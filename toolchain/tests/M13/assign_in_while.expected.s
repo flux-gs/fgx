@@ -21,21 +21,11 @@ feed_stkok        TCS
                 INC     _fcc_fb
                 LDA     g_n
                 TAX
-                TXA
                 DEC
                 STA     g_n
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _assign_in_while_L1
-                EOR     #$8000
-_assign_in_while_L1
-                BMI     *+5
-                BRL     _assign_in_while_L0
+                BPL     _assign_in_while_L0
                 LDA     #0
                 TAX
-                TXA
                 DEC
                 TAY
                 TSC
@@ -62,9 +52,11 @@ feed_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -77,40 +69,37 @@ main_stkok        TCS
                 LDA     #7
                 STA     g_n
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
-_assign_in_while_L2
+                STA     _fcc_img16
+_assign_in_while_L1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 FGX2_FARCALL feed
-                STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _assign_in_while_L4
-                EOR     #$8000
-_assign_in_while_L4
-                BPL     *+5
-                BRL     _assign_in_while_L3
-                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
+                CMP     #0
+                BMI     _assign_in_while_L2
+                LDA     _fcc_img16
                 CLC
-                ADC     1,S   ; fccstk d=0 b=1
-                STA     3,S   ; fccstk d=0 b=3
-                BRL     _assign_in_while_L2
-_assign_in_while_L3
-                LDA     3,S   ; fccstk d=0 b=3
+                ADC     _fcc_img17
+                STA     _fcc_img16
+                BRA     _assign_in_while_L1
+_assign_in_while_L2
+                LDA     _fcc_img16
                 CLC
-                ADC     3,S   ; fccstk d=0 b=3
+                ADC     _fcc_img16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     4
+main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

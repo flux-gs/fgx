@@ -43,26 +43,23 @@ _charptr_arr_global_L0
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _charptr_arr_global_L2
+                BNE     _charptr_arr_global_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _charptr_arr_global_L2
+                BNE     _charptr_arr_global_L2
                 LDA     #0
-                BRL     _charptr_arr_global_L3
+                BRA     _charptr_arr_global_L3
 _charptr_arr_global_L2
                 LDA     #1
 _charptr_arr_global_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _charptr_arr_global_L1
+                BEQ     _charptr_arr_global_L1
                 INC     _fcc_img0
-                BRL     _charptr_arr_global_L0
+                BRA     _charptr_arr_global_L0
 _charptr_arr_global_L1
                 LDA     _fcc_img0
                 TAY
@@ -137,26 +134,23 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _charptr_arr_global_L6
+                BNE     _charptr_arr_global_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _charptr_arr_global_L6
+                BNE     _charptr_arr_global_L6
                 LDA     #1
-                BRL     _charptr_arr_global_L7
+                BRA     _charptr_arr_global_L7
 _charptr_arr_global_L6
                 LDA     #0
 _charptr_arr_global_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _charptr_arr_global_L4
+                BEQ     _charptr_arr_global_L4
                 LDA     #1
-                BRL     _charptr_arr_global_L5
+                BRA     _charptr_arr_global_L5
 _charptr_arr_global_L4
                 LDA     #0
 _charptr_arr_global_L5
@@ -173,7 +167,6 @@ _charptr_arr_global_L5
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #26
                 TAY

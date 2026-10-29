@@ -32,6 +32,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +42,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -84,6 +86,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -93,8 +96,10 @@ main_stkok        TCS
                 MX      %00
                 LDA     #argv_tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -104,6 +109,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnv
@@ -114,8 +120,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -124,11 +128,9 @@ main_stkok        TCS
                 BVC     _spawnops_L1
                 EOR     #$8000
 _spawnops_L1
-                BMI     *+5
-                BRL     _spawnops_L0
+                BPL     _spawnops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -161,28 +163,22 @@ _spawnops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _spawnops_L2
+                BNE     _spawnops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L2
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _spawnops_L3
+                BNE     _spawnops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -192,6 +188,7 @@ _spawnops_L3
                 MX      %00
                 LDA     #argv_tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20
@@ -213,11 +210,9 @@ _spawnops_L3
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _spawnops_L4
+                BNE     _spawnops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -227,6 +222,7 @@ _spawnops_L4
                 STZ     _fcc_fpr0+2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -236,8 +232,10 @@ _spawnops_L4
                 MX      %00
                 LDA     #argv_tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -247,6 +245,7 @@ _spawnops_L4
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnve
@@ -257,18 +256,15 @@ _spawnops_L4
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _spawnops_L8
+                BVC     _spawnops_L6
                 EOR     #$8000
-_spawnops_L8
-                BMI     *+5
-                BRL     _spawnops_L6
+_spawnops_L6
+                BPL     _spawnops_L5
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -297,19 +293,9 @@ _spawnops_L8
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _spawnops_L6
-                LDA     #1
-                BRL     _spawnops_L7
-_spawnops_L6
-                LDA     #0
-_spawnops_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _spawnops_L5
+                BNE     _spawnops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5

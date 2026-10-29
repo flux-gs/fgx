@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #10
                 TAX
-                TXA
                 SEC
                 SBC     #7
                 TAY

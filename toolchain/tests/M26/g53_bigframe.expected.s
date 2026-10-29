@@ -26,15 +26,12 @@ _g53_bigframe_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #300
                 BVC     _g53_bigframe_L3
                 EOR     #$8000
 _g53_bigframe_L3
-                BMI     *+5
-                BRL     _g53_bigframe_L2
+                BPL     _g53_bigframe_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -52,7 +49,6 @@ _g53_bigframe_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -73,7 +69,7 @@ _g53_bigframe_L3
                 PLA
 _g53_bigframe_L1
                 INC     _fcc_img0
-                BRL     _g53_bigframe_L0
+                BRA     _g53_bigframe_L0
 _g53_bigframe_L2
                 SEP     #$20
                 MX      %10
@@ -110,15 +106,12 @@ _g53_bigframe_L2
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #127
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 SEC
                 SBC     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 TAY

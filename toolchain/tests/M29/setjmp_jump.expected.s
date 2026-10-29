@@ -55,8 +55,6 @@ jump_from_deep_stkok        TCS
                 ELSE
                 LDA     8+jump_from_deep_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
-                TAX
-                TXA
                 INC
                 PLX
                 FGX2_FARCALL longjmp
@@ -99,11 +97,8 @@ main_stkok        TCS
                 TAX
                 FGX2_FARCALL setjmp
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _setjmp_jump_L0
+                BNE     _setjmp_jump_L0
                 LDA     #40
                 PHA
                 FGX2_FARCALL jump_from_deep
@@ -123,10 +118,8 @@ main_stkok        TCS
 _setjmp_jump_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #41
-                BNE     *+5
-                BRL     _setjmp_jump_L1
+                BEQ     _setjmp_jump_L1
                 LDA     #2
                 TAY
                 TSC
@@ -140,10 +133,8 @@ _setjmp_jump_L0
 _setjmp_jump_L1
                 LDA     marker
                 TAX
-                TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _setjmp_jump_L2
+                BEQ     _setjmp_jump_L2
                 LDA     #3
                 TAY
                 TSC
@@ -166,11 +157,8 @@ _setjmp_jump_L2
                 TAX
                 FGX2_FARCALL setjmp
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _setjmp_jump_L3
+                BNE     _setjmp_jump_L3
                 SEP     #$20
                 MX      %10
                 PHB
@@ -196,10 +184,8 @@ _setjmp_jump_L2
 _setjmp_jump_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _setjmp_jump_L4
+                BEQ     _setjmp_jump_L4
                 LDA     #5
                 TAY
                 TSC
@@ -222,12 +208,10 @@ _setjmp_jump_L4
                 TAX
                 FGX2_FARCALL setjmp
                 CMP     #0
-                BNE     *+5
-                BRL     _setjmp_jump_L6
+                BEQ     _setjmp_jump_L6
                 CMP     #7
-                BNE     *+5
-                BRL     _setjmp_jump_L7
-                BRL     _setjmp_jump_L8
+                BEQ     _setjmp_jump_L7
+                BRA     _setjmp_jump_L8
 _setjmp_jump_L6
                 SEP     #$20
                 MX      %10

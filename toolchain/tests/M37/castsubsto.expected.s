@@ -26,15 +26,16 @@ _castsubsto_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _castsubsto_L3
                 EOR     #$8000
 _castsubsto_L3
-                BMI     *+5
-                BRL     _castsubsto_L2
+                BPL     _castsubsto_L2
+                LDA     _fcc_img0
+                CLC
+                ADC     #words
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -42,15 +43,8 @@ _castsubsto_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #words
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 AND     #$00FF
@@ -61,8 +55,12 @@ _castsubsto_L3
                 MX      %00
 _castsubsto_L1
                 INC     _fcc_img0
-                BRL     _castsubsto_L0
+                BRA     _castsubsto_L0
 _castsubsto_L2
+                LDA     #0
+                CLC
+                ADC     #words
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -70,19 +68,11 @@ _castsubsto_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #words
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _castsubsto_L4
+                BEQ     _castsubsto_L4
                 LDA     #1
                 TAY
                 TSC
@@ -94,6 +84,10 @@ _castsubsto_L2
                 TYA
                 RTL
 _castsubsto_L4
+                LDA     #7
+                CLC
+                ADC     #words
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -101,19 +95,11 @@ _castsubsto_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #words
-                STA     _fcc_fpr0
-                LDA     #7
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _castsubsto_L5
+                BEQ     _castsubsto_L5
                 LDA     #2
                 TAY
                 TSC
@@ -125,6 +111,10 @@ _castsubsto_L4
                 TYA
                 RTL
 _castsubsto_L5
+                LDA     #5
+                CLC
+                ADC     #words
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -132,12 +122,6 @@ _castsubsto_L5
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #words
-                STA     _fcc_fpr0
-                LDA     #5
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b

@@ -19,9 +19,8 @@
  * Nothing else is touched: putprog/putcolsp, the sverrno save before the
  * format is printed, and the exact punctuation are upstream's.
  *
- * WHAT IT NEEDED THAT DID NOT EXIST: vfprintf(3).  printf.c had the engine
- * (__lc_vpf) and vsprintf as its sprintf-mode wrapper, and no stdio-mode one;
- * verr and vwarn are its first callers.  __progname is crt0's, and has been
+ * WHAT IT NEEDED THAT DID NOT EXIST: vfprintf(3), which verr and vwarn
+ * were the first callers of.  __progname is crt0's, and has been
  * since the first FGX binary -- err(3) is simply the first thing to read it.
  *
  * df(1) is why this landed (apple/fgx#329): its error path is `warn("%s",

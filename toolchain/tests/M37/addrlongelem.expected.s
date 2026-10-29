@@ -27,14 +27,12 @@ _addrlongelem_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #6
                 BVC     _addrlongelem_L3
                 EOR     #$8000
 _addrlongelem_L3
-                BMI     *+5
-                BRL     _addrlongelem_L2
+                BPL     _addrlongelem_L2
                 LDA     #_addrlongelem_al
                 PHA
                 LDA     _fcc_img0
@@ -94,8 +92,9 @@ _addrlongelem_L3
                 PLA
 _addrlongelem_L1
                 INC     _fcc_img0
-                BRL     _addrlongelem_L0
+                BRA     _addrlongelem_L0
 _addrlongelem_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -103,14 +102,9 @@ _addrlongelem_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
+                LDA     #_addrlongelem_al+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -122,26 +116,13 @@ _addrlongelem_L2
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1111
-                STA     _fcc_long_hi
-                LDA     #$0002
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #4369
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L4
+                BEQ     _addrlongelem_L4
                 LDA     #50
                 TAY
                 TSC
@@ -173,26 +154,13 @@ _addrlongelem_L4
                 LDA:    _addrlongelem_al+2,X
                 STA     _fcc_long_hi
                 LDA:    _addrlongelem_al,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7A6B
-                STA     _fcc_long_hi
-                LDA     #$5C4D
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #23629
+                STX     _fcc_long_b_lo
+                LDX     #31339
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L5
+                BEQ     _addrlongelem_L5
                 LDA     #51
                 TAY
                 TSC
@@ -211,26 +179,13 @@ _addrlongelem_L5
                 LDA:    _addrlongelem_al+2,X
                 STA     _fcc_long_hi
                 LDA:    _addrlongelem_al,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1111
-                STA     _fcc_long_hi
-                LDA     #$0001
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #4369
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L6
+                BEQ     _addrlongelem_L6
                 LDA     #52
                 TAY
                 TSC
@@ -249,26 +204,13 @@ _addrlongelem_L6
                 LDA:    _addrlongelem_al+2,X
                 STA     _fcc_long_hi
                 LDA:    _addrlongelem_al,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1111
-                STA     _fcc_long_hi
-                LDA     #$0003
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #3
+                STX     _fcc_long_b_lo
+                LDX     #4369
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L7
+                BEQ     _addrlongelem_L7
                 LDA     #53
                 TAY
                 TSC
@@ -302,6 +244,7 @@ _addrlongelem_L7
                 LDA     _fcc_long_hi
                 STA:    $0002,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -309,14 +252,9 @@ _addrlongelem_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
+                LDA     #_addrlongelem_al+16
                 STA     _fcc_fpr0
-                LDA     #4
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -335,10 +273,8 @@ _addrlongelem_L7
 _addrlongelem_L9
                 STX     _fcc_long_hi
                 TAX
-                TXA
                 CMP     #4369
-                BNE     *+5
-                BRL     _addrlongelem_L8
+                BEQ     _addrlongelem_L8
                 LDA     #54
                 TAY
                 TSC
@@ -358,28 +294,14 @@ _addrlongelem_L8
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _addrlongelem_L10
+                BEQ     _addrlongelem_L10
                 LDA     #55
                 TAY
                 TSC
@@ -393,6 +315,11 @@ _addrlongelem_L8
 _addrlongelem_L10
                 LDA     #3
                 STA     _fcc_img1
+                ASL
+                ASL
+                CLC
+                ADC     #_addrlongelem_al
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -400,14 +327,6 @@ _addrlongelem_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -419,26 +338,13 @@ _addrlongelem_L10
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1111
-                STA     _fcc_long_hi
-                LDA     #$0003
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #3
+                STX     _fcc_long_b_lo
+                LDX     #4369
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L11
+                BEQ     _addrlongelem_L11
                 LDA     #56
                 TAY
                 TSC
@@ -452,6 +358,11 @@ _addrlongelem_L10
 _addrlongelem_L11
                 LDA     #0
                 STA     _fcc_img1
+                ASL
+                ASL
+                CLC
+                ADC     #_addrlongelem_al
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -459,14 +370,6 @@ _addrlongelem_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -478,26 +381,13 @@ _addrlongelem_L11
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1111
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #4369
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L12
+                BEQ     _addrlongelem_L12
                 LDA     #57
                 TAY
                 TSC
@@ -509,6 +399,7 @@ _addrlongelem_L11
                 TYA
                 RTL
 _addrlongelem_L12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -518,12 +409,7 @@ _addrlongelem_L12
                 MX      %00
                 LDA     #_addrlongelem_al
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -535,26 +421,13 @@ _addrlongelem_L12
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1111
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #4369
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L13
+                BEQ     _addrlongelem_L13
                 LDA     #58
                 TAY
                 TSC
@@ -566,6 +439,7 @@ _addrlongelem_L12
                 TYA
                 RTL
 _addrlongelem_L13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -573,23 +447,17 @@ _addrlongelem_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_ai
+                LDA     #_addrlongelem_ai+4
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
                 STA     _fcc_img2
                 LDA     [_fcc_img2]
                 TAX
-                TXA
                 CMP     #258
-                BNE     *+5
-                BRL     _addrlongelem_L14
+                BEQ     _addrlongelem_L14
                 LDA     #59
                 TAY
                 TSC
@@ -612,10 +480,8 @@ _addrlongelem_L14
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                TXA
                 CMP     #819
-                BNE     *+5
-                BRL     _addrlongelem_L15
+                BEQ     _addrlongelem_L15
                 LDA     #60
                 TAY
                 TSC
@@ -632,10 +498,8 @@ _addrlongelem_L15
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _addrlongelem_L16
+                BEQ     _addrlongelem_L16
                 LDA     #61
                 TAY
                 TSC
@@ -652,10 +516,8 @@ _addrlongelem_L16
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                TXA
                 CMP     #259
-                BNE     *+5
-                BRL     _addrlongelem_L17
+                BEQ     _addrlongelem_L17
                 LDA     #62
                 TAY
                 TSC

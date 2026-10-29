@@ -19,36 +19,27 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
-                LDA     stdout+2
+                PHB
+                PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     stdout
+                LDA     #_iob+16
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL fileno
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _stdcells_L0
+                BEQ     _stdcells_L0
                 LDA     #1
                 TAY
                 TSC
@@ -60,38 +51,35 @@ main_stkok        TCS
                 TYA
                 RTL
 _stdcells_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
-                LDA     stdout+2
+                PHB
+                PLA
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     stdout
+                LDA     #_iob+16
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdcells_L2
+                BNE     _stdcells_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdcells_L2
+                BNE     _stdcells_L2
                 LDA     #0
-                BRL     _stdcells_L3
+                BRA     _stdcells_L3
 _stdcells_L2
                 LDA     #1
 _stdcells_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L1
+                BEQ     _stdcells_L1
                 LDA     #2
                 TAY
                 TSC
@@ -136,33 +124,26 @@ _stdcells_L1
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdcells_L5
+                BNE     _stdcells_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdcells_L5
+                BNE     _stdcells_L5
                 LDA     #1
-                BRL     _stdcells_L6
+                BRA     _stdcells_L6
 _stdcells_L5
                 LDA     #0
 _stdcells_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L4
+                BEQ     _stdcells_L4
                 LDA     #3
                 TAY
                 TSC
@@ -174,10 +155,6 @@ _stdcells_L6
                 TYA
                 RTL
 _stdcells_L4
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
                 LDA     _fcc_long_hi
@@ -187,14 +164,17 @@ _stdcells_L4
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
-                LDA     stdout+2
+                PHB
+                PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     stdout
+                LDA     #_iob+16
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
                 LDA     _fcc_long_hi
@@ -209,8 +189,7 @@ _stdcells_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L7
+                BEQ     _stdcells_L7
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -289,28 +268,11 @@ _stdcells_L7
                 CLC
                 ADC     #4
                 TCS
-                SEP     #$20
-                MX      %10
-                LDA     stderr+2
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     stderr
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL fileno
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                LDA     _iob+46
+                AND     #$00FF
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _stdcells_L8
+                BEQ     _stdcells_L8
                 LDA     #5
                 TAY
                 TSC
@@ -322,28 +284,9 @@ _stdcells_L7
                 TYA
                 RTL
 _stdcells_L8
-                SEP     #$20
-                MX      %10
-                LDA     stdin+2
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     stdin
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL fileno
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L9
+                LDA     _iob+14
+                AND     #$00FF
+                BEQ     _stdcells_L9
                 LDA     #6
                 TAY
                 TSC
@@ -367,4 +310,4 @@ _stdcells_L9
                 RTL
 main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
-                FGX2_RELOC_COUNT 11
+                FGX2_RELOC_COUNT 8

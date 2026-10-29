@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26,12 +27,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
+                LDA     #buf+3
                 STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
@@ -48,24 +46,12 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -74,14 +60,13 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #58
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L1
+                BNE     _preinc_deref_expr_L1
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -89,40 +74,27 @@ main_stkok        TCS
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
+                LDA     #buf+2
                 STA     _fcc_fpr1
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L3
+                BNE     _preinc_deref_expr_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L3
+                BNE     _preinc_deref_expr_L2
                 LDA     #0
-                BRL     _preinc_deref_expr_L4
-_preinc_deref_expr_L3
-                LDA     #1
-_preinc_deref_expr_L4
-                CMP     #0
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L1
-                LDA     #0
-                BRL     _preinc_deref_expr_L2
-_preinc_deref_expr_L1
-                LDA     #1
+                BRA     _preinc_deref_expr_L3
 _preinc_deref_expr_L2
+                LDA     #1
+_preinc_deref_expr_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _preinc_deref_expr_L0
+                BEQ     _preinc_deref_expr_L0
+_preinc_deref_expr_L1
                 LDA     #1
                 TAY
                 TSC
@@ -146,24 +118,12 @@ _preinc_deref_expr_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 DEC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -172,14 +132,13 @@ _preinc_deref_expr_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #56
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L6
+                BNE     _preinc_deref_expr_L5
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -187,40 +146,27 @@ _preinc_deref_expr_L0
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
+                LDA     #buf+1
                 STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L8
+                BNE     _preinc_deref_expr_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L8
+                BNE     _preinc_deref_expr_L6
                 LDA     #0
-                BRL     _preinc_deref_expr_L9
-_preinc_deref_expr_L8
-                LDA     #1
-_preinc_deref_expr_L9
-                CMP     #0
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L6
-                LDA     #0
-                BRL     _preinc_deref_expr_L7
+                BRA     _preinc_deref_expr_L7
 _preinc_deref_expr_L6
                 LDA     #1
 _preinc_deref_expr_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _preinc_deref_expr_L5
+                BEQ     _preinc_deref_expr_L4
+_preinc_deref_expr_L5
                 LDA     #2
                 TAY
                 TSC
@@ -231,30 +177,18 @@ _preinc_deref_expr_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_preinc_deref_expr_L5
+_preinc_deref_expr_L4
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
                 DEC
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -263,14 +197,13 @@ _preinc_deref_expr_L5
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L11
+                BNE     _preinc_deref_expr_L9
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -278,40 +211,27 @@ _preinc_deref_expr_L5
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
+                LDA     #buf+1
                 STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L13
+                BNE     _preinc_deref_expr_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L13
+                BNE     _preinc_deref_expr_L10
                 LDA     #0
-                BRL     _preinc_deref_expr_L14
-_preinc_deref_expr_L13
+                BRA     _preinc_deref_expr_L11
+_preinc_deref_expr_L10
                 LDA     #1
-_preinc_deref_expr_L14
-                CMP     #0
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L11
-                LDA     #0
-                BRL     _preinc_deref_expr_L12
 _preinc_deref_expr_L11
-                LDA     #1
-_preinc_deref_expr_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _preinc_deref_expr_L10
+                BEQ     _preinc_deref_expr_L8
+_preinc_deref_expr_L9
                 LDA     #3
                 TAY
                 TSC
@@ -322,7 +242,7 @@ _preinc_deref_expr_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_preinc_deref_expr_L10
+_preinc_deref_expr_L8
                 LDA     #42
                 TAY
                 TSC

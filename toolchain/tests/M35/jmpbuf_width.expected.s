@@ -76,17 +76,12 @@ main_stkok        TCS
                 LDA     #env
                 TAX
                 FGX2_FARCALL setjmp
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _jmpbuf_width_L0
+                BNE     _jmpbuf_width_L0
                 LDA     guard
                 TAX
-                TXA
                 CMP     #23130
-                BNE     *+5
-                BRL     _jmpbuf_width_L1
+                BEQ     _jmpbuf_width_L1
                 LDA     #1
                 TAY
                 TSC
@@ -123,10 +118,8 @@ _jmpbuf_width_L1
 _jmpbuf_width_L0
                 LDA     guard
                 TAX
-                TXA
                 CMP     #23130
-                BNE     *+5
-                BRL     _jmpbuf_width_L2
+                BEQ     _jmpbuf_width_L2
                 LDA     #3
                 TAY
                 TSC

@@ -51,7 +51,6 @@ main_stkok        TCS
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #38
                 STA     _fcc_img0

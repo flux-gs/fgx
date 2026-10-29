@@ -31,26 +31,13 @@ main_stkok        TCS
                 LDA     _fcc_img1
                 STA     _fcc_long_hi
                 LDA     _fcc_img0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FF7F
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65407
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L0
+                BEQ     _longbitnot_L0
                 LDA     #1
                 TAY
                 TSC
@@ -74,26 +61,13 @@ _longbitnot_L0
                 LDA     _fcc_img1
                 STA     _fcc_long_hi
                 LDA     _fcc_img0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFE
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65534
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L1
+                BEQ     _longbitnot_L1
                 LDA     #2
                 TAY
                 TSC
@@ -116,23 +90,10 @@ _longbitnot_L1
                 LDA     hv+2
                 STA     _fcc_long_hi
                 LDA     hv
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0080
-                STA     _fcc_long_hi
-                LDA     #$0000
-                JSR     _fcc_long_not
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65407
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 STA     hv
                 TAY
@@ -142,26 +103,13 @@ _longbitnot_L1
                 LDA     hv+2
                 STA     _fcc_long_hi
                 LDA     hv
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0010
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L2
+                BEQ     _longbitnot_L2
                 LDA     #10
                 TAY
                 TSC
@@ -184,23 +132,10 @@ _longbitnot_L2
                 LDA     hv+2
                 STA     _fcc_long_hi
                 LDA     hv
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0080
-                STA     _fcc_long_hi
-                LDA     #$0000
-                JSR     _fcc_long_not
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65407
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 STA     hv
                 TAY
@@ -210,26 +145,13 @@ _longbitnot_L2
                 LDA     hv+2
                 STA     _fcc_long_hi
                 LDA     hv
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0010
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L3
+                BEQ     _longbitnot_L3
                 LDA     #11
                 TAY
                 TSC
@@ -252,23 +174,10 @@ _longbitnot_L3
                 LDA     lo+2
                 STA     _fcc_long_hi
                 LDA     lo
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0010
-                JSR     _fcc_long_not
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65519
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 STA     lo
                 TAY
@@ -278,26 +187,13 @@ _longbitnot_L3
                 LDA     lo+2
                 STA     _fcc_long_hi
                 LDA     lo
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0080
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #128
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L4
+                BEQ     _longbitnot_L4
                 LDA     #12
                 TAY
                 TSC
@@ -329,26 +225,13 @@ _longbitnot_L4
                 LDA     _fcc_img1
                 STA     _fcc_long_hi
                 LDA     _fcc_img0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FF7F
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65407
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L5
+                BEQ     _longbitnot_L5
                 LDA     #20
                 TAY
                 TSC
@@ -380,26 +263,13 @@ _longbitnot_L5
                 LDA     _fcc_img1
                 STA     _fcc_long_hi
                 LDA     _fcc_img0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$F0F0
-                STA     _fcc_long_hi
-                LDA     #$F0F0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #61680
+                STX     _fcc_long_b_lo
+                LDX     #61680
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L6
+                BEQ     _longbitnot_L6
                 LDA     #21
                 TAY
                 TSC
@@ -422,23 +292,10 @@ _longbitnot_L6
                 LDA     hv+2
                 STA     _fcc_long_hi
                 LDA     hv
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$003C
-                STA     _fcc_long_hi
-                LDA     #$0000
-                JSR     _fcc_long_not
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65475
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 STA     hv
                 TAY
@@ -448,26 +305,13 @@ _longbitnot_L6
                 LDA     hv+2
                 STA     _fcc_long_hi
                 LDA     hv
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$00FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #255
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L7
+                BEQ     _longbitnot_L7
                 LDA     #30
                 TAY
                 TSC
@@ -489,10 +333,8 @@ _longbitnot_L7
                 AND     _fcc_tmp_b
                 STA     sh
                 TAX
-                TXA
                 CMP     #240
-                BNE     *+5
-                BRL     _longbitnot_L8
+                BEQ     _longbitnot_L8
                 LDA     #40
                 TAY
                 TSC

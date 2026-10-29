@@ -55,10 +55,8 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #54
-                BNE     *+5
-                BRL     _strsub_L0
+                BEQ     _strsub_L0
                 LDA     #1
                 TAY
                 TSC
@@ -72,10 +70,8 @@ main_stkok        TCS
 _strsub_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #48
-                BNE     *+5
-                BRL     _strsub_L1
+                BEQ     _strsub_L1
                 LDA     #2
                 TAY
                 TSC
@@ -103,10 +99,8 @@ _strsub_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BNE     *+5
-                BRL     _strsub_L2
+                BEQ     _strsub_L2
                 LDA     #3
                 TAY
                 TSC
@@ -134,10 +128,8 @@ _strsub_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #122
-                BNE     *+5
-                BRL     _strsub_L3
+                BEQ     _strsub_L3
                 LDA     #4
                 TAY
                 TSC
@@ -159,8 +151,6 @@ _strsub_L3
                 LDA     #_strsub_S0
                 STA     _fcc_fpr0
                 LDA     idx
-                TAX
-                TXA
                 INC
                 CLC
                 ADC     _fcc_fpr0
@@ -168,10 +158,8 @@ _strsub_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #49
-                BNE     *+5
-                BRL     _strsub_L4
+                BEQ     _strsub_L4
                 LDA     #5
                 TAY
                 TSC

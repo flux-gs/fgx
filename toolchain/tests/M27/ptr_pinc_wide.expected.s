@@ -42,8 +42,6 @@ _ptr_pinc_wide_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -52,8 +50,7 @@ _ptr_pinc_wide_L0
                 BVC     _ptr_pinc_wide_L2
                 EOR     #$8000
 _ptr_pinc_wide_L2
-                BMI     *+5
-                BRL     _ptr_pinc_wide_L1
+                BPL     _ptr_pinc_wide_L1
                 LDA     _fcc_img2
                 STA     _fcc_long_hi
                 LDA     _fcc_img1
@@ -120,7 +117,6 @@ _ptr_pinc_wide_L2
                 TYA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
@@ -179,8 +175,6 @@ _ptr_pinc_wide_L4
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -189,8 +183,7 @@ _ptr_pinc_wide_L4
                 BVC     _ptr_pinc_wide_L6
                 EOR     #$8000
 _ptr_pinc_wide_L6
-                BMI     *+5
-                BRL     _ptr_pinc_wide_L5
+                BPL     _ptr_pinc_wide_L5
                 DO      8+_ptr_pinc_wide_sum_float_FRAMESIZE/256
                 TSC
                 CLC
@@ -251,7 +244,6 @@ _ptr_pinc_wide_L6
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
@@ -302,8 +294,6 @@ _ptr_pinc_wide_L7
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -312,8 +302,7 @@ _ptr_pinc_wide_L7
                 BVC     _ptr_pinc_wide_L9
                 EOR     #$8000
 _ptr_pinc_wide_L9
-                BMI     *+5
-                BRL     _ptr_pinc_wide_L8
+                BPL     _ptr_pinc_wide_L8
                 DO      8+_ptr_pinc_wide_sum_pp_FRAMESIZE/256
                 TSC
                 CLC
@@ -383,7 +372,6 @@ _ptr_pinc_wide_L9
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
@@ -543,6 +531,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -552,6 +541,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_x
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -582,6 +572,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -591,6 +582,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_y
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -621,6 +613,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -630,6 +623,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_z
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -651,6 +645,7 @@ main_stkok        TCS
                 PLA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -660,6 +655,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_la
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_pinc_wide_sum_long
@@ -672,6 +668,7 @@ main_stkok        TCS
                 PHA
                 LDA     #2
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -681,6 +678,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_fa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_pinc_wide_sum_float
@@ -697,6 +695,7 @@ main_stkok        TCS
                 PHA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -706,6 +705,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_pa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_pinc_wide_sum_pp

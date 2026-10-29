@@ -71,6 +71,12 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #vd+12
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -78,16 +84,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vd
-                CLC
-                ADC     #12
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$1234
@@ -97,6 +93,7 @@ main_stkok        TCS
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -104,10 +101,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vd
-                CLC
-                ADC     #12
+                LDA     #vd+12
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -119,26 +115,13 @@ main_stkok        TCS
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1234
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4660
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L0
+                BEQ     _arraymemberdecay_L0
                 LDA     #43
                 TAY
                 TSC
@@ -150,6 +133,12 @@ main_stkok        TCS
                 TYA
                 RTL
 _arraymemberdecay_L0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #vl+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -157,16 +146,6 @@ _arraymemberdecay_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$5678
@@ -176,6 +155,7 @@ _arraymemberdecay_L0
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -183,10 +163,9 @@ _arraymemberdecay_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                CLC
-                ADC     #2
+                LDA     #vl+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -198,26 +177,13 @@ _arraymemberdecay_L0
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$5678
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #22136
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L1
+                BEQ     _arraymemberdecay_L1
                 LDA     #44
                 TAY
                 TSC
@@ -229,6 +195,12 @@ _arraymemberdecay_L0
                 TYA
                 RTL
 _arraymemberdecay_L1
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #vu+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -236,16 +208,6 @@ _arraymemberdecay_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vu
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$9ABC
@@ -255,6 +217,7 @@ _arraymemberdecay_L1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -262,10 +225,9 @@ _arraymemberdecay_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vu
-                CLC
-                ADC     #2
+                LDA     #vu+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -277,26 +239,13 @@ _arraymemberdecay_L1
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$9ABC
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #39612
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L2
+                BEQ     _arraymemberdecay_L2
                 LDA     #45
                 TAY
                 TSC
@@ -308,6 +257,12 @@ _arraymemberdecay_L1
                 TYA
                 RTL
 _arraymemberdecay_L2
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #vf+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -315,16 +270,6 @@ _arraymemberdecay_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vf
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #16388
                 STA     _fcc_q3
                 LDA     #0
@@ -347,6 +292,7 @@ _arraymemberdecay_L2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -354,10 +300,9 @@ _arraymemberdecay_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vf
-                CLC
-                ADC     #2
+                LDA     #vf+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -407,9 +352,7 @@ _arraymemberdecay_L2
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L3
+                BEQ     _arraymemberdecay_L3
                 LDA     #46
                 TAY
                 TSC
@@ -425,28 +368,23 @@ _arraymemberdecay_L3
                 MX      %10
                 PHB
                 PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #vp
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
                 LDA     #_arraymemberdecay_S0
                 STA     _fcc_fpr1
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #vp+2
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -455,9 +393,8 @@ _arraymemberdecay_L3
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0
+                LDA     _fcc_fpr1+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -465,10 +402,9 @@ _arraymemberdecay_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vp
-                INC
-                INC
+                LDA     #vp+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
@@ -496,52 +432,29 @@ _arraymemberdecay_L3
                 LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     vp+4
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #vp
-                INC
-                INC
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
-                LDA     [_fcc_fpr1]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr1],Y
-                STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     vp+2
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arraymemberdecay_L5
+                BNE     _arraymemberdecay_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arraymemberdecay_L5
+                BNE     _arraymemberdecay_L5
                 LDA     #0
-                BRL     _arraymemberdecay_L6
+                BRA     _arraymemberdecay_L6
 _arraymemberdecay_L5
                 LDA     #1
 _arraymemberdecay_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L4
+                BEQ     _arraymemberdecay_L4
                 LDA     #47
                 TAY
                 TSC
@@ -553,24 +466,11 @@ _arraymemberdecay_L6
                 TYA
                 RTL
 _arraymemberdecay_L4
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #vi
-                INC
-                INC
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #vi+2
                 STA     _fcc_fpr0
-                LDA     #4242
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -578,10 +478,19 @@ _arraymemberdecay_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vi
-                INC
-                INC
+                LDA     #4242
+                STA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #vi+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
@@ -591,10 +500,8 @@ _arraymemberdecay_L4
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #4242
-                BNE     *+5
-                BRL     _arraymemberdecay_L7
+                BEQ     _arraymemberdecay_L7
                 LDA     #48
                 TAY
                 TSC
@@ -606,6 +513,10 @@ _arraymemberdecay_L4
                 TYA
                 RTL
 _arraymemberdecay_L7
+                LDA     #0
+                CLC
+                ADC     #vc+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -613,27 +524,23 @@ _arraymemberdecay_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vc
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #90
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vc
-                INC
-                INC
+                LDA     #vc+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0
@@ -644,10 +551,8 @@ _arraymemberdecay_L7
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _arraymemberdecay_L8
+                BEQ     _arraymemberdecay_L8
                 LDA     #49
                 TAY
                 TSC
@@ -659,6 +564,7 @@ _arraymemberdecay_L7
                 TYA
                 RTL
 _arraymemberdecay_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -666,18 +572,13 @@ _arraymemberdecay_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                INC
-                INC
+                LDA     #vl+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$4321
@@ -687,47 +588,16 @@ _arraymemberdecay_L8
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #vl
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     vl+4
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$4321
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDA     vl+2
+                LDX     #17185
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L9
+                BEQ     _arraymemberdecay_L9
                 LDA     #50
                 TAY
                 TSC
@@ -739,6 +609,12 @@ _arraymemberdecay_L8
                 TYA
                 RTL
 _arraymemberdecay_L9
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #vd+12
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -746,16 +622,6 @@ _arraymemberdecay_L9
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vd
-                CLC
-                ADC     #12
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0F0F
@@ -765,6 +631,7 @@ _arraymemberdecay_L9
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -772,10 +639,9 @@ _arraymemberdecay_L9
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vd
-                CLC
-                ADC     #12
+                LDA     #vd+12
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arraymemberdecay_firstlong
@@ -785,26 +651,13 @@ _arraymemberdecay_L9
                 ADC     #4
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0F0F
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #3855
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L10
+                BEQ     _arraymemberdecay_L10
                 LDA     #51
                 TAY
                 TSC
@@ -816,6 +669,12 @@ _arraymemberdecay_L9
                 TYA
                 RTL
 _arraymemberdecay_L10
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #vl+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -823,16 +682,6 @@ _arraymemberdecay_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$00FF
@@ -842,6 +691,7 @@ _arraymemberdecay_L10
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -849,10 +699,9 @@ _arraymemberdecay_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                INC
-                INC
+                LDA     #vl+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arraymemberdecay_firstlong
@@ -862,26 +711,13 @@ _arraymemberdecay_L10
                 ADC     #4
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$00FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #255
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L11
+                BEQ     _arraymemberdecay_L11
                 LDA     #52
                 TAY
                 TSC
@@ -893,6 +729,12 @@ _arraymemberdecay_L10
                 TYA
                 RTL
 _arraymemberdecay_L11
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #vl+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -900,16 +742,6 @@ _arraymemberdecay_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$7777
@@ -919,6 +751,12 @@ _arraymemberdecay_L11
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #vl+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -926,16 +764,6 @@ _arraymemberdecay_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -945,6 +773,7 @@ _arraymemberdecay_L11
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -952,10 +781,9 @@ _arraymemberdecay_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #vl
-                INC
-                INC
+                LDA     #vl+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -980,26 +808,13 @@ _arraymemberdecay_L11
                 LDA     [_fcc_ptr]
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_lo
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$7777
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #30583
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L12
+                BEQ     _arraymemberdecay_L12
                 LDA     #53
                 TAY
                 TSC

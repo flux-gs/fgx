@@ -34,9 +34,10 @@ g_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -47,7 +48,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
                 SEP     #$20
                 MX      %10
                 PHB
@@ -78,15 +79,13 @@ _libso_shapes3_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _libso_shapes3_L3
                 EOR     #$8000
 _libso_shapes3_L3
-                BMI     *+5
-                BRL     _libso_shapes3_L2
-                LDA     1,S   ; fccstk d=0 b=1
+                BPL     _libso_shapes3_L2
+                LDA     _fcc_img16
                 PHA
                 SEP     #$20
                 MX      %10
@@ -104,7 +103,7 @@ _libso_shapes3_L3
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _libso_shapes3_L1
                 SEP     #$20
                 MX      %10
@@ -117,21 +116,13 @@ _libso_shapes3_L1
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
-                BRL     _libso_shapes3_L0
+                BRA     _libso_shapes3_L0
 _libso_shapes3_L2
 _libso_shapes3_L4
                 LDAL    KFGX_YIELD_MIRROR
@@ -150,18 +141,13 @@ _libso_shapes3_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 BVC     _libso_shapes3_L7
                 EOR     #$8000
 _libso_shapes3_L7
-                BMI     *+5
-                BRL     _libso_shapes3_L6
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                BPL     _libso_shapes3_L6
+                INC     _fcc_img16
 _libso_shapes3_L5
                 SEP     #$20
                 MX      %10
@@ -174,21 +160,13 @@ _libso_shapes3_L5
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
-                BRL     _libso_shapes3_L4
+                BRA     _libso_shapes3_L4
 _libso_shapes3_L6
                 SEP     #$20
                 MX      %10
@@ -218,17 +196,9 @@ _libso_shapes3_L6
                 INC
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -254,8 +224,6 @@ _libso_shapes3_L6
                 ADC     #0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -268,12 +236,8 @@ _libso_shapes3_L6
                 LDA     _libc_blk_libso_shapes3
                 CLC
                 ADC     #6
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -291,9 +255,7 @@ _libso_shapes3_L6
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0
+                LDA     _fcc_fpr1+2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -325,12 +287,11 @@ _libso_shapes3_L6
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CMP     #5
                 BEQ     *+5
-                BRL     _libso_shapes3_L20
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -344,18 +305,9 @@ _libso_shapes3_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     *+5
-                BRL     _libso_shapes3_L20
-                LDA     #1
-                BRL     _libso_shapes3_L21
-_libso_shapes3_L20
-                LDA     #0
-_libso_shapes3_L21
-                CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L18
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -371,18 +323,9 @@ _libso_shapes3_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #2
                 BEQ     *+5
-                BRL     _libso_shapes3_L18
-                LDA     #1
-                BRL     _libso_shapes3_L19
-_libso_shapes3_L18
-                LDA     #0
-_libso_shapes3_L19
-                CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L16
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -393,12 +336,8 @@ _libso_shapes3_L19
                 LDA     _libc_blk_libso_shapes3
                 CLC
                 ADC     #6
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -418,7 +357,7 @@ _libso_shapes3_L19
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _libso_shapes3_L22-1
+                PEA     _libso_shapes3_L12-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -429,7 +368,7 @@ _libso_shapes3_L19
                 DEC
                 PHA
                 RTL
-_libso_shapes3_L22
+_libso_shapes3_L12
                 TAY
                 TSC
                 CLC
@@ -437,18 +376,9 @@ _libso_shapes3_L22
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
                 BEQ     *+5
-                BRL     _libso_shapes3_L16
-                LDA     #1
-                BRL     _libso_shapes3_L17
-_libso_shapes3_L16
-                LDA     #0
-_libso_shapes3_L17
-                CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L14
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -459,12 +389,8 @@ _libso_shapes3_L17
                 LDA     _libc_blk_libso_shapes3
                 CLC
                 ADC     #6
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -484,7 +410,7 @@ _libso_shapes3_L17
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _libso_shapes3_L23-1
+                PEA     _libso_shapes3_L13-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -495,7 +421,7 @@ _libso_shapes3_L17
                 DEC
                 PHA
                 RTL
-_libso_shapes3_L23
+_libso_shapes3_L13
                 TAY
                 TSC
                 CLC
@@ -503,18 +429,8 @@ _libso_shapes3_L23
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _libso_shapes3_L14
-                LDA     #1
-                BRL     _libso_shapes3_L15
-_libso_shapes3_L14
-                LDA     #0
-_libso_shapes3_L15
-                CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L12
+                BNE     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -544,7 +460,7 @@ _libso_shapes3_L15
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _libso_shapes3_L24-1
+                PEA     _libso_shapes3_L14-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -555,7 +471,7 @@ _libso_shapes3_L15
                 DEC
                 PHA
                 RTL
-_libso_shapes3_L24
+_libso_shapes3_L14
                 TAY
                 TSC
                 CLC
@@ -563,32 +479,24 @@ _libso_shapes3_L24
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _libso_shapes3_L12
-                LDA     #1
-                BRL     _libso_shapes3_L13
-_libso_shapes3_L12
-                LDA     #0
-_libso_shapes3_L13
-                CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L10
+                BNE     _libso_shapes3_L10
                 LDA     #42
-                BRL     _libso_shapes3_L11
+                BRA     _libso_shapes3_L11
 _libso_shapes3_L10
                 LDA     #1
 _libso_shapes3_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     2
+main_FRAMESIZE   EQU     4
 main_STKGUARD    EQU     1
                 FGX2_RELOC_COUNT 3

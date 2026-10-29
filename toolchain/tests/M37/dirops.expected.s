@@ -80,9 +80,7 @@ _dirops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L2
+                BEQ     _dirops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +107,9 @@ _dirops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _dirops_L2
-                LDA     #1
-                BRL     _dirops_L3
-_dirops_L2
-                LDA     #0
-_dirops_L3
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L1
+                BNE     _dirops_L1
                 INC     _fcc_img0
-                BRL     _dirops_L0
+                BRA     _dirops_L0
 _dirops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -162,9 +151,10 @@ nameis_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -181,7 +171,7 @@ main_stkok        TCS
                 LDA     #0
                 STA     17,S   ; fccstk d=0 b=17
                 LDA     #1
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img16
                 LDA     #0
                 STA     21,S   ; fccstk d=0 b=21
                 SEP     #$20
@@ -206,44 +196,34 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L5
+                BNE     _dirops_L3
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L5
+                BNE     _dirops_L3
                 LDA     #1
-                BRL     _dirops_L6
-_dirops_L5
+                BRA     _dirops_L4
+_dirops_L3
                 LDA     #0
-_dirops_L6
+_dirops_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L4
+                BEQ     _dirops_L2
                 LDA     #1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirops_L4
+                BRL     main_bandx
+_dirops_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -266,37 +246,27 @@ _dirops_L4
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L8
+                BNE     _dirops_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L8
+                BNE     _dirops_L6
                 LDA     #0
-                BRL     _dirops_L9
-_dirops_L8
+                BRA     _dirops_L7
+_dirops_L6
                 LDA     #1
-_dirops_L9
+_dirops_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L7
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
+                BEQ     _dirops_L5
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL readdir
@@ -310,59 +280,39 @@ _dirops_L9
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L13
+                BNE     _dirops_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L13
+                BNE     _dirops_L9
                 LDA     #0
-                BRL     _dirops_L14
-_dirops_L13
+                BRA     _dirops_L10
+_dirops_L9
                 LDA     #1
-_dirops_L14
+_dirops_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L11
+                BEQ     _dirops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _dirops_L11
-                LDA     #1
-                BRL     _dirops_L12
-_dirops_L11
-                LDA     #0
-_dirops_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L10
+                BNE     _dirops_L8
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     21,S   ; fccstk d=0 b=21
-_dirops_L10
+_dirops_L8
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -374,8 +324,8 @@ _dirops_L10
                 CLC
                 ADC     #4
                 TCS
-_dirops_L7
-_dirops_L15
+_dirops_L5
+_dirops_L11
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -401,84 +351,54 @@ _dirops_L15
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L17
+                BNE     _dirops_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L17
+                BNE     _dirops_L13
                 LDA     #0
-                BRL     _dirops_L18
-_dirops_L17
+                BRA     _dirops_L14
+_dirops_L13
                 LDA     #1
-_dirops_L18
+_dirops_L14
                 CMP     #0
                 BNE     *+5
-                BRL     _dirops_L16
+                BRL     _dirops_L12
                 LDA     13,S   ; fccstk d=0 b=13
                 INC
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 SEC
                 SBC     #1
-                BVC     _dirops_L22
+                BVC     _dirops_L17
                 EOR     #$8000
-_dirops_L22
-                BPL     *+5
-                BRL     _dirops_L20
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
+_dirops_L17
+                BMI     _dirops_L16
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #15
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirops_L23
+                BVC     _dirops_L18
                 EOR     #$8000
-_dirops_L23
-                BPL     *+5
-                BRL     _dirops_L20
+_dirops_L18
+                BPL     _dirops_L15
+_dirops_L16
                 LDA     #0
-                BRL     _dirops_L21
-_dirops_L20
-                LDA     #1
-_dirops_L21
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L19
-                LDA     #0
-                STA     19,S   ; fccstk d=0 b=19
-_dirops_L19
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
+                STA     _fcc_img16
+_dirops_L15
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _dirops_L24
+                BNE     _dirops_L19
                 LDA     #0
-                STA     19,S   ; fccstk d=0 b=19
-_dirops_L24
+                STA     _fcc_img16
+_dirops_L19
                 SEP     #$20
                 MX      %10
                 PHB
@@ -505,12 +425,10 @@ _dirops_L24
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L25
+                BEQ     _dirops_L20
                 LDA     #1
                 STA     15,S   ; fccstk d=0 b=15
-_dirops_L25
+_dirops_L20
                 SEP     #$20
                 MX      %10
                 PHB
@@ -538,67 +456,46 @@ _dirops_L25
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L26
+                BEQ     _dirops_L21
                 LDA     #1
                 STA     17,S   ; fccstk d=0 b=17
-_dirops_L26
-                BRL     _dirops_L15
-_dirops_L16
+_dirops_L21
+                BRL     _dirops_L11
+_dirops_L12
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
-                TXA
                 LDX     #10
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirops_L28
+                BVC     _dirops_L23
                 EOR     #$8000
-_dirops_L28
-                BMI     *+5
-                BRL     _dirops_L27
+_dirops_L23
+                BPL     _dirops_L22
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
-_dirops_L27
-                LDA     19,S   ; fccstk d=0 b=19
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L29
+_dirops_L22
+                LDA     _fcc_img16
+                BEQ     _dirops_L24
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
-_dirops_L29
+_dirops_L24
                 LDA     15,S   ; fccstk d=0 b=15
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L31
+                BEQ     _dirops_L25
                 LDA     17,S   ; fccstk d=0 b=17
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L31
-                LDA     #1
-                BRL     _dirops_L32
-_dirops_L31
-                LDA     #0
-_dirops_L32
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L30
+                BEQ     _dirops_L25
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
-_dirops_L30
+_dirops_L25
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -612,11 +509,8 @@ _dirops_L30
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
                 BEQ     *+5
-                BRL     _dirops_L33
+                BRL     _dirops_L26
                 SEP     #$20
                 MX      %10
                 PHB
@@ -639,37 +533,27 @@ _dirops_L30
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L35
+                BNE     _dirops_L28
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L35
+                BNE     _dirops_L28
                 LDA     #0
-                BRL     _dirops_L36
-_dirops_L35
+                BRA     _dirops_L29
+_dirops_L28
                 LDA     #1
-_dirops_L36
+_dirops_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L34
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _dirops_L27
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL readdir
@@ -683,66 +567,43 @@ _dirops_L36
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L40
+                BNE     _dirops_L31
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L40
+                BNE     _dirops_L31
                 LDA     #0
-                BRL     _dirops_L41
-_dirops_L40
+                BRA     _dirops_L32
+_dirops_L31
                 LDA     #1
-_dirops_L41
+_dirops_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L38
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
+                BEQ     _dirops_L30
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirops_L42
+                BVC     _dirops_L33
                 EOR     #$8000
-_dirops_L42
-                BMI     *+5
-                BRL     _dirops_L38
-                LDA     #1
-                BRL     _dirops_L39
-_dirops_L38
-                LDA     #0
-_dirops_L39
-                CMP     #0
-                BNE     *+5
-                BRL     _dirops_L37
+_dirops_L33
+                BPL     _dirops_L30
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     21,S   ; fccstk d=0 b=21
-_dirops_L37
+_dirops_L30
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -754,18 +615,21 @@ _dirops_L37
                 CLC
                 ADC     #4
                 TCS
-_dirops_L34
-_dirops_L33
+_dirops_L27
+_dirops_L26
                 LDA     21,S   ; fccstk d=0 b=21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     22
+main_FRAMESIZE   EQU     24
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 14

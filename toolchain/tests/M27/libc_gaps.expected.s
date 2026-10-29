@@ -34,10 +34,7 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #119
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strchr
@@ -83,45 +80,31 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _libc_gaps_L4
+                BNE     _libc_gaps_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _libc_gaps_L4
+                BNE     _libc_gaps_L2
                 LDA     #0
-                BRL     _libc_gaps_L5
-_libc_gaps_L4
+                BRA     _libc_gaps_L3
+_libc_gaps_L2
                 LDA     #1
-_libc_gaps_L5
+_libc_gaps_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _libc_gaps_L2
+                BEQ     _libc_gaps_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_ptr
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #119
-                BEQ     *+5
-                BRL     _libc_gaps_L2
-                LDA     #1
-                BRL     _libc_gaps_L3
-_libc_gaps_L2
-                LDA     #0
-_libc_gaps_L3
-                CMP     #0
-                BNE     *+5
-                BRL     _libc_gaps_L0
+                BNE     _libc_gaps_L0
                 LDA     #6
-                BRL     _libc_gaps_L1
+                BRA     _libc_gaps_L1
 _libc_gaps_L0
                 LDA     #0
 _libc_gaps_L1
@@ -129,7 +112,6 @@ _libc_gaps_L1
                 CLC
                 ADC     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #34
                 TAY

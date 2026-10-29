@@ -23,14 +23,8 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     #0
                 STA     inline
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _inline_ident_L0
+                BNE     _inline_ident_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     _fcc_img0
@@ -38,13 +32,10 @@ _inline_ident_L0
                 LDA     #1
                 STA     inline
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _inline_ident_L1
+                BNE     _inline_ident_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #22
                 STA     _fcc_img0

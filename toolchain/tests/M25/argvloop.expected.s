@@ -152,24 +152,21 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _argvloop_L1
+                BNE     _argvloop_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _argvloop_L1
+                BNE     _argvloop_L1
                 LDA     #0
-                BRL     _argvloop_L2
+                BRA     _argvloop_L2
 _argvloop_L1
                 LDA     #1
 _argvloop_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _argvloop_L0
+                BEQ     _argvloop_L0
                 LDA     #1
                 TAY
                 TSC
@@ -190,24 +187,21 @@ _argvloop_L0
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _argvloop_L4
+                BNE     _argvloop_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _argvloop_L4
+                BNE     _argvloop_L4
                 LDA     #1
-                BRL     _argvloop_L5
+                BRA     _argvloop_L5
 _argvloop_L4
                 LDA     #0
 _argvloop_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _argvloop_L3
+                BEQ     _argvloop_L3
                 LDA     #2
                 TAY
                 TSC
@@ -222,10 +216,8 @@ _argvloop_L3
                 LDA     [_fcc_img1]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #47
-                BNE     *+5
-                BRL     _argvloop_L6
+                BEQ     _argvloop_L6
                 LDA     #3
                 TAY
                 TSC
@@ -313,24 +305,21 @@ _argvloop_L6
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _argvloop_L8
+                BNE     _argvloop_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _argvloop_L8
+                BNE     _argvloop_L8
                 LDA     #0
-                BRL     _argvloop_L9
+                BRA     _argvloop_L9
 _argvloop_L8
                 LDA     #1
 _argvloop_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _argvloop_L7
+                BEQ     _argvloop_L7
                 LDA     #4
                 TAY
                 TSC
@@ -367,8 +356,7 @@ _argvloop_L10
                 BVC     _argvloop_L13
                 EOR     #$8000
 _argvloop_L13
-                BMI     *+5
-                BRL     _argvloop_L12
+                BPL     _argvloop_L12
                 DO      10+main_FRAMESIZE/256
                 TSC
                 CLC
@@ -409,24 +397,21 @@ _argvloop_L13
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _argvloop_L15
+                BNE     _argvloop_L15
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _argvloop_L15
+                BNE     _argvloop_L15
                 LDA     #1
-                BRL     _argvloop_L16
+                BRA     _argvloop_L16
 _argvloop_L15
                 LDA     #0
 _argvloop_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _argvloop_L14
+                BEQ     _argvloop_L14
                 LDA     #5
                 TAY
                 TSC

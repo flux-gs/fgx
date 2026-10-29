@@ -40,11 +40,9 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #$FFD6
-                BEQ     *+5
-                BRL     _miscops_L0
+                BNE     _miscops_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -67,29 +65,15 @@ _miscops_L0
                 ADC     #4
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$86A0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #34464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _miscops_L1
+                BEQ     _miscops_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -117,27 +101,23 @@ _miscops_L1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _miscops_L3
+                BNE     _miscops_L3
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _miscops_L3
+                BNE     _miscops_L3
                 LDA     #1
-                BRL     _miscops_L4
+                BRA     _miscops_L4
 _miscops_L3
                 LDA     #0
 _miscops_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _miscops_L2
+                BEQ     _miscops_L2
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -152,11 +132,9 @@ _miscops_L2
                 PLA
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _miscops_L5
+                BNE     _miscops_L5
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -185,11 +163,9 @@ _miscops_L5
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _miscops_L6
+                BNE     _miscops_L6
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -220,17 +196,14 @@ _miscops_L6
                 TCS
                 TYA
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _miscops_L8
                 EOR     #$8000
 _miscops_L8
-                BPL     *+5
-                BRL     _miscops_L7
+                BMI     _miscops_L7
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -239,18 +212,9 @@ _miscops_L7
                 STA     5,S   ; fccstk d=0 b=5
                 SEC
                 SBC     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _miscops_L10
-                EOR     #$8000
-_miscops_L10
-                BPL     *+5
-                BRL     _miscops_L9
+                BMI     _miscops_L9
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7

@@ -29,17 +29,13 @@ _continue_for_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #10
                 BVC     _continue_for_L3
                 EOR     #$8000
 _continue_for_L3
-                BMI     *+5
-                BRL     _continue_for_L2
+                BPL     _continue_for_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #5
                 STA     _fcc_tmp_b
                 TXA
@@ -48,24 +44,20 @@ _continue_for_L3
                 BVC     _continue_for_L5
                 EOR     #$8000
 _continue_for_L5
-                BMI     *+5
-                BRL     _continue_for_L4
-                BRL     _continue_for_L1
+                BPL     _continue_for_L4
+                BRA     _continue_for_L1
 _continue_for_L4
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img1
 _continue_for_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _continue_for_L0
+                BRA     _continue_for_L0
 _continue_for_L2
                 LDA     _fcc_img1
                 TAY

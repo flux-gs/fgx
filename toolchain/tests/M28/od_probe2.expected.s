@@ -58,28 +58,6 @@ f2_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      12+f2_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+f2_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+f2_FRAMESIZE,S   ; fccstk d=2 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+f2_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+f2_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+f2_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -87,28 +65,6 @@ f2_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      12+f2_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+f2_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+f2_FRAMESIZE,S   ; fccstk d=2 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+f2_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+f2_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+f2_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -166,6 +122,7 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -175,6 +132,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #5

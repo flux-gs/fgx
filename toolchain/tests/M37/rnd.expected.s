@@ -27,10 +27,8 @@ main_stkok        TCS
                 TYA
                 FGX2_FARCALL rand
                 TAX
-                TXA
                 CMP     #16838
-                BNE     *+5
-                BRL     _rnd_L0
+                BEQ     _rnd_L0
                 LDA     #1
                 TAY
                 TSC
@@ -44,10 +42,8 @@ main_stkok        TCS
 _rnd_L0
                 FGX2_FARCALL rand
                 TAX
-                TXA
                 CMP     #5758
-                BNE     *+5
-                BRL     _rnd_L1
+                BEQ     _rnd_L1
                 LDA     #2
                 TAY
                 TSC
@@ -61,10 +57,8 @@ _rnd_L0
 _rnd_L1
                 FGX2_FARCALL rand
                 TAX
-                TXA
                 CMP     #10113
-                BNE     *+5
-                BRL     _rnd_L2
+                BEQ     _rnd_L2
                 LDA     #3
                 TAY
                 TSC
@@ -91,26 +85,13 @@ _rnd_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$4C6C
-                STA     _fcc_long_hi
-                LDA     #$264E
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #9806
+                STX     _fcc_long_b_lo
+                LDX     #19564
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _rnd_L3
+                BEQ     _rnd_L3
                 LDA     #4
                 TAY
                 TSC
@@ -131,26 +112,13 @@ _rnd_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$2A74
-                STA     _fcc_long_hi
-                LDA     #$5892
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #22674
+                STX     _fcc_long_b_lo
+                LDX     #10868
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _rnd_L4
+                BEQ     _rnd_L4
                 LDA     #5
                 TAY
                 TSC
@@ -194,14 +162,12 @@ _rnd_L4
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 TAX
-                TXA
                 SEC
                 SBC     #80
                 BVC     _rnd_L6
                 EOR     #$8000
 _rnd_L6
-                BPL     *+5
-                BRL     _rnd_L5
+                BMI     _rnd_L5
                 LDA     #6
                 TAY
                 TSC
@@ -220,10 +186,8 @@ _rnd_L5
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _rnd_L8
+                BNE     _rnd_L8
                 LDA     #7
                 PHA
                 FGX2_FARCALL abs
@@ -231,18 +195,9 @@ _rnd_L5
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _rnd_L8
-                LDA     #0
-                BRL     _rnd_L9
+                BEQ     _rnd_L7
 _rnd_L8
-                LDA     #1
-_rnd_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _rnd_L7
                 LDA     #7
                 TAY
                 TSC

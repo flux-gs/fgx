@@ -67,6 +67,7 @@ main_stkok        TCS
                 PLA
                 LDA     #36864
                 STA     gs+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -76,6 +77,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
@@ -83,33 +86,24 @@ main_stkok        TCS
                 ASL
                 TAX
                 LDA:    garr,X
-                TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L0
+                BCS     _u_track_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
 _u_track_L0
                 FGX2_FARCALL uret
-                TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L1
+                BCS     _u_track_L1
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     9,S   ; fccstk d=0 b=9
@@ -123,34 +117,24 @@ _u_track_L1
                 LDA     gp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L2
+                BCS     _u_track_L2
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     9,S   ; fccstk d=0 b=9
 _u_track_L2
                 LDA     #36864
                 STA     7,S   ; fccstk d=0 b=7
-                TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L3
+                BCS     _u_track_L3
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -185,40 +169,24 @@ _u_track_L3
                 ROR     _fcc_long_b_hi
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_hi
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #144
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #144
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _u_track_L4
+                BEQ     _u_track_L4
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     9,S   ; fccstk d=0 b=9
 _u_track_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #31
-                BEQ     *+5
-                BRL     _u_track_L5
+                BNE     _u_track_L5
                 LDA     #42
-                BRL     _u_track_L6
+                BRA     _u_track_L6
 _u_track_L5
                 LDA     9,S   ; fccstk d=0 b=9
 _u_track_L6

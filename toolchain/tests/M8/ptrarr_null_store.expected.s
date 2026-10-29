@@ -72,24 +72,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L1
+                BNE     _ptrarr_null_store_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L1
+                BNE     _ptrarr_null_store_L1
                 LDA     #0
-                BRL     _ptrarr_null_store_L2
+                BRA     _ptrarr_null_store_L2
 _ptrarr_null_store_L1
                 LDA     #1
 _ptrarr_null_store_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarr_null_store_L0
+                BEQ     _ptrarr_null_store_L0
                 LDA     #1
                 TAY
                 TSC
@@ -120,24 +117,21 @@ _ptrarr_null_store_L0
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L4
+                BNE     _ptrarr_null_store_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L4
+                BNE     _ptrarr_null_store_L4
                 LDA     #0
-                BRL     _ptrarr_null_store_L5
+                BRA     _ptrarr_null_store_L5
 _ptrarr_null_store_L4
                 LDA     #1
 _ptrarr_null_store_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarr_null_store_L3
+                BEQ     _ptrarr_null_store_L3
                 LDA     #2
                 TAY
                 TSC
@@ -167,24 +161,21 @@ _ptrarr_null_store_L3
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L7
+                BNE     _ptrarr_null_store_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L7
+                BNE     _ptrarr_null_store_L7
                 LDA     #0
-                BRL     _ptrarr_null_store_L8
+                BRA     _ptrarr_null_store_L8
 _ptrarr_null_store_L7
                 LDA     #1
 _ptrarr_null_store_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarr_null_store_L6
+                BEQ     _ptrarr_null_store_L6
                 LDA     #3
                 TAY
                 TSC
@@ -207,6 +198,7 @@ _ptrarr_null_store_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -216,6 +208,7 @@ _ptrarr_null_store_L6
                 MX      %00
                 LDA     #s0
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -246,6 +239,7 @@ _ptrarr_null_store_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -255,6 +249,7 @@ _ptrarr_null_store_L6
                 MX      %00
                 LDA     #s0
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -316,24 +311,21 @@ _ptrarr_null_store_L6
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L10
+                BNE     _ptrarr_null_store_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L10
+                BNE     _ptrarr_null_store_L10
                 LDA     #0
-                BRL     _ptrarr_null_store_L11
+                BRA     _ptrarr_null_store_L11
 _ptrarr_null_store_L10
                 LDA     #1
 _ptrarr_null_store_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarr_null_store_L9
+                BEQ     _ptrarr_null_store_L9
                 LDA     #4
                 TAY
                 TSC
@@ -396,24 +388,21 @@ _ptrarr_null_store_L9
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L13
+                BNE     _ptrarr_null_store_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarr_null_store_L13
+                BNE     _ptrarr_null_store_L13
                 LDA     #0
-                BRL     _ptrarr_null_store_L14
+                BRA     _ptrarr_null_store_L14
 _ptrarr_null_store_L13
                 LDA     #1
 _ptrarr_null_store_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarr_null_store_L12
+                BEQ     _ptrarr_null_store_L12
                 LDA     #5
                 TAY
                 TSC

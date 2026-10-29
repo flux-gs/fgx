@@ -247,8 +247,7 @@ _llong_store_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L0
+                BEQ     _llong_store_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -305,10 +304,9 @@ _llong_store_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L0
+                BEQ     _llong_store_L0
                 LDA     #1
-                BRL     _llong_store_L1
+                BRA     _llong_store_L1
 _llong_store_L0
                 LDA     #0
 _llong_store_L1
@@ -620,12 +618,9 @@ main_stkok        TCS
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L2
+                BEQ     _llong_store_L2
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     21,S   ; fccstk d=0 b=21
@@ -687,7 +682,7 @@ _llong_store_L2
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _llong_store_L4
+                BRL     _llong_store_L3
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -776,19 +771,9 @@ _llong_store_L2
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L4
-                LDA     #1
-                BRL     _llong_store_L5
-_llong_store_L4
-                LDA     #0
-_llong_store_L5
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L3
+                BEQ     _llong_store_L3
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     21,S   ; fccstk d=0 b=21
@@ -866,8 +851,7 @@ _llong_store_L3
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L7
+                BEQ     _llong_store_L4
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFE
@@ -908,23 +892,12 @@ _llong_store_L3
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L7
-                LDA     #1
-                BRL     _llong_store_L8
-_llong_store_L7
-                LDA     #0
-_llong_store_L8
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L6
+                BEQ     _llong_store_L4
                 LDA     21,S   ; fccstk d=0 b=21
-                TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     21,S   ; fccstk d=0 b=21
-_llong_store_L6
+_llong_store_L4
                 LDA     lo_neg+2
                 STA     _fcc_long_hi
                 LDA     lo_neg
@@ -998,9 +971,7 @@ _llong_store_L6
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L10
+                BEQ     _llong_store_L5
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -1040,24 +1011,13 @@ _llong_store_L6
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L10
-                LDA     #1
-                BRL     _llong_store_L11
-_llong_store_L10
-                LDA     #0
-_llong_store_L11
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_store_L9
+                BEQ     _llong_store_L5
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     21,S   ; fccstk d=0 b=21
-_llong_store_L9
+_llong_store_L5
                 LDA     21,S   ; fccstk d=0 b=21
                 TAY
                 TSC

@@ -62,7 +62,6 @@ main_stkok        TCS
                 CLC
                 ADC     #4
                 TAX
-                TXA
                 CLC
                 ADC     #30
                 TAY

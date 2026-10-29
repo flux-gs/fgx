@@ -11,7 +11,7 @@
  *                                                which calls strcmp
  *                  GC H ok                        SIGALRM runs the handler
  *                  (writes /tmp/gc.out without closing it, and exits: exit(3)
- *                  flushes stdio through libc's _lc_flush_hook)
+ *                  flushes stdio through _cleanup)
  *   gcprobe -r     GC F ok                        the bytes reached the file
  *                  GC VERDICT PASS
  */

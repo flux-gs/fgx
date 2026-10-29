@@ -351,10 +351,8 @@ chrtoblk_stkok        TCS
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _vnodepool_L0
+                BNE     _vnodepool_L0
                 LDA     #0
                 TAY
                 TSC
@@ -377,10 +375,8 @@ _vnodepool_L0
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _vnodepool_L1
+                BNE     _vnodepool_L1
                 LDA     #1
                 TAY
                 TSC
@@ -403,10 +399,8 @@ _vnodepool_L1
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _vnodepool_L2
+                BNE     _vnodepool_L2
                 LDA     #2
                 TAY
                 TSC
@@ -429,10 +423,8 @@ _vnodepool_L2
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #13
-                BEQ     *+5
-                BRL     _vnodepool_L3
+                BNE     _vnodepool_L3
                 LDA     #3
                 TAY
                 TSC
@@ -455,10 +447,8 @@ _vnodepool_L3
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #14
-                BEQ     *+5
-                BRL     _vnodepool_L4
+                BNE     _vnodepool_L4
                 LDA     #4
                 TAY
                 TSC
@@ -481,10 +471,8 @@ _vnodepool_L4
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _vnodepool_L5
+                BNE     _vnodepool_L5
                 LDA     #5
                 TAY
                 TSC
@@ -507,10 +495,8 @@ _vnodepool_L5
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #16
-                BEQ     *+5
-                BRL     _vnodepool_L6
+                BNE     _vnodepool_L6
                 LDA     #6
                 TAY
                 TSC
@@ -533,10 +519,8 @@ _vnodepool_L6
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #17
-                BEQ     *+5
-                BRL     _vnodepool_L7
+                BNE     _vnodepool_L7
                 LDA     #7
                 TAY
                 TSC
@@ -719,14 +703,11 @@ _vnodepool_L8
                 DEC
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _vnodepool_L9
+                BCS     _vnodepool_L9
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -734,7 +715,7 @@ _vnodepool_L8
                 REP     #$20
                 MX      %00
                 INC     _fcc_img1
-                BRL     _vnodepool_L8
+                BRA     _vnodepool_L8
 _vnodepool_L9
                 TAY
                 TSC
@@ -750,9 +731,10 @@ _vnodepool_zerobytes_STKGUARD    EQU     0
                 FGX2_EXPORT vntblinit
 vntblinit            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vntblinit_FRAMESIZE
+                SBC     #vntblinit_FRAMESIZE-2
                 DO      vntblinit_STKGUARD
                 BCC     vntblinit_stkovf
                 CMP     _fcc_stkfloor
@@ -783,31 +765,10 @@ vntblinit_stkok        TCS
                 ELSE
                 LDA     6+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr0
                 STA     vnode_pool
                 LDA     _fcc_fpr0+2
                 STA     vnode_pool+2
-                DO      8+vntblinit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vntblinit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vntblinit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vntblinit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     #10496
                 CLC
                 ADC     _fcc_fpr0
@@ -816,26 +777,22 @@ vntblinit_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     specinfo_pool+2
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _vnodepool_L10
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _vnodepool_L13
                 EOR     #$8000
 _vnodepool_L13
-                BMI     *+5
-                BRL     _vnodepool_L12
+                BPL     _vnodepool_L12
                 LDA     #speclisth
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -858,11 +815,9 @@ _vnodepool_L13
                 MX      %00
                 PLA
 _vnodepool_L11
-                INC     _fcc_img0
-                BRL     _vnodepool_L10
+                INC     _fcc_img16
+                BRA     _vnodepool_L10
 _vnodepool_L12
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     #896
                 PHA
                 SEP     #$20
@@ -886,6 +841,7 @@ _vnodepool_L12
                 LDA     #0
                 STA     vnode_free_head+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -894,6 +850,9 @@ _vnodepool_L12
                 REP     #$20
                 MX      %00
                 LDA     #vnode_free_head
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
@@ -919,21 +878,19 @@ _vnodepool_L12
                 ADC     #6
                 TCS
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _vnodepool_L14
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _vnodepool_L17
                 EOR     #$8000
 _vnodepool_L17
-                BMI     *+5
-                BRL     _vnodepool_L16
+                BPL     _vnodepool_L16
                 SEP     #$20
                 MX      %10
                 LDA     vnode_pool+2
@@ -942,7 +899,7 @@ _vnodepool_L17
                 MX      %00
                 LDA     vnode_pool
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -962,17 +919,10 @@ _vnodepool_L17
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
                 LDA     #8
                 LDY     #52
                 STA     [_fcc_fpr0],Y
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfree
@@ -981,11 +931,8 @@ _vnodepool_L17
                 ADC     #4
                 TCS
 _vnodepool_L15
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L14
+                INC     _fcc_img16
+                BRA     _vnodepool_L14
 _vnodepool_L16
                 DO      8+vntblinit_FRAMESIZE/256
                 TSC
@@ -1011,7 +958,6 @@ _vnodepool_L16
                 STA     _fcc_fpr0
                 LDA     #10496
                 TAX
-                TXA
                 CLC
                 ADC     #896
                 CLC
@@ -1020,13 +966,15 @@ _vnodepool_L16
                 TAY
                 TSC
                 CLC
-                ADC     #vntblinit_FRAMESIZE
+                ADC     #vntblinit_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vntblinit_FRAMESIZE   EQU     6
+vntblinit_FRAMESIZE   EQU     8
 vntblinit_STKGUARD    EQU     0
                 FGX2_EXPORT vfree
 vfree            ENT
@@ -1326,8 +1274,7 @@ vremfree_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L18
+                BEQ     _vnodepool_L18
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -1405,7 +1352,7 @@ vremfree_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vnodepool_L19
+                BRA     _vnodepool_L19
 _vnodepool_L18
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
@@ -1561,33 +1508,26 @@ getnewvnode_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L21
+                BNE     _vnodepool_L21
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L21
+                BNE     _vnodepool_L21
                 LDA     #1
-                BRL     _vnodepool_L22
+                BRA     _vnodepool_L22
 _vnodepool_L21
                 LDA     #0
 _vnodepool_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L20
+                BEQ     _vnodepool_L20
                 DO      18+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1633,15 +1573,9 @@ _vnodepool_L22
                 TYA
                 RTL
 _vnodepool_L20
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L23
+                BEQ     _vnodepool_L23
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1677,14 +1611,9 @@ _vnodepool_L23
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _vnodepool_L24
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L24
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -1699,31 +1628,16 @@ _vnodepool_L24
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #52
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      6+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1736,10 +1650,6 @@ _vnodepool_L24
                 FIN
                 LDY     #58
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 JSR     _fcc_long_from_int
                 LDY     #10
@@ -1756,24 +1666,12 @@ _vnodepool_L24
                 LDA     #0
                 LDY     #50
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #6
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #8
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -1885,8 +1783,7 @@ _vnodepool_L24
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L25
+                BEQ     _vnodepool_L25
                 SEP     #$20
                 MX      %10
                 LDA     _vnodepool_vfs_cacheops+2
@@ -2058,8 +1955,6 @@ vref_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2068,8 +1963,7 @@ vref_stkok        TCS
                 BVC     _vnodepool_L28
                 EOR     #$8000
 _vnodepool_L28
-                BPL     *+5
-                BRL     _vnodepool_L27
+                BMI     _vnodepool_L27
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2164,60 +2058,13 @@ vget_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #256
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L29
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L29
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -2236,57 +2083,10 @@ vget_stkok        TCS
                 TYA
                 RTL
 _vnodepool_L29
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L30
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BNE     _vnodepool_L30
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vremfree
@@ -2373,8 +2173,6 @@ vrele_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2383,8 +2181,7 @@ vrele_stkok        TCS
                 BVC     _vnodepool_L32
                 EOR     #$8000
 _vnodepool_L32
-                BPL     *+5
-                BRL     _vnodepool_L31
+                BMI     _vnodepool_L31
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2429,32 +2226,8 @@ _vnodepool_L31
                 DEC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                DO      8+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vrele_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vrele_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2463,8 +2236,7 @@ _vnodepool_L31
                 BVC     _vnodepool_L34
                 EOR     #$8000
 _vnodepool_L34
-                BMI     *+5
-                BRL     _vnodepool_L33
+                BPL     _vnodepool_L33
                 TAY
                 TSC
                 CLC
@@ -2475,28 +2247,7 @@ _vnodepool_L34
                 TYA
                 RTL
 _vnodepool_L33
-                DO      8+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vrele_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vrele_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfree
@@ -2702,8 +2453,6 @@ holdrele_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2712,8 +2461,7 @@ holdrele_stkok        TCS
                 BVC     _vnodepool_L37
                 EOR     #$8000
 _vnodepool_L37
-                BPL     *+5
-                BRL     _vnodepool_L36
+                BMI     _vnodepool_L36
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2936,8 +2684,7 @@ insmntque_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L39
+                BEQ     _vnodepool_L39
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -3170,24 +2917,21 @@ _vnodepool_L38
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L41
+                BNE     _vnodepool_L41
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L41
+                BNE     _vnodepool_L41
                 LDA     #1
-                BRL     _vnodepool_L42
+                BRA     _vnodepool_L42
 _vnodepool_L41
                 LDA     #0
 _vnodepool_L42
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L40
+                BEQ     _vnodepool_L40
                 TAY
                 TSC
                 CLC
@@ -3301,8 +3045,7 @@ _vnodepool_L40
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L43
+                BEQ     _vnodepool_L43
                 DO      12+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -3498,9 +3241,10 @@ insmntque_STKGUARD    EQU     0
                 FGX2_EXPORT _vnodepool_specalloc
 _vnodepool_specalloc            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #_vnodepool_specalloc_FRAMESIZE
+                SBC     #_vnodepool_specalloc_FRAMESIZE-2
                 DO      _vnodepool_specalloc_STKGUARD
                 BCC     _vnodepool_specalloc_stkovf
                 CMP     _fcc_stkfloor
@@ -3511,16 +3255,13 @@ _vnodepool_specalloc_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _vnodepool_L44
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _vnodepool_L47
@@ -3536,7 +3277,7 @@ _vnodepool_L47
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3564,45 +3305,30 @@ _vnodepool_L47
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L49
+                BNE     _vnodepool_L49
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L49
+                BNE     _vnodepool_L49
                 LDA     #1
-                BRL     _vnodepool_L50
+                BRA     _vnodepool_L50
 _vnodepool_L49
                 LDA     #0
 _vnodepool_L50
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L48
+                BEQ     _vnodepool_L48
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     specinfo_pool+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #specinfo_pool
+                LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3648,7 +3374,7 @@ _vnodepool_L50
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3663,19 +3389,14 @@ _vnodepool_L50
                 TAY
                 TSC
                 CLC
-                ADC     #_vnodepool_specalloc_FRAMESIZE
+                ADC     #_vnodepool_specalloc_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     _vnodepool_specalloc_bandx
 _vnodepool_L48
 _vnodepool_L45
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRL     _vnodepool_L44
 _vnodepool_L46
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3698,13 +3419,16 @@ _vnodepool_L46
                 TAY
                 TSC
                 CLC
-                ADC     #_vnodepool_specalloc_FRAMESIZE
+                ADC     #_vnodepool_specalloc_FRAMESIZE-2
                 TCS
+_vnodepool_specalloc_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_specalloc_FRAMESIZE   EQU     2
+_vnodepool_specalloc_FRAMESIZE   EQU     4
 _vnodepool_specalloc_STKGUARD    EQU     0
                 FGX2_EXPORT _vnodepool_specfree
 _vnodepool_specfree            ENT
@@ -3898,48 +3622,13 @@ checkalias_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _vnodepool_L52
-                DO      8+checkalias_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+checkalias_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+checkalias_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+checkalias_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+checkalias_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+checkalias_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L51
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _vnodepool_L52
-                LDA     #1
-                BRL     _vnodepool_L53
-_vnodepool_L52
-                LDA     #0
-_vnodepool_L53
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L51
+                BEQ     _vnodepool_L51
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -3953,15 +3642,6 @@ _vnodepool_L53
                 TYA
                 RTL
 _vnodepool_L51
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #speclisth
-                STA     _fcc_fpr0
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4003,8 +3683,15 @@ _vnodepool_L51
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #speclisth
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -4035,7 +3722,7 @@ checkalias_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L54
+_vnodepool_L52
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4047,7 +3734,7 @@ _vnodepool_L54
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L56
+                BRL     _vnodepool_L54
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4059,10 +3746,6 @@ _vnodepool_L54
                 LDA     10+checkalias_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -4080,8 +3763,7 @@ _vnodepool_L54
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L58
+                BNE     _vnodepool_L56
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4116,33 +3798,14 @@ _vnodepool_L54
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L58
-                LDA     #0
-                BRL     _vnodepool_L59
-_vnodepool_L58
-                LDA     #1
-_vnodepool_L59
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L57
-                BRL     _vnodepool_L55
-_vnodepool_L57
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L55
+_vnodepool_L56
+                BRA     _vnodepool_L53
+_vnodepool_L55
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L60
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _vnodepool_L57
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -4154,11 +3817,8 @@ _vnodepool_L57
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_vnodepool_L60
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+_vnodepool_L57
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vget
@@ -4169,15 +3829,14 @@ _vnodepool_L60
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L61
+                BEQ     _vnodepool_L58
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_vnodepool_L61
-                BRL     _vnodepool_L56
-_vnodepool_L55
+_vnodepool_L58
+                BRA     _vnodepool_L54
+_vnodepool_L53
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4210,8 +3869,8 @@ _vnodepool_L55
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L54
-_vnodepool_L56
+                BRL     _vnodepool_L52
+_vnodepool_L54
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4221,43 +3880,26 @@ _vnodepool_L56
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L65
+                BNE     _vnodepool_L61
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L65
+                BNE     _vnodepool_L61
                 LDA     #1
-                BRL     _vnodepool_L66
-_vnodepool_L65
+                BRA     _vnodepool_L62
+_vnodepool_L61
                 LDA     #0
-_vnodepool_L66
+_vnodepool_L62
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L63
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _vnodepool_L60
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L63
-                LDA     #0
-                BRL     _vnodepool_L64
-_vnodepool_L63
-                LDA     #1
-_vnodepool_L64
-                CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L62
+                BRL     _vnodepool_L59
+_vnodepool_L60
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4512,24 +4154,21 @@ _vnodepool_L64
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L68
+                BNE     _vnodepool_L64
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L68
+                BNE     _vnodepool_L64
                 LDA     #0
-                BRL     _vnodepool_L69
-_vnodepool_L68
+                BRA     _vnodepool_L65
+_vnodepool_L64
                 LDA     #1
-_vnodepool_L69
+_vnodepool_L65
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L67
+                BEQ     _vnodepool_L63
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4553,8 +4192,6 @@ _vnodepool_L69
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
@@ -4563,13 +4200,9 @@ _vnodepool_L69
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
@@ -4577,7 +4210,7 @@ _vnodepool_L69
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L67
+_vnodepool_L63
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -4590,13 +4223,10 @@ _vnodepool_L67
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L62
+_vnodepool_L59
                 LDA     #0
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vclean
@@ -4784,24 +4414,21 @@ bdevvp_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L71
+                BNE     _vnodepool_L67
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L71
+                BNE     _vnodepool_L67
                 LDA     #1
-                BRL     _vnodepool_L72
-_vnodepool_L71
+                BRA     _vnodepool_L68
+_vnodepool_L67
                 LDA     #0
-_vnodepool_L72
+_vnodepool_L68
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L70
+                BEQ     _vnodepool_L66
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -4846,7 +4473,7 @@ _vnodepool_L72
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L70
+_vnodepool_L66
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -4884,9 +4511,7 @@ _vnodepool_L70
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L73
+                BEQ     _vnodepool_L69
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -4931,7 +4556,7 @@ _vnodepool_L70
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L73
+_vnodepool_L69
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -4940,10 +4565,6 @@ _vnodepool_L73
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #3
                 LDY     #52
                 STA     [_fcc_fpr0],Y
@@ -4987,8 +4608,7 @@ _vnodepool_L73
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L74
+                BEQ     _vnodepool_L70
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5008,7 +4628,7 @@ _vnodepool_L73
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L74
+_vnodepool_L70
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -5125,7 +4745,7 @@ vfinddev_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L75
+_vnodepool_L71
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5137,13 +4757,9 @@ _vnodepool_L75
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L77
+                BRL     _vnodepool_L73
                 LDA     _fcc_img0
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5161,8 +4777,7 @@ _vnodepool_L75
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L79
+                BNE     _vnodepool_L75
                 LDA     _fcc_img1
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -5174,18 +4789,10 @@ _vnodepool_L75
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L79
-                LDA     #0
-                BRL     _vnodepool_L80
-_vnodepool_L79
-                LDA     #1
-_vnodepool_L80
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L78
-                BRL     _vnodepool_L76
-_vnodepool_L78
+                BEQ     _vnodepool_L74
+_vnodepool_L75
+                BRA     _vnodepool_L72
+_vnodepool_L74
                 DO      12+vfinddev_FRAMESIZE/256
                 TSC
                 CLC
@@ -5230,7 +4837,7 @@ _vnodepool_L78
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L76
+_vnodepool_L72
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5263,8 +4870,8 @@ _vnodepool_L76
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L75
-_vnodepool_L77
+                BRL     _vnodepool_L71
+_vnodepool_L73
                 LDA     #1
                 TAY
                 TSC
@@ -5280,9 +4887,10 @@ vfinddev_STKGUARD    EQU     0
                 FGX2_EXPORT spec_securechr
 spec_securechr            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #spec_securechr_FRAMESIZE
+                SBC     #spec_securechr_FRAMESIZE-2
                 DO      spec_securechr_STKGUARD
                 BCC     spec_securechr_stkovf
                 CMP     _fcc_stkfloor
@@ -5294,25 +4902,20 @@ spec_securechr_stkok        TCS
                 INC     _fcc_fb
                 LDA     securelevel
                 TAX
-                TXA
                 SEC
                 SBC     #1
-                BVC     _vnodepool_L82
+                BVC     _vnodepool_L77
                 EOR     #$8000
-_vnodepool_L82
-                BMI     *+5
-                BRL     _vnodepool_L81
+_vnodepool_L77
+                BPL     _vnodepool_L76
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L81
+                BRL     spec_securechr_bandx
+_vnodepool_L76
                 DO      6+spec_securechr_FRAMESIZE/256
                 TSC
                 CLC
@@ -5328,31 +4931,26 @@ _vnodepool_L81
                 TAY
                 PLA
                 TYA
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
                 TAX
-                TXA
                 CMP     #65535
-                BEQ     *+5
-                BRL     _vnodepool_L83
+                BNE     _vnodepool_L78
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L83
-                LDA     5,S   ; fccstk d=0 b=5
+                BRL     spec_securechr_bandx
+_vnodepool_L78
+                LDA     _fcc_img16
                 LSR
                 LSR
                 LSR
                 LSR
                 LSR
                 CLC
-                ADC     5,S   ; fccstk d=0 b=5
+                ADC     _fcc_img16
                 TAX
                 LDA     #8
                 TAY
@@ -5378,9 +4976,7 @@ _vnodepool_L83
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img0
-_vnodepool_L84
+_vnodepool_L79
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5392,11 +4988,7 @@ _vnodepool_L84
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L86
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L81
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5412,12 +5004,11 @@ _vnodepool_L84
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L88
+                BNE     _vnodepool_L83
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5425,24 +5016,11 @@ _vnodepool_L84
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _vnodepool_L88
-                LDA     #0
-                BRL     _vnodepool_L89
-_vnodepool_L88
-                LDA     #1
-_vnodepool_L89
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L87
-                BRL     _vnodepool_L85
-_vnodepool_L87
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L82
+_vnodepool_L83
+                BRA     _vnodepool_L80
+_vnodepool_L82
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5460,37 +5038,22 @@ _vnodepool_L87
                 STA     _fcc_long_hi
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _vnodepool_L90
+                BEQ     _vnodepool_L84
                 LDA     #16
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L90
-_vnodepool_L85
+                BRA     spec_securechr_bandx
+_vnodepool_L84
+_vnodepool_L80
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5523,21 +5086,22 @@ _vnodepool_L85
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L84
-_vnodepool_L86
-                LDA     _fcc_img0
-                STA     5,S   ; fccstk d=0 b=5
+                BRL     _vnodepool_L79
+_vnodepool_L81
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
+spec_securechr_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-spec_securechr_FRAMESIZE   EQU     6
+spec_securechr_FRAMESIZE   EQU     8
 spec_securechr_STKGUARD    EQU     0
                 FGX2_EXPORT vfs_getsecurelevel
 vfs_getsecurelevel            ENT
@@ -5591,18 +5155,15 @@ vfs_setsecurelevel_stkok        TCS
                 ELSE
                 LDA     6+vfs_setsecurelevel_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vnodepool_L92
+                BVC     _vnodepool_L86
                 EOR     #$8000
-_vnodepool_L92
-                BMI     *+5
-                BRL     _vnodepool_L91
+_vnodepool_L86
+                BPL     _vnodepool_L85
                 LDA     #22
                 TAY
                 TSC
@@ -5613,7 +5174,7 @@ _vnodepool_L92
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L91
+_vnodepool_L85
                 DO      6+vfs_setsecurelevel_FRAMESIZE/256
                 TSC
                 CLC
@@ -5640,9 +5201,10 @@ vfs_setsecurelevel_STKGUARD    EQU     0
                 FGX2_EXPORT vcount
 vcount            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vcount_FRAMESIZE
+                SBC     #vcount_FRAMESIZE-2
                 DO      vcount_STKGUARD
                 BCC     vcount_stkovf
                 CMP     _fcc_stkfloor
@@ -5676,50 +5238,21 @@ vcount_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L93
-                DO      8+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vcount_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vcount_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BNE     _vnodepool_L87
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAY
                 TSC
                 CLC
-                ADC     #vcount_FRAMESIZE
+                ADC     #vcount_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L93
+                BRL     vcount_bandx
+_vnodepool_L87
 vcount_uL_loop
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
                 DO      8+vcount_FRAMESIZE/256
                 TSC
                 CLC
@@ -5780,7 +5313,7 @@ vcount_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L94
+_vnodepool_L88
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5792,11 +5325,7 @@ _vnodepool_L94
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L96
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L90
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5851,8 +5380,7 @@ _vnodepool_L94
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L98
+                BNE     _vnodepool_L92
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5887,33 +5415,18 @@ _vnodepool_L94
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L98
-                LDA     #0
-                BRL     _vnodepool_L99
-_vnodepool_L98
-                LDA     #1
-_vnodepool_L99
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L97
-                BRL     _vnodepool_L95
-_vnodepool_L97
+                BEQ     _vnodepool_L91
+_vnodepool_L92
+                BRA     _vnodepool_L89
+_vnodepool_L91
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L100
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _vnodepool_L93
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -5925,21 +5438,17 @@ _vnodepool_L97
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vcount_uL_loop
-_vnodepool_L100
-                LDA     5,S   ; fccstk d=0 b=5
+_vnodepool_L93
+                LDA     _fcc_img16
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     5,S   ; fccstk d=0 b=5
-_vnodepool_L95
+                STA     _fcc_img16
+_vnodepool_L89
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5972,19 +5481,22 @@ _vnodepool_L95
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L94
-_vnodepool_L96
-                LDA     5,S   ; fccstk d=0 b=5
+                BRL     _vnodepool_L88
+_vnodepool_L90
+                LDA     _fcc_img16
                 TAY
                 TSC
                 CLC
-                ADC     #vcount_FRAMESIZE
+                ADC     #vcount_FRAMESIZE-2
                 TCS
+vcount_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vcount_FRAMESIZE   EQU     6
+vcount_FRAMESIZE   EQU     8
 vcount_STKGUARD    EQU     0
                 FGX2_EXPORT vput
 vput            ENT
@@ -6078,7 +5590,7 @@ vput_stkok        TCS
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L101-1
+                PEA     _vnodepool_L94-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6089,7 +5601,7 @@ vput_stkok        TCS
                 DEC
                 PHA
                 RTL
-_vnodepool_L101
+_vnodepool_L94
                 TAY
                 TSC
                 CLC
@@ -6176,31 +5688,8 @@ vclean_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     5,S   ; fccstk d=0 b=5
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L102
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L95
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vref
@@ -6208,7 +5697,7 @@ vclean_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L102
+_vnodepool_L95
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6233,11 +5722,8 @@ _vnodepool_L102
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #256
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L103
+                BEQ     _vnodepool_L96
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6254,7 +5740,7 @@ _vnodepool_L102
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L103
+_vnodepool_L96
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6279,31 +5765,8 @@ _vnodepool_L103
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #256
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -6359,7 +5822,7 @@ _vnodepool_L103
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L104-1
+                PEA     _vnodepool_L97-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6370,7 +5833,7 @@ _vnodepool_L103
                 DEC
                 PHA
                 RTL
-_vnodepool_L104
+_vnodepool_L97
                 TAY
                 TSC
                 CLC
@@ -6388,11 +5851,8 @@ _vnodepool_L104
                 LDA     10+vclean_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                TXA
                 AND     #4
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L105
+                BEQ     _vnodepool_L98
                 LDA     #1
                 PHA
                 DO      10+vclean_FRAMESIZE/256
@@ -6424,7 +5884,7 @@ _vnodepool_L104
                 CLC
                 ADC     #6
                 TCS
-_vnodepool_L105
+_vnodepool_L98
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6485,6 +5945,7 @@ _vnodepool_L105
                 LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6494,6 +5955,8 @@ _vnodepool_L105
                 MX      %00
                 LDA     #dead_vnodeops
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -6576,7 +6039,7 @@ _vnodepool_L105
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L106-1
+                PEA     _vnodepool_L99-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6587,7 +6050,7 @@ _vnodepool_L105
                 DEC
                 PHA
                 RTL
-_vnodepool_L106
+_vnodepool_L99
                 TAY
                 TSC
                 CLC
@@ -6595,9 +6058,8 @@ _vnodepool_L106
                 TCS
                 TYA
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L107
+                BRL     _vnodepool_L100
                 DO      10+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6609,11 +6071,8 @@ _vnodepool_L106
                 LDA     10+vclean_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                TXA
                 AND     #4
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L108
+                BEQ     _vnodepool_L101
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6668,7 +6127,7 @@ _vnodepool_L106
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L109-1
+                PEA     _vnodepool_L102-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6679,14 +6138,14 @@ _vnodepool_L106
                 DEC
                 PHA
                 RTL
-_vnodepool_L109
+_vnodepool_L102
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-_vnodepool_L108
+_vnodepool_L101
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6734,7 +6193,7 @@ _vnodepool_L108
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L110-1
+                PEA     _vnodepool_L103-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6745,14 +6204,14 @@ _vnodepool_L108
                 DEC
                 PHA
                 RTL
-_vnodepool_L110
+_vnodepool_L103
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_vnodepool_L107
+_vnodepool_L100
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6800,7 +6259,7 @@ _vnodepool_L107
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L112-1
+                PEA     _vnodepool_L105-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6811,16 +6270,14 @@ _vnodepool_L107
                 DEC
                 PHA
                 RTL
-_vnodepool_L112
+_vnodepool_L105
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L111
+                BEQ     _vnodepool_L104
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6837,11 +6294,9 @@ _vnodepool_L112
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L111
+_vnodepool_L104
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L113
+                BEQ     _vnodepool_L106
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6871,7 +6326,7 @@ _vnodepool_L111
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L113
+_vnodepool_L106
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6902,57 +6357,10 @@ _vnodepool_L113
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #512
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L114
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L107
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #512
@@ -6961,28 +6369,7 @@ _vnodepool_L113
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -6990,7 +6377,7 @@ _vnodepool_L113
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L114
+_vnodepool_L107
                 TAY
                 TSC
                 CLC
@@ -7041,60 +6428,13 @@ vgone_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #256
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L115
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L108
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -7111,31 +6451,10 @@ vgone_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L115
+_vnodepool_L108
                 LDA     #4
                 PHA
-                DO      10+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+vgone_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vclean
@@ -7202,69 +6521,15 @@ _vnodepool_L115
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _vnodepool_L117
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L110
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _vnodepool_L117
-                LDA     #0
-                BRL     _vnodepool_L118
-_vnodepool_L117
-                LDA     #1
-_vnodepool_L118
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L116
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BEQ     *+5
+                BRL     _vnodepool_L109
+_vnodepool_L110
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7282,24 +6547,21 @@ _vnodepool_L118
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L120
+                BNE     _vnodepool_L112
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L120
+                BNE     _vnodepool_L112
                 LDA     #1
-                BRL     _vnodepool_L121
-_vnodepool_L120
+                BRA     _vnodepool_L113
+_vnodepool_L112
                 LDA     #0
-_vnodepool_L121
+_vnodepool_L113
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L119
+                BEQ     _vnodepool_L111
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7316,7 +6578,7 @@ _vnodepool_L121
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L119
+_vnodepool_L111
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7397,24 +6659,21 @@ _vnodepool_L119
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L123
+                BNE     _vnodepool_L115
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L123
+                BNE     _vnodepool_L115
                 LDA     #1
-                BRL     _vnodepool_L124
-_vnodepool_L123
+                BRA     _vnodepool_L116
+_vnodepool_L115
                 LDA     #0
-_vnodepool_L124
+_vnodepool_L116
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L122
+                BEQ     _vnodepool_L114
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7460,28 +6719,6 @@ _vnodepool_L124
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
                 LDY     #54
                 LDA     [_fcc_fpr1],Y
                 PHA
@@ -7514,8 +6751,8 @@ _vnodepool_L124
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vnodepool_L125
-_vnodepool_L122
+                BRL     _vnodepool_L117
+_vnodepool_L114
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7576,7 +6813,7 @@ _vnodepool_L122
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L126
+_vnodepool_L118
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7588,11 +6825,7 @@ _vnodepool_L126
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L128
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L120
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7641,26 +6874,23 @@ _vnodepool_L126
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L130
+                BNE     _vnodepool_L122
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L130
+                BNE     _vnodepool_L122
                 LDA     #0
-                BRL     _vnodepool_L131
-_vnodepool_L130
+                BRA     _vnodepool_L123
+_vnodepool_L122
                 LDA     #1
-_vnodepool_L131
+_vnodepool_L123
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L129
-                BRL     _vnodepool_L127
-_vnodepool_L129
+                BEQ     _vnodepool_L121
+                BRA     _vnodepool_L119
+_vnodepool_L121
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7677,28 +6907,6 @@ _vnodepool_L129
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
                 LDY     #54
                 LDA     [_fcc_fpr1],Y
                 PHA
@@ -7732,8 +6940,8 @@ _vnodepool_L129
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vnodepool_L128
-_vnodepool_L127
+                BRA     _vnodepool_L120
+_vnodepool_L119
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7766,8 +6974,8 @@ _vnodepool_L127
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L126
-_vnodepool_L128
+                BRL     _vnodepool_L118
+_vnodepool_L120
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7777,24 +6985,21 @@ _vnodepool_L128
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L133
+                BNE     _vnodepool_L125
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L133
+                BNE     _vnodepool_L125
                 LDA     #1
-                BRL     _vnodepool_L134
-_vnodepool_L133
+                BRA     _vnodepool_L126
+_vnodepool_L125
                 LDA     #0
-_vnodepool_L134
+_vnodepool_L126
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L132
+                BEQ     _vnodepool_L124
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7811,8 +7016,8 @@ _vnodepool_L134
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L132
-_vnodepool_L125
+_vnodepool_L124
+_vnodepool_L117
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7837,40 +7042,16 @@ _vnodepool_L125
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L135
+                BRL     _vnodepool_L127
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     5,S   ; fccstk d=0 b=5
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7911,7 +7092,7 @@ _vnodepool_L125
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_img0
-_vnodepool_L136
+_vnodepool_L128
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7923,11 +7104,7 @@ _vnodepool_L136
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L138
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L130
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7982,8 +7159,7 @@ _vnodepool_L136
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L140
+                BNE     _vnodepool_L132
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8018,18 +7194,10 @@ _vnodepool_L136
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L140
-                LDA     #0
-                BRL     _vnodepool_L141
-_vnodepool_L140
-                LDA     #1
-_vnodepool_L141
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L139
-                BRL     _vnodepool_L137
-_vnodepool_L139
+                BEQ     _vnodepool_L131
+_vnodepool_L132
+                BRA     _vnodepool_L129
+_vnodepool_L131
                 INC     _fcc_img0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -8039,7 +7207,7 @@ _vnodepool_L139
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_vnodepool_L137
+_vnodepool_L129
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8072,15 +7240,11 @@ _vnodepool_L137
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L136
-_vnodepool_L138
+                BRL     _vnodepool_L128
+_vnodepool_L130
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L142
+                BNE     _vnodepool_L133
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8097,13 +7261,11 @@ _vnodepool_L138
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L142
+_vnodepool_L133
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _vnodepool_L143
+                BNE     _vnodepool_L134
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -8116,7 +7278,7 @@ _vnodepool_L142
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_vnodepool_L143
+_vnodepool_L134
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8147,29 +7309,7 @@ _vnodepool_L143
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_vnodepool_L135
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+_vnodepool_L127
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -8228,7 +7368,7 @@ _vnodepool_L135
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vnodepool_L116
+_vnodepool_L109
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8267,7 +7407,7 @@ _vnodepool_L116
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L144
+                BRL     _vnodepool_L135
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8359,6 +7499,7 @@ _vnodepool_L116
                 LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8368,6 +7509,8 @@ _vnodepool_L116
                 MX      %00
                 LDA     #vnode_free_head
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -8389,8 +7532,7 @@ _vnodepool_L116
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L145
+                BEQ     _vnodepool_L136
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -8436,8 +7578,8 @@ _vnodepool_L116
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _vnodepool_L146
-_vnodepool_L145
+                BRA     _vnodepool_L137
+_vnodepool_L136
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8465,7 +7607,7 @@ _vnodepool_L145
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
-_vnodepool_L146
+_vnodepool_L137
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8495,7 +7637,7 @@ _vnodepool_L146
                 CLC
                 ADC     #1
                 STA     freevnodes
-_vnodepool_L144
+_vnodepool_L135
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8535,9 +7677,10 @@ vgone_STKGUARD    EQU     0
                 FGX2_EXPORT vflush
 vflush            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vflush_FRAMESIZE
+                SBC     #vflush_FRAMESIZE-2
                 DO      vflush_STKGUARD
                 BCC     vflush_stkovf
                 CMP     _fcc_stkfloor
@@ -8547,6 +7690,17 @@ vflush_stkovf       JMP     _fcc_stkoflow
 vflush_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      14+vflush_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #14+vflush_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
+                FIN
+                STA     _fcc_img16
                 DO      8+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -8574,42 +7728,18 @@ vflush_stkok        TCS
                 STA     _fcc_long_hi
                 LDY     #20
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0040
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #64
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L147
+                BEQ     _vnodepool_L138
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8626,7 +7756,7 @@ vflush_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L147
+_vnodepool_L138
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
 vflush_uL_loop
@@ -8668,7 +7798,7 @@ vflush_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L148
+_vnodepool_L139
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8680,11 +7810,7 @@ _vnodepool_L148
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vnodepool_L150
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L141
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -8721,29 +7847,26 @@ _vnodepool_L148
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L152
+                BNE     _vnodepool_L143
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L152
+                BNE     _vnodepool_L143
                 LDA     #0
-                BRL     _vnodepool_L153
-_vnodepool_L152
+                BRA     _vnodepool_L144
+_vnodepool_L143
                 LDA     #1
-_vnodepool_L153
+_vnodepool_L144
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L151
+                BEQ     _vnodepool_L142
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflush_uL_loop
-_vnodepool_L151
+_vnodepool_L142
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8792,78 +7915,38 @@ _vnodepool_L151
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L155
+                BNE     _vnodepool_L146
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L155
+                BNE     _vnodepool_L146
                 LDA     #1
-                BRL     _vnodepool_L156
-_vnodepool_L155
+                BRA     _vnodepool_L147
+_vnodepool_L146
                 LDA     #0
-_vnodepool_L156
+_vnodepool_L147
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L154
-                BRL     _vnodepool_L149
-_vnodepool_L154
-                DO      14+vflush_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+vflush_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
+                BEQ     _vnodepool_L145
+                BRL     _vnodepool_L140
+_vnodepool_L145
+                LDA     _fcc_img16
                 TAX
-                TXA
                 AND     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L158
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L148
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #4
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L158
-                LDA     #1
-                BRL     _vnodepool_L159
-_vnodepool_L158
-                LDA     #0
-_vnodepool_L159
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L157
-                BRL     _vnodepool_L149
-_vnodepool_L157
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L148
+                BRL     _vnodepool_L140
+_vnodepool_L148
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L160
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _vnodepool_L149
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -8871,58 +7954,24 @@ _vnodepool_L157
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vnodepool_L149
-_vnodepool_L160
-                DO      14+vflush_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+vflush_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
+                BRL     _vnodepool_L140
+_vnodepool_L149
+                LDA     _fcc_img16
                 TAX
-                TXA
                 AND     #2
-                CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L161
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L150
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _vnodepool_L163
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L151
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _vnodepool_L163
-                LDA     #1
-                BRL     _vnodepool_L164
-_vnodepool_L163
-                LDA     #0
-_vnodepool_L164
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L162
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L151
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -8930,14 +7979,11 @@ _vnodepool_L164
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vnodepool_L165
-_vnodepool_L162
+                BRL     _vnodepool_L152
+_vnodepool_L151
                 LDA     #0
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vclean
@@ -8958,24 +8004,21 @@ _vnodepool_L162
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L167
+                BNE     _vnodepool_L154
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L167
+                BNE     _vnodepool_L154
                 LDA     #1
-                BRL     _vnodepool_L168
-_vnodepool_L167
+                BRA     _vnodepool_L155
+_vnodepool_L154
                 LDA     #0
-_vnodepool_L168
+_vnodepool_L155
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L166
+                BEQ     _vnodepool_L153
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8987,8 +8030,8 @@ _vnodepool_L168
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vnodepool_L149
-_vnodepool_L166
+                BRA     _vnodepool_L140
+_vnodepool_L153
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -9028,14 +8071,14 @@ _vnodepool_L166
                 CLC
                 ADC     #8
                 TCS
-_vnodepool_L165
-                BRL     _vnodepool_L149
-_vnodepool_L161
+_vnodepool_L152
+                BRA     _vnodepool_L140
+_vnodepool_L150
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-_vnodepool_L149
+_vnodepool_L140
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -9044,34 +8087,32 @@ _vnodepool_L149
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L148
-_vnodepool_L150
+                BRL     _vnodepool_L139
+_vnodepool_L141
                 LDA     9,S   ; fccstk d=0 b=9
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L169
+                BEQ     _vnodepool_L156
                 LDA     #16
                 TAY
                 TSC
                 CLC
-                ADC     #vflush_FRAMESIZE
+                ADC     #vflush_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L169
+                BRA     vflush_bandx
+_vnodepool_L156
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #vflush_FRAMESIZE
+                ADC     #vflush_FRAMESIZE-2
                 TCS
+vflush_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vflush_FRAMESIZE   EQU     10
+vflush_FRAMESIZE   EQU     12
 vflush_STKGUARD    EQU     0
                 FGX2_EXPORT ndinit
 ndinit            ENT
@@ -9188,15 +8229,8 @@ ndslot_stkok        TCS
                 ELSE
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _vnodepool_L173
-                EOR     #$8000
-_vnodepool_L173
-                BPL     *+5
-                BRL     _vnodepool_L171
+                CMP     #0
+                BMI     _vnodepool_L158
                 DO      8+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -9208,22 +8242,13 @@ _vnodepool_L173
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #2
-                BVC     _vnodepool_L174
+                BVC     _vnodepool_L159
                 EOR     #$8000
-_vnodepool_L174
-                BMI     *+5
-                BRL     _vnodepool_L171
-                LDA     #0
-                BRL     _vnodepool_L172
-_vnodepool_L171
-                LDA     #1
-_vnodepool_L172
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L170
+_vnodepool_L159
+                BMI     _vnodepool_L157
+_vnodepool_L158
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -9236,7 +8261,7 @@ _vnodepool_L172
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L170
+_vnodepool_L157
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -9248,14 +8273,12 @@ _vnodepool_L170
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
-                BVC     _vnodepool_L178
+                BVC     _vnodepool_L162
                 EOR     #$8000
-_vnodepool_L178
-                BPL     *+5
-                BRL     _vnodepool_L176
+_vnodepool_L162
+                BMI     _vnodepool_L161
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -9266,26 +8289,16 @@ _vnodepool_L178
                 ELSE
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 LDX     #32
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vnodepool_L179
+                BVC     _vnodepool_L163
                 EOR     #$8000
-_vnodepool_L179
-                BPL     *+5
-                BRL     _vnodepool_L176
-                LDA     #0
-                BRL     _vnodepool_L177
-_vnodepool_L176
-                LDA     #1
-_vnodepool_L177
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L175
+_vnodepool_L163
+                BPL     _vnodepool_L160
+_vnodepool_L161
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -9298,7 +8311,7 @@ _vnodepool_L177
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L175
+_vnodepool_L160
                 SEP     #$20
                 MX      %10
                 LDA     nd_pool+2
@@ -9312,24 +8325,21 @@ _vnodepool_L175
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L181
+                BNE     _vnodepool_L165
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L181
+                BNE     _vnodepool_L165
                 LDA     #1
-                BRL     _vnodepool_L182
-_vnodepool_L181
+                BRA     _vnodepool_L166
+_vnodepool_L165
                 LDA     #0
-_vnodepool_L182
+_vnodepool_L166
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L180
+                BEQ     _vnodepool_L164
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -9342,7 +8352,7 @@ _vnodepool_L182
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L180
+_vnodepool_L164
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -9353,8 +8363,6 @@ _vnodepool_L180
                 ELSE
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 DEC
                 ASL
                 TAX
@@ -9394,18 +8402,17 @@ _vnodepool_L180
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     _fcc_img0
-_vnodepool_L183
+_vnodepool_L167
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 SEC
                 SBC     #158
-                BVC     _vnodepool_L186
+                BVC     _vnodepool_L170
                 EOR     #$8000
-_vnodepool_L186
-                BMI     *+5
-                BRL     _vnodepool_L185
+_vnodepool_L170
+                BPL     _vnodepool_L169
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -9420,10 +8427,10 @@ _vnodepool_L186
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_vnodepool_L184
+_vnodepool_L168
                 INC     _fcc_img0
-                BRL     _vnodepool_L183
-_vnodepool_L185
+                BRA     _vnodepool_L167
+_vnodepool_L169
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -9479,7 +8486,6 @@ _vnodepool_L185
                 ASL
                 ASL
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 CLC
@@ -9658,46 +8664,21 @@ vfs_dounmount_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L190
+                BNE     _vnodepool_L173
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L190
+                BNE     _vnodepool_L173
                 LDA     #1
-                BRL     _vnodepool_L191
-_vnodepool_L190
+                BRA     _vnodepool_L174
+_vnodepool_L173
                 LDA     #0
-_vnodepool_L191
+_vnodepool_L174
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L188
-                DO      8+vfs_dounmount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vfs_dounmount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vfs_dounmount_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vfs_dounmount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vfs_dounmount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vfs_dounmount_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BNE     _vnodepool_L172
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -9715,32 +8696,22 @@ _vnodepool_L191
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L192
+                BNE     _vnodepool_L175
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L192
+                BNE     _vnodepool_L175
                 LDA     #1
-                BRL     _vnodepool_L193
-_vnodepool_L192
+                BRA     _vnodepool_L176
+_vnodepool_L175
                 LDA     #0
-_vnodepool_L193
+_vnodepool_L176
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L188
-                LDA     #0
-                BRL     _vnodepool_L189
-_vnodepool_L188
-                LDA     #1
-_vnodepool_L189
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L187
+                BEQ     _vnodepool_L171
+_vnodepool_L172
                 LDA     #22
                 TAY
                 TSC
@@ -9751,7 +8722,7 @@ _vnodepool_L189
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L187
+_vnodepool_L171
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9852,8 +8823,7 @@ _vnodepool_L187
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L194
+                BEQ     _vnodepool_L177
                 SEP     #$20
                 MX      %10
                 LDA     _vnodepool_vfs_cacheops+2
@@ -9905,7 +8875,7 @@ _vnodepool_L187
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L195-1
+                PEA     _vnodepool_L178-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9916,14 +8886,14 @@ _vnodepool_L187
                 DEC
                 PHA
                 RTL
-_vnodepool_L195
+_vnodepool_L178
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_vnodepool_L194
+_vnodepool_L177
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10012,7 +8982,7 @@ _vnodepool_L194
                 LDA     9,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vnodepool_L196-1
+                PEA     _vnodepool_L179-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -10023,7 +8993,7 @@ _vnodepool_L194
                 DEC
                 PHA
                 RTL
-_vnodepool_L196
+_vnodepool_L179
                 TAY
                 TSC
                 CLC
@@ -10032,8 +9002,7 @@ _vnodepool_L196
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L197
+                BEQ     _vnodepool_L180
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10096,7 +9065,7 @@ _vnodepool_L196
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L197
+_vnodepool_L180
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10135,24 +9104,22 @@ _vnodepool_L197
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L201
+                BNE     _vnodepool_L182
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L201
+                BNE     _vnodepool_L182
                 LDA     #0
-                BRL     _vnodepool_L202
-_vnodepool_L201
+                BRA     _vnodepool_L183
+_vnodepool_L182
                 LDA     #1
-_vnodepool_L202
+_vnodepool_L183
                 CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L199
+                BRL     _vnodepool_L181
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10192,32 +9159,22 @@ _vnodepool_L202
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L203
+                BNE     _vnodepool_L184
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L203
+                BNE     _vnodepool_L184
                 LDA     #0
-                BRL     _vnodepool_L204
-_vnodepool_L203
+                BRA     _vnodepool_L185
+_vnodepool_L184
                 LDA     #1
-_vnodepool_L204
+_vnodepool_L185
                 CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L199
-                LDA     #1
-                BRL     _vnodepool_L200
-_vnodepool_L199
-                LDA     #0
-_vnodepool_L200
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L198
+                BRL     _vnodepool_L181
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10441,7 +9398,7 @@ _vnodepool_L200
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vnodepool_L198
+_vnodepool_L181
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -10451,28 +9408,21 @@ _vnodepool_L198
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L206
+                BNE     _vnodepool_L187
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L206
+                BNE     _vnodepool_L187
                 LDA     #0
-                BRL     _vnodepool_L207
-_vnodepool_L206
+                BRA     _vnodepool_L188
+_vnodepool_L187
                 LDA     #1
-_vnodepool_L207
+_vnodepool_L188
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L205
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L186
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -10533,7 +9483,7 @@ _vnodepool_L207
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L205
+_vnodepool_L186
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10613,15 +9563,6 @@ _vnodepool_nchbucket_stkovf       JMP     _fcc_stkoflow
 _vnodepool_nchbucket_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
                 DO      8+_vnodepool_nchbucket_FRAMESIZE/256
                 TSC
                 CLC
@@ -10643,32 +9584,25 @@ _vnodepool_nchbucket_stkok        TCS
                 ELSE
                 LDA     6+_vnodepool_nchbucket_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #16
-                TAX
-                TXA
-                SEC
-                SBC     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #15
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #nchashtbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -10867,6 +9801,7 @@ _vnodepool_ncinshash_stkok        TCS
                 ELSE
                 LDA     6+_vnodepool_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -10898,28 +9833,7 @@ _vnodepool_ncinshash_stkok        TCS
                 LDA     10+_vnodepool_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_vnodepool_ncinshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_vnodepool_ncinshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_vnodepool_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_vnodepool_ncinshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_vnodepool_ncinshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_vnodepool_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -11173,24 +10087,21 @@ _vnodepool_nclru_totail_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L209
+                BNE     _vnodepool_L190
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L209
+                BNE     _vnodepool_L190
                 LDA     #1
-                BRL     _vnodepool_L210
-_vnodepool_L209
+                BRA     _vnodepool_L191
+_vnodepool_L190
                 LDA     #0
-_vnodepool_L210
+_vnodepool_L191
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L208
+                BEQ     _vnodepool_L189
                 TAY
                 TSC
                 CLC
@@ -11200,7 +10111,7 @@ _vnodepool_L210
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L208
+_vnodepool_L189
                 DO      8+_vnodepool_nclru_totail_FRAMESIZE/256
                 TSC
                 CLC
@@ -11632,8 +10543,7 @@ _vnodepool_nclru_remove_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L211
+                BEQ     _vnodepool_L192
                 DO      8+_vnodepool_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11711,8 +10621,8 @@ _vnodepool_nclru_remove_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vnodepool_L212
-_vnodepool_L211
+                BRA     _vnodepool_L193
+_vnodepool_L192
                 DO      8+_vnodepool_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11750,7 +10660,7 @@ _vnodepool_L211
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_vnodepool_L212
+_vnodepool_L193
                 TAY
                 TSC
                 CLC
@@ -11839,6 +10749,7 @@ _vnodepool_nclru_tohead_stkok        TCS
                 LDA     6+_vnodepool_nclru_tohead_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -11848,6 +10759,8 @@ _vnodepool_nclru_tohead_stkok        TCS
                 MX      %00
                 LDA     #nchhead
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #12
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -11869,8 +10782,7 @@ _vnodepool_nclru_tohead_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L213
+                BEQ     _vnodepool_L194
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -11916,8 +10828,8 @@ _vnodepool_nclru_tohead_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _vnodepool_L214
-_vnodepool_L213
+                BRA     _vnodepool_L195
+_vnodepool_L194
                 DO      8+_vnodepool_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -11945,7 +10857,7 @@ _vnodepool_L213
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_vnodepool_L214
+_vnodepool_L195
                 DO      8+_vnodepool_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -12101,28 +11013,7 @@ _vnodepool_ncdetach_stkok        TCS
                 LDA     6+_vnodepool_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_vnodepool_ncdetach_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_vnodepool_ncdetach_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_vnodepool_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_vnodepool_ncdetach_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_vnodepool_ncdetach_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_vnodepool_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -12150,9 +11041,10 @@ _vnodepool_ncdetach_STKGUARD    EQU     0
                 FGX2_EXPORT nchinit
 nchinit            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #nchinit_FRAMESIZE
+                SBC     #nchinit_FRAMESIZE-2
                 DO      nchinit_STKGUARD
                 BCC     nchinit_stkovf
                 CMP     _fcc_stkfloor
@@ -12251,23 +11143,26 @@ nchinit_stkok        TCS
                 STA     nchstats+30
                 TYA
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
-_vnodepool_L215
+                STA     _fcc_img16
+_vnodepool_L196
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #16
-                BVC     _vnodepool_L218
+                BVC     _vnodepool_L199
                 EOR     #$8000
-_vnodepool_L218
-                BMI     *+5
-                BRL     _vnodepool_L217
+_vnodepool_L199
+                BPL     _vnodepool_L198
+                LDA     _fcc_img16
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12275,23 +11170,10 @@ _vnodepool_L218
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_fpr1+2
                 LDA     7,S   ; fccstk d=0 b=7
@@ -12308,10 +11190,7 @@ _vnodepool_L218
                 STA     _fcc_fpr0+2
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr1+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -12325,18 +11204,17 @@ _vnodepool_L218
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vnodepool_L216
-                INC     _fcc_img0
-                BRL     _vnodepool_L215
-_vnodepool_L217
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
+_vnodepool_L197
+                INC     _fcc_img16
+                BRA     _vnodepool_L196
+_vnodepool_L198
                 LDA     #0
                 STA     nchhead
                 TAY
                 LDA     #0
                 STA     nchhead+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12345,6 +11223,9 @@ _vnodepool_L217
                 REP     #$20
                 MX      %00
                 LDA     #nchhead
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
@@ -12361,24 +11242,21 @@ _vnodepool_L217
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L220
+                BNE     _vnodepool_L201
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L220
+                BNE     _vnodepool_L201
                 LDA     #1
-                BRL     _vnodepool_L221
-_vnodepool_L220
+                BRA     _vnodepool_L202
+_vnodepool_L201
                 LDA     #0
-_vnodepool_L221
+_vnodepool_L202
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L219
+                BEQ     _vnodepool_L200
                 LDA     #0
                 STA     doingcache
                 LDA     #0
@@ -12387,33 +11265,22 @@ _vnodepool_L221
                 TAY
                 TSC
                 CLC
-                ADC     #nchinit_FRAMESIZE
+                ADC     #nchinit_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L219
+                BRL     nchinit_bandx
+_vnodepool_L200
                 LDA     #64
                 TAX
-                TXA
                 SEC
                 SBC     #1
-                STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L222
+                STA     _fcc_img16
+_vnodepool_L203
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _vnodepool_L225
-                EOR     #$8000
-_vnodepool_L225
+                LDA     _fcc_img16
                 BPL     *+5
-                BRL     _vnodepool_L224
+                BRL     _vnodepool_L205
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -12422,7 +11289,7 @@ _vnodepool_L225
                 MX      %00
                 LDA     namecache_pool
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -12436,10 +11303,6 @@ _vnodepool_L225
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -12508,10 +11371,6 @@ _vnodepool_L225
                 REP     #$20
                 MX      %00
                 LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1+2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr1
@@ -12527,10 +11386,7 @@ _vnodepool_L225
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -12551,13 +11407,10 @@ _vnodepool_L225
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L223
-                LDA     1,S   ; fccstk d=0 b=1
-                SEC
-                SBC     #1
-                STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L222
-_vnodepool_L224
+_vnodepool_L204
+                DEC     _fcc_img16
+                BRL     _vnodepool_L203
+_vnodepool_L205
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -12579,13 +11432,16 @@ _vnodepool_L224
                 TAY
                 TSC
                 CLC
-                ADC     #nchinit_FRAMESIZE
+                ADC     #nchinit_FRAMESIZE-2
                 TCS
+nchinit_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-nchinit_FRAMESIZE   EQU     10
+nchinit_FRAMESIZE   EQU     12
 nchinit_STKGUARD    EQU     0
                 FGX2_EXPORT namehash
 namehash            ENT
@@ -12644,7 +11500,7 @@ namehash_stkok        TCS
                 TYA
                 LDA     #0
                 STA     _fcc_img0
-_vnodepool_L226
+_vnodepool_L206
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12655,11 +11511,11 @@ _vnodepool_L226
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vnodepool_L229
+                BVC     _vnodepool_L209
                 EOR     #$8000
-_vnodepool_L229
+_vnodepool_L209
                 BMI     *+5
-                BRL     _vnodepool_L228
+                BRL     _vnodepool_L208
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -12749,10 +11605,10 @@ _vnodepool_L229
                 LDA     _fcc_long_hi
                 STA     _fcc_img5
                 TYA
-_vnodepool_L227
+_vnodepool_L207
                 INC     _fcc_img0
-                BRL     _vnodepool_L226
-_vnodepool_L228
+                BRL     _vnodepool_L206
+_vnodepool_L208
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -12837,7 +11693,7 @@ _vnodepool_namecmp_stkok        TCS
                 LDA     12+_vnodepool_namecmp_FRAMESIZE,S   ; fccstk d=0 b=12 fs
                 FIN
                 STA     _fcc_img4
-_vnodepool_L230
+_vnodepool_L210
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12846,9 +11702,7 @@ _vnodepool_L230
                 DEC
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L231
+                BEQ     _vnodepool_L211
                 LDA     [_fcc_img1]
                 INC     _fcc_img1
                 AND     #$00FF
@@ -12859,8 +11713,7 @@ _vnodepool_L230
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L232
+                BEQ     _vnodepool_L212
                 LDA     #1
                 TAY
                 TSC
@@ -12871,9 +11724,9 @@ _vnodepool_L230
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L232
-                BRL     _vnodepool_L230
-_vnodepool_L231
+_vnodepool_L212
+                BRA     _vnodepool_L210
+_vnodepool_L211
                 LDA     #0
                 TAY
                 TSC
@@ -12978,25 +11831,13 @@ cache_purge_stkok        TCS
                 STA     _fcc_long_hi
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L233
+                BEQ     _vnodepool_L213
                 TAY
                 TSC
                 CLC
@@ -13006,23 +11847,29 @@ cache_purge_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L233
+_vnodepool_L213
                 LDA     #0
                 STA     _fcc_img0
-_vnodepool_L234
+_vnodepool_L214
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #16
-                BVC     _vnodepool_L237
+                BVC     _vnodepool_L217
                 EOR     #$8000
-_vnodepool_L237
+_vnodepool_L217
                 BMI     *+5
-                BRL     _vnodepool_L236
+                BRL     _vnodepool_L216
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13030,23 +11877,10 @@ _vnodepool_L237
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -13062,7 +11896,7 @@ _vnodepool_L237
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L238
+_vnodepool_L218
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -13076,28 +11910,21 @@ _vnodepool_L238
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L241
+                BNE     _vnodepool_L221
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L241
+                BNE     _vnodepool_L221
                 LDA     #0
-                BRL     _vnodepool_L242
-_vnodepool_L241
+                BRA     _vnodepool_L222
+_vnodepool_L221
                 LDA     #1
-_vnodepool_L242
+_vnodepool_L222
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L240
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _vnodepool_L220
                 LDA     #0
                 JSR     _fcc_long_from_int
                 LDY     #28
@@ -13120,7 +11947,7 @@ _vnodepool_L242
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 TXA
-_vnodepool_L239
+_vnodepool_L219
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13140,12 +11967,12 @@ _vnodepool_L239
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L238
-_vnodepool_L240
-_vnodepool_L235
+                BRL     _vnodepool_L218
+_vnodepool_L220
+_vnodepool_L215
                 INC     _fcc_img0
-                BRL     _vnodepool_L234
-_vnodepool_L236
+                BRL     _vnodepool_L214
+_vnodepool_L216
                 DO      8+cache_purge_FRAMESIZE/256
                 TSC
                 CLC
@@ -13210,9 +12037,10 @@ cache_purge_STKGUARD    EQU     0
                 FGX2_EXPORT cache_purgevfs
 cache_purgevfs            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #cache_purgevfs_FRAMESIZE
+                SBC     #cache_purgevfs_FRAMESIZE-2
                 DO      cache_purgevfs_STKGUARD
                 BCC     cache_purgevfs_stkovf
                 CMP     _fcc_stkfloor
@@ -13223,21 +12051,27 @@ cache_purgevfs_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     13,S   ; fccstk d=0 b=13
-_vnodepool_L243
+                STA     _fcc_img16
+_vnodepool_L223
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #16
-                BVC     _vnodepool_L246
+                BVC     _vnodepool_L226
                 EOR     #$8000
-_vnodepool_L246
+_vnodepool_L226
                 BMI     *+5
-                BRL     _vnodepool_L245
+                BRL     _vnodepool_L225
+                LDA     _fcc_img16
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13245,23 +12079,10 @@ _vnodepool_L246
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -13277,7 +12098,7 @@ _vnodepool_L246
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L247
+_vnodepool_L227
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -13291,28 +12112,22 @@ _vnodepool_L247
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L250
+                BNE     _vnodepool_L230
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L250
+                BNE     _vnodepool_L230
                 LDA     #0
-                BRL     _vnodepool_L251
-_vnodepool_L250
+                BRA     _vnodepool_L231
+_vnodepool_L230
                 LDA     #1
-_vnodepool_L251
+_vnodepool_L231
                 CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L249
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L229
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -13349,24 +12164,21 @@ _vnodepool_L251
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L255
+                BNE     _vnodepool_L234
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L255
+                BNE     _vnodepool_L234
                 LDA     #1
-                BRL     _vnodepool_L256
-_vnodepool_L255
+                BRA     _vnodepool_L235
+_vnodepool_L234
                 LDA     #0
-_vnodepool_L256
+_vnodepool_L235
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L253
+                BNE     _vnodepool_L233
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13419,34 +12231,24 @@ _vnodepool_L256
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L257
+                BNE     _vnodepool_L236
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L257
+                BNE     _vnodepool_L236
                 LDA     #0
-                BRL     _vnodepool_L258
-_vnodepool_L257
+                BRA     _vnodepool_L237
+_vnodepool_L236
                 LDA     #1
-_vnodepool_L258
+_vnodepool_L237
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L253
-                LDA     #0
-                BRL     _vnodepool_L254
-_vnodepool_L253
-                LDA     #1
-_vnodepool_L254
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L252
-                BRL     _vnodepool_L248
-_vnodepool_L252
+                BEQ     _vnodepool_L232
+_vnodepool_L233
+                BRL     _vnodepool_L228
+_vnodepool_L232
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13492,10 +12294,7 @@ _vnodepool_L252
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vnodepool_ncdetach
@@ -13525,7 +12324,7 @@ _vnodepool_L252
                 CLC
                 ADC     #4
                 TCS
-_vnodepool_L248
+_vnodepool_L228
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -13534,25 +12333,24 @@ _vnodepool_L248
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L247
-_vnodepool_L249
-_vnodepool_L244
-                LDA     13,S   ; fccstk d=0 b=13
-                CLC
-                ADC     #1
-                STA     13,S   ; fccstk d=0 b=13
-                BRL     _vnodepool_L243
-_vnodepool_L245
+                BRL     _vnodepool_L227
+_vnodepool_L229
+_vnodepool_L224
+                INC     _fcc_img16
+                BRL     _vnodepool_L223
+_vnodepool_L225
                 TAY
                 TSC
                 CLC
-                ADC     #cache_purgevfs_FRAMESIZE
+                ADC     #cache_purgevfs_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-cache_purgevfs_FRAMESIZE   EQU     14
+cache_purgevfs_FRAMESIZE   EQU     16
 cache_purgevfs_STKGUARD    EQU     0
                 FGX2_EXPORT cache_lookup
 cache_lookup            ENT
@@ -13570,16 +12368,7 @@ cache_lookup_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     doingcache
-                CMP     #0
-                BEQ     _vnodepool_L260
-                LDA     #0
-                BRA     _vnodepool_L261
-_vnodepool_L260
-                LDA     #1
-_vnodepool_L261
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L259
+                BNE     _vnodepool_L238
                 LDA     #0
                 TAY
                 TSC
@@ -13590,7 +12379,7 @@ _vnodepool_L261
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L259
+_vnodepool_L238
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -13615,18 +12404,16 @@ _vnodepool_L259
                 STA     _fcc_fpr0
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vnodepool_L263
+                BVC     _vnodepool_L240
                 EOR     #$8000
-_vnodepool_L263
-                BMI     *+5
-                BRL     _vnodepool_L262
+_vnodepool_L240
+                BPL     _vnodepool_L239
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13634,10 +12421,9 @@ _vnodepool_L263
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #20
+                LDA     #nchstats+20
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -13693,29 +12479,7 @@ _vnodepool_L263
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L262
-                DO      8+cache_lookup_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+cache_lookup_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+cache_lookup_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+cache_lookup_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+cache_lookup_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+cache_lookup_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+_vnodepool_L239
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -13775,10 +12539,6 @@ _vnodepool_L262
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -13794,7 +12554,7 @@ _vnodepool_L262
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vnodepool_L264
+_vnodepool_L241
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -13808,28 +12568,22 @@ _vnodepool_L264
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L267
+                BNE     _vnodepool_L244
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L267
+                BNE     _vnodepool_L244
                 LDA     #0
-                BRL     _vnodepool_L268
-_vnodepool_L267
+                BRA     _vnodepool_L245
+_vnodepool_L244
                 LDA     #1
-_vnodepool_L268
+_vnodepool_L245
                 CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L266
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vnodepool_L243
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -13848,24 +12602,22 @@ _vnodepool_L268
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L276
+                BNE     _vnodepool_L247
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L276
+                BNE     _vnodepool_L247
                 LDA     #1
-                BRL     _vnodepool_L277
-_vnodepool_L276
+                BRA     _vnodepool_L248
+_vnodepool_L247
                 LDA     #0
-_vnodepool_L277
+_vnodepool_L248
                 CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L274
+                BRL     _vnodepool_L246
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13900,15 +12652,7 @@ _vnodepool_L277
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _vnodepool_L274
-                LDA     #1
-                BRL     _vnodepool_L275
-_vnodepool_L274
-                LDA     #0
-_vnodepool_L275
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L272
+                BRL     _vnodepool_L246
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13944,16 +12688,7 @@ _vnodepool_L275
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vnodepool_L272
-                LDA     #1
-                BRL     _vnodepool_L273
-_vnodepool_L272
-                LDA     #0
-_vnodepool_L273
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L270
+                BNE     _vnodepool_L246
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14013,22 +12748,11 @@ _vnodepool_L273
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L270
-                LDA     #1
-                BRL     _vnodepool_L271
-_vnodepool_L270
-                LDA     #0
-_vnodepool_L271
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L269
-                BRL     _vnodepool_L266
-_vnodepool_L269
-_vnodepool_L265
+                BNE     _vnodepool_L246
+                BRA     _vnodepool_L243
+_vnodepool_L246
+_vnodepool_L242
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14048,8 +12772,8 @@ _vnodepool_L265
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vnodepool_L264
-_vnodepool_L266
+                BRL     _vnodepool_L241
+_vnodepool_L243
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14060,24 +12784,22 @@ _vnodepool_L266
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L279
+                BNE     _vnodepool_L250
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L279
+                BNE     _vnodepool_L250
                 LDA     #1
-                BRL     _vnodepool_L280
-_vnodepool_L279
+                BRA     _vnodepool_L251
+_vnodepool_L250
                 LDA     #0
-_vnodepool_L280
+_vnodepool_L251
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L278
+                BEQ     _vnodepool_L249
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14085,10 +12807,9 @@ _vnodepool_L280
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #16
+                LDA     #nchstats+16
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14115,7 +12836,7 @@ _vnodepool_L280
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L278
+_vnodepool_L249
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -14142,15 +12863,8 @@ _vnodepool_L278
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 CMP     #0
-                BEQ     _vnodepool_L282
-                LDA     #0
-                BRA     _vnodepool_L283
-_vnodepool_L282
-                LDA     #1
-_vnodepool_L283
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L281
+                BNE     _vnodepool_L252
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14158,10 +12872,9 @@ _vnodepool_L283
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #8
+                LDA     #nchstats+8
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14178,8 +12891,8 @@ _vnodepool_L283
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _vnodepool_L284
-_vnodepool_L281
+                BRL     _vnodepool_L253
+_vnodepool_L252
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14201,24 +12914,22 @@ _vnodepool_L281
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L286
+                BNE     _vnodepool_L255
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L286
+                BNE     _vnodepool_L255
                 LDA     #1
-                BRL     _vnodepool_L287
-_vnodepool_L286
+                BRA     _vnodepool_L256
+_vnodepool_L255
                 LDA     #0
-_vnodepool_L287
+_vnodepool_L256
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L285
+                BEQ     _vnodepool_L254
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14226,10 +12937,9 @@ _vnodepool_L287
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #4
+                LDA     #nchstats+4
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14267,8 +12977,8 @@ _vnodepool_L287
                 STA     _fcc_fb
                 TYA
                 RTL
-                BRL     _vnodepool_L288
-_vnodepool_L285
+                BRL     _vnodepool_L257
+_vnodepool_L254
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14283,10 +12993,6 @@ _vnodepool_L285
                 PHA
                 TYA
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=4 b=1
-                STA     _fcc_fpr0
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -14314,8 +13020,8 @@ _vnodepool_L285
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L289
+                BEQ     _vnodepool_L258
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14323,10 +13029,9 @@ _vnodepool_L285
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #12
+                LDA     #nchstats+12
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14343,8 +13048,9 @@ _vnodepool_L285
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _vnodepool_L290
-_vnodepool_L289
+                BRL     _vnodepool_L259
+_vnodepool_L258
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14354,6 +13060,7 @@ _vnodepool_L289
                 MX      %00
                 LDA     #nchstats
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14442,9 +13149,9 @@ _vnodepool_L289
                 STA     _fcc_fb
                 TYA
                 RTL
-_vnodepool_L290
-_vnodepool_L288
-_vnodepool_L284
+_vnodepool_L259
+_vnodepool_L257
+_vnodepool_L253
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14493,9 +13200,10 @@ cache_lookup_STKGUARD    EQU     0
                 FGX2_EXPORT cache_enter
 cache_enter            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #cache_enter_FRAMESIZE
+                SBC     #cache_enter_FRAMESIZE-2
                 DO      cache_enter_STKGUARD
                 BCC     cache_enter_stkovf
                 CMP     _fcc_stkfloor
@@ -14506,26 +13214,14 @@ cache_enter_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     doingcache
-                CMP     #0
-                BEQ     _vnodepool_L292
-                LDA     #0
-                BRA     _vnodepool_L293
-_vnodepool_L292
-                LDA     #1
-_vnodepool_L293
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L291
+                BNE     _vnodepool_L260
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L291
+                BRL     cache_enter_bandx
+_vnodepool_L260
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
                 CLC
@@ -14550,28 +13246,22 @@ _vnodepool_L291
                 STA     _fcc_fpr0
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vnodepool_L295
+                BVC     _vnodepool_L262
                 EOR     #$8000
-_vnodepool_L295
-                BMI     *+5
-                BRL     _vnodepool_L294
+_vnodepool_L262
+                BPL     _vnodepool_L261
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L294
+                BRL     cache_enter_bandx
+_vnodepool_L261
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -14584,47 +13274,34 @@ _vnodepool_L294
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L297
+                BNE     _vnodepool_L264
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L297
+                BNE     _vnodepool_L264
                 LDA     #1
-                BRL     _vnodepool_L298
-_vnodepool_L297
+                BRA     _vnodepool_L265
+_vnodepool_L264
                 LDA     #0
-_vnodepool_L298
+_vnodepool_L265
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L296
+                BEQ     _vnodepool_L263
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L296
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     cache_enter_bandx
+_vnodepool_L263
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vnodepool_nclru_remove
@@ -14728,8 +13405,7 @@ _vnodepool_L296
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L299
+                BEQ     _vnodepool_L266
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14780,8 +13456,8 @@ _vnodepool_L296
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _vnodepool_L300
-_vnodepool_L299
+                BRA     _vnodepool_L267
+_vnodepool_L266
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14795,7 +13471,7 @@ _vnodepool_L299
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-_vnodepool_L300
+_vnodepool_L267
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14893,10 +13569,7 @@ _vnodepool_L300
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
                 CLC
@@ -14929,14 +13602,12 @@ _vnodepool_L300
                 REP     #$20
                 MX      %00
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img0
-_vnodepool_L301
+                STA     _fcc_img16
+_vnodepool_L268
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 PHA
                 DO      10+cache_enter_FRAMESIZE/256
                 TSC
@@ -14966,18 +13637,17 @@ _vnodepool_L301
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vnodepool_L304
+                BVC     _vnodepool_L271
                 EOR     #$8000
-_vnodepool_L304
-                BMI     *+5
-                BRL     _vnodepool_L303
+_vnodepool_L271
+                BPL     _vnodepool_L270
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #33
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -15015,7 +13685,7 @@ _vnodepool_L304
                 MX      %00
                 PLA
                 STA     _fcc_fpr1
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     _fcc_fpr1
                 STA     _fcc_fpr1
@@ -15026,12 +13696,10 @@ _vnodepool_L304
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_vnodepool_L302
-                INC     _fcc_img0
-                BRL     _vnodepool_L301
-_vnodepool_L303
-                LDA     _fcc_img0
-                STA     5,S   ; fccstk d=0 b=5
+_vnodepool_L269
+                INC     _fcc_img16
+                BRL     _vnodepool_L268
+_vnodepool_L270
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15154,20 +13822,25 @@ _vnodepool_L303
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
+cache_enter_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-cache_enter_FRAMESIZE   EQU     6
+cache_enter_FRAMESIZE   EQU     8
 cache_enter_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -15177,6 +13850,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15186,6 +13860,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_vnodepool_vn_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -15193,6 +13868,7 @@ main_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15202,6 +13878,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_vnodepool_nc_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL nchinit
@@ -15209,6 +13886,7 @@ main_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15218,6 +13896,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #ufs_cacheops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfs_setcacheops
@@ -15227,21 +13906,16 @@ main_stkok        TCS
                 TCS
                 LDA     freevnodes
                 TAX
-                TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _vnodepool_L305
+                BEQ     _vnodepool_L272
                 LDA     #51
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L305
+                BRL     main_bandx
+_vnodepool_L272
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -15276,35 +13950,29 @@ _vnodepool_L305
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L307
+                BNE     _vnodepool_L274
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L307
+                BNE     _vnodepool_L274
                 LDA     #0
-                BRL     _vnodepool_L308
-_vnodepool_L307
+                BRA     _vnodepool_L275
+_vnodepool_L274
                 LDA     #1
-_vnodepool_L308
+_vnodepool_L275
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L306
+                BEQ     _vnodepool_L273
                 LDA     #52
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L306
+                BRL     main_bandx
+_vnodepool_L273
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -15317,6 +13985,7 @@ _vnodepool_L306
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15326,6 +13995,7 @@ _vnodepool_L306
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
@@ -15343,22 +14013,15 @@ _vnodepool_L306
                 TCS
                 TYA
                 STA     21,S   ; fccstk d=0 b=21
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L309
+                BEQ     _vnodepool_L276
                 LDA     #53
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L309
+                BRL     main_bandx
+_vnodepool_L276
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15389,35 +14052,29 @@ _vnodepool_L309
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L311
+                BNE     _vnodepool_L278
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L311
+                BNE     _vnodepool_L278
                 LDA     #0
-                BRL     _vnodepool_L312
-_vnodepool_L311
+                BRA     _vnodepool_L279
+_vnodepool_L278
                 LDA     #1
-_vnodepool_L312
+_vnodepool_L279
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L310
+                BEQ     _vnodepool_L277
                 LDA     #54
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L310
+                BRL     main_bandx
+_vnodepool_L277
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15425,21 +14082,16 @@ _vnodepool_L310
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L313
+                BEQ     _vnodepool_L280
                 LDA     #55
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L313
+                BRL     main_bandx
+_vnodepool_L280
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15449,36 +14101,21 @@ _vnodepool_L313
                 STA     _fcc_long_hi
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L314
+                BEQ     _vnodepool_L281
                 LDA     #56
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L314
+                BRL     main_bandx
+_vnodepool_L281
                 LDA     freevnodes
                 TAX
                 LDA     #64
@@ -15488,19 +14125,15 @@ _vnodepool_L314
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L315
+                BEQ     _vnodepool_L282
                 LDA     #57
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L315
+                BRL     main_bandx
+_vnodepool_L282
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -15513,6 +14146,7 @@ _vnodepool_L315
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15522,6 +14156,7 @@ _vnodepool_L315
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
@@ -15539,22 +14174,16 @@ _vnodepool_L315
                 TCS
                 TYA
                 STA     21,S   ; fccstk d=0 b=21
-                TAX
-                TXA
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L316
+                BEQ     _vnodepool_L283
                 LDA     #58
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L316
+                BRL     main_bandx
+_vnodepool_L283
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15588,19 +14217,15 @@ _vnodepool_L316
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L317
+                BEQ     _vnodepool_L284
                 LDA     #59
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L317
+                BRL     main_bandx
+_vnodepool_L284
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15619,21 +14244,16 @@ _vnodepool_L317
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _vnodepool_L318
+                BEQ     _vnodepool_L285
                 LDA     #60
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L318
+                BRL     main_bandx
+_vnodepool_L285
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15652,21 +14272,16 @@ _vnodepool_L318
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L319
+                BEQ     _vnodepool_L286
                 LDA     #61
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L319
+                BRL     main_bandx
+_vnodepool_L286
                 LDA     freevnodes
                 TAX
                 LDA     #64
@@ -15677,19 +14292,15 @@ _vnodepool_L319
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L320
+                BEQ     _vnodepool_L287
                 LDA     #62
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L320
+                BRL     main_bandx
+_vnodepool_L287
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15707,22 +14318,15 @@ _vnodepool_L320
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L321
+                BEQ     _vnodepool_L288
                 LDA     #63
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L321
+                BRL     main_bandx
+_vnodepool_L288
                 LDA     freevnodes
                 TAX
                 LDA     #64
@@ -15732,19 +14336,15 @@ _vnodepool_L321
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L322
+                BEQ     _vnodepool_L289
                 LDA     #64
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L322
+                BRL     main_bandx
+_vnodepool_L289
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15754,36 +14354,21 @@ _vnodepool_L322
                 STA     _fcc_long_hi
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L323
+                BEQ     _vnodepool_L290
                 LDA     #65
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L323
+                BRL     main_bandx
+_vnodepool_L290
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15791,23 +14376,18 @@ _vnodepool_L323
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L324
+                BEQ     _vnodepool_L291
                 LDA     #66
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L324
+                BRL     main_bandx
+_vnodepool_L291
                 LDA     freevnodes
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img17
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15821,22 +14401,15 @@ _vnodepool_L324
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L325
+                BEQ     _vnodepool_L292
                 LDA     #67
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L325
+                BRL     main_bandx
+_vnodepool_L292
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15844,50 +14417,40 @@ _vnodepool_L325
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L326
+                BEQ     _vnodepool_L293
                 LDA     #68
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L326
+                BRL     main_bandx
+_vnodepool_L293
                 LDA     freevnodes
                 TAX
-                LDA     19,S   ; fccstk d=0 b=19
+                LDA     _fcc_img17
                 TAY
                 TYA
                 DEC
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L327
+                BEQ     _vnodepool_L294
                 LDA     #69
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L327
+                BRL     main_bandx
+_vnodepool_L294
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #256
                 STA     [_fcc_fpr0]
                 LDA     _vnodepool_nslept
@@ -15906,21 +14469,16 @@ _vnodepool_L327
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L328
+                BEQ     _vnodepool_L295
                 LDA     #70
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L328
+                BRL     main_bandx
+_vnodepool_L295
                 LDA     _vnodepool_nslept
                 TAX
                 LDA     _vnodepool_nvxsleeps
@@ -15930,19 +14488,15 @@ _vnodepool_L328
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L329
+                BEQ     _vnodepool_L296
                 LDA     #71
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L329
+                BRL     main_bandx
+_vnodepool_L296
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15989,6 +14543,7 @@ _vnodepool_L329
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15998,6 +14553,7 @@ _vnodepool_L329
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
@@ -16015,22 +14571,15 @@ _vnodepool_L329
                 TCS
                 TYA
                 STA     21,S   ; fccstk d=0 b=21
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L330
+                BEQ     _vnodepool_L297
                 LDA     #71
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L330
+                BRL     main_bandx
+_vnodepool_L297
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -16043,7 +14592,7 @@ _vnodepool_L330
                 ADC     #4
                 TCS
                 LDA     #0
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img17
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -16056,9 +14605,7 @@ _vnodepool_L330
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_img0
-_vnodepool_L331
+_vnodepool_L298
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -16069,10 +14616,9 @@ _vnodepool_L331
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L333
-                INC     _fcc_img0
-_vnodepool_L332
+                BEQ     _vnodepool_L300
+                INC     _fcc_img17
+_vnodepool_L299
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16093,28 +14639,23 @@ _vnodepool_L332
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                BRL     _vnodepool_L331
-_vnodepool_L333
-                LDA     _fcc_img0
-                STA     19,S   ; fccstk d=0 b=19
+                BRA     _vnodepool_L298
+_vnodepool_L300
+                LDA     _fcc_img17
                 TAX
                 LDA     freevnodes
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L334
+                BEQ     _vnodepool_L301
                 LDA     #72
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L334
+                BRL     main_bandx
+_vnodepool_L301
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -16148,24 +14689,21 @@ _vnodepool_L334
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L338
+                BNE     _vnodepool_L304
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L338
+                BNE     _vnodepool_L304
                 LDA     #1
-                BRL     _vnodepool_L339
-_vnodepool_L338
+                BRA     _vnodepool_L305
+_vnodepool_L304
                 LDA     #0
-_vnodepool_L339
+_vnodepool_L305
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L336
+                BNE     _vnodepool_L303
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16187,43 +14725,30 @@ _vnodepool_L339
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L340
+                BNE     _vnodepool_L306
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L340
+                BNE     _vnodepool_L306
                 LDA     #1
-                BRL     _vnodepool_L341
-_vnodepool_L340
+                BRA     _vnodepool_L307
+_vnodepool_L306
                 LDA     #0
-_vnodepool_L341
+_vnodepool_L307
                 CMP     #0
-                BEQ     *+5
-                BRL     _vnodepool_L336
-                LDA     #0
-                BRL     _vnodepool_L337
-_vnodepool_L336
-                LDA     #1
-_vnodepool_L337
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L335
+                BEQ     _vnodepool_L302
+_vnodepool_L303
                 LDA     #73
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L335
+                BRL     main_bandx
+_vnodepool_L302
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16236,7 +14761,7 @@ _vnodepool_L335
                 ADC     #4
                 TCS
                 LDA     #0
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img17
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -16249,7 +14774,7 @@ _vnodepool_L335
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-_vnodepool_L342
+_vnodepool_L308
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -16260,13 +14785,9 @@ _vnodepool_L342
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L344
-                LDA     19,S   ; fccstk d=0 b=19
-                CLC
-                ADC     #1
-                STA     19,S   ; fccstk d=0 b=19
-_vnodepool_L343
+                BEQ     _vnodepool_L310
+                INC     _fcc_img17
+_vnodepool_L309
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16287,27 +14808,23 @@ _vnodepool_L343
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                BRL     _vnodepool_L342
-_vnodepool_L344
-                LDA     19,S   ; fccstk d=0 b=19
+                BRA     _vnodepool_L308
+_vnodepool_L310
+                LDA     _fcc_img17
                 TAX
                 LDA     freevnodes
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L345
+                BEQ     _vnodepool_L311
                 LDA     #74
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L345
+                BRL     main_bandx
+_vnodepool_L311
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -16320,7 +14837,7 @@ _vnodepool_L345
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-_vnodepool_L346
+_vnodepool_L312
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -16331,8 +14848,7 @@ _vnodepool_L346
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L349
+                BEQ     _vnodepool_L314
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16352,17 +14868,8 @@ _vnodepool_L346
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vnodepool_L349
-                LDA     #1
-                BRL     _vnodepool_L350
-_vnodepool_L349
-                LDA     #0
-_vnodepool_L350
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L348
-_vnodepool_L347
+                BEQ     _vnodepool_L314
+_vnodepool_L313
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16383,8 +14890,8 @@ _vnodepool_L347
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                BRL     _vnodepool_L346
-_vnodepool_L348
+                BRA     _vnodepool_L312
+_vnodepool_L314
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16394,35 +14901,29 @@ _vnodepool_L348
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L352
+                BNE     _vnodepool_L316
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L352
+                BNE     _vnodepool_L316
                 LDA     #1
-                BRL     _vnodepool_L353
-_vnodepool_L352
+                BRA     _vnodepool_L317
+_vnodepool_L316
                 LDA     #0
-_vnodepool_L353
+_vnodepool_L317
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L351
+                BEQ     _vnodepool_L315
                 LDA     #75
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L351
+                BRL     main_bandx
+_vnodepool_L315
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_tail+2
@@ -16439,35 +14940,30 @@ _vnodepool_L351
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L355
+                BNE     _vnodepool_L319
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L355
+                BNE     _vnodepool_L319
                 LDA     #0
-                BRL     _vnodepool_L356
-_vnodepool_L355
+                BRA     _vnodepool_L320
+_vnodepool_L319
                 LDA     #1
-_vnodepool_L356
+_vnodepool_L320
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L354
+                BEQ     _vnodepool_L318
                 LDA     #76
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L354
+                BRL     main_bandx
+_vnodepool_L318
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16477,6 +14973,7 @@ _vnodepool_L354
                 MX      %00
                 LDA     #_vnodepool_vn_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -16510,6 +15007,7 @@ _vnodepool_L354
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16519,8 +15017,10 @@ _vnodepool_L354
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16530,6 +15030,7 @@ _vnodepool_L354
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16541,22 +15042,15 @@ _vnodepool_L354
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L357
+                BEQ     _vnodepool_L321
                 LDA     #77
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L357
+                BRL     main_bandx
+_vnodepool_L321
                 LDA     mnt_a+18
                 STA     _fcc_fpr0+2
                 LDA     mnt_a+16
@@ -16567,35 +15061,29 @@ _vnodepool_L357
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L359
+                BNE     _vnodepool_L323
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L359
+                BNE     _vnodepool_L323
                 LDA     #0
-                BRL     _vnodepool_L360
-_vnodepool_L359
+                BRA     _vnodepool_L324
+_vnodepool_L323
                 LDA     #1
-_vnodepool_L360
+_vnodepool_L324
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L358
+                BEQ     _vnodepool_L322
                 LDA     #78
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L358
+                BRL     main_bandx
+_vnodepool_L322
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16612,6 +15100,7 @@ _vnodepool_L358
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16621,37 +15110,33 @@ _vnodepool_L358
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L362
+                BNE     _vnodepool_L326
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L362
+                BNE     _vnodepool_L326
                 LDA     #0
-                BRL     _vnodepool_L363
-_vnodepool_L362
+                BRA     _vnodepool_L327
+_vnodepool_L326
                 LDA     #1
-_vnodepool_L363
+_vnodepool_L327
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L361
+                BEQ     _vnodepool_L325
                 LDA     #79
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L361
+                BRL     main_bandx
+_vnodepool_L325
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16661,6 +15146,7 @@ _vnodepool_L361
                 MX      %00
                 LDA     #mnt_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     7,S   ; fccstk d=4 b=3
@@ -16683,35 +15169,29 @@ _vnodepool_L361
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L365
+                BNE     _vnodepool_L329
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L365
+                BNE     _vnodepool_L329
                 LDA     #0
-                BRL     _vnodepool_L366
-_vnodepool_L365
+                BRA     _vnodepool_L330
+_vnodepool_L329
                 LDA     #1
-_vnodepool_L366
+_vnodepool_L330
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L364
+                BEQ     _vnodepool_L328
                 LDA     #80
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L364
+                BRL     main_bandx
+_vnodepool_L328
                 LDA     mnt_b+18
                 STA     _fcc_fpr0+2
                 LDA     mnt_b+16
@@ -16722,35 +15202,29 @@ _vnodepool_L364
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L368
+                BNE     _vnodepool_L332
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L368
+                BNE     _vnodepool_L332
                 LDA     #0
-                BRL     _vnodepool_L369
-_vnodepool_L368
+                BRA     _vnodepool_L333
+_vnodepool_L332
                 LDA     #1
-_vnodepool_L369
+_vnodepool_L333
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L367
+                BEQ     _vnodepool_L331
                 LDA     #81
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L367
+                BRL     main_bandx
+_vnodepool_L331
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -16776,35 +15250,29 @@ _vnodepool_L367
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L371
+                BNE     _vnodepool_L335
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L371
+                BNE     _vnodepool_L335
                 LDA     #0
-                BRL     _vnodepool_L372
-_vnodepool_L371
+                BRA     _vnodepool_L336
+_vnodepool_L335
                 LDA     #1
-_vnodepool_L372
+_vnodepool_L336
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L370
+                BEQ     _vnodepool_L334
                 LDA     #82
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L370
+                BRL     main_bandx
+_vnodepool_L334
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16826,35 +15294,30 @@ _vnodepool_L370
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L374
+                BNE     _vnodepool_L338
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L374
+                BNE     _vnodepool_L338
                 LDA     #0
-                BRL     _vnodepool_L375
-_vnodepool_L374
+                BRA     _vnodepool_L339
+_vnodepool_L338
                 LDA     #1
-_vnodepool_L375
+_vnodepool_L339
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L373
+                BEQ     _vnodepool_L337
                 LDA     #83
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L373
+                BRL     main_bandx
+_vnodepool_L337
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16864,6 +15327,7 @@ _vnodepool_L373
                 MX      %00
                 LDA     #_vnodepool_vn_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -16890,6 +15354,7 @@ _vnodepool_L373
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16899,8 +15364,10 @@ _vnodepool_L373
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16910,6 +15377,7 @@ _vnodepool_L373
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16921,22 +15389,15 @@ _vnodepool_L373
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L376
+                BEQ     _vnodepool_L340
                 LDA     #84
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L376
+                BRL     main_bandx
+_vnodepool_L340
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -16949,6 +15410,7 @@ _vnodepool_L376
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16958,8 +15420,10 @@ _vnodepool_L376
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16969,6 +15433,7 @@ _vnodepool_L376
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16980,22 +15445,15 @@ _vnodepool_L376
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L377
+                BEQ     _vnodepool_L341
                 LDA     #85
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L377
+                BRL     main_bandx
+_vnodepool_L341
                 LDA     mnt_a+18
                 STA     _fcc_fpr0+2
                 LDA     mnt_a+16
@@ -17006,35 +15464,29 @@ _vnodepool_L377
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L379
+                BNE     _vnodepool_L343
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L379
+                BNE     _vnodepool_L343
                 LDA     #0
-                BRL     _vnodepool_L380
-_vnodepool_L379
+                BRA     _vnodepool_L344
+_vnodepool_L343
                 LDA     #1
-_vnodepool_L380
+_vnodepool_L344
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L378
+                BEQ     _vnodepool_L342
                 LDA     #86
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L378
+                BRL     main_bandx
+_vnodepool_L342
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -17061,35 +15513,29 @@ _vnodepool_L378
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L382
+                BNE     _vnodepool_L346
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L382
+                BNE     _vnodepool_L346
                 LDA     #0
-                BRL     _vnodepool_L383
-_vnodepool_L382
+                BRA     _vnodepool_L347
+_vnodepool_L346
                 LDA     #1
-_vnodepool_L383
+_vnodepool_L347
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L381
+                BEQ     _vnodepool_L345
                 LDA     #87
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L381
+                BRL     main_bandx
+_vnodepool_L345
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -17115,35 +15561,30 @@ _vnodepool_L381
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L385
+                BNE     _vnodepool_L349
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L385
+                BNE     _vnodepool_L349
                 LDA     #0
-                BRL     _vnodepool_L386
-_vnodepool_L385
+                BRA     _vnodepool_L350
+_vnodepool_L349
                 LDA     #1
-_vnodepool_L386
+_vnodepool_L350
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L384
+                BEQ     _vnodepool_L348
                 LDA     #88
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L384
+                BRL     main_bandx
+_vnodepool_L348
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17153,6 +15594,7 @@ _vnodepool_L384
                 MX      %00
                 LDA     #_vnodepool_vn_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -17172,6 +15614,7 @@ _vnodepool_L384
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17181,6 +15624,7 @@ _vnodepool_L384
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
@@ -17197,22 +15641,15 @@ _vnodepool_L384
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L387
+                BEQ     _vnodepool_L351
                 LDA     #89
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L387
+                BRL     main_bandx
+_vnodepool_L351
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17231,21 +15668,16 @@ _vnodepool_L387
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L388
+                BEQ     _vnodepool_L352
                 LDA     #90
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L388
+                BRL     main_bandx
+_vnodepool_L352
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17253,21 +15685,16 @@ _vnodepool_L388
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L389
+                BEQ     _vnodepool_L353
                 LDA     #91
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L389
+                BRL     main_bandx
+_vnodepool_L353
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17285,22 +15712,15 @@ _vnodepool_L389
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L390
+                BEQ     _vnodepool_L354
                 LDA     #92
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L390
+                BRL     main_bandx
+_vnodepool_L354
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17308,21 +15728,16 @@ _vnodepool_L390
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L391
+                BEQ     _vnodepool_L355
                 LDA     #93
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L391
+                BRL     main_bandx
+_vnodepool_L355
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17340,22 +15755,16 @@ _vnodepool_L391
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L392
+                BEQ     _vnodepool_L356
                 LDA     #94
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L392
+                BRL     main_bandx
+_vnodepool_L356
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17365,6 +15774,7 @@ _vnodepool_L392
                 MX      %00
                 LDA     #_vnodepool_vn_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -17381,21 +15791,19 @@ _vnodepool_L392
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
                 LDA     #0
-                STA     17,S   ; fccstk d=0 b=17
-_vnodepool_L393
+                STA     _fcc_img16
+_vnodepool_L357
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     17,S   ; fccstk d=0 b=17
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #64
-                BVC     _vnodepool_L396
+                BVC     _vnodepool_L360
                 EOR     #$8000
-_vnodepool_L396
-                BMI     *+5
-                BRL     _vnodepool_L395
+_vnodepool_L360
+                BPL     _vnodepool_L359
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -17408,6 +15816,7 @@ _vnodepool_L396
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17417,8 +15826,10 @@ _vnodepool_L396
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17428,6 +15839,7 @@ _vnodepool_L396
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17439,29 +15851,20 @@ _vnodepool_L396
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L397
+                BEQ     _vnodepool_L361
                 LDA     #95
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L397
-_vnodepool_L394
-                LDA     17,S   ; fccstk d=0 b=17
-                CLC
-                ADC     #1
-                STA     17,S   ; fccstk d=0 b=17
-                BRL     _vnodepool_L393
-_vnodepool_L395
+                BRL     main_bandx
+_vnodepool_L361
+_vnodepool_L358
+                INC     _fcc_img16
+                BRA     _vnodepool_L357
+_vnodepool_L359
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -17474,6 +15877,7 @@ _vnodepool_L395
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17483,8 +15887,10 @@ _vnodepool_L395
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17494,6 +15900,7 @@ _vnodepool_L395
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17506,21 +15913,16 @@ _vnodepool_L395
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #23
-                BNE     *+5
-                BRL     _vnodepool_L398
+                BEQ     _vnodepool_L362
                 LDA     #96
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L398
+                BRL     main_bandx
+_vnodepool_L362
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -17530,52 +15932,39 @@ _vnodepool_L398
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L400
+                BNE     _vnodepool_L364
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L400
+                BNE     _vnodepool_L364
                 LDA     #0
-                BRL     _vnodepool_L401
-_vnodepool_L400
+                BRA     _vnodepool_L365
+_vnodepool_L364
                 LDA     #1
-_vnodepool_L401
+_vnodepool_L365
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L399
+                BEQ     _vnodepool_L363
                 LDA     #97
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L399
+                BRL     main_bandx
+_vnodepool_L363
                 LDA     freevnodes
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L402
+                BEQ     _vnodepool_L366
                 LDA     #98
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L402
+                BRL     main_bandx
+_vnodepool_L366
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -17589,39 +15978,33 @@ _vnodepool_L402
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L404
+                BNE     _vnodepool_L368
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L404
+                BNE     _vnodepool_L368
                 LDA     #0
-                BRL     _vnodepool_L405
-_vnodepool_L404
+                BRA     _vnodepool_L369
+_vnodepool_L368
                 LDA     #1
-_vnodepool_L405
+_vnodepool_L369
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L403
+                BEQ     _vnodepool_L367
                 LDA     #100
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L403
+                BRL     main_bandx
+_vnodepool_L367
                 LDA     _vnodepool_nreclaim
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img17
                 LDA     _vnodepool_invalbufs
-                STA     17,S   ; fccstk d=0 b=17
+                STA     _fcc_img16
                 SEP     #$20
                 MX      %10
                 LDA     vnode_pool+2
@@ -17655,21 +16038,16 @@ _vnodepool_L403
                 TCS
                 LDA     freevnodes
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L406
+                BEQ     _vnodepool_L370
                 LDA     #101
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L406
+                BRL     main_bandx
+_vnodepool_L370
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -17682,6 +16060,7 @@ _vnodepool_L406
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17691,8 +16070,10 @@ _vnodepool_L406
                 MX      %00
                 LDA     #fakeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17702,6 +16083,7 @@ _vnodepool_L406
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17713,22 +16095,15 @@ _vnodepool_L406
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L407
+                BEQ     _vnodepool_L371
                 LDA     #102
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L407
+                BRL     main_bandx
+_vnodepool_L371
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -17759,60 +16134,50 @@ _vnodepool_L407
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _vnodepool_L409
+                BNE     _vnodepool_L373
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vnodepool_L409
+                BNE     _vnodepool_L373
                 LDA     #0
-                BRL     _vnodepool_L410
-_vnodepool_L409
+                BRA     _vnodepool_L374
+_vnodepool_L373
                 LDA     #1
-_vnodepool_L410
+_vnodepool_L374
                 CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L408
+                BEQ     _vnodepool_L372
                 LDA     #103
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L408
+                BRL     main_bandx
+_vnodepool_L372
                 LDA     _vnodepool_nreclaim
                 TAX
-                LDA     19,S   ; fccstk d=0 b=19
+                LDA     _fcc_img17
                 TAY
                 TYA
                 INC
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _vnodepool_L411
+                BEQ     _vnodepool_L375
                 LDA     #104
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L411
+                BRA     main_bandx
+_vnodepool_L375
                 LDA     _vnodepool_invalbufs
                 TAX
-                LDA     17,S   ; fccstk d=0 b=17
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 TXA
                 LDX     _fcc_tmp_b
@@ -17820,22 +16185,18 @@ _vnodepool_L411
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vnodepool_L413
+                BVC     _vnodepool_L377
                 EOR     #$8000
-_vnodepool_L413
-                BPL     *+5
-                BRL     _vnodepool_L412
+_vnodepool_L377
+                BMI     _vnodepool_L376
                 LDA     #105
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L412
+                BRA     main_bandx
+_vnodepool_L376
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -17843,65 +16204,53 @@ _vnodepool_L412
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L414
+                BEQ     _vnodepool_L378
                 LDA     #106
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L414
+                BRA     main_bandx
+_vnodepool_L378
                 LDA     freevnodes
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _vnodepool_L415
+                BEQ     _vnodepool_L379
                 LDA     #107
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L415
+                BRA     main_bandx
+_vnodepool_L379
                 LDA     _vnodepool_nslept
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _vnodepool_L416
+                BEQ     _vnodepool_L380
                 LDA     #108
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vnodepool_L416
+                BRA     main_bandx
+_vnodepool_L380
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     22
+main_FRAMESIZE   EQU     26
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 158

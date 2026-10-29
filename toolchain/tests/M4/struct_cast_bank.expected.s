@@ -83,8 +83,6 @@ _struct_cast_bank_L0
                 DEC
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -93,8 +91,7 @@ _struct_cast_bank_L0
                 BVC     _struct_cast_bank_L2
                 EOR     #$8000
 _struct_cast_bank_L2
-                BMI     *+5
-                BRL     _struct_cast_bank_L1
+                BPL     _struct_cast_bank_L1
                 LDA     [_fcc_img3]
                 INC     _fcc_img3
                 AND     #$00FF
@@ -104,7 +101,7 @@ _struct_cast_bank_L2
                 REP     #$20
                 MX      %00
                 INC     _fcc_img1
-                BRL     _struct_cast_bank_L0
+                BRA     _struct_cast_bank_L0
 _struct_cast_bank_L1
                 LDA     #0
                 TAY
@@ -171,6 +168,7 @@ main_stkok        TCS
                 TCS
                 LDA     #12
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -180,6 +178,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #sink
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20
@@ -201,6 +200,7 @@ main_stkok        TCS
                 TCS
                 LDA     #2
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -210,6 +210,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #sink
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20

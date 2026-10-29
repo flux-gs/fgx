@@ -30,21 +30,10 @@ main_stkok        TCS
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #60
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #60
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
                 STA     g
                 TAY
@@ -54,26 +43,13 @@ main_stkok        TCS
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$6A52
-                STA     _fcc_long_hi
-                LDA     #$003D
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #61
+                STX     _fcc_long_b_lo
+                LDX     #27218
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L0
+                BEQ     _longcompound_L0
                 LDA     #1
                 TAY
                 TSC
@@ -114,26 +90,13 @@ _longcompound_L0
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$6A52
-                STA     _fcc_long_hi
-                LDA     #$003B
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #59
+                STX     _fcc_long_b_lo
+                LDX     #27218
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L1
+                BEQ     _longcompound_L1
                 LDA     #2
                 TAY
                 TSC
@@ -173,26 +136,13 @@ _longcompound_L1
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$6A54
-                STA     _fcc_long_hi
-                LDA     #$0040
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #64
+                STX     _fcc_long_b_lo
+                LDX     #27220
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L2
+                BEQ     _longcompound_L2
                 LDA     #3
                 TAY
                 TSC
@@ -215,21 +165,10 @@ _longcompound_L2
                 LDA     _fcc_img1
                 STA     _fcc_long_hi
                 LDA     _fcc_img0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #20
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #20
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
                 STA     _fcc_img0
                 TAY
@@ -239,26 +178,13 @@ _longcompound_L2
                 LDA     _fcc_img1
                 STA     _fcc_long_hi
                 LDA     _fcc_img0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0014
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #20
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L3
+                BEQ     _longcompound_L3
                 LDA     #4
                 TAY
                 TSC
@@ -298,26 +224,13 @@ _longcompound_L3
                 LDA     _fcc_img1
                 STA     _fcc_long_hi
                 LDA     _fcc_img0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0002
-                STA     _fcc_long_hi
-                LDA     #$0028
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #40
+                STX     _fcc_long_b_lo
+                LDX     #2
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L4
+                BEQ     _longcompound_L4
                 LDA     #5
                 TAY
                 TSC

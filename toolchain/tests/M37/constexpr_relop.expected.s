@@ -30,12 +30,10 @@ classify_stkok        TCS
                 LDA     6+classify_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #10
-                BNE     *+5
-                BRL     _constexpr_relop_L1
+                BEQ     _constexpr_relop_L1
                 CMP     #20
-                BNE     *+5
-                BRL     _constexpr_relop_L2
-                BRL     _constexpr_relop_L3
+                BEQ     _constexpr_relop_L2
+                BRA     _constexpr_relop_L3
 _constexpr_relop_L1
                 LDA     #1
                 TAY

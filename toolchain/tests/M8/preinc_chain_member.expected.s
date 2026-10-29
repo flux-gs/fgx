@@ -31,6 +31,7 @@ main_stkok        TCS
                 LDA     _fcc_long_hi
                 STA     I+4
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -40,6 +41,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #I
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -52,6 +54,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     O+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -60,17 +63,19 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #O
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     pp
                 LDA     _fcc_fpr0+2
                 STA     pp+2
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     pp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pp
+                LDA     pp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -84,60 +89,30 @@ main_stkok        TCS
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
                 DEC
-                STA     [_fcc_ptr]
-                TAX
-                TXA
+                STA     [_fcc_fpr0]
                 CMP     #4
-                BEQ     *+5
-                BRL     _preinc_chain_member_L0
+                BNE     _preinc_chain_member_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _preinc_chain_member_L0
                 LDA     I+0
-                TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _preinc_chain_member_L1
+                BNE     _preinc_chain_member_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _preinc_chain_member_L1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     pp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pp
+                LDA     pp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -151,48 +126,21 @@ _preinc_chain_member_L1
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
                 INC
-                STA     [_fcc_ptr]
-                TAX
-                TXA
+                STA     [_fcc_fpr0]
                 CMP     #5
-                BEQ     *+5
-                BRL     _preinc_chain_member_L2
+                BNE     _preinc_chain_member_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
 _preinc_chain_member_L2
                 LDA     I+0
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _preinc_chain_member_L3
+                BNE     _preinc_chain_member_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0

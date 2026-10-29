@@ -19,25 +19,13 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_initcomma_elems
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_initcomma_elems
                 STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
-                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -45,15 +33,23 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_initcomma_elems
-                STA     _fcc_fpr0
+                LDY     #6
+                LDA     [_fcc_fpr0],Y
+                PHA
                 LDA     #1
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_initcomma_elems
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -61,6 +57,13 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_initcomma_elems
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -68,15 +71,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_initcomma_elems
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

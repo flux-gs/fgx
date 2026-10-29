@@ -48,6 +48,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -57,6 +58,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -69,10 +71,8 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #49
-                BNE     *+5
-                BRL     _sprintf9_L0
+                BEQ     _sprintf9_L0
                 LDA     #10
                 TAY
                 TSC
@@ -89,10 +89,8 @@ _sprintf9_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #46
-                BNE     *+5
-                BRL     _sprintf9_L1
+                BEQ     _sprintf9_L1
                 LDA     #11
                 TAY
                 TSC
@@ -109,10 +107,8 @@ _sprintf9_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #53
-                BNE     *+5
-                BRL     _sprintf9_L2
+                BEQ     _sprintf9_L2
                 LDA     #12
                 TAY
                 TSC
@@ -129,10 +125,8 @@ _sprintf9_L2
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #57
-                BNE     *+5
-                BRL     _sprintf9_L3
+                BEQ     _sprintf9_L3
                 LDA     #13
                 TAY
                 TSC
@@ -149,10 +143,8 @@ _sprintf9_L3
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #57
-                BNE     *+5
-                BRL     _sprintf9_L4
+                BEQ     _sprintf9_L4
                 LDA     #14
                 TAY
                 TSC
@@ -168,11 +160,7 @@ _sprintf9_L4
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _sprintf9_L5
+                BEQ     _sprintf9_L5
                 LDA     #15
                 TAY
                 TSC

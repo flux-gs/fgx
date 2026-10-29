@@ -39,6 +39,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #2
                 STA     L+10
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -48,6 +49,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #L
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -80,6 +82,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #4
                 STA     M+14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -89,6 +92,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #M
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -101,6 +105,7 @@ _chainincdec_setup_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     T+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -110,6 +115,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #L
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -156,9 +162,10 @@ _chainincdec_setup_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -169,6 +176,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 FGX2_FARCALL _chainincdec_setup
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -178,6 +186,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #T
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -232,71 +241,40 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _chainincdec_L0
+                BEQ     _chainincdec_L0
                 LDA     #50
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _chainincdec_L0
                 LDA     L+0
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _chainincdec_L2
+                BNE     _chainincdec_L2
                 LDA     L+10
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _chainincdec_L2
-                LDA     #0
-                BRL     _chainincdec_L3
+                BEQ     _chainincdec_L1
 _chainincdec_L2
-                LDA     #1
-_chainincdec_L3
-                CMP     #0
-                BNE     *+5
-                BRL     _chainincdec_L1
                 LDA     #51
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _chainincdec_L1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     T+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #T
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     T
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -313,29 +291,69 @@ _chainincdec_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _chainincdec_L4
+                BEQ     _chainincdec_L3
                 LDA     #52
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L4
+                BRL     main_bandx
+_chainincdec_L3
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     M+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #M
+                LDA     M
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                CMP     #11
+                BEQ     _chainincdec_L4
+                LDA     #53
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE-2
+                TCS
+                BRL     main_bandx
+_chainincdec_L4
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -351,21 +369,19 @@ _chainincdec_L4
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
+                INC
+                STA     [_fcc_fpr0]
+                LDA     L+2
                 TAX
-                TXA
-                CMP     #11
-                BNE     *+5
-                BRL     _chainincdec_L5
-                LDA     #53
+                CMP     #12
+                BEQ     _chainincdec_L5
+                LDA     #54
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _chainincdec_L5
                 SEP     #$20
                 MX      %10
@@ -413,71 +429,6 @@ _chainincdec_L5
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                INC
-                STA     [_fcc_fpr0]
-                LDA     L+2
-                TAX
-                TXA
-                CMP     #12
-                BNE     *+5
-                BRL     _chainincdec_L6
-                LDA     #54
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L6
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
                 DEC
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -530,52 +481,33 @@ _chainincdec_L6
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _chainincdec_L7
+                BEQ     _chainincdec_L6
                 LDA     #55
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L7
+                BRL     main_bandx
+_chainincdec_L6
                 LDA     L+0
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _chainincdec_L9
+                BNE     _chainincdec_L8
                 LDA     L+10
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _chainincdec_L9
-                LDA     #0
-                BRL     _chainincdec_L10
-_chainincdec_L9
-                LDA     #1
-_chainincdec_L10
-                CMP     #0
-                BNE     *+5
-                BRL     _chainincdec_L8
+                BEQ     _chainincdec_L7
+_chainincdec_L8
                 LDA     #56
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L8
+                BRL     main_bandx
+_chainincdec_L7
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -648,37 +580,21 @@ _chainincdec_L8
                 LDA     L+6
                 STA     _fcc_long_hi
                 LDA     L+4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _chainincdec_L11
+                BEQ     _chainincdec_L9
                 LDA     #57
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L11
+                BRL     main_bandx
+_chainincdec_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -743,37 +659,21 @@ _chainincdec_L11
                 LDA     L+6
                 STA     _fcc_long_hi
                 LDA     L+4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0001
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _chainincdec_L12
+                BEQ     _chainincdec_L10
                 LDA     #58
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L12
+                BRL     main_bandx
+_chainincdec_L10
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -838,37 +738,21 @@ _chainincdec_L12
                 LDA     L+6
                 STA     _fcc_long_hi
                 LDA     L+4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _chainincdec_L13
+                BEQ     _chainincdec_L11
                 LDA     #59
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L13
+                BRL     main_bandx
+_chainincdec_L11
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -925,37 +809,93 @@ _chainincdec_L13
                 LDA     L+8
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _chainincdec_L14
+                BEQ     _chainincdec_L12
                 LDA     #60
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L14
+                BRL     main_bandx
+_chainincdec_L12
                 LDA     L+2
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _chainincdec_L15
+                BEQ     _chainincdec_L13
                 LDA     #61
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                BRL     main_bandx
+_chainincdec_L13
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                INC
+                STA     [_fcc_fpr0]
+                LDA     M+6
+                TAX
+                CMP     #21
+                BEQ     _chainincdec_L14
+                LDA     #62
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE-2
+                TCS
+                BRL     main_bandx
+_chainincdec_L14
+                LDA     M+4
+                TAX
+                CMP     #3
+                BNE     _chainincdec_L16
+                LDA     M+14
+                TAX
+                CMP     #4
+                BEQ     _chainincdec_L15
+_chainincdec_L16
+                LDA     #63
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE-2
+                TCS
+                BRL     main_bandx
 _chainincdec_L15
                 SEP     #$20
                 MX      %10
@@ -996,106 +936,16 @@ _chainincdec_L15
                 STA     [_fcc_fpr0]
                 LDA     M+6
                 TAX
-                TXA
-                CMP     #21
-                BNE     *+5
-                BRL     _chainincdec_L16
-                LDA     #62
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L16
-                LDA     M+4
-                TAX
-                TXA
-                CMP     #3
-                BEQ     *+5
-                BRL     _chainincdec_L18
-                LDA     M+14
-                TAX
-                TXA
-                CMP     #4
-                BEQ     *+5
-                BRL     _chainincdec_L18
-                LDA     #0
-                BRL     _chainincdec_L19
-_chainincdec_L18
-                LDA     #1
-_chainincdec_L19
-                CMP     #0
-                BNE     *+5
-                BRL     _chainincdec_L17
-                LDA     #63
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L17
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                CLC
-                ADC     #6
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                INC
-                STA     [_fcc_fpr0]
-                LDA     M+6
-                TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _chainincdec_L20
+                BEQ     _chainincdec_L17
                 LDA     #64
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L20
+                BRL     main_bandx
+_chainincdec_L17
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1136,69 +986,43 @@ _chainincdec_L20
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _chainincdec_L21
+                BEQ     _chainincdec_L18
                 LDA     #65
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L21
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #T
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                INC
-                STA     [_fcc_fpr0]
+                BRL     main_bandx
+_chainincdec_L18
                 LDA     T+8
+                INC
+                STA     T+8
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _chainincdec_L22
+                BEQ     _chainincdec_L19
                 LDA     #66
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L22
+                BRL     main_bandx
+_chainincdec_L19
                 LDA     T+10
                 TAX
-                TXA
                 CMP     #30
-                BNE     *+5
-                BRL     _chainincdec_L23
+                BEQ     _chainincdec_L20
                 LDA     #72
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L23
+                BRL     main_bandx
+_chainincdec_L20
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1208,6 +1032,7 @@ _chainincdec_L23
                 MX      %00
                 LDA     #M
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -1251,41 +1076,32 @@ _chainincdec_L23
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _chainincdec_L24
+                BEQ     _chainincdec_L21
                 LDA     #67
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L24
+                BRL     main_bandx
+_chainincdec_L21
                 LDA     #0
                 STA     L+2
                 LDA     #0
-                STA     9,S   ; fccstk d=0 b=9
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_img0
-_chainincdec_L25
+                STA     _fcc_img16
+_chainincdec_L22
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #5
-                BVC     _chainincdec_L28
+                BVC     _chainincdec_L25
                 EOR     #$8000
-_chainincdec_L28
-                BMI     *+5
-                BRL     _chainincdec_L27
+_chainincdec_L25
+                BPL     _chainincdec_L24
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1335,60 +1151,39 @@ _chainincdec_L28
                 CLC
                 ADC     #1
                 STA     [_fcc_fpr0]
-_chainincdec_L26
-                INC     _fcc_img0
-                BRL     _chainincdec_L25
-_chainincdec_L27
-                LDA     _fcc_img0
-                STA     9,S   ; fccstk d=0 b=9
+_chainincdec_L23
+                INC     _fcc_img16
+                BRA     _chainincdec_L22
+_chainincdec_L24
                 LDA     L+2
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _chainincdec_L29
+                BEQ     _chainincdec_L26
                 LDA     #68
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L29
+                BRL     main_bandx
+_chainincdec_L26
                 LDA     L+0
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _chainincdec_L31
+                BNE     _chainincdec_L28
                 LDA     L+10
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _chainincdec_L31
-                LDA     #0
-                BRL     _chainincdec_L32
-_chainincdec_L31
-                LDA     #1
-_chainincdec_L32
-                CMP     #0
-                BNE     *+5
-                BRL     _chainincdec_L30
+                BEQ     _chainincdec_L27
+_chainincdec_L28
                 LDA     #69
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L30
+                BRL     main_bandx
+_chainincdec_L27
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -1416,37 +1211,20 @@ _chainincdec_L30
                 STA     [_fcc_fpr0]
                 LDA     #0
                 STA     L+2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #M
-                CLC
-                ADC     #6
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                INC
-                STA     [_fcc_fpr0]
                 LDA     M+6
+                INC
+                STA     M+6
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _chainincdec_L33
+                BEQ     _chainincdec_L29
                 LDA     #70
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L33
+                BRA     main_bandx
+_chainincdec_L29
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1486,31 +1264,29 @@ _chainincdec_L33
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _chainincdec_L34
+                BEQ     _chainincdec_L30
                 LDA     #71
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L34
+                BRA     main_bandx
+_chainincdec_L30
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     10
+main_FRAMESIZE   EQU     12
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

@@ -30,6 +30,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -39,6 +40,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -69,6 +71,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -78,6 +81,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -97,6 +101,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -106,14 +111,11 @@ main_stkok        TCS
                 MX      %00
                 LDA     #row
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -138,10 +140,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #81
-                BNE     *+5
-                BRL     _parensubidx_L0
+                BEQ     _parensubidx_L0
                 LDA     #1
                 TAY
                 TSC
@@ -181,10 +181,8 @@ _parensubidx_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #121
-                BNE     *+5
-                BRL     _parensubidx_L1
+                BEQ     _parensubidx_L1
                 LDA     #2
                 TAY
                 TSC
@@ -233,10 +231,8 @@ _parensubidx_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #81
-                BNE     *+5
-                BRL     _parensubidx_L2
+                BEQ     _parensubidx_L2
                 LDA     #3
                 TAY
                 TSC

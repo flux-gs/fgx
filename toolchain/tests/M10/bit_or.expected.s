@@ -22,7 +22,6 @@ main_stkok        TCS
                 LDA     #32
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 ORA     #10
                 TAY
                 TSC

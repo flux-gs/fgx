@@ -33,8 +33,7 @@ main_stkok        TCS
                 BVC     _cond_mul_L1
                 EOR     #$8000
 _cond_mul_L1
-                BMI     *+5
-                BRL     _cond_mul_L0
+                BPL     _cond_mul_L0
                 LDA     _fcc_img0
                 TAX
                 LDA     _fcc_img1
@@ -42,7 +41,7 @@ _cond_mul_L1
                 TXA
                 JSR     _fcc_mul16
                 STA     _fcc_img2
-                BRL     _cond_mul_L2
+                BRA     _cond_mul_L2
 _cond_mul_L0
                 LDA     #0
                 STA     _fcc_img2

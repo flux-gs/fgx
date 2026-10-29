@@ -20,12 +20,10 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                CMP     #0
-                BNE     *+5
-                BRL     _if_else_L0
+                BEQ     _if_else_L0
                 LDA     #0
                 STA     _fcc_img0
-                BRL     _if_else_L1
+                BRA     _if_else_L1
 _if_else_L0
                 LDA     #42
                 STA     _fcc_img0

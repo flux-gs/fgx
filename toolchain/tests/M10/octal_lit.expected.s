@@ -21,10 +21,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #255
                 TAX
-                TXA
                 CMP     #255
-                BNE     *+5
-                BRL     _octal_lit_L0
+                BEQ     _octal_lit_L0
                 LDA     #1
                 TAY
                 TSC
@@ -38,10 +36,8 @@ main_stkok        TCS
 _octal_lit_L0
                 LDA     #127
                 TAX
-                TXA
                 CMP     #127
-                BNE     *+5
-                BRL     _octal_lit_L1
+                BEQ     _octal_lit_L1
                 LDA     #2
                 TAY
                 TSC
@@ -55,10 +51,8 @@ _octal_lit_L0
 _octal_lit_L1
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _octal_lit_L2
+                BEQ     _octal_lit_L2
                 LDA     #3
                 TAY
                 TSC
@@ -72,10 +66,8 @@ _octal_lit_L1
 _octal_lit_L2
                 LDA     #7
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _octal_lit_L3
+                BEQ     _octal_lit_L3
                 LDA     #4
                 TAY
                 TSC
@@ -88,11 +80,7 @@ _octal_lit_L2
                 RTL
 _octal_lit_L3
                 LDA     #0
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _octal_lit_L4
+                BEQ     _octal_lit_L4
                 LDA     #5
                 TAY
                 TSC
@@ -106,14 +94,10 @@ _octal_lit_L3
 _octal_lit_L4
                 LDA     #128
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #128
-                BNE     *+5
-                BRL     _octal_lit_L5
+                BEQ     _octal_lit_L5
                 LDA     #6
                 TAY
                 TSC

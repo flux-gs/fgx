@@ -76,7 +76,6 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 SEC
                 SBC     #7
                 TAY

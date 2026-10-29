@@ -107,7 +107,6 @@ add_ten_stkok        TCS
                 LDA     6+add_ten_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 TAY
@@ -155,10 +154,7 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #3
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHK
                 PEA     _fp_array_L0-1
                 SEP     #$20
@@ -197,10 +193,7 @@ _fp_array_L0
                 PHA
                 LDA     #4
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=4 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHK
                 PEA     _fp_array_L1-1
                 SEP     #$20
@@ -243,10 +236,7 @@ _fp_array_L1
                 PHA
                 LDA     #14
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=4 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHK
                 PEA     _fp_array_L2-1
                 SEP     #$20

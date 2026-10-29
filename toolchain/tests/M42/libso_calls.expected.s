@@ -30,7 +30,6 @@ _libso_calls_helper_stkok        TCS
                 LDA     6+_libso_calls_helper_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 TAY
                 TSC
@@ -106,8 +105,7 @@ main_stkok        TCS
                 TAX
                 FGX2_FARCALL setjmp
                 CMP     #0
-                BNE     *+5
-                BRL     _libso_calls_L0
+                BEQ     _libso_calls_L0
                 LDA     #1
                 TAY
                 TSC
@@ -181,12 +179,10 @@ _libso_calls_L0
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #16
-                BEQ     *+5
-                BRL     _libso_calls_L1
+                BNE     _libso_calls_L1
                 LDA     #42
-                BRL     _libso_calls_L2
+                BRA     _libso_calls_L2
 _libso_calls_L1
                 FGX2_FARCALL ext
 _libso_calls_L2

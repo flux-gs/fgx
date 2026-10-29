@@ -30,14 +30,12 @@ fib_stkok        TCS
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #2
                 BVC     _p33_recurse_L1
                 EOR     #$8000
 _p33_recurse_L1
-                BMI     *+5
-                BRL     _p33_recurse_L0
+                BPL     _p33_recurse_L0
                 DO      6+fib_FRAMESIZE/256
                 TSC
                 CLC
@@ -69,7 +67,6 @@ _p33_recurse_L0
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 PHA
                 FGX2_FARCALL fib
@@ -88,7 +85,6 @@ _p33_recurse_L0
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 DEC
                 PHA
@@ -136,8 +132,6 @@ fact_stkok        TCS
                 ELSE
                 LDA     6+fact_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -146,8 +140,7 @@ fact_stkok        TCS
                 BVC     _p33_recurse_L3
                 EOR     #$8000
 _p33_recurse_L3
-                BPL     *+5
-                BRL     _p33_recurse_L2
+                BMI     _p33_recurse_L2
                 LDA     #1
                 TAY
                 TSC
@@ -182,7 +175,6 @@ _p33_recurse_L2
                 LDA     8+fact_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 PHA
@@ -226,10 +218,8 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #55
-                BNE     *+5
-                BRL     _p33_recurse_L4
+                BEQ     _p33_recurse_L4
                 LDA     #1
                 TAY
                 TSC
@@ -248,10 +238,8 @@ _p33_recurse_L4
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _p33_recurse_L5
+                BEQ     _p33_recurse_L5
                 LDA     #2
                 TAY
                 TSC
@@ -270,10 +258,8 @@ _p33_recurse_L5
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #610
-                BNE     *+5
-                BRL     _p33_recurse_L6
+                BEQ     _p33_recurse_L6
                 LDA     #3
                 TAY
                 TSC

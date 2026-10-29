@@ -30,6 +30,7 @@ pick_stkok        TCS
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     slot+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -39,6 +40,7 @@ pick_stkok        TCS
                 MX      %00
                 LDA     #slot
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -98,33 +100,21 @@ main_stkok        TCS
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _amp_call_chain_L0
+                BNE     _amp_call_chain_L0
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
 _amp_call_chain_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #15
                 STA     [_fcc_fpr0]
                 LDA     slot+0
                 TAX
-                TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _amp_call_chain_L1
+                BNE     _amp_call_chain_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -143,42 +133,18 @@ _amp_call_chain_L1
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     #6
                 STA     [_fcc_fpr0]
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     #12
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 LDA     slot+2
-                TAX
-                TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _amp_call_chain_L3
+                BNE     _amp_call_chain_L2
                 LDA     slot+4
-                TAX
-                TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _amp_call_chain_L3
-                LDA     #1
-                BRL     _amp_call_chain_L4
-_amp_call_chain_L3
-                LDA     #0
-_amp_call_chain_L4
-                CMP     #0
-                BNE     *+5
-                BRL     _amp_call_chain_L2
+                BNE     _amp_call_chain_L2
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CLC
                 ADC     #18
                 STA     9,S   ; fccstk d=0 b=9

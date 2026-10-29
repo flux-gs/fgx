@@ -66,14 +66,10 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_shl16
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _shift_left_type_L0
+                BNE     _shift_left_type_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -86,14 +82,9 @@ _shift_left_type_L0
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_shl16
-                TAX
-                TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _shift_left_type_L1
+                BNE     _shift_left_type_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -114,8 +105,7 @@ _shift_left_type_L1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _shift_left_type_L3
+                BNE     _shift_left_type_L2
                 LDA     _fcc_img1
                 TAX
                 LDA     _fcc_img2
@@ -123,19 +113,8 @@ _shift_left_type_L1
                 TXA
                 JSR     _fcc_shrs16
                 CMP     #$FFFC
-                BEQ     *+5
-                BRL     _shift_left_type_L3
-                LDA     #1
-                BRL     _shift_left_type_L4
-_shift_left_type_L3
-                LDA     #0
-_shift_left_type_L4
-                CMP     #0
-                BNE     *+5
-                BRL     _shift_left_type_L2
+                BNE     _shift_left_type_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
@@ -147,10 +126,8 @@ _shift_left_type_L2
                 TXA
                 JSR     _fcc_shr16
                 TAX
-                TXA
                 CMP     #2048
-                BEQ     *+5
-                BRL     _shift_left_type_L6
+                BNE     _shift_left_type_L3
                 LDA     _fcc_img6
                 STA     _fcc_long_hi
                 LDA     _fcc_img5
@@ -171,42 +148,19 @@ _shift_left_type_L2
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_shr
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0008
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65528
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _shift_left_type_L6
-                LDA     #1
-                BRL     _shift_left_type_L7
-_shift_left_type_L6
-                LDA     #0
-_shift_left_type_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _shift_left_type_L5
+                BEQ     _shift_left_type_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
-_shift_left_type_L5
+_shift_left_type_L3
                 LDA     _fcc_img0
                 TAY
                 TSC

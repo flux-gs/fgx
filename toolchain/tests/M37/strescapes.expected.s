@@ -69,14 +69,10 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
-                BNE     *+5
-                BRL     _strescapes_L0
+                BEQ     _strescapes_L0
                 LDA     #1
                 TAY
                 TSC
@@ -100,10 +96,8 @@ _strescapes_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #91
-                BNE     *+5
-                BRL     _strescapes_L1
+                BEQ     _strescapes_L1
                 LDA     #2
                 TAY
                 TSC
@@ -127,10 +121,8 @@ _strescapes_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
-                BNE     *+5
-                BRL     _strescapes_L2
+                BEQ     _strescapes_L2
                 LDA     #3
                 TAY
                 TSC
@@ -154,10 +146,8 @@ _strescapes_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #74
-                BNE     *+5
-                BRL     _strescapes_L3
+                BEQ     _strescapes_L3
                 LDA     #4
                 TAY
                 TSC
@@ -180,14 +170,10 @@ _strescapes_L3
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
-                BNE     *+5
-                BRL     _strescapes_L4
+                BEQ     _strescapes_L4
                 LDA     #5
                 TAY
                 TSC
@@ -211,10 +197,8 @@ _strescapes_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #91
-                BNE     *+5
-                BRL     _strescapes_L5
+                BEQ     _strescapes_L5
                 LDA     #6
                 TAY
                 TSC
@@ -238,10 +222,8 @@ _strescapes_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #72
-                BNE     *+5
-                BRL     _strescapes_L6
+                BEQ     _strescapes_L6
                 LDA     #7
                 TAY
                 TSC
@@ -264,11 +246,7 @@ _strescapes_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _strescapes_L7
+                BEQ     _strescapes_L7
                 LDA     #8
                 TAY
                 TSC
@@ -291,14 +269,10 @@ _strescapes_L7
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
-                BNE     *+5
-                BRL     _strescapes_L8
+                BEQ     _strescapes_L8
                 LDA     #9
                 TAY
                 TSC
@@ -322,10 +296,8 @@ _strescapes_L8
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #91
-                BNE     *+5
-                BRL     _strescapes_L9
+                BEQ     _strescapes_L9
                 LDA     #10
                 TAY
                 TSC
@@ -348,14 +320,10 @@ _strescapes_L9
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _strescapes_L10
+                BEQ     _strescapes_L10
                 LDA     #11
                 TAY
                 TSC
@@ -378,14 +346,10 @@ _strescapes_L10
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _strescapes_L11
+                BEQ     _strescapes_L11
                 LDA     #12
                 TAY
                 TSC
@@ -408,14 +372,10 @@ _strescapes_L11
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
-                BNE     *+5
-                BRL     _strescapes_L12
+                BEQ     _strescapes_L12
                 LDA     #13
                 TAY
                 TSC
@@ -438,14 +398,10 @@ _strescapes_L12
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #220
-                BNE     *+5
-                BRL     _strescapes_L13
+                BEQ     _strescapes_L13
                 LDA     #14
                 TAY
                 TSC
@@ -468,11 +424,7 @@ _strescapes_L13
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _strescapes_L14
+                BEQ     _strescapes_L14
                 LDA     #15
                 TAY
                 TSC

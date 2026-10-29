@@ -42,18 +42,9 @@ main_stkok        TCS
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _fileops_L1
-                EOR     #$8000
-_fileops_L1
-                BPL     *+5
-                BRL     _fileops_L0
+                BMI     _fileops_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
@@ -81,35 +72,27 @@ _fileops_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _fileops_L2
+                BNE     _fileops_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L2
+_fileops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
                 TAY
                 PLA
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _fileops_L3
+                BNE     _fileops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L3
+_fileops_L2
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -131,22 +114,13 @@ _fileops_L3
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _fileops_L5
-                EOR     #$8000
-_fileops_L5
-                BPL     *+5
-                BRL     _fileops_L4
+                BMI     _fileops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L4
+_fileops_L3
                 LDA     #0
                 PHA
                 LDA     #$0000
@@ -193,15 +167,13 @@ _fileops_L4
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fileops_L6
+                BEQ     _fileops_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L6
+_fileops_L4
                 LDA     #4
                 PHA
                 SEP     #$20
@@ -226,17 +198,14 @@ _fileops_L6
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _fileops_L7
+                BNE     _fileops_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L7
+_fileops_L5
                 LDA     #4
                 PHA
                 SEP     #$20
@@ -269,18 +238,13 @@ _fileops_L7
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _fileops_L8
+                BNE     _fileops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L8
+_fileops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
@@ -308,15 +272,13 @@ _fileops_L8
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _fileops_L9
+                BNE     _fileops_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L9
+_fileops_L7
                 SEP     #$20
                 MX      %10
                 PHB
@@ -335,18 +297,13 @@ _fileops_L9
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _fileops_L10
+                BNE     _fileops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L10
+_fileops_L8
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -366,18 +323,13 @@ _fileops_L10
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _fileops_L11
+                BEQ     _fileops_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     3,S   ; fccstk d=0 b=3
-_fileops_L11
+_fileops_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC

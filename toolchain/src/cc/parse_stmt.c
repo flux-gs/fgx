@@ -408,19 +408,36 @@ field_init_is_null(void)
     return 0;
 }
 
-/* C89 6.7.2: the specifiers of a type may appear in ANY order, so a
- * signed/unsigned that TRAILS the base (`int signed b`, `long unsigned`) is
- * legal -- joe's utils.h `int_min(signed int a, int signed b)` is the case
- * that needed it.  The leading modifier loop in parse_type_spec already
- * handles the usual `unsigned int`; this consumes the trailing spelling after
- * an int/char/long base. */
-static void
-consume_trailing_signedness(TypeSpec *t)
+/* The specifiers after an int, char or long base, in any order: K&R A.8.2,
+ * "At most one of the words long or short may be specified together with
+ * int; the meaning is the same if int is not mentioned ... At most one of
+ * signed or unsigned may be specified together with int or any of its short
+ * or long varieties, or with char", and A.8's declaration-specifiers are a
+ * sequence with no order.  So `int long', `long unsigned' and `int signed'
+ * are the types `long', `unsigned long' and `int'.  joe's utils.h
+ * `int_min(signed int a, int signed b)' and 4.3BSD-Reno doprnt.c's
+ * `va_arg(argp, long unsigned)' are the cases.  parse_type_spec and a cast's
+ * type name both end here. */
+void
+consume_trailing_specifiers(LocalType *base, int *is_unsigned)
 {
-    while (g_cur.kind == TOK_IDENT &&
-           ((g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "unsigned", 8) == 0) ||
-            (g_cur.id_len == 6 && memcmp(g_cur.id_ptr, "signed", 6) == 0))) {
-        t->is_unsigned = (g_cur.id_len == 8);
+    for (;;) {
+        if (g_cur.kind == TOK_IDENT &&
+            ((g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "unsigned", 8) == 0) ||
+             (g_cur.id_len == 6 && memcmp(g_cur.id_ptr, "signed", 6) == 0))) {
+            *is_unsigned = (g_cur.id_len == 8);
+        } else if (g_cur.kind == TOK_IDENT && *base == LT_INT &&
+                   g_cur.id_len == 5 && memcmp(g_cur.id_ptr, "short", 5) == 0) {
+            ;                                   /* short is int here */
+        } else if (g_cur.kind == TOK_INT_KW &&
+                   (*base == LT_INT || *base == LT_LONG || *base == LT_LLONG)) {
+            ;
+        } else if (g_cur.kind == TOK_LONG_KW &&
+                   (*base == LT_INT || *base == LT_LONG)) {
+            *base = (*base == LT_INT) ? LT_LONG : LT_LLONG;
+        } else {
+            return;
+        }
         next_tok();
     }
 }
@@ -502,7 +519,7 @@ parse_type_spec(void)
         }
         /* Accept optional 'int' for K&R `long int` shape. */
         if (g_cur.kind == TOK_INT_KW) next_tok();
-        consume_trailing_signedness(&t);
+        consume_trailing_specifiers(&t.base, &t.is_unsigned);
         return t;
     }
     if (g_cur.kind == TOK_FLOAT_KW) {
@@ -513,11 +530,11 @@ parse_type_spec(void)
     if (g_cur.kind == TOK_INT_KW) {
         t.base = LT_INT;
         next_tok();
-        consume_trailing_signedness(&t);
+        consume_trailing_specifiers(&t.base, &t.is_unsigned);
     } else if (g_cur.kind == TOK_CHAR_KW) {
         t.base = LT_CHAR;
         next_tok();
-        consume_trailing_signedness(&t);
+        consume_trailing_specifiers(&t.base, &t.is_unsigned);
     } else if (g_cur.kind == TOK_VOID_KW) {
         t.base = LT_VOID;
         next_tok();
@@ -800,6 +817,16 @@ ast_store_conv(int dst, Local *lc, Global *gv)
 int
 emit_lvalue_addr(int head)
 {
+    int off, kd = emit_lvalue_addr_off(head, &off);
+    emit_fpr_add_const(kd, off);
+    return kd;
+}
+
+/* emit_lvalue_addr with the final offset left to the caller: the address is
+ * kd + *offp, and kd is unchanged by it. */
+int
+emit_lvalue_addr_off(int head, int *offp)
+{
     int kd;
     if (g_ast[head].c >= 0)
         kd = walk_fpr(g_ast[head].c);        /* computed pointer value = pointee addr */
@@ -827,15 +854,13 @@ emit_lvalue_addr(int head)
                 emit_fpr_add_const(kd, off);
                 off = 0;
             }
-            walk_val(g_ast[s].b);                           /* index -> A */
-            emit_index_scale(g_ast[s].val);                 /* * elem size */
-            emit_fpr_add_a(kd);
+            emit_fpr_add_index(kd, g_ast[s].b, g_ast[s].val);
             break;
         default:
             die(g_ast[s].line, g_ast[s].col, "bad lvalue step (internal)");
         }
     }
-    if (off) emit_fpr_add_const(kd, off);
+    *offp            = off;
     g_expr_type      = g_ast[head].type;
     g_expr_struct_id = g_ast[head].struct_id;
     return kd;
@@ -1939,6 +1964,7 @@ walk_stmt(int n)
             ir_emitf("                LDA     #%s\n", gname(gv));
         }
         emit_push_a();                       /* base @ 1,S */
+        int cio_snap = ir_cur_n();
         walk_cio(g_ast[n].kid0, g_ast[n].n_kids,
                  sa_n_dims, sa_dims, sa_row_stride);
         ir_emitf("                CLC\n");
@@ -1947,6 +1973,8 @@ walk_stmt(int n)
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
         ir_record_raw(IR_TYA, 0, 0, NULL);   /* A = element address */
+        if ((lc ? ISPTR(lc->type) : is_ptr_target) && ir_call_since(cio_snap))
+            emit_restage_base_bank(lc, lc ? NULL : gv);
         if (g_ast[n].op != TOK_EOF) {
             TokKind op = g_ast[n].op;
             if (atype == LT_LONG_ARRAY || atype == LT_FLOAT_ARRAY) {
@@ -2239,7 +2267,7 @@ walk_stmt(int n)
         g_last_stmt_returned = 0;
         break;
     case S_EXPR:
-        walk_val(g_ast[n].a);       /* discarded: offset word suffices */
+        walk_expr_stmt(g_ast[n].a);  /* the value is discarded */
         g_last_stmt_returned = 0;
         break;
     case S_IF: {
@@ -8881,6 +8909,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
      * the offsets are identical, only the base register changes. */
     ir_emitf("%s_FRAMESIZE   EQU     %d\n",
             g_func_name, g_fn_is_soft ? 0 : 2 * g_total_slots);
+    ir_tag_last(IRF_FRAMESIZE, (unsigned)(g_fn_is_soft ? 0 : 2 * g_total_slots));
     /* Emitted ONLY for a cycle member.  Gating in C rather than with a Merlin
      * `DO` keeps the predicate-off output byte-identical: a DO/FIN block costs
      * no bytes in the BINARY but does change the .s TEXT, so emitting it

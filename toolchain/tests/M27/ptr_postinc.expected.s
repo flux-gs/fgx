@@ -51,16 +51,12 @@ _ptr_postinc_L0
                 INC     _fcc_img2
                 AND     #$00FF
                 STA     _fcc_img1
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _ptr_postinc_L1
+                BEQ     _ptr_postinc_L1
                 LDA     _fcc_img0
                 CLC
                 ADC     _fcc_img1
                 STA     _fcc_img0
-                BRL     _ptr_postinc_L0
+                BRA     _ptr_postinc_L0
 _ptr_postinc_L1
                 LDA     _fcc_img0
                 TAY
@@ -129,8 +125,6 @@ _ptr_postinc_L2
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -139,8 +133,7 @@ _ptr_postinc_L2
                 BVC     _ptr_postinc_L4
                 EOR     #$8000
 _ptr_postinc_L4
-                BMI     *+5
-                BRL     _ptr_postinc_L3
+                BPL     _ptr_postinc_L3
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_img2]
@@ -153,11 +146,10 @@ _ptr_postinc_L4
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
-                BRL     _ptr_postinc_L2
+                BRA     _ptr_postinc_L2
 _ptr_postinc_L3
                 LDA     _fcc_img1
                 TAY
@@ -226,8 +218,6 @@ _ptr_postinc_L5
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -236,8 +226,7 @@ _ptr_postinc_L5
                 BVC     _ptr_postinc_L7
                 EOR     #$8000
 _ptr_postinc_L7
-                BMI     *+5
-                BRL     _ptr_postinc_L6
+                BPL     _ptr_postinc_L6
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_img2]
@@ -254,11 +243,10 @@ _ptr_postinc_L7
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
-                BRL     _ptr_postinc_L5
+                BRA     _ptr_postinc_L5
 _ptr_postinc_L6
                 LDA     _fcc_img1
                 TAY
@@ -498,6 +486,7 @@ main_stkok        TCS
                 TYA
                 STA:    $0000,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -507,6 +496,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_postinc_fwd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_sum_fwd
@@ -519,6 +509,7 @@ main_stkok        TCS
                 PHA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -526,12 +517,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_ptr_postinc_bwd
+                LDA     #_ptr_postinc_bwd+2
                 STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_sum_bwd
@@ -548,6 +536,7 @@ main_stkok        TCS
                 PHA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -555,13 +544,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_ptr_postinc_v
+                LDA     #_ptr_postinc_v+4
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_isum_bwd

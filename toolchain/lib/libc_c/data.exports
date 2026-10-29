@@ -4,9 +4,7 @@
 # Every other core cell is libc's own and is not in the export table.
 errno
 environ
-stdin
-stdout
-stderr
+_iob
 optarg
 optind
 opterr

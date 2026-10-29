@@ -252,40 +252,24 @@ main_stkok        TCS
                 TYA
                 FGX2_FARCALL ri
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _fconv_call_L0
+                BNE     _fconv_call_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L0
                 FGX2_FARCALL rf
                 JSR     _fcc_ftol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L1
+                BEQ     _fconv_call_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -300,13 +284,10 @@ _fconv_call_L1
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _fconv_call_L2
+                BNE     _fconv_call_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
@@ -327,29 +308,15 @@ _fconv_call_L2
                 ADC     #4
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0007
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #7
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L3
+                BEQ     _fconv_call_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -371,42 +338,22 @@ _fconv_call_L3
                 TCS
                 TYA
                 JSR     _fcc_ftol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L4
+                BEQ     _fconv_call_L4
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L4
                 LDA     gi
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _fconv_call_L5
+                BNE     _fconv_call_L5
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
@@ -414,30 +361,14 @@ _fconv_call_L5
                 LDA     gl+2
                 STA     _fcc_long_hi
                 LDA     gl
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #61072
+                STX     _fcc_long_b_lo
+                LDX     #65534
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L6
+                BEQ     _fconv_call_L6
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
@@ -445,13 +376,10 @@ _fconv_call_L6
                 LDA     gc
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _fconv_call_L7
+                BNE     _fconv_call_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     1,S   ; fccstk d=0 b=1

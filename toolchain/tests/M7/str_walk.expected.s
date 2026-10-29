@@ -51,16 +51,14 @@ _str_walk_L0
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img0]
                 AND     #$00FF
-                CMP     #0
-                BNE     *+5
-                BRL     _str_walk_L1
+                BEQ     _str_walk_L1
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2
                 LDA     _fcc_img0
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _str_walk_L0
+                BRA     _str_walk_L0
 _str_walk_L1
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2

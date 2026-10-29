@@ -57,7 +57,6 @@ add8_stkok        TCS
                 LDA     6+add8_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 TAY
@@ -303,10 +302,7 @@ _locfnp_L2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     13,S   ; fccstk d=0 b=13
                 PHA
-                LDA     13,S   ; fccstk d=2 b=11
-                STA     _fcc_fpr0+2
-                LDA     11,S   ; fccstk d=2 b=9
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHK
                 PEA     _locfnp_L3-1
                 SEP     #$20
@@ -495,6 +491,7 @@ _locfnp_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -504,6 +501,7 @@ _locfnp_L6
                 MX      %00
                 LDA     #b1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -543,6 +541,7 @@ _locfnp_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -552,6 +551,7 @@ _locfnp_L6
                 MX      %00
                 LDA     #b2
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -630,7 +630,6 @@ _locfnp_L6
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #20
                 STA     _fcc_tmp_b

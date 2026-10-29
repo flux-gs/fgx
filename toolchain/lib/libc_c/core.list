@@ -1,26 +1,6 @@
 # Statics that stay in libc's per-process CORE rather than a member block
-# (shared libc SP2 spec, section 4): the buffered-stdio and printf state
-# every stdio program already carries and that getc/putc/printf touch per
-# byte (stdio_core.c, printf.c).  One unmangled name per line.
-_lc_buf
-_lc_bpos
-_lc_blen
-_lc_bfail
-_lc_bfd
-_lc_btty
-_lc_small
-_lc_wfd
-_lc_wbuf
-_lc_wcnt
-_lc_wline
-_lc_wready
-_lc_wnomem
-__lc_pf_mode
-__lc_pf_fd
-__lc_pf_out
-__lc_pf_lim
-__lc_pf_n
-__lc_pf_fill
-__lc_pf_fdbuf
-__lc_pf_gbuf
-__lc_pf_glen
+# (shared libc SP2 spec, section 4).  stdio's own state is _iob, a global,
+# which the core holds anyway.  One unmangled name per line.
+# findiop.c's sbuf: _smallbuf's initialiser takes its address, which a
+# member block cannot give (the block is per-process and placed at load).
+sbuf

@@ -146,11 +146,10 @@ char *crypt(char *key, char *salt);
  * apple/fgx#414. */
 char *crypt_salt(char *hash);
 
-/* getpass(3) -- read a line from fd 0 with echo disabled, print `prompt`
- * first.  BSD opens /dev/tty; FGX has no /dev/tty (see the block comment
- * above getpass() in lib/libc_c/libc_c.c), so this reads fd 0 -- the same
- * descriptor getty/login already have the line on.  Returns a pointer to a
- * static buffer the next call overwrites, truncated to _PASSWORD_LEN. */
+/* getpass(3) -- 2.11BSD's (libc_c/getpass.c): read a line from /dev/tty, or
+ * stdin when it cannot be opened, with echo off and the stream unbuffered,
+ * printing `prompt` first.  Returns a pointer to a static buffer the next
+ * call overwrites, truncated to _PASSWORD_LEN. */
 #define _PASSWORD_LEN 32
 char *getpass();
 

@@ -147,8 +147,6 @@ rec_stkok        TCS
                 ELSE
                 LDA     6+rec_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -157,8 +155,7 @@ rec_stkok        TCS
                 BVC     _stkfloor_L1
                 EOR     #$8000
 _stkfloor_L1
-                BMI     *+5
-                BRL     _stkfloor_L0
+                BPL     _stkfloor_L0
                 DO      6+rec_FRAMESIZE/256
                 TSC
                 CLC
@@ -170,7 +167,6 @@ _stkfloor_L1
                 LDA     6+rec_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 PHA

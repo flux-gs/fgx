@@ -279,6 +279,7 @@ fuse_cmp_branch(int n, int label, int want_true)
     TokKind op;
     Node *a, *b;
     int uns;
+    long zero;
 
     if (g_ast[n].kind != N_BINOP) return 0;
     op = g_ast[n].op;
@@ -293,6 +294,16 @@ fuse_cmp_branch(int n, int label, int want_true)
 
     /* The usual arithmetic conversions, as emit_scalar_binop applies them. */
     uns = arith_unsigned(a->type, a->is_unsigned, b->type, b->is_unsigned);
+
+    if (ast_const_int(g_ast[n].b, &zero) && zero == 0 &&
+        (op == TOK_EQEQ || op == TOK_NE ||
+         (!uns && (op == TOK_LT || op == TOK_GE)))) {
+        walk_expr(g_ast[n].a);
+        emit_cmp_zero_branch(op, label, want_true);
+        g_expr_type     = LT_INT;
+        g_expr_unsigned = uns;
+        return 1;
+    }
 
     /* emit_scalar_binop's int arm, inlined: LHS pushed, RHS stashed to
      * _fcc_tmp_b, LHS popped back into A. */
@@ -317,6 +328,30 @@ fuse_cmp_branch(int n, int label, int want_true)
 void
 walk_cond_branch(int n, int label, int want_true)
 {
+    /* K&R A.7.14: "the first operand is evaluated, including all side
+     * effects; if it is equal to 0, the value of the expression is 0.
+     * Otherwise, the right operand is evaluated" -- and A.7.15 the same for
+     * || with "unequal".  In a condition that order is two branches; the 0/1
+     * the operator returns as a value is never built. */
+    if (g_ast[n].kind == N_LOGIC_AND || g_ast[n].kind == N_LOGIC_OR) {
+        int is_and = g_ast[n].kind == N_LOGIC_AND;
+        if (is_and != want_true) {        /* either operand decides alone */
+            walk_cond_branch(g_ast[n].a, label, want_true);
+            walk_cond_branch(g_ast[n].b, label, want_true);
+        } else {                          /* the first can only rule out */
+            int lab_skip = new_label();
+            walk_cond_branch(g_ast[n].a, lab_skip, !want_true);
+            walk_cond_branch(g_ast[n].b, label, want_true);
+            emit_label(lab_skip);
+        }
+        g_expr_type = LT_INT;
+        return;
+    }
+    if (g_ast[n].kind == N_LNOT) {
+        walk_cond_branch(g_ast[n].a, label, !want_true);
+        g_expr_type = LT_INT;
+        return;
+    }
     if (fuse_cmp_branch(n, label, want_true)) return;
     walk_cond(n);
     emit_bcond(want_true ? IRC_BNE : IRC_BEQ, label, 1);
@@ -349,6 +384,19 @@ walk_cond(int n)
         return;
     }
     emit_test_a_zero();
+}
+
+/* The address of a homed parameter would be its frame copy, not the slot the
+ * caller pushed.  params_home leaves every parameter in place when the body
+ * takes one's address, by the same test, so this is reached only if the two
+ * disagree. */
+static void
+refuse_homed_addr(int n)
+{
+    Local *lc = param_addr_node(n);
+    if (lc && lc->homed_from >= 0)
+        die(g_ast[n].line, g_ast[n].col,
+            "internal: the address of a homed parameter");
 }
 
 /* Walk a child that must yield a far pointer; materialize an int-valued child
@@ -746,6 +794,7 @@ sizeof_paren_has_operator(void)
 }
 
 static int build_unary(void);
+static int build_unary_operand(void);
 
 /* A numeric or character constant: sized by the type its AST node carries
  * (A.2.5.1's ladder for an integer constant, A.2.5.3's suffix for a floating
@@ -2461,7 +2510,7 @@ build_unary(void)
                     lex_peek_restore(&pk_lp);
                 }
                 if (postfix) {
-                    int a = build_unary();
+                    int a = build_unary_operand();
                     int n = ast_new(N_DEREF_GENERAL, op_line, op_col);
                     g_ast[n].a = a;
                     if (g_ast[a].type == LT_FN_PTR) {
@@ -2528,7 +2577,7 @@ build_unary(void)
             }
         }
         /* General path. */
-        int a = build_unary();
+        int a = build_unary_operand();
         int n = ast_new(N_DEREF_GENERAL, op_line, op_col);
         g_ast[n].a = a;
         if (g_ast[a].type == LT_FN_PTR) {
@@ -2602,6 +2651,28 @@ value_chain_ends_in_compound_store(void)
     return is_compound_op(g_toks[i].kind);
 }
 
+/* Set while the operand of a prefix `*' is being parsed.  K&R A.7.4: a
+ * unary-expression is `unary-operator cast-expression', and A.7.17 puts the
+ * assignment operators below every unary one, so an `=' after the operand
+ * belongs to the expression the `*' heads: `*(q)->p = c' stores through
+ * (q)->p (A.7.4.3, "returns the object ... to which its operand points"),
+ * and A.7.2 makes the parenthesized `(q)' the same primary as `q'.  A store
+ * chain must not absorb that `=' into the operand.  build_assign clears the
+ * flag for every full expression nested inside the operand -- a parenthesized
+ * group, an argument, a subscript -- and puts it back. */
+static int g_unop_operand;
+
+static int
+build_unary_operand(void)
+{
+    int saved = g_unop_operand, r;
+
+    g_unop_operand = 1;
+    r = build_unary();
+    g_unop_operand = saved;
+    return r;
+}
+
 static int
 value_chain_ends_in_store(void)
 {
@@ -2621,6 +2692,8 @@ value_chain_ends_in_store(void)
         break;
     }
     TokKind fin = g_toks[i].kind;
+    if (g_unop_operand)
+        return 0;
     return (fin == TOK_EQ || is_compound_op(fin));
 }
 
@@ -3403,6 +3476,7 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
              * was lost -- elvis's msg(fmt, long...) %s read bank 0. */
             int ptr_long = ks >= 0 && (is_ptr_type(at) || ISARY(at));
             if (ptr_long) {
+                fpr_sym_flush(ks);
                 ir_emitf("                LDA     %s+2\n", fpr_name(ks));
                 ir_emitf("                STA     _fcc_long_hi\n");
             }
@@ -3686,8 +3760,9 @@ build_primary_ast(void)
                 bt = LT_LLONG;                  /* `long long' (extension) */
                 next_tok();
             }
-            if (!from_typedef && bt == LT_LONG && g_cur.kind == TOK_INT_KW)
-                next_tok();
+            if (!from_typedef && (bt == LT_INT || bt == LT_CHAR ||
+                                  bt == LT_LONG || bt == LT_LLONG))
+                consume_trailing_specifiers(&bt, &saw_unsigned);
             if (g_cur.kind == TOK_LPAREN) {
                 /* Inline abstract fn-ptr declarator cast, `T (*)(params)`.
                  *
@@ -6379,8 +6454,21 @@ peek_chain_dot_bridges(void)
 /* build_assign — parse_assign's expression-context store classifier (3a-F).
  * All lookahead rewinds are cursor checkpoints; the RHS recursion keeps the
  * right-associativity. */
+static int build_assign_body(void);
+
 static int
 build_assign(void)
+{
+    int saved = g_unop_operand, r;
+
+    g_unop_operand = 0;
+    r = build_assign_body();
+    g_unop_operand = saved;
+    return r;
+}
+
+static int
+build_assign_body(void)
 {
     /* --libso: a block static on the left goes to the lvalue walker, which
      * build_primary_ast enters for it (build_block_static), not to the
@@ -6524,7 +6612,7 @@ build_assign(void)
         lex_peek_restore(&ds_pk);
         next_tok();                                    /* consume '*' */
         {
-            int e = build_unary();                     /* the pointer value E */
+            int e = build_unary_operand();             /* the pointer value E */
             if (ISPTR(g_ast[e].type) && g_ast[e].type != LT_FN_PTR &&
                 (g_cur.kind == TOK_EQ || is_compound_op(g_cur.kind))) {
                 int head = ast_new(N_LV_CHAIN, op_line, op_col);
@@ -7220,11 +7308,55 @@ llong_opassign(int n, TokKind op, int rhs, LocalType ht, int lhs_u)
                       g_ast[rhs].is_unsigned, compound_binop_fn(op));
 }
 
+/* The statement-context root whose value walk_expr_stmt discards. */
+static int g_discard_node = -1;
+
+/* The type of the object an expression-context store writes, or LT_VOID
+ * when n is not one.  N_STORE_VAR carries its RHS's descriptor (chained
+ * pointer stores read it), so its object's type comes from the symbol. */
+static LocalType
+store_object_type(int n)
+{
+    switch (g_ast[n].kind) {
+    case N_STORE_VAR:
+        return g_ast[n].sym_lc ? g_ast[n].sym_lc->type : g_ast[n].sym_gv->type;
+    case N_DSTORE: case N_COMPOUND_VAR:
+    case N_STORE_DOTFIELD: case N_STORE_PTRARR_ELEM: case N_STORE_MEMBER:
+    case N_STORE_SARR_MEMBER: case N_STORE_ARR_ELEM: case N_LV_STORE_E:
+        return g_ast[n].type;
+    default:
+        return LT_VOID;
+    }
+}
+
 void
 walk_expr(int n)
 {
     walk_expr_body(n);
+    /* K&R A.7.17: "The type of an assignment expression is that of its left
+     * operand, and the value is the value stored in the left operand after
+     * the assignment has taken place."  A char store writes A's low byte;
+     * the value is that byte, so A drops its high one -- unless the
+     * statement discards the value. */
+    if (n != g_discard_node && g_fpr_res < 0 &&
+        store_object_type(n) == LT_CHAR)
+        ir_emitf("                AND     #$00FF\n");
     g_expr_const_int = cast_operand_is_const(n);
+}
+
+/* fpr k += index * stride.  A constant index is a constant offset (K&R
+ * A.7.3.1: E1[E2] is *((E1)+(E2))), added at compile time. */
+void
+emit_fpr_add_index(int k, int idx, unsigned stride)
+{
+    long v;
+    if (ast_const_int(idx, &v)) {
+        emit_fpr_add_const(k, (int)(v * (long)(stride > 1 ? stride : 1)));
+        return;
+    }
+    walk_val(idx);
+    emit_index_scale(stride);
+    emit_fpr_add_a(k);
 }
 
 /* emit_addr_field_index -- add `index * elemsize' to an address already in
@@ -7243,7 +7375,7 @@ emit_addr_field_index(int k, int idx_ast, int elemsize)
 static void
 walk_expr_body(int n)
 {
-    g_fpr_res = -1;
+        g_fpr_res = -1;
     switch (g_ast[n].kind) {
     case N_MUL_INLINE_CONST:
         walk_val(g_ast[n].a);
@@ -7328,6 +7460,12 @@ walk_expr_body(int n)
         else                walk_expr(g_ast[n].a);
         LocalType lt = a->type;
         int lu = a->is_unsigned;
+        long kc;
+        if (lt == LT_LONG && (b->type == LT_INT || b->type == LT_LONG) &&
+            ast_const_int(g_ast[n].b, &kc)) {
+            emit_long_binop_const(lu, b->type, b->is_unsigned, kc, fn);
+            break;
+        }
         if (lt == LT_DOUBLE || b->type == LT_DOUBLE) {
             /* Widened BEFORE the push: a conversion calls the soft double,
              * which the right operand's parking in the second-operand cells
@@ -7444,11 +7582,13 @@ walk_expr_body(int n)
         int res_ptr  = ISPTR(g_ast[n].type) || g_ast[n].type == LT_STRUCT;
         int kb = -1, kc = -1;
         walk_cond_branch(g_ast[n].a, lab_else, 0);
-        if (res_ptr) { kb = walk_fpr(g_ast[n].b); fpr_drop(kb); }
+        /* Each arm leaves its value in the register the join re-allocates,
+         * so a constant address is built before the drop. */
+        if (res_ptr) { kb = walk_fpr(g_ast[n].b); fpr_sym_flush(kb); fpr_drop(kb); }
         else         { walk_val(g_ast[n].b); ternary_arm_conv(n); }
         emit_bra_label(lab_end);
         emit_label(lab_else);
-        if (res_ptr) { kc = walk_fpr(g_ast[n].c); fpr_drop(kc); }
+        if (res_ptr) { kc = walk_fpr(g_ast[n].c); fpr_sym_flush(kc); fpr_drop(kc); }
         else         { walk_val(g_ast[n].c); ternary_arm_conv(n); }
         emit_label(lab_end);
         if (res_ptr) {
@@ -7460,11 +7600,15 @@ walk_expr_body(int n)
         }
         break;
     }
-    case N_COMMA:
+    case N_COMMA: {
+        int saved = g_discard_node;    /* K&R A.7.18: the left value is discarded */
+        g_discard_node = g_ast[n].a;
         walk_expr(g_ast[n].a);
+        g_discard_node = saved;
         if (g_fpr_res >= 0) { fpr_drop(g_fpr_res); g_fpr_res = -1; }
         walk_expr(g_ast[n].b);
         break;
+    }
     /* --- unary --- */
     case N_SIZEOF:
         ir_emitf("                LDA     #%d\n", (int)g_ast[n].val);
@@ -7684,9 +7828,7 @@ walk_expr_body(int n)
     }
     case N_ADDR_ARR_ELEM: {
         int k = fpr_addr_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
-        walk_val(g_ast[n].a);                  /* index -> A */
-        emit_index_scale(g_ast[n].val);
-        emit_fpr_add_a(k);
+        emit_fpr_add_index(k, g_ast[n].a, g_ast[n].val);
         if (g_ast[n].b == -2 && g_ast[n].val_hi > 0)   /* '.field...' chain */
             emit_fpr_add_const(k, (int)g_ast[n].val_hi);
         if (g_ast[n].c >= 0)                  /* `.arrayfield[j]' (#202) */
@@ -7729,6 +7871,7 @@ walk_expr_body(int n)
         break;
     }
     case N_ADDR_VAR:
+        refuse_homed_addr(n);
         fpr_addr_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
         break;
     case N_DEREF_POSTINC:
@@ -7857,6 +8000,7 @@ walk_expr_body(int n)
              * offset through long_from_int and dropped the bank (caught
              * by M37/fileops: write()'s buffer bank arrived as 0). */
             int k = walk_fpr(g_ast[n].a);
+            fpr_sym_flush(k);
             ir_emitf("                LDA     %s+2\n", fpr_name(k));
             ir_emitf("                STA     _fcc_long_hi\n");
             emit_fpr_to_a(k);
@@ -9014,7 +9158,9 @@ walk_expr_body(int n)
     case N_ADDR_LV_E: {
         /* &chain: the walker's ADDRESS fpr IS the value -- a far pointer whose
          * bank rides through every deref/scaled-add (K&R A.7.4.2). */
-        int kd = emit_lvalue_addr(g_ast[n].a);
+        int kd;
+        refuse_homed_addr(n);
+        kd = emit_lvalue_addr(g_ast[n].a);
         g_fpr_res        = kd;
         g_expr_type      = g_ast[n].type;
         g_expr_struct_id = g_ast[n].struct_id;
@@ -9043,40 +9189,58 @@ walk_expr_body(int n)
     }
     case N_LV_INCDEC_E: {
         /* postfix ++/-- of a deref LVALUE `(*p)++`: the ADDRESS of the pointee
-         * is p's own value (the deref's operand).  Land that far address in
-         * _fcc_ptr, then RMW the word there in place (bank preserved).  For a
-         * pointer leaf the yielded far pointer is captured by fpr_in. */
+         * is p's own value (the deref's operand), in an fpr; RMW the word
+         * through it in place (bank preserved).  For a pointer leaf the
+         * yielded far pointer is captured by fpr_in. */
         int op        = g_ast[n].a;
         int is_inc    = (g_ast[n].flags & AF_IS_INC) ? 1 : 0;
         int is_prefix = (g_ast[n].flags & AF_RET_OLD) ? 0 : 1;
         LocalType lt  = g_ast[n].type;
         int is_ptr    = ISPTR(lt);
-        int kd;
+        int kd, off = 0;
         if (g_ast[op].kind == N_LV_CHAIN)
-            kd = emit_lvalue_addr(op);                       /* &arr[i] etc. (chain) */
+            kd = emit_lvalue_addr_off(op, &off);             /* &arr[i] etc. (chain) */
         else if (g_ast[op].kind == N_DEREF_FAST)
             kd = fpr_load_sym(g_ast[op].sym_lc, NULL);       /* addr = the ptr's value */
         else
             kd = walk_fpr(g_ast[op].a);                      /* N_DEREF_GENERAL operand */
+        if (!is_ptr || fpr_is_sym(kd)) {      /* only the pointer RMW takes it in Y */
+            emit_fpr_add_const(kd, off);
+            off = 0;
+        }
         /* A LONG OR FLOAT LEAF IS A 32-BIT ±1.  The word RMW below reaches
          * only the low half: a long lost its carry and yielded whatever
          * _fcc_long_hi last held (`++s.lw[i]' in value position), and a float
          * had one added to its mantissa bits. */
         if (lt == LT_LONG || lt == LT_FLOAT || IS_QUAD(lt)) {
+            fpr_sym_flush(kd);
             emit_wide_incdec_at_fpr(kd, 0, lt, is_inc, !is_prefix);
             fpr_drop(kd);
             g_fpr_res = -1;
             break;
         }
-        emit_m8();                                            /* _fcc_ptr <- fpr kd */
-        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(fpr_name(kd)));
-        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
-        emit_m16();
-        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(kd)));
-        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
-        fpr_drop(kd);
-        emit_incdec_at_fcc_ptr((int)g_ast[n].val, is_inc, is_prefix, is_ptr,
+        if (fpr_is_sym(kd)) {                 /* a fixed address: RMW it there */
+            emit_incdec_at_sym(kd, (int)g_ast[n].val, is_inc, is_prefix, is_ptr,
                                lt, g_ast[n].struct_id);
+            fpr_drop(kd);
+            if (is_ptr) fpr_in();
+            else        g_fpr_res = -1;
+            g_expr_type      = lt;
+            g_expr_struct_id = g_ast[n].struct_id;
+            g_expr_unsigned  = g_ast[n].is_unsigned;
+            break;
+        }
+        if (is_ptr) {                          /* the result replaces the address */
+            emit_ptr_incdec_into_fpr(kd, off, (int)g_ast[n].val, is_inc, is_prefix);
+            g_fpr_res        = kd;
+            g_expr_type      = lt;
+            g_expr_struct_id = g_ast[n].struct_id;
+            g_expr_unsigned  = g_ast[n].is_unsigned;
+            break;
+        }
+        emit_incdec_at_fpr(kd, (int)g_ast[n].val, is_inc, is_prefix, is_ptr,
+                           lt, g_ast[n].struct_id);
+        fpr_drop(kd);
         if (is_ptr) {
             fpr_in();                          /* A + _fcc_ptr+2 -> fresh fpr */
         } else {
@@ -9151,8 +9315,16 @@ walk_expr_body(int n)
         {
         /* A-1: LHS signedness at load, after promotion (A.6.1). */
         int lhs_u = promoted_unsigned(ht, g_expr_unsigned);
+        long kc;
         if (llong_opassign_applies(ht, op, g_ast[n].a)) {
             llong_opassign(n, op, g_ast[n].a, ht, lhs_u);
+        } else if (ht == LT_LONG &&
+                   (g_ast[g_ast[n].a].type == LT_INT ||
+                    g_ast[g_ast[n].a].type == LT_LONG) &&
+                   ast_const_int(g_ast[n].a, &kc)) {
+            emit_stage_long_b(kc);     /* the LHS stays in A:_fcc_long_hi */
+            g_expr_type = ht;
+            emit_compound_op(op, lhs_u, ht);
         } else if (ht == LT_LONG || ht == LT_FLOAT) {
             /* 4-byte LHS: the RHS walk clobbers _fcc_long_hi, so save BOTH
              * words; promote an int/char RHS before the 32-bit op.  A lone
@@ -9466,7 +9638,10 @@ walk_expr_root(int n)
 void
 walk_expr_stmt(int n)
 {
+    int saved = g_discard_node;
+    g_discard_node = n;
     walk_expr(n);
+    g_discard_node = saved;
     if (g_fpr_res >= 0)
         fpr_drop(g_fpr_res);
     if (fpr_live() != 0)

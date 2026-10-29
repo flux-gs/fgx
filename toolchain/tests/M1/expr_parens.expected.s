@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 ASL

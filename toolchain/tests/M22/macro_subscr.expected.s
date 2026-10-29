@@ -26,15 +26,12 @@ _macro_subscr_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #128
                 BVC     _macro_subscr_L3
                 EOR     #$8000
 _macro_subscr_L3
-                BMI     *+5
-                BRL     _macro_subscr_L2
+                BPL     _macro_subscr_L2
                 LDA     #up_tab
                 PHA
                 LDA     _fcc_img0
@@ -79,7 +76,7 @@ _macro_subscr_L3
                 PLA
 _macro_subscr_L1
                 INC     _fcc_img0
-                BRL     _macro_subscr_L0
+                BRA     _macro_subscr_L0
 _macro_subscr_L2
                 LDA     #up_tab
                 PHA
@@ -181,6 +178,7 @@ _macro_subscr_L2
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -190,10 +188,12 @@ _macro_subscr_L2
                 MX      %00
                 LDA     #dbuf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
                 STA     _fcc_img2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -203,6 +203,7 @@ _macro_subscr_L2
                 MX      %00
                 LDA     #sbuf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
                 LDA     _fcc_fpr0
@@ -222,8 +223,6 @@ _macro_subscr_L2
                 LDA     [_fcc_img4]
                 INC     _fcc_img4
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
                 LDA:    up_tab,X
@@ -255,8 +254,6 @@ _macro_subscr_L2
                 TAX
                 LDA:    sbuf,X
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
                 LDA:    lo_tab,X
@@ -277,14 +274,9 @@ _macro_subscr_L2
                 TAX
                 LDA:    dbuf,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _macro_subscr_L4
+                BNE     _macro_subscr_L4
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     _fcc_img1
@@ -294,13 +286,10 @@ _macro_subscr_L4
                 LDA:    dbuf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _macro_subscr_L5
+                BNE     _macro_subscr_L5
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #22
                 STA     _fcc_img1

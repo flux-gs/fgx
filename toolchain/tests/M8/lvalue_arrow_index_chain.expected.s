@@ -114,10 +114,8 @@ main_stkok        TCS
                 PLA
                 CLC
                 ADC     #20
-                STA     _fcc_fpr0
-                LDA     #3
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #3
                 STA     _fcc_fpr0
                 LDA     #10
                 SEP     #$20
@@ -143,12 +141,8 @@ main_stkok        TCS
                 PLA
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -176,10 +170,8 @@ main_stkok        TCS
                 ADC     #34
                 CLC
                 ADC     #20
-                STA     _fcc_fpr0
-                LDA     #3
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF

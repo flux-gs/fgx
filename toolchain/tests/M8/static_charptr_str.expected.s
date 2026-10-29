@@ -59,10 +59,9 @@ _static_charptr_str_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _static_charptr_str_L1
+                BEQ     _static_charptr_str_L1
                 INC     _fcc_img0
-                BRL     _static_charptr_str_L0
+                BRA     _static_charptr_str_L0
 _static_charptr_str_L1
                 LDA     _fcc_img0
                 TAY
@@ -153,7 +152,6 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CLC
                 ADC     #26
                 TAY

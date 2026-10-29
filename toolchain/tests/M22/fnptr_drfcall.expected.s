@@ -175,17 +175,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     gdisp+2
                 TYA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gdisp
-                STA     ggp
-                LDA     _fcc_fpr0+2
-                STA     ggp+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -195,6 +185,22 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gdisp
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
+                STA     ggp
+                LDA     _fcc_fpr0+2
+                STA     ggp+2
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gdisp
+                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -225,6 +231,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -234,6 +241,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #one
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     13,S
@@ -305,6 +313,7 @@ _fnptr_drfcall_L2
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -314,6 +323,7 @@ _fnptr_drfcall_L2
                 MX      %00
                 LDA     #one
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     13,S
@@ -398,6 +408,7 @@ _fnptr_drfcall_L3
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -407,6 +418,7 @@ _fnptr_drfcall_L3
                 MX      %00
                 LDA     #one
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     13,S

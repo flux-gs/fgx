@@ -47,13 +47,10 @@ _divs_pow2_L1
                 CMP     #$8000
                 ROR
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _divs_pow2_L0
+                BNE     _divs_pow2_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -84,13 +81,10 @@ _divs_pow2_L3
                 CMP     #$8000
                 ROR
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _divs_pow2_L2
+                BNE     _divs_pow2_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -120,14 +114,9 @@ _divs_pow2_L5
                 ROR
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _divs_pow2_L4
+                BNE     _divs_pow2_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -157,14 +146,9 @@ _divs_pow2_L7
                 ROR
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _divs_pow2_L6
+                BNE     _divs_pow2_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -195,11 +179,9 @@ _divs_pow2_L9
                 CMP     #$8000
                 ROR
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _divs_pow2_L8
+                BNE     _divs_pow2_L8
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -230,11 +212,9 @@ _divs_pow2_L11
                 CMP     #$8000
                 ROR
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _divs_pow2_L10
+                BNE     _divs_pow2_L10
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img0
@@ -264,14 +244,9 @@ _divs_pow2_L13
                 ROR
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _divs_pow2_L12
+                BNE     _divs_pow2_L12
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     _fcc_img0
@@ -302,11 +277,9 @@ _divs_pow2_L15
                 CMP     #$8000
                 ROR
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _divs_pow2_L14
+                BNE     _divs_pow2_L14
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     _fcc_img0
@@ -337,11 +310,9 @@ _divs_pow2_L17
                 CMP     #$8000
                 ROR
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _divs_pow2_L16
+                BNE     _divs_pow2_L16
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #256
                 STA     _fcc_img0
@@ -356,11 +327,9 @@ _divs_pow2_L19
                 CMP     #$8000
                 ROR
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _divs_pow2_L18
+                BNE     _divs_pow2_L18
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #512
                 STA     _fcc_img0
@@ -374,14 +343,9 @@ _divs_pow2_L18
 _divs_pow2_L21
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _divs_pow2_L20
+                BNE     _divs_pow2_L20
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1024
                 STA     _fcc_img0
@@ -396,13 +360,10 @@ _divs_pow2_L23
                 CMP     #$8000
                 ROR
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _divs_pow2_L22
+                BNE     _divs_pow2_L22
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2048
                 STA     _fcc_img0
@@ -417,13 +378,10 @@ _divs_pow2_L25
                 CMP     #$8000
                 ROR
                 TAX
-                TXA
                 CMP     #16383
-                BEQ     *+5
-                BRL     _divs_pow2_L24
+                BNE     _divs_pow2_L24
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4096
                 STA     _fcc_img0
@@ -441,11 +399,8 @@ _divs_pow2_L27
                 CMP     #$8000
                 ROR
                 CMP     #$C000
-                BEQ     *+5
-                BRL     _divs_pow2_L26
+                BNE     _divs_pow2_L26
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8192
                 STA     _fcc_img0
@@ -456,23 +411,18 @@ _divs_pow2_L26
                 STX     _fcc_tmp_b
                 JSR     _fcc_divs16
                 CMP     #$FFF6
-                BEQ     *+5
-                BRL     _divs_pow2_L28
+                BNE     _divs_pow2_L28
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #16384
                 STA     _fcc_img0
 _divs_pow2_L28
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #32767
-                BEQ     *+5
-                BRL     _divs_pow2_L29
+                BNE     _divs_pow2_L29
                 LDA     #42
-                BRL     _divs_pow2_L30
+                BRA     _divs_pow2_L30
 _divs_pow2_L29
                 LDA     _fcc_img0
 _divs_pow2_L30

@@ -23,12 +23,11 @@ main_stkok        TCS
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     one
                 CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L0
+                BEQ     _ternary_balance_L0
                 LDA     f+2
                 STA     _fcc_long_hi
                 LDA     f
-                BRL     _ternary_balance_L1
+                BRA     _ternary_balance_L1
 _ternary_balance_L0
                 LDA     #1
                 JSR     _fcc_itof
@@ -79,23 +78,19 @@ _ternary_balance_L1
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L2
+                BEQ     _ternary_balance_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
 _ternary_balance_L2
                 LDA     one
                 CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L3
+                BEQ     _ternary_balance_L3
                 LDA     #1
                 JSR     _fcc_itof
-                BRL     _ternary_balance_L4
+                BRA     _ternary_balance_L4
 _ternary_balance_L3
                 LDA     f+2
                 STA     _fcc_long_hi
@@ -147,24 +142,20 @@ _ternary_balance_L4
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L5
+                BEQ     _ternary_balance_L5
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
 _ternary_balance_L5
                 LDA     one
                 CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L6
+                BEQ     _ternary_balance_L6
                 LDA     big+2
                 STA     _fcc_long_hi
                 LDA     big
-                BRL     _ternary_balance_L7
+                BRA     _ternary_balance_L7
 _ternary_balance_L6
                 LDA     #1
                 JSR     _fcc_long_from_int
@@ -177,40 +168,25 @@ _ternary_balance_L7
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L8
+                BEQ     _ternary_balance_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     9,S   ; fccstk d=0 b=9
 _ternary_balance_L8
                 LDA     one
                 CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L9
+                BEQ     _ternary_balance_L9
                 LDA     #1
                 JSR     _fcc_long_from_int
-                BRL     _ternary_balance_L10
+                BRA     _ternary_balance_L10
 _ternary_balance_L9
                 LDA     big+2
                 STA     _fcc_long_hi
@@ -224,28 +200,15 @@ _ternary_balance_L10
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ternary_balance_L11
+                BEQ     _ternary_balance_L11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     9,S   ; fccstk d=0 b=9

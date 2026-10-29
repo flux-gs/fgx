@@ -57,8 +57,6 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 INC
                 INC
                 TAY
@@ -103,8 +101,6 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 AND     #6
                 TAY
                 LDA     1,S
@@ -151,8 +147,6 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 ORA     #15
                 TAY
                 LDA     1,S
@@ -203,8 +197,6 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 SEC
                 SBC     #100
                 TAY
@@ -222,10 +214,8 @@ main_stkok        TCS
                 TAX
                 LDA:    gv,X
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _garr_compound_L0
+                BEQ     _garr_compound_L0
                 LDA     #1
                 TAY
                 TSC
@@ -242,10 +232,8 @@ _garr_compound_L0
                 LDA:    gbm,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #255
-                BNE     *+5
-                BRL     _garr_compound_L1
+                BEQ     _garr_compound_L1
                 LDA     #2
                 TAY
                 TSC
@@ -262,10 +250,8 @@ _garr_compound_L1
                 LDA:    gbm,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #100
-                BNE     *+5
-                BRL     _garr_compound_L2
+                BEQ     _garr_compound_L2
                 LDA     #3
                 TAY
                 TSC

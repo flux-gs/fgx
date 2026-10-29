@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,10 +29,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #wtab
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img2
                 LDA     _fcc_fpr0
                 STA     _fcc_img1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +44,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #ctab
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -82,8 +86,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 ORA     #16
                 TAY
                 LDA     1,S
@@ -133,8 +135,6 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #15
                 TAY
                 LDA     1,S
@@ -154,14 +154,9 @@ main_stkok        TCS
                 ASL
                 TAX
                 LDA:    wtab,X
-                TAX
-                TXA
                 CMP     #19
-                BEQ     *+5
-                BRL     _ptrsub_L0
+                BNE     _ptrsub_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -170,21 +165,14 @@ _ptrsub_L0
                 TAX
                 LDA:    ctab,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _ptrsub_L1
+                BNE     _ptrsub_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
 _ptrsub_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -193,11 +181,9 @@ _ptrsub_L1
                 BVC     _ptrsub_L3
                 EOR     #$8000
 _ptrsub_L3
-                BMI     *+5
-                BRL     _ptrsub_L2
+                BPL     _ptrsub_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0

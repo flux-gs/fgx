@@ -54,8 +54,7 @@ _m20_long_L0
                 BVC     _m20_long_L3
                 EOR     #$8000
 _m20_long_L3
-                BMI     *+5
-                BRL     _m20_long_L2
+                BPL     _m20_long_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
@@ -119,7 +118,6 @@ _m20_long_L3
 _m20_long_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -156,6 +154,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -165,6 +164,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #ages
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sum_longs
@@ -182,22 +182,10 @@ main_stkok        TCS
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0004
-                STA     _fcc_long_hi
-                LDA     #$9444
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #37956
+                STX     _fcc_long_b_lo
+                LDX     #4
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 TAY
                 TSC

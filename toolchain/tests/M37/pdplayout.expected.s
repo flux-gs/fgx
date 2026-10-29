@@ -21,10 +21,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L0
+                BEQ     _pdplayout_L0
                 LDA     #1
                 TAY
                 TSC
@@ -38,10 +36,8 @@ main_stkok        TCS
 _pdplayout_L0
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L1
+                BEQ     _pdplayout_L1
                 LDA     #2
                 TAY
                 TSC
@@ -55,10 +51,8 @@ _pdplayout_L0
 _pdplayout_L1
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L2
+                BEQ     _pdplayout_L2
                 LDA     #3
                 TAY
                 TSC
@@ -72,10 +66,8 @@ _pdplayout_L1
 _pdplayout_L2
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L3
+                BEQ     _pdplayout_L3
                 LDA     #4
                 TAY
                 TSC
@@ -89,10 +81,8 @@ _pdplayout_L2
 _pdplayout_L3
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L4
+                BEQ     _pdplayout_L4
                 LDA     #5
                 TAY
                 TSC
@@ -104,6 +94,7 @@ _pdplayout_L3
                 TYA
                 RTL
 _pdplayout_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -111,10 +102,10 @@ _pdplayout_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                INC
-                INC
+                LDA     #gp+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -124,14 +115,13 @@ _pdplayout_L4
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L5
+                BEQ     _pdplayout_L5
                 LDA     #6
                 TAY
                 TSC
@@ -143,6 +133,7 @@ _pdplayout_L4
                 TYA
                 RTL
 _pdplayout_L5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -150,10 +141,10 @@ _pdplayout_L5
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #6
+                LDA     #gp+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -163,14 +154,13 @@ _pdplayout_L5
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L6
+                BEQ     _pdplayout_L6
                 LDA     #7
                 TAY
                 TSC
@@ -182,6 +172,7 @@ _pdplayout_L5
                 TYA
                 RTL
 _pdplayout_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -189,10 +180,10 @@ _pdplayout_L6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #8
+                LDA     #gp+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -202,14 +193,13 @@ _pdplayout_L6
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _pdplayout_L7
+                BEQ     _pdplayout_L7
                 LDA     #8
                 TAY
                 TSC
@@ -221,6 +211,7 @@ _pdplayout_L6
                 TYA
                 RTL
 _pdplayout_L7
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -228,10 +219,10 @@ _pdplayout_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #12
+                LDA     #gp+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -241,14 +232,13 @@ _pdplayout_L7
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _pdplayout_L8
+                BEQ     _pdplayout_L8
                 LDA     #9
                 TAY
                 TSC
@@ -260,6 +250,7 @@ _pdplayout_L7
                 TYA
                 RTL
 _pdplayout_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -267,10 +258,10 @@ _pdplayout_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #20
+                LDA     #gp+20
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -280,14 +271,13 @@ _pdplayout_L8
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #20
-                BNE     *+5
-                BRL     _pdplayout_L9
+                BEQ     _pdplayout_L9
                 LDA     #10
                 TAY
                 TSC
@@ -301,10 +291,8 @@ _pdplayout_L8
 _pdplayout_L9
                 LDA     #24
                 TAX
-                TXA
                 CMP     #24
-                BNE     *+5
-                BRL     _pdplayout_L10
+                BEQ     _pdplayout_L10
                 LDA     #11
                 TAY
                 TSC
@@ -318,10 +306,8 @@ _pdplayout_L9
 _pdplayout_L10
                 LDA     #64
                 TAX
-                TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _pdplayout_L11
+                BEQ     _pdplayout_L11
                 LDA     #12
                 TAY
                 TSC
@@ -333,6 +319,7 @@ _pdplayout_L10
                 TYA
                 RTL
 _pdplayout_L11
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -342,6 +329,8 @@ _pdplayout_L11
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -351,14 +340,11 @@ _pdplayout_L11
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _pdplayout_L12
+                BEQ     _pdplayout_L12
                 LDA     #13
                 TAY
                 TSC
@@ -370,6 +356,7 @@ _pdplayout_L11
                 TYA
                 RTL
 _pdplayout_L12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -377,10 +364,10 @@ _pdplayout_L12
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                INC
-                INC
+                LDA     #gdi+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -390,14 +377,13 @@ _pdplayout_L12
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L13
+                BEQ     _pdplayout_L13
                 LDA     #14
                 TAY
                 TSC
@@ -409,6 +395,7 @@ _pdplayout_L12
                 TYA
                 RTL
 _pdplayout_L13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -416,10 +403,10 @@ _pdplayout_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #4
+                LDA     #gdi+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -429,14 +416,13 @@ _pdplayout_L13
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L14
+                BEQ     _pdplayout_L14
                 LDA     #15
                 TAY
                 TSC
@@ -448,6 +434,7 @@ _pdplayout_L13
                 TYA
                 RTL
 _pdplayout_L14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -455,10 +442,10 @@ _pdplayout_L14
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #6
+                LDA     #gdi+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -468,14 +455,13 @@ _pdplayout_L14
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L15
+                BEQ     _pdplayout_L15
                 LDA     #16
                 TAY
                 TSC
@@ -487,6 +473,7 @@ _pdplayout_L14
                 TYA
                 RTL
 _pdplayout_L15
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -494,10 +481,10 @@ _pdplayout_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #8
+                LDA     #gdi+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -507,14 +494,13 @@ _pdplayout_L15
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _pdplayout_L16
+                BEQ     _pdplayout_L16
                 LDA     #17
                 TAY
                 TSC
@@ -526,6 +512,7 @@ _pdplayout_L15
                 TYA
                 RTL
 _pdplayout_L16
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -533,10 +520,10 @@ _pdplayout_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #12
+                LDA     #gdi+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -546,14 +533,13 @@ _pdplayout_L16
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _pdplayout_L17
+                BEQ     _pdplayout_L17
                 LDA     #18
                 TAY
                 TSC
@@ -565,6 +551,7 @@ _pdplayout_L16
                 TYA
                 RTL
 _pdplayout_L17
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -572,10 +559,10 @@ _pdplayout_L17
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #40
+                LDA     #gdi+40
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -585,14 +572,13 @@ _pdplayout_L17
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _pdplayout_L18
+                BEQ     _pdplayout_L18
                 LDA     #19
                 TAY
                 TSC
@@ -604,6 +590,7 @@ _pdplayout_L17
                 TYA
                 RTL
 _pdplayout_L18
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -611,10 +598,10 @@ _pdplayout_L18
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #50
+                LDA     #gdi+50
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -624,14 +611,13 @@ _pdplayout_L18
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #50
-                BNE     *+5
-                BRL     _pdplayout_L19
+                BEQ     _pdplayout_L19
                 LDA     #20
                 TAY
                 TSC
@@ -643,6 +629,7 @@ _pdplayout_L18
                 TYA
                 RTL
 _pdplayout_L19
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -650,10 +637,10 @@ _pdplayout_L19
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #52
+                LDA     #gdi+52
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -663,14 +650,13 @@ _pdplayout_L19
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #52
-                BNE     *+5
-                BRL     _pdplayout_L20
+                BEQ     _pdplayout_L20
                 LDA     #21
                 TAY
                 TSC
@@ -682,6 +668,7 @@ _pdplayout_L19
                 TYA
                 RTL
 _pdplayout_L20
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -689,12 +676,10 @@ _pdplayout_L20
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #8
-                CLC
-                ADC     #52
+                LDA     #gdi+60
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -704,14 +689,13 @@ _pdplayout_L20
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #60
-                BNE     *+5
-                BRL     _pdplayout_L21
+                BEQ     _pdplayout_L21
                 LDA     #22
                 TAY
                 TSC
@@ -725,10 +709,8 @@ _pdplayout_L20
 _pdplayout_L21
                 LDA     #70
                 TAX
-                TXA
                 CMP     #70
-                BNE     *+5
-                BRL     _pdplayout_L22
+                BEQ     _pdplayout_L22
                 LDA     #23
                 TAY
                 TSC
@@ -740,6 +722,7 @@ _pdplayout_L21
                 TYA
                 RTL
 _pdplayout_L22
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -747,10 +730,10 @@ _pdplayout_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdir
-                INC
-                INC
+                LDA     #gdir+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -760,14 +743,13 @@ _pdplayout_L22
                 MX      %00
                 LDA     #gdir
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L23
+                BEQ     _pdplayout_L23
                 LDA     #24
                 TAY
                 TSC
@@ -779,6 +761,7 @@ _pdplayout_L22
                 TYA
                 RTL
 _pdplayout_L23
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -786,10 +769,10 @@ _pdplayout_L23
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdir
-                CLC
-                ADC     #4
+                LDA     #gdir+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -799,14 +782,13 @@ _pdplayout_L23
                 MX      %00
                 LDA     #gdir
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L24
+                BEQ     _pdplayout_L24
                 LDA     #25
                 TAY
                 TSC
@@ -818,6 +800,7 @@ _pdplayout_L23
                 TYA
                 RTL
 _pdplayout_L24
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -825,10 +808,10 @@ _pdplayout_L24
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdir
-                CLC
-                ADC     #6
+                LDA     #gdir+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -838,14 +821,13 @@ _pdplayout_L24
                 MX      %00
                 LDA     #gdir
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L25
+                BEQ     _pdplayout_L25
                 LDA     #26
                 TAY
                 TSC
@@ -859,10 +841,8 @@ _pdplayout_L24
 _pdplayout_L25
                 LDA     #446
                 TAX
-                TXA
                 CMP     #446
-                BNE     *+5
-                BRL     _pdplayout_L26
+                BEQ     _pdplayout_L26
                 LDA     #27
                 TAY
                 TSC
@@ -874,6 +854,7 @@ _pdplayout_L25
                 TYA
                 RTL
 _pdplayout_L26
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -881,10 +862,10 @@ _pdplayout_L26
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                INC
-                INC
+                LDA     #gfs+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -894,14 +875,13 @@ _pdplayout_L26
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L27
+                BEQ     _pdplayout_L27
                 LDA     #28
                 TAY
                 TSC
@@ -913,6 +893,7 @@ _pdplayout_L26
                 TYA
                 RTL
 _pdplayout_L27
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -920,10 +901,10 @@ _pdplayout_L27
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #6
+                LDA     #gfs+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -933,14 +914,13 @@ _pdplayout_L27
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L28
+                BEQ     _pdplayout_L28
                 LDA     #29
                 TAY
                 TSC
@@ -952,6 +932,7 @@ _pdplayout_L27
                 TYA
                 RTL
 _pdplayout_L28
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -959,10 +940,10 @@ _pdplayout_L28
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #8
+                LDA     #gfs+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -972,14 +953,13 @@ _pdplayout_L28
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _pdplayout_L29
+                BEQ     _pdplayout_L29
                 LDA     #30
                 TAY
                 TSC
@@ -991,6 +971,7 @@ _pdplayout_L28
                 TYA
                 RTL
 _pdplayout_L29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -998,10 +979,10 @@ _pdplayout_L29
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #208
+                LDA     #gfs+208
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1011,14 +992,13 @@ _pdplayout_L29
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #208
-                BNE     *+5
-                BRL     _pdplayout_L30
+                BEQ     _pdplayout_L30
                 LDA     #31
                 TAY
                 TSC
@@ -1030,6 +1010,7 @@ _pdplayout_L29
                 TYA
                 RTL
 _pdplayout_L30
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1037,10 +1018,10 @@ _pdplayout_L30
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #210
+                LDA     #gfs+210
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1050,14 +1031,13 @@ _pdplayout_L30
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #210
-                BNE     *+5
-                BRL     _pdplayout_L31
+                BEQ     _pdplayout_L31
                 LDA     #32
                 TAY
                 TSC
@@ -1069,6 +1049,7 @@ _pdplayout_L30
                 TYA
                 RTL
 _pdplayout_L31
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1076,10 +1057,10 @@ _pdplayout_L31
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #410
+                LDA     #gfs+410
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1089,14 +1070,13 @@ _pdplayout_L31
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #410
-                BNE     *+5
-                BRL     _pdplayout_L32
+                BEQ     _pdplayout_L32
                 LDA     #33
                 TAY
                 TSC
@@ -1108,6 +1088,7 @@ _pdplayout_L31
                 TYA
                 RTL
 _pdplayout_L32
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1115,10 +1096,10 @@ _pdplayout_L32
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #414
+                LDA     #gfs+414
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1128,14 +1109,13 @@ _pdplayout_L32
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #414
-                BNE     *+5
-                BRL     _pdplayout_L33
+                BEQ     _pdplayout_L33
                 LDA     #34
                 TAY
                 TSC
@@ -1147,6 +1127,7 @@ _pdplayout_L32
                 TYA
                 RTL
 _pdplayout_L33
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1154,10 +1135,10 @@ _pdplayout_L33
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #418
+                LDA     #gfs+418
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1167,14 +1148,13 @@ _pdplayout_L33
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #418
-                BNE     *+5
-                BRL     _pdplayout_L34
+                BEQ     _pdplayout_L34
                 LDA     #35
                 TAY
                 TSC
@@ -1186,6 +1166,7 @@ _pdplayout_L33
                 TYA
                 RTL
 _pdplayout_L34
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1193,10 +1174,10 @@ _pdplayout_L34
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #422
+                LDA     #gfs+422
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1206,14 +1187,13 @@ _pdplayout_L34
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #422
-                BNE     *+5
-                BRL     _pdplayout_L35
+                BEQ     _pdplayout_L35
                 LDA     #36
                 TAY
                 TSC
@@ -1225,6 +1205,7 @@ _pdplayout_L34
                 TYA
                 RTL
 _pdplayout_L35
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1232,10 +1213,10 @@ _pdplayout_L35
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #428
+                LDA     #gfs+428
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1245,14 +1226,13 @@ _pdplayout_L35
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #428
-                BNE     *+5
-                BRL     _pdplayout_L36
+                BEQ     _pdplayout_L36
                 LDA     #37
                 TAY
                 TSC
@@ -1264,6 +1244,7 @@ _pdplayout_L35
                 TYA
                 RTL
 _pdplayout_L36
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1271,10 +1252,10 @@ _pdplayout_L36
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #440
+                LDA     #gfs+440
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1284,14 +1265,13 @@ _pdplayout_L36
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #440
-                BNE     *+5
-                BRL     _pdplayout_L37
+                BEQ     _pdplayout_L37
                 LDA     #38
                 TAY
                 TSC
@@ -1303,6 +1283,7 @@ _pdplayout_L36
                 TYA
                 RTL
 _pdplayout_L37
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1310,10 +1291,10 @@ _pdplayout_L37
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #444
+                LDA     #gfs+444
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1323,14 +1304,13 @@ _pdplayout_L37
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #444
-                BNE     *+5
-                BRL     _pdplayout_L38
+                BEQ     _pdplayout_L38
                 LDA     #39
                 TAY
                 TSC
@@ -1342,6 +1322,12 @@ _pdplayout_L37
                 TYA
                 RTL
 _pdplayout_L38
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #gfs+8
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1349,16 +1335,12 @@ _pdplayout_L38
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     #1
+                LDA     #0
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #gfs+8
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1366,24 +1348,12 @@ _pdplayout_L38
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #8
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L39
+                BEQ     _pdplayout_L39
                 LDA     #40
                 TAY
                 TSC
@@ -1395,6 +1365,11 @@ _pdplayout_L38
                 TYA
                 RTL
 _pdplayout_L39
+                LDA     #1
+                ASL
+                CLC
+                ADC     #gfs+210
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1402,15 +1377,11 @@ _pdplayout_L39
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #210
-                STA     _fcc_fpr0
-                LDA     #1
+                LDA     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #gfs+210
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1418,23 +1389,12 @@ _pdplayout_L39
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #210
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L40
+                BEQ     _pdplayout_L40
                 LDA     #41
                 TAY
                 TSC
@@ -1446,6 +1406,12 @@ _pdplayout_L39
                 TYA
                 RTL
 _pdplayout_L40
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #gdi+12
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1453,16 +1419,12 @@ _pdplayout_L40
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #12
-                STA     _fcc_fpr0
-                LDA     #1
+                LDA     #0
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #gdi+12
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1470,27 +1432,13 @@ _pdplayout_L40
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #12
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L41
+                BEQ     _pdplayout_L41
                 LDA     #42
                 TAX
-                TXA
                 INC
                 TAY
                 TSC
@@ -1535,14 +1483,10 @@ _pdplayout_L41
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L42
+                BEQ     _pdplayout_L42
                 LDA     #44
                 TAY
                 TSC
@@ -1565,14 +1509,10 @@ _pdplayout_L42
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _pdplayout_L43
+                BEQ     _pdplayout_L43
                 LDA     #45
                 TAY
                 TSC
@@ -1595,14 +1535,10 @@ _pdplayout_L43
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L44
+                BEQ     _pdplayout_L44
                 LDA     #46
                 TAY
                 TSC
@@ -1625,14 +1561,10 @@ _pdplayout_L44
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _pdplayout_L45
+                BEQ     _pdplayout_L45
                 LDA     #47
                 TAY
                 TSC

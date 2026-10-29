@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <ctype.h>
 
 /* Per-function op list.  One C function's emitted line count is modest; this cap
  * is a generous backstop (errors out loudly rather than silently truncating). */
@@ -90,6 +91,15 @@ ir_emitf(const char *fmt, ...)
         vfprintf(g_out, fmt, ap);
     }
     va_end(ap);
+}
+
+/* Tag the line ir_emitf just recorded (IRF_PRO_FB etc.). */
+void
+ir_tag_last(unsigned flag, unsigned u0)
+{
+    if (!(g_ir_on && g_recording) || g_ir_n == 0) return;
+    g_ir[g_ir_n - 1].flags |= flag;
+    if (flag & IRF_FRAMESIZE) g_ir[g_ir_n - 1].u0 = u0;
 }
 
 /* T2-3: flags applied to the NEXT recorded op (one-shot; see IRF_RAW). */
@@ -551,6 +561,19 @@ ir_alloc_bb(int lo, int hi)
  *     either way (same as the unseeded stack slot).
  * ========================================================================== */
 #define IR_NIMG       16    /* _fcc_img0.._fcc_img15 ($C0..$DF) */
+/* The callee-saved band, _fcc_img16.._fcc_img31 ($78..$97).  A function that
+ * calls another C function cannot hold a value in $C0..$DF across the call,
+ * since the callee may use those slots too; it can in the band, because every
+ * function that writes a band slot saves the caller's value on entry and puts
+ * it back on return (ir_band_frame), and setjmp/longjmp carry the band in the
+ * jmp_buf for the returns a longjmp skips.  Kernel and module code run on
+ * another direct page and do not use it, nor does a recursive function. */
+#define IR_BAND0      16
+#define IR_NBAND      16
+/* A band slot costs a PEI on entry and a PLA/STA on return, so only a local
+ * read in a loop is worth one: a scalar needs two loop accesses' weight. */
+#define IR_BAND_MIN   (2 * IR_LOOP_WEIGHT)
+static int g_band_n;        /* band words this function saves, from IR_BAND0 */
 #define IR_PROMOTE_MIN 3    /* min weighted accesses to bother promoting */
 /* P1.3-inc3: a loop-body access (IR node u1==1) is read every iteration, so it
  * is worth far more than a straight-line access.  Weighting it lets a loop-bound
@@ -658,6 +681,21 @@ ir_text_has_unsafe_call(const char *t)
     return 0;
 }
 
+/* 1 iff an op recorded since `snap' calls anything that may reuse the
+ * _fcc_ scratch cells: a call to other than a runtime helper, or an
+ * indirect call anywhere in the function (it carries no token to find). */
+int
+ir_call_since(int snap)
+{
+    int j;
+    if (g_has_indirect_call) return 1;
+    for (j = snap; j < g_ir_n; j++)
+        if (g_ir[j].op == IR_TEXT && g_ir[j].text &&
+            ir_text_has_unsafe_call(g_ir[j].text))
+            return 1;
+    return 0;
+}
+
 /* P1.4 loop-scoped (region) promotion plan: (local, DP-IMG slot) pairs to seed at
  * IR_LOOP_BEGIN and write back at IR_LOOP_END, keyed by loop id.  Filled by
  * ir_promote_loops, consumed by ir_emit_loop_seeds/writeback. */
@@ -757,30 +795,12 @@ ir_promote_loops(void)
 }
 
 static void
-ir_promote_locals(void)
+ir_promote_scalars(int *chosenp, int lim, int band)
 {
     Local *cand[MAX_LOCALS];
     int    cnt[MAX_LOCALS];
-    int    ncand = 0, chosen = 0, j, c;
-
-    g_n_promoted_params = 0;
-    g_loop_reg_n = 0;
-    if (!g_ir_opt) return;
-
-    /* 1. Eligibility: any call that may reach another C function (which could
-     * reuse this task DP page's $C0..$DF) disqualifies WHOLE-function promotion.
-     *  (a) indirect (fn-ptr) calls — tokenless computed-RTS trampoline that the
-     *      text scan below cannot see; flagged directly by emit_call_indirect.
-     *      Also blocks region promotion (can't localize a tokenless call).
-     *  (b) any token-bearing JSR/JSL/FARCALL to a non-_fcc_ target -> fall back to
-     *      LOOP-SCOPED promotion of the function's CALL-FREE loop regions. */
-    if (g_has_indirect_call) return;
-    for (j = 0; j < g_ir_n; j++)
-        if (g_ir[j].op == IR_TEXT && g_ir[j].text &&
-            ir_text_has_unsafe_call(g_ir[j].text)) {
-            ir_promote_loops();
-            return;
-        }
+    int    ncand = 0;
+    int chosen = *chosenp, j, c;
 
     /* 2. Tally accesses per promotable int/char scalar local OR param. */
     for (j = 0; j < g_ir_n; j++) {
@@ -794,8 +814,9 @@ ir_promote_locals(void)
         if (lc->type != LT_INT && lc->type != LT_CHAR) continue;
         if (lc->addr_taken || lc->raw_accessed) continue;
         /* PARAMS cost a 4-byte entry seed -> only promote when loop-hot so the
-         * seed is amortized; LOCALS have no seed and stay un-gated. */
-        if (lc->kind == LK_PARAM && !lc->loop_accessed) continue;
+         * seed is amortized; LOCALS have no seed and stay un-gated, unless a
+         * band slot's save and restore are the cost. */
+        if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed) continue;
         for (c = 0; c < ncand; c++) if (cand[c] == lc) break;
         if (c == ncand) {
             if (ncand >= MAX_LOCALS) continue;
@@ -808,10 +829,11 @@ ir_promote_locals(void)
     }
 
     /* 3. Greedily assign DP-IMG slots to the hottest (>= IR_PROMOTE_MIN). */
-    while (chosen < IR_NIMG) {
+    while (chosen < lim) {
         int best = -1, bi;
         for (bi = 0; bi < ncand; bi++)
-            if (cnt[bi] >= IR_PROMOTE_MIN && (best < 0 || cnt[bi] > cnt[best]))
+            if (cnt[bi] >= (band ? IR_BAND_MIN : IR_PROMOTE_MIN) &&
+                (best < 0 || cnt[bi] > cnt[best]))
                 best = bi;
         if (best < 0) break;
         for (j = 0; j < g_ir_n; j++) {
@@ -827,7 +849,7 @@ ir_promote_locals(void)
             }
         }
         /* A promoted PARAM must be seeded from its stack home at entry. */
-        if (cand[best]->kind == LK_PARAM) {
+        if (cand[best]->kind == LK_PARAM || cand[best]->homed_from >= 0) {
             g_promoted_param[g_n_promoted_params]      = cand[best];
             g_promoted_param_slot[g_n_promoted_params] = chosen;
             g_n_promoted_params++;
@@ -835,6 +857,14 @@ ir_promote_locals(void)
         cnt[best] = -1;                                  /* consumed */
         chosen++;
     }
+
+    *chosenp = chosen;
+}
+
+static void
+ir_promote_ptrs(int *chosenp, int lim, int band)
+{
+    int chosen = *chosenp, j, c;
 
     /* 4. (B1b/B1c) Promote hot int/char/void-pointee pointer locals/params to a
      * CONTIGUOUS img PAIR {chosen (offset), chosen+1 (bank)}.  Reuses `chosen`
@@ -866,8 +896,9 @@ ir_promote_locals(void)
             if (!lc || (lc->kind != LK_LOCAL && lc->kind != LK_PARAM)) continue;
             if (!ir_ptr_promotable(lc)) continue;
             if (lc->addr_taken || lc->raw_accessed) continue;
-            /* PARAMS cost a 4-byte entry seed -> only promote when loop-hot. */
-            if (lc->kind == LK_PARAM && !lc->loop_accessed) continue;
+            /* PARAMS cost a 4-byte entry seed, and a band pair its save and
+             * restore -> only promote when loop-hot. */
+            if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed) continue;
             for (c = 0; c < nptr; c++) if (pc[c] == lc) break;
             if (c == nptr) {
                 if (nptr >= MAX_LOCALS) continue;
@@ -881,7 +912,7 @@ ir_promote_locals(void)
             pn[c] += (op == IR_DEREF_POSTINC_LOCAL ||
                       op == IR_WALK_STORE_SETUP) ? 2 : 1;
         }
-        while (chosen + 1 < IR_NIMG) {     /* a pointer needs 2 contiguous slots */
+        while (chosen + 1 < lim) {         /* a pointer needs 2 contiguous slots */
             int best = -1;
             for (pi = 0; pi < nptr; pi++)
                 if (pn[pi] >= IR_PTR_PROMOTE_MIN && (best < 0 || pn[pi] > pn[best]))
@@ -916,7 +947,7 @@ ir_promote_locals(void)
                 default: break;
                 }
             }
-            if (pc[best]->kind == LK_PARAM) {  /* 4-byte seed (ir_emit_param_seeds detects the type) */
+            if (pc[best]->kind == LK_PARAM || pc[best]->homed_from >= 0) {  /* 4-byte seed (ir_emit_param_seeds detects the type) */
                 g_promoted_param[g_n_promoted_params]      = pc[best];
                 g_promoted_param_slot[g_n_promoted_params] = chosen;
                 g_n_promoted_params++;
@@ -925,6 +956,14 @@ ir_promote_locals(void)
             chosen += 2;                                  /* consumed the pair */
         }
     }
+
+    *chosenp = chosen;
+}
+
+static void
+ir_promote_longs(int *chosenp, int lim, int band)
+{
+    int chosen = *chosenp, j, c;
 
     /* 4b. Promote hot LONG locals/params to a contiguous img PAIR
      * {chosen (low word), chosen+1 (high word)}, after the scalars and
@@ -955,9 +994,10 @@ ir_promote_locals(void)
             if (!lc || (lc->kind != LK_LOCAL && lc->kind != LK_PARAM)) continue;
             if (lc->type != LT_LONG) continue;         /* not LT_FLOAT: see above */
             if (lc->addr_taken || lc->raw_accessed) continue;
-            /* A promoted PARAM costs a 4-byte entry seed, so it has to be
-             * loop-hot to pay for itself -- same gate as scalars and pointers. */
-            if (lc->kind == LK_PARAM && !lc->loop_accessed) continue;
+            /* A promoted PARAM costs a 4-byte entry seed, and a band pair its
+             * save and restore, so it has to be loop-hot to pay for itself --
+             * same gate as scalars and pointers. */
+            if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed) continue;
             for (c = 0; c < nlong; c++) if (gc[c] == lc) break;
             if (c == nlong) {
                 if (nlong >= MAX_LOCALS) continue;
@@ -965,7 +1005,7 @@ ir_promote_locals(void)
             }
             gn[c] += 1;
         }
-        while (chosen + 1 < IR_NIMG) {   /* a long needs 2 contiguous slots */
+        while (chosen + 1 < lim) {       /* a long needs 2 contiguous slots */
             int best = -1;
             for (gi = 0; gi < nlong; gi++)
                 if (gn[gi] >= IR_PTR_PROMOTE_MIN && (best < 0 || gn[gi] > gn[best]))
@@ -981,7 +1021,7 @@ ir_promote_locals(void)
                     g_ir[j].u0 = (unsigned)chosen;   /* u1 (widen arm) is kept */
                 }
             }
-            if (gc[best]->kind == LK_PARAM) {
+            if (gc[best]->kind == LK_PARAM || gc[best]->homed_from >= 0) {
                 g_promoted_param[g_n_promoted_params]      = gc[best];
                 g_promoted_param_slot[g_n_promoted_params] = chosen;
                 g_n_promoted_params++;
@@ -989,6 +1029,57 @@ ir_promote_locals(void)
             gn[best] = -1;
             chosen += 2;
         }
+    }
+
+    *chosenp = chosen;
+}
+
+static void
+ir_promote_locals(void)
+{
+    int    chosen = 0, j;
+    int    calls = g_has_indirect_call, band = 0, lim = IR_NIMG;
+
+    g_n_promoted_params = 0;
+    g_loop_reg_n = 0;
+    g_band_n = 0;
+    if (!g_ir_opt) return;
+
+    /* 1. Eligibility: any call that may reach another C function (which could
+     * reuse this task DP page's $C0..$DF) disqualifies $C0..$DF for the WHOLE
+     * function.
+     *  (a) indirect (fn-ptr) calls — tokenless computed-RTS trampoline that the
+     *      text scan below cannot see; flagged directly by emit_call_indirect.
+     *      Also blocks region promotion (can't localize a tokenless call).
+     *  (b) any token-bearing JSR/JSL/FARCALL to a non-_fcc_ target.
+     * Such a function promotes its loop-hot locals into the callee-saved band
+     * instead, and then (b) its CALL-FREE loop regions into $C0..$DF. */
+    for (j = 0; j < g_ir_n && !calls; j++)
+        if (g_ir[j].op == IR_TEXT && g_ir[j].text &&
+            ir_text_has_unsafe_call(g_ir[j].text))
+            calls = 1;
+    if (calls) {
+        /* A recursive function's band saves repeat at every level of the
+         * recursion, on the hardware stack that a soft frame exists to
+         * spare; it keeps its locals on its frame. */
+        if (g_kernel_bank || g_module_bank || g_fn_is_soft ||
+            ir_self_recursive()) {
+            if (!g_has_indirect_call) ir_promote_loops();
+            return;
+        }
+        band   = 1;
+        chosen = IR_BAND0;
+        lim    = IR_BAND0 + IR_NBAND;
+    }
+
+    if (band) {           /* a band pointer is worth the most: derefs in place */
+        ir_promote_ptrs(&chosen, lim, band);
+        ir_promote_longs(&chosen, lim, band);
+        ir_promote_scalars(&chosen, lim, band);
+    } else {
+        ir_promote_scalars(&chosen, lim, band);
+        ir_promote_ptrs(&chosen, lim, band);
+        ir_promote_longs(&chosen, lim, band);
     }
 
     /* 5. (B1c-2a-step-2) COLLAPSE a promoted `*p++ = RHS` walk-WRITE.  The promoted
@@ -1032,6 +1123,14 @@ ir_promote_locals(void)
         }
     }
 
+    if (band) {
+        g_band_n = chosen - IR_BAND0;
+        if (!g_has_indirect_call) ir_promote_loops();
+        if (g_tac_stats && g_band_n)
+            fprintf(stderr, "fcc-promote: %-20s %d band slot(s) (%d param)\n",
+                    g_func_name[0] ? g_func_name : "?", g_band_n, g_n_promoted_params);
+        return;
+    }
     if (g_tac_stats && chosen)
         fprintf(stderr, "fcc-promote: %-20s %d slot(s) -> DP-IMG (%d param)\n",
                 g_func_name[0] ? g_func_name : "?", chosen, g_n_promoted_params);
@@ -1047,6 +1146,21 @@ ir_emit_param_seeds(void)
 {
     int s, saved = g_s_delta;
     g_s_delta = 0;
+    /* Homed parameters first (params_home): from the slot the caller pushed
+     * to the frame slot the body uses, which a promoted one is then seeded
+     * from below. */
+    for (s = 0; s < g_n_locals; s++) {
+        Local *h = &g_locals[s], pushed;
+        int off;
+        if (h->homed_from < 0) continue;
+        pushed            = *h;
+        pushed.kind       = LK_PARAM;
+        pushed.slot_first = h->homed_from;
+        for (off = 0; off < h->byte_size; off += 2) {
+            emit_slot_lda16(&pushed, off);
+            emit_slot_sta16(h, off);
+        }
+    }
     for (s = 0; s < g_n_promoted_params; s++) {
         Local *p = g_promoted_param[s];
         int    k = g_promoted_param_slot[s];
@@ -1489,6 +1603,388 @@ ir_begin_func(void)
     g_n_promoted_params = 0;   /* defensive: never carry seed state across functions */
 }
 
+/* WHICH LOCAL POINTER EACH FPR HOLDS, while lowering.  A walker loads a
+ * pointer local into an fpr for every use -- `--p->_cnt >= 0 ? *p->_ptr++'
+ * loads p twice -- and the second load reads the same four bytes the first
+ * left in the register.  The reload is then `LDA _fcc_fprK', which keeps the
+ * load's contract (A = the offset word) without touching the frame.
+ *
+ * The record is cleared by what the emitted text does, read back line by
+ * line: a label, a call, a jump or any instruction this does not know clears
+ * every register; a store to _fcc_fprK clears K; a store to a frame slot
+ * clears the pointers held from that local, or every register when the op
+ * names no local.  A conditional branch leaves the record for the path that
+ * falls through; a `*+N' branch may land past the next op, so the record is
+ * cleared after that op as well.  A pointer whose address is taken or that raw code touches
+ * is never recorded, so no store through a register can reach its slot. */
+static Local *g_fpr_holds[8];
+static int    g_fpr_skip;    /* this op has a `*+N' branch */
+
+static void
+fpr_holds_drop_local(Local *lc)
+{
+    int k;
+    for (k = 0; k < 8; k++)
+        if (g_fpr_holds[k] == lc) g_fpr_holds[k] = NULL;
+}
+
+static int
+mn_in(const char *m, const char *const *t)
+{
+    for (; *t; t++) if (strcmp(m, *t) == 0) return 1;
+    return 0;
+}
+
+static void
+fpr_holds_scan(const char *t, size_t len, Local *own)
+{
+    static const char *const reads[] = {
+        "LDA", "LDX", "LDY", "LDAL", "TAX", "TAY", "TXA", "TYA", "TXY", "TYX",
+        "TSX", "TSC", "TCS", "PHA", "PLA", "PHX", "PLX", "PHY", "PLY", "PHB",
+        "PLB", "PHK", "PHP", "PLP", "PEI", "PEA", "PER", "CLC", "SEC", "CLV",
+        "ADC", "SBC", "AND", "ORA", "EOR", "CMP", "CPX", "CPY", "BIT", "XBA",
+        "SEP", "REP", "MX", "DO", "ELSE", "FIN", "BEQ", "BNE", "BMI", "BPL",
+        "BCC", "BCS", "BVC", "BVS", "INX", "INY", "DEX", "DEY", "INA", "DEA",
+        "NOP", NULL
+    };
+    static const char *const writes[] = {
+        "STA", "STX", "STY", "STZ", "INC", "DEC", "ASL", "LSR", "ROL", "ROR",
+        "TSB", "TRB", NULL
+    };
+    const char *p = t, *end = t + len;
+    while (p < end) {
+        const char *nl = memchr(p, '\n', (size_t)(end - p));
+        const char *e = nl ? nl : end, *q = p;
+        char m[16], o[64];
+        size_t n;
+        if (q < e && *q != ' ' && *q != '\t' && *q != ';' && *q != '*') {
+            memset(g_fpr_holds, 0, sizeof g_fpr_holds);      /* a label */
+            while (q < e && *q != ' ' && *q != '\t') q++;
+        }
+        while (q < e && (*q == ' ' || *q == '\t')) q++;
+        for (n = 0; q < e && *q != ' ' && *q != '\t' && *q != ';' && n + 1 < sizeof m; q++)
+            m[n++] = (char)toupper((unsigned char)*q);
+        m[n] = '\0';
+        while (q < e && (*q == ' ' || *q == '\t')) q++;
+        for (n = 0; q < e && *q != ' ' && *q != '\t' && *q != ';' && n + 1 < sizeof o; q++)
+            o[n++] = *q;
+        o[n] = '\0';
+        p = nl ? nl + 1 : end;
+        if (m[0] == 'B' && o[0] == '*') g_fpr_skip = 1;
+        if (m[0] == '\0' || mn_in(m, reads)) continue;
+        if (!mn_in(m, writes)) {
+            memset(g_fpr_holds, 0, sizeof g_fpr_holds);      /* call, jump, unknown */
+            continue;
+        }
+        if (o[0] == '\0' || strcmp(o, "A") == 0) continue;   /* the accumulator */
+        if (strncmp(o, "_fcc_fpr", 8) == 0) {
+            if (o[8] >= '0' && o[8] <= '7' && !strchr(o, ','))
+                g_fpr_holds[o[8] - '0'] = NULL;
+            else
+                memset(g_fpr_holds, 0, sizeof g_fpr_holds);  /* indexed */
+            continue;
+        }
+        if (strstr(o, ",S") || strstr(o, "[_fcc_fp]") ||
+            strstr(o, "[_fcc_fb]") || strstr(o, "[_fcc_sfp]")) {
+            if (own) fpr_holds_drop_local(own);              /* its own slot */
+            else     memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        }
+    }
+}
+
+/* The Local an op addresses, or NULL. */
+static Local *
+ir_op_local(const IrNode *n)
+{
+    switch (n->op) {
+    case IR_LOAD_LOCAL: case IR_STORE_LOCAL: case IR_LOAD_LOCAL_IMG:
+    case IR_INCDEC_LOCAL: case IR_DEREF_LOCAL: case IR_LOAD_PTR_LOCAL:
+    case IR_STORE_PTR_LOCAL: case IR_STORE_PTR_OFFSET:
+    case IR_DEREF_POSTINC_LOCAL: case IR_DEREF_POSTINC_LOCAL_IMG:
+    case IR_INDEX_DEREF_LOCAL: case IR_WALK_STORE_SETUP:
+    case IR_WALK_STORE_SETUP_IMG: case IR_WALK_STORE: case IR_WALK_STORE_IMG:
+    case IR_LOAD_LONG_LOCAL: case IR_STORE_LONG_LOCAL:
+    case IR_LOAD_LLONG_LOCAL: case IR_STORE_LLONG_LOCAL:
+    case IR_ADDR_PARAM: case IR_FPR_LOAD_PTR_LOCAL:
+    case IR_FPR_STORE_PTR_LOCAL: case IR_BINOP_MEM_LOCAL:
+        return (Local *)n->ptr;
+    default:
+        return NULL;
+    }
+}
+
+static int
+fpr_holds_ok(Local *lc)
+{
+    return lc && !lc->addr_taken && !lc->raw_accessed;
+}
+
+/* WHAT THE RECORD IS AT A LABEL.  A label that only forward branches reach,
+ * every one of them already lowered, holds what all of them and the code
+ * falling into it agree on; any other label holds nothing.  ir_holds_prescan
+ * counts each label's branches (IR_BR, IR_BCOND) and marks one that text
+ * names -- a jump table, a hand-built branch -- as reached by what this does
+ * not follow. */
+typedef struct {
+    Local *holds[8];
+    int    refs, seen, have, text_ref;
+} LabelHolds;
+
+static LabelHolds *g_lh;
+static int         g_lh_base, g_lh_n;
+static int         g_fpr_dead;   /* the last op does not fall through */
+
+static LabelHolds *
+lh_get(int lab)
+{
+    if (!g_lh || lab < g_lh_base || lab >= g_lh_base + g_lh_n) return NULL;
+    return &g_lh[lab - g_lh_base];
+}
+
+/* Mark every `<prefix>_L<num>' a text names as an operand. */
+static void
+lh_scan_text(const char *t, size_t len)
+{
+    size_t pl = strlen(g_tu_prefix), i;
+    for (i = 0; i + pl + 2 < len; i++) {
+        LabelHolds *h;
+        if (memcmp(t + i, g_tu_prefix, pl) != 0 || t[i + pl] != '_' ||
+            t[i + pl + 1] != 'L' || !isdigit((unsigned char)t[i + pl + 2]))
+            continue;
+        if (i > 0 && t[i - 1] == '\n') continue;       /* a definition */
+        if (i == 0) continue;
+        h = lh_get(atoi(t + i + pl + 2));
+        if (h) h->text_ref = 1;
+    }
+}
+
+static void
+ir_holds_prescan(void)
+{
+    int i, lo = -1, hi = -1;
+    free(g_lh);
+    g_lh = NULL;
+    for (i = 0; i < g_ir_n; i++) {
+        IrOp op = g_ir[i].op;
+        if (op == IR_LABEL || op == IR_BR || op == IR_BCOND) {
+            int l = (int)g_ir[i].u0;
+            if (lo < 0 || l < lo) lo = l;
+            if (l > hi) hi = l;
+        }
+    }
+    if (lo < 0) return;
+    g_lh_base = lo;
+    g_lh_n = hi - lo + 1;
+    g_lh = calloc((size_t)g_lh_n, sizeof *g_lh);
+    if (!g_lh) return;                 /* every label then holds nothing */
+    for (i = 0; i < g_ir_n; i++) {
+        IrNode *n = &g_ir[i];
+        if (n->op == IR_BR || n->op == IR_BCOND) {
+            LabelHolds *h = lh_get((int)n->u0);
+            if (h) h->refs++;
+        } else if (n->op == IR_TEXT && n->text_len) {
+            lh_scan_text(n->text, n->text_len);
+        }
+    }
+}
+
+/* A branch to `lab' carries the record as it stands. */
+static void
+lh_branch(int lab)
+{
+    LabelHolds *h = lh_get(lab);
+    int k;
+    if (!h) return;
+    h->seen++;
+    if (!h->have) {
+        memcpy(h->holds, g_fpr_holds, sizeof h->holds);
+        h->have = 1;
+        return;
+    }
+    for (k = 0; k < 8; k++)
+        if (h->holds[k] != g_fpr_holds[k]) h->holds[k] = NULL;
+}
+
+/* The record at label `lab', from what reaches it. */
+static void
+lh_label(int lab)
+{
+    LabelHolds *h = lh_get(lab);
+    int k;
+    if (!h || h->text_ref || h->seen != h->refs) {
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        return;
+    }
+    if (g_fpr_dead) {                  /* reached only by its branches */
+        if (h->have) memcpy(g_fpr_holds, h->holds, sizeof g_fpr_holds);
+        else         memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        return;
+    }
+    if (h->have)
+        for (k = 0; k < 8; k++)
+            if (h->holds[k] != g_fpr_holds[k]) g_fpr_holds[k] = NULL;
+}
+
+/* Does emitted text end in a transfer that does not fall through? */
+static int
+text_ends_dead(const char *t, size_t len)
+{
+    static const char *const dead[] = {
+        "BRA", "BRL", "JMP", "JML", "RTL", "RTS", "RTI", NULL
+    };
+    size_t e = len, b;
+    char m[8];
+    size_t k = 0;
+    while (e > 0 && (t[e - 1] == '\n' || t[e - 1] == ' ')) e--;
+    b = e;
+    while (b > 0 && t[b - 1] != '\n') b--;
+    if (b < e && t[b] != ' ' && t[b] != '\t') return 0;   /* a label line */
+    while (b < e && (t[b] == ' ' || t[b] == '\t')) b++;
+    while (b < e && t[b] != ' ' && t[b] != '\t' && k + 1 < sizeof m)
+        m[k++] = (char)toupper((unsigned char)t[b++]);
+    m[k] = '\0';
+    return mn_in(m, dead);
+}
+
+/* Lower op n into g_out, keeping g_fpr_holds. */
+static void
+ir_lower_tracked(IrNode *n, FILE *out)
+{
+    Local *lc = ir_op_local(n);
+    int    pending = g_fpr_skip;     /* an earlier `*+N' may land after this op */
+    char  *buf;
+    size_t len;
+    FILE  *mem;
+
+    g_fpr_skip = 0;
+    if (n->op == IR_FPR_LOAD_PTR_LOCAL && fpr_holds_ok(lc) &&
+        g_fpr_holds[n->u1] == lc) {
+        fprintf(out, "                LDA     _fcc_fpr%u\n", n->u1);
+        g_fpr_dead = 0;
+    } else if (n->op == IR_BCOND) {          /* `Bcc L' or `B!cc *+5; BRL L' */
+        lh_branch((int)n->u0);
+        emit_lower_op(n);
+        g_fpr_dead = 0;
+    } else if (n->op == IR_BR) {
+        lh_branch((int)n->u0);
+        emit_lower_op(n);
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        g_fpr_dead = 1;
+    } else if (n->op == IR_LABEL) {
+        if (pending) g_fpr_dead = 0;         /* an earlier skip may land here */
+        emit_lower_op(n);
+        lh_label((int)n->u0);
+        g_fpr_dead = 0;
+    } else {
+        mem = open_memstream(&buf, &len);
+        if (!mem) { perror("fcc: open_memstream"); exit(1); }
+        g_out = mem;
+        if (n->op == IR_TEXT) {
+            if (n->text_len) fwrite(n->text, 1, n->text_len, mem);
+        } else {
+            emit_lower_op(n);
+        }
+        g_out = out;
+        fclose(mem);
+        fpr_holds_scan(buf, len, lc);
+        if ((n->op == IR_FPR_LOAD_PTR_LOCAL || n->op == IR_FPR_STORE_PTR_LOCAL) &&
+            fpr_holds_ok(lc))
+            g_fpr_holds[n->u1] = lc;
+        /* a `*+N' skip may step over the final transfer */
+        if (len) g_fpr_dead = text_ends_dead(buf, len) && !g_fpr_skip;
+        fwrite(buf, 1, len, out);
+        free(buf);
+    }
+    if (pending)
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+    if (g_fpr_skip)
+        g_fpr_skip = 1;
+}
+
+/* Replace node j's text. */
+static void
+ir_text_set(int j, const char *t)
+{
+    size_t n = strlen(t);
+    char  *copy = malloc(n + 1);
+    if (!copy) { fprintf(stderr, "fcc: IR out of memory\n"); exit(1); }
+    memcpy(copy, t, n + 1);
+    free(g_ir[j].text);
+    g_ir[j].text     = copy;
+    g_ir[j].text_len = n;
+}
+
+/* Make node j a line of text t ("" for none). */
+static void
+ir_node_text(int j, const char *t)
+{
+    if (g_ir[j].op != IR_TEXT) {
+        g_ir[j].op   = IR_TEXT;
+        g_ir[j].text = NULL;
+    }
+    ir_text_set(j, t);
+}
+
+/* The frame of a function that holds g_band_n words of the callee-saved band:
+ * the caller's values are pushed after its _fcc_fb and pulled back, in the
+ * reverse order, once the locals are freed.  FRAMESIZE counts the pushes, so
+ * a parameter's `off+FRAMESIZE,S' still reaches it; the SBC and ADC that
+ * allocate and free the locals leave them out.  With more than one return,
+ * each frees its locals and branches to one copy of the pulls and the rest of
+ * the epilogue, placed after the function's last line. */
+static void
+ir_band_frame(void)
+{
+    char buf[IR_LINE_MAX], pulls[IR_LINE_MAX];
+    int  j, s, n = 0, bytes = 2 * g_band_n, rets = 0;
+    if (!g_band_n) return;
+    for (s = g_band_n - 1; s >= 0; s--)
+        n += snprintf(pulls + n, sizeof pulls - (size_t)n,
+                      "                PLA\n                STA     _fcc_img%d\n",
+                      IR_BAND0 + s);
+    for (j = 0; j < g_ir_n; j++)
+        if (g_ir[j].flags & IRF_FRAME_ADC) rets++;
+    for (j = 0; j < g_ir_n; j++) {
+        unsigned f = g_ir[j].flags;
+        if (f & IRF_EPI_TAIL) {
+            if (rets > 1) ir_node_text(j, "");
+            continue;
+        }
+        if (g_ir[j].op != IR_TEXT) continue;
+        if (f & IRF_PRO_FB) {
+            n = snprintf(buf, sizeof buf, "                PEI     _fcc_fb\n");
+            for (s = 0; s < g_band_n; s++)
+                n += snprintf(buf + n, sizeof buf - (size_t)n,
+                              "                PEI     _fcc_img%d\n", IR_BAND0 + s);
+        } else if (f & IRF_FRAME_SBC) {
+            snprintf(buf, sizeof buf, "                SBC     #%s_FRAMESIZE-%d\n",
+                     g_func_name, bytes);
+        } else if (f & IRF_FRAME_ADC) {
+            snprintf(buf, sizeof buf, "                ADC     #%s_FRAMESIZE-%d\n",
+                     g_func_name, bytes);
+        } else if (f & IRF_EPI_TCS) {
+            if (rets > 1)
+                snprintf(buf, sizeof buf, "                TCS\n                BRL     %s_bandx\n",
+                         g_func_name);
+            else
+                snprintf(buf, sizeof buf, "                TCS\n%s", pulls);
+        } else if (f & IRF_FRAMESIZE) {
+            n = 0;
+            if (rets > 1)
+                n = snprintf(buf, sizeof buf,
+                             "%s_bandx\n%s                PLA\n"
+                             "                STA     _fcc_fb\n"
+                             "                TYA\n                RTL\n",
+                             g_func_name, pulls);
+            snprintf(buf + n, sizeof buf - (size_t)n, "%s_FRAMESIZE   EQU     %u\n",
+                     g_func_name, g_ir[j].u0 + (unsigned)bytes);
+        } else {
+            continue;
+        }
+        ir_text_set(j, buf);
+    }
+}
+
 void
 ir_end_func(void)
 {
@@ -1505,6 +2001,7 @@ ir_end_func(void)
      * under FCC_NO_REGALLOC (g_ir_opt==0 -> raw v0.14.0) nor the FCC_TAC_LOWER
      * round-trip gate (must stay byte-identical to raw). */
     if (g_ir_opt && !g_tac_lower) ir_promote_locals();
+    ir_band_frame();
 
     /* fcc2 isel Phase 1: select explicit-machine-form ops (load-op fold) on the
      * real allocator path only; gated by FCC_NO_ISEL for bisection. */
@@ -1523,8 +2020,14 @@ ir_end_func(void)
         ir_allocate();               /* P1.3 allocator (uses g_bb); no-op if g_ir_opt==0 */
         if (g_p3_stats < 0) g_p3_stats = getenv("FCC_P3_STATS") ? 1 : 0;
         if (g_p3_stats) ir_p3_stats();   /* read-only Phase-3 measurement */
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        g_fpr_skip = 0;
+        g_fpr_dead = 0;
+        if (g_ir_opt) ir_holds_prescan();
         for (i = 0; i < g_ir_n; i++) {
-            if (g_ir[i].op == IR_TEXT) {
+            if (g_ir_opt) {
+                ir_lower_tracked(&g_ir[i], g_out);
+            } else if (g_ir[i].op == IR_TEXT) {
                 if (g_ir[i].text_len)
                     fwrite(g_ir[i].text, 1, g_ir[i].text_len, g_out);
             } else {

@@ -123,10 +123,6 @@ main_stkok        TCS
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #40
                 SEP     #$20
                 MX      %10
@@ -150,10 +146,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr0
+                INC
                 STA     _fcc_fpr0
                 LDA     #2
                 SEP     #$20

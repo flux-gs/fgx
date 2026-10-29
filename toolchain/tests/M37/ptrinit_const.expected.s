@@ -72,46 +72,19 @@ main_stkok        TCS
                 LDA     _fcc_img2
                 STA     _fcc_long_hi
                 LDA     _fcc_img1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$00FF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #255
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$00E1
-                STA     _fcc_long_hi
-                LDA     #$2000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #8192
+                STX     _fcc_long_b_lo
+                LDX     #225
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrinit_const_L0
+                BEQ     _ptrinit_const_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -119,46 +92,19 @@ _ptrinit_const_L0
                 LDA     _fcc_img4
                 STA     _fcc_long_hi
                 LDA     _fcc_img3
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$00FF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #255
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$00E1
-                STA     _fcc_long_hi
-                LDA     #$2004
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #8196
+                STX     _fcc_long_b_lo
+                LDX     #225
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrinit_const_L1
+                BEQ     _ptrinit_const_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -166,29 +112,15 @@ _ptrinit_const_L1
                 LDA     _fcc_img6
                 STA     _fcc_long_hi
                 LDA     _fcc_img5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrinit_const_L2
+                BEQ     _ptrinit_const_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0

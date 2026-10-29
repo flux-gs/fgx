@@ -48,15 +48,14 @@ _param_seed_L0
                 BVC     _param_seed_L3
                 EOR     #$8000
 _param_seed_L3
-                BMI     *+5
-                BRL     _param_seed_L2
+                BPL     _param_seed_L2
                 LDA     _fcc_img1
                 CLC
                 ADC     _fcc_img2
                 STA     _fcc_img1
 _param_seed_L1
                 INC     _fcc_img0
-                BRL     _param_seed_L0
+                BRA     _param_seed_L0
 _param_seed_L2
                 LDA     _fcc_img1
                 CLC

@@ -32,24 +32,22 @@ get_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _static_struct_ptr_L1
+                BNE     _static_struct_ptr_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _static_struct_ptr_L1
+                BNE     _static_struct_ptr_L1
                 LDA     #1
-                BRL     _static_struct_ptr_L2
+                BRA     _static_struct_ptr_L2
 _static_struct_ptr_L1
                 LDA     #0
 _static_struct_ptr_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _static_struct_ptr_L0
+                BEQ     _static_struct_ptr_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -59,6 +57,8 @@ _static_struct_ptr_L2
                 MX      %00
                 LDA     #gd
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     get_sl_dp
                 LDA     _fcc_fpr0+2
                 STA     get_sl_dp+2

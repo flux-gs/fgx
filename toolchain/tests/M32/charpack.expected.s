@@ -107,10 +107,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _charpack_L0
+                BEQ     _charpack_L0
                 LDA     #1
                 TAY
                 TSC
@@ -124,10 +122,8 @@ main_stkok        TCS
 _charpack_L0
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _charpack_L1
+                BEQ     _charpack_L1
                 LDA     #2
                 TAY
                 TSC
@@ -141,10 +137,8 @@ _charpack_L0
 _charpack_L1
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _charpack_L2
+                BEQ     _charpack_L2
                 LDA     #3
                 TAY
                 TSC
@@ -158,10 +152,8 @@ _charpack_L1
 _charpack_L2
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _charpack_L3
+                BEQ     _charpack_L3
                 LDA     #4
                 TAY
                 TSC
@@ -175,10 +167,8 @@ _charpack_L2
 _charpack_L3
                 LDA     #6
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _charpack_L4
+                BEQ     _charpack_L4
                 LDA     #5
                 TAY
                 TSC
@@ -205,25 +195,14 @@ _charpack_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #17
-                BEQ     *+5
-                BRL     _charpack_L6
+                BNE     _charpack_L6
                 LDA     2,S   ; fccstk d=0 b=2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #34
-                BEQ     *+5
-                BRL     _charpack_L6
-                LDA     #0
-                BRL     _charpack_L7
+                BEQ     _charpack_L5
 _charpack_L6
-                LDA     #1
-_charpack_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _charpack_L5
                 LDA     #6
                 TAY
                 TSC
@@ -244,10 +223,8 @@ _charpack_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #17
-                BNE     *+5
-                BRL     _charpack_L8
+                BEQ     _charpack_L7
                 LDA     #7
                 TAY
                 TSC
@@ -258,29 +235,18 @@ _charpack_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L8
+_charpack_L7
                 LDA     gcc+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _charpack_L10
+                BNE     _charpack_L9
                 LDA     gcc+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #22
-                BEQ     *+5
-                BRL     _charpack_L10
-                LDA     #0
-                BRL     _charpack_L11
-_charpack_L10
-                LDA     #1
-_charpack_L11
-                CMP     #0
-                BNE     *+5
-                BRL     _charpack_L9
+                BEQ     _charpack_L8
+_charpack_L9
                 LDA     #8
                 TAY
                 TSC
@@ -291,7 +257,7 @@ _charpack_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L9
+_charpack_L8
                 LDA     #1
                 SEP     #$20
                 MX      %10
@@ -321,40 +287,19 @@ _charpack_L9
                 LDA     gb+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _charpack_L15
+                BNE     _charpack_L11
                 LDA     gb+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _charpack_L15
-                LDA     #0
-                BRL     _charpack_L16
-_charpack_L15
-                LDA     #1
-_charpack_L16
-                CMP     #0
-                BEQ     *+5
-                BRL     _charpack_L13
+                BNE     _charpack_L11
                 LDA     gb+6
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _charpack_L13
-                LDA     #0
-                BRL     _charpack_L14
-_charpack_L13
-                LDA     #1
-_charpack_L14
-                CMP     #0
-                BNE     *+5
-                BRL     _charpack_L12
+                BEQ     _charpack_L10
+_charpack_L11
                 LDA     #8
                 TAY
                 TSC
@@ -365,30 +310,17 @@ _charpack_L14
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L12
+_charpack_L10
                 LDA     gb+4
                 STA     _fcc_long_hi
                 LDA     gb+2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _charpack_L17
+                BEQ     _charpack_L12
                 LDA     #9
                 TAY
                 TSC
@@ -399,7 +331,12 @@ _charpack_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L17
+_charpack_L12
+                LDA     #0
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -407,132 +344,109 @@ _charpack_L17
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #1
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #0
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #2
                 SEP     #$20
                 MX      %10
                 LDY     #1
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                LDA     #1
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #3
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #1
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #4
                 SEP     #$20
                 MX      %10
                 LDY     #1
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                LDA     #2
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #5
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #0
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #1
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _charpack_L21
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
+                BNE     _charpack_L14
                 LDA     #1
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #garr
                 STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                AND     #$00FF
-                TAX
-                TXA
-                CMP     #3
-                BEQ     *+5
-                BRL     _charpack_L21
-                LDA     #0
-                BRL     _charpack_L22
-_charpack_L21
-                LDA     #1
-_charpack_L22
-                CMP     #0
-                BEQ     *+5
-                BRL     _charpack_L19
                 SEP     #$20
                 MX      %10
                 PHB
@@ -540,28 +454,29 @@ _charpack_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                CMP     #3
+                BNE     _charpack_L14
                 LDA     #2
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #garr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charpack_L19
-                LDA     #0
-                BRL     _charpack_L20
-_charpack_L19
-                LDA     #1
-_charpack_L20
-                CMP     #0
-                BNE     *+5
-                BRL     _charpack_L18
+                BEQ     _charpack_L13
+_charpack_L14
                 LDA     #10
                 TAY
                 TSC
@@ -572,7 +487,7 @@ _charpack_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L18
+_charpack_L13
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -599,10 +514,8 @@ _charpack_L18
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _charpack_L23
+                BEQ     _charpack_L15
                 LDA     #11
                 TAY
                 TSC
@@ -613,16 +526,16 @@ _charpack_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L23
+_charpack_L15
                 LDA     #9
                 SEP     #$20
                 MX      %10
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     _charpack_FA24+2
+                LDA     _charpack_FA16+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _charpack_FA24
+                LDA     _charpack_FA16
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -638,10 +551,8 @@ _charpack_L23
                 LDA     3,S   ; fccstk d=0 b=3
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _charpack_L25
+                BEQ     _charpack_L17
                 LDA     #12
                 TAY
                 TSC
@@ -652,13 +563,13 @@ _charpack_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L25
+_charpack_L17
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 PHK
-                PEA     _charpack_L26-1
+                PEA     _charpack_L18-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -669,13 +580,11 @@ _charpack_L25
                 DEC
                 PHA
                 RTL
-_charpack_L26
+_charpack_L18
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _charpack_L27
+                BEQ     _charpack_L19
                 LDA     #12
                 TAY
                 TSC
@@ -686,7 +595,7 @@ _charpack_L26
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L27
+_charpack_L19
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -712,12 +621,12 @@ _charpack_L27
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #0
-_charpack_L29
+_charpack_L21
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _charpack_L29
+                BPL     _charpack_L21
                 FGX2_FARCALL take
                 TAY
                 PLA
@@ -730,14 +639,12 @@ _charpack_L29
                 ADC     #17
                 ASL
                 TAX
-                TXA
                 CLC
                 ADC     #51
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _charpack_L28
+                BEQ     _charpack_L20
                 LDA     #13
                 TAY
                 TSC
@@ -748,7 +655,7 @@ _charpack_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L28
+_charpack_L20
                 LDA     #42
                 TAY
                 TSC

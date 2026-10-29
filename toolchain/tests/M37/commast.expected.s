@@ -34,39 +34,23 @@ main_stkok        TCS
                 LDA     #7
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _commast_L1
+                BNE     _commast_L0
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _commast_L1
-                LDA     #1
-                BRL     _commast_L2
-_commast_L1
-                LDA     #0
-_commast_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L0
+                BNE     _commast_L0
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _commast_L0
                 LDA     _tty+0
                 TAX
-                TXA
                 ORA     #2
                 STA     _tty+0
                 LDA     #1
                 STA     _rawmode
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -76,6 +60,7 @@ _commast_L0
                 MX      %00
                 LDA     #_tty
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     _tty_ch
@@ -89,59 +74,26 @@ _commast_L0
                 TYA
                 LDA     _tty+0
                 TAX
-                TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _commast_L8
+                BNE     _commast_L1
                 LDA     _rawmode
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _commast_L8
-                LDA     #1
-                BRL     _commast_L9
-_commast_L8
-                LDA     #0
-_commast_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L6
+                BNE     _commast_L1
                 LDA     nxstty
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _commast_L6
-                LDA     #1
-                BRL     _commast_L7
-_commast_L6
-                LDA     #0
-_commast_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L4
+                BNE     _commast_L1
                 LDA     seen_flags
                 TAX
-                TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _commast_L4
-                LDA     #1
-                BRL     _commast_L5
-_commast_L4
-                LDA     #0
-_commast_L5
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L3
+                BNE     _commast_L1
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
-_commast_L3
+_commast_L1
                 LDA     _tty+0
                 PHA
                 LDA     #2
@@ -152,6 +104,7 @@ _commast_L3
                 STA     _tty+0
                 LDA     #0
                 STA     _rawmode
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -161,6 +114,7 @@ _commast_L3
                 MX      %00
                 LDA     #_tty
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     _tty_ch
@@ -173,64 +127,26 @@ _commast_L3
                 TCS
                 TYA
                 LDA     _tty+0
-                TAX
-                TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _commast_L15
+                BNE     _commast_L2
                 LDA     _rawmode
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _commast_L15
-                LDA     #1
-                BRL     _commast_L16
-_commast_L15
-                LDA     #0
-_commast_L16
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L13
+                BNE     _commast_L2
                 LDA     nxstty
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _commast_L13
-                LDA     #1
-                BRL     _commast_L14
-_commast_L13
-                LDA     #0
-_commast_L14
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L11
+                BNE     _commast_L2
                 LDA     seen_flags
-                TAX
-                TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _commast_L11
-                LDA     #1
-                BRL     _commast_L12
-_commast_L11
-                LDA     #0
-_commast_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L10
+                BNE     _commast_L2
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
-_commast_L10
+_commast_L2
                 LDA     #4
                 STA     gwin+0
                 LDA     #6
                 STA     gwin+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -240,6 +156,7 @@ _commast_L10
                 MX      %00
                 LDA     #gwin
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -248,46 +165,25 @@ _commast_L10
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _commast_L18
+                BNE     _commast_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _commast_L18
-                LDA     #1
-                BRL     _commast_L19
-_commast_L18
-                LDA     #0
-_commast_L19
-                CMP     #0
-                BNE     *+5
-                BRL     _commast_L17
+                BNE     _commast_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
-_commast_L17
+_commast_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC

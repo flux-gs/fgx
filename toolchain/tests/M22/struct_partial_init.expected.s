@@ -20,25 +20,10 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     _struct_partial_init_g+0
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _struct_partial_init_L1
+                BNE     _struct_partial_init_L1
                 LDA     _struct_partial_init_g+2
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _struct_partial_init_L1
-                LDA     #0
-                BRL     _struct_partial_init_L2
+                BEQ     _struct_partial_init_L0
 _struct_partial_init_L1
-                LDA     #1
-_struct_partial_init_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _struct_partial_init_L0
                 LDA     #1
                 TAY
                 TSC
@@ -50,6 +35,12 @@ _struct_partial_init_L2
                 TYA
                 RTL
 _struct_partial_init_L0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -57,20 +48,16 @@ _struct_partial_init_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _struct_partial_init_L4
+                BNE     _struct_partial_init_L3
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -78,29 +65,12 @@ _struct_partial_init_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _struct_partial_init_L4
-                LDA     #0
-                BRL     _struct_partial_init_L5
-_struct_partial_init_L4
-                LDA     #1
-_struct_partial_init_L5
-                CMP     #0
-                BNE     *+5
-                BRL     _struct_partial_init_L3
+                BEQ     _struct_partial_init_L2
+_struct_partial_init_L3
                 LDA     #2
                 TAY
                 TSC
@@ -111,7 +81,13 @@ _struct_partial_init_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_struct_partial_init_L3
+_struct_partial_init_L2
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -119,20 +95,16 @@ _struct_partial_init_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _struct_partial_init_L7
+                BNE     _struct_partial_init_L5
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -140,29 +112,10 @@ _struct_partial_init_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _struct_partial_init_L7
-                LDA     #0
-                BRL     _struct_partial_init_L8
-_struct_partial_init_L7
-                LDA     #1
-_struct_partial_init_L8
-                CMP     #0
-                BNE     *+5
-                BRL     _struct_partial_init_L6
+                BEQ     _struct_partial_init_L4
+_struct_partial_init_L5
                 LDA     #3
                 TAY
                 TSC
@@ -173,7 +126,7 @@ _struct_partial_init_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_struct_partial_init_L6
+_struct_partial_init_L4
                 LDA     #42
                 TAY
                 TSC

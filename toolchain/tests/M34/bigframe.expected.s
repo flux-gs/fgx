@@ -285,14 +285,12 @@ main_stkok        TCS
                 LDA     8+main_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _bigframe_L2
                 EOR     #$8000
 _bigframe_L2
-                BPL     *+5
-                BRL     _bigframe_L0
+                BMI     _bigframe_L0
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -310,7 +308,7 @@ _bigframe_L2
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BRL     _bigframe_L1
+                BRA     _bigframe_L1
 _bigframe_L0
                 LDA     #0
 _bigframe_L1

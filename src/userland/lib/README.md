@@ -66,10 +66,6 @@ For a multi-bank binary (n_data_segment = 1) the split is symmetric:
                 ;  ↑ code only — these files have no DS/DA storage now.
 
 * seg1.link.s
-                ;  EQUs that libc_data.s references but libc.s defines:
-_IOREAD         EQU     $0001
-_IOWRT          EQU     $0002
-
                 PUT     <fcc-output>.data.s
                 PUT     ../lib/libc_data.s
                 PUT     ../lib/args_data.s

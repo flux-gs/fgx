@@ -1,13 +1,9 @@
-/* T5-C C6: stdin/stdout/stderr cells widened to loader-patched 4-byte far
- * pointers (LIBC_DATA_PTR rows in libc_data.s — offset assembly-resolved,
- * bank byte relocated to the data segment by fgx_ld).  Before this, the
- * 2-byte DA cells read as a 4-byte FILE* gave a junk bank (the adjacent
- * cell's low word) — engines were immune (they rebase the offset) but any
- * far-pointer USE of the cell value was broken: FILE* equality against an
- * fopen() return, or handing the cell's value across a bank-sensitive
- * boundary.  Check 4 is the bank oracle: fopen composes its FILE* with the
- * real data bank; the widened stdout cell must carry the SAME bank.
- * FGX-only (MAME oracle).  Exit 42; pre-widening this exits 4 (RED-proven). */
+/* stdin, stdout and stderr are 2.11BSD's &_iob[0], [1] and [2]: the table is a
+ * C global in libc's per-process core, in the program's data bank.  A FILE*
+ * fopen() returns is another entry of the same table, so it must carry the
+ * same bank (check 4); a FILE* compares equal to itself (2); and the three
+ * standard streams are descriptors 0, 1 and 2.  FGX-only (MAME oracle).
+ * Exit 42. */
 #include <stdio.h>
 
 int main(void)

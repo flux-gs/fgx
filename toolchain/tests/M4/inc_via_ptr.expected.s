@@ -65,7 +65,6 @@ inc_stkok        TCS
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 LDA     #0

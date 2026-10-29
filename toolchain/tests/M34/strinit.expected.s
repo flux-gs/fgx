@@ -107,17 +107,7 @@ main_stkok        TCS
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     #2
                 STA     17,S   ; fccstk d=0 b=17
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bx
-                STA     19,S   ; fccstk d=0 b=19
-                LDA     _fcc_fpr0+2
-                STA     21,S   ; fccstk d=0 b=21
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -127,6 +117,23 @@ main_stkok        TCS
                 MX      %00
                 LDA     #bx
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
+                STA     19,S   ; fccstk d=0 b=19
+                LDA     _fcc_fpr0+2
+                STA     21,S   ; fccstk d=0 b=21
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #bx
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0+2
                 STA     25,S   ; fccstk d=0 b=25
@@ -149,8 +156,6 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 SEC
                 SBC     #111
                 STA     _fcc_tmp_b
@@ -198,13 +203,10 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _strinit_L0
+                BNE     _strinit_L0
                 LDA     #5
-                BRL     _strinit_L1
+                BRA     _strinit_L1
 _strinit_L0
                 LDA     #0
 _strinit_L1
@@ -230,8 +232,6 @@ _strinit_L1
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 SEC
                 SBC     #104
                 STA     _fcc_tmp_b
@@ -279,13 +279,10 @@ _strinit_L1
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #105
-                BEQ     *+5
-                BRL     _strinit_L2
+                BNE     _strinit_L2
                 LDA     #3
-                BRL     _strinit_L3
+                BRA     _strinit_L3
 _strinit_L2
                 LDA     #0
 _strinit_L3

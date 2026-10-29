@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27,6 +28,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #buf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
@@ -46,12 +50,11 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _deref_store_gp_L0
+                BEQ     _deref_store_gp_L0
                 LDA     #1
                 TAY
                 TSC
@@ -68,10 +71,8 @@ _deref_store_gp_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _deref_store_gp_L1
+                BEQ     _deref_store_gp_L1
                 LDA     #2
                 TAY
                 TSC
@@ -91,6 +92,10 @@ _deref_store_gp_L1
                 MX      %00
                 LDA     gp
                 STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -98,32 +103,23 @@ _deref_store_gp_L1
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _deref_store_gp_L3
+                BNE     _deref_store_gp_L3
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _deref_store_gp_L3
+                BNE     _deref_store_gp_L3
                 LDA     #0
-                BRL     _deref_store_gp_L4
+                BRA     _deref_store_gp_L4
 _deref_store_gp_L3
                 LDA     #1
 _deref_store_gp_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_store_gp_L2
+                BEQ     _deref_store_gp_L2
                 LDA     #3
                 TAY
                 TSC
@@ -151,11 +147,10 @@ _deref_store_gp_L2
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _deref_store_gp_L5
+                BEQ     _deref_store_gp_L5
                 LDA     #4
                 TAY
                 TSC
@@ -172,10 +167,8 @@ _deref_store_gp_L5
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _deref_store_gp_L6
+                BEQ     _deref_store_gp_L6
                 LDA     #5
                 TAY
                 TSC
@@ -187,6 +180,7 @@ _deref_store_gp_L5
                 TYA
                 RTL
 _deref_store_gp_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -195,6 +189,9 @@ _deref_store_gp_L6
                 REP     #$20
                 MX      %00
                 LDA     #ibuf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     ip
                 LDA     _fcc_fpr0+2
                 STA     ip+2
@@ -212,10 +209,8 @@ _deref_store_gp_L6
                 LDA     #1000
                 STA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #1000
-                BNE     *+5
-                BRL     _deref_store_gp_L7
+                BEQ     _deref_store_gp_L7
                 LDA     #6
                 TAY
                 TSC
@@ -232,10 +227,8 @@ _deref_store_gp_L7
                 TAX
                 LDA:    ibuf,X
                 TAX
-                TXA
                 CMP     #1000
-                BNE     *+5
-                BRL     _deref_store_gp_L8
+                BEQ     _deref_store_gp_L8
                 LDA     #7
                 TAY
                 TSC
@@ -255,6 +248,11 @@ _deref_store_gp_L8
                 MX      %00
                 LDA     ip
                 STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     #ibuf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -262,33 +260,23 @@ _deref_store_gp_L8
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #ibuf
-                STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _deref_store_gp_L10
+                BNE     _deref_store_gp_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _deref_store_gp_L10
+                BNE     _deref_store_gp_L10
                 LDA     #0
-                BRL     _deref_store_gp_L11
+                BRA     _deref_store_gp_L11
 _deref_store_gp_L10
                 LDA     #1
 _deref_store_gp_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_store_gp_L9
+                BEQ     _deref_store_gp_L9
                 LDA     #8
                 TAY
                 TSC

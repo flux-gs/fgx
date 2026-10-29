@@ -81,10 +81,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #17
-                BNE     *+5
-                BRL     _p33_farfield_L0
+                BEQ     _p33_farfield_L0
                 LDA     #1
                 TAY
                 TSC
@@ -103,10 +101,8 @@ _p33_farfield_L0
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #34
-                BNE     *+5
-                BRL     _p33_farfield_L1
+                BEQ     _p33_farfield_L1
                 LDA     #2
                 TAY
                 TSC
@@ -125,10 +121,8 @@ _p33_farfield_L1
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #51
-                BNE     *+5
-                BRL     _p33_farfield_L2
+                BEQ     _p33_farfield_L2
                 LDA     #3
                 TAY
                 TSC
@@ -152,17 +146,11 @@ _p33_farfield_L2
                 INC
                 INC
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _p33_farfield_L3
+                BEQ     _p33_farfield_L3
                 LDA     #4
                 TAY
                 TSC
@@ -185,18 +173,14 @@ _p33_farfield_L3
                 ADC     #0
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #255
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #255
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _p33_farfield_L4
+                BEQ     _p33_farfield_L4
                 LDA     #5
                 TAY
                 TSC

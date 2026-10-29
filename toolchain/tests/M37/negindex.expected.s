@@ -26,15 +26,12 @@ _negindex_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #6
                 BVC     _negindex_L3
                 EOR     #$8000
 _negindex_L3
-                BMI     *+5
-                BRL     _negindex_L2
+                BPL     _negindex_L2
                 LDA     #_negindex_ai
                 PHA
                 LDA     _fcc_img0
@@ -79,8 +76,9 @@ _negindex_L3
                 PLA
 _negindex_L1
                 INC     _fcc_img0
-                BRL     _negindex_L0
+                BRA     _negindex_L0
 _negindex_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -88,13 +86,9 @@ _negindex_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_negindex_ai
+                LDA     #_negindex_ai+4
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
@@ -111,10 +105,8 @@ _negindex_L2
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _negindex_L4
+                BEQ     _negindex_L4
                 LDA     #50
                 TAY
                 TSC
@@ -138,10 +130,8 @@ _negindex_L4
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #256
-                BNE     *+5
-                BRL     _negindex_L5
+                BEQ     _negindex_L5
                 LDA     #51
                 TAY
                 TSC
@@ -167,10 +157,8 @@ _negindex_L5
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _negindex_L6
+                BEQ     _negindex_L6
                 LDA     #52
                 TAY
                 TSC
@@ -196,10 +184,8 @@ _negindex_L6
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #259
-                BNE     *+5
-                BRL     _negindex_L7
+                BEQ     _negindex_L7
                 LDA     #53
                 TAY
                 TSC
@@ -223,10 +209,8 @@ _negindex_L7
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #259
-                BNE     *+5
-                BRL     _negindex_L8
+                BEQ     _negindex_L8
                 LDA     #54
                 TAY
                 TSC
@@ -250,10 +234,8 @@ _negindex_L8
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #258
-                BNE     *+5
-                BRL     _negindex_L9
+                BEQ     _negindex_L9
                 LDA     #55
                 TAY
                 TSC
@@ -278,10 +260,8 @@ _negindex_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _negindex_L10
+                BEQ     _negindex_L10
                 LDA     #56
                 TAY
                 TSC
@@ -304,10 +284,8 @@ _negindex_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #259
-                BNE     *+5
-                BRL     _negindex_L11
+                BEQ     _negindex_L11
                 LDA     #57
                 TAY
                 TSC
@@ -351,10 +329,8 @@ _negindex_L11
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                TXA
                 CMP     #1911
-                BNE     *+5
-                BRL     _negindex_L12
+                BEQ     _negindex_L12
                 LDA     #58
                 TAY
                 TSC
@@ -371,10 +347,8 @@ _negindex_L12
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                TXA
                 CMP     #256
-                BNE     *+5
-                BRL     _negindex_L13
+                BEQ     _negindex_L13
                 LDA     #59
                 TAY
                 TSC
@@ -391,10 +365,8 @@ _negindex_L13
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                TXA
                 CMP     #258
-                BNE     *+5
-                BRL     _negindex_L14
+                BEQ     _negindex_L14
                 LDA     #60
                 TAY
                 TSC
@@ -423,6 +395,7 @@ _negindex_L14
                 TYA
                 STA:    $0000,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -430,12 +403,9 @@ _negindex_L14
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_negindex_ac
+                LDA     #_negindex_ac+2
                 STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
                 LDA     _fcc_fpr0
@@ -457,8 +427,7 @@ _negindex_L14
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _negindex_L15
+                BEQ     _negindex_L15
                 LDA     #61
                 TAY
                 TSC
@@ -487,8 +456,7 @@ _negindex_L15
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _negindex_L16
+                BEQ     _negindex_L16
                 LDA     #62
                 TAY
                 TSC

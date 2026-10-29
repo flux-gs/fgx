@@ -43,28 +43,7 @@ bump_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     #10
                 STA     [_fcc_fpr0]
-                DO      8+bump_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bump_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bump_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bump_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bump_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bump_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+bump_FRAMESIZE/256
                 TSC
                 CLC
@@ -89,7 +68,6 @@ bump_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     [_fcc_fpr0]
@@ -143,6 +121,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -150,13 +129,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #hdr
+                LDA     #hdr+2
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -164,10 +139,7 @@ main_stkok        TCS
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bump
@@ -186,18 +158,18 @@ main_stkok        TCS
                 ASL
                 TAX
                 LDA:    hdr,X
-                TAX
-                TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _derefstore_L0
+                BNE     _derefstore_L0
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
-                TXA
                 CLC
                 ADC     #15
                 STA     5,S   ; fccstk d=0 b=5
 _derefstore_L0
+                LDA     #1
+                ASL
+                CLC
+                ADC     #hdr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -205,16 +177,7 @@ _derefstore_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #hdr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 INC
                 INC
                 STA     [_fcc_fpr0]
@@ -223,13 +186,10 @@ _derefstore_L0
                 TAX
                 LDA:    hdr,X
                 TAX
-                TXA
                 CMP     #17
-                BEQ     *+5
-                BRL     _derefstore_L1
+                BNE     _derefstore_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     5,S   ; fccstk d=0 b=5

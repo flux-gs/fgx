@@ -39,6 +39,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -48,6 +49,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #pool
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -67,8 +70,6 @@ _ptrmemidx_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _ptrmemidx_L3
@@ -116,7 +117,6 @@ _ptrmemidx_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     [_fcc_fpr0]
@@ -197,12 +197,8 @@ _ptrmemidx_L2
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr1+2
@@ -218,12 +214,8 @@ _ptrmemidx_L2
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr1
+                ADC     #4
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 STA     [_fcc_fpr0]
@@ -242,21 +234,10 @@ _ptrmemidx_L2
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _ptrmemidx_L4
+                BNE     _ptrmemidx_L4
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -275,22 +256,13 @@ _ptrmemidx_L4
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #13
-                BEQ     *+5
-                BRL     _ptrmemidx_L5
+                BNE     _ptrmemidx_L5
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -309,22 +281,13 @@ _ptrmemidx_L5
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _ptrmemidx_L6
+                BNE     _ptrmemidx_L6
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -343,12 +306,8 @@ _ptrmemidx_L6
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -368,12 +327,8 @@ _ptrmemidx_L6
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -383,13 +338,10 @@ _ptrmemidx_L6
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _ptrmemidx_L7
+                BNE     _ptrmemidx_L7
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img1

@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #$FFFB
                 TAX
-                TXA
                 CLC
                 ADC     #47
                 TAY

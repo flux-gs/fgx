@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #42
                 STA     storage+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29,25 +30,17 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #storage
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     np
                 LDA     _fcc_fpr0+2
                 STA     np+2
                 LDA     np
                 STA     _fcc_img0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #np
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                TAX
-                TXA
+                LDA     np
                 EOR     #1
-                STA     [_fcc_fpr0]
+                STA     np
                 SEP     #$20
                 MX      %10
                 LDA     np+2
@@ -62,20 +55,9 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_ne16
                 STA     3,S   ; fccstk d=0 b=3
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #np
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                TAX
-                TXA
+                LDA     np
                 EOR     #1
-                STA     [_fcc_fpr0]
+                STA     np
                 SEP     #$20
                 MX      %10
                 LDA     np+2
@@ -90,37 +72,18 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_eq16
                 STA     5,S   ; fccstk d=0 b=5
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #np
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     np
                 TAX
-                TXA
                 ORA     #1
-                STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #np
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     np
                 PHA
                 LDA     #1
                 EOR     #$FFFF
                 STA     _fcc_tmp_b
                 PLA
                 AND     _fcc_tmp_b
-                STA     [_fcc_fpr0]
+                STA     np
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -130,25 +93,15 @@ main_stkok        TCS
                 MX      %00
                 LDA     #storage
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     np
                 LDA     _fcc_fpr0+2
                 STA     np+2
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
-                BNE     *+5
-                BRL     _knr_pun_dot_L2
+                BEQ     _knr_pun_dot_L0
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
-                BNE     *+5
-                BRL     _knr_pun_dot_L2
-                LDA     #1
-                BRL     _knr_pun_dot_L3
-_knr_pun_dot_L2
-                LDA     #0
-_knr_pun_dot_L3
-                CMP     #0
-                BNE     *+5
-                BRL     _knr_pun_dot_L0
+                BEQ     _knr_pun_dot_L0
                 SEP     #$20
                 MX      %10
                 LDA     np+2
@@ -159,7 +112,7 @@ _knr_pun_dot_L3
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                BRL     _knr_pun_dot_L1
+                BRA     _knr_pun_dot_L1
 _knr_pun_dot_L0
                 LDA     #0
 _knr_pun_dot_L1

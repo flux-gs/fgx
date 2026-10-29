@@ -30,8 +30,8 @@ getn_stkok        TCS
                 LDA     6+getn_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _call_postfix_L0
+                BEQ     _call_postfix_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,8 +41,10 @@ getn_stkok        TCS
                 MX      %00
                 LDA     #n1
                 STA     _fcc_fpr0
-                BRL     _call_postfix_L1
+                PLA
+                BRA     _call_postfix_L1
 _call_postfix_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -52,6 +54,7 @@ _call_postfix_L0
                 MX      %00
                 LDA     #n0
                 STA     _fcc_fpr0
+                PLA
 _call_postfix_L1
                 TAY
                 TSC
@@ -79,6 +82,7 @@ getarr_stkovf       JMP     _fcc_stkoflow
 getarr_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -88,6 +92,7 @@ getarr_stkok        TCS
                 MX      %00
                 LDA     #garr
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -118,6 +123,7 @@ main_stkok        TCS
                 STA     n0+0
                 LDA     #30
                 STA     n1+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -127,6 +133,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #n1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -139,6 +146,10 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     n0+8
                 TYA
+                LDA     #0
+                CLC
+                ADC     #n0+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -146,14 +157,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #n0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #90
                 SEP     #$20
                 MX      %10
@@ -185,10 +188,8 @@ main_stkok        TCS
                 TYA
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _call_postfix_L2
+                BEQ     _call_postfix_L2
                 LDA     #1
                 TAY
                 TSC
@@ -220,10 +221,8 @@ _call_postfix_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #30
-                BNE     *+5
-                BRL     _call_postfix_L3
+                BEQ     _call_postfix_L3
                 LDA     #2
                 TAY
                 TSC
@@ -252,10 +251,8 @@ _call_postfix_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _call_postfix_L4
+                BEQ     _call_postfix_L4
                 LDA     #3
                 TAY
                 TSC
@@ -275,10 +272,8 @@ _call_postfix_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _call_postfix_L5
+                BEQ     _call_postfix_L5
                 LDA     #4
                 TAY
                 TSC

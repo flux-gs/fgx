@@ -39,10 +39,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
-                BNE     *+5
-                BRL     _static_arr_init_L0
+                BEQ     _static_arr_init_L0
                 LDA     #1
                 TAY
                 TSC
@@ -74,10 +72,8 @@ _static_arr_init_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
-                BNE     *+5
-                BRL     _static_arr_init_L1
+                BEQ     _static_arr_init_L1
                 LDA     #2
                 TAY
                 TSC
@@ -109,10 +105,8 @@ _static_arr_init_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
-                BNE     *+5
-                BRL     _static_arr_init_L2
+                BEQ     _static_arr_init_L2
                 LDA     #3
                 TAY
                 TSC
@@ -129,10 +123,8 @@ _static_arr_init_L2
                 LDA:    main_sl_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _static_arr_init_L3
+                BEQ     _static_arr_init_L3
                 LDA     #4
                 TAY
                 TSC
@@ -149,10 +141,8 @@ _static_arr_init_L3
                 LDA:    main_sl_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #122
-                BNE     *+5
-                BRL     _static_arr_init_L4
+                BEQ     _static_arr_init_L4
                 LDA     #5
                 TAY
                 TSC
@@ -168,11 +158,7 @@ _static_arr_init_L4
                 TAX
                 LDA:    main_sl_buf,X
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _static_arr_init_L5
+                BEQ     _static_arr_init_L5
                 LDA     #6
                 TAY
                 TSC
@@ -189,10 +175,8 @@ _static_arr_init_L5
                 TAX
                 LDA:    main_sl_nums,X
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _static_arr_init_L6
+                BEQ     _static_arr_init_L6
                 LDA     #7
                 TAY
                 TSC
@@ -209,8 +193,7 @@ _static_arr_init_L6
                 TAX
                 LDA:    main_sl_nums,X
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _static_arr_init_L7
+                BEQ     _static_arr_init_L7
                 LDA     #8
                 TAY
                 TSC

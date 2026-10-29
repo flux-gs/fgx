@@ -58,9 +58,10 @@ take2_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -96,16 +97,12 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #3
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_img0
+                STA     _fcc_img16
 _pp_adv4_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
-                TAX
-                TXA
+                LDA     _fcc_img16
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -114,21 +111,17 @@ _pp_adv4_L0
                 BVC     _pp_adv4_L2
                 EOR     #$8000
 _pp_adv4_L2
-                BMI     *+5
-                BRL     _pp_adv4_L1
-                LDA     _fcc_img0
+                BPL     _pp_adv4_L1
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #1
-                STA     _fcc_img0
-                BRL     _pp_adv4_L0
+                STA     _fcc_img16
+                BRA     _pp_adv4_L0
 _pp_adv4_L1
-                LDA     _fcc_img0
-                STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
-                ADC     3,S   ; fccstk d=0 b=3
+                ADC     _fcc_img16
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #$0001
                 STA     _fcc_long_hi
@@ -141,46 +134,19 @@ _pp_adv4_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1166
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4454
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$000A
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #10
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _pp_adv4_L3
+                BEQ     _pp_adv4_L3
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -209,14 +175,9 @@ _pp_adv4_L3
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _pp_adv4_L4
+                BNE     _pp_adv4_L4
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -225,7 +186,6 @@ _pp_adv4_L4
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     _fcc_tmp_b
@@ -248,25 +208,24 @@ _pp_adv4_L4
                 CLC
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 INC
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 INC
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     12
+main_FRAMESIZE   EQU     14
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

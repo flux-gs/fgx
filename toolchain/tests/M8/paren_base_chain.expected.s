@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29,9 +30,13 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     p
                 LDA     _fcc_fpr0+2
                 STA     p+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -40,6 +45,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     t
                 LDA     _fcc_fpr0+2
                 STA     t+2
@@ -57,6 +65,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -65,6 +74,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #b
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -116,6 +128,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -124,6 +137,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #c
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -142,6 +158,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -150,18 +167,29 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #a
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
                 LDA     #c
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     t
                 LDA     _fcc_fpr0+2
                 STA     t+2
@@ -183,12 +211,8 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     p
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -211,6 +235,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     t
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -220,29 +245,25 @@ main_stkok        TCS
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L1
+                BNE     _paren_base_chain_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L1
+                BNE     _paren_base_chain_L1
                 LDA     #1
-                BRL     _paren_base_chain_L2
+                BRA     _paren_base_chain_L2
 _paren_base_chain_L1
                 LDA     #0
 _paren_base_chain_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L0
+                BEQ     _paren_base_chain_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -263,14 +284,9 @@ _paren_base_chain_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _paren_base_chain_L3
+                BNE     _paren_base_chain_L3
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -292,13 +308,10 @@ _paren_base_chain_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _paren_base_chain_L4
+                BNE     _paren_base_chain_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -328,12 +341,6 @@ _paren_base_chain_L4
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -355,6 +362,7 @@ _paren_base_chain_L4
                 MX      %00
                 LDA     t
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -364,26 +372,24 @@ _paren_base_chain_L4
                 MX      %00
                 LDA     #c
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L8
+                BNE     _paren_base_chain_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L8
+                BNE     _paren_base_chain_L6
                 LDA     #1
-                BRL     _paren_base_chain_L9
-_paren_base_chain_L8
+                BRA     _paren_base_chain_L7
+_paren_base_chain_L6
                 LDA     #0
-_paren_base_chain_L9
+_paren_base_chain_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L6
+                BEQ     _paren_base_chain_L5
                 SEP     #$20
                 MX      %10
                 LDA     t+2
@@ -395,25 +401,15 @@ _paren_base_chain_L9
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _paren_base_chain_L6
-                LDA     #1
-                BRL     _paren_base_chain_L7
-_paren_base_chain_L6
-                LDA     #0
-_paren_base_chain_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L5
+                BNE     _paren_base_chain_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
 _paren_base_chain_L5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -422,35 +418,23 @@ _paren_base_chain_L5
                 REP     #$20
                 MX      %00
                 LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     t
                 LDA     _fcc_fpr0+2
                 STA     t+2
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     t+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #t
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
+                LDA     t
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -460,6 +444,8 @@ _paren_base_chain_L5
                 MX      %00
                 LDA     #c
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -472,68 +458,49 @@ _paren_base_chain_L5
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                LDA     #c
-                STA     _fcc_fpr1
-                LDA     _fcc_fpr0
-                CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L11
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                CMP     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L11
-                LDA     #1
-                BRL     _paren_base_chain_L12
-_paren_base_chain_L11
-                LDA     #0
-_paren_base_chain_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L10
-                LDA     _fcc_img0
-                TAX
-                TXA
-                CLC
-                ADC     #6
-                STA     _fcc_img0
-_paren_base_chain_L10
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
                 MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #c
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr0
+                CMP     _fcc_fpr1
+                BNE     _paren_base_chain_L9
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                CMP     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                BNE     _paren_base_chain_L9
+                LDA     #1
+                BRA     _paren_base_chain_L10
+_paren_base_chain_L9
+                LDA     #0
+_paren_base_chain_L10
+                CMP     #0
+                BEQ     _paren_base_chain_L8
+                LDA     _fcc_img0
+                TAX
+                CLC
+                ADC     #6
+                STA     _fcc_img0
+_paren_base_chain_L8
+                SEP     #$20
+                MX      %10
+                LDA     b+10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                PLA
+                LDA     b+8
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -543,33 +510,30 @@ _paren_base_chain_L10
                 MX      %00
                 LDA     #c
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L14
+                BNE     _paren_base_chain_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L14
+                BNE     _paren_base_chain_L12
                 LDA     #1
-                BRL     _paren_base_chain_L15
-_paren_base_chain_L14
+                BRA     _paren_base_chain_L13
+_paren_base_chain_L12
                 LDA     #0
-_paren_base_chain_L15
+_paren_base_chain_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L13
+                BEQ     _paren_base_chain_L11
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
-_paren_base_chain_L13
+_paren_base_chain_L11
                 SEP     #$20
                 MX      %10
                 LDA     p+2
@@ -595,12 +559,7 @@ _paren_base_chain_L13
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -610,6 +569,8 @@ _paren_base_chain_L13
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -624,49 +585,29 @@ _paren_base_chain_L13
                 STA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _paren_base_chain_L17
+                BEQ     _paren_base_chain_L15
                 LDA     #1
-                BRL     _paren_base_chain_L18
-_paren_base_chain_L17
+                BRA     _paren_base_chain_L16
+_paren_base_chain_L15
                 LDA     #0
-_paren_base_chain_L18
+_paren_base_chain_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L16
+                BEQ     _paren_base_chain_L14
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
-_paren_base_chain_L16
+_paren_base_chain_L14
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     b+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #b
+                LDA     b
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -676,33 +617,30 @@ _paren_base_chain_L16
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L20
+                BNE     _paren_base_chain_L18
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L20
+                BNE     _paren_base_chain_L18
                 LDA     #1
-                BRL     _paren_base_chain_L21
-_paren_base_chain_L20
+                BRA     _paren_base_chain_L19
+_paren_base_chain_L18
                 LDA     #0
-_paren_base_chain_L21
+_paren_base_chain_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L19
+                BEQ     _paren_base_chain_L17
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
-_paren_base_chain_L19
+_paren_base_chain_L17
                 LDA     _fcc_img0
                 TAY
                 TSC

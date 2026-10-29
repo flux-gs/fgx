@@ -28,16 +28,11 @@ _dowhile_cont_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 INC
                 STA     _fcc_img0
-                TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _dowhile_cont_L3
-                BRL     _dowhile_cont_L1
+                BNE     _dowhile_cont_L3
+                BRA     _dowhile_cont_L1
 _dowhile_cont_L3
                 LDA     _fcc_img1
                 CLC
@@ -46,15 +41,13 @@ _dowhile_cont_L3
 _dowhile_cont_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 BVC     _dowhile_cont_L4
                 EOR     #$8000
 _dowhile_cont_L4
-                BMI     *+5
-                BRL     _dowhile_cont_L2
-                BRL     _dowhile_cont_L0
+                BPL     _dowhile_cont_L2
+                BRA     _dowhile_cont_L0
 _dowhile_cont_L2
                 LDA     _fcc_img1
                 TAY

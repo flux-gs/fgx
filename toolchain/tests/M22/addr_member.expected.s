@@ -19,6 +19,10 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #2
+                CLC
+                ADC     #gb+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26,36 +30,29 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gb
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #90
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #3
+                ASL
+                CLC
+                ADC     #gb+10
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gb
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #7
                 STA     [_fcc_fpr0]
                 LDA     #2
                 STA     gp+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -65,6 +62,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -89,19 +87,19 @@ main_stkok        TCS
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #2
+                CLC
+                ADC     #gb+2
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gb
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
@@ -118,10 +116,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _addr_member_L0
+                BEQ     _addr_member_L0
                 LDA     #1
                 TAY
                 TSC
@@ -133,6 +129,14 @@ main_stkok        TCS
                 TYA
                 RTL
 _addr_member_L0
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr1+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr1
+                LDA     [_fcc_fpr1]
+                CLC
+                ADC     #gb+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -140,18 +144,6 @@ _addr_member_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gb
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
-                LDA     [_fcc_fpr1]
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
@@ -168,10 +160,8 @@ _addr_member_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _addr_member_L1
+                BEQ     _addr_member_L1
                 LDA     #2
                 TAY
                 TSC
@@ -183,6 +173,11 @@ _addr_member_L0
                 TYA
                 RTL
 _addr_member_L1
+                LDA     #3
+                ASL
+                CLC
+                ADC     #gb+10
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -190,15 +185,6 @@ _addr_member_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gb
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
@@ -215,10 +201,8 @@ _addr_member_L1
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _addr_member_L2
+                BEQ     _addr_member_L2
                 LDA     #3
                 TAY
                 TSC
@@ -262,10 +246,8 @@ _addr_member_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #76
-                BNE     *+5
-                BRL     _addr_member_L3
+                BEQ     _addr_member_L3
                 LDA     #4
                 TAY
                 TSC
@@ -277,6 +259,7 @@ _addr_member_L2
                 TYA
                 RTL
 _addr_member_L3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -286,6 +269,7 @@ _addr_member_L3
                 MX      %00
                 LDA     #gb
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
                 LDA     _fcc_fpr0
@@ -298,10 +282,8 @@ _addr_member_L3
                 STA     [_fcc_fpr0]
                 LDA     gb+0
                 TAX
-                TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _addr_member_L4
+                BEQ     _addr_member_L4
                 LDA     #5
                 TAY
                 TSC
@@ -315,7 +297,6 @@ _addr_member_L3
 _addr_member_L4
                 LDA     gb+0
                 TAX
-                TXA
                 INC
                 INC
                 TAY

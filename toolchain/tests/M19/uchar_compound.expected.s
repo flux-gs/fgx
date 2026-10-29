@@ -34,11 +34,9 @@ main_stkok        TCS
                 JSR     _fcc_divs16
                 STA     _fcc_img1
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _uchar_compound_L0
+                BNE     _uchar_compound_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -54,13 +52,10 @@ _uchar_compound_L0
                 STA     _fcc_img2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #156
-                BEQ     *+5
-                BRL     _uchar_compound_L1
+                BNE     _uchar_compound_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -86,13 +81,10 @@ _uchar_compound_L1
                 LDA     GC
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #156
-                BEQ     *+5
-                BRL     _uchar_compound_L2
+                BNE     _uchar_compound_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -107,11 +99,9 @@ _uchar_compound_L2
                 JSR     _fcc_divs16
                 STA     GI
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _uchar_compound_L3
+                BNE     _uchar_compound_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -120,12 +110,20 @@ _uchar_compound_L3
                 SEP     #$20
                 MX      %10
                 STA     GC
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
                 LDA     #GC
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     PC
                 LDA     _fcc_fpr0+2
                 STA     PC+2
@@ -151,14 +149,9 @@ _uchar_compound_L3
                 MX      %00
                 LDA     GC
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #156
-                BEQ     *+5
-                BRL     _uchar_compound_L4
+                BNE     _uchar_compound_L4
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -180,31 +173,21 @@ _uchar_compound_L4
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _uchar_compound_L5
+                BNE     _uchar_compound_L5
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img0
 _uchar_compound_L5
                 LDA     #10
                 AND     #$00FF
-                TAX
-                TXA
                 SEC
                 SBC     #20
                 STA     _fcc_img2
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #246
-                BEQ     *+5
-                BRL     _uchar_compound_L6
+                BNE     _uchar_compound_L6
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     _fcc_img0
@@ -219,13 +202,10 @@ _uchar_compound_L6
                 ADC     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #245
-                BEQ     *+5
-                BRL     _uchar_compound_L7
+                BNE     _uchar_compound_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     _fcc_img0

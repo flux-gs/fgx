@@ -66,9 +66,8 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
-                BRL     _float_array_init_L3
+                BRL     _float_array_init_L0
                 LDA     #1
                 ASL
                 ASL
@@ -114,17 +113,7 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L3
-                LDA     #1
-                BRL     _float_array_init_L4
-_float_array_init_L3
-                LDA     #0
-_float_array_init_L4
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L1
+                BEQ     _float_array_init_L0
                 LDA     #2
                 ASL
                 ASL
@@ -170,20 +159,8 @@ _float_array_init_L4
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L1
-                LDA     #1
-                BRL     _float_array_init_L2
-_float_array_init_L1
-                LDA     #0
-_float_array_init_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L0
+                BEQ     _float_array_init_L0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -238,9 +215,8 @@ _float_array_init_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
-                BRL     _float_array_init_L10
+                BRL     _float_array_init_L1
                 LDA     #1
                 ASL
                 ASL
@@ -286,17 +262,8 @@ _float_array_init_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
-                BRL     _float_array_init_L10
-                LDA     #1
-                BRL     _float_array_init_L11
-_float_array_init_L10
-                LDA     #0
-_float_array_init_L11
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L8
+                BRL     _float_array_init_L1
                 LDA     #2
                 ASL
                 ASL
@@ -342,17 +309,7 @@ _float_array_init_L11
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L8
-                LDA     #1
-                BRL     _float_array_init_L9
-_float_array_init_L8
-                LDA     #0
-_float_array_init_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L6
+                BEQ     _float_array_init_L1
                 LDA     #3
                 ASL
                 ASL
@@ -398,24 +355,12 @@ _float_array_init_L9
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L6
-                LDA     #1
-                BRL     _float_array_init_L7
-_float_array_init_L6
-                LDA     #0
-_float_array_init_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L5
+                BEQ     _float_array_init_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
-_float_array_init_L5
+_float_array_init_L1
                 LDA     #0
                 ASL
                 ASL
@@ -461,9 +406,8 @@ _float_array_init_L5
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
-                BRL     _float_array_init_L13
+                BRL     _float_array_init_L2
                 LDA     #1
                 ASL
                 ASL
@@ -514,37 +458,22 @@ _float_array_init_L5
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L13
-                LDA     #1
-                BRL     _float_array_init_L14
-_float_array_init_L13
-                LDA     #0
-_float_array_init_L14
-                CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L12
+                BEQ     _float_array_init_L2
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
-_float_array_init_L12
+_float_array_init_L2
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _float_array_init_L15
+                BNE     _float_array_init_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
-_float_array_init_L15
+_float_array_init_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

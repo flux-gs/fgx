@@ -296,6 +296,10 @@ typedef struct {
     int        ubs_in_loop;     /* ...and that read was inside a loop */
     int        decl_line;
     int        decl_col;
+    /* A parameter copied at entry into a frame slot near S (params_home):
+     * its index into g_param_byte_offsets, the slot the caller pushed.
+     * -1 for everything else.  kind is LK_LOCAL once it is homed. */
+    int        homed_from;
 } Local;
 #define MAX_SOFT_SLOTS  6144        /* per-frame slot cap (~12KB of 2-byte slots).  The 16KB
                                        soft-stack region it derived from is gone (P3-3 3.3); the
@@ -1344,6 +1348,11 @@ emit_float_to_long(void);
 void
 emit_stash_long_to_b(void);
 void
+emit_stage_long_b(long k);
+void
+emit_long_binop_const(int lhs_unsigned, LocalType rhs_type, int rhs_unsigned,
+                      long k, void (*fn)(void));
+void
 emit_scalar_binop(LocalType lhs_type, LocalType rhs_type,
                   int lhs_unsigned, int rhs_unsigned, void (*fn)(void));
 void
@@ -1407,6 +1416,18 @@ enum { IRC_BEQ, IRC_BNE, IRC_BCC, IRC_BCS, IRC_BMI, IRC_BPL, IRC_BVC,
 void emit_br(int n, int is_brl);                   /* T2-3: BRA/BRL <tu>_Ln */
 void emit_bcond(int cond, int n, int far);          /* T2-3: Bcc [<tu>_Ln | *+5+BRL] */
 void emit_jsr_rt(const char *name);                 /* T2-3: JSR runtime helper */
+int  fpr_is_sym(int k);                          /* &global+off, not yet built */
+void fpr_sym_flush(int k);                       /* build it (A preserved) */
+void fpr_sym_flush_live(void);
+void fpr_sym_live_check(void);
+void emit_fpr_add_index(int k, int idx, unsigned stride);                   /* die if one is live */
+void emit_incdec_at_sym(int k, int stride, int is_inc, int is_prefix,
+                        int is_ptr, tword rt, int rt_sid);
+Local *param_addr_node(int n);   /* params_home: &param in the body */
+void emit_restage_base_bank(Local *lc, Global *gv);   /* after an index that calls */
+void emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix,
+                        int is_ptr, tword rt, int rt_sid);
+void emit_ptr_incdec_into_fpr(int k, int off, int stride, int is_inc, int is_prefix);
 void emit_m8(void);                                 /* T2-3: SEP #$20 / MX %10 */
 void emit_m16(void);                                /* T2-3: REP #$20 / MX %00 */
 void
@@ -1416,6 +1437,7 @@ void emit_test_long_zero(int is_float);
 void walk_cond(int n);
 void walk_cond_branch(int n, int label, int want_true);
 void emit_cmp_branch(TokKind op, int is_unsigned, int label, int want_true);
+void emit_cmp_zero_branch(TokKind op, int label, int want_true);
 void
 emit_beq_label(int n);
 void
@@ -1449,7 +1471,8 @@ int
 parse_struct_def(const char *tag_ptr, int tag_len, int is_union);
 TypeSpec
 parse_type_spec(void);
-void long_double_or_die(void);   /* `long double' is double; `long float' dies */
+void long_double_or_die(void);
+void consume_trailing_specifiers(LocalType *base, int *is_unsigned);   /* `long double' is double; `long float' dies */
 LocalType
 type_for_decl(TypeSpec t, int stars, int is_array);
 /* C parameter adjustment: array-typed parameter -> pointer to element. */
@@ -1575,6 +1598,7 @@ int  walk_fpr(int n);
 /* Uniform K&R lvalue-address walker (parse_stmt.c); reused by the expression
  * parser/walk for value-leaving lvalue stores/incdec (N_LV_STORE_E etc.). */
 int  emit_lvalue_addr(int head);
+int  emit_lvalue_addr_off(int head, int *offp);
 void build_lvalue_suffixes(int head, LocalType cur, int cur_sid);
 void require_assignable(LocalType t, TokKind op);
 int  build_struct_var_store(Local *lc, Global *gv, int rhs, int line, int col);

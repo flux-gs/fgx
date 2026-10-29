@@ -69,9 +69,7 @@ _strcopy_test_L0
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img0]
                 AND     #$00FF
-                CMP     #0
-                BNE     *+5
-                BRL     _strcopy_test_L1
+                BEQ     _strcopy_test_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -92,7 +90,7 @@ _strcopy_test_L0
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _strcopy_test_L0
+                BRA     _strcopy_test_L0
 _strcopy_test_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
@@ -162,16 +160,14 @@ _strcopy_test_L2
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img0]
                 AND     #$00FF
-                CMP     #0
-                BNE     *+5
-                BRL     _strcopy_test_L3
+                BEQ     _strcopy_test_L3
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2
                 LDA     _fcc_img0
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _strcopy_test_L2
+                BRA     _strcopy_test_L2
 _strcopy_test_L3
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
@@ -238,6 +234,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -247,6 +244,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL copy
@@ -254,6 +252,7 @@ main_stkok        TCS
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -263,6 +262,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strlen_

@@ -30,24 +30,18 @@ classify_stkok        TCS
                 LDA     6+classify_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #97
-                BNE     *+5
-                BRL     _m9_ctrl_test_L1
+                BEQ     _m9_ctrl_test_L1
                 CMP     #65
-                BNE     *+5
-                BRL     _m9_ctrl_test_L2
+                BEQ     _m9_ctrl_test_L2
                 CMP     #98
-                BNE     *+5
-                BRL     _m9_ctrl_test_L3
+                BEQ     _m9_ctrl_test_L3
                 CMP     #66
-                BNE     *+5
-                BRL     _m9_ctrl_test_L4
+                BEQ     _m9_ctrl_test_L4
                 CMP     #99
-                BNE     *+5
-                BRL     _m9_ctrl_test_L5
+                BEQ     _m9_ctrl_test_L5
                 CMP     #67
-                BNE     *+5
-                BRL     _m9_ctrl_test_L6
-                BRL     _m9_ctrl_test_L7
+                BEQ     _m9_ctrl_test_L6
+                BRA     _m9_ctrl_test_L7
 _m9_ctrl_test_L1
 _m9_ctrl_test_L2
                 LDA     #1
@@ -111,9 +105,11 @@ classify_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -124,55 +120,46 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img17
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img16
 _m9_ctrl_test_L8
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #10
                 BVC     _m9_ctrl_test_L11
                 EOR     #$8000
 _m9_ctrl_test_L11
-                BMI     *+5
-                BRL     _m9_ctrl_test_L10
-                LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
+                BPL     _m9_ctrl_test_L10
+                LDA     _fcc_img16
                 CMP     #1
-                BEQ     *+5
-                BRL     _m9_ctrl_test_L12
-                BRL     _m9_ctrl_test_L9
+                BNE     _m9_ctrl_test_L12
+                BRA     _m9_ctrl_test_L9
 _m9_ctrl_test_L12
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _m9_ctrl_test_L13
-                BRL     _m9_ctrl_test_L10
+                BNE     _m9_ctrl_test_L13
+                BRA     _m9_ctrl_test_L10
 _m9_ctrl_test_L13
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img17
                 PHA
                 LDA     #97
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _m9_ctrl_test_L16
                 EOR     #$8000
 _m9_ctrl_test_L16
-                BMI     *+5
-                BRL     _m9_ctrl_test_L14
-                LDA     7,S   ; fccstk d=4 b=3
-                BRL     _m9_ctrl_test_L15
+                BPL     _m9_ctrl_test_L14
+                LDA     _fcc_img16
+                BRA     _m9_ctrl_test_L15
 _m9_ctrl_test_L14
                 LDA     #0
 _m9_ctrl_test_L15
@@ -189,17 +176,16 @@ _m9_ctrl_test_L15
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img17
 _m9_ctrl_test_L9
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CLC
                 ADC     #1
-                STA     3,S   ; fccstk d=0 b=3
-                BRL     _m9_ctrl_test_L8
+                STA     _fcc_img16
+                BRA     _m9_ctrl_test_L8
 _m9_ctrl_test_L10
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -210,12 +196,16 @@ _m9_ctrl_test_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     4
+main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

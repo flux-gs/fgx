@@ -22,44 +22,29 @@ main_stkok        TCS
                 LDA     #10
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #4
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #2
                 ASL
-                TAX
-                TXA
                 INC
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #1
-                TAX
-                TXA
                 CLC
                 ADC     #3
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     #0
-                TAX
-                TXA
                 CLC
                 ADC     #3
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #1
-                TAX
-                TXA
                 INC
                 INC
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     11,S   ; fccstk d=0 b=11

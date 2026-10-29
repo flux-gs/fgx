@@ -23,6 +23,10 @@ main_stkok        TCS
                 STA     _fcc_img1
                 LDA     #85
                 STA     5,S   ; fccstk d=0 b=5
+                LDA     #3
+                CLC
+                ADC     #_derefrmw_buf
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30,16 +34,15 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_derefrmw_buf
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
                 STA     _fcc_img2
+                LDA     #4
+                ASL
+                CLC
+                ADC     #_derefrmw_s
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -47,12 +50,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_derefrmw_s
-                STA     _fcc_fpr0
-                LDA     #4
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 STA     _derefrmw_fp
                 LDA     _fcc_fpr0+2
                 STA     _derefrmw_fp+2
@@ -106,45 +104,21 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_tmp_b
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _derefrmw_L1
+                BNE     _derefrmw_L1
                 LDA     #2
                 ASL
                 TAX
                 LDA:    _derefrmw_s,X
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _derefrmw_L1
-                LDA     #0
-                BRL     _derefrmw_L2
+                BEQ     _derefrmw_L0
 _derefrmw_L1
-                LDA     #1
-_derefrmw_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _derefrmw_L0
                 LDA     #1
                 TAY
                 TSC
@@ -199,10 +173,8 @@ _derefrmw_L0
                 LDA:    _derefrmw_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #165
-                BNE     *+5
-                BRL     _derefrmw_L3
+                BEQ     _derefrmw_L2
                 LDA     #2
                 TAY
                 TSC
@@ -213,7 +185,7 @@ _derefrmw_L0
                 STA     _fcc_fb
                 TYA
                 RTL
-_derefrmw_L3
+_derefrmw_L2
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -221,8 +193,6 @@ _derefrmw_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 SEP     #$20
@@ -235,10 +205,8 @@ _derefrmw_L3
                 LDA:    _derefrmw_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #168
-                BNE     *+5
-                BRL     _derefrmw_L4
+                BEQ     _derefrmw_L3
                 LDA     #3
                 TAY
                 TSC
@@ -249,7 +217,7 @@ _derefrmw_L3
                 STA     _fcc_fb
                 TYA
                 RTL
-_derefrmw_L4
+_derefrmw_L3
                 LDA     #_derefrmw_s
                 PHA
                 LDA     #0
@@ -295,33 +263,20 @@ _derefrmw_L4
                 LDA     _derefrmw_sp
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
-                TAX
-                TXA
                 DEC
                 STA     [_fcc_fpr0]
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _derefrmw_L6
+                BNE     _derefrmw_L5
                 LDA     #0
                 ASL
                 TAX
                 LDA:    _derefrmw_s,X
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _derefrmw_L6
-                LDA     #0
-                BRL     _derefrmw_L7
-_derefrmw_L6
-                LDA     #1
-_derefrmw_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _derefrmw_L5
+                BEQ     _derefrmw_L4
+_derefrmw_L5
                 LDA     #4
                 TAY
                 TSC
@@ -332,7 +287,7 @@ _derefrmw_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_derefrmw_L5
+_derefrmw_L4
                 LDA     #42
                 TAY
                 TSC

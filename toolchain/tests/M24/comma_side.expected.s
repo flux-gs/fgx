@@ -22,7 +22,6 @@ main_stkok        TCS
                 LDA     #3
                 STA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3

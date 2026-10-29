@@ -7,13 +7,14 @@
  * no prototypes are declared here (and must not be — a prototype would route
  * them through the ordinary stack-based call path).
  *
- * jmp_buf is a 16-byte buffer matching the asm layout (libc.s):
+ * jmp_buf is a 48-byte buffer matching the asm layout (libc.s):
  *   +0 PB  +1 DBR  +2..3 _fcc_fb  +4..5 PC  +6..7 SP  +8..9 DP
  *   +10..11 _fcc_sfp   (bank-0 stack campaign 1.1)
  *   +12..15 the 32-bit signal mask (apple/fgx#64)
- * It grew 10 -> 12 in 1.1 and 12 -> 16 for the mask.  If you keep a private
- * copy of this typedef, it WILL be written past: libc's setjmp stores 16
- * bytes unconditionally.  There
+ *   +16..47 the callee-saved direct-page band, _fcc_img16.._fcc_img31
+ * It grew 10 -> 12 in 1.1, 12 -> 16 for the mask and 16 -> 48 for the band.
+ * If you keep a private copy of this typedef, it WILL be written past:
+ * libc's setjmp stores 48 bytes unconditionally.  There
  * was one such copy (src/userland/ed/ed.c) and it now includes this header.
  * It is a struct (not the historical array typedef) because fcc has no array
  * typedefs; a bare jmp_buf identifier still decays to its address, so source
@@ -40,7 +41,7 @@
 #ifndef _SETJMP_H
 #define _SETJMP_H
 
-typedef struct { char _jb[16]; } jmp_buf;
+typedef struct { char _jb[48]; } jmp_buf;
 
 /* setjmp(jmp_buf env)        -> 0 on the direct call, the longjmp value on
  *                               resume.  Usable in any expression context.

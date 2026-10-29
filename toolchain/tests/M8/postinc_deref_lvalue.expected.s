@@ -99,6 +99,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -107,9 +108,13 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #str
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     cursor
                 LDA     _fcc_fpr0+2
                 STA     cursor+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -119,6 +124,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #cursor
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0

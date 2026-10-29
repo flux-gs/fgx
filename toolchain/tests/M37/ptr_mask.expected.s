@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,12 +29,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_ptr_mask_buf
+                LDA     #_ptr_mask_buf+21
                 STA     _fcc_fpr0
-                LDA     #21
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
                 LDA     _fcc_fpr0
@@ -53,17 +51,12 @@ main_stkok        TCS
                 STA     _fcc_img1
                 PHA
                 LDA     _fcc_img2
-                TAX
-                TXA
                 AND     #15
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L0
+                BNE     _ptr_mask_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -76,17 +69,12 @@ _ptr_mask_L0
                 STA     _fcc_img1
                 PHA
                 LDA     _fcc_img2
-                TAX
-                TXA
                 AND     #15
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L1
+                BNE     _ptr_mask_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -95,23 +83,16 @@ _ptr_mask_L1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img4
                 STA     _fcc_fpr0
-                TAX
-                TXA
                 ORA     #1
                 STA     _fcc_img1
                 PHA
                 LDA     _fcc_img2
-                TAX
-                TXA
                 ORA     #1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L2
+                BNE     _ptr_mask_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -132,11 +113,8 @@ _ptr_mask_L2
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L3
+                BNE     _ptr_mask_L3
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -145,22 +123,15 @@ _ptr_mask_L3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img4
                 STA     _fcc_fpr0
-                TAX
-                TXA
                 AND     #1
                 PHA
                 LDA     _fcc_img2
-                TAX
-                TXA
                 AND     #1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L4
+                BNE     _ptr_mask_L4
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -169,6 +140,7 @@ _ptr_mask_L4
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img4
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -176,52 +148,39 @@ _ptr_mask_L4
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #_ptr_mask_buf
+                LDA     #_ptr_mask_buf+21
                 STA     _fcc_fpr1
-                LDA     #21
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_mask_L6
+                BNE     _ptr_mask_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_mask_L6
+                BNE     _ptr_mask_L6
                 LDA     #1
-                BRL     _ptr_mask_L7
+                BRA     _ptr_mask_L7
 _ptr_mask_L6
                 LDA     #0
 _ptr_mask_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_mask_L5
+                BEQ     _ptr_mask_L5
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L5
                 LDA     _fcc_img3
-                TAX
-                TXA
                 AND     #60
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _ptr_mask_L8
+                BNE     _ptr_mask_L8
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0

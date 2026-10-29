@@ -93,17 +93,13 @@ main_stkok        TCS
                 PHA
                 RTL
 _uresid_L3
-                TAX
-                TXA
                 LDX     #30000
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _uresid_L2
+                BCS     _uresid_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -164,11 +160,8 @@ _uresid_L4
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _uresid_L5
+                BEQ     _uresid_L5
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -177,6 +170,7 @@ _uresid_L5
                 STA     _fcc_long_hi
                 LDA     #$9C40
                 STA     gu
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -186,14 +180,11 @@ _uresid_L5
                 MX      %00
                 LDA     #gu
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 LDA     #2500

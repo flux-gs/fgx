@@ -94,20 +94,13 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #6
                 STA     [_fcc_fpr0]
                 LDA     21,S   ; fccstk d=0 b=21
@@ -130,6 +123,7 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -137,13 +131,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ga4
+                LDA     #ga4+6
                 STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bump
@@ -344,12 +334,9 @@ _epp_L2
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _epp_L3
+                BEQ     _epp_L3
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     21,S   ; fccstk d=0 b=21

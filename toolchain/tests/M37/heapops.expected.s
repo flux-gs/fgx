@@ -39,36 +39,28 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _heapops_L1
+                BNE     _heapops_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _heapops_L1
+                BNE     _heapops_L1
                 LDA     #0
-                BRL     _heapops_L2
+                BRA     _heapops_L2
 _heapops_L1
                 LDA     #1
 _heapops_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _heapops_L0
+                BEQ     _heapops_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -119,14 +111,10 @@ _heapops_L0
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _heapops_L3
+                BNE     _heapops_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -155,36 +143,28 @@ _heapops_L3
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _heapops_L5
+                BNE     _heapops_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _heapops_L5
+                BNE     _heapops_L5
                 LDA     #0
-                BRL     _heapops_L6
+                BRA     _heapops_L6
 _heapops_L5
                 LDA     #1
 _heapops_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _heapops_L4
+                BEQ     _heapops_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -213,14 +193,9 @@ _heapops_L4
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _heapops_L7
+                BNE     _heapops_L7
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     9,S   ; fccstk d=0 b=9
@@ -255,27 +230,23 @@ _heapops_L7
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _heapops_L9
+                BNE     _heapops_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _heapops_L9
+                BNE     _heapops_L9
                 LDA     #0
-                BRL     _heapops_L10
+                BRA     _heapops_L10
 _heapops_L9
                 LDA     #1
 _heapops_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _heapops_L8
+                BEQ     _heapops_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     9,S   ; fccstk d=0 b=9

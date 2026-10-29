@@ -999,6 +999,7 @@ emit_load_ptr_local_img_lower(unsigned k)
 void
 emit_fpr_load_ptr_local(int k, Local *lc)
 {
+    fpr_sym_flush(k);
     if (g_loop_depth) lc->loop_accessed = 1;
     g_expr_type      = lc->type;
     g_expr_struct_id = lc->struct_id;
@@ -1011,6 +1012,7 @@ emit_fpr_load_ptr_local(int k, Local *lc)
 void
 emit_fpr_store_ptr_local(int k, Local *lc)
 {
+    fpr_sym_flush(k);
     lc->n_stores++;         /* use-before-set: the POINTER store path -- N_STORE_VAR breaks here before
        emit_store_local, so a `p = q` never reached the counter */
     if (g_loop_depth) lc->loop_accessed = 1;
@@ -1190,15 +1192,21 @@ emit_deref_postinc_local_img_lower(Local *lc, unsigned k, int is_inc, int stride
 /* fcc2 P1.4 (B1c-2b): un-promoted lowering of IR_INDEX_DEREF_LOCAL.  BYTE-IDENTICAL
  * to emit_array_index_read's scalar-pointer tail: A holds the scaled element index,
  * the 2-byte base offset is @ 1,S, the base bank is in _fcc_ptr+2.  s_delta is the
- * g_s_delta snapshot (parity; not consumed — the 1,S is literal). */
+ * g_s_delta snapshot after the PLA, where a `called' index re-reads the bank. */
 static void
-emit_index_deref_local_lower(Local *lc, int s_delta, int is_byte)
+emit_index_deref_local_lower(Local *lc, int s_delta, int is_byte, int called)
 {
-    (void)lc; (void)s_delta;
     ir_emitf("                CLC\n");
     ir_emitf("                ADC     1,S\n");      /* + base offset */
     ir_emitf("                STA     _fcc_ptr\n");
     ir_emitf("                PLA\n");              /* drop the 2-byte pushed base */
+    if (called) {                                  /* emit_restage_base_bank */
+        int saved = g_s_delta;
+        g_s_delta = s_delta;
+        emit_slot_lda16(lc, 2);
+        ir_emitf("                STA     _fcc_ptr+2\n");
+        g_s_delta = saved;
+    }
     ir_emitf("                LDA     [_fcc_ptr]\n");
     if (is_byte)
         ir_emitf("                AND     #$00FF\n");
@@ -1815,6 +1823,7 @@ emit_store_local_field(Local *lc, Field *f)
 void
 emit_fpr_store_local_4(Local *lc, int off, int k)
 {
+    fpr_sym_flush(k);
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
     emit_field_sta(lc, off);
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(fpr_name(k)));
@@ -2183,6 +2192,38 @@ emit_deref_ptr_field_store(LocalType field_type, int field_offset)
  * why `c.b = 0xFF; if (++c.b == 0)' is the fixture case that catches its
  * absence and nothing else is.  Postfix needs no mask: its result comes from
  * _fcc_tmp_b, which was saved already masked. */
+/* emit_incdec_at_fcc_ptr's word at offset y: through _fcc_ptr, through the
+ * register emit_incdec_at_fpr named, or at the absolute cell
+ * emit_incdec_at_sym set. */
+static const char *g_rmw_cell;
+static const char *g_rmw_ptr;
+
+static void
+rmw_lda(int y)
+{
+    if (g_rmw_cell) {
+        ir_record_raw(IR_LDA_CELL, 0, 0,
+                      (void *)(y ? cellpf("%s+%d", g_rmw_cell, y) : g_rmw_cell));
+        return;
+    }
+    if (y) {
+        ir_emitf("                LDY     #%d\n", y);
+        ir_record_raw(IR_LDA_DEREF, 1, 0,
+                      (void *)(g_rmw_ptr ? g_rmw_ptr : cellp("_fcc_ptr")));
+    } else {
+        ir_record_raw(IR_LDA_DEREF, 0, 0,
+                      (void *)(g_rmw_ptr ? g_rmw_ptr : cellp("_fcc_ptr")));
+    }
+}
+
+static void
+rmw_sta(void)
+{
+    if (g_rmw_cell) ir_record_raw(IR_STA_CELL, 0, 0, (void *)g_rmw_cell);
+    else            ir_record_raw(IR_STA_DEREF, 0, 0,
+                                  (void *)(g_rmw_ptr ? g_rmw_ptr : cellp("_fcc_ptr")));
+}
+
 void
 emit_incdec_at_fcc_ptr(int stride, int is_inc, int is_prefix, int is_ptr,
                        tword rt, int rt_sid)
@@ -2193,7 +2234,7 @@ emit_incdec_at_fcc_ptr(int stride, int is_inc, int is_prefix, int is_ptr,
         /* 8-bit RMW: mask the load, byte-store the result, mask the prefix
          * value.  The neighbouring byte is never read into the result and
          * never written back. */
-        ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
+        rmw_lda(0);
         ir_emitf("                AND     #$00FF\n");        /* old value, 0..255 */
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
         if (is_inc) {
@@ -2202,7 +2243,7 @@ emit_incdec_at_fcc_ptr(int stride, int is_inc, int is_prefix, int is_ptr,
             ir_record_raw(IR_SUB_CONST, (unsigned)(stride), 0, NULL);
         }
         emit_m8();
-        ir_record_raw(IR_STA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
+        rmw_sta();
         emit_m16();
         if (is_prefix) {
             ir_emitf("                AND     #$00FF\n");    /* NEW, wrap folded */
@@ -2214,21 +2255,20 @@ emit_incdec_at_fcc_ptr(int stride, int is_inc, int is_prefix, int is_ptr,
         g_expr_unsigned  = 0;
         return;
     }
-    ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));  /* old offset/value word */
+    rmw_lda(0);  /* old offset/value word */
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));  /* save old */
     if (is_inc) {
         ir_record_raw(IR_ADD_CONST, (unsigned)(stride), 0, NULL);
     } else {
         ir_record_raw(IR_SUB_CONST, (unsigned)(stride), 0, NULL);
     }
-    ir_record_raw(IR_STA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));  /* write new word (ptr bank byte untouched) */
+    rmw_sta();  /* write new word (ptr bank byte untouched) */
     if (is_ptr) {
         if (is_prefix)
             ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b")); /* wanted = NEW offset */
         /* else wanted = OLD offset, already in _fcc_tmp_b */
         {                                  /* pointee bank = member's stored bank */
-            ir_emitf("                LDY     #2\n");
-            ir_record_raw(IR_LDA_DEREF, 1, 0, (void *)cellp("_fcc_ptr"));
+            rmw_lda(2);
             ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
         }
         ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b")); /* A = wanted offset */
@@ -2339,6 +2379,7 @@ void
 emit_wide_incdec_at_fpr(int kd, int off, LocalType lt, int is_inc,
                         int return_old)
 {
+    fpr_sym_flush(kd);
     if (lt == LT_DOUBLE) {
         emit_fpr_deref_field(kd, LT_DOUBLE, off);    /* acc = OLD */
         if (return_old)
@@ -2483,9 +2524,11 @@ emit_prologue_unconditional(void)
      * yields bank 0 for free.  Params sit above the frame + the saved-FP word,
      * so slot_addr_str adds FRAMESIZE+2 to their n,S displacement. */
     ir_emitf("                PEI     _fcc_fb\n");         /* save caller frame ptr */
+    ir_tag_last(IRF_PRO_FB, 0);              /* ...and the band (ir_band_frame) */
     ir_emitf("                TSC\n");
     ir_emitf("                SEC\n");
     ir_emitf("                SBC     #%s_FRAMESIZE\n", g_func_name);
+    ir_tag_last(IRF_FRAME_SBC, 0);
     /* P3-3 3.2b hardware-stack overflow guard.  DO-gated by %s_STKGUARD (an
      * EQU emitted at function end = 1 iff this fn recurses, calls indirectly,
      * or has a >=128 B frame — small leaf frames stay lean, byte-identical to
@@ -2566,11 +2609,17 @@ emit_epilogue_return(void)
     ir_emitf("                TSC\n");
     ir_emitf("                CLC\n");
     ir_emitf("                ADC     #%s_FRAMESIZE\n", g_func_name);
+    ir_tag_last(IRF_FRAME_ADC, 0);
     ir_emitf("                TCS\n");                        /* free the frame */
+    ir_tag_last(IRF_EPI_TCS, 0);             /* ...then pull the band back */
     ir_record_raw(IR_POP_A, 0, 0, NULL);                        /* restore caller frame ptr */
+    ir_tag_last(IRF_EPI_TAIL, 0);
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_fb"));
+    ir_tag_last(IRF_EPI_TAIL, 0);
     ir_record_raw(IR_TYA, 0, 0, NULL);                         /* restore return value */
+    ir_tag_last(IRF_EPI_TAIL, 0);
     ir_emitf("                RTL\n");
+    ir_tag_last(IRF_EPI_TAIL, 0);
 }
 
 static void
@@ -2980,7 +3029,8 @@ emit_lower_op(const IrNode *n)
         emit_deref_postinc_local_img_lower((Local *)n->ptr, n->u0,
                                            (int)(n->u1 & 1u), (int)(n->u1 >> 1)); break;
     case IR_INDEX_DEREF_LOCAL:
-        emit_index_deref_local_lower((Local *)n->ptr, (int)n->u0, (int)(n->u1 & 1u)); break;
+        emit_index_deref_local_lower((Local *)n->ptr, (int)n->u0, (int)(n->u1 & 1u),
+                                     (int)((n->u1 >> 2) & 1u)); break;
     case IR_INDEX_DEREF_LOCAL_IMG:
         emit_index_deref_local_img_lower(n->u0, (int)(n->u1 & 1u)); break;
     case IR_WALK_STORE_SETUP:
@@ -3699,6 +3749,27 @@ emit_air_head(Local *lc)
     return ir_cur_n();                      /* B1c-2b: scan the index eval's ops */
 }
 
+/* A pointer base's bank waits in _fcc_ptr+2 while its index is evaluated
+ * (emit_load_base, emit_load_global).  A call in the index may reuse
+ * _fcc_ptr -- `digs[f(x)]', 4.3BSD-Reno doprnt.c's quad digits -- so the
+ * bank is staged again from the pointer itself, local or global.  A is
+ * kept. */
+void
+emit_restage_base_bank(Local *lc, Global *gv)
+{
+    ir_record_raw(IR_TAY, 0, 0, NULL);
+    if (lc) {
+        emit_slot_lda16(lc, 2);
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
+    } else {
+        emit_m8();
+        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(gname(gv)));
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
+        emit_m16();
+    }
+    ir_record_raw(IR_TYA, 0, 0, NULL);
+}
+
 int
 emit_air_tail(Local *lc, int idx_snap, int consumed)
 {
@@ -3763,11 +3834,14 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         !ISPTR(DECREF(lc->type)) &&
         lc->type != LT_LONG_PTR && lc->type != LT_FLOAT_PTR) {
         int base_mut = ir_local_mutated_since(idx_snap, (void *)lc);
+        int called   = ir_call_since(idx_snap);
         g_s_delta -= 2;                                  /* matches the PLA in the lowering */
         g_expr_type     = is_byte ? LT_CHAR : LT_INT;
         g_expr_unsigned = lc->is_unsigned;   /* A-1: elem inherits decl */
+        if (called) lc->raw_accessed = 1;    /* the lowering reads its slot */
         ir_record_op_ptr2(IR_INDEX_DEREF_LOCAL, lc, (unsigned)g_s_delta,
-                          (unsigned)((is_byte ? 1u : 0u) | (base_mut ? 2u : 0u)));
+                          (unsigned)((is_byte ? 1u : 0u) | (base_mut ? 2u : 0u) |
+                                     (called ? 4u : 0u)));
         return -1;
     }
     ir_emitf("                CLC\n");
@@ -3814,6 +3888,7 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
+        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
         ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_long_b_lo"));
         /* Re-load with +2 offset for high word. */
@@ -3837,6 +3912,7 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
+        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
         if (ISPTR(elem)) {                  /* element is itself a pointer → 4-byte load */
             int k = fpr_alloc();
             emit_fpr_load_ptr_at_fcc_ptr(k);
@@ -4471,6 +4547,37 @@ emit_scalar_binop(LocalType lhs_type, LocalType rhs_type,
     fn();
     /* A-1: result keeps the op's unsignedness (harmless for comparison
      * results, which are 0/1 bools). */
+    g_expr_unsigned = g_binop_unsigned;
+}
+
+/* The constant k, already at its own width and sign (ast_const_int), as the
+ * second operand of a long operation: widened as emit_promote_a_to_long would
+ * widen it, through X, so A:_fcc_long_hi is untouched. */
+void
+emit_stage_long_b(long k)
+{
+    unsigned long v = (unsigned long)k;
+    ir_emitf("                LDX     #%lu\n", v & 0xFFFFuL);
+    ir_emitf("                STX     _fcc_long_b_lo\n");
+    ir_emitf("                LDX     #%lu\n", (v >> 16) & 0xFFFFuL);
+    ir_emitf("                STX     _fcc_long_b_hi\n");
+}
+
+/* A long operation whose right operand is the constant k: the left operand
+ * stays in A:_fcc_long_hi and k goes straight to the second-operand cells,
+ * with no push, pop or runtime widening between. */
+void
+emit_long_binop_const(int lhs_unsigned, LocalType rhs_type, int rhs_unsigned,
+                      long k, void (*fn)(void))
+{
+    if (fn == emit_binop_shl || fn == emit_binop_shr)
+        g_binop_unsigned = promoted_unsigned(LT_LONG, lhs_unsigned);
+    else
+        g_binop_unsigned = arith_unsigned(LT_LONG, lhs_unsigned,
+                                          rhs_type, rhs_unsigned);
+    emit_stage_long_b(k);
+    g_expr_type = LT_LONG;
+    fn();
     g_expr_unsigned = g_binop_unsigned;
 }
 
@@ -5205,6 +5312,7 @@ emit_scale_compound_ptr(LocalType lhs_type, int struct_id, TokKind op)
 void
 emit_label(int n)
 {
+    fpr_sym_live_check();
     ir_record_op1(IR_LABEL, (unsigned)n);
 }
 
@@ -5214,12 +5322,14 @@ emit_label(int n)
 void
 emit_br(int n, int is_brl)
 {
+    fpr_sym_live_check();
     ir_record_op2(IR_BR, (unsigned)n, is_brl ? 1u : 0u);
 }
 
 void
 emit_bcond(int cond, int n, int far)
 {
+    fpr_sym_live_check();
     ir_record_op2(IR_BCOND, (unsigned)n,
                   (unsigned)(cond & 7) | (far ? 8u : 0u));
 }
@@ -5373,6 +5483,7 @@ emit_test_long_zero(int is_float)
 void
 emit_fpr_test_zero(int k)
 {
+    fpr_sym_flush(k);
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(fpr_name(k)));
     ir_emitf("                AND     #$00FF\n");     /* drop the pad byte */
     ir_emitf("                ORA     %s\n", fpr_name(k));
@@ -5608,13 +5719,29 @@ emit_cmp_branch(TokKind op, int is_unsigned, int label, int want_true)
         int lab = new_label();
         ir_emitf("                SEC\n");
         ir_emitf("                SBC     _fcc_tmp_b\n");
-        ir_emitf("                BVC     %s_L%d\n", g_tu_prefix, lab);
+        emit_bcond(IRC_BVC, lab, 0);       /* over the 3-byte EOR: near */
         ir_emitf("                EOR     #$8000\n");
-        ir_emitf("%s_L%d\n", g_tu_prefix, lab);
+        emit_label(lab);
         cc = (op == TOK_LT) ? IRC_BMI : IRC_BPL;
     }
 
     /* cc is the branch-if-TRUE condition; the pairs differ in bit 0. */
+    if (!want_true) cc ^= 1;
+    emit_bcond(cc, label, 1);
+    g_expr_type = LT_INT;
+}
+
+
+/* emit_cmp_branch with a literal 0 on the right: A is the left side, and
+ * `CMP #0' leaves the N and Z the subtraction would -- A - 0 cannot
+ * overflow, so the sign of A is the sign of the difference. */
+void
+emit_cmp_zero_branch(TokKind op, int label, int want_true)
+{
+    int cc = (op == TOK_EQEQ) ? IRC_BEQ :
+             (op == TOK_NE)   ? IRC_BNE :
+             (op == TOK_LT)   ? IRC_BMI : IRC_BPL;
+    ir_emitf("                CMP     #0\n");
     if (!want_true) cc ^= 1;
     emit_bcond(cc, label, 1);
     g_expr_type = LT_INT;
@@ -6254,12 +6381,125 @@ emit_globals_section(void)
 
 static int g_fpr_top = 0;
 
+/* A CONSTANT-ADDRESS FPR.  `&global + off' with the bank in DBR is a value
+ * known at assembly time, and K&R A.7.3.3 makes `E1->MOS' "the same as
+ * (*E1).MOS", so a member reached through it is the object at gname+off+m.
+ * emit_fpr_addr_global records the symbol here instead of building the
+ * register; add_const moves the offset, and the field load, store and
+ * inc/dec emit `LDA gname+n'.  Anything else materializes the register
+ * first (fpr_sym_flush).  fpr_name() and the label/branch emitters die on a
+ * symbolic register, so a consumer that was not taught this fails the build
+ * rather than reading an unwritten register. */
+static Global *g_fpr_symg[FCC_NFPR];
+static int     g_fpr_symo[FCC_NFPR];
+
+int
+fpr_is_sym(int k)
+{
+    return k >= 0 && k < FCC_NFPR && g_fpr_symg[k] != NULL;
+}
+
+/* The assembler operand for a symbolic register's address plus n. */
+static const char *
+fpr_sym_cell(int k, int n)
+{
+    int off = g_fpr_symo[k] + n;
+    if (off == 0) return cellpf("%s", gname(g_fpr_symg[k]));
+    if (off < 0)  return cellpf("%s-%d", gname(g_fpr_symg[k]), -off);
+    return cellpf("%s+%d", gname(g_fpr_symg[k]), off);
+}
+
+/* Build a symbolic register for real: bank from DBR, offset gname+off.  A is
+ * preserved (PHA/PLA, no n,S operand between them), so a caller holding a
+ * value in A can flush. */
+void
+fpr_sym_flush(int k)
+{
+    const char *addr;
+    if (!fpr_is_sym(k)) return;
+    addr = fpr_sym_cell(k, 0);
+    g_fpr_symg[k] = NULL;
+    ir_emitf("                PHA\n");
+    emit_fpr_bank_dbr(k);
+    ir_emitf("                LDA     #%s\n", addr);
+    ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
+    ir_emitf("                PLA\n");
+}
+
+/* Every live symbolic register, before control flow joins or leaves. */
+void
+fpr_sym_flush_live(void)
+{
+    int k;
+    for (k = 0; k < g_fpr_top; k++) fpr_sym_flush(k);
+}
+
+/* A label or branch with a symbolic register live.  Each path reaching a
+ * label must agree on what the register holds, so it is built here, before
+ * the branch leaves or the label is placed, with A and the flags kept: a
+ * conditional branch reads the flags the compare just set. */
+void
+fpr_sym_live_check(void)
+{
+    int k, any = 0;
+    for (k = 0; k < g_fpr_top; k++) any |= (g_fpr_symg[k] != NULL);
+    if (!any) return;
+    ir_emitf("                PHP\n");
+    fpr_sym_flush_live();
+    ir_emitf("                PLP\n");
+}
+
+void
+emit_incdec_at_sym(int k, int stride, int is_inc, int is_prefix, int is_ptr,
+                   tword rt, int rt_sid)
+{
+    g_rmw_cell = fpr_sym_cell(k, 0);
+    emit_incdec_at_fcc_ptr(stride, is_inc, is_prefix, is_ptr, rt, rt_sid);
+    g_rmw_cell = NULL;
+}
+
+/* The same in place through register k, which already holds the address:
+ * `LDA [_fcc_fprK]', with no copy of it into _fcc_ptr first. */
+void
+emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix, int is_ptr,
+                   tword rt, int rt_sid)
+{
+    g_rmw_ptr = cellp(fpr_name(k));
+    emit_incdec_at_fcc_ptr(stride, is_inc, is_prefix, is_ptr, rt, rt_sid);
+    g_rmw_ptr = NULL;
+}
+
+/* ++/-- of a pointer held at the address fpr k + off, yielding the pointer
+ * (old for postfix, new for prefix) in k itself: the address is dead once
+ * the word is written back, so the result's offset and bank go straight
+ * into k rather than through the carrier.  The offset rides in Y, so k is
+ * read as it stands.  A = the offset, as fpr_in leaves it. */
+void
+emit_ptr_incdec_into_fpr(int k, int off, int stride, int is_inc, int is_prefix)
+{
+    const char *cell = cellp(fpr_name(k));
+    g_rmw_ptr = cell;
+    rmw_lda(off);                                                  /* old offset */
+    ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
+    if (is_inc) ir_record_raw(IR_ADD_CONST, (unsigned)stride, 0, NULL);
+    else        ir_record_raw(IR_SUB_CONST, (unsigned)stride, 0, NULL);
+    ir_record_raw(IR_STA_DEREF, off ? 1 : 0, 0, (void *)cell);     /* Y is still off */
+    if (is_prefix)
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
+    rmw_lda(off + 2);                                 /* bank (and pad) word */
+    g_rmw_ptr = NULL;
+    ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp2(cell));
+    ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
+    ir_record_raw(IR_STA_CELL, 0, 0, (void *)cell);
+}
+
 int
 fpr_alloc(void)
 {
     if (g_fpr_top >= FCC_NFPR)
         die(g_cur.line, g_cur.col,
             "fcc-fpr: expression pointer-register pressure (max 8)");
+    g_fpr_symg[g_fpr_top] = NULL;
     return g_fpr_top++;
 }
 
@@ -6268,12 +6508,15 @@ fpr_free(int k)
 {
     if (k != g_fpr_top - 1)
         die(g_cur.line, g_cur.col, "fcc-fpr: non-LIFO register free");
+    g_fpr_symg[k] = NULL;
     g_fpr_top--;
 }
 
 void
 fpr_reset(void)
 {
+    int k;
+    for (k = 0; k < FCC_NFPR; k++) g_fpr_symg[k] = NULL;
     g_fpr_top = 0;
 }
 
@@ -6287,6 +6530,10 @@ const char *
 fpr_name(int k)
 {
     static char buf[16];
+    if (fpr_is_sym(k)) {
+        die(g_cur.line, g_cur.col,
+            "internal: fcc-fpr: a symbolic register named before it was built");
+    }
     snprintf(buf, sizeof buf, "_fcc_fpr%d", k);
     return buf;
 }
@@ -6307,6 +6554,12 @@ emit_fpr_lit(int k, unsigned off)
 void
 emit_fpr_mov(int dst, int src)
 {
+    if (fpr_is_sym(src)) {
+        g_fpr_symg[dst] = g_fpr_symg[src];
+        g_fpr_symo[dst] = g_fpr_symo[src];
+        return;
+    }
+    g_fpr_symg[dst] = NULL;
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(src)));
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(dst)));
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(fpr_name(src)));
@@ -6342,6 +6595,11 @@ emit_fpr_bank_pbr(int k)
 void
 emit_fpr_addr_global(int k, Global *g)
 {
+    if (!is_block_static(g)) {
+        g_fpr_symg[k] = g;
+        g_fpr_symo[k] = 0;
+        return;
+    }
     emit_fpr_bank_dbr(k);
     if (is_block_static(g)) {
         /* --libso: a block static lives in this process's block for its
@@ -6396,6 +6654,7 @@ emit_fpr_from_carrier(int k)
 void
 emit_fpr_to_carrier(int k)
 {
+    fpr_sym_flush(k);
     emit_m8();
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(fpr_name(k)));
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
@@ -6413,6 +6672,7 @@ emit_fpr_to_carrier(int k)
 void
 emit_fpr_deref_load(int k, tword pointee)
 {
+    if (fpr_is_sym(k)) { emit_fpr_deref_field(k, pointee, 0); return; }
     if (ISPTR(pointee)) {
         ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp(fpr_name(k)));   /* offset word */
         ir_record_raw(IR_PUSH_A, 0, 0, NULL);
@@ -6444,6 +6704,10 @@ void
 emit_fpr_deref_store_word(int k, int off)
 {
     emit_assign_conv(LT_INT);        /* A.7.17: a float truncates, never its bits */
+    if (fpr_is_sym(k)) {
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)fpr_sym_cell(k, off));
+        return;
+    }
     if (off > 0) {
         ir_emitf("                LDY     #%d\n", off);
         ir_record_raw(IR_STA_DEREF, 1, 0, (void *)cellp(fpr_name(k)));
@@ -6457,6 +6721,11 @@ emit_fpr_deref_store_byte(int k, int off)
 {
     emit_assign_conv(LT_CHAR);       /* A.7.17: a float truncates, never its bits */
     emit_m8();
+    if (fpr_is_sym(k)) {
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)fpr_sym_cell(k, off));
+        emit_m16();
+        return;
+    }
     if (off > 0) {
         ir_emitf("                LDY     #%d\n", off);
         ir_record_raw(IR_STA_DEREF, 1, 0, (void *)cellp(fpr_name(k)));
@@ -6471,6 +6740,17 @@ emit_fpr_deref_store_byte(int k, int off)
 void
 emit_fpr_add_a(int k)
 {
+    if (fpr_is_sym(k)) {
+        /* A = the scaled index; the register becomes gname+off+A. */
+        const char *addr = fpr_sym_cell(k, 0);
+        g_fpr_symg[k] = NULL;
+        ir_emitf("                CLC\n");
+        ir_emitf("                ADC     #%s\n", addr);
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
+        emit_fpr_bank_dbr(k);
+        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
+        return;
+    }
     ir_emitf("                CLC\n");
     ir_emitf("                ADC     %s\n", fpr_name(k));
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
@@ -6482,6 +6762,7 @@ emit_fpr_add_a(int k)
 void
 emit_fpr_push_lower(int k)
 {
+    fpr_sym_flush(k);
     ir_emitf("                PEI     %s+2\n", fpr_name(k));
     ir_emitf("                PEI     %s\n", fpr_name(k));
 }
@@ -6497,6 +6778,7 @@ emit_fpr_push(int k)
 void
 emit_fpr_ret(int k)
 {
+    fpr_sym_flush(k);
     if (k != 0)
         emit_fpr_mov(0, k);
 }
@@ -6573,6 +6855,7 @@ void
 emit_fpr_add_const(int k, int n)
 {
     if (n == 0) return;
+    if (fpr_is_sym(k)) { g_fpr_symo[k] += n; return; }
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
     ir_record_raw(IR_ADD_CONST, (unsigned)(n), 0, NULL);
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
@@ -6585,6 +6868,8 @@ emit_fpr_add_const(int k, int n)
 void
 emit_fpr_cmp(int k1, int k2, int is_ne)
 {
+    fpr_sym_flush(k1);
+    fpr_sym_flush(k2);
     int lab_diff = new_label();
     int lab_end  = new_label();
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k1)));
@@ -6618,6 +6903,41 @@ void
 emit_fpr_deref_field(int k, tword t, int off)
 {
     int stored_bank = (t == LT_FN_PTR) || ISPTR(t);   /* one-mode: always stored */
+    if (fpr_is_sym(k)) {
+        /* The object is at a fixed address: read it there.  A pointer result
+         * replaces the register, which then holds a value, not an address. */
+        if (ISPTR(t)) {
+            const char *lo = fpr_sym_cell(k, off), *hi = fpr_sym_cell(k, off + 2);
+            g_fpr_symg[k] = NULL;
+            emit_m8();
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)hi);
+            ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp2(fpr_name(k)));
+            emit_m16();
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)lo);
+            ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
+            return;
+        }
+        if (BT_IS_QUAD(BTYPE(t))) {
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)fpr_sym_cell(k, off + 6));
+            ir_emitf("                STA     _fcc_q3\n");
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)fpr_sym_cell(k, off + 4));
+            ir_emitf("                STA     _fcc_q2\n");
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)fpr_sym_cell(k, off + 2));
+            ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_long_hi"));
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)fpr_sym_cell(k, off));
+                return;
+        }
+        if (BTYPE(t) == BT_LONG || BTYPE(t) == BT_FLOAT) {
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)fpr_sym_cell(k, off + 2));
+            ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_long_hi"));
+            ir_record_raw(IR_LDA_CELL, 0, 0, (void *)fpr_sym_cell(k, off));
+                return;
+        }
+        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)fpr_sym_cell(k, off));
+        if (BTYPE(t) == BT_CHAR || BTYPE(t) == BT_VOID)
+            ir_emitf("                AND     #$00FF\n");
+        return;
+    }
     if (ISPTR(t)) {
         if (off > 0) {
             ir_emitf("                LDY     #%d\n", off);
@@ -6682,6 +7002,7 @@ emit_fpr_deref_field(int k, tword t, int off)
 void
 emit_fpr_deref_store_long(int k, int off)
 {
+    fpr_sym_flush(k);
     if (g_expr_type == LT_DOUBLE)
         emit_from_double(LT_LONG);
     if (off > 0) {
@@ -6702,6 +7023,7 @@ emit_fpr_deref_store_long(int k, int off)
 void
 emit_fpr_deref_store_llong(int k, int off)
 {
+    fpr_sym_flush(k);
     ir_emitf("                LDY     #%d\n", off);
     ir_record_raw(IR_STA_DEREF, 1, 0, (void *)cellp(fpr_name(k)));
     ir_record_raw(IR_TAX, 0, 0, NULL);
@@ -6723,6 +7045,8 @@ emit_fpr_deref_store_llong(int k, int off)
 void
 emit_fpr_deref_store_ptr(int kd, int ks, int off)
 {
+    fpr_sym_flush(kd);
+    fpr_sym_flush(ks);
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(ks)));
     if (off > 0) {
         ir_emitf("                LDY     #%d\n", off);
@@ -6757,6 +7081,7 @@ emit_fpr_load_global_ptr(int k, Global *g)
 void
 emit_fpr_store_global_ptr(int k, Global *g)
 {
+    fpr_sym_flush(k);
     refuse_block_static(g, "emit_fpr_store_global_ptr");
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(gname(g)));
@@ -6804,6 +7129,7 @@ emit_fpr_addr_func(int k, Func *fn)
 int
 emit_fpr_spill_live(void)
 {
+    fpr_sym_flush_live();
     int n = g_fpr_top;
     for (int k = 0; k < n; k++)
         emit_fpr_push_lower(k);
@@ -6830,12 +7156,14 @@ emit_fpr_restore_live(int n)
 void
 emit_fpr_to_a(int k)
 {
+    fpr_sym_flush(k);
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
 }
 
 void
 emit_fpr_off_from_a(int k)
 {
+    fpr_sym_flush(k);
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
 }
 
@@ -6843,6 +7171,8 @@ emit_fpr_off_from_a(int k)
 void
 emit_fpr_diff(int k1, int k2)
 {
+    fpr_sym_flush(k1);
+    fpr_sym_flush(k2);
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k1)));
     ir_emitf("                SEC\n");
     ir_emitf("                SBC     %s\n", fpr_name(k2));
@@ -6852,6 +7182,7 @@ emit_fpr_diff(int k1, int k2)
 void
 emit_fpr_sub_a(int k)
 {
+    fpr_sym_flush(k);
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
     ir_emitf("                SEC\n");
@@ -6866,6 +7197,7 @@ emit_fpr_sub_a(int k)
 void
 emit_fpr_incdec_home_global(int k, Global *g, int delta, int update_fpr)
 {
+    fpr_sym_flush(k);
     refuse_block_static(g, "emit_fpr_incdec_home_global");
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
     if (delta >= 0) {
@@ -6909,6 +7241,8 @@ emit_fpr_load_field(int k, Local *lc, Global *g, Field *f)
 void
 emit_fpr_struct_copy(int kd, int ks, int nbytes)
 {
+    fpr_sym_flush(kd);
+    fpr_sym_flush(ks);
     int lab = new_label();
     ir_emitf("                LDY     #%d\n", nbytes - 2);
     ir_emitf("%s_L%d\n", g_tu_prefix, lab);
@@ -6928,6 +7262,7 @@ emit_fpr_struct_copy(int kd, int ks, int nbytes)
 void
 emit_fpr_arg_window(int k, int nbytes)
 {
+    fpr_sym_flush(k);
     ir_emitf("                TSC\n");
     ir_record_raw(IR_SUB_CONST, (unsigned)(nbytes), 0, NULL);
     ir_emitf("                TCS\n");

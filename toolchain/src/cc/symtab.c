@@ -128,6 +128,7 @@ locals_declare(const char *name, int name_len, LocalKind kind,
     g_locals[g_n_locals].raw_accessed  = 0;
     g_locals[g_n_locals].loop_accessed = 0;
     g_locals[g_n_locals].scope_hidden  = 0;           /* K&R A.11.1 block scope */
+    g_locals[g_n_locals].homed_from    = -1;
     /* Use-before-set: entries are REUSED across functions and this routine
      * assigns field by field rather than clearing, so these must be reset
      * here or the previous occupant's verdict is inherited. */
@@ -181,12 +182,90 @@ locals_declare(const char *name, int name_len, LocalKind kind,
  * Otherwise, pointer comparison is undefined."  Called once the function
  * body's tree is built and before it is walked, which is the earliest every
  * local is known and the latest before any offset is emitted. */
+/* The parameter whose own address node n takes, or NULL: `&p', `&s.f', or an
+ * `&chain' rooted at p whose first step is not through p's value. */
+Local *
+param_addr_node(int n)
+{
+    Node  *a = &g_ast[n];
+    Local *lc;
+    int    step;
+
+    if (a->kind == N_ADDR_VAR || a->kind == N_ADDR_DOT_BARE ||
+        a->kind == N_ADDR_DOT_ARRFIELD || a->kind == N_ADDR_ARR_ELEM ||
+        a->kind == N_ADDR_ARR_ELEM_MD)
+        lc = a->sym_lc;
+    else if (a->kind == N_ADDR_LV_E && a->a >= 0 &&
+             g_ast[a->a].kind == N_LV_CHAIN && g_ast[a->a].a < 0) {
+        lc   = g_ast[a->a].sym_lc;
+        step = g_ast[a->a].b;
+        if (step >= 0 && (g_ast[step].kind == N_LV_STEP_ARROW ||
+                          g_ast[step].kind == N_LV_STEP_DEREF ||
+                          g_ast[step].kind == N_LV_STEP_INDEX))
+            return NULL;
+    } else
+        return NULL;
+    return (lc && (lc->kind == LK_PARAM || lc->homed_from >= 0)) ? lc : NULL;
+}
+
+/* A parameter sits above the whole frame, at 6 + FRAMESIZE + its offset from
+ * S, so a frame of more than about 250 bytes -- one BUFSIZ buffer -- puts
+ * every parameter on the _fcc_fp path, six instructions an access.  K&R
+ * A.10.1: "the parameters are understood to be declared just after the
+ * beginning of the compound statement constituting the function's body",
+ * and "the arguments are converted as necessary and assigned to the
+ * parameters".  So each scalar or pointer parameter of such a function is
+ * given a frame slot, assigned from where the caller pushed it at entry
+ * (ir_emit_param_seeds), and read and written there.
+ *
+ * Its address is what this cannot move: `&last' is how stdarg and varargs
+ * reach the arguments after it.  A function that takes the address of any
+ * parameter keeps them all where they are; the walker refuses such a node on
+ * a homed one, so a form this scan misjudges is a compile error, not a stray
+ * pointer.  main's argc and argv are bound into their pushed slots before the
+ * seed point, so main keeps its parameters too.  Returns the slots added. */
+static int
+params_home(int first)
+{
+    int i, n, need = 0, bytes = 0;
+
+    if (g_fn_is_soft || g_main_argc_local || g_main_argv_local)
+        return 0;
+    for (i = 0; i < first; i++)
+        if (g_locals[i].kind == LK_PARAM)
+            bytes += g_locals[i].byte_size;
+    if (6 + 2 * g_total_slots + bytes < 224)      /* leaves room for pushes */
+        return 0;
+    for (n = 0; n < g_n_ast; n++)
+        if (param_addr_node(n))
+            return 0;
+    for (i = 0; i < first; i++) {
+        Local *lc = &g_locals[i];
+        if (lc->kind != LK_PARAM)
+            continue;
+        if (!(lc->type == LT_INT || lc->type == LT_CHAR || lc->type == LT_LONG ||
+              (ISPTR(lc->type) && lc->type != LT_FN_PTR)))
+            continue;
+        lc->homed_from = lc->slot_first;
+        lc->kind       = LK_LOCAL;
+        lc->slot_count = lc->byte_size / 2;
+        lc->n_stores   = 1;                     /* the entry copy */
+        need += lc->slot_count;
+    }
+    return need;
+}
+
 void
 locals_layout(int first)
 {
     int slot = -1;
+    int homed = params_home(first);
+    if (homed) {
+        slot = 0;                               /* the frame's first slot */
+        g_total_slots += homed;
+    }
     for (int pass = 0; pass < 2; pass++) {
-        for (int i = first; i < g_n_locals; i++) {
+        for (int i = homed ? 0 : first; i < g_n_locals; i++) {
             Local *lc = &g_locals[i];
             if (lc->kind != LK_LOCAL)
                 continue;

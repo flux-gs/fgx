@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29,9 +30,13 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #gbuf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gs
                 LDA     _fcc_fpr0+2
                 STA     gs+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +46,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -125,6 +131,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     gd+0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -134,6 +141,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #b2
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -145,8 +154,6 @@ main_stkok        TCS
                 LDA     _fcc_img0
                 PHA
                 LDA     #0
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -165,6 +172,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -173,9 +181,13 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #gbuf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gs
                 LDA     _fcc_fpr0+2
                 STA     gs+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -184,6 +196,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #gs
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gpp
                 LDA     _fcc_fpr0+2
                 STA     gpp+2
@@ -216,16 +231,12 @@ main_stkok        TCS
                 LDA     gpp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     [_fcc_fpr0]
                 LDA     _fcc_img0
                 PHA
                 LDA     #0
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -244,6 +255,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -252,9 +264,13 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #gbuf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gs
                 LDA     _fcc_fpr0+2
                 STA     gs+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -263,6 +279,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #gs
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gv
                 LDA     _fcc_fpr0+2
                 STA     gv+2
@@ -328,6 +347,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -336,6 +356,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #ga
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gpp
                 LDA     _fcc_fpr0+2
                 STA     gpp+2
@@ -360,6 +383,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -369,6 +393,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #b2
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -419,8 +444,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -449,6 +472,10 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     _fcc_img0
+                LDA     #5
+                CLC
+                ADC     #gbuf
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -456,14 +483,11 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbuf
-                STA     _fcc_fpr0
-                LDA     #5
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 STA     gs
                 LDA     _fcc_fpr0+2
                 STA     gs+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -472,6 +496,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #gs
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gpp
                 LDA     _fcc_fpr0+2
                 STA     gpp+2
@@ -504,8 +531,6 @@ main_stkok        TCS
                 LDA     gpp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 SEC
                 SBC     #3
                 STA     [_fcc_fpr0]
@@ -513,7 +538,6 @@ main_stkok        TCS
                 PHA
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

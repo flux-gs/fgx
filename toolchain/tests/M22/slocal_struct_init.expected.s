@@ -69,10 +69,8 @@ main_stkok        TCS
                 STA     _fcc_long_hi
                 LDA     main_sl_t+0
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _slocal_struct_init_L0
+                BEQ     _slocal_struct_init_L0
                 LDA     #1
                 TAY
                 TSC
@@ -88,10 +86,8 @@ _slocal_struct_init_L0
                 STA     _fcc_long_hi
                 LDA     main_sl_t+4
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _slocal_struct_init_L1
+                BEQ     _slocal_struct_init_L1
                 LDA     #2
                 TAY
                 TSC
@@ -105,10 +101,8 @@ _slocal_struct_init_L0
 _slocal_struct_init_L1
                 FGX2_FARCALL getpart
                 TAX
-                TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _slocal_struct_init_L2
+                BEQ     _slocal_struct_init_L2
                 LDA     #3
                 TAY
                 TSC

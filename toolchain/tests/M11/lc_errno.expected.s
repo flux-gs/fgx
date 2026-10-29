@@ -43,8 +43,7 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _lc_errno_L0
+                BEQ     _lc_errno_L0
                 LDA     #1
                 TAY
                 TSC
@@ -58,10 +57,8 @@ main_stkok        TCS
 _lc_errno_L0
                 LDA     errno
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _lc_errno_L1
+                BEQ     _lc_errno_L1
                 LDA     #2
                 TAY
                 TSC
@@ -105,11 +102,7 @@ _lc_errno_L1
                 TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L2
+                BEQ     _lc_errno_L2
                 LDA     #3
                 TAY
                 TSC
@@ -123,10 +116,8 @@ _lc_errno_L1
 _lc_errno_L2
                 LDA     errno
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _lc_errno_L3
+                BEQ     _lc_errno_L3
                 LDA     #4
                 TAY
                 TSC
@@ -164,11 +155,7 @@ _lc_errno_L3
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L4
+                BEQ     _lc_errno_L4
                 LDA     #5
                 TAY
                 TSC
@@ -206,11 +193,7 @@ _lc_errno_L4
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L5
+                BEQ     _lc_errno_L5
                 LDA     #6
                 TAY
                 TSC
@@ -248,11 +231,7 @@ _lc_errno_L5
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L6
+                BEQ     _lc_errno_L6
                 LDA     #7
                 TAY
                 TSC

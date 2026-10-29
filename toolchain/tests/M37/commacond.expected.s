@@ -38,9 +38,12 @@ next_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-6
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -51,7 +54,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
                 LDA     #3
                 STA     fed
 _commacond_L0
@@ -59,109 +62,93 @@ _commacond_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 FGX2_FARCALL next
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
                 TAX
                 LDA     #6
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_lts16
                 CMP     #0
-                BNE     *+5
-                BRL     _commacond_L1
-                LDA     5,S   ; fccstk d=0 b=5
+                BEQ     _commacond_L1
+                LDA     _fcc_img17
                 CLC
-                ADC     1,S   ; fccstk d=0 b=1
-                STA     5,S   ; fccstk d=0 b=5
-                BRL     _commacond_L0
+                ADC     _fcc_img18
+                STA     _fcc_img17
+                BRA     _commacond_L0
 _commacond_L1
-                LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
+                LDA     _fcc_img18
                 CLC
                 ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
                 TAX
                 LDA     #7
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_eq16
                 CMP     #0
-                BNE     *+5
-                BRL     _commacond_L2
-                LDA     5,S   ; fccstk d=0 b=5
+                BEQ     _commacond_L2
+                LDA     _fcc_img17
                 TAX
-                TXA
                 CLC
                 ADC     #10
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
 _commacond_L2
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_img0
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img2
+                STA     _fcc_img16
 _commacond_L3
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
-                TAX
-                TXA
+                LDA     _fcc_img16
                 CLC
                 ADC     #100
-                STA     _fcc_img2
-                LDA     _fcc_img0
+                STA     _fcc_img18
+                LDA     _fcc_img16
                 TAX
                 LDA     #4
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_lts16
                 CMP     #0
-                BNE     *+5
-                BRL     _commacond_L5
-                LDA     _fcc_img1
+                BEQ     _commacond_L5
+                LDA     _fcc_img17
                 TAX
-                TXA
                 CLC
                 ADC     #1
-                STA     _fcc_img1
+                STA     _fcc_img17
 _commacond_L4
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     #1
-                STA     _fcc_img0
-                BRL     _commacond_L3
+                STA     _fcc_img16
+                BRA     _commacond_L3
 _commacond_L5
-                LDA     _fcc_img0
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     _fcc_img1
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     _fcc_img2
-                STA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 TAX
-                TXA
                 CMP     #104
-                BEQ     *+5
-                BRL     _commacond_L6
-                LDA     5,S   ; fccstk d=0 b=5
+                BNE     _commacond_L6
+                LDA     _fcc_img17
                 TAX
-                TXA
                 CLC
                 ADC     #16
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
 _commacond_L6
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     6
+main_FRAMESIZE   EQU     12
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

@@ -24,6 +24,17 @@ import re
 import sys
 
 EQU = re.compile(r"^(_fcc_[A-Za-z0-9_]+)\s+EQU\s+(\$[0-9A-Fa-f]+)\s*(;.*)?$")
+# The callee-saved band, _fcc_img16.._fcc_img31.  Kernel and module C never
+# promote into it (ir.c gates it off under --kernel-bank and --module-bank), so
+# the context switch's save range leaves it out.  Its names stay in the map:
+# the fpsim module assembles softdouble.s, pile code that uses the band on the
+# calling task's own direct page.
+BAND = re.compile(r"^_fcc_img(\d+)$")
+
+
+def in_band(name):
+    b = BAND.match(name)
+    return bool(b) and int(b.group(1)) >= 16
 
 HEADER = """\
 ;==============================================================================
@@ -98,7 +109,7 @@ def main(argv):
     # bytes, because _fcc_ptr2 at $FC was taken for 2 bytes rather than 4.
     nslots = len(lines)
     vals = {l.split()[0]: int(l.split("$")[1], 16) for l in lines}
-    lo = min(vals.values())
+    lo = min(v for k, v in vals.items() if not in_band(k))
     band = 0x100 - lo
     lines.append("")
     lines.append(";--- the band the context switch must save once kernel C can sleep ---")

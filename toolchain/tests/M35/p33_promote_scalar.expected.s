@@ -27,14 +27,12 @@ _p33_promote_scalar_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #520
                 BVC     _p33_promote_scalar_L3
                 EOR     #$8000
 _p33_promote_scalar_L3
-                BMI     *+5
-                BRL     _p33_promote_scalar_L2
+                BPL     _p33_promote_scalar_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -69,7 +67,7 @@ _p33_promote_scalar_L3
                 PLA
 _p33_promote_scalar_L1
                 INC     _fcc_img0
-                BRL     _p33_promote_scalar_L0
+                BRA     _p33_promote_scalar_L0
 _p33_promote_scalar_L2
                 LDA     #100
                 STA     _fcc_img1
@@ -80,10 +78,8 @@ _p33_promote_scalar_L2
                 ADC     _fcc_img2
                 STA     _fcc_img3
                 TAX
-                TXA
                 CMP     #300
-                BNE     *+5
-                BRL     _p33_promote_scalar_L4
+                BEQ     _p33_promote_scalar_L4
                 LDA     #1
                 TAY
                 TSC
@@ -109,10 +105,8 @@ _p33_promote_scalar_L4
                 ADC     _fcc_tmp_b
                 STA     _fcc_img3
                 TAX
-                TXA
                 CMP     #800
-                BNE     *+5
-                BRL     _p33_promote_scalar_L5
+                BEQ     _p33_promote_scalar_L5
                 LDA     #2
                 TAY
                 TSC
@@ -128,24 +122,13 @@ _p33_promote_scalar_L5
                 STA     _fcc_img2
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #800
-                BEQ     *+5
-                BRL     _p33_promote_scalar_L7
+                BNE     _p33_promote_scalar_L7
                 LDA     _fcc_img2
                 TAX
-                TXA
                 CMP     #800
-                BEQ     *+5
-                BRL     _p33_promote_scalar_L7
-                LDA     #0
-                BRL     _p33_promote_scalar_L8
+                BEQ     _p33_promote_scalar_L6
 _p33_promote_scalar_L7
-                LDA     #1
-_p33_promote_scalar_L8
-                CMP     #0
-                BNE     *+5
-                BRL     _p33_promote_scalar_L6
                 LDA     #3
                 TAY
                 TSC
@@ -174,11 +157,7 @@ _p33_promote_scalar_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _p33_promote_scalar_L10
+                BNE     _p33_promote_scalar_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -196,19 +175,8 @@ _p33_promote_scalar_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _p33_promote_scalar_L10
-                LDA     #0
-                BRL     _p33_promote_scalar_L11
-_p33_promote_scalar_L10
-                LDA     #1
-_p33_promote_scalar_L11
-                CMP     #0
-                BNE     *+5
-                BRL     _p33_promote_scalar_L9
+                BEQ     _p33_promote_scalar_L8
+_p33_promote_scalar_L9
                 LDA     #4
                 TAY
                 TSC
@@ -219,7 +187,7 @@ _p33_promote_scalar_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_p33_promote_scalar_L9
+_p33_promote_scalar_L8
                 LDA     #42
                 TAY
                 TSC

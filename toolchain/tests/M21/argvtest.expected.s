@@ -112,24 +112,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _argvtest_L1
+                BNE     _argvtest_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _argvtest_L1
+                BNE     _argvtest_L1
                 LDA     #1
-                BRL     _argvtest_L2
+                BRA     _argvtest_L2
 _argvtest_L1
                 LDA     #0
 _argvtest_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _argvtest_L0
+                BEQ     _argvtest_L0
                 LDA     #1
                 TAY
                 TSC
@@ -144,10 +141,8 @@ _argvtest_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #47
-                BEQ     *+5
-                BRL     _argvtest_L3
+                BNE     _argvtest_L3
                 LDA     #42
                 TAY
                 TSC

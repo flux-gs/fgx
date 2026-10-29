@@ -67,10 +67,8 @@ main_stkok        TCS
                 JSR     _fcc_fdiv
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _f_div_L0
+                BEQ     _f_div_L0
                 LDA     #1
                 TAY
                 TSC
@@ -124,10 +122,8 @@ _f_div_L0
                 FGX2_FARCALL _fcc_ddiv
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _f_div_L1
+                BEQ     _f_div_L1
                 LDA     #2
                 TAY
                 TSC
@@ -187,10 +183,8 @@ _f_div_L1
                 JSR     _fcc_fdiv
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _f_div_L2
+                BEQ     _f_div_L2
                 LDA     #3
                 TAY
                 TSC
@@ -284,10 +278,8 @@ _f_div_L2
                 FGX2_FARCALL _fcc_dmul
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _f_div_L3
+                BEQ     _f_div_L3
                 LDA     #4
                 TAY
                 TSC
@@ -334,10 +326,8 @@ _f_div_L3
                 JSR     _fcc_fdiv
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _f_div_L4
+                BEQ     _f_div_L4
                 LDA     #5
                 TAY
                 TSC
@@ -397,10 +387,8 @@ _f_div_L4
                 JSR     _fcc_fdiv
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _f_div_L5
+                BEQ     _f_div_L5
                 LDA     #6
                 TAY
                 TSC
@@ -460,10 +448,8 @@ _f_div_L5
                 JSR     _fcc_fdiv
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
-                BEQ     *+5
-                BRL     _f_div_L6
+                BNE     _f_div_L6
                 LDA     #42
                 TAY
                 TSC

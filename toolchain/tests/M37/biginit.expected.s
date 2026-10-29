@@ -24,10 +24,8 @@ main_stkok        TCS
                 TAX
                 LDA:    a,X
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _biginit_L0
+                BEQ     _biginit_L0
                 LDA     #1
                 TAY
                 TSC
@@ -44,10 +42,8 @@ _biginit_L0
                 TAX
                 LDA:    a,X
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _biginit_L1
+                BEQ     _biginit_L1
                 LDA     #2
                 TAY
                 TSC
@@ -72,18 +68,14 @@ _biginit_L1
                 ASL
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _biginit_L2
+                BEQ     _biginit_L2
                 LDA     #3
                 TAY
                 TSC
@@ -108,18 +100,14 @@ _biginit_L2
                 ASL
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _biginit_L3
+                BEQ     _biginit_L3
                 LDA     #4
                 TAY
                 TSC
@@ -144,18 +132,14 @@ _biginit_L3
                 ASL
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _biginit_L4
+                BEQ     _biginit_L4
                 LDA     #5
                 TAY
                 TSC

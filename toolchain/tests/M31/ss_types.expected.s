@@ -50,6 +50,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -59,6 +60,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
@@ -83,7 +85,6 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_tmp_b
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 TAY

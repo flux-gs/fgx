@@ -29,11 +29,8 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_shrs16
                 CMP     #$FFFC
-                BEQ     *+5
-                BRL     _sar_L0
+                BNE     _sar_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -46,11 +43,8 @@ _sar_L0
                 TXA
                 JSR     _fcc_shrs16
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sar_L1
+                BNE     _sar_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -60,26 +54,19 @@ _sar_L1
                 LSR
                 LSR
                 LSR
-                TAX
-                TXA
                 CMP     #4096
-                BEQ     *+5
-                BRL     _sar_L2
+                BNE     _sar_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
 _sar_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _sar_L3
+                BNE     _sar_L3
                 LDA     #42
-                BRL     _sar_L4
+                BRA     _sar_L4
 _sar_L3
                 LDA     _fcc_img0
 _sar_L4

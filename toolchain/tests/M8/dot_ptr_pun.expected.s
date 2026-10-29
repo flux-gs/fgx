@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27,37 +28,18 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #node
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     p
                 LDA     _fcc_fpr0+2
                 STA     p+2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #p
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                TAX
-                TXA
+                LDA     p
                 AND     #0
-                STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #p
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     p
                 TAX
-                TXA
                 ORA     #42
-                STA     [_fcc_fpr0]
+                STA     p
                 SEP     #$20
                 MX      %10
                 LDA     p+2

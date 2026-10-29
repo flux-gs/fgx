@@ -80,24 +80,21 @@ pick_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _nullptr_L1
+                BNE     _nullptr_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _nullptr_L1
+                BNE     _nullptr_L1
                 LDA     #1
-                BRL     _nullptr_L2
+                BRA     _nullptr_L2
 _nullptr_L1
                 LDA     #0
 _nullptr_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _nullptr_L0
+                BEQ     _nullptr_L0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -122,8 +119,7 @@ _nullptr_L0
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _nullptr_L3
+                BEQ     _nullptr_L3
                 SEP     #$20
                 MX      %10
                 LDA     pick_sl_cached+2
@@ -141,7 +137,7 @@ _nullptr_L0
                 ADC     #4
                 TCS
                 TYA
-                BRL     _nullptr_L4
+                BRA     _nullptr_L4
 _nullptr_L3
                 LDA     #0
                 STA     _fcc_fpr0
@@ -189,8 +185,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _nullptr_L5
+                BEQ     _nullptr_L5
                 LDA     #1
                 ASL
                 ASL
@@ -213,7 +208,7 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                BRL     _nullptr_L6
+                BRA     _nullptr_L6
 _nullptr_L5
                 LDA     #0
                 STA     _fcc_fpr0
@@ -315,18 +310,16 @@ _nullptr_L6
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _nullptr_L7
+                BNE     _nullptr_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _nullptr_L7
+                BNE     _nullptr_L7
                 LDA     #1
-                BRL     _nullptr_L8
+                BRA     _nullptr_L8
 _nullptr_L7
                 LDA     #0
 _nullptr_L8
@@ -354,18 +347,16 @@ _nullptr_L8
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _nullptr_L9
+                BNE     _nullptr_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _nullptr_L9
+                BNE     _nullptr_L9
                 LDA     #1
-                BRL     _nullptr_L10
+                BRA     _nullptr_L10
 _nullptr_L9
                 LDA     #0
 _nullptr_L10

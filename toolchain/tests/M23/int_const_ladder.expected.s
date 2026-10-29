@@ -58,29 +58,14 @@ main_stkok        TCS
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L0
+                BEQ     _int_const_ladder_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -88,29 +73,14 @@ _int_const_ladder_L0
                 LDA     b+2
                 STA     _fcc_long_hi
                 LDA     b
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L1
+                BEQ     _int_const_ladder_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -118,29 +88,14 @@ _int_const_ladder_L1
                 LDA     c+2
                 STA     _fcc_long_hi
                 LDA     c
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L2
+                BEQ     _int_const_ladder_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -148,29 +103,14 @@ _int_const_ladder_L2
                 LDA     d+2
                 STA     _fcc_long_hi
                 LDA     d
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32768
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L3
+                BEQ     _int_const_ladder_L3
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     _fcc_img0
@@ -178,29 +118,15 @@ _int_const_ladder_L3
                 LDA     e+2
                 STA     _fcc_long_hi
                 LDA     e
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$7FFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32767
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L4
+                BEQ     _int_const_ladder_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     _fcc_img0

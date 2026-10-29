@@ -199,6 +199,12 @@ def check_fn(fn, equs, path):
             rest = code[lab.end():]
             if re.search(r"\bEQU\b", rest):
                 break
+            # the shared epilogue tail of a function holding callee-saved
+            # band words: its returns free the frame and branch here to pull
+            # the band and _fcc_fb, as an inline teardown does
+            if name == fn.name + "_bandx":
+                dead = True
+                continue
             incoming = None if dead else depth
             exp = pending.pop(name, None)
             prior = label_depth.get(name)
@@ -298,7 +304,9 @@ def check_fn(fn, equs, path):
             mdec = re.match(r"\s*TSC((?:\s+DEC)+)\s+TCS", joined)
             if mrel:
                 amt = mrel.group(1)
-                if amt.endswith("_FRAMESIZE"):        # epilogue teardown
+                # epilogue teardown; `-<n>' leaves the callee-saved band
+                # words the prologue pushed, which the epilogue pulls back
+                if re.fullmatch(r"\S+_FRAMESIZE(-\d+)?", amt):
                     if depth != 0:
                         err(lineno, f"epilogue teardown at nonzero depth {depth}")
                     idx = _past_tcs()
@@ -426,15 +434,18 @@ def check_fn(fn, equs, path):
                             err(lineno, f"annotation b+d={want} != operand {val} "
                                         f"(displacement format bug)")
 
-        if mnem in UNCOND and not operand.startswith("*"):
-            dead = True
         # A PC-relative forward jump (`BRA *+5`) skips one instruction that
         # another PC-relative branch lands on -- fcc's boolean idiom, `BNE *+7
         # / LDA #0 / BRA *+5 / LDA #1` -- so the code after it is reached, at
         # this depth.  Marking it dead lost every push until the next label:
         # a long double compare followed by the pushes of the next operation
         # (ecvt.c's cvt) read as a pull below the frame.
-        elif mnem in COND_BR:
+        if mnem in UNCOND and not operand.startswith("*"):
+            dead = True
+        # A branch carries its depth to its label, an unconditional one as
+        # much as a conditional one: after `BRA L' the walk is dead, and L
+        # takes its depth from here.
+        if mnem in COND_BR or mnem in ("BRA", "BRL"):
             tgt = operand.strip()
             if tgt.startswith("*"):
                 pass                     # PC-relative skip (`*+5`), not a label
@@ -587,6 +598,47 @@ f              ENT
 f_FRAMESIZE     EQU     4
 """
 
+# green: a function holding two callee-saved band words.  The prologue pushes
+# them after _fcc_fb, FRAMESIZE counts them, and both returns free only the
+# locals and branch to the shared tail that pulls them back.
+_GREEN_BAND = """\
+f              ENT
+                PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                TSC
+                SEC
+                SBC     #f_FRAMESIZE-4
+                TCS
+                STA     _fcc_fb
+                INC     _fcc_fb
+                LDA     10+f_FRAMESIZE,S ; fccstk d=0 b=10 fs
+                STA     _fcc_img16
+                BEQ     f_L1
+                TAY
+                TSC
+                CLC
+                ADC     #f_FRAMESIZE-4
+                TCS
+                BRA     f_bandx
+f_L1            LDA     #1
+                TAY
+                TSC
+                CLC
+                ADC     #f_FRAMESIZE-4
+                TCS
+f_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+f_FRAMESIZE     EQU     8
+"""
+
 # red (a): uncounted push — a PHA/PLA window around a correct access; the
 # annotation d stays 0 but the tracker sees depth 2.
 _RED_BIAS = _GREEN.replace(
@@ -639,6 +691,7 @@ def self_test():
 
     one("green baseline", _GREEN, True)
     one("green: code after `BRA *+5' is live", _GREEN_SKIP, True)
+    one("green: callee-saved band words and the shared tail", _GREEN_BAND, True)
     one("red(a) g_s_delta bias (uncounted push)", _RED_BIAS, False)
     one("red(b) unpopped push -> teardown imbalance", _RED_LEAK, False)
     one("red(c) return-address band clobber", _RED_BAND, False)

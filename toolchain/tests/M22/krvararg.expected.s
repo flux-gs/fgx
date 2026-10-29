@@ -65,10 +65,8 @@ knr_stkok        TCS
                 LDA     6+knr_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #42
-                BEQ     *+5
-                BRL     _krvararg_L1
+                BNE     _krvararg_L0
                 DO      8+knr_FRAMESIZE/256
                 TSC
                 CLC
@@ -80,18 +78,8 @@ knr_stkok        TCS
                 LDA     8+knr_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 TAX
-                TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _krvararg_L1
-                LDA     #1
-                BRL     _krvararg_L2
-_krvararg_L1
-                LDA     #0
-_krvararg_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _krvararg_L0
+                BNE     _krvararg_L0
                 LDA     #42
                 TAY
                 TSC

@@ -70,26 +70,13 @@ main_stkok        TCS
                 LDA:    la+2,X
                 STA     _fcc_long_hi
                 LDA:    la,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$86A0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #34464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_arrelem_L0
+                BEQ     _f_arrelem_L0
                 LDA     #1
                 TAY
                 TSC
@@ -108,26 +95,13 @@ _f_arrelem_L0
                 LDA:    la+2,X
                 STA     _fcc_long_hi
                 LDA:    la,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_arrelem_L1
+                BEQ     _f_arrelem_L1
                 LDA     #2
                 TAY
                 TSC
@@ -229,10 +203,8 @@ _f_arrelem_L1
                 LDA:    fa,X
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _f_arrelem_L2
+                BEQ     _f_arrelem_L2
                 LDA     #3
                 TAY
                 TSC
@@ -287,10 +259,8 @@ _f_arrelem_L2
                 FGX2_FARCALL _fcc_dmul
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _f_arrelem_L3
+                BEQ     _f_arrelem_L3
                 LDA     #4
                 TAY
                 TSC
@@ -310,26 +280,13 @@ _f_arrelem_L3
                 LDA:    la+2,X
                 STA     _fcc_long_hi
                 LDA:    la,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_arrelem_L4
+                BEQ     _f_arrelem_L4
                 LDA     #5
                 TAY
                 TSC
@@ -350,10 +307,8 @@ _f_arrelem_L4
                 LDA:    fa,X
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _f_arrelem_L5
+                BEQ     _f_arrelem_L5
                 LDA     #6
                 TAY
                 TSC

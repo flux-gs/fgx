@@ -70,8 +70,7 @@ _walkcopy_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _walkcopy_L1
+                BEQ     _walkcopy_L1
                 LDA     [_fcc_img0]
                 INC     _fcc_img0
                 AND     #$00FF
@@ -81,7 +80,7 @@ _walkcopy_L0
                 REP     #$20
                 MX      %00
                 INC     _fcc_img2
-                BRL     _walkcopy_L0
+                BRA     _walkcopy_L0
 _walkcopy_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
@@ -179,8 +178,6 @@ _walkcopy_L2
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -189,8 +186,7 @@ _walkcopy_L2
                 BVC     _walkcopy_L4
                 EOR     #$8000
 _walkcopy_L4
-                BMI     *+5
-                BRL     _walkcopy_L3
+                BPL     _walkcopy_L3
                 LDA     [_fcc_img3]
                 PHA
                 LDA     _fcc_img3
@@ -205,11 +201,10 @@ _walkcopy_L4
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
-                BRL     _walkcopy_L2
+                BRA     _walkcopy_L2
 _walkcopy_L3
                 TAY
                 TSC
@@ -297,6 +292,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -306,8 +302,10 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_walkcopy_csrc
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -317,6 +315,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_walkcopy_cdst
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _walkcopy_ccopy
@@ -360,6 +359,7 @@ main_stkok        TCS
                 PLA
                 LDA     #2
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -369,8 +369,10 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_walkcopy_isrc
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -380,6 +382,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_walkcopy_idst
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _walkcopy_icopy

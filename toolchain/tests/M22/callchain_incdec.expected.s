@@ -22,6 +22,7 @@ lookup_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31,6 +32,7 @@ lookup_stkok        TCS
                 MX      %00
                 LDA     #root
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -60,6 +62,7 @@ ivec_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -69,6 +72,7 @@ ivec_stkok        TCS
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -109,25 +113,15 @@ main_stkok        TCS
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _callchain_incdec_L0
+                BEQ     _callchain_incdec_L0
                 LDA     #1
                 TAY
                 TSC
@@ -141,10 +135,8 @@ main_stkok        TCS
 _callchain_incdec_L0
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_incdec_L1
+                BEQ     _callchain_incdec_L1
                 LDA     #2
                 TAY
                 TSC
@@ -166,23 +158,13 @@ _callchain_incdec_L1
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _callchain_incdec_L2
+                BEQ     _callchain_incdec_L2
                 LDA     #3
                 TAY
                 TSC
@@ -196,10 +178,8 @@ _callchain_incdec_L1
 _callchain_incdec_L2
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _callchain_incdec_L3
+                BEQ     _callchain_incdec_L3
                 LDA     #4
                 TAY
                 TSC
@@ -221,24 +201,14 @@ _callchain_incdec_L3
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_incdec_L4
+                BEQ     _callchain_incdec_L4
                 LDA     #5
                 TAY
                 TSC
@@ -260,23 +230,13 @@ _callchain_incdec_L4
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _callchain_incdec_L5
+                BEQ     _callchain_incdec_L5
                 LDA     #6
                 TAY
                 TSC
@@ -290,10 +250,8 @@ _callchain_incdec_L4
 _callchain_incdec_L5
                 LDA     calls
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _callchain_incdec_L6
+                BEQ     _callchain_incdec_L6
                 LDA     #7
                 TAY
                 TSC
@@ -325,30 +283,19 @@ _callchain_incdec_L6
                 LDA     #0
                 STA     calls
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
                 LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _callchain_incdec_L7
+                BEQ     _callchain_incdec_L7
                 LDA     #8
                 TAY
                 TSC
@@ -365,10 +312,8 @@ _callchain_incdec_L7
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _callchain_incdec_L8
+                BEQ     _callchain_incdec_L8
                 LDA     #9
                 TAY
                 TSC
@@ -381,28 +326,17 @@ _callchain_incdec_L7
                 RTL
 _callchain_incdec_L8
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
                 LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _callchain_incdec_L9
+                BEQ     _callchain_incdec_L9
                 LDA     #10
                 TAY
                 TSC
@@ -419,10 +353,8 @@ _callchain_incdec_L9
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _callchain_incdec_L10
+                BEQ     _callchain_incdec_L10
                 LDA     #11
                 TAY
                 TSC
@@ -435,32 +367,21 @@ _callchain_incdec_L9
                 RTL
 _callchain_incdec_L10
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
                 LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     #2
                 ASL
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _callchain_incdec_L11
+                BEQ     _callchain_incdec_L11
                 LDA     #12
                 TAY
                 TSC
@@ -474,10 +395,8 @@ _callchain_incdec_L10
 _callchain_incdec_L11
                 LDA     calls
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _callchain_incdec_L12
+                BEQ     _callchain_incdec_L12
                 LDA     #13
                 TAY
                 TSC
@@ -506,37 +425,13 @@ _callchain_incdec_L12
                 TYA
                 STA:    $0000,X
                 PLA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #vec
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     vec+2
                 INC
-                STA     [_fcc_ptr]
+                STA     vec+2
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _callchain_incdec_L13
+                BEQ     _callchain_incdec_L13
                 LDA     #14
                 TAY
                 TSC
@@ -553,10 +448,8 @@ _callchain_incdec_L13
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _callchain_incdec_L14
+                BEQ     _callchain_incdec_L14
                 LDA     #15
                 TAY
                 TSC
@@ -568,40 +461,16 @@ _callchain_incdec_L13
                 TYA
                 RTL
 _callchain_incdec_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #vec
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     vec+2
                 INC
-                STA     [_fcc_ptr]
+                STA     vec+2
                 LDA     #1
                 ASL
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _callchain_incdec_L15
+                BEQ     _callchain_incdec_L15
                 LDA     #16
                 TAY
                 TSC
@@ -613,23 +482,12 @@ _callchain_incdec_L14
                 TYA
                 RTL
 _callchain_incdec_L15
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #sub
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #sub
                 STA     _fcc_fpr0
-                LDA     #100
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -637,16 +495,24 @@ _callchain_incdec_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #sub
-                STA     _fcc_fpr0
+                LDA     #100
+                STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #sub
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #200
                 STA     [_fcc_fpr0]
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -656,12 +522,7 @@ _callchain_incdec_L15
                 MX      %00
                 LDA     #sub
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -680,40 +541,21 @@ _callchain_incdec_L15
                 TAY
                 PLA
                 TYA
-                LDA     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDY     #4
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #4
-                STA     [_fcc_ptr]
-                LDY     #2
-                LDA     [_fcc_ptr],Y
-                STA     _fcc_ptr+2
+                STA     [_fcc_fpr0],Y
+                LDY     #6
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_ptr+2
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #100
-                BNE     *+5
-                BRL     _callchain_incdec_L16
+                BEQ     _callchain_incdec_L16
                 LDA     #17
                 TAY
                 TSC
@@ -727,31 +569,16 @@ _callchain_incdec_L15
 _callchain_incdec_L16
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root+4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #200
-                BNE     *+5
-                BRL     _callchain_incdec_L17
+                BEQ     _callchain_incdec_L17
                 LDA     #18
                 TAY
                 TSC

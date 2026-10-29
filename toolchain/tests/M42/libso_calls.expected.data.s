@@ -11,5 +11,5 @@ _libc_blk_libso_calls DA      libso_calls__BT
                 FGX2_EXPORT libso_calls__BT
 libso_calls__BT          ANOP
                 ERR     *-libso_calls__BT-0
-_libso_calls_jb DS      16
+_libso_calls_jb DS      48
                 FGX2_RELOC_COUNT 3

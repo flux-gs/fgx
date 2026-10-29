@@ -338,8 +338,7 @@ _aud_starinc_cp_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _aud_starinc_cp_L1
+                BEQ     _aud_starinc_cp_L1
                 LDA     [_fcc_img0]
                 INC     _fcc_img0
                 AND     #$00FF
@@ -349,7 +348,7 @@ _aud_starinc_cp_L0
                 REP     #$20
                 MX      %00
                 INC     _fcc_img2
-                BRL     _aud_starinc_cp_L0
+                BRA     _aud_starinc_cp_L0
 _aud_starinc_cp_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2

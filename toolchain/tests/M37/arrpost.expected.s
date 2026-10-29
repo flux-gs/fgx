@@ -40,6 +40,11 @@ main_stkok        TCS
                 TYA
                 STA:    $0000,X
                 PLA
+                LDA     _fcc_img1
+                ASL
+                CLC
+                ADC     #w
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -47,13 +52,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #w
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
@@ -78,6 +76,10 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                LDA     #2
+                CLC
+                ADC     #b
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -85,12 +87,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
@@ -104,14 +100,9 @@ main_stkok        TCS
                 ASL
                 TAX
                 LDA:    w,X
-                TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _arrpost_L0
+                BNE     _arrpost_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -120,27 +111,19 @@ _arrpost_L0
                 TAX
                 LDA:    b,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _arrpost_L1
+                BNE     _arrpost_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
 _arrpost_L1
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _arrpost_L2
+                BNE     _arrpost_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0

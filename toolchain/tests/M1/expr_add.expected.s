@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #1
                 TAX
-                TXA
                 INC
                 INC
                 TAY

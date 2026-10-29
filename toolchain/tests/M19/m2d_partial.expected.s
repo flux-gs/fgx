@@ -70,8 +70,7 @@ _m2d_partial_L0
                 BVC     _m2d_partial_L3
                 EOR     #$8000
 _m2d_partial_L3
-                BMI     *+5
-                BRL     _m2d_partial_L2
+                BPL     _m2d_partial_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img4
@@ -93,11 +92,10 @@ _m2d_partial_L3
 _m2d_partial_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _m2d_partial_L0
+                BRA     _m2d_partial_L0
 _m2d_partial_L2
                 LDA     _fcc_img1
                 TAY

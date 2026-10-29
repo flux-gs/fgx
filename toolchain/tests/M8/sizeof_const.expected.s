@@ -25,7 +25,6 @@ main_stkok        TCS
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #24
                 TAY

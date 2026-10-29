@@ -123,6 +123,7 @@ fill_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -132,6 +133,7 @@ fill_stkok        TCS
                 MX      %00
                 LDA     #tab
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC

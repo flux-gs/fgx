@@ -43,28 +43,6 @@ _memberstructassign_fill_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     #4660
                 STA     [_fcc_fpr0]
-                DO      8+_memberstructassign_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_memberstructassign_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_memberstructassign_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_memberstructassign_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_memberstructassign_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_memberstructassign_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     #$1122
                 STA     _fcc_long_hi
                 LDA     #$3344
@@ -75,28 +53,6 @@ _memberstructassign_fill_stkok        TCS
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 TXA
-                DO      8+_memberstructassign_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_memberstructassign_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_memberstructassign_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_memberstructassign_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_memberstructassign_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_memberstructassign_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     #22136
                 LDY     #6
                 STA     [_fcc_fpr0],Y
@@ -150,27 +106,7 @@ _memberstructassign_clear_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     #43690
                 STA     [_fcc_fpr0]
-                DO      8+_memberstructassign_clear_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_memberstructassign_clear_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_memberstructassign_clear_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_memberstructassign_clear_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_memberstructassign_clear_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_memberstructassign_clear_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -312,10 +248,8 @@ _memberstructassign_landed_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _memberstructassign_L0
+                BEQ     _memberstructassign_L0
                 LDA     #1
                 TAY
                 TSC
@@ -355,26 +289,13 @@ _memberstructassign_L0
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L1
+                BEQ     _memberstructassign_L1
                 LDA     #2
                 TAY
                 TSC
@@ -412,10 +333,8 @@ _memberstructassign_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _memberstructassign_L2
+                BEQ     _memberstructassign_L2
                 LDA     #3
                 TAY
                 TSC
@@ -451,10 +370,8 @@ _memberstructassign_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #43690
-                BNE     *+5
-                BRL     _memberstructassign_L3
+                BEQ     _memberstructassign_L3
                 LDA     #4
                 TAY
                 TSC
@@ -466,35 +383,11 @@ _memberstructassign_L2
                 TYA
                 RTL
 _memberstructassign_L3
-                DO      8+_memberstructassign_landed_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_memberstructassign_landed_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_memberstructassign_landed_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_memberstructassign_landed_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_memberstructassign_landed_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_memberstructassign_landed_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #48059
-                BNE     *+5
-                BRL     _memberstructassign_L4
+                BEQ     _memberstructassign_L4
                 LDA     #5
                 TAY
                 TSC
@@ -521,9 +414,10 @@ _memberstructassign_landed_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -533,6 +427,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -542,6 +437,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_src
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_fill
@@ -549,6 +445,7 @@ main_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -558,14 +455,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_dst
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -611,9 +506,7 @@ _memberstructassign_L5
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L6
+                BEQ     _memberstructassign_L6
                 LDA     #10
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -636,13 +529,11 @@ _memberstructassign_L5
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -652,6 +543,7 @@ _memberstructassign_L6
                 MX      %00
                 LDA     #g_src
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -697,9 +589,7 @@ _memberstructassign_L7
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L8
+                BEQ     _memberstructassign_L8
                 LDA     #20
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -722,13 +612,11 @@ _memberstructassign_L7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -738,14 +626,12 @@ _memberstructassign_L8
                 MX      %00
                 LDA     #g_dst2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -821,9 +707,7 @@ _memberstructassign_L10
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L11
+                BEQ     _memberstructassign_L11
                 LDA     #30
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -846,12 +730,9 @@ _memberstructassign_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L11
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -863,37 +744,22 @@ _memberstructassign_L11
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L12
+                BEQ     _memberstructassign_L12
                 LDA     #39
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -903,6 +769,7 @@ _memberstructassign_L12
                 MX      %00
                 LDA     #g_dst2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -910,17 +777,6 @@ _memberstructassign_L12
                 CLC
                 ADC     #4
                 TCS
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_dst2
-                CLC
-                ADC     #2
-                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -933,6 +789,17 @@ _memberstructassign_L12
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr1+2
                 LDA     _fcc_fpr1
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #g_dst2+2
+                STA     _fcc_fpr0
+                PLA
                 LDY     #6
 _memberstructassign_L13
                 LDA     [_fcc_fpr1],Y
@@ -954,9 +821,10 @@ _memberstructassign_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
-                INC
-                INC
+                CLC
+                ADC     #2
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -964,10 +832,9 @@ _memberstructassign_L13
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #g_dst2
-                CLC
-                ADC     #2
+                LDA     #g_dst2+2
                 STA     _fcc_fpr1
+                PLA
                 LDY     #6
 _memberstructassign_L14
                 LDA     [_fcc_fpr1],Y
@@ -988,9 +855,7 @@ _memberstructassign_L14
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L15
+                BEQ     _memberstructassign_L15
                 LDA     #40
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -1013,13 +878,11 @@ _memberstructassign_L14
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L15
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1027,16 +890,9 @@ _memberstructassign_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+12
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -1044,6 +900,14 @@ _memberstructassign_L15
                 CLC
                 ADC     #4
                 TCS
+                LDA     #1
+                ASL
+                INC
+                ASL
+                ASL
+                CLC
+                ADC     #g_arr+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1051,18 +915,7 @@ _memberstructassign_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1083,7 +936,7 @@ _memberstructassign_L16
                 DEY
                 BPL     _memberstructassign_L16
                 LDA     #1
-                STA     25,S   ; fccstk d=0 b=25
+                STA     _fcc_img16
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -1101,18 +954,7 @@ _memberstructassign_L16
                 INC
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                LDA     #g_arr
-                INC
-                INC
-                STA     _fcc_fpr1
-                LDA     25,S   ; fccstk d=0 b=25
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -1120,8 +962,16 @@ _memberstructassign_L16
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr1
+                ADC     #g_arr+2
                 STA     _fcc_fpr1
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr1
                 LDY     #6
 _memberstructassign_L17
                 LDA     [_fcc_fpr1],Y
@@ -1142,9 +992,7 @@ _memberstructassign_L17
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L18
+                BEQ     _memberstructassign_L18
                 LDA     #50
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -1167,12 +1015,9 @@ _memberstructassign_L17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L18
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
@@ -1219,53 +1064,32 @@ _memberstructassign_L19
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_long_hi
                 LDA     15,S   ; fccstk d=0 b=15
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L20
+                BEQ     _memberstructassign_L20
                 LDA     #60
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L20
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _memberstructassign_L21
+                BEQ     _memberstructassign_L21
                 LDA     #61
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L21
                 LDA     #0
                 STA     g_zero+0
@@ -1313,36 +1137,20 @@ _memberstructassign_L22
                 LDA     g_zero+4
                 STA     _fcc_long_hi
                 LDA     g_zero+2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L23
+                BEQ     _memberstructassign_L23
                 LDA     #62
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L23
                 LDA     #0
                 STA     g_zero+0
@@ -1370,16 +1178,8 @@ _memberstructassign_L23
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1390,17 +1190,10 @@ _memberstructassign_L23
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #6
                 STA     [_fcc_fpr0],Y
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1423,53 +1216,32 @@ _memberstructassign_L24
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_long_hi
                 LDA     15,S   ; fccstk d=0 b=15
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L25
+                BEQ     _memberstructassign_L25
                 LDA     #63
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L25
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _memberstructassign_L26
+                BEQ     _memberstructassign_L26
                 LDA     #64
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L26
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -1520,9 +1292,7 @@ _memberstructassign_L27
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L28
+                BEQ     _memberstructassign_L28
                 LDA     #70
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -1545,13 +1315,11 @@ _memberstructassign_L27
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L28
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1561,6 +1329,7 @@ _memberstructassign_L28
                 MX      %00
                 LDA     #g_dst2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -1568,17 +1337,6 @@ _memberstructassign_L28
                 CLC
                 ADC     #4
                 TCS
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_dst2
-                CLC
-                ADC     #2
-                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1591,13 +1349,7 @@ _memberstructassign_L28
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr1+2
                 LDA     _fcc_fpr1
-                LDY     #6
-_memberstructassign_L29
-                LDA     [_fcc_fpr1],Y
-                STA     [_fcc_fpr0],Y
-                DEY
-                DEY
-                BPL     _memberstructassign_L29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1605,21 +1357,16 @@ _memberstructassign_L29
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_dst2
+                LDA     #g_dst2+2
                 STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L30
-                LDA     #80
+                PLA
+                LDY     #6
+_memberstructassign_L29
+                LDA     [_fcc_fpr1],Y
+                STA     [_fcc_fpr0],Y
+                DEY
+                DEY
+                BPL     _memberstructassign_L29
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1630,6 +1377,31 @@ _memberstructassign_L29
                 MX      %00
                 LDA     #g_dst2
                 STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _memberstructassign_landed
+                TAY
+                TSC
+                CLC
+                ADC     #4
+                TCS
+                TYA
+                CMP     #0
+                BEQ     _memberstructassign_L30
+                LDA     #80
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #g_dst2
+                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
@@ -1646,39 +1418,25 @@ _memberstructassign_L29
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L30
                 LDA     #0
-                STA     25,S   ; fccstk d=0 b=25
+                STA     _fcc_img16
 _memberstructassign_L31
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     25,S   ; fccstk d=0 b=25
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _memberstructassign_L34
                 EOR     #$8000
 _memberstructassign_L34
-                BMI     *+5
-                BRL     _memberstructassign_L33
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_arr
-                STA     _fcc_fpr0
-                LDA     25,S   ; fccstk d=0 b=25
+                BPL     _memberstructassign_L33
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -1686,8 +1444,16 @@ _memberstructassign_L34
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #g_arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -1696,26 +1462,11 @@ _memberstructassign_L34
                 ADC     #4
                 TCS
 _memberstructassign_L32
-                LDA     25,S   ; fccstk d=0 b=25
-                CLC
-                ADC     #1
-                STA     25,S   ; fccstk d=0 b=25
-                BRL     _memberstructassign_L31
+                INC     _fcc_img16
+                BRA     _memberstructassign_L31
 _memberstructassign_L33
                 LDA     #1
-                STA     25,S   ; fccstk d=0 b=25
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_arr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     25,S   ; fccstk d=0 b=25
+                STA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -1723,8 +1474,16 @@ _memberstructassign_L33
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #g_arr+2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1744,6 +1503,7 @@ _memberstructassign_L35
                 DEY
                 DEY
                 BPL     _memberstructassign_L35
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1751,16 +1511,9 @@ _memberstructassign_L35
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+12
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
@@ -1770,10 +1523,9 @@ _memberstructassign_L35
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L36
+                BEQ     _memberstructassign_L36
                 LDA     #90
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1782,16 +1534,9 @@ _memberstructassign_L35
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+12
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
@@ -1808,13 +1553,11 @@ _memberstructassign_L35
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L36
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1824,22 +1567,12 @@ _memberstructassign_L36
                 MX      %00
                 LDA     #g_arr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -1847,37 +1580,22 @@ _memberstructassign_L36
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L37
+                BEQ     _memberstructassign_L37
                 LDA     #98
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L37
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1885,24 +1603,14 @@ _memberstructassign_L37
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+24
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -1910,41 +1618,26 @@ _memberstructassign_L37
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L38
+                BEQ     _memberstructassign_L38
                 LDA     #99
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L38
                 LDA     #52428
                 STA     g_nest+0
                 LDA     #56797
                 STA     g_nest+14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1952,10 +1645,9 @@ _memberstructassign_L38
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_nest
-                INC
-                INC
+                LDA     #g_nest+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -1963,6 +1655,7 @@ _memberstructassign_L38
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1972,13 +1665,12 @@ _memberstructassign_L38
                 MX      %00
                 LDA     #g_nest
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0
                 STA     21,S   ; fccstk d=0 b=21
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0+2
-                LDA     21,S   ; fccstk d=0 b=21
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -2001,6 +1693,7 @@ _memberstructassign_L39
                 DEY
                 DEY
                 BPL     _memberstructassign_L39
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2008,10 +1701,9 @@ _memberstructassign_L39
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_nest
-                INC
-                INC
+                LDA     #g_nest+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
@@ -2021,10 +1713,9 @@ _memberstructassign_L39
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L40
+                BEQ     _memberstructassign_L40
                 LDA     #100
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2033,10 +1724,9 @@ _memberstructassign_L39
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_nest
-                INC
-                INC
+                LDA     #g_nest+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
@@ -2053,51 +1743,39 @@ _memberstructassign_L39
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L40
                 LDA     g_nest+0
                 TAX
-                TXA
                 CMP     #52428
-                BNE     *+5
-                BRL     _memberstructassign_L41
+                BEQ     _memberstructassign_L41
                 LDA     #108
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L41
                 LDA     g_nest+14
                 TAX
-                TXA
                 CMP     #56797
-                BNE     *+5
-                BRL     _memberstructassign_L42
+                BEQ     _memberstructassign_L42
                 LDA     #109
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L42
                 LDA     #52428
                 STA     g_nest+0
                 LDA     #56797
                 STA     g_nest+14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2105,10 +1783,9 @@ _memberstructassign_L42
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_nest
-                INC
-                INC
+                LDA     #g_nest+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
@@ -2116,19 +1793,6 @@ _memberstructassign_L42
                 CLC
                 ADC     #4
                 TCS
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_nest
-                INC
-                INC
-                CLC
-                ADC     #2
-                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2141,13 +1805,7 @@ _memberstructassign_L42
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr1+2
                 LDA     _fcc_fpr1
-                LDY     #6
-_memberstructassign_L43
-                LDA     [_fcc_fpr1],Y
-                STA     [_fcc_fpr0],Y
-                DEY
-                DEY
-                BPL     _memberstructassign_L43
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2155,10 +1813,27 @@ _memberstructassign_L43
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_nest
-                INC
-                INC
+                LDA     #g_nest+4
                 STA     _fcc_fpr0
+                PLA
+                LDY     #6
+_memberstructassign_L43
+                LDA     [_fcc_fpr1],Y
+                STA     [_fcc_fpr0],Y
+                DEY
+                DEY
+                BPL     _memberstructassign_L43
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #g_nest+2
+                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
@@ -2168,10 +1843,9 @@ _memberstructassign_L43
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L44
+                BEQ     _memberstructassign_L44
                 LDA     #110
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2180,10 +1854,9 @@ _memberstructassign_L43
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_nest
-                INC
-                INC
+                LDA     #g_nest+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
@@ -2200,46 +1873,33 @@ _memberstructassign_L43
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L44
                 LDA     g_nest+0
                 TAX
-                TXA
                 CMP     #52428
-                BNE     *+5
-                BRL     _memberstructassign_L45
+                BEQ     _memberstructassign_L45
                 LDA     #118
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L45
                 LDA     g_nest+14
                 TAX
-                TXA
                 CMP     #56797
-                BNE     *+5
-                BRL     _memberstructassign_L46
+                BEQ     _memberstructassign_L46
                 LDA     #119
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L46
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -2284,21 +1944,14 @@ _memberstructassign_L47
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L48
+                BEQ     _memberstructassign_L48
                 LDA     #120
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _memberstructassign_L48
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -2310,36 +1963,20 @@ _memberstructassign_L48
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L49
+                BEQ     _memberstructassign_L49
                 LDA     #121
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _memberstructassign_L49
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -2348,21 +1985,14 @@ _memberstructassign_L49
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L50
+                BEQ     _memberstructassign_L50
                 LDA     #122
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _memberstructassign_L50
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -2370,53 +2000,42 @@ _memberstructassign_L50
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #43690
-                BNE     *+5
-                BRL     _memberstructassign_L51
+                BEQ     _memberstructassign_L51
                 LDA     #123
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _memberstructassign_L51
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #48059
-                BNE     *+5
-                BRL     _memberstructassign_L52
+                BEQ     _memberstructassign_L52
                 LDA     #124
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _memberstructassign_L52
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     26
+main_FRAMESIZE   EQU     28
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 40

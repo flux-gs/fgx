@@ -89,7 +89,6 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 TAY

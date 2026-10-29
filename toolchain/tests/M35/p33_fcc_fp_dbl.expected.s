@@ -29,14 +29,12 @@ _p33_fcc_fp_dbl_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #520
                 BVC     _p33_fcc_fp_dbl_L3
                 EOR     #$8000
 _p33_fcc_fp_dbl_L3
-                BMI     *+5
-                BRL     _p33_fcc_fp_dbl_L2
+                BPL     _p33_fcc_fp_dbl_L2
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -61,7 +59,7 @@ _p33_fcc_fp_dbl_L3
                 MX      %00
 _p33_fcc_fp_dbl_L1
                 INC     _fcc_img0
-                BRL     _p33_fcc_fp_dbl_L0
+                BRA     _p33_fcc_fp_dbl_L0
 _p33_fcc_fp_dbl_L2
                 LDA     #100
                 PHA
@@ -113,10 +111,8 @@ _p33_fcc_fp_dbl_L2
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #300
-                BNE     *+5
-                BRL     _p33_fcc_fp_dbl_L4
+                BEQ     _p33_fcc_fp_dbl_L4
                 LDA     #1
                 TAY
                 TSC
@@ -165,10 +161,8 @@ _p33_fcc_fp_dbl_L4
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #800
-                BNE     *+5
-                BRL     _p33_fcc_fp_dbl_L5
+                BEQ     _p33_fcc_fp_dbl_L5
                 LDA     #2
                 TAY
                 TSC
@@ -209,10 +203,8 @@ _p33_fcc_fp_dbl_L5
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #800
-                BEQ     *+5
-                BRL     _p33_fcc_fp_dbl_L7
+                BNE     _p33_fcc_fp_dbl_L7
                 TSC
                 CLC
                 ADC     #527
@@ -220,18 +212,9 @@ _p33_fcc_fp_dbl_L5
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #800
-                BEQ     *+5
-                BRL     _p33_fcc_fp_dbl_L7
-                LDA     #0
-                BRL     _p33_fcc_fp_dbl_L8
+                BEQ     _p33_fcc_fp_dbl_L6
 _p33_fcc_fp_dbl_L7
-                LDA     #1
-_p33_fcc_fp_dbl_L8
-                CMP     #0
-                BNE     *+5
-                BRL     _p33_fcc_fp_dbl_L6
                 LDA     #3
                 TAY
                 TSC
@@ -244,11 +227,7 @@ _p33_fcc_fp_dbl_L8
                 RTL
 _p33_fcc_fp_dbl_L6
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _p33_fcc_fp_dbl_L12
+                BNE     _p33_fcc_fp_dbl_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -261,25 +240,9 @@ _p33_fcc_fp_dbl_L6
                 INC
                 INC
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _p33_fcc_fp_dbl_L12
-                LDA     #0
-                BRL     _p33_fcc_fp_dbl_L13
-_p33_fcc_fp_dbl_L12
-                LDA     #1
-_p33_fcc_fp_dbl_L13
-                CMP     #0
-                BEQ     *+5
-                BRL     _p33_fcc_fp_dbl_L10
+                BNE     _p33_fcc_fp_dbl_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -291,26 +254,13 @@ _p33_fcc_fp_dbl_L13
                 INC
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #519
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #519
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _p33_fcc_fp_dbl_L10
-                LDA     #0
-                BRL     _p33_fcc_fp_dbl_L11
-_p33_fcc_fp_dbl_L10
-                LDA     #1
-_p33_fcc_fp_dbl_L11
-                CMP     #0
-                BNE     *+5
-                BRL     _p33_fcc_fp_dbl_L9
+                BEQ     _p33_fcc_fp_dbl_L8
+_p33_fcc_fp_dbl_L9
                 LDA     #4
                 TAY
                 TSC
@@ -321,7 +271,7 @@ _p33_fcc_fp_dbl_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_p33_fcc_fp_dbl_L9
+_p33_fcc_fp_dbl_L8
                 LDA     #42
                 TAY
                 TSC

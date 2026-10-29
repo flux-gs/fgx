@@ -101,6 +101,7 @@ main_stkok        TCS
                 PLA
                 LDA     #0
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -110,6 +111,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     Cursor
                 LDA     _fcc_fpr0+2
                 STA     Cursor+2
@@ -127,14 +130,9 @@ _for_step_global_ptr_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _for_step_global_ptr_L2
+                BEQ     _for_step_global_ptr_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -153,7 +151,7 @@ _for_step_global_ptr_L1
                 LDA     _fcc_ptr+2
                 STA     Cursor+2
                 TYA
-                BRL     _for_step_global_ptr_L0
+                BRA     _for_step_global_ptr_L0
 _for_step_global_ptr_L2
                 LDA     _fcc_img0
                 TAY

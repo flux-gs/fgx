@@ -26,15 +26,12 @@ _glptrsub_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _glptrsub_L3
                 EOR     #$8000
 _glptrsub_L3
-                BMI     *+5
-                BRL     _glptrsub_L2
+                BPL     _glptrsub_L2
                 LDA     #larr
                 PHA
                 LDA     _fcc_img0
@@ -59,8 +56,9 @@ _glptrsub_L3
                 PLA
 _glptrsub_L1
                 INC     _fcc_img0
-                BRL     _glptrsub_L0
+                BRA     _glptrsub_L0
 _glptrsub_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -70,6 +68,8 @@ _glptrsub_L2
                 MX      %00
                 LDA     #larr
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     lp
                 LDA     _fcc_fpr0+2
                 STA     lp+2
@@ -152,26 +152,13 @@ _glptrsub_L2
                 LDA:    larr+2,X
                 STA     _fcc_long_hi
                 LDA:    larr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0064
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #100
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L4
+                BEQ     _glptrsub_L4
                 LDA     #1
                 TAY
                 TSC
@@ -190,26 +177,13 @@ _glptrsub_L4
                 LDA:    larr+2,X
                 STA     _fcc_long_hi
                 LDA:    larr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$3039
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #12345
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L5
+                BEQ     _glptrsub_L5
                 LDA     #2
                 TAY
                 TSC
@@ -246,8 +220,6 @@ _glptrsub_L5
                 LDA     #5
                 ASL
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -263,26 +235,13 @@ _glptrsub_L5
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$002A
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #42
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L6
+                BEQ     _glptrsub_L6
                 LDA     #3
                 TAY
                 TSC
@@ -297,8 +256,6 @@ _glptrsub_L6
                 LDA     #3
                 ASL
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -314,26 +271,13 @@ _glptrsub_L6
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0064
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #100
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L7
+                BEQ     _glptrsub_L7
                 LDA     #4
                 TAY
                 TSC
@@ -348,8 +292,6 @@ _glptrsub_L7
                 LDA     #7
                 ASL
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -365,26 +307,13 @@ _glptrsub_L7
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$3039
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #12345
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L8
+                BEQ     _glptrsub_L8
                 LDA     #5
                 TAY
                 TSC
@@ -400,7 +329,6 @@ _glptrsub_L8
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

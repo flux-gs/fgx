@@ -270,12 +270,9 @@ CODE_EQUS = [("SYS_EXIT", "1"), ("SYS_WRITE", "4"), ("SYS_TRAMP", "$000328"),
 # (fcc_libc_shims.s:70-71), which define them in bank 0; every other bank's
 # code names them too.
 DP_EQUS = [("c_strcmp_a", "$F2"), ("c_strcmp_b", "$F5")]
-# The EQUs every data segment assembles with: the stdio flag bits and
-# __sFILE offsets libc_data.s lays out, and the argv cap args_data.s sizes
+# The EQUs every data segment assembles with: the argv cap args_data.s sizes
 # its vector by (tools/check_argv_caps.py holds ARGS_MAX to the kernel's).
-DATA_EQUS = [("_IOREAD", "$0001"), ("_IOWRT", "$0002"), ("LIBC_NFILE", "8"),
-             ("__sFILE_file", "0"), ("__sFILE_flag", "2"), ("__sFILE_size", "4"),
-             ("ARGS_MAX", "16"), ("ARGS_INPUT_MAX", "128")]
+DATA_EQUS = [("ARGS_MAX", "16"), ("ARGS_INPUT_MAX", "128")]
 
 
 def write_link(d, name, org, equs, puts, pad=0):

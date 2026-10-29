@@ -37,33 +37,26 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _heap_intptr_L1
+                BNE     _heap_intptr_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _heap_intptr_L1
+                BNE     _heap_intptr_L1
                 LDA     #1
-                BRL     _heap_intptr_L2
+                BRA     _heap_intptr_L2
 _heap_intptr_L1
                 LDA     #0
 _heap_intptr_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _heap_intptr_L0
+                BEQ     _heap_intptr_L0
                 LDA     #9
                 TAY
                 TSC
@@ -75,10 +68,6 @@ _heap_intptr_L2
                 TYA
                 RTL
 _heap_intptr_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -152,10 +141,8 @@ _heap_intptr_L0
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _heap_intptr_L3
+                BEQ     _heap_intptr_L3
                 LDA     #1
                 TAY
                 TSC
@@ -178,10 +165,8 @@ _heap_intptr_L3
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _heap_intptr_L4
+                BEQ     _heap_intptr_L4
                 LDA     #2
                 TAY
                 TSC
@@ -199,10 +184,8 @@ _heap_intptr_L4
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _heap_intptr_L5
+                BEQ     _heap_intptr_L5
                 LDA     #3
                 TAY
                 TSC
@@ -316,10 +299,8 @@ _heap_intptr_L5
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _heap_intptr_L6
+                BEQ     _heap_intptr_L6
                 LDA     #4
                 TAY
                 TSC
@@ -343,10 +324,8 @@ _heap_intptr_L6
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _heap_intptr_L7
+                BEQ     _heap_intptr_L7
                 LDA     #5
                 TAY
                 TSC

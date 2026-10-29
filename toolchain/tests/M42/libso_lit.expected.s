@@ -30,10 +30,6 @@ main_stkok        TCS
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #65
                 SEP     #$20
                 MX      %10
@@ -102,10 +98,6 @@ main_stkok        TCS
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
@@ -114,21 +106,17 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 PHA
                 LDA     #8
-                TAX
-                TXA
                 CLC
                 ADC     #7
                 TAX
-                TXA
                 CLC
                 ADC     #65
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _libso_lit_L0
+                BNE     _libso_lit_L0
                 LDA     #42
-                BRL     _libso_lit_L1
+                BRA     _libso_lit_L1
 _libso_lit_L0
                 LDA     #1
 _libso_lit_L1

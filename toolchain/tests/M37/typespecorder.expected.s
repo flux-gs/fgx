@@ -47,8 +47,7 @@ pick_stkok        TCS
                 BVC     _typespecorder_L2
                 EOR     #$8000
 _typespecorder_L2
-                BMI     *+5
-                BRL     _typespecorder_L0
+                BPL     _typespecorder_L0
                 DO      6+pick_FRAMESIZE/256
                 TSC
                 CLC
@@ -59,7 +58,7 @@ _typespecorder_L2
                 ELSE
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                BRL     _typespecorder_L1
+                BRA     _typespecorder_L1
 _typespecorder_L0
                 DO      8+pick_FRAMESIZE/256
                 TSC
@@ -109,7 +108,6 @@ mask_stkok        TCS
                 LDA     6+mask_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 AND     #255
                 TAY
                 TSC
@@ -158,21 +156,10 @@ big_stkok        TCS
                 ELSE
                 LDA     6+big_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #15
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #15
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 TAY
                 TSC

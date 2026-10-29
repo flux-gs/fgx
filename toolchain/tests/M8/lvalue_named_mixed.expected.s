@@ -90,8 +90,6 @@ main_stkok        TCS
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 ORA     #40
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -128,7 +126,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 INC
                 STA     [_fcc_fpr0]

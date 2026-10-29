@@ -62,6 +62,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -71,6 +72,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -91,6 +93,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -100,6 +103,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -109,11 +113,7 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L0
+                BEQ     _llong_printf_L0
                 LDA     #1
                 TAY
                 TSC
@@ -186,6 +186,7 @@ _llong_printf_L0
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -195,6 +196,7 @@ _llong_printf_L0
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -215,6 +217,7 @@ _llong_printf_L0
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -224,6 +227,7 @@ _llong_printf_L0
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -233,11 +237,7 @@ _llong_printf_L0
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L1
+                BEQ     _llong_printf_L1
                 LDA     #2
                 TAY
                 TSC
@@ -276,6 +276,7 @@ _llong_printf_L1
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -285,6 +286,7 @@ _llong_printf_L1
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -305,6 +307,7 @@ _llong_printf_L1
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -314,6 +317,7 @@ _llong_printf_L1
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -323,11 +327,7 @@ _llong_printf_L1
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L2
+                BEQ     _llong_printf_L2
                 LDA     #3
                 TAY
                 TSC
@@ -382,6 +382,7 @@ _llong_printf_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -391,6 +392,7 @@ _llong_printf_L2
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -411,6 +413,7 @@ _llong_printf_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -420,6 +423,7 @@ _llong_printf_L2
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -429,11 +433,7 @@ _llong_printf_L2
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L3
+                BEQ     _llong_printf_L3
                 LDA     #4
                 TAY
                 TSC
@@ -472,6 +472,7 @@ _llong_printf_L3
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -481,6 +482,7 @@ _llong_printf_L3
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -501,6 +503,7 @@ _llong_printf_L3
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -510,6 +513,7 @@ _llong_printf_L3
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -519,11 +523,7 @@ _llong_printf_L3
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L4
+                BEQ     _llong_printf_L4
                 LDA     #5
                 TAY
                 TSC
@@ -579,6 +579,7 @@ _llong_printf_L4
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -588,6 +589,7 @@ _llong_printf_L4
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -608,6 +610,7 @@ _llong_printf_L4
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -617,6 +620,7 @@ _llong_printf_L4
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -626,11 +630,7 @@ _llong_printf_L4
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L5
+                BEQ     _llong_printf_L5
                 LDA     #6
                 TAY
                 TSC
@@ -703,6 +703,7 @@ _llong_printf_L5
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -712,6 +713,7 @@ _llong_printf_L5
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -732,6 +734,7 @@ _llong_printf_L5
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -741,6 +744,7 @@ _llong_printf_L5
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -750,11 +754,7 @@ _llong_printf_L5
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L6
+                BEQ     _llong_printf_L6
                 LDA     #7
                 TAY
                 TSC
@@ -805,6 +805,7 @@ _llong_printf_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -814,6 +815,7 @@ _llong_printf_L6
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -834,6 +836,7 @@ _llong_printf_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -843,6 +846,7 @@ _llong_printf_L6
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -852,11 +856,8 @@ _llong_printf_L6
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L7
+                BEQ     _llong_printf_L7
                 LDA     #8
                 TAY
                 TSC
@@ -914,7 +915,7 @@ _llong_printf_L7
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _llong_printf_L13
+                BRL     _llong_printf_L9
                 LDA     #32767
                 STA     _fcc_q3
                 LDA     #65535
@@ -996,15 +997,7 @@ _llong_printf_L7
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _llong_printf_L13
-                LDA     #0
-                BRL     _llong_printf_L14
-_llong_printf_L13
-                LDA     #1
-_llong_printf_L14
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L11
+                BRL     _llong_printf_L9
                 LDA     #32767
                 STA     _fcc_q3
                 LDA     #65535
@@ -1118,16 +1111,7 @@ _llong_printf_L14
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L11
-                LDA     #0
-                BRL     _llong_printf_L12
-_llong_printf_L11
-                LDA     #1
-_llong_printf_L12
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L9
+                BNE     _llong_printf_L9
                 LDA     #65535
                 STA     _fcc_q3
                 LDA     #65535
@@ -1172,17 +1156,8 @@ _llong_printf_L12
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L9
-                LDA     #0
-                BRL     _llong_printf_L10
+                BEQ     _llong_printf_L8
 _llong_printf_L9
-                LDA     #1
-_llong_printf_L10
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L8
                 LDA     #9
                 TAY
                 TSC

@@ -283,6 +283,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -292,6 +293,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -363,10 +365,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _pre_deref_rmw_L0
+                BEQ     _pre_deref_rmw_L0
                 LDA     #1
                 TAY
                 TSC
@@ -384,7 +384,6 @@ _pre_deref_rmw_L0
                 CLC
                 ADC     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 TAY

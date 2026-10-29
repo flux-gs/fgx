@@ -20,7 +20,6 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                CMP     #0
                 BEQ     _logic_not_L0
                 LDA     #0
                 BRA     _logic_not_L1
@@ -29,7 +28,6 @@ _logic_not_L0
 _logic_not_L1
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #1
-                CMP     #0
                 BEQ     _logic_not_L2
                 LDA     #0
                 BRA     _logic_not_L3

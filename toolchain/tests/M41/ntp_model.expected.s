@@ -578,9 +578,7 @@ _ntp_model_mag_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L0
+                BEQ     _ntp_model_L0
                 DO      12+_ntp_model_mag_FRAMESIZE/256
                 TSC
                 CLC
@@ -629,7 +627,7 @@ _ntp_model_mag_stkok        TCS
                 EOR     #$8000
                 STA     _fcc_q3
                 TYA
-                BRL     _ntp_model_L1
+                BRA     _ntp_model_L1
 _ntp_model_L0
                 DO      12+_ntp_model_mag_FRAMESIZE/256
                 TSC
@@ -689,9 +687,12 @@ _ntp_model_mag_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-6
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -702,14 +703,13 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     93,S   ; fccstk d=0 b=93
+                STA     _fcc_img18
 _ntp_model_L2
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     93,S   ; fccstk d=0 b=93
+                LDA     _fcc_img18
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _ntp_model_L5
@@ -766,7 +766,7 @@ _ntp_model_L5
                 PHA
                 TYA
                 PHA
-                LDA     101,S   ; fccstk d=8 b=93
+                LDA     _fcc_img18
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -1557,19 +1557,14 @@ _ntp_model_L5
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L6
+                BEQ     _ntp_model_L6
                 LDA     #1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ntp_model_L6
                 LDA     79,S   ; fccstk d=0 b=79
                 STA     _fcc_q3
@@ -1666,38 +1661,22 @@ _ntp_model_L6
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L7
+                BEQ     _ntp_model_L7
                 LDA     #2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ntp_model_L7
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_long_hi
                 LDA     17,S   ; fccstk d=0 b=17
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$83AA
-                STA     _fcc_long_hi
-                LDA     #$7E80
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32384
+                STX     _fcc_long_b_lo
+                LDX     #33706
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 FGX2_FARCALL _fcc_dfromul
                 TAY
@@ -1734,14 +1713,14 @@ _ntp_model_L7
                 TYA
                 FGX2_FARCALL _fcc_dadd
                 FGX2_FARCALL _fcc_dtol
-                STA     89,S   ; fccstk d=0 b=89
+                STA     _fcc_img16
                 TAY
                 LDA     _fcc_long_hi
-                STA     91,S   ; fccstk d=0 b=91
+                STA     _fcc_img17
                 TYA
-                LDA     91,S   ; fccstk d=0 b=91
+                LDA     _fcc_img17
                 STA     _fcc_long_hi
-                LDA     89,S   ; fccstk d=0 b=89
+                LDA     _fcc_img16
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1750,22 +1729,10 @@ _ntp_model_L7
                 LDA     23,S   ; fccstk d=4 b=19
                 STA     _fcc_long_hi
                 LDA     21,S   ; fccstk d=4 b=17
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$83AA
-                STA     _fcc_long_hi
-                LDA     #$7E80
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32384
+                STX     _fcc_long_b_lo
+                LDX     #33706
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
@@ -1777,36 +1744,36 @@ _ntp_model_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L8
+                BEQ     _ntp_model_L8
                 LDA     #3
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _ntp_model_L8
 _ntp_model_L3
-                LDA     93,S   ; fccstk d=0 b=93
-                CLC
-                ADC     #1
-                STA     93,S   ; fccstk d=0 b=93
+                INC     _fcc_img18
                 BRL     _ntp_model_L2
 _ntp_model_L4
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     94
+main_FRAMESIZE   EQU     100
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 45

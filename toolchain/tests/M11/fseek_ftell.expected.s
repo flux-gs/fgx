@@ -52,22 +52,10 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _fseek_ftell_L1
-                LDA     #0
-                BRA     _fseek_ftell_L2
-_fseek_ftell_L1
-                LDA     #1
-_fseek_ftell_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _fseek_ftell_L0
+                BNE     _fseek_ftell_L0
                 LDA     #1
                 TAY
                 TSC
@@ -89,10 +77,7 @@ _fseek_ftell_L0
                 PHA
                 TYA
                 PHA
-                LDA     9,S   ; fccstk d=6 b=3
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=6 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fseek

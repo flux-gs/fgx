@@ -85,21 +85,10 @@ cl_hash_idiom_stkok        TCS
                 ELSE
                 LDA     6+cl_hash_idiom_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #16
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_img2
                 TAY
@@ -466,66 +455,32 @@ _clhash_L1
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #16
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_img2
                 TAY
                 LDA     _fcc_long_hi
                 STA     _fcc_img3
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L2
+                BEQ     _clhash_L2
                 BRL     _clhash_L0
 _clhash_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #16
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
                 STA     _fcc_img2
                 TAY
@@ -539,25 +494,13 @@ _clhash_L3
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L5
+                BEQ     _clhash_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -595,7 +538,7 @@ _clhash_L4
                 LDA     _fcc_long_hi
                 STA     _fcc_img3
                 TYA
-                BRL     _clhash_L3
+                BRA     _clhash_L3
 _clhash_L5
                 LDA     #0
                 TAY
@@ -612,9 +555,10 @@ cl_hash_idiom_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -625,26 +569,22 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _clhash_L6
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #5006
                 BVC     _clhash_L9
                 EOR     #$8000
 _clhash_L9
-                BMI     *+5
-                BRL     _clhash_L8
+                BPL     _clhash_L8
                 LDA     #arr
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -665,11 +605,15 @@ _clhash_L9
                 STA:    $0002,X
                 PLA
 _clhash_L7
-                INC     _fcc_img0
-                BRL     _clhash_L6
+                INC     _fcc_img16
+                BRA     _clhash_L6
 _clhash_L8
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -677,14 +621,7 @@ _clhash_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 STA     htab
                 LDA     _fcc_fpr0+2
                 STA     htab+2
@@ -708,36 +645,20 @@ _clhash_L8
                 LDA:    arr+2,X
                 STA     _fcc_long_hi
                 LDA:    arr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$5555
-                STA     _fcc_long_hi
-                LDA     #$5555
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #21845
+                STX     _fcc_long_b_lo
+                LDX     #21845
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L10
+                BEQ     _clhash_L10
                 LDA     #1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _clhash_L10
                 LDA     #5004
                 ASL
@@ -746,36 +667,20 @@ _clhash_L10
                 LDA:    arr+2,X
                 STA     _fcc_long_hi
                 LDA:    arr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$5555
-                STA     _fcc_long_hi
-                LDA     #$5555
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #21845
+                STX     _fcc_long_b_lo
+                LDX     #21845
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L11
+                BEQ     _clhash_L11
                 LDA     #2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _clhash_L11
                 LDA     #5005
                 ASL
@@ -784,111 +689,76 @@ _clhash_L11
                 LDA:    arr+2,X
                 STA     _fcc_long_hi
                 LDA:    arr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$5555
-                STA     _fcc_long_hi
-                LDA     #$5555
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #21845
+                STX     _fcc_long_b_lo
+                LDX     #21845
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L12
+                BEQ     _clhash_L12
                 LDA     #3
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _clhash_L12
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _clhash_L13
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #5003
                 BVC     _clhash_L16
                 EOR     #$8000
 _clhash_L16
-                BMI     *+5
-                BRL     _clhash_L15
+                BPL     _clhash_L15
                 LDA     #1
                 CLC
-                ADC     1,S   ; fccstk d=0 b=1
+                ADC     _fcc_img16
                 ASL
                 ASL
                 TAX
                 LDA:    arr+2,X
                 STA     _fcc_long_hi
                 LDA:    arr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L17
+                BEQ     _clhash_L17
                 LDA     #4
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _clhash_L17
 _clhash_L14
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
-                BRL     _clhash_L13
+                INC     _fcc_img16
+                BRA     _clhash_L13
 _clhash_L15
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     2
+main_FRAMESIZE   EQU     4
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

@@ -20,8 +20,6 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #40
-                TAX
-                TXA
                 INC
                 INC
                 STA     _fcc_img0
@@ -74,8 +72,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 AND     #6
                 TAY
                 LDA     1,S
@@ -134,8 +130,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 ORA     #15
                 TAY
                 LDA     1,S
@@ -194,8 +188,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 SEC
                 SBC     #100
                 TAY
@@ -236,10 +228,8 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _paren_compound_L0
+                BEQ     _paren_compound_L0
                 LDA     #1
                 TAY
                 TSC
@@ -269,10 +259,8 @@ _paren_compound_L0
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #255
-                BNE     *+5
-                BRL     _paren_compound_L1
+                BEQ     _paren_compound_L1
                 LDA     #2
                 TAY
                 TSC
@@ -302,10 +290,8 @@ _paren_compound_L1
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #100
-                BNE     *+5
-                BRL     _paren_compound_L2
+                BEQ     _paren_compound_L2
                 LDA     #3
                 TAY
                 TSC
@@ -319,10 +305,8 @@ _paren_compound_L1
 _paren_compound_L2
                 LDA     gsv
                 TAX
-                TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _paren_compound_L3
+                BEQ     _paren_compound_L3
                 LDA     #4
                 TAY
                 TSC

@@ -70,8 +70,7 @@ _pidx_read_L0
                 BVC     _pidx_read_L3
                 EOR     #$8000
 _pidx_read_L3
-                BMI     *+5
-                BRL     _pidx_read_L2
+                BPL     _pidx_read_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img4
@@ -92,7 +91,7 @@ _pidx_read_L3
                 STA     _fcc_img1
 _pidx_read_L1
                 INC     _fcc_img0
-                BRL     _pidx_read_L0
+                BRA     _pidx_read_L0
 _pidx_read_L2
                 LDA     _fcc_img1
                 TAY
@@ -191,6 +190,7 @@ main_stkok        TCS
                 PLA
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -200,6 +200,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_pidx_read_data
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _pidx_read_psum

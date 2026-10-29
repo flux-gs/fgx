@@ -247,8 +247,7 @@ _llong_conv_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L0
+                BEQ     _llong_conv_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -305,10 +304,9 @@ _llong_conv_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L0
+                BEQ     _llong_conv_L0
                 LDA     #1
-                BRL     _llong_conv_L1
+                BRA     _llong_conv_L1
 _llong_conv_L0
                 LDA     #0
 _llong_conv_L1
@@ -414,8 +412,7 @@ _llong_conv_uis_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L2
+                BEQ     _llong_conv_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -472,10 +469,9 @@ _llong_conv_uis_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L2
+                BEQ     _llong_conv_L2
                 LDA     #1
-                BRL     _llong_conv_L3
+                BRA     _llong_conv_L3
 _llong_conv_L2
                 LDA     #0
 _llong_conv_L3
@@ -772,73 +768,50 @@ _llong_conv_sw_stkok        TCS
                 STA     _fcc_long_b_lo
                 LDA     _fcc_q3
                 CMP     #65535
-                BEQ     *+5
-                BRL     _llong_conv_L9
+                BNE     _llong_conv_L9
                 LDA     _fcc_q2
                 CMP     #65535
-                BEQ     *+5
-                BRL     _llong_conv_L9
+                BNE     _llong_conv_L9
                 LDA     _fcc_long_hi
                 CMP     #65535
-                BEQ     *+5
-                BRL     _llong_conv_L9
+                BNE     _llong_conv_L9
                 LDA     _fcc_long_b_lo
                 CMP     #65535
-                BNE     *+5
-                BRL     _llong_conv_L5
+                BEQ     _llong_conv_L5
 _llong_conv_L9
                 LDA     _fcc_q3
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L10
+                BNE     _llong_conv_L10
                 LDA     _fcc_q2
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L10
+                BNE     _llong_conv_L10
                 LDA     _fcc_long_hi
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L10
+                BNE     _llong_conv_L10
                 LDA     _fcc_long_b_lo
                 CMP     #5
-                BNE     *+5
-                BRL     _llong_conv_L6
+                BEQ     _llong_conv_L6
 _llong_conv_L10
                 LDA     _fcc_q3
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L11
+                BNE     _llong_conv_L11
                 LDA     _fcc_q2
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L11
+                BNE     _llong_conv_L11
                 LDA     _fcc_long_hi
                 CMP     #65535
-                BEQ     *+5
-                BRL     _llong_conv_L11
+                BNE     _llong_conv_L11
                 LDA     _fcc_long_b_lo
                 CMP     #65535
-                BNE     *+5
-                BRL     _llong_conv_L7
+                BEQ     _llong_conv_L7
 _llong_conv_L11
                 LDA     _fcc_q3
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L12
+                BNE     _llong_conv_L12
                 LDA     _fcc_q2
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L12
+                BNE     _llong_conv_L12
                 LDA     _fcc_long_hi
                 CMP     #32767
-                BEQ     *+5
-                BRL     _llong_conv_L12
+                BNE     _llong_conv_L12
                 LDA     _fcc_long_b_lo
                 CMP     #65535
-                BNE     *+5
-                BRL     _llong_conv_L8
+                BEQ     _llong_conv_L8
 _llong_conv_L12
-                BRL     _llong_conv_L4
+                BRA     _llong_conv_L4
 _llong_conv_L5
                 LDA     #1
                 TAY
@@ -899,9 +872,10 @@ _llong_conv_sw_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -931,6 +905,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -940,6 +915,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -958,20 +934,15 @@ main_stkok        TCS
                 LDA     a
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #52719
-                BNE     *+5
-                BRL     _llong_conv_L13
+                BEQ     _llong_conv_L13
                 LDA     #1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L13
                 LDA     a+6
                 STA     _fcc_q3
@@ -988,36 +959,20 @@ _llong_conv_L13
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_long_hi
                 LDA     11,S   ; fccstk d=0 b=11
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #52719
+                STX     _fcc_long_b_lo
+                LDX     #35243
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L14
+                BEQ     _llong_conv_L14
                 LDA     #2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L14
                 LDA     a+6
                 STA     _fcc_q3
@@ -1029,20 +984,15 @@ _llong_conv_L14
                 STA     19,S   ; fccstk d=0 b=19
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #239
-                BNE     *+5
-                BRL     _llong_conv_L15
+                BEQ     _llong_conv_L15
                 LDA     #3
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L15
                 LDA     a+6
                 STA     _fcc_q3
@@ -1053,20 +1003,15 @@ _llong_conv_L15
                 LDA     a
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #52719
-                BNE     *+5
-                BRL     _llong_conv_L16
+                BEQ     _llong_conv_L16
                 LDA     #4
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L16
                 LDA     #200
                 STA     19,S   ; fccstk d=0 b=19
@@ -1124,25 +1069,14 @@ _llong_conv_L16
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _llong_conv_L18
-                LDA     #0
-                BRA     _llong_conv_L19
-_llong_conv_L18
-                LDA     #1
-_llong_conv_L19
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L17
+                BNE     _llong_conv_L17
                 LDA     #5
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L17
                 LDA     #$FFFB
                 STA     1,S   ; fccstk d=0 b=1
@@ -1204,27 +1138,15 @@ _llong_conv_L17
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L21
-                LDA     #0
-                BRA     _llong_conv_L22
-_llong_conv_L21
-                LDA     #1
-_llong_conv_L22
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L20
+                BNE     _llong_conv_L18
                 LDA     #6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L20
+                BRL     main_bandx
+_llong_conv_L18
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -1282,26 +1204,15 @@ _llong_conv_L20
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _llong_conv_L24
-                LDA     #0
-                BRA     _llong_conv_L25
-_llong_conv_L24
-                LDA     #1
-_llong_conv_L25
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L23
+                BNE     _llong_conv_L19
                 LDA     #7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L23
+                BRL     main_bandx
+_llong_conv_L19
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$1170
@@ -1370,27 +1281,15 @@ _llong_conv_L23
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L27
-                LDA     #0
-                BRA     _llong_conv_L28
-_llong_conv_L27
-                LDA     #1
-_llong_conv_L28
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L26
+                BNE     _llong_conv_L20
                 LDA     #8
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L26
+                BRL     main_bandx
+_llong_conv_L20
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -1452,27 +1351,15 @@ _llong_conv_L26
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L30
-                LDA     #0
-                BRA     _llong_conv_L31
-_llong_conv_L30
-                LDA     #1
-_llong_conv_L31
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L29
+                BNE     _llong_conv_L21
                 LDA     #9
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L29
+                BRL     main_bandx
+_llong_conv_L21
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -1535,26 +1422,15 @@ _llong_conv_L29
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _llong_conv_L33
-                LDA     #0
-                BRA     _llong_conv_L34
-_llong_conv_L33
-                LDA     #1
-_llong_conv_L34
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L32
+                BNE     _llong_conv_L22
                 LDA     #10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L32
+                BRL     main_bandx
+_llong_conv_L22
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -1572,6 +1448,7 @@ _llong_conv_L32
                 LDA     _fcc_long_hi
                 PHA
                 TYA
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1582,6 +1459,7 @@ _llong_conv_L32
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -1679,27 +1557,15 @@ _llong_conv_L32
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L36
-                LDA     #0
-                BRA     _llong_conv_L37
-_llong_conv_L36
-                LDA     #1
-_llong_conv_L37
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L35
+                BNE     _llong_conv_L23
                 LDA     #11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L35
+                BRL     main_bandx
+_llong_conv_L23
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
                 LDA     a+6
@@ -1771,26 +1637,15 @@ _llong_conv_L35
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _llong_conv_L39
-                LDA     #0
-                BRA     _llong_conv_L40
-_llong_conv_L39
-                LDA     #1
-_llong_conv_L40
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L38
+                BNE     _llong_conv_L24
                 LDA     #12
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L38
+                BRL     main_bandx
+_llong_conv_L24
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -1833,27 +1688,15 @@ _llong_conv_L38
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BEQ     _llong_conv_L42
-                LDA     #0
-                BRA     _llong_conv_L43
-_llong_conv_L42
-                LDA     #1
-_llong_conv_L43
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L41
+                BNE     _llong_conv_L25
                 LDA     #13
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L41
+                BRL     main_bandx
+_llong_conv_L25
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -1870,6 +1713,7 @@ _llong_conv_L41
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1879,6 +1723,7 @@ _llong_conv_L41
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -1974,27 +1819,15 @@ _llong_conv_L41
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L45
-                LDA     #0
-                BRA     _llong_conv_L46
-_llong_conv_L45
-                LDA     #1
-_llong_conv_L46
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L44
+                BNE     _llong_conv_L26
                 LDA     #14
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L44
+                BRL     main_bandx
+_llong_conv_L26
                 LDA     b+6
                 STA     _fcc_q3
                 LDA     b+4
@@ -2082,26 +1915,15 @@ _llong_conv_L44
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _llong_conv_L48
-                LDA     #0
-                BRA     _llong_conv_L49
-_llong_conv_L48
-                LDA     #1
-_llong_conv_L49
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L47
+                BNE     _llong_conv_L27
                 LDA     #15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L47
+                BRL     main_bandx
+_llong_conv_L27
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0002
@@ -2159,15 +1981,7 @@ _llong_conv_L47
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _llong_conv_L53
-                LDA     #0
-                BRA     _llong_conv_L54
-_llong_conv_L53
-                LDA     #1
-_llong_conv_L54
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L51
+                BEQ     _llong_conv_L29
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_long_hi
                 LDA     11,S   ; fccstk d=0 b=11
@@ -2206,35 +2020,16 @@ _llong_conv_L54
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BEQ     _llong_conv_L55
-                LDA     #0
-                BRA     _llong_conv_L56
-_llong_conv_L55
-                LDA     #1
-_llong_conv_L56
-                CMP     #0
-                BEQ     *+5
-                BRL     _llong_conv_L51
-                LDA     #0
-                BRL     _llong_conv_L52
-_llong_conv_L51
-                LDA     #1
-_llong_conv_L52
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L50
+                BNE     _llong_conv_L28
+_llong_conv_L29
                 LDA     #16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L50
+                BRL     main_bandx
+_llong_conv_L28
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -2251,6 +2046,7 @@ _llong_conv_L50
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2260,6 +2056,7 @@ _llong_conv_L50
                 MX      %00
                 LDA     #u
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2314,20 +2111,15 @@ _llong_conv_L50
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L57
+                BEQ     _llong_conv_L30
                 LDA     #17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L57
+                BRL     main_bandx
+_llong_conv_L30
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -2373,27 +2165,15 @@ _llong_conv_L57
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BEQ     _llong_conv_L59
-                LDA     #0
-                BRA     _llong_conv_L60
-_llong_conv_L59
-                LDA     #1
-_llong_conv_L60
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L58
+                BNE     _llong_conv_L31
                 LDA     #18
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L58
+                BRL     main_bandx
+_llong_conv_L31
                 LDA     #$FFFD
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #$0000
@@ -2412,6 +2192,7 @@ _llong_conv_L58
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2421,6 +2202,7 @@ _llong_conv_L58
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2432,8 +2214,7 @@ _llong_conv_L58
                 TYA
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L61
+                BEQ     _llong_conv_L32
                 LDA     b+6
                 STA     _fcc_q3
                 LDA     b+4
@@ -2441,8 +2222,8 @@ _llong_conv_L58
                 LDA     b+2
                 STA     _fcc_long_hi
                 LDA     b
-                BRL     _llong_conv_L62
-_llong_conv_L61
+                BRA     _llong_conv_L33
+_llong_conv_L32
                 LDA     1,S   ; fccstk d=0 b=1
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -2451,7 +2232,7 @@ _llong_conv_L61
                 LDX     #$FFFF
                 STX     _fcc_q2
                 STX     _fcc_q3
-_llong_conv_L62
+_llong_conv_L33
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -2500,31 +2281,18 @@ _llong_conv_L62
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L64
-                LDA     #0
-                BRA     _llong_conv_L65
-_llong_conv_L64
-                LDA     #1
-_llong_conv_L65
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L63
+                BNE     _llong_conv_L34
                 LDA     #19
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L63
+                BRL     main_bandx
+_llong_conv_L34
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L66
+                BEQ     _llong_conv_L35
                 LDA     b+6
                 STA     _fcc_q3
                 LDA     b+4
@@ -2532,8 +2300,8 @@ _llong_conv_L63
                 LDA     b+2
                 STA     _fcc_long_hi
                 LDA     b
-                BRL     _llong_conv_L67
-_llong_conv_L66
+                BRA     _llong_conv_L36
+_llong_conv_L35
                 LDA     1,S   ; fccstk d=0 b=1
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -2542,7 +2310,7 @@ _llong_conv_L66
                 LDX     #$FFFF
                 STX     _fcc_q2
                 STX     _fcc_q3
-_llong_conv_L67
+_llong_conv_L36
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -2593,31 +2361,18 @@ _llong_conv_L67
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L69
-                LDA     #0
-                BRA     _llong_conv_L70
-_llong_conv_L69
-                LDA     #1
-_llong_conv_L70
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L68
+                BNE     _llong_conv_L37
                 LDA     #20
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L68
+                BRL     main_bandx
+_llong_conv_L37
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L71
+                BEQ     _llong_conv_L38
                 LDA     1,S   ; fccstk d=0 b=1
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -2626,8 +2381,8 @@ _llong_conv_L68
                 LDX     #$FFFF
                 STX     _fcc_q2
                 STX     _fcc_q3
-                BRL     _llong_conv_L72
-_llong_conv_L71
+                BRA     _llong_conv_L39
+_llong_conv_L38
                 LDA     b+6
                 STA     _fcc_q3
                 LDA     b+4
@@ -2635,7 +2390,7 @@ _llong_conv_L71
                 LDA     b+2
                 STA     _fcc_long_hi
                 LDA     b
-_llong_conv_L72
+_llong_conv_L39
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -2686,35 +2441,21 @@ _llong_conv_L72
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L74
-                LDA     #0
-                BRA     _llong_conv_L75
-_llong_conv_L74
-                LDA     #1
-_llong_conv_L75
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L73
+                BNE     _llong_conv_L40
                 LDA     #21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L73
+                BRL     main_bandx
+_llong_conv_L40
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$9C40
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L76
+                BEQ     _llong_conv_L41
                 LDA     b+6
                 STA     _fcc_q3
                 LDA     b+4
@@ -2722,14 +2463,14 @@ _llong_conv_L73
                 LDA     b+2
                 STA     _fcc_long_hi
                 LDA     b
-                BRL     _llong_conv_L77
-_llong_conv_L76
+                BRA     _llong_conv_L42
+_llong_conv_L41
                 LDA     9,S   ; fccstk d=0 b=9
                 LDX     #0
                 STX     _fcc_long_hi
                 STZ     _fcc_q2
                 STZ     _fcc_q3
-_llong_conv_L77
+_llong_conv_L42
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -2779,26 +2520,15 @@ _llong_conv_L77
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _llong_conv_L79
-                LDA     #0
-                BRA     _llong_conv_L80
-_llong_conv_L79
-                LDA     #1
-_llong_conv_L80
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L78
+                BNE     _llong_conv_L43
                 LDA     #22
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L78
+                BRL     main_bandx
+_llong_conv_L43
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -2816,6 +2546,7 @@ _llong_conv_L78
                 LDA     _fcc_long_hi
                 PHA
                 TYA
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2826,6 +2557,7 @@ _llong_conv_L78
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2859,21 +2591,16 @@ _llong_conv_L78
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_conv_L81
+                BEQ     _llong_conv_L44
                 LDA     #23
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L81
+                BRL     main_bandx
+_llong_conv_L44
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -2890,6 +2617,7 @@ _llong_conv_L81
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2899,6 +2627,7 @@ _llong_conv_L81
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2932,21 +2661,16 @@ _llong_conv_L81
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _llong_conv_L82
+                BEQ     _llong_conv_L45
                 LDA     #24
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L82
+                BRL     main_bandx
+_llong_conv_L45
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -2962,6 +2686,7 @@ _llong_conv_L82
                 LDA     _fcc_long_hi
                 PHA
                 TYA
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2972,6 +2697,7 @@ _llong_conv_L82
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3005,21 +2731,16 @@ _llong_conv_L82
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _llong_conv_L83
+                BEQ     _llong_conv_L46
                 LDA     #25
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L83
+                BRL     main_bandx
+_llong_conv_L46
                 LDA     #$7FFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -3036,6 +2757,7 @@ _llong_conv_L83
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3045,6 +2767,7 @@ _llong_conv_L83
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3078,21 +2801,16 @@ _llong_conv_L83
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _llong_conv_L84
+                BEQ     _llong_conv_L47
                 LDA     #26
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L84
+                BRL     main_bandx
+_llong_conv_L47
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -3109,6 +2827,7 @@ _llong_conv_L84
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3118,6 +2837,7 @@ _llong_conv_L84
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3151,21 +2871,16 @@ _llong_conv_L84
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _llong_conv_L85
+                BEQ     _llong_conv_L48
                 LDA     #27
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L85
+                BRL     main_bandx
+_llong_conv_L48
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -3182,6 +2897,7 @@ _llong_conv_L85
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3191,6 +2907,7 @@ _llong_conv_L85
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3224,21 +2941,16 @@ _llong_conv_L85
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _llong_conv_L86
+                BEQ     _llong_conv_L49
                 LDA     #28
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L86
+                BRL     main_bandx
+_llong_conv_L49
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3255,6 +2967,7 @@ _llong_conv_L86
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3264,6 +2977,7 @@ _llong_conv_L86
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3286,21 +3000,16 @@ _llong_conv_L86
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #52719
-                BNE     *+5
-                BRL     _llong_conv_L87
+                BEQ     _llong_conv_L50
                 LDA     #29
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L87
+                BRL     main_bandx
+_llong_conv_L50
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -3320,37 +3029,21 @@ _llong_conv_L87
                 ADC     #4
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #52719
+                STX     _fcc_long_b_lo
+                LDX     #35243
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L88
+                BEQ     _llong_conv_L51
                 LDA     #30
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L88
+                BRL     main_bandx
+_llong_conv_L51
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -3375,21 +3068,16 @@ _llong_conv_L88
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #52719
-                BNE     *+5
-                BRL     _llong_conv_L89
+                BEQ     _llong_conv_L52
                 LDA     #31
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L89
+                BRL     main_bandx
+_llong_conv_L52
                 LDA     #$FFF9
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #$0000
@@ -3450,27 +3138,15 @@ _llong_conv_L89
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L91
-                LDA     #0
-                BRA     _llong_conv_L92
-_llong_conv_L91
-                LDA     #1
-_llong_conv_L92
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L90
+                BNE     _llong_conv_L53
                 LDA     #32
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L90
+                BRL     main_bandx
+_llong_conv_L53
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -3532,27 +3208,15 @@ _llong_conv_L90
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
-                BEQ     _llong_conv_L94
-                LDA     #0
-                BRA     _llong_conv_L95
-_llong_conv_L94
-                LDA     #1
-_llong_conv_L95
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L93
+                BNE     _llong_conv_L54
                 LDA     #33
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L93
+                BRL     main_bandx
+_llong_conv_L54
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -3568,6 +3232,7 @@ _llong_conv_L93
                 LDA     _fcc_long_hi
                 PHA
                 TYA
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -3578,6 +3243,7 @@ _llong_conv_L93
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3603,6 +3269,7 @@ _llong_conv_L93
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3612,6 +3279,7 @@ _llong_conv_L93
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3622,8 +3290,8 @@ _llong_conv_L93
                 TCS
                 TYA
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
-_llong_conv_L96
+                STA     _fcc_img16
+_llong_conv_L55
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3638,33 +3306,21 @@ _llong_conv_L96
                 ORA     _fcc_q2
                 ORA     _fcc_q3
                 BNE     *+5
-                BRL     _llong_conv_L98
-                LDA     7,S   ; fccstk d=0 b=7
-                TAX
-                TXA
+                BRL     _llong_conv_L56
+                LDA     _fcc_img16
                 SEC
                 SBC     #3
-                BVC     _llong_conv_L100
+                BVC     _llong_conv_L57
                 EOR     #$8000
-_llong_conv_L100
+_llong_conv_L57
                 BMI     *+5
-                BRL     _llong_conv_L98
-                LDA     #1
-                BRL     _llong_conv_L99
-_llong_conv_L98
-                LDA     #0
-_llong_conv_L99
-                CMP     #0
-                BNE     *+5
-                BRL     _llong_conv_L97
-                LDA     7,S   ; fccstk d=0 b=7
-                INC
-                STA     7,S   ; fccstk d=0 b=7
+                BRL     _llong_conv_L56
+                INC     _fcc_img16
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CMP     #2
                 BEQ     *+5
-                BRL     _llong_conv_L101
+                BRL     _llong_conv_L58
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -3714,36 +3370,34 @@ _llong_conv_L99
                 LDA     _fcc_q3
                 STA     a+6
                 TYA
-_llong_conv_L101
-                BRL     _llong_conv_L96
-_llong_conv_L97
-                LDA     7,S   ; fccstk d=0 b=7
+_llong_conv_L58
+                BRL     _llong_conv_L55
+_llong_conv_L56
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _llong_conv_L102
+                BEQ     _llong_conv_L59
                 LDA     #34
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_conv_L102
+                BRA     main_bandx
+_llong_conv_L59
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     20
+main_FRAMESIZE   EQU     22
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 61

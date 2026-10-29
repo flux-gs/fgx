@@ -48,141 +48,58 @@ main_stkok        TCS
                 LDA     #0
                 STA     _fcc_img0
                 LDA     #2
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_expr_L3
+                BNE     _sizeof_expr_L0
                 LDA     #4
-                TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _sizeof_expr_L3
-                LDA     #1
-                BRL     _sizeof_expr_L4
-_sizeof_expr_L3
-                LDA     #0
-_sizeof_expr_L4
-                CMP     #0
-                BNE     *+5
-                BRL     _sizeof_expr_L1
+                BNE     _sizeof_expr_L0
                 LDA     #2
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_expr_L1
-                LDA     #1
-                BRL     _sizeof_expr_L2
-_sizeof_expr_L1
-                LDA     #0
-_sizeof_expr_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _sizeof_expr_L0
+                BNE     _sizeof_expr_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _sizeof_expr_L0
                 LDA     #4
-                TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _sizeof_expr_L8
+                BNE     _sizeof_expr_L1
                 LDA     #2
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_expr_L8
-                LDA     #1
-                BRL     _sizeof_expr_L9
-_sizeof_expr_L8
-                LDA     #0
-_sizeof_expr_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _sizeof_expr_L6
+                BNE     _sizeof_expr_L1
                 LDA     #2
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_expr_L6
-                LDA     #1
-                BRL     _sizeof_expr_L7
-_sizeof_expr_L6
-                LDA     #0
-_sizeof_expr_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _sizeof_expr_L5
+                BNE     _sizeof_expr_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
-_sizeof_expr_L5
+_sizeof_expr_L1
                 LDA     #4
-                TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _sizeof_expr_L11
+                BNE     _sizeof_expr_L2
                 LDA     #2
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_expr_L11
-                LDA     #1
-                BRL     _sizeof_expr_L12
-_sizeof_expr_L11
-                LDA     #0
-_sizeof_expr_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _sizeof_expr_L10
+                BNE     _sizeof_expr_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
-_sizeof_expr_L10
+_sizeof_expr_L2
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_expr_L14
+                BNE     _sizeof_expr_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _sizeof_expr_L14
-                LDA     #1
-                BRL     _sizeof_expr_L15
-_sizeof_expr_L14
-                LDA     #0
-_sizeof_expr_L15
-                CMP     #0
-                BNE     *+5
-                BRL     _sizeof_expr_L13
+                BNE     _sizeof_expr_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
-_sizeof_expr_L13
+_sizeof_expr_L3
                 LDA     _fcc_img0
                 TAY
                 TSC

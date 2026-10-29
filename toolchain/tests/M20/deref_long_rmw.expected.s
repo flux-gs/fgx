@@ -83,6 +83,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -92,6 +93,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_v
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -127,28 +129,15 @@ main_stkok        TCS
                 LDA     g_v+2
                 STA     _fcc_long_hi
                 LDA     g_v
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_long_rmw_L0
+                BEQ     _deref_long_rmw_L0
                 LDA     #14
-                BRL     _deref_long_rmw_L1
+                BRA     _deref_long_rmw_L1
 _deref_long_rmw_L0
                 LDA     #0
 _deref_long_rmw_L1
@@ -186,28 +175,15 @@ _deref_long_rmw_L1
                 LDA     g_v+2
                 STA     _fcc_long_hi
                 LDA     g_v
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_long_rmw_L2
+                BEQ     _deref_long_rmw_L2
                 LDA     #14
-                BRL     _deref_long_rmw_L3
+                BRA     _deref_long_rmw_L3
 _deref_long_rmw_L2
                 LDA     #0
 _deref_long_rmw_L3
@@ -224,6 +200,7 @@ _deref_long_rmw_L3
                 LDA     _fcc_long_hi
                 STA     g_v+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -233,6 +210,7 @@ _deref_long_rmw_L3
                 MX      %00
                 LDA     #g_v
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pop
@@ -245,28 +223,15 @@ _deref_long_rmw_L3
                 LDA     g_v+2
                 STA     _fcc_long_hi
                 LDA     g_v
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_long_rmw_L4
+                BEQ     _deref_long_rmw_L4
                 LDA     #14
-                BRL     _deref_long_rmw_L5
+                BRA     _deref_long_rmw_L5
 _deref_long_rmw_L4
                 LDA     #0
 _deref_long_rmw_L5

@@ -324,6 +324,96 @@ int main(void)
     check("clcadc_keep_v_read",
           "                CLC\n                ADC     #1\n                BVC     L5\n", "                CLC\n                ADC     #1\n                BVC     L5\n");
 
+    /* a far conditional within reach becomes the inverse short branch */
+    check("relax_pair",
+          "                BNE     *+5\n                BRL     L1\n                NOP\nL1                 ENT\n",
+          "                BEQ     L1\n                NOP\nL1                 ENT\n");
+    /* backward, and a lone BRL becomes BRA */
+    check("relax_back_brl",
+          "L2                 ENT\n                NOP\n                BRL     L2\n",
+          "L2                 ENT\n                NOP\n                BRA     L2\n");
+    /* 43 four-byte stores put L3 at 172, beyond +127: the pair stays */
+    {
+        static char in[4096];
+        size_t k;
+        strcpy(in, "                BMI     *+5\n                BRL     L3\n");
+        for (k = 0; k < 43; k++)
+            strcat(in, "                STA     far\n");
+        strcat(in, "L3                 ENT\n");
+        check("relax_out_of_reach", in, in);
+    }
+    /* a line it cannot size refuses every branch across it */
+    check("relax_unknown_line",
+          "                BRL     L4\n                HEX     0102\nL4                 ENT\n",
+          "                BRL     L4\n                HEX     0102\nL4                 ENT\n");
+    /* a BRL inside the reach of a `*+7' keeps its 3 bytes */
+    check("relax_pinned_by_skip",
+          "                BEQ     *+7\n                LDA     #0\n                BRL     L5\n                NOP\nL5                 ENT\n",
+          "                BEQ     *+7\n                LDA     #0\n                BRL     L5\n                NOP\nL5                 ENT\n");
+
+    /* CMP #0 after LDA: N and Z are already A's, and no path reads C */
+    check("cmp0_after_lda",
+          "                LDA     x\n                CMP     #0\n                BNE     L6\n                RTL\nL6                 CLC\n                RTL\n",
+          "                LDA     x\n                BNE     L6\n                RTL\nL6                 CLC\n                RTL\n");
+    /* the taken path reads the compare's carry: kept */
+    check("cmp0_keep_carry_at_label",
+          "                LDA     x\n                CMP     #0\n                BNE     L7\n                RTL\nL7                 ADC     #1\n                RTL\n",
+          "                LDA     x\n                CMP     #0\n                BNE     L7\n                RTL\nL7                 ADC     #1\n                RTL\n");
+    /* a DO whose one arm writes C and the other does not: kept */
+    check("cmp0_keep_do_one_arm",
+          "                LDA     x\n                CMP     #0\n                DO      k\n                CLC\n                ELSE\n                NOP\n                FIN\n                ROL\n",
+          "                LDA     x\n                CMP     #0\n                DO      k\n                CLC\n                ELSE\n                NOP\n                FIN\n                ROL\n");
+    /* STA leaves N and Z from an earlier value: kept */
+    check("cmp0_keep_after_sta",
+          "                STA     x\n                CMP     #0\n                BEQ     L8\nL8                 RTL\n",
+          "                STA     x\n                CMP     #0\n                BEQ     L8\nL8                 RTL\n");
+    /* a far pair out of reach is followed to its label and past its BRL */
+    {
+        static char in[4096], want[4096];
+        size_t k;
+        strcpy(in, "                AND     #128\n                CMP     #0\n"
+                   "                BNE     *+5\n                BRL     L10\n");
+        strcpy(want, "                AND     #128\n"
+                     "                BNE     *+5\n                BRL     L10\n");
+        for (k = 0; k < 43; k++) {
+            strcat(in, "                STA     far\n");
+            strcat(want, "                STA     far\n");
+        }
+        strcat(in, "                RTL\nL10                CLC\n                RTL\n");
+        strcat(want, "                RTL\nL10                CLC\n                RTL\n");
+        check("cmp0_far_pair", in, want);
+    }
+    /* a store between leaves A, N and Z as DEC set them */
+    check("cmp0_after_store",
+          "                DEC\n                STA     [_fcc_fpr0]\n                CMP     #0\n                BMI     L9\n                RTL\nL9                 RTL\n",
+          "                DEC\n                STA     [_fcc_fpr0]\n                BMI     L9\n                RTL\nL9                 RTL\n");
+    /* TAX ; TXA puts back what A holds */
+    check("tax_txa",
+          "                TAX\n                TXA\n                AND     #128\n",
+          "                TAX\n                AND     #128\n");
+    /* a TAX no path reads X from goes; a read on either path keeps it */
+    check("dead_tax",
+          "                TAX\n                AND     #128\n                BEQ     L9\n                LDX     #0\n                RTL\nL9                 TSX\n                RTL\n",
+          "                AND     #128\n                BEQ     L9\n                LDX     #0\n                RTL\nL9                 TSX\n                RTL\n");
+    check("tax_before_setjmp",
+          "                TAX\n                FGX2_FARCALL setjmp\n                LDX     #0\n                RTL\n",
+          "                TAX\n                FGX2_FARCALL setjmp\n                LDX     #0\n                RTL\n");
+    check("tax_at_return",
+          "                TAX\n                LDA     #0\n                RTL\n",
+          "                TAX\n                LDA     #0\n                RTL\n");
+    check("tax_read_at_label",
+          "                TAX\n                AND     #128\n                BEQ     L9\n                RTL\nL9                 TXA\n                RTL\n",
+          "                TAX\n                AND     #128\n                BEQ     L9\n                RTL\nL9                 TXA\n                RTL\n");
+    check("tax_before_jsr",
+          "                TAX\n                LDA     #1\n                JSR     _fcc_x\n                RTL\n",
+          "                TAX\n                LDA     #1\n                JSR     _fcc_x\n                RTL\n");
+    check("tax_indexed",
+          "                TAX\n                LDAL    $000000,X\n                RTL\n",
+          "                TAX\n                LDAL    $000000,X\n                RTL\n");
+    check("tax_nz_live",
+          "                TAX\n                BEQ     L9\n                RTL\nL9                 RTL\n",
+          "                TAX\n                BEQ     L9\n                RTL\nL9                 RTL\n");
+
     /* (option C pattern 3 redundant-restore was dropped: 0 corpus yield.) */
 
     printf("\n%d/%d passed\n", g_tests - g_fails, g_tests);

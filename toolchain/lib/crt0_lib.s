@@ -43,11 +43,8 @@ _crt0_lib       MX      %11
                 JSR     _crt0_inits
                 FGX2_FARCALL main                   ; A = exit status (RTL)
                 AND     #$00FF
-                PHA                                 ; returning from main flushes
-                FGX2_FARCALL __lc_stdio_flush       ; stdio
-                PLA
-                JSL     SYS_TRAMP
-                DFB     SYS_EXIT
+                PHA                                 ; exit(main(...)), as 2.11BSD
+                FGX2_FARCALL exit                   ; crt0 does; exit does not return
 @cl_safety      BRA     @cl_safety
 
 ;------------------------------------------------------------------------------

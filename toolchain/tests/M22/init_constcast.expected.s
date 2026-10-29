@@ -23,14 +23,10 @@ main_stkok        TCS
                 TAX
                 LDA:    cols,X
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #255
-                BNE     *+5
-                BRL     _init_constcast_L0
+                BEQ     _init_constcast_L0
                 LDA     #1
                 TAY
                 TSC
@@ -47,10 +43,8 @@ _init_constcast_L0
                 TAX
                 LDA:    flags,X
                 TAX
-                TXA
                 CMP     #16
-                BNE     *+5
-                BRL     _init_constcast_L1
+                BEQ     _init_constcast_L1
                 LDA     #2
                 TAY
                 TSC
@@ -67,10 +61,8 @@ _init_constcast_L1
                 TAX
                 LDA:    flags,X
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _init_constcast_L2
+                BEQ     _init_constcast_L2
                 LDA     #3
                 TAY
                 TSC
@@ -82,6 +74,14 @@ _init_constcast_L1
                 TYA
                 RTL
 _init_constcast_L2
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #keys
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -89,16 +89,6 @@ _init_constcast_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -118,10 +108,8 @@ _init_constcast_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _init_constcast_L3
+                BEQ     _init_constcast_L3
                 LDA     #4
                 TAY
                 TSC
@@ -133,6 +121,14 @@ _init_constcast_L2
                 TYA
                 RTL
 _init_constcast_L3
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #keys
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -140,23 +136,11 @@ _init_constcast_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _init_constcast_L4
+                BEQ     _init_constcast_L4
                 LDA     #5
                 TAY
                 TSC
@@ -168,15 +152,6 @@ _init_constcast_L3
                 TYA
                 RTL
 _init_constcast_L4
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -184,8 +159,15 @@ _init_constcast_L4
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #keys
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -201,8 +183,7 @@ _init_constcast_L4
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _init_constcast_L5
+                BEQ     _init_constcast_L5
                 LDA     #6
                 TAY
                 TSC
@@ -214,15 +195,6 @@ _init_constcast_L4
                 TYA
                 RTL
 _init_constcast_L5
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -230,8 +202,15 @@ _init_constcast_L5
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #keys
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -246,8 +225,7 @@ _init_constcast_L5
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _init_constcast_L6
+                BEQ     _init_constcast_L6
                 LDA     #7
                 TAY
                 TSC

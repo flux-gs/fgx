@@ -27,14 +27,12 @@ _ss_bigbuf_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #2048
                 BVC     _ss_bigbuf_L3
                 EOR     #$8000
 _ss_bigbuf_L3
-                BMI     *+5
-                BRL     _ss_bigbuf_L2
+                BPL     _ss_bigbuf_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -97,7 +95,7 @@ _ss_bigbuf_L3
                 PLA
 _ss_bigbuf_L1
                 INC     _fcc_img0
-                BRL     _ss_bigbuf_L0
+                BRA     _ss_bigbuf_L0
 _ss_bigbuf_L2
                 SEP     #$20
                 MX      %10

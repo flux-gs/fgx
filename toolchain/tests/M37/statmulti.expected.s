@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     main_sl_b
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29,6 +30,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #main_sl_buf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     main_sl_p
                 LDA     _fcc_fpr0+2
                 STA     main_sl_p+2
@@ -49,25 +53,13 @@ main_stkok        TCS
                 LDA     main_sl_n+2
                 STA     _fcc_long_hi
                 LDA     main_sl_n
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #100
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #100
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _statmulti_L0
+                BEQ     _statmulti_L0
                 LDA     #1
                 TAY
                 TSC
@@ -90,10 +82,8 @@ _statmulti_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _statmulti_L1
+                BEQ     _statmulti_L1
                 LDA     #2
                 TAY
                 TSC

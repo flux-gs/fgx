@@ -26,8 +26,6 @@ main_stkok        TCS
                 LDA     #7
                 STA     _fcc_img2
                 LDA     #0
-                TAX
-                TXA
                 SEC
                 SBC     #3
                 STA     _fcc_img3
@@ -41,11 +39,8 @@ main_stkok        TCS
                 BVC     _aud_cmp_all_L1
                 EOR     #$8000
 _aud_cmp_all_L1
-                BMI     *+5
-                BRL     _aud_cmp_all_L0
+                BPL     _aud_cmp_all_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -63,11 +58,8 @@ _aud_cmp_all_L0
                 BVC     _aud_cmp_all_L3
                 EOR     #$8000
 _aud_cmp_all_L3
-                BMI     *+5
-                BRL     _aud_cmp_all_L2
+                BPL     _aud_cmp_all_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -85,11 +77,8 @@ _aud_cmp_all_L2
                 BVC     _aud_cmp_all_L5
                 EOR     #$8000
 _aud_cmp_all_L5
-                BPL     *+5
-                BRL     _aud_cmp_all_L4
+                BMI     _aud_cmp_all_L4
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -104,11 +93,8 @@ _aud_cmp_all_L4
                 BVC     _aud_cmp_all_L7
                 EOR     #$8000
 _aud_cmp_all_L7
-                BPL     *+5
-                BRL     _aud_cmp_all_L6
+                BMI     _aud_cmp_all_L6
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -119,11 +105,8 @@ _aud_cmp_all_L6
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _aud_cmp_all_L8
+                BNE     _aud_cmp_all_L8
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -134,11 +117,8 @@ _aud_cmp_all_L8
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _aud_cmp_all_L9
+                BEQ     _aud_cmp_all_L9
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -153,11 +133,8 @@ _aud_cmp_all_L9
                 BVC     _aud_cmp_all_L11
                 EOR     #$8000
 _aud_cmp_all_L11
-                BMI     *+5
-                BRL     _aud_cmp_all_L10
+                BPL     _aud_cmp_all_L10
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -175,11 +152,9 @@ _aud_cmp_all_L10
                 BVC     _aud_cmp_all_L13
                 EOR     #$8000
 _aud_cmp_all_L13
-                BMI     *+5
-                BRL     _aud_cmp_all_L12
+                BPL     _aud_cmp_all_L12
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     _fcc_img0

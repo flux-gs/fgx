@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27,9 +28,13 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #storage
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     htab
                 LDA     _fcc_fpr0+2
                 STA     htab+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -39,6 +44,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #cstorage
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     codetab
                 LDA     _fcc_fpr0+2
                 STA     codetab+2
@@ -50,14 +57,12 @@ _glptrhash_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5010
                 BVC     _glptrhash_L3
                 EOR     #$8000
 _glptrhash_L3
-                BMI     *+5
-                BRL     _glptrhash_L2
+                BPL     _glptrhash_L2
                 SEP     #$20
                 MX      %10
                 LDA     htab+2
@@ -230,25 +235,13 @@ _glptrhash_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #1780
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1780
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L4
+                BEQ     _glptrhash_L4
                 LDA     #10
                 TAY
                 TSC
@@ -263,8 +256,6 @@ _glptrhash_L4
                 LDA     _fcc_img2
                 ASL
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -280,27 +271,13 @@ _glptrhash_L4
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L5
+                BEQ     _glptrhash_L5
                 LDA     #11
                 TAY
                 TSC
@@ -315,8 +292,6 @@ _glptrhash_L5
                 LDA     _fcc_img2
                 ASL
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -332,25 +307,13 @@ _glptrhash_L5
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L6
+                BEQ     _glptrhash_L6
                 LDA     #12
                 TAY
                 TSC
@@ -457,8 +420,6 @@ _glptrhash_L6
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -472,10 +433,8 @@ _glptrhash_L6
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _glptrhash_L7
+                BEQ     _glptrhash_L7
                 LDA     #1
                 TAY
                 TSC
@@ -490,25 +449,13 @@ _glptrhash_L7
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #258
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #258
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L8
+                BEQ     _glptrhash_L8
                 LDA     #2
                 TAY
                 TSC
@@ -523,8 +470,6 @@ _glptrhash_L8
                 LDA     _fcc_img2
                 ASL
                 ASL
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -540,26 +485,13 @@ _glptrhash_L8
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$D074
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #53364
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L9
+                BEQ     _glptrhash_L9
                 LDA     #3
                 TAY
                 TSC
@@ -578,26 +510,13 @@ _glptrhash_L9
                 LDA:    storage+2,X
                 STA     _fcc_long_hi
                 LDA:    storage,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$D074
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #53364
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L10
+                BEQ     _glptrhash_L10
                 LDA     #4
                 TAY
                 TSC
@@ -614,10 +533,8 @@ _glptrhash_L10
                 TAX
                 LDA:    cstorage,X
                 TAX
-                TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _glptrhash_L11
+                BEQ     _glptrhash_L11
                 LDA     #5
                 TAY
                 TSC

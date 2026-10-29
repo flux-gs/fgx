@@ -27,23 +27,12 @@ _sa_fld_rmw_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _sa_fld_rmw_L3
                 EOR     #$8000
 _sa_fld_rmw_L3
-                BMI     *+5
-                BRL     _sa_fld_rmw_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
+                BPL     _sa_fld_rmw_L2
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -52,20 +41,18 @@ _sa_fld_rmw_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #10
                 LDY     #8
                 STA     [_fcc_fpr0],Y
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -74,24 +61,22 @@ _sa_fld_rmw_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #0
                 LDY     #10
                 STA     [_fcc_fpr0],Y
 _sa_fld_rmw_L1
                 INC     _fcc_img0
-                BRL     _sa_fld_rmw_L0
+                BRA     _sa_fld_rmw_L0
 _sa_fld_rmw_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 INC
@@ -99,22 +84,20 @@ _sa_fld_rmw_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 DEC
                 LDY     #8
                 STA     [_fcc_fpr0],Y
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 CLC
@@ -122,13 +105,8 @@ _sa_fld_rmw_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                INC
-                LDY     #8
-                STA     [_fcc_fpr0],Y
                 SEP     #$20
                 MX      %10
                 PHB
@@ -136,24 +114,19 @@ _sa_fld_rmw_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
+                LDY     #8
+                LDA     [_fcc_fpr0],Y
+                INC
+                LDY     #8
+                STA     [_fcc_fpr0],Y
                 LDA     #1
                 ASL
                 INC
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CLC
-                ADC     #5
-                LDY     #8
-                STA     [_fcc_fpr0],Y
                 SEP     #$20
                 MX      %10
                 PHB
@@ -161,8 +134,12 @@ _sa_fld_rmw_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
+                LDY     #8
+                LDA     [_fcc_fpr0],Y
+                CLC
+                ADC     #5
+                LDY     #8
+                STA     [_fcc_fpr0],Y
                 LDA     #3
                 ASL
                 CLC
@@ -170,16 +147,8 @@ _sa_fld_rmw_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                SEC
-                SBC     #3
-                LDY     #8
-                STA     [_fcc_fpr0],Y
                 SEP     #$20
                 MX      %10
                 PHB
@@ -187,8 +156,13 @@ _sa_fld_rmw_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
+                LDY     #8
+                LDA     [_fcc_fpr0],Y
+                TAX
+                SEC
+                SBC     #3
+                LDY     #8
+                STA     [_fcc_fpr0],Y
                 LDA     #0
                 ASL
                 CLC
@@ -196,11 +170,8 @@ _sa_fld_rmw_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -208,16 +179,24 @@ _sa_fld_rmw_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
+                LDY     #8
+                LDA     [_fcc_fpr0],Y
+                PHA
                 LDA     #1
                 ASL
                 INC
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -225,15 +204,6 @@ _sa_fld_rmw_L2
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 INC
@@ -241,15 +211,8 @@ _sa_fld_rmw_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_tmp_b
-                PLA
-                CLC
-                ADC     _fcc_tmp_b
-                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -257,8 +220,13 @@ _sa_fld_rmw_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
+                LDY     #8
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_tmp_b
+                PLA
+                CLC
+                ADC     _fcc_tmp_b
+                PHA
                 LDA     #3
                 ASL
                 CLC
@@ -266,8 +234,15 @@ _sa_fld_rmw_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #blk
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

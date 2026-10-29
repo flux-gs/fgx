@@ -53,15 +53,7 @@ _renameover_put_stkok        TCS
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L1
-                EOR     #$8000
-_renameover_L1
-                BMI     *+5
-                BRL     _renameover_L0
+                BPL     _renameover_L0
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -131,8 +123,7 @@ _renameover_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _renameover_L2
+                BEQ     _renameover_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
@@ -149,7 +140,7 @@ _renameover_L0
                 STA     _fcc_fb
                 TYA
                 RTL
-_renameover_L2
+_renameover_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
@@ -216,15 +207,7 @@ main_stkok        TCS
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L4
-                EOR     #$8000
-_renameover_L4
-                BMI     *+5
-                BRL     _renameover_L3
+                BPL     _renameover_L2
                 LDA     #1
                 TAY
                 TSC
@@ -235,7 +218,7 @@ _renameover_L4
                 STA     _fcc_fb
                 TYA
                 RTL
-_renameover_L3
+_renameover_L2
                 LDA     #6
                 PHA
                 SEP     #$20
@@ -267,15 +250,7 @@ _renameover_L3
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L6
-                EOR     #$8000
-_renameover_L6
-                BMI     *+5
-                BRL     _renameover_L5
+                BPL     _renameover_L3
                 LDA     #2
                 TAY
                 TSC
@@ -286,7 +261,7 @@ _renameover_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_renameover_L5
+_renameover_L3
                 SEP     #$20
                 MX      %10
                 PHB
@@ -316,18 +291,13 @@ _renameover_L5
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _renameover_L7
+                BNE     _renameover_L4
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
-_renameover_L7
+_renameover_L4
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -349,15 +319,8 @@ _renameover_L7
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L9
-                EOR     #$8000
-_renameover_L9
                 BPL     *+5
-                BRL     _renameover_L8
+                BRL     _renameover_L5
                 LDA     #6
                 PHA
                 SEP     #$20
@@ -390,10 +353,8 @@ _renameover_L9
                 TYA
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _renameover_L15
+                BNE     _renameover_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -412,18 +373,8 @@ _renameover_L9
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #78
-                BEQ     *+5
-                BRL     _renameover_L15
-                LDA     #1
-                BRL     _renameover_L16
-_renameover_L15
-                LDA     #0
-_renameover_L16
-                CMP     #0
-                BNE     *+5
-                BRL     _renameover_L13
+                BNE     _renameover_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -442,18 +393,8 @@ _renameover_L16
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #69
-                BEQ     *+5
-                BRL     _renameover_L13
-                LDA     #1
-                BRL     _renameover_L14
-_renameover_L13
-                LDA     #0
-_renameover_L14
-                CMP     #0
-                BNE     *+5
-                BRL     _renameover_L11
+                BNE     _renameover_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -472,26 +413,15 @@ _renameover_L14
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #87
-                BEQ     *+5
-                BRL     _renameover_L11
-                LDA     #1
-                BRL     _renameover_L12
-_renameover_L11
-                LDA     #0
-_renameover_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _renameover_L10
+                BNE     _renameover_L6
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
-_renameover_L10
-_renameover_L8
+_renameover_L6
+_renameover_L5
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -513,30 +443,21 @@ _renameover_L8
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L18
-                EOR     #$8000
-_renameover_L18
-                BMI     *+5
-                BRL     _renameover_L17
+                BPL     _renameover_L7
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     13,S   ; fccstk d=0 b=13
-                BRL     _renameover_L19
-_renameover_L17
+                BRA     _renameover_L8
+_renameover_L7
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
                 FGX2_FARCALL close
                 TAY
                 PLA
                 TYA
-_renameover_L19
+_renameover_L8
                 LDA     #1
                 PHA
                 SEP     #$20
@@ -568,11 +489,7 @@ _renameover_L19
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _renameover_L20
+                BNE     _renameover_L9
                 SEP     #$20
                 MX      %10
                 PHB
@@ -602,18 +519,13 @@ _renameover_L19
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _renameover_L21
+                BNE     _renameover_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
-_renameover_L21
+_renameover_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -646,7 +558,7 @@ _renameover_L21
                 CLC
                 ADC     #4
                 TCS
-_renameover_L20
+_renameover_L9
                 SEP     #$20
                 MX      %10
                 PHB

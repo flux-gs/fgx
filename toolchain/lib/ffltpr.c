@@ -8,18 +8,17 @@
  * is not defined the references to pgen, pfloat and pscien in doprnt will be
  * satisfied by ffltpr.s (fake floating print)."
  *
- * Here libc's printf always calls __lc_pf_float (libc_c/fltpr.c), and fcc
- * marks a translation unit that can print a float with `]__lc_fltused'.
- * fgx_static links this file, compiled as program source, into a program
- * none of whose units carries the marker; its __lc_pf_float, a definition in
- * the program, shadows libc's (fgx_gc.graph's archive search), and fltpr
- * with ecvt and fcvt is never reached.  libc.so, and so every dynamic
- * program, keeps the real printer.
+ * Here libc's _doprnt (doprnt.c) calls __lc_pf_float for each %e, %f or %g,
+ * with 4.3BSD-Reno cvt's interface, and fcc marks a translation unit that
+ * can print a float with `]__lc_fltused'.  fgx_static links this file,
+ * compiled as program source, into a program none of whose units carries
+ * the marker; its __lc_pf_float, a definition in the program, shadows libc's
+ * (fgx_gc.graph's archive search), and fltpr with ecvt and fcvt is never
+ * reached.  libc.so, and so every dynamic program, keeps the real printer.
  */
-void __lc_pf_q(int width, int zeropad, int leftjust);
-
-void __lc_pf_float(int c, double f, int width, int prec, int hasprec,
-                   int zeropad, int leftjust)
+int __lc_pf_float(double f, int prec, int flags, char *signp, int fmtch,
+                  char *startp, char *endp)
 {
-    __lc_pf_q(width, zeropad, leftjust);
+    startp[1] = '?';
+    return 1;
 }

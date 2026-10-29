@@ -7,9 +7,10 @@
                 FGX2_EXPORT deep
 deep            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #deep_FRAMESIZE
+                SBC     #deep_FRAMESIZE-2
                 DO      deep_STKGUARD
                 BCC     deep_stkovf
                 CMP     _fcc_stkfloor
@@ -20,23 +21,19 @@ deep_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _p33_setjmp_local_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _p33_setjmp_local_L3
                 EOR     #$8000
 _p33_setjmp_local_L3
-                BMI     *+5
-                BRL     _p33_setjmp_local_L2
+                BPL     _p33_setjmp_local_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -45,7 +42,7 @@ _p33_setjmp_local_L3
                 INC
                 INC
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 CLC
                 ADC     1,S
@@ -53,7 +50,7 @@ _p33_setjmp_local_L3
                 PLA
                 TYA
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -67,11 +64,9 @@ _p33_setjmp_local_L3
                 STA     [_fcc_ptr]
                 PLA
 _p33_setjmp_local_L1
-                INC     _fcc_img0
-                BRL     _p33_setjmp_local_L0
+                INC     _fcc_img16
+                BRA     _p33_setjmp_local_L0
 _p33_setjmp_local_L2
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     marker
                 PHA
                 SEP     #$20
@@ -111,13 +106,15 @@ _p33_setjmp_local_L2
                 TAY
                 TSC
                 CLC
-                ADC     #deep_FRAMESIZE
+                ADC     #deep_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-deep_FRAMESIZE   EQU     18
+deep_FRAMESIZE   EQU     20
 deep_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
@@ -161,19 +158,14 @@ main_stkok        TCS
                 TAX
                 FGX2_FARCALL setjmp
                 STA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _p33_setjmp_local_L4
+                BNE     _p33_setjmp_local_L4
                 FGX2_FARCALL deep
 _p33_setjmp_local_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #314
-                BNE     *+5
-                BRL     _p33_setjmp_local_L5
+                BEQ     _p33_setjmp_local_L5
                 LDA     #1
                 TAY
                 TSC
@@ -191,10 +183,8 @@ _p33_setjmp_local_L5
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #314
-                BNE     *+5
-                BRL     _p33_setjmp_local_L6
+                BEQ     _p33_setjmp_local_L6
                 LDA     #2
                 TAY
                 TSC
@@ -208,10 +198,8 @@ _p33_setjmp_local_L5
 _p33_setjmp_local_L6
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _p33_setjmp_local_L7
+                BEQ     _p33_setjmp_local_L7
                 LDA     #3
                 TAY
                 TSC
@@ -225,10 +213,8 @@ _p33_setjmp_local_L6
 _p33_setjmp_local_L7
                 LDA     marker
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _p33_setjmp_local_L8
+                BEQ     _p33_setjmp_local_L8
                 LDA     #4
                 TAY
                 TSC
@@ -254,34 +240,27 @@ _p33_setjmp_local_L8
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1+2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _p33_setjmp_local_L10
+                BNE     _p33_setjmp_local_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _p33_setjmp_local_L10
+                BNE     _p33_setjmp_local_L10
                 LDA     #0
-                BRL     _p33_setjmp_local_L11
+                BRA     _p33_setjmp_local_L11
 _p33_setjmp_local_L10
                 LDA     #1
 _p33_setjmp_local_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _p33_setjmp_local_L9
+                BEQ     _p33_setjmp_local_L9
                 LDA     #5
                 TAY
                 TSC
@@ -299,10 +278,8 @@ _p33_setjmp_local_L9
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #314
-                BNE     *+5
-                BRL     _p33_setjmp_local_L12
+                BEQ     _p33_setjmp_local_L12
                 LDA     #6
                 TAY
                 TSC

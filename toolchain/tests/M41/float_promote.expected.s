@@ -7,9 +7,11 @@
                 FGX2_EXPORT _float_promote_vsum
 _float_promote_vsum            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #_float_promote_vsum_FRAMESIZE
+                SBC     #_float_promote_vsum_FRAMESIZE-4
                 DO      _float_promote_vsum_STKGUARD
                 BCC     _float_promote_vsum_stkovf
                 CMP     _fcc_stkfloor
@@ -49,7 +51,6 @@ _float_promote_vsum_stkok        TCS
                 MX      %00
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -61,9 +62,9 @@ _float_promote_vsum_stkok        TCS
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _float_promote_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
@@ -93,8 +94,6 @@ _float_promote_L0
                 STA     6+_float_promote_vsum_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -121,13 +120,11 @@ _float_promote_L2
                 PHA
                 TYA
                 PHA
-                LDA     11,S   ; fccstk d=8 b=3
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=8 b=1
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 LDA     #8
-                TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -139,12 +136,10 @@ _float_promote_L2
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     11,S   ; fccstk d=8 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     9,S   ; fccstk d=8 b=1
+                STA     _fcc_img16
                 LDA     #8
-                TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -199,10 +194,6 @@ _float_promote_L1
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
-                LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_q3
                 LDA     9,S   ; fccstk d=0 b=9
@@ -213,13 +204,17 @@ _float_promote_L1
                 TAY
                 TSC
                 CLC
-                ADC     #_float_promote_vsum_FRAMESIZE
+                ADC     #_float_promote_vsum_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-_float_promote_vsum_FRAMESIZE   EQU     12
+_float_promote_vsum_FRAMESIZE   EQU     16
 _float_promote_vsum_STKGUARD    EQU     0
                 FGX2_EXPORT _float_promote_twice
 _float_promote_twice            ENT
@@ -702,8 +697,7 @@ main_stkok        TCS
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L4
+                BEQ     _float_promote_L4
                 LDA     #1
                 TAY
                 TSC
@@ -829,8 +823,7 @@ _float_promote_L4
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L5
+                BEQ     _float_promote_L5
                 LDA     #2
                 TAY
                 TSC
@@ -880,8 +873,7 @@ _float_promote_L5
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L6
+                BEQ     _float_promote_L6
                 LDA     #3
                 TAY
                 TSC
@@ -930,8 +922,7 @@ _float_promote_L6
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L7
+                BEQ     _float_promote_L7
                 LDA     #4
                 TAY
                 TSC
@@ -973,26 +964,13 @@ _float_promote_L7
                 ADC     #14
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$86A3
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #34467
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L8
+                BEQ     _float_promote_L8
                 LDA     #5
                 TAY
                 TSC
@@ -1058,8 +1036,7 @@ _float_promote_L10
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L9
+                BEQ     _float_promote_L9
                 LDA     #6
                 TAY
                 TSC

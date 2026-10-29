@@ -24,6 +24,7 @@ void *memmove(void *d, void *s, int n);   /* overlap-safe */
 int   memcmp(void *a, void *b, int n);
 void *memset(void *p, int c, unsigned n);
 void  bcopy(void *s, void *d, int n);   /* BSD arg order (src, dst); overlap-safe */
+void *memchr(void *s, int c, int n);
 
 char *strdup(char *s);
 

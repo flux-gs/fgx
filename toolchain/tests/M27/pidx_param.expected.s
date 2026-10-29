@@ -51,14 +51,12 @@ _pidx_param_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _pidx_param_L3
                 EOR     #$8000
 _pidx_param_L3
-                BMI     *+5
-                BRL     _pidx_param_L2
+                BPL     _pidx_param_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img3
@@ -79,7 +77,7 @@ _pidx_param_L3
                 STA     _fcc_img1
 _pidx_param_L1
                 INC     _fcc_img0
-                BRL     _pidx_param_L0
+                BRA     _pidx_param_L0
 _pidx_param_L2
                 LDA     _fcc_img1
                 TAY
@@ -159,6 +157,7 @@ main_stkok        TCS
                 TYA
                 STA:    $0000,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -168,6 +167,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_pidx_param_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _pidx_param_f

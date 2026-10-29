@@ -70,8 +70,7 @@ _sum_loop_L0
                 BVC     _sum_loop_L2
                 EOR     #$8000
 _sum_loop_L2
-                BMI     *+5
-                BRL     _sum_loop_L1
+                BPL     _sum_loop_L1
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img4
@@ -92,11 +91,10 @@ _sum_loop_L2
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _sum_loop_L0
+                BRA     _sum_loop_L0
 _sum_loop_L1
                 LDA     _fcc_img1
                 TAY

@@ -19,6 +19,7 @@ f_stkovf       JMP     _fcc_stkoflow
 f_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,6 +29,7 @@ f_stkok        TCS
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
@@ -102,8 +104,7 @@ f_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrlong_cast_L0
+                BEQ     _ptrlong_cast_L0
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
@@ -111,7 +112,7 @@ f_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
-                BRL     _ptrlong_cast_L1
+                BRA     _ptrlong_cast_L1
 _ptrlong_cast_L0
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -144,25 +145,13 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 FGX2_FARCALL f
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrlong_cast_L6
+                BEQ     _ptrlong_cast_L2
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
@@ -182,16 +171,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrlong_cast_L6
-                LDA     #1
-                BRL     _ptrlong_cast_L7
-_ptrlong_cast_L6
-                LDA     #0
-_ptrlong_cast_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _ptrlong_cast_L4
+                BEQ     _ptrlong_cast_L2
                 LDA     q+6
                 STA     _fcc_q3
                 LDA     q+4
@@ -217,18 +197,9 @@ _ptrlong_cast_L7
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrlong_cast_L4
-                LDA     #1
-                BRL     _ptrlong_cast_L5
-_ptrlong_cast_L4
-                LDA     #0
-_ptrlong_cast_L5
-                CMP     #0
-                BNE     *+5
-                BRL     _ptrlong_cast_L2
+                BEQ     _ptrlong_cast_L2
                 LDA     #42
-                BRL     _ptrlong_cast_L3
+                BRA     _ptrlong_cast_L3
 _ptrlong_cast_L2
                 LDA     #7
 _ptrlong_cast_L3

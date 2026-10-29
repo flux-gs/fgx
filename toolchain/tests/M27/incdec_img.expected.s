@@ -28,24 +28,20 @@ _incdec_img_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #10
                 BVC     _incdec_img_L3
                 EOR     #$8000
 _incdec_img_L3
-                BMI     *+5
-                BRL     _incdec_img_L2
+                BPL     _incdec_img_L2
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img1
 _incdec_img_L1
                 INC     _fcc_img0
-                BRL     _incdec_img_L0
+                BRA     _incdec_img_L0
 _incdec_img_L2
                 LDA     #8
                 STA     _fcc_img0
@@ -70,7 +66,6 @@ _incdec_img_L2
                 ADC     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #15
                 TAY

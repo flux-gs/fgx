@@ -29,8 +29,6 @@ fact_stkok        TCS
                 ELSE
                 LDA     6+fact_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -39,8 +37,7 @@ fact_stkok        TCS
                 BVC     _fn_recurse_L1
                 EOR     #$8000
 _fn_recurse_L1
-                BPL     *+5
-                BRL     _fn_recurse_L0
+                BMI     _fn_recurse_L0
                 LDA     #1
                 TAY
                 TSC
@@ -74,7 +71,6 @@ _fn_recurse_L0
                 LDA     8+fact_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 PHA

@@ -159,7 +159,6 @@ _array_param_pick_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #48
                 TAY
@@ -300,6 +299,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -309,6 +309,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #arr
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _array_param_sum
@@ -321,6 +322,7 @@ main_stkok        TCS
                 PHA
                 LDA     #0
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -330,6 +332,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #strs
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _array_param_pick

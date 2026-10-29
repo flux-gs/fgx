@@ -98,10 +98,6 @@ first_stkok        TCS
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAY
@@ -167,10 +163,6 @@ second_stkok        TCS
                 ADC     #0
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF

@@ -43,28 +43,6 @@ getput_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                DO      14+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+getput_FRAMESIZE,S   ; fccstk d=2 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      12+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+getput_FRAMESIZE,S   ; fccstk d=2 b=10 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -72,28 +50,6 @@ getput_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      14+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+getput_FRAMESIZE,S   ; fccstk d=2 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      12+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+getput_FRAMESIZE,S   ; fccstk d=2 b=10 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -159,28 +115,7 @@ setit_stkok        TCS
                 LDA     10+setit_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     [_fcc_fpr0]
-                DO      8+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+setit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      12+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -193,28 +128,7 @@ setit_stkok        TCS
                 FIN
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                DO      8+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+setit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      14+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -227,28 +141,7 @@ setit_stkok        TCS
                 FIN
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                DO      8+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+setit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      16+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -295,6 +188,7 @@ main_stkok        TCS
                 PHA
                 LDA     #6
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -304,6 +198,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL setit
@@ -313,10 +208,8 @@ main_stkok        TCS
                 TCS
                 LDA     a+0
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _od_probe3_L0
+                BEQ     _od_probe3_L0
                 LDA     #1
                 TAY
                 TSC
@@ -330,10 +223,8 @@ main_stkok        TCS
 _od_probe3_L0
                 LDA     a+2
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _od_probe3_L1
+                BEQ     _od_probe3_L1
                 LDA     #2
                 TAY
                 TSC
@@ -347,10 +238,8 @@ _od_probe3_L0
 _od_probe3_L1
                 LDA     a+4
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _od_probe3_L2
+                BEQ     _od_probe3_L2
                 LDA     #3
                 TAY
                 TSC
@@ -363,11 +252,7 @@ _od_probe3_L1
                 RTL
 _od_probe3_L2
                 LDA     a+10
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _od_probe3_L3
+                BEQ     _od_probe3_L3
                 LDA     #4
                 TAY
                 TSC
@@ -379,6 +264,7 @@ _od_probe3_L2
                 TYA
                 RTL
 _od_probe3_L3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -388,6 +274,7 @@ _od_probe3_L3
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -406,6 +293,7 @@ _od_probe3_L3
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -414,6 +302,9 @@ _od_probe3_L3
                 REP     #$20
                 MX      %00
                 LDA     #a
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -436,6 +327,11 @@ _od_probe3_L3
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
@@ -443,6 +339,7 @@ _od_probe3_L3
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -471,10 +368,8 @@ _od_probe3_L3
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -484,26 +379,24 @@ _od_probe3_L3
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _od_probe3_L5
+                BNE     _od_probe3_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _od_probe3_L5
+                BNE     _od_probe3_L5
                 LDA     #0
-                BRL     _od_probe3_L6
+                BRA     _od_probe3_L6
 _od_probe3_L5
                 LDA     #1
 _od_probe3_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _od_probe3_L4
+                BEQ     _od_probe3_L4
                 LDA     #5
                 TAY
                 TSC
@@ -515,16 +408,10 @@ _od_probe3_L6
                 TYA
                 RTL
 _od_probe3_L4
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _od_probe3_L7
+                BEQ     _od_probe3_L7
                 LDA     #6
                 TAY
                 TSC
@@ -536,17 +423,11 @@ _od_probe3_L4
                 TYA
                 RTL
 _od_probe3_L7
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _od_probe3_L8
+                BEQ     _od_probe3_L8
                 LDA     #7
                 TAY
                 TSC
@@ -558,10 +439,6 @@ _od_probe3_L7
                 TYA
                 RTL
 _od_probe3_L8
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 ASL
@@ -622,10 +499,8 @@ _od_probe3_L10
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #16
-                BNE     *+5
-                BRL     _od_probe3_L9
+                BEQ     _od_probe3_L9
                 LDA     #8
                 TAY
                 TSC

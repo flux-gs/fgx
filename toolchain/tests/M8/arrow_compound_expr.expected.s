@@ -58,7 +58,6 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 STA     [_fcc_fpr0]
@@ -108,22 +107,10 @@ main_stkok        TCS
                 STA     _fcc_long_hi
                 LDY     #6
                 LDA     [_fcc_fpr1],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$000F
-                STA     _fcc_long_hi
-                LDA     #$423A
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16954
+                STX     _fcc_long_b_lo
+                LDX     #15
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 LDY     #6
                 STA     [_fcc_fpr0],Y
@@ -138,10 +125,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -192,21 +175,10 @@ main_stkok        TCS
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_add
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #12
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #12
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 TAY
                 TSC

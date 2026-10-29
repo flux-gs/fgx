@@ -55,9 +55,9 @@ def layout():
           "the core and the templates follow the last bank's bytes", "%d %d %d"
           % (p.core_at, p.tmpl_at, len(last)))
     fx = [(s, o) for s, o, t in img.relocs if t == img.n_data and s >= 2]
-    check(not fx and len(tr["fixups"]) == 3,
-          "libc's three fixups carry no reloc into the data segment: the "
-          "startup sets their bank from DBR", str(fx))
+    check(not fx and len(tr["fixups"]) == 1,
+          "libc's one fixup (findiop.c's _smallbuf = sbuf) carries no reloc "
+          "into the data segment: the startup sets its bank from DBR", str(fx))
     moved = [(o, t) for s, o, t in lib["relocs"] if s == tr["core"] and t == tr["templates"]]
     good = all(struct.unpack_from("<H", last, p.core_at + o - 2)[0]
                == (struct.unpack_from("<H", core, o - 2)[0] + p.tmpl_at) & 0xFFFF
@@ -378,9 +378,9 @@ def image():
           "(shared text would freeze it at the first process's bank)", str(lib_to_data[:4]))
 
 def one_more_row():
-    """A libc whose block table gained a row -- 38, the same five bitmap
-    bytes, the same exports and so the same CRC -- is refused: the bitmap's
-    bits would name other members."""
+    """A libc whose block table gained a row -- the same bitmap bytes, the
+    same exports and so the same CRC -- is refused: the bitmap's bits would
+    name other members."""
     hello = dyn("hello", os.path.join(HERE, "hello.c"), "libc")
     data = open(fgx_libso.so_path("libc"), "rb").read()
     p = fgx_bind.parse(data)
@@ -395,7 +395,8 @@ def one_more_row():
     try:
         fgx_bind.bind(hello, d)
     except SystemExit as e:
-        check("38" in str(e) and "37" in str(e),
+        n = len(tr["blocks"])
+        check(str(n + 1) in str(e) and str(n) in str(e),
               "a block table one row longer is refused, naming both counts", str(e))
     else:
         check(False, "a block table one row longer is refused, naming both counts")

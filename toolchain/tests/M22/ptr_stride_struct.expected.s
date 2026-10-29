@@ -19,6 +19,7 @@ bump_stkovf       JMP     _fcc_stkoflow
 bump_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26,31 +27,19 @@ bump_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+4
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #10
                 TAY
@@ -79,23 +68,12 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #f4
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #f4
                 STA     _fcc_fpr0
-                LDA     #10
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -103,16 +81,14 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
-                STA     _fcc_fpr0
+                LDA     #10
+                STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #f4
                 STA     _fcc_fpr0
-                LDA     #11
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -120,16 +96,14 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
-                STA     _fcc_fpr0
+                LDA     #11
+                STA     [_fcc_fpr0]
                 LDA     #2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #f4
                 STA     _fcc_fpr0
-                LDA     #12
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -137,18 +111,16 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
-                STA     _fcc_fpr0
+                LDA     #12
+                STA     [_fcc_fpr0]
                 LDA     #0
                 ASL
                 CLC
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #t3
                 STA     _fcc_fpr0
-                LDA     #20
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -156,17 +128,15 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
-                STA     _fcc_fpr0
+                LDA     #20
+                STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 INC
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #t3
                 STA     _fcc_fpr0
-                LDA     #21
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -174,18 +144,26 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
-                STA     _fcc_fpr0
+                LDA     #21
+                STA     [_fcc_fpr0]
                 LDA     #2
                 ASL
                 INC
                 INC
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #t3
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #22
                 STA     [_fcc_fpr0]
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -195,10 +173,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #root
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -208,6 +188,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #other
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -220,6 +201,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     root+6
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -229,11 +211,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
@@ -261,10 +240,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L0
+                BEQ     _ptr_stride_struct_L0
                 LDA     #1
                 TAY
                 TSC
@@ -276,6 +253,7 @@ main_stkok        TCS
                 TYA
                 RTL
 _ptr_stride_struct_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -285,11 +263,8 @@ _ptr_stride_struct_L0
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
@@ -317,10 +292,8 @@ _ptr_stride_struct_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L1
+                BEQ     _ptr_stride_struct_L1
                 LDA     #2
                 TAY
                 TSC
@@ -332,6 +305,7 @@ _ptr_stride_struct_L0
                 TYA
                 RTL
 _ptr_stride_struct_L1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -339,13 +313,10 @@ _ptr_stride_struct_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+4
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
@@ -373,10 +344,8 @@ _ptr_stride_struct_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L2
+                BEQ     _ptr_stride_struct_L2
                 LDA     #3
                 TAY
                 TSC
@@ -388,6 +357,7 @@ _ptr_stride_struct_L1
                 TYA
                 RTL
 _ptr_stride_struct_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -397,11 +367,8 @@ _ptr_stride_struct_L2
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
@@ -431,10 +398,8 @@ _ptr_stride_struct_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L3
+                BEQ     _ptr_stride_struct_L3
                 LDA     #4
                 TAY
                 TSC
@@ -446,6 +411,7 @@ _ptr_stride_struct_L2
                 TYA
                 RTL
 _ptr_stride_struct_L3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -453,13 +419,10 @@ _ptr_stride_struct_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
@@ -491,10 +454,8 @@ _ptr_stride_struct_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L4
+                BEQ     _ptr_stride_struct_L4
                 LDA     #5
                 TAY
                 TSC
@@ -506,6 +467,7 @@ _ptr_stride_struct_L3
                 TYA
                 RTL
 _ptr_stride_struct_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -515,11 +477,8 @@ _ptr_stride_struct_L4
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
@@ -549,10 +508,8 @@ _ptr_stride_struct_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L5
+                BEQ     _ptr_stride_struct_L5
                 LDA     #6
                 TAY
                 TSC
@@ -564,6 +521,7 @@ _ptr_stride_struct_L4
                 TYA
                 RTL
 _ptr_stride_struct_L5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -573,13 +531,8 @@ _ptr_stride_struct_L5
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gt
                 LDA     _fcc_fpr0+2
                 STA     gt+2
@@ -607,10 +560,8 @@ _ptr_stride_struct_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L6
+                BEQ     _ptr_stride_struct_L6
                 LDA     #7
                 TAY
                 TSC
@@ -622,6 +573,7 @@ _ptr_stride_struct_L5
                 TYA
                 RTL
 _ptr_stride_struct_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -631,13 +583,8 @@ _ptr_stride_struct_L6
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gt
                 LDA     _fcc_fpr0+2
                 STA     gt+2
@@ -668,10 +615,8 @@ _ptr_stride_struct_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L7
+                BEQ     _ptr_stride_struct_L7
                 LDA     #8
                 TAY
                 TSC
@@ -683,6 +628,7 @@ _ptr_stride_struct_L6
                 TYA
                 RTL
 _ptr_stride_struct_L7
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -692,13 +638,8 @@ _ptr_stride_struct_L7
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gt
                 LDA     _fcc_fpr0+2
                 STA     gt+2
@@ -730,10 +671,8 @@ _ptr_stride_struct_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L8
+                BEQ     _ptr_stride_struct_L8
                 LDA     #9
                 TAY
                 TSC
@@ -745,6 +684,7 @@ _ptr_stride_struct_L7
                 TYA
                 RTL
 _ptr_stride_struct_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -752,15 +692,10 @@ _ptr_stride_struct_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+12
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gt
                 LDA     _fcc_fpr0+2
                 STA     gt+2
@@ -794,10 +729,8 @@ _ptr_stride_struct_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #20
-                BNE     *+5
-                BRL     _ptr_stride_struct_L9
+                BEQ     _ptr_stride_struct_L9
                 LDA     #10
                 TAY
                 TSC
@@ -809,6 +742,7 @@ _ptr_stride_struct_L8
                 TYA
                 RTL
 _ptr_stride_struct_L9
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -818,13 +752,8 @@ _ptr_stride_struct_L9
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gt
                 LDA     _fcc_fpr0+2
                 STA     gt+2
@@ -852,10 +781,8 @@ _ptr_stride_struct_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L10
+                BEQ     _ptr_stride_struct_L10
                 LDA     #11
                 TAY
                 TSC
@@ -867,6 +794,7 @@ _ptr_stride_struct_L9
                 TYA
                 RTL
 _ptr_stride_struct_L10
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -876,12 +804,7 @@ _ptr_stride_struct_L10
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -919,10 +842,8 @@ _ptr_stride_struct_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L11
+                BEQ     _ptr_stride_struct_L11
                 LDA     #12
                 TAY
                 TSC
@@ -934,6 +855,7 @@ _ptr_stride_struct_L10
                 TYA
                 RTL
 _ptr_stride_struct_L11
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -943,12 +865,7 @@ _ptr_stride_struct_L11
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -992,10 +909,8 @@ _ptr_stride_struct_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L12
+                BEQ     _ptr_stride_struct_L12
                 LDA     #13
                 TAY
                 TSC
@@ -1007,6 +922,7 @@ _ptr_stride_struct_L11
                 TYA
                 RTL
 _ptr_stride_struct_L12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1014,14 +930,9 @@ _ptr_stride_struct_L12
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+4
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1059,10 +970,8 @@ _ptr_stride_struct_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L13
+                BEQ     _ptr_stride_struct_L13
                 LDA     #14
                 TAY
                 TSC
@@ -1074,6 +983,7 @@ _ptr_stride_struct_L12
                 TYA
                 RTL
 _ptr_stride_struct_L13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1083,12 +993,7 @@ _ptr_stride_struct_L13
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1132,10 +1037,8 @@ _ptr_stride_struct_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L14
+                BEQ     _ptr_stride_struct_L14
                 LDA     #15
                 TAY
                 TSC
@@ -1147,6 +1050,7 @@ _ptr_stride_struct_L13
                 TYA
                 RTL
 _ptr_stride_struct_L14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1156,14 +1060,7 @@ _ptr_stride_struct_L14
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1212,10 +1109,8 @@ _ptr_stride_struct_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L15
+                BEQ     _ptr_stride_struct_L15
                 LDA     #16
                 TAY
                 TSC
@@ -1227,6 +1122,7 @@ _ptr_stride_struct_L14
                 TYA
                 RTL
 _ptr_stride_struct_L15
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1236,14 +1132,7 @@ _ptr_stride_struct_L15
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1284,10 +1173,8 @@ _ptr_stride_struct_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L16
+                BEQ     _ptr_stride_struct_L16
                 LDA     #17
                 TAY
                 TSC
@@ -1299,6 +1186,7 @@ _ptr_stride_struct_L15
                 TYA
                 RTL
 _ptr_stride_struct_L16
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1308,12 +1196,7 @@ _ptr_stride_struct_L16
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1326,45 +1209,22 @@ _ptr_stride_struct_L16
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     root
                 CLC
                 ADC     #4
-                STA     [_fcc_fpr0]
+                STA     root
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L17
+                BEQ     _ptr_stride_struct_L17
                 LDA     #18
                 TAY
                 TSC
@@ -1376,6 +1236,7 @@ _ptr_stride_struct_L16
                 TYA
                 RTL
 _ptr_stride_struct_L17
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1385,12 +1246,7 @@ _ptr_stride_struct_L17
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1415,30 +1271,16 @@ _ptr_stride_struct_L17
                 STA     root+0
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L18
+                BEQ     _ptr_stride_struct_L18
                 LDA     #19
                 TAY
                 TSC
@@ -1450,6 +1292,7 @@ _ptr_stride_struct_L17
                 TYA
                 RTL
 _ptr_stride_struct_L18
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1459,14 +1302,7 @@ _ptr_stride_struct_L18
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1479,48 +1315,22 @@ _ptr_stride_struct_L18
                 LDA     _fcc_ptr+2
                 STA     root+10
                 TYA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #root
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     root+8
                 CLC
                 ADC     #6
-                STA     [_fcc_fpr0]
+                STA     root+8
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root+8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L19
+                BEQ     _ptr_stride_struct_L19
                 LDA     #20
                 TAY
                 TSC
@@ -1532,6 +1342,7 @@ _ptr_stride_struct_L18
                 TYA
                 RTL
 _ptr_stride_struct_L19
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1541,12 +1352,7 @@ _ptr_stride_struct_L19
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1625,10 +1431,8 @@ _ptr_stride_struct_L19
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L20
+                BEQ     _ptr_stride_struct_L20
                 LDA     #21
                 TAY
                 TSC
@@ -1640,6 +1444,7 @@ _ptr_stride_struct_L19
                 TYA
                 RTL
 _ptr_stride_struct_L20
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1649,12 +1454,7 @@ _ptr_stride_struct_L20
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1733,10 +1533,8 @@ _ptr_stride_struct_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L21
+                BEQ     _ptr_stride_struct_L21
                 LDA     #22
                 TAY
                 TSC
@@ -1748,6 +1546,7 @@ _ptr_stride_struct_L20
                 TYA
                 RTL
 _ptr_stride_struct_L21
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1757,14 +1556,7 @@ _ptr_stride_struct_L21
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1836,10 +1628,8 @@ _ptr_stride_struct_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L22
+                BEQ     _ptr_stride_struct_L22
                 LDA     #23
                 TAY
                 TSC
@@ -1851,6 +1641,7 @@ _ptr_stride_struct_L21
                 TYA
                 RTL
 _ptr_stride_struct_L22
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1860,14 +1651,12 @@ _ptr_stride_struct_L22
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1877,14 +1666,11 @@ _ptr_stride_struct_L22
                 MX      %00
                 LDA     #gr
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
@@ -1905,10 +1691,8 @@ _ptr_stride_struct_L22
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L23
+                BEQ     _ptr_stride_struct_L23
                 LDA     #24
                 TAY
                 TSC
@@ -1920,6 +1704,7 @@ _ptr_stride_struct_L22
                 TYA
                 RTL
 _ptr_stride_struct_L23
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1929,14 +1714,12 @@ _ptr_stride_struct_L23
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1946,14 +1729,11 @@ _ptr_stride_struct_L23
                 MX      %00
                 LDA     #gr
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CLC
                 ADC     #4
@@ -1968,10 +1748,8 @@ _ptr_stride_struct_L23
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L24
+                BEQ     _ptr_stride_struct_L24
                 LDA     #25
                 TAY
                 TSC
@@ -1983,6 +1761,7 @@ _ptr_stride_struct_L23
                 TYA
                 RTL
 _ptr_stride_struct_L24
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1992,16 +1771,12 @@ _ptr_stride_struct_L24
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gt
                 LDA     _fcc_fpr0+2
                 STA     gt+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2011,14 +1786,11 @@ _ptr_stride_struct_L24
                 MX      %00
                 LDA     #gt
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
@@ -2040,10 +1812,8 @@ _ptr_stride_struct_L24
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L25
+                BEQ     _ptr_stride_struct_L25
                 LDA     #26
                 TAY
                 TSC
@@ -2057,6 +1827,7 @@ _ptr_stride_struct_L24
 _ptr_stride_struct_L25
                 LDA     #2
                 STA     13,S   ; fccstk d=0 b=13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2066,11 +1837,8 @@ _ptr_stride_struct_L25
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
@@ -2100,10 +1868,8 @@ _ptr_stride_struct_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L26
+                BEQ     _ptr_stride_struct_L26
                 LDA     #27
                 TAY
                 TSC
@@ -2115,6 +1881,7 @@ _ptr_stride_struct_L25
                 TYA
                 RTL
 _ptr_stride_struct_L26
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2124,13 +1891,8 @@ _ptr_stride_struct_L26
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gt
                 LDA     _fcc_fpr0+2
                 STA     gt+2
@@ -2163,10 +1925,8 @@ _ptr_stride_struct_L26
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L27
+                BEQ     _ptr_stride_struct_L27
                 LDA     #28
                 TAY
                 TSC
@@ -2180,6 +1940,7 @@ _ptr_stride_struct_L26
 _ptr_stride_struct_L27
                 LDA     #2
                 STA     15,S   ; fccstk d=0 b=15
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2189,12 +1950,7 @@ _ptr_stride_struct_L27
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2238,10 +1994,8 @@ _ptr_stride_struct_L27
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L28
+                BEQ     _ptr_stride_struct_L28
                 LDA     #29
                 TAY
                 TSC
@@ -2253,6 +2007,7 @@ _ptr_stride_struct_L27
                 TYA
                 RTL
 _ptr_stride_struct_L28
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2262,12 +2017,7 @@ _ptr_stride_struct_L28
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2292,30 +2042,16 @@ _ptr_stride_struct_L28
                 STA     root+0
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L29
+                BEQ     _ptr_stride_struct_L29
                 LDA     #30
                 TAY
                 TSC
@@ -2327,6 +2063,7 @@ _ptr_stride_struct_L28
                 TYA
                 RTL
 _ptr_stride_struct_L29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2336,12 +2073,7 @@ _ptr_stride_struct_L29
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2409,10 +2141,8 @@ _ptr_stride_struct_L29
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L30
+                BEQ     _ptr_stride_struct_L30
                 LDA     #31
                 TAY
                 TSC
@@ -2424,6 +2154,7 @@ _ptr_stride_struct_L29
                 TYA
                 RTL
 _ptr_stride_struct_L30
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2433,14 +2164,12 @@ _ptr_stride_struct_L30
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2450,14 +2179,11 @@ _ptr_stride_struct_L30
                 MX      %00
                 LDA     #gr
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     17,S   ; fccstk d=2 b=15
@@ -2478,10 +2204,8 @@ _ptr_stride_struct_L30
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L31
+                BEQ     _ptr_stride_struct_L31
                 LDA     #32
                 TAY
                 TSC
@@ -2493,6 +2217,7 @@ _ptr_stride_struct_L30
                 TYA
                 RTL
 _ptr_stride_struct_L31
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2502,14 +2227,7 @@ _ptr_stride_struct_L31
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2559,10 +2277,8 @@ _ptr_stride_struct_L31
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L32
+                BEQ     _ptr_stride_struct_L32
                 LDA     #33
                 TAY
                 TSC
@@ -2576,6 +2292,7 @@ _ptr_stride_struct_L31
 _ptr_stride_struct_L32
                 LDA     #2
                 STA     21,S   ; fccstk d=0 b=21
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2583,14 +2300,9 @@ _ptr_stride_struct_L32
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2634,10 +2346,8 @@ _ptr_stride_struct_L32
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L33
+                BEQ     _ptr_stride_struct_L33
                 LDA     #34
                 TAY
                 TSC
@@ -2649,6 +2359,7 @@ _ptr_stride_struct_L32
                 TYA
                 RTL
 _ptr_stride_struct_L33
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2656,14 +2367,9 @@ _ptr_stride_struct_L33
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2688,30 +2394,16 @@ _ptr_stride_struct_L33
                 STA     root+0
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L34
+                BEQ     _ptr_stride_struct_L34
                 LDA     #35
                 TAY
                 TSC
@@ -2723,6 +2415,7 @@ _ptr_stride_struct_L33
                 TYA
                 RTL
 _ptr_stride_struct_L34
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2730,14 +2423,9 @@ _ptr_stride_struct_L34
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2805,10 +2493,8 @@ _ptr_stride_struct_L34
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L35
+                BEQ     _ptr_stride_struct_L35
                 LDA     #36
                 TAY
                 TSC
@@ -2820,6 +2506,7 @@ _ptr_stride_struct_L34
                 TYA
                 RTL
 _ptr_stride_struct_L35
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2827,16 +2514,14 @@ _ptr_stride_struct_L35
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2846,14 +2531,11 @@ _ptr_stride_struct_L35
                 MX      %00
                 LDA     #gr
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     _fcc_fpr0
                 STA     23,S   ; fccstk d=0 b=23
-                LDA     25,S   ; fccstk d=0 b=25
-                STA     _fcc_fpr0+2
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     23,S   ; fccstk d=2 b=21
@@ -2874,10 +2556,8 @@ _ptr_stride_struct_L35
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L36
+                BEQ     _ptr_stride_struct_L36
                 LDA     #37
                 TAY
                 TSC
@@ -2889,6 +2569,7 @@ _ptr_stride_struct_L35
                 TYA
                 RTL
 _ptr_stride_struct_L36
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2896,16 +2577,9 @@ _ptr_stride_struct_L36
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+12
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2953,10 +2627,8 @@ _ptr_stride_struct_L36
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L37
+                BEQ     _ptr_stride_struct_L37
                 LDA     #38
                 TAY
                 TSC
@@ -2968,6 +2640,7 @@ _ptr_stride_struct_L36
                 TYA
                 RTL
 _ptr_stride_struct_L37
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2977,12 +2650,7 @@ _ptr_stride_struct_L37
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3032,10 +2700,8 @@ _ptr_stride_struct_L37
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L38
+                BEQ     _ptr_stride_struct_L38
                 LDA     #39
                 TAY
                 TSC
@@ -3047,6 +2713,7 @@ _ptr_stride_struct_L37
                 TYA
                 RTL
 _ptr_stride_struct_L38
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3056,12 +2723,7 @@ _ptr_stride_struct_L38
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3106,10 +2768,8 @@ _ptr_stride_struct_L38
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L39
+                BEQ     _ptr_stride_struct_L39
                 LDA     #40
                 TAY
                 TSC
@@ -3121,6 +2781,7 @@ _ptr_stride_struct_L38
                 TYA
                 RTL
 _ptr_stride_struct_L39
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3128,14 +2789,9 @@ _ptr_stride_struct_L39
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3180,10 +2836,8 @@ _ptr_stride_struct_L39
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L40
+                BEQ     _ptr_stride_struct_L40
                 LDA     #41
                 TAY
                 TSC
@@ -3246,24 +2900,13 @@ _ptr_stride_struct_L40
                 TYA
                 STA:    $0000,X
                 PLA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_tmp_b
                 LDA     #174
                 JSR     _fcc_mul16
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #b1
                 STA     _fcc_fpr0
-                LDA     #60
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3271,17 +2914,15 @@ _ptr_stride_struct_L40
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #b1
-                STA     _fcc_fpr0
+                LDA     #60
+                STA     [_fcc_fpr0]
                 LDA     #1
                 STA     _fcc_tmp_b
                 LDA     #174
                 JSR     _fcc_mul16
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #b1
                 STA     _fcc_fpr0
-                LDA     #61
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3289,19 +2930,27 @@ _ptr_stride_struct_L40
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #b1
-                STA     _fcc_fpr0
+                LDA     #61
+                STA     [_fcc_fpr0]
                 LDA     #2
                 STA     _fcc_tmp_b
                 LDA     #174
                 JSR     _fcc_mul16
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #b1
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #62
                 STA     [_fcc_fpr0]
                 LDA     #2
                 STA     27,S   ; fccstk d=0 b=27
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3311,12 +2960,8 @@ _ptr_stride_struct_L40
                 MX      %00
                 LDA     #b1
                 STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_tmp_b
-                LDA     #174
-                JSR     _fcc_mul16
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gb
                 LDA     _fcc_fpr0+2
                 STA     gb+2
@@ -3344,10 +2989,8 @@ _ptr_stride_struct_L40
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #61
-                BNE     *+5
-                BRL     _ptr_stride_struct_L41
+                BEQ     _ptr_stride_struct_L41
                 LDA     #43
                 TAY
                 TSC
@@ -3359,6 +3002,7 @@ _ptr_stride_struct_L40
                 TYA
                 RTL
 _ptr_stride_struct_L41
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3368,12 +3012,8 @@ _ptr_stride_struct_L41
                 MX      %00
                 LDA     #b1
                 STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_tmp_b
-                LDA     #174
-                JSR     _fcc_mul16
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gb
                 LDA     _fcc_fpr0+2
                 STA     gb+2
@@ -3404,10 +3044,8 @@ _ptr_stride_struct_L41
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #61
-                BNE     *+5
-                BRL     _ptr_stride_struct_L42
+                BEQ     _ptr_stride_struct_L42
                 LDA     #44
                 TAY
                 TSC
@@ -3419,6 +3057,7 @@ _ptr_stride_struct_L41
                 TYA
                 RTL
 _ptr_stride_struct_L42
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3428,12 +3067,8 @@ _ptr_stride_struct_L42
                 MX      %00
                 LDA     #b1
                 STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_tmp_b
-                LDA     #174
-                JSR     _fcc_mul16
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gb
                 LDA     _fcc_fpr0+2
                 STA     gb+2
@@ -3464,10 +3099,8 @@ _ptr_stride_struct_L42
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #62
-                BNE     *+5
-                BRL     _ptr_stride_struct_L43
+                BEQ     _ptr_stride_struct_L43
                 LDA     #45
                 TAY
                 TSC
@@ -3479,6 +3112,7 @@ _ptr_stride_struct_L42
                 TYA
                 RTL
 _ptr_stride_struct_L43
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3486,14 +3120,10 @@ _ptr_stride_struct_L43
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #b1
+                LDA     #b1+348
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                LDA     #174
-                JSR     _fcc_mul16
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gb
                 LDA     _fcc_fpr0+2
                 STA     gb+2
@@ -3526,10 +3156,8 @@ _ptr_stride_struct_L43
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #60
-                BNE     *+5
-                BRL     _ptr_stride_struct_L44
+                BEQ     _ptr_stride_struct_L44
                 LDA     #46
                 TAY
                 TSC
@@ -3541,6 +3169,7 @@ _ptr_stride_struct_L43
                 TYA
                 RTL
 _ptr_stride_struct_L44
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3550,13 +3179,7 @@ _ptr_stride_struct_L44
                 MX      %00
                 LDA     #b1
                 STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_tmp_b
-                LDA     #174
-                JSR     _fcc_mul16
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3604,10 +3227,8 @@ _ptr_stride_struct_L44
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #62
-                BNE     *+5
-                BRL     _ptr_stride_struct_L45
+                BEQ     _ptr_stride_struct_L45
                 LDA     #47
                 TAY
                 TSC
@@ -3619,6 +3240,7 @@ _ptr_stride_struct_L44
                 TYA
                 RTL
 _ptr_stride_struct_L45
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3628,12 +3250,7 @@ _ptr_stride_struct_L45
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3685,10 +3302,8 @@ _ptr_stride_struct_L45
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L46
+                BEQ     _ptr_stride_struct_L46
                 LDA     #48
                 TAY
                 TSC
@@ -3700,6 +3315,7 @@ _ptr_stride_struct_L45
                 TYA
                 RTL
 _ptr_stride_struct_L46
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3709,12 +3325,7 @@ _ptr_stride_struct_L46
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3739,30 +3350,16 @@ _ptr_stride_struct_L46
                 STA     root+0
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L47
+                BEQ     _ptr_stride_struct_L47
                 LDA     #49
                 TAY
                 TSC
@@ -3774,6 +3371,7 @@ _ptr_stride_struct_L46
                 TYA
                 RTL
 _ptr_stride_struct_L47
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3783,12 +3381,7 @@ _ptr_stride_struct_L47
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3864,10 +3457,8 @@ _ptr_stride_struct_L47
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L48
+                BEQ     _ptr_stride_struct_L48
                 LDA     #50
                 TAY
                 TSC
@@ -3892,6 +3483,7 @@ _ptr_stride_struct_L48
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3901,12 +3493,7 @@ _ptr_stride_struct_L48
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3975,10 +3562,8 @@ _ptr_stride_struct_L48
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L49
+                BEQ     _ptr_stride_struct_L49
                 LDA     #51
                 TAY
                 TSC
@@ -4001,6 +3586,7 @@ _ptr_stride_struct_L49
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4010,12 +3596,7 @@ _ptr_stride_struct_L49
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4084,10 +3665,8 @@ _ptr_stride_struct_L49
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L50
+                BEQ     _ptr_stride_struct_L50
                 LDA     #52
                 TAY
                 TSC
@@ -4110,6 +3689,7 @@ _ptr_stride_struct_L50
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4117,14 +3697,9 @@ _ptr_stride_struct_L50
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4193,10 +3768,8 @@ _ptr_stride_struct_L50
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L51
+                BEQ     _ptr_stride_struct_L51
                 LDA     #53
                 TAY
                 TSC
@@ -4219,6 +3792,7 @@ _ptr_stride_struct_L51
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4228,14 +3802,7 @@ _ptr_stride_struct_L51
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4305,10 +3872,8 @@ _ptr_stride_struct_L51
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L52
+                BEQ     _ptr_stride_struct_L52
                 LDA     #54
                 TAY
                 TSC
@@ -4331,6 +3896,7 @@ _ptr_stride_struct_L52
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4340,14 +3906,7 @@ _ptr_stride_struct_L52
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4419,10 +3978,8 @@ _ptr_stride_struct_L52
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L53
+                BEQ     _ptr_stride_struct_L53
                 LDA     #55
                 TAY
                 TSC
@@ -4445,6 +4002,7 @@ _ptr_stride_struct_L53
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4454,11 +4012,7 @@ _ptr_stride_struct_L53
                 MX      %00
                 LDA     #iv
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4526,10 +4080,8 @@ _ptr_stride_struct_L53
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #71
-                BNE     *+5
-                BRL     _ptr_stride_struct_L54
+                BEQ     _ptr_stride_struct_L54
                 LDA     #56
                 TAY
                 TSC
@@ -4552,6 +4104,7 @@ _ptr_stride_struct_L54
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4561,11 +4114,7 @@ _ptr_stride_struct_L54
                 MX      %00
                 LDA     #iv
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4633,10 +4182,8 @@ _ptr_stride_struct_L54
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #72
-                BNE     *+5
-                BRL     _ptr_stride_struct_L55
+                BEQ     _ptr_stride_struct_L55
                 LDA     #57
                 TAY
                 TSC
@@ -4648,6 +4195,7 @@ _ptr_stride_struct_L54
                 TYA
                 RTL
 _ptr_stride_struct_L55
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4657,11 +4205,8 @@ _ptr_stride_struct_L55
                 MX      %00
                 LDA     #parr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     ppg
                 LDA     _fcc_fpr0+2
                 STA     ppg+2
@@ -4676,6 +4221,7 @@ _ptr_stride_struct_L55
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4685,12 +4231,7 @@ _ptr_stride_struct_L55
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4743,10 +4284,8 @@ _ptr_stride_struct_L55
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L56
+                BEQ     _ptr_stride_struct_L56
                 LDA     #58
                 TAY
                 TSC
@@ -4760,6 +4299,7 @@ _ptr_stride_struct_L55
 _ptr_stride_struct_L56
                 LDA     #1
                 STA     31,S   ; fccstk d=0 b=31
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4769,14 +4309,7 @@ _ptr_stride_struct_L56
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4816,10 +4349,8 @@ _ptr_stride_struct_L56
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4827,35 +4358,26 @@ _ptr_stride_struct_L56
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+6
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L58
+                BNE     _ptr_stride_struct_L58
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L58
+                BNE     _ptr_stride_struct_L58
                 LDA     #0
-                BRL     _ptr_stride_struct_L59
+                BRA     _ptr_stride_struct_L59
 _ptr_stride_struct_L58
                 LDA     #1
 _ptr_stride_struct_L59
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L57
+                BEQ     _ptr_stride_struct_L57
                 LDA     #59
                 TAY
                 TSC
@@ -4894,16 +4416,10 @@ _ptr_stride_struct_L57
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L60
+                BEQ     _ptr_stride_struct_L60
                 LDA     #60
                 TAY
                 TSC
@@ -4944,10 +4460,8 @@ _ptr_stride_struct_L60
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4955,35 +4469,26 @@ _ptr_stride_struct_L60
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+6
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L62
+                BNE     _ptr_stride_struct_L62
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L62
+                BNE     _ptr_stride_struct_L62
                 LDA     #0
-                BRL     _ptr_stride_struct_L63
+                BRA     _ptr_stride_struct_L63
 _ptr_stride_struct_L62
                 LDA     #1
 _ptr_stride_struct_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L61
+                BEQ     _ptr_stride_struct_L61
                 LDA     #61
                 TAY
                 TSC
@@ -5023,16 +4528,10 @@ _ptr_stride_struct_L61
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L64
+                BEQ     _ptr_stride_struct_L64
                 LDA     #62
                 TAY
                 TSC
@@ -5044,6 +4543,7 @@ _ptr_stride_struct_L61
                 TYA
                 RTL
 _ptr_stride_struct_L64
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5053,12 +4553,7 @@ _ptr_stride_struct_L64
                 MX      %00
                 LDA     #f4
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -5096,10 +4591,8 @@ _ptr_stride_struct_L64
                 STA     39,S   ; fccstk d=0 b=39
                 LDA     _fcc_fpr0
                 STA     37,S   ; fccstk d=0 b=37
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0+2
-                LDA     37,S   ; fccstk d=0 b=37
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5107,34 +4600,26 @@ _ptr_stride_struct_L64
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #f4
+                LDA     #f4+4
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L66
+                BNE     _ptr_stride_struct_L66
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L66
+                BNE     _ptr_stride_struct_L66
                 LDA     #0
-                BRL     _ptr_stride_struct_L67
+                BRA     _ptr_stride_struct_L67
 _ptr_stride_struct_L66
                 LDA     #1
 _ptr_stride_struct_L67
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L65
+                BEQ     _ptr_stride_struct_L65
                 LDA     #63
                 TAY
                 TSC
@@ -5171,16 +4656,10 @@ _ptr_stride_struct_L65
                 STA     39,S   ; fccstk d=0 b=39
                 LDA     _fcc_fpr0
                 STA     37,S   ; fccstk d=0 b=37
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0+2
-                LDA     37,S   ; fccstk d=0 b=37
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L68
+                BEQ     _ptr_stride_struct_L68
                 LDA     #64
                 TAY
                 TSC
@@ -5192,6 +4671,7 @@ _ptr_stride_struct_L65
                 TYA
                 RTL
 _ptr_stride_struct_L68
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5201,14 +4681,7 @@ _ptr_stride_struct_L68
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -5261,10 +4734,8 @@ _ptr_stride_struct_L68
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5272,36 +4743,26 @@ _ptr_stride_struct_L68
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+12
                 STA     _fcc_fpr1
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L70
+                BNE     _ptr_stride_struct_L70
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L70
+                BNE     _ptr_stride_struct_L70
                 LDA     #0
-                BRL     _ptr_stride_struct_L71
+                BRA     _ptr_stride_struct_L71
 _ptr_stride_struct_L70
                 LDA     #1
 _ptr_stride_struct_L71
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L69
+                BEQ     _ptr_stride_struct_L69
                 LDA     #65
                 TAY
                 TSC
@@ -5353,16 +4814,10 @@ _ptr_stride_struct_L69
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L72
+                BEQ     _ptr_stride_struct_L72
                 LDA     #66
                 TAY
                 TSC
@@ -5374,6 +4829,7 @@ _ptr_stride_struct_L69
                 TYA
                 RTL
 _ptr_stride_struct_L72
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5383,14 +4839,7 @@ _ptr_stride_struct_L72
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -5405,40 +4854,20 @@ _ptr_stride_struct_L72
                 TYA
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     gh+10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gh
-                STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
+                LDA     gh+8
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #6
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5446,35 +4875,26 @@ _ptr_stride_struct_L72
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+6
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L74
+                BNE     _ptr_stride_struct_L74
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L74
+                BNE     _ptr_stride_struct_L74
                 LDA     #0
-                BRL     _ptr_stride_struct_L75
+                BRA     _ptr_stride_struct_L75
 _ptr_stride_struct_L74
                 LDA     #1
 _ptr_stride_struct_L75
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L73
+                BEQ     _ptr_stride_struct_L73
                 LDA     #67
                 TAY
                 TSC
@@ -5488,24 +4908,11 @@ _ptr_stride_struct_L75
 _ptr_stride_struct_L73
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     gh+10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gh
-                STA     _fcc_fpr0
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     gh+8
                 STA     _fcc_fpr0
                 LDA     31,S   ; fccstk d=0 b=31
                 STA     _fcc_tmp_b
@@ -5520,16 +4927,10 @@ _ptr_stride_struct_L73
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L76
+                BEQ     _ptr_stride_struct_L76
                 LDA     #68
                 TAY
                 TSC
@@ -5543,6 +4944,7 @@ _ptr_stride_struct_L73
 _ptr_stride_struct_L76
                 LDA     #2
                 STA     41,S   ; fccstk d=0 b=41
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5552,13 +4954,7 @@ _ptr_stride_struct_L76
                 MX      %00
                 LDA     #b1
                 STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_tmp_b
-                LDA     #174
-                JSR     _fcc_mul16
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -5598,10 +4994,8 @@ _ptr_stride_struct_L76
                 STA     45,S   ; fccstk d=0 b=45
                 LDA     _fcc_fpr0
                 STA     43,S   ; fccstk d=0 b=43
-                LDA     45,S   ; fccstk d=0 b=45
-                STA     _fcc_fpr0+2
-                LDA     43,S   ; fccstk d=0 b=43
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5609,35 +5003,26 @@ _ptr_stride_struct_L76
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #b1
+                LDA     #b1+174
                 STA     _fcc_fpr1
-                LDA     #1
-                STA     _fcc_tmp_b
-                LDA     #174
-                JSR     _fcc_mul16
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L78
+                BNE     _ptr_stride_struct_L78
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L78
+                BNE     _ptr_stride_struct_L78
                 LDA     #0
-                BRL     _ptr_stride_struct_L79
+                BRA     _ptr_stride_struct_L79
 _ptr_stride_struct_L78
                 LDA     #1
 _ptr_stride_struct_L79
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L77
+                BEQ     _ptr_stride_struct_L77
                 LDA     #69
                 TAY
                 TSC
@@ -5676,16 +5061,10 @@ _ptr_stride_struct_L77
                 STA     45,S   ; fccstk d=0 b=45
                 LDA     _fcc_fpr0
                 STA     43,S   ; fccstk d=0 b=43
-                LDA     45,S   ; fccstk d=0 b=45
-                STA     _fcc_fpr0+2
-                LDA     43,S   ; fccstk d=0 b=43
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #62
-                BNE     *+5
-                BRL     _ptr_stride_struct_L80
+                BEQ     _ptr_stride_struct_L80
                 LDA     #70
                 TAY
                 TSC
@@ -5699,6 +5078,7 @@ _ptr_stride_struct_L77
 _ptr_stride_struct_L80
                 LDA     #1
                 STA     47,S   ; fccstk d=0 b=47
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5707,9 +5087,13 @@ _ptr_stride_struct_L80
                 REP     #$20
                 MX      %00
                 LDA     #root
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5719,14 +5103,7 @@ _ptr_stride_struct_L80
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -5770,10 +5147,8 @@ _ptr_stride_struct_L80
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5781,35 +5156,26 @@ _ptr_stride_struct_L80
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+6
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L82
+                BNE     _ptr_stride_struct_L82
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L82
+                BNE     _ptr_stride_struct_L82
                 LDA     #0
-                BRL     _ptr_stride_struct_L83
+                BRA     _ptr_stride_struct_L83
 _ptr_stride_struct_L82
                 LDA     #1
 _ptr_stride_struct_L83
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L81
+                BEQ     _ptr_stride_struct_L81
                 LDA     #71
                 TAY
                 TSC
@@ -5854,16 +5220,10 @@ _ptr_stride_struct_L81
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L84
+                BEQ     _ptr_stride_struct_L84
                 LDA     #72
                 TAY
                 TSC
@@ -5875,6 +5235,7 @@ _ptr_stride_struct_L81
                 TYA
                 RTL
 _ptr_stride_struct_L84
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5884,14 +5245,7 @@ _ptr_stride_struct_L84
                 MX      %00
                 LDA     #t3
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -5925,22 +5279,15 @@ _ptr_stride_struct_L84
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #6
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5948,35 +5295,26 @@ _ptr_stride_struct_L84
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #t3
+                LDA     #t3+6
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L86
+                BNE     _ptr_stride_struct_L86
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L86
+                BNE     _ptr_stride_struct_L86
                 LDA     #0
-                BRL     _ptr_stride_struct_L87
+                BRA     _ptr_stride_struct_L87
 _ptr_stride_struct_L86
                 LDA     #1
 _ptr_stride_struct_L87
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L85
+                BEQ     _ptr_stride_struct_L85
                 LDA     #73
                 TAY
                 TSC
@@ -6023,16 +5361,10 @@ _ptr_stride_struct_L85
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L88
+                BEQ     _ptr_stride_struct_L88
                 LDA     #74
                 TAY
                 TSC

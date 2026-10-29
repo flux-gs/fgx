@@ -32,6 +32,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +42,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #row
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -60,6 +62,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -69,6 +72,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #rows
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -88,40 +92,19 @@ _dot_member_store_incdec_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _dot_member_store_incdec_L3
                 EOR     #$8000
 _dot_member_store_incdec_L3
-                BMI     *+5
-                BRL     _dot_member_store_incdec_L2
+                BPL     _dot_member_store_incdec_L2
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     B+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #B
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     B
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -140,7 +123,6 @@ _dot_member_store_incdec_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 AND     #$00FF
@@ -151,41 +133,30 @@ _dot_member_store_incdec_L3
                 MX      %00
 _dot_member_store_incdec_L1
                 INC     _fcc_img0
-                BRL     _dot_member_store_incdec_L0
+                BRA     _dot_member_store_incdec_L0
 _dot_member_store_incdec_L2
                 LDA     #0
                 TAX
                 LDA:    row,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L5
+                BNE     _dot_member_store_incdec_L4
                 LDA     #3
                 TAX
                 LDA:    row,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L5
-                LDA     #1
-                BRL     _dot_member_store_incdec_L6
-_dot_member_store_incdec_L5
-                LDA     #0
-_dot_member_store_incdec_L6
-                CMP     #0
-                BNE     *+5
-                BRL     _dot_member_store_incdec_L4
+                BNE     _dot_member_store_incdec_L4
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img1
 _dot_member_store_incdec_L4
+                LDA     #1
+                ASL
+                CLC
+                ADC     #B+4
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -193,95 +164,38 @@ _dot_member_store_incdec_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #B
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #5
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #B
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                TAX
-                TXA
+                LDA     B+6
                 CMP     #5
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L7
+                BNE     _dot_member_store_incdec_L5
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img1
-_dot_member_store_incdec_L7
+_dot_member_store_incdec_L5
                 LDA     #9
                 STA     B+10
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #B
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #B
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     B+10
                 INC
-                STA     [_fcc_fpr0]
-                LDA     B+10
+                STA     B+10
                 TAX
-                TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L8
+                BNE     _dot_member_store_incdec_L6
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img1
-_dot_member_store_incdec_L8
+_dot_member_store_incdec_L6
                 LDA     #65535
                 STA     B+12
                 TAY
                 LDA     #0
                 STA     B+14
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -289,10 +203,9 @@ _dot_member_store_incdec_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #B
-                CLC
-                ADC     #12
+                LDA     #B+12
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -312,33 +225,19 @@ _dot_member_store_incdec_L8
                 LDA     B+14
                 STA     _fcc_long_hi
                 LDA     B+12
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _dot_member_store_incdec_L9
+                BEQ     _dot_member_store_incdec_L7
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img1
-_dot_member_store_incdec_L9
+_dot_member_store_incdec_L7
                 LDA     _fcc_img1
                 TAY
                 TSC

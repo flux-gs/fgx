@@ -81,6 +81,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -90,6 +91,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #dst
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fill
@@ -155,10 +157,8 @@ fill_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
-                BEQ     *+5
-                BRL     _sigsown_L3
+                BNE     _sigsown_L0
                 DO      12+fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -189,18 +189,8 @@ fill_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
-                BEQ     *+5
-                BRL     _sigsown_L3
-                LDA     #1
-                BRL     _sigsown_L4
-_sigsown_L3
-                LDA     #0
-_sigsown_L4
-                CMP     #0
-                BNE     *+5
-                BRL     _sigsown_L1
+                BNE     _sigsown_L0
                 DO      16+fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -231,18 +221,8 @@ _sigsown_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _sigsown_L1
-                LDA     #1
-                BRL     _sigsown_L2
-_sigsown_L1
-                LDA     #0
-_sigsown_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _sigsown_L0
+                BNE     _sigsown_L0
                 LDA     #42
                 TAY
                 TSC

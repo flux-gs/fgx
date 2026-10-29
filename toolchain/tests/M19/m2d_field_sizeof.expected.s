@@ -24,10 +24,9 @@ main_stkok        TCS
                 PHA
                 LDA     #14
                 CMP     #14
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L0
+                BNE     _m2d_field_sizeof_L0
                 LDA     #1
-                BRL     _m2d_field_sizeof_L1
+                BRA     _m2d_field_sizeof_L1
 _m2d_field_sizeof_L0
                 LDA     #0
 _m2d_field_sizeof_L1
@@ -39,10 +38,9 @@ _m2d_field_sizeof_L1
                 PHA
                 LDA     #14
                 CMP     #14
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L2
+                BNE     _m2d_field_sizeof_L2
                 LDA     #2
-                BRL     _m2d_field_sizeof_L3
+                BRA     _m2d_field_sizeof_L3
 _m2d_field_sizeof_L2
                 LDA     #0
 _m2d_field_sizeof_L3
@@ -54,10 +52,9 @@ _m2d_field_sizeof_L3
                 PHA
                 LDA     #16
                 CMP     #16
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L4
+                BNE     _m2d_field_sizeof_L4
                 LDA     #4
-                BRL     _m2d_field_sizeof_L5
+                BRA     _m2d_field_sizeof_L5
 _m2d_field_sizeof_L4
                 LDA     #0
 _m2d_field_sizeof_L5
@@ -69,10 +66,9 @@ _m2d_field_sizeof_L5
                 PHA
                 LDA     #15
                 CMP     #15
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L6
+                BNE     _m2d_field_sizeof_L6
                 LDA     #8
-                BRL     _m2d_field_sizeof_L7
+                BRA     _m2d_field_sizeof_L7
 _m2d_field_sizeof_L6
                 LDA     #0
 _m2d_field_sizeof_L7
@@ -83,13 +79,10 @@ _m2d_field_sizeof_L7
                 STA     _fcc_img0
                 PHA
                 LDA     #14
-                TAX
-                TXA
                 CMP     #14
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L8
+                BNE     _m2d_field_sizeof_L8
                 LDA     #16
-                BRL     _m2d_field_sizeof_L9
+                BRA     _m2d_field_sizeof_L9
 _m2d_field_sizeof_L8
                 LDA     #0
 _m2d_field_sizeof_L9
@@ -100,13 +93,10 @@ _m2d_field_sizeof_L9
                 STA     _fcc_img0
                 PHA
                 LDA     #15
-                TAX
-                TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L10
+                BNE     _m2d_field_sizeof_L10
                 LDA     #32
-                BRL     _m2d_field_sizeof_L11
+                BRA     _m2d_field_sizeof_L11
 _m2d_field_sizeof_L10
                 LDA     #0
 _m2d_field_sizeof_L11
@@ -117,13 +107,10 @@ _m2d_field_sizeof_L11
                 STA     _fcc_img0
                 PHA
                 LDA     #2
-                TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L12
+                BNE     _m2d_field_sizeof_L12
                 LDA     #64
-                BRL     _m2d_field_sizeof_L13
+                BRA     _m2d_field_sizeof_L13
 _m2d_field_sizeof_L12
                 LDA     #0
 _m2d_field_sizeof_L13
@@ -135,12 +122,10 @@ _m2d_field_sizeof_L13
                 PHA
                 LDA     #1
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _m2d_field_sizeof_L14
+                BNE     _m2d_field_sizeof_L14
                 LDA     #128
-                BRL     _m2d_field_sizeof_L15
+                BRA     _m2d_field_sizeof_L15
 _m2d_field_sizeof_L14
                 LDA     #0
 _m2d_field_sizeof_L15

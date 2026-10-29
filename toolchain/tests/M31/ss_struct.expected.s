@@ -27,6 +27,11 @@ main_stkok        TCS
                 SEP     #$20
                 MX      %10
                 STA     3,S   ; fccstk d=0 b=3
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
@@ -34,6 +39,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gv
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -60,7 +66,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #33
                 STA     _fcc_tmp_b

@@ -33,14 +33,12 @@ _bfold_far_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #126
                 BVC     _bfold_far_L3
                 EOR     #$8000
 _bfold_far_L3
-                BMI     *+5
-                BRL     _bfold_far_L2
+                BPL     _bfold_far_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -72,7 +70,7 @@ _bfold_far_L3
                 PLA
 _bfold_far_L1
                 INC     _fcc_img0
-                BRL     _bfold_far_L0
+                BRA     _bfold_far_L0
 _bfold_far_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA

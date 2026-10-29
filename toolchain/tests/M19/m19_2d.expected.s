@@ -70,8 +70,7 @@ _m19_2d_L0
                 BVC     _m19_2d_L3
                 EOR     #$8000
 _m19_2d_L3
-                BMI     *+5
-                BRL     _m19_2d_L2
+                BPL     _m19_2d_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img4
@@ -93,11 +92,10 @@ _m19_2d_L3
 _m19_2d_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _m19_2d_L0
+                BRA     _m19_2d_L0
 _m19_2d_L2
                 LDA     _fcc_img1
                 TAY
@@ -114,9 +112,11 @@ sum_row_STKGUARD    EQU     0
                 FGX2_EXPORT sum_grid
 sum_grid            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #sum_grid_FRAMESIZE
+                SBC     #sum_grid_FRAMESIZE-4
                 DO      sum_grid_STKGUARD
                 BCC     sum_grid_stkovf
                 CMP     _fcc_stkfloor
@@ -127,14 +127,14 @@ sum_grid_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _m19_2d_L4
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
                 DO      10+sum_grid_FRAMESIZE/256
                 TSC
@@ -153,9 +153,8 @@ _m19_2d_L4
                 BVC     _m19_2d_L7
                 EOR     #$8000
 _m19_2d_L7
-                BMI     *+5
-                BRL     _m19_2d_L6
-                LDA     3,S   ; fccstk d=0 b=3
+                BPL     _m19_2d_L6
+                LDA     _fcc_img17
                 PHA
                 LDA     #3
                 PHA
@@ -181,7 +180,7 @@ _m19_2d_L7
                 LDA     10+sum_grid_FRAMESIZE,S   ; fccstk d=4 b=6 fs
                 FIN
                 PHA
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -213,27 +212,30 @@ _m19_2d_L7
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
 _m19_2d_L5
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CLC
                 ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
                 BRL     _m19_2d_L4
 _m19_2d_L6
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img17
                 TAY
                 TSC
                 CLC
-                ADC     #sum_grid_FRAMESIZE
+                ADC     #sum_grid_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-sum_grid_FRAMESIZE   EQU     4
+sum_grid_FRAMESIZE   EQU     8
 sum_grid_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
@@ -252,6 +254,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -261,6 +264,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #matrix
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sum_grid

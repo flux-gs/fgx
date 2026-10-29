@@ -37,22 +37,10 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _lc_atol_L1
-                LDA     #0
-                BRA     _lc_atol_L2
-_lc_atol_L1
-                LDA     #1
-_lc_atol_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _lc_atol_L0
+                BNE     _lc_atol_L0
                 LDA     #1
                 TAY
                 TSC
@@ -304,10 +292,7 @@ _lc_atol_L0
                 PLA
                 PLA
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL atol
@@ -325,27 +310,13 @@ _lc_atol_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$86A0
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #31072
+                STX     _fcc_long_b_lo
+                LDX     #65534
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_atol_L3
+                BEQ     _lc_atol_L1
                 LDA     #42
                 TAY
                 TSC
@@ -356,7 +327,7 @@ _lc_atol_L0
                 STA     _fcc_fb
                 TYA
                 RTL
-_lc_atol_L3
+_lc_atol_L1
                 LDA     #1
                 TAY
                 TSC

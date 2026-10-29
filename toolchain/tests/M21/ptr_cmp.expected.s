@@ -56,8 +56,7 @@ _ptr_cmp_L0
                 PLA
                 JSR     _fcc_leu16
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L2
+                BEQ     _ptr_cmp_L2
                 INC     _fcc_img0
 _ptr_cmp_L1
                 LDA     _fcc_img2
@@ -66,7 +65,7 @@ _ptr_cmp_L1
                 CLC
                 ADC     #2
                 STA     _fcc_img1
-                BRL     _ptr_cmp_L0
+                BRA     _ptr_cmp_L0
 _ptr_cmp_L2
                 LDA     _fcc_img0
                 TAY
@@ -145,6 +144,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -154,13 +154,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #arr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     lo
                 LDA     _fcc_fpr0+2
                 STA     lo+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -168,23 +167,18 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
+                LDA     #arr+6
                 STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     hi
                 LDA     _fcc_fpr0+2
                 STA     hi+2
                 FGX2_FARCALL pcount
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _ptr_cmp_L3
+                BEQ     _ptr_cmp_L3
                 LDA     #1
                 TAY
                 TSC
@@ -219,15 +213,7 @@ _ptr_cmp_L3
                 PLA
                 JSR     _fcc_ltu16
                 CMP     #0
-                BEQ     _ptr_cmp_L5
-                LDA     #0
-                BRA     _ptr_cmp_L6
-_ptr_cmp_L5
-                LDA     #1
-_ptr_cmp_L6
-                CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L4
+                BNE     _ptr_cmp_L4
                 LDA     #2
                 TAY
                 TSC
@@ -262,15 +248,7 @@ _ptr_cmp_L4
                 PLA
                 JSR     _fcc_gtu16
                 CMP     #0
-                BEQ     _ptr_cmp_L8
-                LDA     #0
-                BRA     _ptr_cmp_L9
-_ptr_cmp_L8
-                LDA     #1
-_ptr_cmp_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L7
+                BNE     _ptr_cmp_L5
                 LDA     #3
                 TAY
                 TSC
@@ -281,7 +259,7 @@ _ptr_cmp_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L7
+_ptr_cmp_L5
                 SEP     #$20
                 MX      %10
                 LDA     hi+2
@@ -305,15 +283,7 @@ _ptr_cmp_L7
                 PLA
                 JSR     _fcc_geu16
                 CMP     #0
-                BEQ     _ptr_cmp_L11
-                LDA     #0
-                BRA     _ptr_cmp_L12
-_ptr_cmp_L11
-                LDA     #1
-_ptr_cmp_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L10
+                BNE     _ptr_cmp_L6
                 LDA     #4
                 TAY
                 TSC
@@ -324,7 +294,7 @@ _ptr_cmp_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L10
+_ptr_cmp_L6
                 LDA     #5
                 PHA
                 LDA     #3
@@ -335,10 +305,8 @@ _ptr_cmp_L10
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _ptr_cmp_L13
+                BEQ     _ptr_cmp_L7
                 LDA     #5
                 TAY
                 TSC
@@ -349,7 +317,7 @@ _ptr_cmp_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L13
+_ptr_cmp_L7
                 LDA     #0
                 PHA
                 LDA     #$FFFF
@@ -360,10 +328,8 @@ _ptr_cmp_L13
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _ptr_cmp_L14
+                BEQ     _ptr_cmp_L8
                 LDA     #6
                 TAY
                 TSC
@@ -374,7 +340,7 @@ _ptr_cmp_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L14
+_ptr_cmp_L8
                 LDA     #42
                 TAY
                 TSC

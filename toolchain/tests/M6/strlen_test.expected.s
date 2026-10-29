@@ -46,8 +46,7 @@ _strlen_test_L0
                 BVC     _strlen_test_L2
                 EOR     #$8000
 _strlen_test_L2
-                BMI     *+5
-                BRL     _strlen_test_L1
+                BPL     _strlen_test_L1
                 DO      8+clearbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -98,11 +97,10 @@ _strlen_test_L2
                 TYA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _strlen_test_L0
+                BRA     _strlen_test_L0
 _strlen_test_L1
                 TAY
                 TSC
@@ -160,9 +158,7 @@ _strlen_test_L3
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img1]
                 AND     #$00FF
-                CMP     #0
-                BNE     *+5
-                BRL     _strlen_test_L4
+                BEQ     _strlen_test_L4
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -170,11 +166,10 @@ _strlen_test_L3
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _strlen_test_L3
+                BRA     _strlen_test_L3
 _strlen_test_L4
                 LDA     _fcc_img0
                 TAY

@@ -59,8 +59,6 @@ _ptr_promote_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -69,8 +67,7 @@ _ptr_promote_L0
                 BVC     _ptr_promote_L2
                 EOR     #$8000
 _ptr_promote_L2
-                BMI     *+5
-                BRL     _ptr_promote_L1
+                BPL     _ptr_promote_L1
                 LDA     _fcc_img0
                 PHA
                 LDA     [_fcc_img2]
@@ -87,7 +84,7 @@ _ptr_promote_L2
                 ADC     #1
                 STA     _fcc_img2
                 DEC     _fcc_img1
-                BRL     _ptr_promote_L0
+                BRA     _ptr_promote_L0
 _ptr_promote_L1
                 LDA     _fcc_img0
                 TAY
@@ -198,6 +195,7 @@ main_stkok        TCS
                 PLA
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -207,6 +205,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_promote_data
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_promote_psum

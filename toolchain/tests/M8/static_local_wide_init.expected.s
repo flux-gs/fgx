@@ -19,33 +19,13 @@ f_stkovf       JMP     _fcc_stkoflow
 f_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #f_sl_d
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -78,6 +58,17 @@ f_stkok        TCS
                 PLA
                 STA     _fcc_q3
                 TYA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #f_sl_d
+                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dadd
@@ -100,33 +91,13 @@ f_stkok        TCS
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #f_sl_d
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -136,33 +107,13 @@ f_stkok        TCS
                 PHA
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #f_sl_d
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+14
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+12
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+10
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+8
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -189,33 +140,13 @@ f_stkok        TCS
                 PHA
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #f_sl_d
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+22
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+20
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+18
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_d+16
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -276,22 +207,10 @@ f_stkok        TCS
                 LDA:    f_sl_l+2,X
                 STA     _fcc_long_hi
                 LDA:    f_sl_l,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$2710
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #10000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_divs
                 STA     _fcc_tmp_b
                 PLA
@@ -309,33 +228,13 @@ f_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #f_sl_q
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q+14
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q+12
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q+10
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q+8
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -345,33 +244,13 @@ f_stkok        TCS
                 PHA
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #f_sl_q
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     f_sl_q
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -436,7 +315,6 @@ main_stkok        TCS
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #19
                 TAY

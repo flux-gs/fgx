@@ -54,8 +54,7 @@ _long_param_L0
                 BVC     _long_param_L3
                 EOR     #$8000
 _long_param_L3
-                BMI     *+5
-                BRL     _long_param_L2
+                BPL     _long_param_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
@@ -137,7 +136,6 @@ _long_param_L3
 _long_param_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -205,22 +203,10 @@ main_stkok        TCS
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0004
-                STA     _fcc_long_hi
-                LDA     #$93B6
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #37814
+                STX     _fcc_long_b_lo
+                LDX     #4
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     1,S   ; fccstk d=0 b=1
                 TAY

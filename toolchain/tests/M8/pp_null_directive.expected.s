@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #40
                 TAX
-                TXA
                 INC
                 INC
                 STA     _fcc_img0

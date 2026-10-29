@@ -32,6 +32,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +42,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #r0
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -71,6 +73,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -80,6 +83,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #r1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -193,8 +197,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 SEP     #$20
@@ -311,6 +313,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -320,6 +323,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #r0
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -359,6 +363,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -368,6 +373,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #r1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -522,8 +528,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 ORA     #16
                 SEP     #$20
                 MX      %10
@@ -559,8 +563,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 DEC
                 DEC
                 SEP     #$20
@@ -607,150 +609,69 @@ main_stkok        TCS
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _st2dary_L5
+                BNE     _st2dary_L0
                 LDA     #1
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #66
-                BEQ     *+5
-                BRL     _st2dary_L5
-                LDA     #1
-                BRL     _st2dary_L6
-_st2dary_L5
-                LDA     #0
-_st2dary_L6
-                CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L3
+                BNE     _st2dary_L0
                 LDA     #2
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _st2dary_L3
-                LDA     #1
-                BRL     _st2dary_L4
-_st2dary_L3
-                LDA     #0
-_st2dary_L4
-                CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L1
+                BNE     _st2dary_L0
                 LDA     #3
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #68
-                BEQ     *+5
-                BRL     _st2dary_L1
-                LDA     #1
-                BRL     _st2dary_L2
-_st2dary_L1
-                LDA     #0
-_st2dary_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L0
+                BNE     _st2dary_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img0
 _st2dary_L0
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _st2dary_L14
+                BNE     _st2dary_L1
                 LDA     #0
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _st2dary_L14
-                LDA     #1
-                BRL     _st2dary_L15
-_st2dary_L14
-                LDA     #0
-_st2dary_L15
-                CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L12
+                BNE     _st2dary_L1
                 LDA     #1
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _st2dary_L12
-                LDA     #1
-                BRL     _st2dary_L13
-_st2dary_L12
-                LDA     #0
-_st2dary_L13
-                CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L10
+                BNE     _st2dary_L1
                 LDA     #2
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _st2dary_L10
-                LDA     #1
-                BRL     _st2dary_L11
-_st2dary_L10
-                LDA     #0
-_st2dary_L11
-                CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L8
+                BNE     _st2dary_L1
                 LDA     #3
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _st2dary_L8
-                LDA     #1
-                BRL     _st2dary_L9
-_st2dary_L8
-                LDA     #0
-_st2dary_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L7
+                BNE     _st2dary_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #30
                 STA     _fcc_img0
-_st2dary_L7
+_st2dary_L1
                 LDA     _fcc_img0
                 TAY
                 TSC

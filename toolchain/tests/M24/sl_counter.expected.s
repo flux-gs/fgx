@@ -21,7 +21,6 @@ next_id_stkok        TCS
                 INC     _fcc_fb
                 LDA     next_id_sl_c
                 TAX
-                TXA
                 INC
                 STA     next_id_sl_c
                 TAY

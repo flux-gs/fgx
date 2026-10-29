@@ -80,9 +80,7 @@ _tmops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L2
+                BEQ     _tmops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +107,9 @@ _tmops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _tmops_L2
-                LDA     #1
-                BRL     _tmops_L3
-_tmops_L2
-                LDA     #0
-_tmops_L3
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L1
+                BNE     _tmops_L1
                 INC     _fcc_img0
-                BRL     _tmops_L0
+                BRA     _tmops_L0
 _tmops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -176,6 +165,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -185,6 +175,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #e0
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL gmtime
@@ -198,175 +189,54 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #126
-                BEQ     *+5
-                BRL     _tmops_L19
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _tmops_L19
-                LDA     #1
-                BRL     _tmops_L20
-_tmops_L19
-                LDA     #0
-_tmops_L20
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L17
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #30
-                BEQ     *+5
-                BRL     _tmops_L17
-                LDA     #1
-                BRL     _tmops_L18
-_tmops_L17
-                LDA     #0
-_tmops_L18
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L15
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #14
-                BEQ     *+5
-                BRL     _tmops_L15
-                LDA     #1
-                BRL     _tmops_L16
-_tmops_L15
-                LDA     #0
-_tmops_L16
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L13
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _tmops_L13
-                LDA     #1
-                BRL     _tmops_L14
-_tmops_L13
-                LDA     #0
-_tmops_L14
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _tmops_L11
-                LDA     #1
-                BRL     _tmops_L12
-_tmops_L11
-                LDA     #0
-_tmops_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L9
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _tmops_L9
-                LDA     #1
-                BRL     _tmops_L10
-_tmops_L9
-                LDA     #0
-_tmops_L10
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L7
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #180
-                BEQ     *+5
-                BRL     _tmops_L7
-                LDA     #1
-                BRL     _tmops_L8
-_tmops_L7
-                LDA     #0
-_tmops_L8
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L5
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _tmops_L5
-                LDA     #1
-                BRL     _tmops_L6
-_tmops_L5
-                LDA     #0
-_tmops_L6
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L4
+                BNE     _tmops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L4
+_tmops_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -400,16 +270,14 @@ _tmops_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L21
+                BEQ     _tmops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L21
+_tmops_L3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -419,6 +287,7 @@ _tmops_L21
                 MX      %00
                 LDA     #e1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL localtime
@@ -432,100 +301,38 @@ _tmops_L21
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _tmops_L29
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L4
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #29
-                BEQ     *+5
-                BRL     _tmops_L29
-                LDA     #1
-                BRL     _tmops_L30
-_tmops_L29
-                LDA     #0
-_tmops_L30
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L27
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L4
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #124
-                BEQ     *+5
-                BRL     _tmops_L27
-                LDA     #1
-                BRL     _tmops_L28
-_tmops_L27
-                LDA     #0
-_tmops_L28
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L25
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L4
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _tmops_L25
-                LDA     #1
-                BRL     _tmops_L26
-_tmops_L25
-                LDA     #0
-_tmops_L26
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L23
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L4
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #59
-                BEQ     *+5
-                BRL     _tmops_L23
-                LDA     #1
-                BRL     _tmops_L24
-_tmops_L23
-                LDA     #0
-_tmops_L24
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L22
+                BNE     _tmops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L22
+_tmops_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -535,6 +342,7 @@ _tmops_L22
                 MX      %00
                 LDA     #e1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL localtime
@@ -555,6 +363,7 @@ _tmops_L22
                 TYA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -564,6 +373,7 @@ _tmops_L22
                 MX      %00
                 LDA     #e1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ctime
@@ -582,11 +392,11 @@ _tmops_L22
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
-                BRL     _tmops_L31
+                BRL     _tmops_L5
                 LDA     #99
                 STA     gtz+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -596,8 +406,10 @@ _tmops_L22
                 MX      %00
                 LDA     #gtz
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -607,6 +419,7 @@ _tmops_L22
                 MX      %00
                 LDA     #gtv
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL gettimeofday
@@ -616,125 +429,49 @@ _tmops_L22
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _tmops_L39
+                BNE     _tmops_L6
                 LDA     gtv+2
                 STA     _fcc_long_hi
                 LDA     gtv+0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$6553
-                STA     _fcc_long_hi
-                LDA     #$F100
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #61696
+                STX     _fcc_long_b_lo
+                LDX     #25939
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BNE     *+5
-                BRL     _tmops_L39
-                LDA     #1
-                BRL     _tmops_L40
-_tmops_L39
-                LDA     #0
-_tmops_L40
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L37
+                BEQ     _tmops_L6
                 LDA     gtv+6
                 STA     _fcc_long_hi
                 LDA     gtv+4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _tmops_L37
-                LDA     #1
-                BRL     _tmops_L38
-_tmops_L37
-                LDA     #0
-_tmops_L38
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L35
+                BEQ     _tmops_L6
                 LDA     gtv+6
                 STA     _fcc_long_hi
                 LDA     gtv+4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$000F
-                STA     _fcc_long_hi
-                LDA     #$4240
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16960
+                STX     _fcc_long_b_lo
+                LDX     #15
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _tmops_L35
-                LDA     #1
-                BRL     _tmops_L36
-_tmops_L35
-                LDA     #0
-_tmops_L36
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L33
+                BEQ     _tmops_L6
                 LDA     gtz+0
                 TAX
-                TXA
                 CMP     #99
-                BNE     *+5
-                BRL     _tmops_L33
-                LDA     #1
-                BRL     _tmops_L34
-_tmops_L33
-                LDA     #0
-_tmops_L34
-                CMP     #0
-                BNE     *+5
-                BRL     _tmops_L32
+                BEQ     _tmops_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L32
-_tmops_L31
+_tmops_L6
+_tmops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC

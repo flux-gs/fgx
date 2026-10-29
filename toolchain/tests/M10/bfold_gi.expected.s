@@ -31,21 +31,19 @@ _bfold_gi_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _bfold_gi_L3
                 EOR     #$8000
 _bfold_gi_L3
-                BMI     *+5
-                BRL     _bfold_gi_L2
+                BPL     _bfold_gi_L2
                 LDA     _fcc_img1
                 CLC
                 ADC     _fcc_img2
                 STA     _fcc_img1
 _bfold_gi_L1
                 INC     _fcc_img0
-                BRL     _bfold_gi_L0
+                BRA     _bfold_gi_L0
 _bfold_gi_L2
                 LDA     _fcc_img1
                 TAY

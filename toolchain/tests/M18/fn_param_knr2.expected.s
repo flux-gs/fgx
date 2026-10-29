@@ -147,8 +147,6 @@ use_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 SEC
                 SBC     #97
                 STA     _fcc_tmp_b
@@ -198,7 +196,6 @@ use_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #97
                 STA     _fcc_tmp_b
@@ -219,9 +216,10 @@ use_STKGUARD    EQU     0
                 FGX2_EXPORT call
 call            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #call_FRAMESIZE
+                SBC     #call_FRAMESIZE-2
                 DO      call_STKGUARD
                 BCC     call_stkovf
                 CMP     _fcc_stkfloor
@@ -232,7 +230,7 @@ call_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -288,30 +286,24 @@ _fn_param_knr2_L1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _fn_param_knr2_L4
+                BNE     _fn_param_knr2_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _fn_param_knr2_L4
+                BNE     _fn_param_knr2_L4
                 LDA     #0
-                BRL     _fn_param_knr2_L5
+                BRA     _fn_param_knr2_L5
 _fn_param_knr2_L4
                 LDA     #1
 _fn_param_knr2_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _fn_param_knr2_L3
+                BEQ     _fn_param_knr2_L3
 _fn_param_knr2_L2
-                LDA     5,S   ; fccstk d=0 b=5
-                CLC
-                ADC     #1
-                STA     5,S   ; fccstk d=0 b=5
-                BRL     _fn_param_knr2_L1
+                INC     _fcc_img16
+                BRA     _fn_param_knr2_L1
 _fn_param_knr2_L3
                 DO      8+call_FRAMESIZE/256
                 TSC
@@ -356,7 +348,7 @@ _fn_param_knr2_L3
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
-                LDA     13,S   ; fccstk d=8 b=5
+                LDA     _fcc_img16
                 PHA
                 LDA     7,S
                 STA     _fcc_fpr0
@@ -384,12 +376,14 @@ _fn_param_knr2_L6
                 TAY
                 TSC
                 CLC
-                ADC     #call_FRAMESIZE
+                ADC     #call_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-call_FRAMESIZE   EQU     6
+call_FRAMESIZE   EQU     8
 call_STKGUARD    EQU     1
                 FGX2_RELOC_COUNT 5

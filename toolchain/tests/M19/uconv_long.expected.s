@@ -79,11 +79,8 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L0
+                BEQ     _uconv_long_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -109,11 +106,8 @@ _uconv_long_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L1
+                BEQ     _uconv_long_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -139,11 +133,8 @@ _uconv_long_L1
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L2
+                BEQ     _uconv_long_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -177,18 +168,8 @@ _uconv_long_L2
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BEQ     _uconv_long_L4
-                LDA     #0
-                BRA     _uconv_long_L5
-_uconv_long_L4
-                LDA     #1
-_uconv_long_L5
-                CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L3
+                BNE     _uconv_long_L3
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -221,33 +202,18 @@ _uconv_long_L3
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_add
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$ADB0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #44464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L6
+                BEQ     _uconv_long_L4
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
-_uconv_long_L6
+_uconv_long_L4
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$1170
@@ -268,63 +234,33 @@ _uconv_long_L6
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_sub
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$7530
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #30000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L7
+                BEQ     _uconv_long_L5
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img0
-_uconv_long_L7
+_uconv_long_L5
                 LDA     UL+2
                 STA     _fcc_long_hi
                 LDA     UL
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_gtu
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L8
+                BEQ     _uconv_long_L6
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     _fcc_img0
-_uconv_long_L8
+_uconv_long_L6
                 LDA     U2
                 PHA
                 LDA     L2+2
@@ -353,33 +289,19 @@ _uconv_long_L8
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_sub
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L9
+                BEQ     _uconv_long_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     _fcc_img0
-_uconv_long_L9
+_uconv_long_L7
                 LDA     _fcc_img0
                 TAY
                 TSC

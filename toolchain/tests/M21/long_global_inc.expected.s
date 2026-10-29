@@ -59,14 +59,12 @@ _long_global_inc_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _long_global_inc_L3
                 EOR     #$8000
 _long_global_inc_L3
-                BMI     *+5
-                BRL     _long_global_inc_L2
+                BPL     _long_global_inc_L2
                 LDA     g_n+2
                 STA     _fcc_long_hi
                 LDA     g_n
@@ -79,11 +77,10 @@ _long_global_inc_L3
 _long_global_inc_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _long_global_inc_L0
+                BRA     _long_global_inc_L0
 _long_global_inc_L2
                 LDA     g_n+2
                 STA     _fcc_long_hi

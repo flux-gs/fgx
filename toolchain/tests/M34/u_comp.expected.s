@@ -29,14 +29,9 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_divu16
                 STA     u
-                TAX
-                TXA
                 CMP     #18432
-                BEQ     *+5
-                BRL     _u_comp_L0
+                BNE     _u_comp_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -49,14 +44,9 @@ _u_comp_L0
                 TXA
                 JSR     _fcc_shr16
                 STA     u
-                TAX
-                TXA
                 CMP     #2304
-                BEQ     *+5
-                BRL     _u_comp_L1
+                BNE     _u_comp_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -69,26 +59,19 @@ _u_comp_L1
                 TXA
                 JSR     _fcc_modu16
                 STA     u
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _u_comp_L2
+                BNE     _u_comp_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
 _u_comp_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _u_comp_L3
+                BNE     _u_comp_L3
                 LDA     #42
-                BRL     _u_comp_L4
+                BRA     _u_comp_L4
 _u_comp_L3
                 LDA     _fcc_img0
 _u_comp_L4

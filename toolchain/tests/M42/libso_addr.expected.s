@@ -89,12 +89,10 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _libso_addr_L0
+                BNE     _libso_addr_L0
                 LDA     #42
-                BRL     _libso_addr_L1
+                BRA     _libso_addr_L1
 _libso_addr_L0
                 LDA     #1
 _libso_addr_L1

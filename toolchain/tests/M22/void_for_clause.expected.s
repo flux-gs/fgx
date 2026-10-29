@@ -21,7 +21,6 @@ vbefore_stkok        TCS
                 INC     _fcc_fb
                 LDA     gtrace
                 TAX
-                TXA
                 INC
                 STA     gtrace
                 TAY
@@ -52,7 +51,6 @@ vafter_stkok        TCS
                 INC     _fcc_fb
                 LDA     gtrace
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     gtrace
@@ -70,9 +68,10 @@ vafter_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -85,7 +84,7 @@ main_stkok        TCS
                 LDA     #0
                 STA     gtrace
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
                 FGX2_FARCALL vbefore
                 LDA     #1
                 STA     bavar
@@ -94,65 +93,55 @@ _void_for_clause_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     bavar
-                CMP     #0
-                BNE     *+5
-                BRL     _void_for_clause_L2
-                LDA     1,S   ; fccstk d=0 b=1
+                BEQ     _void_for_clause_L2
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CLC
                 ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _void_for_clause_L1
                 FGX2_FARCALL vafter
                 LDA     #0
                 STA     bavar
-                BRL     _void_for_clause_L0
+                BRA     _void_for_clause_L0
 _void_for_clause_L2
                 LDA     gtrace
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _void_for_clause_L3
+                BEQ     _void_for_clause_L3
                 LDA     #1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _void_for_clause_L3
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
-                TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _void_for_clause_L4
+                BEQ     _void_for_clause_L4
                 LDA     #2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _void_for_clause_L4
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     2
+main_FRAMESIZE   EQU     4
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 6

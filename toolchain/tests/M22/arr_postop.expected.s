@@ -36,6 +36,11 @@ main_stkok        TCS
                 TYA
                 STA:    $0000,X
                 PLA
+                LDA     #0
+                ASL
+                CLC
+                ADC     #giw
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -43,13 +48,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #giw
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
@@ -57,10 +55,8 @@ main_stkok        TCS
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _arr_postop_L0
+                BEQ     _arr_postop_L0
                 LDA     #1
                 TAY
                 TSC
@@ -77,10 +73,8 @@ _arr_postop_L0
                 TAX
                 LDA:    giw,X
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _arr_postop_L1
+                BEQ     _arr_postop_L1
                 LDA     #2
                 TAY
                 TSC
@@ -143,10 +137,8 @@ _arr_postop_L1
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _arr_postop_L2
+                BEQ     _arr_postop_L2
                 LDA     #3
                 TAY
                 TSC
@@ -176,10 +168,8 @@ _arr_postop_L2
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _arr_postop_L3
+                BEQ     _arr_postop_L3
                 LDA     #4
                 TAY
                 TSC
@@ -211,6 +201,10 @@ _arr_postop_L3
                 REP     #$20
                 MX      %00
                 PLA
+                LDA     #2
+                CLC
+                ADC     #gcb
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -218,12 +212,6 @@ _arr_postop_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gcb
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
@@ -236,10 +224,8 @@ _arr_postop_L3
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #200
-                BNE     *+5
-                BRL     _arr_postop_L4
+                BEQ     _arr_postop_L4
                 LDA     #5
                 TAY
                 TSC
@@ -256,10 +242,8 @@ _arr_postop_L4
                 LDA:    gcb,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #199
-                BNE     *+5
-                BRL     _arr_postop_L5
+                BEQ     _arr_postop_L5
                 LDA     #6
                 TAY
                 TSC
@@ -294,6 +278,11 @@ _arr_postop_L6
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
+                LDA     #3
+                ASL
+                CLC
+                ADC     #giw
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -301,20 +290,11 @@ _arr_postop_L6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #giw
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
                 STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -323,17 +303,14 @@ _arr_postop_L6
                 BVC     _arr_postop_L8
                 EOR     #$8000
 _arr_postop_L8
-                BMI     *+5
-                BRL     _arr_postop_L7
+                BPL     _arr_postop_L7
                 INC     _fcc_img0
-                BRL     _arr_postop_L6
+                BRA     _arr_postop_L6
 _arr_postop_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _arr_postop_L9
+                BEQ     _arr_postop_L9
                 LDA     #7
                 TAY
                 TSC

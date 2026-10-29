@@ -5,12 +5,7 @@
  * See docs/history/plans/2026-07-20-dns-resolver-scoping.md.
  */
 
-/* libc primitives the resolver calls.  A FILE* is a far char* on FGX, so
- * these are declared with that convention rather than <stdio.h>'s FILE. */
-extern char *fopen(char *path, char *mode);
-extern char *fgets(char *s, int size, char *fp);
-extern int   fclose(char *fp);
-extern int   sprintf(char *buf, char *fmt, ...);
+/* libc primitives the resolver calls that <stdio.h> does not declare. */
 extern int   nanosleep(int ticks);
 extern int   close(int fd);
 extern int   socket(int domain, int type, int proto);
@@ -80,7 +75,7 @@ static int _parse_ip4(char *s, unsigned char *ip4)
  * hostname).  1 on hit.  One parser serves both directions (code-size). */
 static int _hosts_scan(char *name, unsigned char *ip4, char *out_name)
 {
-    char *f = fopen("/etc/hosts", "r");
+    FILE *f = fopen("/etc/hosts", "r");
     char line[160];
     char *p, *ipstr, *tok;
     unsigned char lip[4];
@@ -130,7 +125,7 @@ static char _resolv_search[128];
  * stash the first "search <d..>" / "domain <d>" list in _resolv_search. */
 static int _nameserver(unsigned char *ns4)
 {
-    char *f = fopen("/etc/resolv.conf", "r");
+    FILE *f = fopen("/etc/resolv.conf", "r");
     char line[128];
     char *p, *e;
     int got = 0, i;
@@ -360,7 +355,7 @@ struct hostent *gethostbyaddr(char *addr, int len, int type)
  * proto if one is given.  Returns 1 with the host-order port + canonical name. */
 static int _services_lookup(char *name, char *proto, char *out_name, int *out_port)
 {
-    char *f = fopen("/etc/services", "r");
+    FILE *f = fopen("/etc/services", "r");
     char line[160];
     char *p, *nm, *portstr, *protostr, *tok;
     int matched, v, k, i;

@@ -57,10 +57,8 @@ probe_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _deref_postfix_L0
+                BEQ     _deref_postfix_L0
                 LDA     #1
                 TAY
                 TSC
@@ -110,10 +108,8 @@ _deref_postfix_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _deref_postfix_L1
+                BEQ     _deref_postfix_L1
                 LDA     #2
                 TAY
                 TSC
@@ -178,10 +174,8 @@ _deref_postfix_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _deref_postfix_L2
+                BEQ     _deref_postfix_L2
                 LDA     #3
                 TAY
                 TSC
@@ -296,6 +290,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -305,6 +300,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL probe

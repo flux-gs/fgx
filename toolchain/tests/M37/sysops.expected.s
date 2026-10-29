@@ -39,14 +39,9 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _sysops_L0
+                BNE     _sysops_L0
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     11,S   ; fccstk d=0 b=11
@@ -82,13 +77,8 @@ _sysops_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #127
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _sysops_L2
+                BNE     _sysops_L1
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -105,25 +95,12 @@ _sysops_L0
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_shrs16
-                TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _sysops_L2
-                LDA     #1
-                BRL     _sysops_L3
-_sysops_L2
-                LDA     #0
-_sysops_L3
-                CMP     #0
-                BNE     *+5
-                BRL     _sysops_L1
+                BNE     _sysops_L1
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     11,S   ; fccstk d=0 b=11
@@ -148,33 +125,19 @@ _sysops_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$6955
-                STA     _fcc_long_hi
-                LDA     #$B900
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #47360
+                STX     _fcc_long_b_lo
+                LDX     #26965
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L4
+                BEQ     _sysops_L2
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     11,S   ; fccstk d=0 b=11
-_sysops_L4
+_sysops_L2
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 TAY
@@ -220,8 +183,7 @@ _sysops_L4
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L6
+                BEQ     _sysops_L3
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
@@ -242,40 +204,19 @@ _sysops_L4
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_sub
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #30
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #30
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L6
-                LDA     #1
-                BRL     _sysops_L7
-_sysops_L6
-                LDA     #0
-_sysops_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _sysops_L5
+                BEQ     _sysops_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     11,S   ; fccstk d=0 b=11
-_sysops_L5
+_sysops_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 TAY
                 TSC

@@ -24,15 +24,11 @@ main_stkok        TCS
                 LDA     #1
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
-                CMP     #0
-                BNE     *+5
-                BRL     _logic_and_L0
+                BEQ     _logic_and_L0
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
-                BNE     *+5
-                BRL     _logic_and_L0
+                BEQ     _logic_and_L0
                 LDA     #1
-                BRL     _logic_and_L1
+                BRA     _logic_and_L1
 _logic_and_L0
                 LDA     #0
 _logic_and_L1

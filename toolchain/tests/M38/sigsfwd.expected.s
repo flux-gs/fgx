@@ -152,10 +152,8 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _sigsfwd_L0
+                BEQ     _sigsfwd_L0
                 LDA     #6
                 TAY
                 TSC
@@ -171,6 +169,7 @@ _sigsfwd_L0
                 PHA
                 LDA     #0
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -180,6 +179,7 @@ _sigsfwd_L0
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     11,S   ; fccstk d=8 b=3
@@ -198,10 +198,8 @@ _sigsfwd_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _sigsfwd_L1
+                BEQ     _sigsfwd_L1
                 LDA     #7
                 TAY
                 TSC
@@ -217,6 +215,7 @@ _sigsfwd_L1
                 PHA
                 LDA     #0
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -226,6 +225,7 @@ _sigsfwd_L1
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     11,S   ; fccstk d=8 b=3
@@ -367,26 +367,13 @@ chk_stkok        TCS
                 ELSE
                 LDA     6+chk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1234
-                STA     _fcc_long_hi
-                LDA     #$5678
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #22136
+                STX     _fcc_long_b_lo
+                LDX     #4660
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsfwd_L4
+                BEQ     _sigsfwd_L2
                 DO      12+chk_FRAMESIZE/256
                 TSC
                 CLC
@@ -409,6 +396,7 @@ chk_stkok        TCS
                 LDA     10+chk_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -418,36 +406,26 @@ chk_stkok        TCS
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _sigsfwd_L6
+                BNE     _sigsfwd_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _sigsfwd_L6
+                BNE     _sigsfwd_L4
                 LDA     #1
-                BRL     _sigsfwd_L7
-_sigsfwd_L6
-                LDA     #0
-_sigsfwd_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _sigsfwd_L4
-                LDA     #1
-                BRL     _sigsfwd_L5
+                BRA     _sigsfwd_L5
 _sigsfwd_L4
                 LDA     #0
 _sigsfwd_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsfwd_L2
+                BEQ     _sigsfwd_L2
                 LDA     #42
-                BRL     _sigsfwd_L3
+                BRA     _sigsfwd_L3
 _sigsfwd_L2
                 LDA     #7
 _sigsfwd_L3

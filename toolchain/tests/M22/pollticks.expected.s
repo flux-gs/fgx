@@ -24,23 +24,13 @@ _pollticks_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 FGX2_FARCALL pollkey
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _pollticks_L2
-                EOR     #$8000
-_pollticks_L2
-                BPL     *+5
-                BRL     _pollticks_L1
-                BRL     _pollticks_L0
+                CMP     #0
+                BMI     _pollticks_L1
+                BRA     _pollticks_L0
 _pollticks_L1
                 FGX2_FARCALL yield
-                TAX
-                TXA
                 CMP     #0
-                BNE     *+5
-                BRL     _pollticks_L3
+                BEQ     _pollticks_L2
                 LDA     #1
                 TAY
                 TSC
@@ -51,17 +41,10 @@ _pollticks_L1
                 STA     _fcc_fb
                 TYA
                 RTL
-_pollticks_L3
+_pollticks_L2
                 FGX2_FARCALL pollkey
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _pollticks_L5
-                EOR     #$8000
-_pollticks_L5
-                BPL     *+5
-                BRL     _pollticks_L4
+                CMP     #0
+                BMI     _pollticks_L3
                 LDA     #2
                 TAY
                 TSC
@@ -72,7 +55,7 @@ _pollticks_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_pollticks_L4
+_pollticks_L3
                 FGX2_FARCALL ticks
                 STA     1,S   ; fccstk d=0 b=1
                 FGX2_FARCALL yield
@@ -80,15 +63,7 @@ _pollticks_L4
                 SEC
                 SBC     1,S   ; fccstk d=0 b=1
                 STA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _pollticks_L7
-                EOR     #$8000
-_pollticks_L7
-                BMI     *+5
-                BRL     _pollticks_L6
+                BPL     _pollticks_L4
                 LDA     #3
                 TAY
                 TSC
@@ -99,7 +74,7 @@ _pollticks_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_pollticks_L6
+_pollticks_L4
                 LDA     #42
                 TAY
                 TSC

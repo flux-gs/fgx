@@ -22,6 +22,7 @@ lookup_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31,6 +32,7 @@ lookup_stkok        TCS
                 MX      %00
                 LDA     #root
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -60,6 +62,7 @@ ivec_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -69,6 +72,7 @@ ivec_stkok        TCS
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -113,10 +117,8 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _callchain_stmt_L0
+                BEQ     _callchain_stmt_L0
                 LDA     #1
                 TAY
                 TSC
@@ -139,16 +141,12 @@ _callchain_stmt_L0
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 ORA     #16
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #20
-                BNE     *+5
-                BRL     _callchain_stmt_L1
+                BEQ     _callchain_stmt_L1
                 LDA     #2
                 TAY
                 TSC
@@ -171,16 +169,12 @@ _callchain_stmt_L1
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #28
-                BNE     *+5
-                BRL     _callchain_stmt_L2
+                BEQ     _callchain_stmt_L2
                 LDA     #3
                 TAY
                 TSC
@@ -205,10 +199,8 @@ _callchain_stmt_L2
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _callchain_stmt_L3
+                BEQ     _callchain_stmt_L3
                 LDA     #4
                 TAY
                 TSC
@@ -221,14 +213,11 @@ _callchain_stmt_L2
                 RTL
 _callchain_stmt_L3
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     [_fcc_fpr0]
@@ -237,10 +226,8 @@ _callchain_stmt_L3
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _callchain_stmt_L4
+                BEQ     _callchain_stmt_L4
                 LDA     #5
                 TAY
                 TSC
@@ -254,10 +241,8 @@ _callchain_stmt_L3
 _callchain_stmt_L4
                 LDA     calls
                 TAX
-                TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _callchain_stmt_L5
+                BEQ     _callchain_stmt_L5
                 LDA     #6
                 TAY
                 TSC

@@ -21,10 +21,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     g+0
                 TAX
-                TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _struct_sinit_L0
+                BEQ     _struct_sinit_L0
                 LDA     #1
                 TAY
                 TSC
@@ -38,10 +36,8 @@ main_stkok        TCS
 _struct_sinit_L0
                 LDA     g+2
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _struct_sinit_L1
+                BEQ     _struct_sinit_L1
                 LDA     #2
                 TAY
                 TSC
@@ -56,10 +52,8 @@ _struct_sinit_L1
                 LDA     g+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _struct_sinit_L2
+                BEQ     _struct_sinit_L2
                 LDA     #3
                 TAY
                 TSC

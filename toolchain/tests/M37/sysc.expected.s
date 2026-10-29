@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30,14 +31,11 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_sysc_path
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_fpr0
                 STA     11,S   ; fccstk d=0 b=11
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0+2
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
@@ -71,40 +69,25 @@ main_stkok        TCS
 _sysc_L1
                 STX     __sys_c
                 STY     __sys_y
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _sysc_L0
+                BNE     _sysc_L0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L0
                 LDA     __sys_c
-                TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _sysc_L2
+                BNE     _sysc_L2
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L2
                 LDA     __sys_y
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _sysc_L3
+                BNE     _sysc_L3
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -136,14 +119,9 @@ _sysc_L4
                 STX     __sys_c
                 STY     __sys_y
                 LDA     __sys_c
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _sysc_L5
+                BNE     _sysc_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     1,S   ; fccstk d=0 b=1

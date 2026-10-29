@@ -49,10 +49,8 @@ main_stkok        TCS
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #101
-                BNE     *+5
-                BRL     _ampderef_L0
+                BEQ     _ampderef_L0
                 LDA     #1
                 TAY
                 TSC
@@ -94,10 +92,8 @@ _ampderef_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #111
-                BNE     *+5
-                BRL     _ampderef_L1
+                BEQ     _ampderef_L1
                 LDA     #2
                 TAY
                 TSC
@@ -109,6 +105,14 @@ _ampderef_L0
                 TYA
                 RTL
 _ampderef_L1
+                LDA     #2
+                ASL
+                INC
+                INC
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -116,16 +120,6 @@ _ampderef_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #30
                 LDY     #2
                 STA     [_fcc_fpr0],Y
@@ -160,17 +154,11 @@ _ampderef_L1
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #30
-                BNE     *+5
-                BRL     _ampderef_L2
+                BEQ     _ampderef_L2
                 LDA     #3
                 TAY
                 TSC
@@ -190,12 +178,9 @@ _ampderef_L2
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
-                TXA
                 SEC
                 SBC     #111
                 TAX
-                TXA
                 CLC
                 ADC     #30
                 TAY

@@ -38,7 +38,10 @@ main_stkok        TCS
                 PLA
                 LDA     #3
                 STA     _fcc_img0
-                PHA
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -46,23 +49,14 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                PLA
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img2
                 LDA     _fcc_fpr0
                 STA     _fcc_img1
                 LDA     [_fcc_img1]
                 TAX
-                TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _iplusp_scale_L0
+                BEQ     _iplusp_scale_L0
                 LDA     #1
                 TAY
                 TSC
@@ -78,6 +72,7 @@ _iplusp_scale_L0
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img1
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -87,15 +82,14 @@ _iplusp_scale_L0
                 MX      %00
                 LDA     #arr
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
                 LSR
                 TAX
-                TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _iplusp_scale_L1
+                BEQ     _iplusp_scale_L1
                 LDA     #2
                 TAY
                 TSC
@@ -131,7 +125,11 @@ _iplusp_scale_L1
                 PLA
                 LDA     #2
                 STA     _fcc_img0
-                PHA
+                ASL
+                ASL
+                CLC
+                ADC     #larr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -139,14 +137,6 @@ _iplusp_scale_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #larr
-                STA     _fcc_fpr0
-                PLA
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
@@ -158,26 +148,13 @@ _iplusp_scale_L1
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$86A0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #34464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _iplusp_scale_L2
+                BEQ     _iplusp_scale_L2
                 LDA     #3
                 TAY
                 TSC
@@ -190,7 +167,11 @@ _iplusp_scale_L1
                 RTL
 _iplusp_scale_L2
                 LDA     #2
-                PHA
+                TAX
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -198,13 +179,11 @@ _iplusp_scale_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                PLA
+                LDA     #2
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #arr
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -212,33 +191,23 @@ _iplusp_scale_L2
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr1
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _iplusp_scale_L4
+                BNE     _iplusp_scale_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _iplusp_scale_L4
+                BNE     _iplusp_scale_L4
                 LDA     #0
-                BRL     _iplusp_scale_L5
+                BRA     _iplusp_scale_L5
 _iplusp_scale_L4
                 LDA     #1
 _iplusp_scale_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _iplusp_scale_L3
+                BEQ     _iplusp_scale_L3
                 LDA     #4
                 TAY
                 TSC

@@ -138,27 +138,93 @@ static void *_memset1(void *p, int c, unsigned n)
 }
 
 /* bcopy: BSD arg order (src, dst, len), overlap-safe (4.3BSD contract).
- * BOTH arms are its own loops now.  The dst<src arm used to delegate to
- * memcpy "the forward loop" -- true of the old per-byte M8 loop, FALSE
- * since the word-loop rewrite: memcpy's DEY/DEY/BPL idiom copies TOP-
- * DOWN, which is exactly the unsafe direction for a dst<src overlap.
- * frotz's libcadds fixture caught it on target: memmove(ov, ov+2, 4)
- * re-read its own fresh stores and doubled the tail.  An ascending byte
- * loop is slower than the word move, but bcopy's callers are the
- * overlap-prone ones by nature; non-overlap bulk copies use memcpy. */
+ * A 16-bit word at a time through [dp],Y, as memcpy does, in the direction
+ * an overlap needs: up when dst is below src, down when it is above, and
+ * either way when the two are in different banks.  Every word is read
+ * before the store that could overwrite it, and the odd byte goes at the
+ * end the copy has not yet reached -- last going up, first going down.
+ * memcpy's own loop runs down and takes its odd byte last, which an
+ * overlapping copy one byte up would read after overwriting it, so it is
+ * not used here.  n <= 0 copies nothing. */
 void bcopy(void *s, void *d, int n)
 {
-    char *sp = (char *)s;
-    char *dp = (char *)d;
-    int i;
-
-    if ((unsigned long)dp < (unsigned long)sp) {
-        for (i = 0; i < n; i++)
-            dp[i] = sp[i];
-    } else if (dp != sp) {
-        for (i = n - 1; i >= 0; i--)
-            dp[i] = sp[i];
-    }
+    __asm_p0 = (char *)d;
+    __asm_p1 = (char *)s;
+    __asm_w0 = n;
+    __asm(
+        "LDA __asm_p0",
+        "STA c_strcmp_a",
+        "LDA __asm_p1",
+        "STA c_strcmp_b",
+        "SEP #$20",
+        "MX %10",
+        "LDA __asm_p0+2",
+        "STA c_strcmp_a+2",
+        "LDA __asm_p1+2",
+        "STA c_strcmp_b+2",
+        "CMP c_strcmp_a+2",       /* Z: same bank */
+        "REP #$20",
+        "MX %00",
+        "BNE @bc_up",             /* different banks: no overlap */
+        "LDA c_strcmp_a",
+        "CMP c_strcmp_b",
+        "BEQ @bc_done",           /* the same bytes */
+        "BCS @bc_down",           /* dst above src */
+        "@bc_up",
+        "LDA __asm_w0",
+        "BMI @bc_done",
+        "AND #$FFFE",
+        "STA __asm_w1",           /* the even count: the words' end */
+        "BEQ @bc_utail",
+        "LDY #0",
+        "@bc_uw",
+        "LDA [c_strcmp_b],Y",
+        "STA [c_strcmp_a],Y",
+        "INY",
+        "INY",
+        "CPY __asm_w1",
+        "BCC @bc_uw",
+        "@bc_utail",
+        "LDA __asm_w0",
+        "LSR",
+        "BCC @bc_done",           /* even: no odd byte */
+        "LDY __asm_w1",
+        "SEP #$20",
+        "MX %10",
+        "LDA [c_strcmp_b],Y",
+        "STA [c_strcmp_a],Y",
+        "REP #$20",
+        "MX %00",
+        "BRA @bc_done",
+        "@bc_down",
+        "LDA __asm_w0",
+        "BMI @bc_done",
+        "LSR",
+        "BCC @bc_dw0",            /* even: no odd byte */
+        "LDA __asm_w0",
+        "DEC",
+        "TAY",                    /* Y = n-1, the odd byte */
+        "SEP #$20",
+        "MX %10",
+        "LDA [c_strcmp_b],Y",
+        "STA [c_strcmp_a],Y",
+        "REP #$20",
+        "MX %00",
+        "@bc_dw0",
+        "LDA __asm_w0",
+        "AND #$FFFE",
+        "BEQ @bc_done",
+        "DEC",
+        "DEC",
+        "TAY",                    /* Y = the last word */
+        "@bc_dw",
+        "LDA [c_strcmp_b],Y",
+        "STA [c_strcmp_a],Y",
+        "DEY",
+        "DEY",
+        "BPL @bc_dw",
+        "@bc_done"
+    );
 }
 
 /* ANSI memmove: bcopy's overlap-safe copy with the ANSI argument order

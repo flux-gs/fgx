@@ -7,9 +7,10 @@
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -61,6 +62,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -70,6 +72,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -79,39 +82,31 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _vspf_L0
+                BNE     _vspf_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
 _vspf_L0
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_img0
+                STA     _fcc_img16
 _vspf_L1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _vspf_L4
                 EOR     #$8000
 _vspf_L4
-                BMI     *+5
-                BRL     _vspf_L3
+                BPL     _vspf_L3
                 LDA     #ov
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     1,S
                 TAY
@@ -120,7 +115,7 @@ _vspf_L4
                 PHA
                 LDA     #65
                 CLC
-                ADC     _fcc_img0
+                ADC     _fcc_img16
                 TAY
                 LDA     1,S
                 TAX
@@ -132,12 +127,25 @@ _vspf_L4
                 MX      %00
                 PLA
 _vspf_L2
-                INC     _fcc_img0
-                BRL     _vspf_L1
+                INC     _fcc_img16
+                BRA     _vspf_L1
 _vspf_L3
-                LDA     _fcc_img0
-                STA     3,S   ; fccstk d=0 b=3
                 LDA     #5
+                PHA
+                LDA     #2
+                CLC
+                ADC     #ov
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -148,21 +156,7 @@ _vspf_L3
                 MX      %00
                 LDA     #ov
                 STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                PHB
                 PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ov
-                STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bcopy
@@ -175,53 +169,31 @@ _vspf_L3
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _vspf_L8
+                BNE     _vspf_L5
                 LDA     #6
                 TAX
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #69
-                BEQ     *+5
-                BRL     _vspf_L8
-                LDA     #1
-                BRL     _vspf_L9
-_vspf_L8
-                LDA     #0
-_vspf_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _vspf_L6
+                BNE     _vspf_L5
                 LDA     #7
                 TAX
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #72
-                BEQ     *+5
-                BRL     _vspf_L6
-                LDA     #1
-                BRL     _vspf_L7
-_vspf_L6
-                LDA     #0
-_vspf_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _vspf_L5
+                BNE     _vspf_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
 _vspf_L5
                 LDA     #2
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -231,8 +203,13 @@ _vspf_L5
                 MX      %00
                 LDA     #ov
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                LDA     #5
+                CLC
+                ADC     #ov
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -240,12 +217,7 @@ _vspf_L5
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ov
-                STA     _fcc_fpr0
-                LDA     #5
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bcopy
@@ -258,45 +230,34 @@ _vspf_L5
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #68
-                BEQ     *+5
-                BRL     _vspf_L11
+                BNE     _vspf_L6
                 LDA     #1
                 TAX
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #69
-                BEQ     *+5
-                BRL     _vspf_L11
-                LDA     #1
-                BRL     _vspf_L12
-_vspf_L11
-                LDA     #0
-_vspf_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _vspf_L10
+                BNE     _vspf_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
-_vspf_L10
+_vspf_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     4
+main_FRAMESIZE   EQU     6
 main_STKGUARD    EQU     0
                 FGX2_EXPORT fmtit
 fmtit            ENT
@@ -356,6 +317,7 @@ fmtit_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -365,6 +327,7 @@ fmtit_stkok        TCS
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vsprintf

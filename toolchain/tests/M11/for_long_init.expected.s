@@ -7,9 +7,12 @@
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-6
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -20,26 +23,14 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
                 STA     3,S   ; fccstk d=0 b=3
                 TAY
@@ -49,77 +40,49 @@ main_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=0 b=3
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
                 TAY
                 JSR     _fcc_long_from_int
                 LDA     _fcc_long_hi
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img17
                 TYA
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
 _for_long_init_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     9,S   ; fccstk d=0 b=9
+                LDA     _fcc_img17
                 STA     _fcc_long_hi
-                LDA     7,S   ; fccstk d=0 b=7
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #6
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDA     _fcc_img16
+                LDX     #6
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _for_long_init_L2
-                LDA     _fcc_img0
-                TAX
-                TXA
+                BEQ     _for_long_init_L2
+                LDA     _fcc_img18
                 CLC
                 ADC     #7
-                STA     _fcc_img0
+                STA     _fcc_img18
 _for_long_init_L1
-                LDA     9,S   ; fccstk d=0 b=9
+                LDA     _fcc_img17
                 STA     _fcc_long_hi
-                LDA     7,S   ; fccstk d=0 b=7
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDA     _fcc_img16
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
                 TAY
                 LDA     _fcc_long_hi
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img17
                 TYA
-                BRL     _for_long_init_L0
+                BRA     _for_long_init_L0
 _for_long_init_L2
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 PHA
                 SEP     #$20
                 MX      %10
@@ -141,12 +104,18 @@ _for_long_init_L2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     10
+main_FRAMESIZE   EQU     16
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 3

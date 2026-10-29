@@ -30,14 +30,8 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #14
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 LDA     #7
                 STA     [_fcc_fpr0]
@@ -50,24 +44,13 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #14
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _memchain2_L0
+                BNE     _memchain2_L0
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -106,13 +89,8 @@ _memchain2_L0
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #6
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -131,14 +109,9 @@ _memchain2_L0
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _memchain2_L1
+                BNE     _memchain2_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -174,14 +147,9 @@ _memchain2_L1
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
-                TXA
                 CMP     #16
-                BEQ     *+5
-                BRL     _memchain2_L2
+                BNE     _memchain2_L2
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -255,27 +223,14 @@ _memchain2_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _memchain2_L4
+                BNE     _memchain2_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _memchain2_L4
-                LDA     #1
-                BRL     _memchain2_L5
-_memchain2_L4
-                LDA     #0
-_memchain2_L5
-                CMP     #0
-                BNE     *+5
-                BRL     _memchain2_L3
+                BNE     _memchain2_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img0

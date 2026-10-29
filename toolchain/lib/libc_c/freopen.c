@@ -1,29 +1,53 @@
-char *freopen(char *path, char *mode, char *fp)
+/* SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * FGX-Provenance: 2.11BSD vendor/2.11BSD/usr/lib/libc/stdio/freopen.c
+ *   Original work: freopen.c 5.2 (Berkeley) 3/9/86,
+ *	Copyright (c) 1980
+ *	Regents of the University of California.
+ */
+/* Upstream's body.  The #include lines are the aggregate's (libc_c.c). */
+FILE *
+freopen(file, mode, iop)
+	char *file;
+	register char *mode;
+	register FILE *iop;
 {
-    int i = ((unsigned)(unsigned long)fp
-             - (unsigned)(unsigned long)&_libc_FILE_table[0]) >> 2;
-    int *e = &_libc_FILE_table[i * 2];
-    int fd, fl;
+	register f, rw, oflags;
 
-    fl = __lc_mode_flags(mode);
-    if (fl < 0) { errno = 22; return (char *)0; }
-    __lc_bdrop(i - _LC_FIRSTBUF);       /* the old file's bytes die with its fd */
-    if (e[0] != -1) {
-        __lc_wrelease(e[0]);            /* held OUTPUT belongs to the old file,
-                                         * and must go out before its fd does */
-        close(e[0]);
-    }
-    fd = open(path, fl, 0666);      /* "w" carries O_TRUNC; see __lc_mode_flags.
-                                     * 0666 is BOTH ancestors' -- 2.11BSD and
-                                     * 4.3BSD-Reno lib/libc/stdio/fopen.c:44 are
-                                     * the same line, `open(file, oflags, 0666)'
-                                     * -- and the umask is what narrows it. */
-    if (fd < 0) {
-        e[0] = -1;
-        e[1] = 0;
-        return (char *)0;
-    }
-    e[0] = fd;
-    e[1] = __lc_mode_dir(mode);
-    return __lc_fptr(i);
+	rw = (mode[1] == '+');
+
+	fclose(iop);
+
+	switch (*mode) {
+	case 'a':
+		oflags = O_CREAT | (rw ? O_RDWR : O_WRONLY);
+		break;
+	case 'r':
+		oflags = rw ? O_RDWR : O_RDONLY;
+		break;
+	case 'w':
+		oflags = O_TRUNC | O_CREAT | (rw ? O_RDWR : O_WRONLY);
+		break;
+	default:
+		return (NULL);
+	}
+
+	f = open(file, oflags, 0666);
+	if (f < 0)
+		return (NULL);
+
+	if (*mode == 'a')
+		lseek(f, (off_t)0, L_XTND);
+
+	iop->_cnt = 0;
+	iop->_file = f;
+	iop->_bufsiz = 0;
+	if (rw)
+		iop->_flag = _IORW;
+	else if (*mode == 'r')
+		iop->_flag = _IOREAD;
+	else
+		iop->_flag = _IOWRT;
+	iop->_base = iop->_ptr = NULL;
+	return (iop);
 }

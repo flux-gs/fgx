@@ -30,7 +30,6 @@ add_b_stkok        TCS
                 LDA     6+add_b_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 TAY
@@ -70,7 +69,6 @@ add_c_stkok        TCS
                 LDA     6+add_c_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #30
                 TAY
@@ -110,7 +108,6 @@ add_a_stkok        TCS
                 LDA     6+add_a_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 INC
                 TAY
@@ -139,6 +136,14 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #0
+                ASL
+                CLC
+                ADC     #0
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -146,16 +151,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20

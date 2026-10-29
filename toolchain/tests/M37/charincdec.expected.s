@@ -190,6 +190,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -199,10 +200,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -212,6 +215,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gq
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -240,68 +244,31 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L0
+                BNE     _charincdec_L0
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
 _charincdec_L0
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _charincdec_L6
+                BNE     _charincdec_L1
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _charincdec_L6
-                LDA     #1
-                BRL     _charincdec_L7
-_charincdec_L6
-                LDA     #0
-_charincdec_L7
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L4
+                BNE     _charincdec_L1
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L4
-                LDA     #1
-                BRL     _charincdec_L5
-_charincdec_L4
-                LDA     #0
-_charincdec_L5
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L2
+                BNE     _charincdec_L1
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L2
-                LDA     #1
-                BRL     _charincdec_L3
-_charincdec_L2
-                LDA     #0
-_charincdec_L3
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L1
+                BNE     _charincdec_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -329,62 +296,29 @@ _charincdec_L1
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _charincdec_L13
+                BNE     _charincdec_L2
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L13
-                LDA     #1
-                BRL     _charincdec_L14
-_charincdec_L13
-                LDA     #0
-_charincdec_L14
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L11
+                BNE     _charincdec_L2
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L11
-                LDA     #1
-                BRL     _charincdec_L12
-_charincdec_L11
-                LDA     #0
-_charincdec_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L9
+                BNE     _charincdec_L2
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L9
-                LDA     #1
-                BRL     _charincdec_L10
-_charincdec_L9
-                LDA     #0
-_charincdec_L10
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L8
+                BNE     _charincdec_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L8
+_charincdec_L2
                 FGX2_FARCALL clear
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
@@ -402,151 +336,70 @@ _charincdec_L8
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L20
+                BNE     _charincdec_L3
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L20
-                LDA     #1
-                BRL     _charincdec_L21
-_charincdec_L20
-                LDA     #0
-_charincdec_L21
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L18
+                BNE     _charincdec_L3
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L18
-                LDA     #1
-                BRL     _charincdec_L19
-_charincdec_L18
-                LDA     #0
-_charincdec_L19
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L16
+                BNE     _charincdec_L3
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L16
-                LDA     #1
-                BRL     _charincdec_L17
-_charincdec_L16
-                LDA     #0
-_charincdec_L17
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L15
+                BNE     _charincdec_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L15
+_charincdec_L3
                 FGX2_FARCALL clear
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L27
+                BNE     _charincdec_L4
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L27
-                LDA     #1
-                BRL     _charincdec_L28
-_charincdec_L27
-                LDA     #0
-_charincdec_L28
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L25
+                BNE     _charincdec_L4
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L25
-                LDA     #1
-                BRL     _charincdec_L26
-_charincdec_L25
-                LDA     #0
-_charincdec_L26
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L23
+                BNE     _charincdec_L4
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L23
-                LDA     #1
-                BRL     _charincdec_L24
-_charincdec_L23
-                LDA     #0
-_charincdec_L24
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L22
+                BNE     _charincdec_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L22
+_charincdec_L4
                 FGX2_FARCALL clear
                 LDA     #1
                 STA     13,S   ; fccstk d=0 b=13
+                CLC
+                ADC     #carr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -554,110 +407,53 @@ _charincdec_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #carr
-                STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L36
+                BNE     _charincdec_L5
                 LDA     #1
                 TAX
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L36
-                LDA     #1
-                BRL     _charincdec_L37
-_charincdec_L36
-                LDA     #0
-_charincdec_L37
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L34
+                BNE     _charincdec_L5
                 LDA     #0
                 TAX
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #113
-                BEQ     *+5
-                BRL     _charincdec_L34
-                LDA     #1
-                BRL     _charincdec_L35
-_charincdec_L34
-                LDA     #0
-_charincdec_L35
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L32
+                BNE     _charincdec_L5
                 LDA     #2
                 TAX
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #115
-                BEQ     *+5
-                BRL     _charincdec_L32
-                LDA     #1
-                BRL     _charincdec_L33
-_charincdec_L32
-                LDA     #0
-_charincdec_L33
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L30
+                BNE     _charincdec_L5
                 LDA     #3
                 TAX
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #116
-                BEQ     *+5
-                BRL     _charincdec_L30
-                LDA     #1
-                BRL     _charincdec_L31
-_charincdec_L30
-                LDA     #0
-_charincdec_L31
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L29
+                BNE     _charincdec_L5
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L29
+_charincdec_L5
                 FGX2_FARCALL clear
                 SEP     #$20
                 MX      %10
@@ -681,96 +477,45 @@ _charincdec_L29
                 PLA
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L45
+                BNE     _charincdec_L6
                 LDA     gq+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L45
-                LDA     #1
-                BRL     _charincdec_L46
-_charincdec_L45
-                LDA     #0
-_charincdec_L46
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L43
+                BNE     _charincdec_L6
                 LDA     gq+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #81
-                BEQ     *+5
-                BRL     _charincdec_L43
-                LDA     #1
-                BRL     _charincdec_L44
-_charincdec_L43
-                LDA     #0
-_charincdec_L44
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L41
+                BNE     _charincdec_L6
                 LDA     gq+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #83
-                BEQ     *+5
-                BRL     _charincdec_L41
-                LDA     #1
-                BRL     _charincdec_L42
-_charincdec_L41
-                LDA     #0
-_charincdec_L42
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L39
+                BNE     _charincdec_L6
                 LDA     gq+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #84
-                BEQ     *+5
-                BRL     _charincdec_L39
-                LDA     #1
-                BRL     _charincdec_L40
-_charincdec_L39
-                LDA     #0
-_charincdec_L40
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L38
+                BNE     _charincdec_L6
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L38
+_charincdec_L6
                 FGX2_FARCALL clear
                 LDA     #255
                 SEP     #$20
@@ -780,99 +525,40 @@ _charincdec_L38
                 MX      %00
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L47
+                BNE     _charincdec_L7
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
-_charincdec_L47
+_charincdec_L7
                 LDA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L53
+                BNE     _charincdec_L8
                 LDA     gs+1
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L53
-                LDA     #1
-                BRL     _charincdec_L54
-_charincdec_L53
-                LDA     #0
-_charincdec_L54
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L51
+                BNE     _charincdec_L8
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L51
-                LDA     #1
-                BRL     _charincdec_L52
-_charincdec_L51
-                LDA     #0
-_charincdec_L52
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L49
+                BNE     _charincdec_L8
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L49
-                LDA     #1
-                BRL     _charincdec_L50
-_charincdec_L49
-                LDA     #0
-_charincdec_L50
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L48
+                BNE     _charincdec_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L48
+_charincdec_L8
                 FGX2_FARCALL clear
                 LDA     #255
                 SEP     #$20
@@ -898,150 +584,68 @@ _charincdec_L48
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L60
+                BNE     _charincdec_L9
                 LDA     gs+1
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L60
-                LDA     #1
-                BRL     _charincdec_L61
-_charincdec_L60
-                LDA     #0
-_charincdec_L61
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L58
+                BNE     _charincdec_L9
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L58
-                LDA     #1
-                BRL     _charincdec_L59
-_charincdec_L58
-                LDA     #0
-_charincdec_L59
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L56
+                BNE     _charincdec_L9
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L56
-                LDA     #1
-                BRL     _charincdec_L57
-_charincdec_L56
-                LDA     #0
-_charincdec_L57
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L55
+                BNE     _charincdec_L9
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L55
+_charincdec_L9
                 FGX2_FARCALL clear
                 LDA     #0
                 SEP     #$20
                 MX      %10
                 STA     gs+1
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 DEC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L67
+                BNE     _charincdec_L10
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L67
-                LDA     #1
-                BRL     _charincdec_L68
-_charincdec_L67
-                LDA     #0
-_charincdec_L68
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L65
+                BNE     _charincdec_L10
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L65
-                LDA     #1
-                BRL     _charincdec_L66
-_charincdec_L65
-                LDA     #0
-_charincdec_L66
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L63
+                BNE     _charincdec_L10
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L63
-                LDA     #1
-                BRL     _charincdec_L64
-_charincdec_L63
-                LDA     #0
-_charincdec_L64
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L62
+                BNE     _charincdec_L10
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L62
+_charincdec_L10
                 FGX2_FARCALL clear
                 LDA     #0
                 SEP     #$20
@@ -1066,63 +670,28 @@ _charincdec_L62
                 MX      %00
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L74
+                BNE     _charincdec_L11
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L74
-                LDA     #1
-                BRL     _charincdec_L75
-_charincdec_L74
-                LDA     #0
-_charincdec_L75
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L72
+                BNE     _charincdec_L11
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L72
-                LDA     #1
-                BRL     _charincdec_L73
-_charincdec_L72
-                LDA     #0
-_charincdec_L73
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L70
+                BNE     _charincdec_L11
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L70
-                LDA     #1
-                BRL     _charincdec_L71
-_charincdec_L70
-                LDA     #0
-_charincdec_L71
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L69
+                BNE     _charincdec_L11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L69
+_charincdec_L11
                 FGX2_FARCALL clear
                 LDA     #255
                 SEP     #$20
@@ -1149,61 +718,26 @@ _charincdec_L69
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L81
+                BNE     _charincdec_L12
                 LDA     go+2
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L81
-                LDA     #1
-                BRL     _charincdec_L82
-_charincdec_L81
-                LDA     #0
-_charincdec_L82
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L79
+                BNE     _charincdec_L12
                 LDA     go+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _charincdec_L79
-                LDA     #1
-                BRL     _charincdec_L80
-_charincdec_L79
-                LDA     #0
-_charincdec_L80
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L77
+                BNE     _charincdec_L12
                 LDA     go+0
                 TAX
-                TXA
                 CMP     #24930
-                BEQ     *+5
-                BRL     _charincdec_L77
-                LDA     #1
-                BRL     _charincdec_L78
-_charincdec_L77
-                LDA     #0
-_charincdec_L78
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L76
+                BNE     _charincdec_L12
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L76
+_charincdec_L12
                 FGX2_FARCALL clear
                 LDA     #255
                 SEP     #$20
@@ -1223,32 +757,17 @@ _charincdec_L76
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L84
+                BNE     _charincdec_L13
                 LDA     gu
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L84
-                LDA     #1
-                BRL     _charincdec_L85
-_charincdec_L84
-                LDA     #0
-_charincdec_L85
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L83
+                BNE     _charincdec_L13
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L83
+_charincdec_L13
                 FGX2_FARCALL clear
                 LDA     #255
                 SEP     #$20
@@ -1282,62 +801,27 @@ _charincdec_L83
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_long_hi
                 LDA     15,S   ; fccstk d=0 b=15
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #255
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #255
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L89
+                BEQ     _charincdec_L14
                 LDA     gs+1
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L89
-                LDA     #1
-                BRL     _charincdec_L90
-_charincdec_L89
-                LDA     #0
-_charincdec_L90
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L87
+                BNE     _charincdec_L14
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L87
-                LDA     #1
-                BRL     _charincdec_L88
-_charincdec_L87
-                LDA     #0
-_charincdec_L88
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L86
+                BNE     _charincdec_L14
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L86
+_charincdec_L14
                 FGX2_FARCALL clear
                 LDA     #16
                 SEP     #$20
@@ -1349,28 +833,14 @@ _charincdec_L86
                 SEP     #$20
                 MX      %10
                 STA     gs+2
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -1393,51 +863,28 @@ _charincdec_L86
                 PHA
                 LDA     #17
                 TAX
-                TXA
                 CLC
                 ADC     #17
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _charincdec_L94
+                BNE     _charincdec_L15
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #42
-                BEQ     *+5
-                BRL     _charincdec_L94
-                LDA     #1
-                BRL     _charincdec_L95
-_charincdec_L94
-                LDA     #0
-_charincdec_L95
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L92
+                BNE     _charincdec_L15
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L92
-                LDA     #1
-                BRL     _charincdec_L93
-_charincdec_L92
-                LDA     #0
-_charincdec_L93
-                CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L91
+                BNE     _charincdec_L15
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
-_charincdec_L91
+_charincdec_L15
                 LDA     9,S   ; fccstk d=0 b=9
                 TAY
                 TSC

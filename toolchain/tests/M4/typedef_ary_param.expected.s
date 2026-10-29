@@ -70,10 +70,9 @@ _typedef_ary_param_L0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _typedef_ary_param_L1
+                BEQ     _typedef_ary_param_L1
                 INC     _fcc_img0
-                BRL     _typedef_ary_param_L0
+                BRA     _typedef_ary_param_L0
 _typedef_ary_param_L1
                 LDA     _fcc_img0
                 TAY
@@ -152,8 +151,7 @@ _typedef_ary_param_L2
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _typedef_ary_param_L4
+                BEQ     _typedef_ary_param_L4
                 INC     _fcc_img0
 _typedef_ary_param_L3
                 LDA     3,S   ; fccstk d=0 b=3
@@ -162,7 +160,7 @@ _typedef_ary_param_L3
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _typedef_ary_param_L2
+                BRA     _typedef_ary_param_L2
 _typedef_ary_param_L4
                 LDA     _fcc_img0
                 TAY
@@ -246,24 +244,6 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #table
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL walk
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -274,6 +254,28 @@ main_stkok        TCS
                 MX      %00
                 LDA     #table
                 STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL walk
+                TAY
+                TSC
+                CLC
+                ADC     #4
+                TCS
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #table
+                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL count
@@ -288,6 +290,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -297,6 +300,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #tag
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL first

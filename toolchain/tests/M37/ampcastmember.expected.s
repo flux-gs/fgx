@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,6 +29,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -93,6 +95,7 @@ main_stkok        TCS
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -102,20 +105,15 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ampcastmember_L0
+                BEQ     _ampcastmember_L0
                 LDA     #1
                 TAY
                 TSC
@@ -127,17 +125,11 @@ main_stkok        TCS
                 TYA
                 RTL
 _ampcastmember_L0
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ampcastmember_L1
+                BEQ     _ampcastmember_L1
                 LDA     #2
                 TAY
                 TSC
@@ -149,35 +141,18 @@ _ampcastmember_L0
                 TYA
                 RTL
 _ampcastmember_L1
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0005
-                STA     _fcc_long_hi
-                LDA     #$1615
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #5653
+                STX     _fcc_long_b_lo
+                LDX     #5
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ampcastmember_L2
+                BEQ     _ampcastmember_L2
                 LDA     #3
                 TAY
                 TSC
@@ -199,24 +174,21 @@ _ampcastmember_L2
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ampcastmember_L4
+                BNE     _ampcastmember_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ampcastmember_L4
+                BNE     _ampcastmember_L4
                 LDA     #1
-                BRL     _ampcastmember_L5
+                BRA     _ampcastmember_L5
 _ampcastmember_L4
                 LDA     #0
 _ampcastmember_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _ampcastmember_L3
+                BEQ     _ampcastmember_L3
                 LDA     #4
                 TAY
                 TSC
@@ -240,10 +212,8 @@ _ampcastmember_L3
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _ampcastmember_L6
+                BEQ     _ampcastmember_L6
                 LDA     #5
                 TAY
                 TSC
@@ -267,10 +237,8 @@ _ampcastmember_L6
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _ampcastmember_L7
+                BEQ     _ampcastmember_L7
                 LDA     #6
                 TAY
                 TSC
@@ -305,10 +273,8 @@ _ampcastmember_L7
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #99
-                BNE     *+5
-                BRL     _ampcastmember_L8
+                BEQ     _ampcastmember_L8
                 LDA     #7
                 TAY
                 TSC
@@ -326,10 +292,8 @@ _ampcastmember_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ampcastmember_L9
+                BEQ     _ampcastmember_L9
                 LDA     #8
                 TAY
                 TSC
@@ -361,6 +325,10 @@ _ampcastmember_L9
                 REP     #$20
                 MX      %00
                 PLA
+                LDA     #5
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -368,12 +336,6 @@ _ampcastmember_L9
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr0
-                LDA     #5
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
                 LDA     _fcc_fpr0
@@ -381,10 +343,8 @@ _ampcastmember_L9
                 LDA     [_fcc_img4]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #77
-                BNE     *+5
-                BRL     _ampcastmember_L10
+                BEQ     _ampcastmember_L10
                 LDA     #9
                 TAY
                 TSC

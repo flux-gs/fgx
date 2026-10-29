@@ -52,28 +52,7 @@ setp_stkok        TCS
                 LDA     10+setp_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     [_fcc_fpr0]
-                DO      8+setp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setp_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+setp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+setp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+setp_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      12+setp_FRAMESIZE/256
                 TSC
                 CLC

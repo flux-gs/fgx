@@ -27,14 +27,12 @@ _p33_frame_deep_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #260
                 BVC     _p33_frame_deep_L3
                 EOR     #$8000
 _p33_frame_deep_L3
-                BMI     *+5
-                BRL     _p33_frame_deep_L2
+                BPL     _p33_frame_deep_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -52,7 +50,6 @@ _p33_frame_deep_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -73,7 +70,7 @@ _p33_frame_deep_L3
                 PLA
 _p33_frame_deep_L1
                 INC     _fcc_img0
-                BRL     _p33_frame_deep_L0
+                BRA     _p33_frame_deep_L0
 _p33_frame_deep_L2
                 LDA     #12345
                 STA     _fcc_img1
@@ -94,11 +91,7 @@ _p33_frame_deep_L2
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _p33_frame_deep_L4
+                BEQ     _p33_frame_deep_L4
                 LDA     #1
                 TAY
                 TSC
@@ -130,14 +123,12 @@ _p33_frame_deep_L4
                 PHA
                 LDA     #255
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _p33_frame_deep_L5
+                BEQ     _p33_frame_deep_L5
                 LDA     #2
                 TAY
                 TSC
@@ -169,14 +160,12 @@ _p33_frame_deep_L5
                 PHA
                 LDA     #256
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _p33_frame_deep_L6
+                BEQ     _p33_frame_deep_L6
                 LDA     #3
                 TAY
                 TSC
@@ -208,14 +197,12 @@ _p33_frame_deep_L6
                 PHA
                 LDA     #259
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _p33_frame_deep_L7
+                BEQ     _p33_frame_deep_L7
                 LDA     #4
                 TAY
                 TSC
@@ -229,10 +216,8 @@ _p33_frame_deep_L6
 _p33_frame_deep_L7
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #12345
-                BNE     *+5
-                BRL     _p33_frame_deep_L8
+                BEQ     _p33_frame_deep_L8
                 LDA     #5
                 TAY
                 TSC
@@ -254,14 +239,12 @@ _p33_frame_deep_L9
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #260
                 BVC     _p33_frame_deep_L12
                 EOR     #$8000
 _p33_frame_deep_L12
-                BMI     *+5
-                BRL     _p33_frame_deep_L11
+                BPL     _p33_frame_deep_L11
                 LDA     _fcc_img1
                 PHA
                 SEP     #$20
@@ -288,14 +271,12 @@ _p33_frame_deep_L12
                 STA     _fcc_img1
 _p33_frame_deep_L10
                 INC     _fcc_img0
-                BRL     _p33_frame_deep_L9
+                BRA     _p33_frame_deep_L9
 _p33_frame_deep_L11
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #16262
-                BNE     *+5
-                BRL     _p33_frame_deep_L13
+                BEQ     _p33_frame_deep_L13
                 LDA     #6
                 TAY
                 TSC

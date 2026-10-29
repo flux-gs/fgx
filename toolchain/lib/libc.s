@@ -235,8 +235,8 @@ vfork           MX      %00
 ;            setjmp's caller as if setjmp had just returned, with A
 ;            set to val (or 1 if val == 0, per C standard).
 ;
-; jmp_buf layout (16 bytes; 10 -> 12 in bank-0 stack campaign 1.1, 12 -> 16
-; for the signal mask in apple/fgx#64):
+; jmp_buf layout (48 bytes; 10 -> 12 in bank-0 stack campaign 1.1, 12 -> 16
+; for the signal mask in apple/fgx#64, 16 -> 48 for the callee-saved band):
 ;   +0       PB     program bank at setjmp call
 ;   +1       DBR    data bank register
 ;   +2..+3   _fcc_fb   fcc frame base (was the P/pad pair pre-P3-3)
@@ -256,6 +256,7 @@ vfork           MX      %00
 ;                      fault.c, and the standard BSD idiom) skips crt0's
 ;                      trampoline unblock and leaves its own signal blocked
 ;                      forever -- one ^C per process.
+;   +16..+47 the callee-saved band, _fcc_img16.._fcc_img31 ($78..$97).
 ;
 ; longjmp returns to the saved (pb:pc+1) by synthesizing an RTL
 ; frame on the user stack: push pb, then pc (16-bit), then RTL.  RTL
@@ -338,6 +339,24 @@ setjmp          MX      %00
                 LDA     _sig_curmask+2
                 STA:    $000E,X
 
+                ; +16..+47  the callee-saved band, _fcc_img16.._fcc_img31
+                ; ($78..$97), as 4.3BSD-Reno's i386 setjmp saves ebx, esi,
+                ; edi and ebp.  A function between this one and a longjmp
+                ; that pushed a caller's band word restores it on return,
+                ; and the longjmp skips that return.
+                TXA
+                CLC
+                ADC     #16+30
+                TAY
+                LDX     #30
+@sj_band        LDA     $78,X
+                STA:    $0000,Y
+                DEY
+                DEY
+                DEX
+                DEX
+                BPL     @sj_band
+
                 PLY
                 PLP
                 LDA     #0
@@ -392,6 +411,22 @@ longjmp         MX      %00
                 ; Restore DP.
                 LDA:    $0008,X
                 TCD
+
+                ; ... and the callee-saved band (+16..+47) into it.
+                PHX
+                TXA
+                CLC
+                ADC     #16+30
+                TAY
+                LDX     #30
+@lj_band        LDA:    $0000,Y
+                STA     $78,X
+                DEY
+                DEY
+                DEX
+                DEX
+                BPL     @lj_band
+                PLX
 
                 ; Restore DBR.
                 SEP     #$20
@@ -448,20 +483,6 @@ SYS_OPEN_NUM    EQU     5
 SYS_CLOSE_NUM   EQU     6
 SYS_LSEEK_NUM   EQU     19
 SYS_GETKEY_NUM  EQU     50
-
-; struct __sFILE { short _file; short _flag; } — 4 B per entry.
-; Field offsets accessed via DP-pointer (LIBC_DP_TMP),Y.
-__sFILE_file    EQU     0
-__sFILE_flag    EQU     2
-__sFILE_size    EQU     4
-LIBC_NFILE      EQU     8                        ; max simultaneous open FILEs
-
-; FILE _flag bits (4.3BSD-compatible subset; buffering bits reserved).
-_IOREAD         EQU     $0001
-_IOWRT          EQU     $0002
-_IONBF          EQU     $0004                    ; reserved — always unbuffered today
-_IOEOF          EQU     $0010
-_IOERR          EQU     $0020
 
 ; SEEK_SET / SEEK_CUR / SEEK_END — match kernel SYS_LSEEK whence values.
 SEEK_SET        EQU     0

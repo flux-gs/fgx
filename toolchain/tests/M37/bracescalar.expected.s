@@ -29,8 +29,6 @@ f_stkok        TCS
                 ELSE
                 LDA     6+f_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
@@ -90,8 +88,6 @@ main_stkok        TCS
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -105,14 +101,9 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #101
-                BEQ     *+5
-                BRL     _bracescalar_L3
+                BNE     _bracescalar_L0
                 LDA     #4
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -126,22 +117,9 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #116
-                BEQ     *+5
-                BRL     _bracescalar_L3
-                LDA     #1
-                BRL     _bracescalar_L4
-_bracescalar_L3
-                LDA     #0
-_bracescalar_L4
-                CMP     #0
-                BNE     *+5
-                BRL     _bracescalar_L1
+                BNE     _bracescalar_L0
                 LDA     #5
-                TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -155,22 +133,9 @@ _bracescalar_L4
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
-                BEQ     *+5
-                BRL     _bracescalar_L1
-                LDA     #1
-                BRL     _bracescalar_L2
-_bracescalar_L1
-                LDA     #0
-_bracescalar_L2
-                CMP     #0
-                BNE     *+5
-                BRL     _bracescalar_L0
+                BNE     _bracescalar_L0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -178,44 +143,28 @@ _bracescalar_L0
                 LDA     gl+2
                 STA     _fcc_long_hi
                 LDA     gl
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$1170
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _bracescalar_L5
+                BEQ     _bracescalar_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
-_bracescalar_L5
+_bracescalar_L1
                 LDA     gi
                 CMP     #$FFFD
-                BEQ     *+5
-                BRL     _bracescalar_L6
+                BNE     _bracescalar_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
-_bracescalar_L6
+_bracescalar_L2
                 LDA     #1
                 PHA
                 FGX2_FARCALL f
@@ -224,25 +173,20 @@ _bracescalar_L6
                 TYA
                 PHA
                 LDA     #2
-                TAX
-                TXA
                 CLC
                 ADC     #5
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _bracescalar_L7
+                BNE     _bracescalar_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #21
                 STA     1,S   ; fccstk d=0 b=1
-_bracescalar_L7
+_bracescalar_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

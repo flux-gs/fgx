@@ -148,10 +148,8 @@ main_stkok        TCS
                 TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #777
-                BNE     *+5
-                BRL     _p33_addr_bank_L0
+                BEQ     _p33_addr_bank_L0
                 LDA     #1
                 TAY
                 TSC
@@ -183,10 +181,8 @@ _p33_addr_bank_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #777
-                BNE     *+5
-                BRL     _p33_addr_bank_L1
+                BEQ     _p33_addr_bank_L1
                 LDA     #2
                 TAY
                 TSC
@@ -209,11 +205,8 @@ _p33_addr_bank_L1
                 LDA     _fcc_fb
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                INC
+                INC
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -240,10 +233,8 @@ _p33_addr_bank_L1
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #555
-                BNE     *+5
-                BRL     _p33_addr_bank_L2
+                BEQ     _p33_addr_bank_L2
                 LDA     #3
                 TAY
                 TSC
@@ -269,18 +260,12 @@ _p33_addr_bank_L2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #888
                 STA     [_fcc_fpr0]
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #888
-                BNE     *+5
-                BRL     _p33_addr_bank_L3
+                BEQ     _p33_addr_bank_L3
                 LDA     #4
                 TAY
                 TSC
@@ -302,19 +287,10 @@ _p33_addr_bank_L3
                 INC
                 INC
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 CLC
@@ -340,10 +316,8 @@ _p33_addr_bank_L3
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #999
-                BNE     *+5
-                BRL     _p33_addr_bank_L4
+                BEQ     _p33_addr_bank_L4
                 LDA     #5
                 TAY
                 TSC

@@ -40,26 +40,13 @@ main_stkok        TCS
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L0
+                BEQ     _long_shift_L0
                 LDA     #1
                 TAY
                 TSC
@@ -120,26 +107,13 @@ _long_shift_L0
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32768
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L1
+                BEQ     _long_shift_L1
                 LDA     #2
                 TAY
                 TSC
@@ -178,26 +152,13 @@ _long_shift_L1
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$2340
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #9024
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L2
+                BEQ     _long_shift_L2
                 LDA     #3
                 TAY
                 TSC
@@ -230,26 +191,13 @@ _long_shift_L2
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L3
+                BEQ     _long_shift_L3
                 LDA     #4
                 TAY
                 TSC
@@ -283,27 +231,13 @@ _long_shift_L3
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65534
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L4
+                BEQ     _long_shift_L4
                 LDA     #5
                 TAY
                 TSC
@@ -334,26 +268,13 @@ _long_shift_L4
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L5
+                BEQ     _long_shift_L5
                 LDA     #6
                 TAY
                 TSC
@@ -384,26 +305,13 @@ _long_shift_L5
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1234
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #4660
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L6
+                BEQ     _long_shift_L6
                 LDA     #7
                 TAY
                 TSC
@@ -435,26 +343,13 @@ _long_shift_L6
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0002
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #2
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L7
+                BEQ     _long_shift_L7
                 LDA     #8
                 TAY
                 TSC
@@ -500,27 +395,13 @@ _long_shift_L7
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #32768
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L8
+                BEQ     _long_shift_L8
                 LDA     #9
                 TAY
                 TSC
@@ -563,26 +444,13 @@ _long_shift_L8
                 LDA     ur+2
                 STA     _fcc_long_hi
                 LDA     ur
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1234
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4660
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L9
+                BEQ     _long_shift_L9
                 LDA     #10
                 TAY
                 TSC
@@ -619,26 +487,13 @@ _long_shift_L9
                 LDA     ur+2
                 STA     _fcc_long_hi
                 LDA     ur
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32768
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L10
+                BEQ     _long_shift_L10
                 LDA     #11
                 TAY
                 TSC
@@ -675,26 +530,13 @@ _long_shift_L10
                 LDA     ur+2
                 STA     _fcc_long_hi
                 LDA     ur
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$8000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32768
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L11
+                BEQ     _long_shift_L11
                 LDA     #12
                 TAY
                 TSC
@@ -717,21 +559,10 @@ _long_shift_L11
                 LDA     ua+2
                 STA     _fcc_long_hi
                 LDA     ua
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #15
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #15
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_shru
                 STA     ur
                 TAY
@@ -741,26 +572,13 @@ _long_shift_L11
                 LDA     ur+2
                 STA     _fcc_long_hi
                 LDA     ur
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L12
+                BEQ     _long_shift_L12
                 LDA     #13
                 TAY
                 TSC
@@ -792,26 +610,13 @@ _long_shift_L12
                 LDA     ur+2
                 STA     _fcc_long_hi
                 LDA     ur
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1234
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4660
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L13
+                BEQ     _long_shift_L13
                 LDA     #14
                 TAY
                 TSC
@@ -847,26 +652,13 @@ _long_shift_L13
                 LDA     ur+2
                 STA     _fcc_long_hi
                 LDA     ur
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0123
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #291
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L14
+                BEQ     _long_shift_L14
                 LDA     #15
                 TAY
                 TSC
@@ -913,26 +705,13 @@ _long_shift_L14
                 LDA     ur+2
                 STA     _fcc_long_hi
                 LDA     ur
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L15
+                BEQ     _long_shift_L15
                 LDA     #16
                 TAY
                 TSC
@@ -980,26 +759,13 @@ _long_shift_L16
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1234
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4660
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L17
+                BEQ     _long_shift_L17
                 LDA     #17
                 TAY
                 TSC
@@ -1036,26 +802,13 @@ _long_shift_L18
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1234
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4660
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L19
+                BEQ     _long_shift_L19
                 LDA     #18
                 TAY
                 TSC
@@ -1098,27 +851,13 @@ _long_shift_L20
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L21
+                BEQ     _long_shift_L21
                 LDA     #19
                 TAY
                 TSC
@@ -1161,27 +900,13 @@ _long_shift_L22
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L23
+                BEQ     _long_shift_L23
                 LDA     #20
                 TAY
                 TSC
@@ -1242,27 +967,13 @@ _long_shift_L24
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L25
+                BEQ     _long_shift_L25
                 LDA     #21
                 TAY
                 TSC
@@ -1323,27 +1034,13 @@ _long_shift_L26
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65534
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L27
+                BEQ     _long_shift_L27
                 LDA     #22
                 TAY
                 TSC
@@ -1381,27 +1078,13 @@ _long_shift_L28
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L29
+                BEQ     _long_shift_L29
                 LDA     #23
                 TAY
                 TSC
@@ -1439,27 +1122,13 @@ _long_shift_L30
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65534
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L31
+                BEQ     _long_shift_L31
                 LDA     #24
                 TAY
                 TSC
@@ -1483,21 +1152,10 @@ _long_shift_L31
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #31
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #31
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_shr
                 STA     r
                 TAY
@@ -1507,27 +1165,13 @@ _long_shift_L31
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L32
+                BEQ     _long_shift_L32
                 LDA     #25
                 TAY
                 TSC
@@ -1551,21 +1195,10 @@ _long_shift_L32
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #15
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #15
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_shr
                 STA     r
                 TAY
@@ -1575,27 +1208,13 @@ _long_shift_L32
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L33
+                BEQ     _long_shift_L33
                 LDA     #26
                 TAY
                 TSC
@@ -1633,27 +1252,13 @@ _long_shift_L34
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32768
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L35
+                BEQ     _long_shift_L35
                 LDA     #27
                 TAY
                 TSC
@@ -1686,26 +1291,13 @@ _long_shift_L35
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0006
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #6
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L36
+                BEQ     _long_shift_L36
                 LDA     #28
                 TAY
                 TSC
@@ -1738,26 +1330,13 @@ _long_shift_L36
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L37
+                BEQ     _long_shift_L37
                 LDA     #29
                 TAY
                 TSC
@@ -1791,27 +1370,13 @@ _long_shift_L37
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0006
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65530
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L38
+                BEQ     _long_shift_L38
                 LDA     #30
                 TAY
                 TSC
@@ -1842,26 +1407,13 @@ _long_shift_L38
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0005
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #5
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L39
+                BEQ     _long_shift_L39
                 LDA     #31
                 TAY
                 TSC
@@ -1892,26 +1444,13 @@ _long_shift_L39
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0007
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #7
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L40
+                BEQ     _long_shift_L40
                 LDA     #32
                 TAY
                 TSC
@@ -1934,21 +1473,10 @@ _long_shift_L40
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #3
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #3
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_mul
                 STA     r
                 TAY
@@ -1958,26 +1486,13 @@ _long_shift_L40
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$012C
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #300
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L41
+                BEQ     _long_shift_L41
                 LDA     #33
                 TAY
                 TSC
@@ -2008,26 +1523,13 @@ _long_shift_L41
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1234
-                STA     _fcc_long_hi
-                LDA     #$5678
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #22136
+                STX     _fcc_long_b_lo
+                LDX     #4660
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L42
+                BEQ     _long_shift_L42
                 LDA     #34
                 TAY
                 TSC
@@ -2058,26 +1560,13 @@ _long_shift_L42
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1234
-                STA     _fcc_long_hi
-                LDA     #$5678
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #22136
+                STX     _fcc_long_b_lo
+                LDX     #4660
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L43
+                BEQ     _long_shift_L43
                 LDA     #35
                 TAY
                 TSC
@@ -2116,26 +1605,13 @@ _long_shift_L43
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0010
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_shift_L44
+                BEQ     _long_shift_L44
                 LDA     #36
                 TAY
                 TSC

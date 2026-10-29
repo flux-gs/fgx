@@ -89,14 +89,12 @@ main_stkok        TCS
                 FGX2_FARCALL setjmp
                 LDA     sjm_hits
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _sigjmpmask_L2
                 EOR     #$8000
 _sigjmpmask_L2
-                BMI     *+5
-                BRL     _sigjmpmask_L1
+                BPL     _sigjmpmask_L1
                 LDA     #2
                 PHA
                 FGX2_FARCALL getpid
@@ -109,12 +107,10 @@ _sigjmpmask_L2
 _sigjmpmask_L1
                 LDA     sjm_hits
                 TAX
-                TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _sigjmpmask_L3
+                BNE     _sigjmpmask_L3
                 LDA     #21
-                BRL     _sigjmpmask_L4
+                BRA     _sigjmpmask_L4
 _sigjmpmask_L3
                 LDA     #0
 _sigjmpmask_L4
@@ -134,65 +130,20 @@ _sigjmpmask_L4
                 ADC     #4
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #2
-                TAX
-                TXA
-                SEC
-                SBC     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
-                JSR     _fcc_long_shl
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _sigjmpmask_L5
+                BEQ     _sigjmpmask_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #21
                 STA     1,S   ; fccstk d=0 b=1

@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,14 +29,11 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_arrfieldlong_ob
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #$1111
                 STA     _fcc_long_hi
                 LDA     #$2222
@@ -45,10 +43,6 @@ main_stkok        TCS
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #$3333
                 STA     _fcc_long_hi
                 LDA     #$4444
@@ -66,15 +60,12 @@ _arrfieldlong_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _arrfieldlong_L3
                 EOR     #$8000
 _arrfieldlong_L3
-                BMI     *+5
-                BRL     _arrfieldlong_L2
+                BPL     _arrfieldlong_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -127,7 +118,7 @@ _arrfieldlong_L3
                 MX      %00
 _arrfieldlong_L1
                 INC     _fcc_img0
-                BRL     _arrfieldlong_L0
+                BRA     _arrfieldlong_L0
 _arrfieldlong_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -166,26 +157,13 @@ _arrfieldlong_L2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0A0B
-                STA     _fcc_long_hi
-                LDA     #$0C0D
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #3085
+                STX     _fcc_long_b_lo
+                LDX     #2571
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L4
+                BEQ     _arrfieldlong_L4
                 LDA     #50
                 TAY
                 TSC
@@ -213,26 +191,13 @@ _arrfieldlong_L4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L5
+                BEQ     _arrfieldlong_L5
                 LDA     #51
                 TAY
                 TSC
@@ -260,26 +225,13 @@ _arrfieldlong_L5
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L6
+                BEQ     _arrfieldlong_L6
                 LDA     #52
                 TAY
                 TSC
@@ -314,10 +266,8 @@ _arrfieldlong_L6
 _arrfieldlong_L8
                 STX     _fcc_long_hi
                 TAX
-                TXA
                 CMP     #2571
-                BNE     *+5
-                BRL     _arrfieldlong_L7
+                BEQ     _arrfieldlong_L7
                 LDA     #53
                 TAY
                 TSC
@@ -345,28 +295,14 @@ _arrfieldlong_L7
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65535
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 TAX
-                TXA
                 CMP     #3085
-                BNE     *+5
-                BRL     _arrfieldlong_L9
+                BEQ     _arrfieldlong_L9
                 LDA     #54
                 TAY
                 TSC
@@ -417,26 +353,13 @@ _arrfieldlong_L9
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7E6D
-                STA     _fcc_long_hi
-                LDA     #$5C4B
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #23627
+                STX     _fcc_long_b_lo
+                LDX     #32365
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L10
+                BEQ     _arrfieldlong_L10
                 LDA     #55
                 TAY
                 TSC
@@ -464,26 +387,13 @@ _arrfieldlong_L10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L11
+                BEQ     _arrfieldlong_L11
                 LDA     #56
                 TAY
                 TSC
@@ -533,26 +443,13 @@ _arrfieldlong_L11
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1234
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4660
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L12
+                BEQ     _arrfieldlong_L12
                 LDA     #57
                 TAY
                 TSC
@@ -586,11 +483,8 @@ _arrfieldlong_L12
                 LDX     #$FFFF
 _arrfieldlong_L14
                 STX     _fcc_long_hi
-                TAX
-                TXA
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L13
+                BEQ     _arrfieldlong_L13
                 LDA     #58
                 TAY
                 TSC
@@ -640,27 +534,13 @@ _arrfieldlong_L13
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65534
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L15
+                BEQ     _arrfieldlong_L15
                 LDA     #59
                 TAY
                 TSC
@@ -698,10 +578,8 @@ _arrfieldlong_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #17185
-                BNE     *+5
-                BRL     _arrfieldlong_L16
+                BEQ     _arrfieldlong_L16
                 LDA     #60
                 TAY
                 TSC
@@ -725,11 +603,7 @@ _arrfieldlong_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _arrfieldlong_L18
+                BNE     _arrfieldlong_L18
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -742,19 +616,8 @@ _arrfieldlong_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
-                CMP     #0
-                BEQ     *+5
-                BRL     _arrfieldlong_L18
-                LDA     #0
-                BRL     _arrfieldlong_L19
+                BEQ     _arrfieldlong_L17
 _arrfieldlong_L18
-                LDA     #1
-_arrfieldlong_L19
-                CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L17
                 LDA     #61
                 TAY
                 TSC
@@ -801,8 +664,7 @@ _arrfieldlong_L17
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrfieldlong_L20
+                BEQ     _arrfieldlong_L19
                 LDA     #62
                 TAY
                 TSC
@@ -813,7 +675,7 @@ _arrfieldlong_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L20
+_arrfieldlong_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -832,8 +694,7 @@ _arrfieldlong_L20
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _arrfieldlong_L22
+                BNE     _arrfieldlong_L21
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -852,16 +713,8 @@ _arrfieldlong_L20
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _arrfieldlong_L22
-                LDA     #0
-                BRL     _arrfieldlong_L23
-_arrfieldlong_L22
-                LDA     #1
-_arrfieldlong_L23
-                CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L21
+                BEQ     _arrfieldlong_L20
+_arrfieldlong_L21
                 LDA     #63
                 TAY
                 TSC
@@ -872,7 +725,7 @@ _arrfieldlong_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L21
+_arrfieldlong_L20
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -881,27 +734,75 @@ _arrfieldlong_L21
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1111
-                STA     _fcc_long_hi
-                LDA     #$2222
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #8738
+                STX     _fcc_long_b_lo
+                LDX     #4369
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L24
+                BEQ     _arrfieldlong_L22
                 LDA     #64
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrfieldlong_L22
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #34
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #32
+                LDA     [_fcc_fpr0],Y
+                LDX     #17476
+                STX     _fcc_long_b_lo
+                LDX     #13107
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_ne
+                CMP     #0
+                BEQ     _arrfieldlong_L23
+                LDA     #65
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrfieldlong_L23
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                LDX     #4660
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_ne
+                CMP     #0
+                BEQ     _arrfieldlong_L24
+                LDA     #66
                 TAY
                 TSC
                 CLC
@@ -915,33 +816,27 @@ _arrfieldlong_L24
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #4
                 STA     _fcc_fpr0
-                LDY     #34
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
-                LDY     #32
-                LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$3333
-                STA     _fcc_long_hi
-                LDA     #$4444
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                LDX     #3085
+                STX     _fcc_long_b_lo
+                LDX     #2571
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L25
-                LDA     #65
+                BEQ     _arrfieldlong_L25
+                LDA     #67
                 TAY
                 TSC
                 CLC
@@ -958,7 +853,7 @@ _arrfieldlong_L25
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                LDA     #0
+                LDA     #2
                 ASL
                 ASL
                 CLC
@@ -968,27 +863,14 @@ _arrfieldlong_L25
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1234
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65534
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L26
-                LDA     #66
+                BEQ     _arrfieldlong_L26
+                LDA     #68
                 TAY
                 TSC
                 CLC
@@ -1005,101 +887,6 @@ _arrfieldlong_L26
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0A0B
-                STA     _fcc_long_hi
-                LDA     #$0C0D
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
-                JSR     _fcc_long_ne
-                CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L27
-                LDA     #67
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_arrfieldlong_L27
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
-                JSR     _fcc_long_ne
-                CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L28
-                LDA     #68
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_arrfieldlong_L28
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
                 LDA     #3
                 ASL
                 ASL
@@ -1110,26 +897,13 @@ _arrfieldlong_L28
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7E6D
-                STA     _fcc_long_hi
-                LDA     #$5C4B
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #23627
+                STX     _fcc_long_b_lo
+                LDX     #32365
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L29
+                BEQ     _arrfieldlong_L27
                 LDA     #69
                 TAY
                 TSC
@@ -1140,7 +914,7 @@ _arrfieldlong_L28
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L29
+_arrfieldlong_L27
                 LDA     #42
                 TAY
                 TSC

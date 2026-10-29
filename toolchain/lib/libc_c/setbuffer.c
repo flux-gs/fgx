@@ -1,19 +1,28 @@
-/* setbuffer(3) and setlinebuf(3) -- 2.11BSD usr/src/lib/libc/stdio/setbuffer.c.
- * No-ops for the reason setbuf(3) is one: FGX stdio is unbuffered, so there
- * is no buffer to point at a caller's array and no line mode to switch into.
- * They exist because ported programs call them at startup and then rely on
- * WRITES BEHAVING AS IF FLUSHED -- which unbuffered output already satisfies,
- * strictly more eagerly than either function asks for.  2.11BSD's fsck opens
- * with setbuffer(stdin,...); setbuffer(stdout,...); setlinebuf(stdout);.
- *
- * setlinebuf returns int upstream (the old interface); nothing checks it. */
-void setbuffer(char *fp, char *buf, int size)
+/* SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * FGX-Provenance: 2.11BSD vendor/2.11BSD/usr/lib/libc/stdio/setbuffer.c
+ *   Original work: setbuffer.c 8.1.1 (2.11BSD) 1997/7/29,
+ *	Copyright (c) 1990, 1993
+ *	The Regents of the University of California.
+ */
+/* Upstream's body.  The #include lines are the aggregate's (libc_c.c). */
+void
+setbuffer(fp, buf, size)
+	register FILE *fp;
+	char *buf;
+	int size;
 {
-    (void)fp; (void)buf; (void)size;
+
+	(void)setvbuf(fp, buf, buf ? _IOFBF : _IONBF, size);
 }
 
-int setlinebuf(char *fp)
+/*
+ * set line buffering
+ */
+int
+setlinebuf(fp)
+	FILE *fp;
 {
-    (void)fp;
-    return (0);
+
+	return (setvbuf(fp, (char *)NULL, _IOLBF, (size_t)0));
 }

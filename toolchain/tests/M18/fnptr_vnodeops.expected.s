@@ -885,6 +885,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     a_vnode+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -894,6 +895,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #ufs_vnodeops
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -908,6 +910,7 @@ main_stkok        TCS
                 TYA
                 LDA     #0
                 STA     a_vnode+6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -917,14 +920,11 @@ main_stkok        TCS
                 MX      %00
                 LDA     #a_vnode
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -1232,10 +1232,6 @@ _fnptr_vnodeops_L4
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
-                LDA     9,S   ; fccstk d=2 b=7
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=2 b=5
-                STA     _fcc_fpr0
                 LDY     #112
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -1279,7 +1275,6 @@ _fnptr_vnodeops_L5
                 ADC     _fcc_tmp_b
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #57
                 TAY

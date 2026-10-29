@@ -98,10 +98,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _ptr_typedef_L0
+                BEQ     _ptr_typedef_L0
                 LDA     #1
                 TAY
                 TSC
@@ -174,12 +172,8 @@ _ptr_typedef_L0
                 LDA     _fcc_fb
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #$FFFF
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #-4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
@@ -252,10 +246,8 @@ _ptr_typedef_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _ptr_typedef_L1
+                BEQ     _ptr_typedef_L1
                 LDA     #2
                 TAY
                 TSC

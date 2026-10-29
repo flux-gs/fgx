@@ -32,22 +32,10 @@ main_stkok        TCS
                 FGX2_FARCALL timeout
                 PHA
                 FGX2_FARCALL g
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$8696
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #34454
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_tmp_b
                 PLA
@@ -109,21 +97,10 @@ g_stkok        TCS
                 LDA     y+2
                 STA     _fcc_long_hi
                 LDA     y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #2
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
                 TAY
                 TSC

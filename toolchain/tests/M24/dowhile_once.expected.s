@@ -27,22 +27,14 @@ _dowhile_once_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0
 _dowhile_once_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
-                SEC
-                SBC     #0
-                BVC     _dowhile_once_L3
-                EOR     #$8000
-_dowhile_once_L3
-                BMI     *+5
-                BRL     _dowhile_once_L2
-                BRL     _dowhile_once_L0
+                CMP     #0
+                BPL     _dowhile_once_L2
+                BRA     _dowhile_once_L0
 _dowhile_once_L2
                 LDA     _fcc_img0
                 TAY

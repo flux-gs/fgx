@@ -26,8 +26,6 @@ _lshiftvar_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
-                TAX
-                TXA
                 LDX     #12
                 STA     _fcc_tmp_b
                 TXA
@@ -57,21 +55,10 @@ _lshiftvar_L3
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_shl
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_img4
                 TAY
@@ -79,42 +66,18 @@ _lshiftvar_L3
                 STA     _fcc_img5
                 TYA
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _lshiftvar_L5
+                BNE     _lshiftvar_L4
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$01FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #511
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L5
-                LDA     #1
-                BRL     _lshiftvar_L6
-_lshiftvar_L5
-                LDA     #0
-_lshiftvar_L6
-                CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L4
+                BEQ     _lshiftvar_L4
                 LDA     #1
                 TAY
                 TSC
@@ -127,42 +90,18 @@ _lshiftvar_L6
                 RTL
 _lshiftvar_L4
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _lshiftvar_L8
+                BNE     _lshiftvar_L5
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$03FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1023
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L8
-                LDA     #1
-                BRL     _lshiftvar_L9
-_lshiftvar_L8
-                LDA     #0
-_lshiftvar_L9
-                CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L7
+                BEQ     _lshiftvar_L5
                 LDA     #2
                 TAY
                 TSC
@@ -173,44 +112,20 @@ _lshiftvar_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_lshiftvar_L7
+_lshiftvar_L5
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _lshiftvar_L11
+                BNE     _lshiftvar_L6
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$07FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2047
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L11
-                LDA     #1
-                BRL     _lshiftvar_L12
-_lshiftvar_L11
-                LDA     #0
-_lshiftvar_L12
-                CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L10
+                BEQ     _lshiftvar_L6
                 LDA     #3
                 TAY
                 TSC
@@ -221,44 +136,21 @@ _lshiftvar_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_lshiftvar_L10
+_lshiftvar_L6
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _lshiftvar_L14
+                BNE     _lshiftvar_L7
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0FFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4095
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L14
-                LDA     #1
-                BRL     _lshiftvar_L15
-_lshiftvar_L14
-                LDA     #0
-_lshiftvar_L15
-                CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L13
+                BEQ     _lshiftvar_L7
                 LDA     #4
                 TAY
                 TSC
@@ -269,7 +161,7 @@ _lshiftvar_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_lshiftvar_L13
+_lshiftvar_L7
 _lshiftvar_L1
                 INC     _fcc_img1
                 BRL     _lshiftvar_L0
@@ -284,23 +176,21 @@ _lshiftvar_L2
                 TYA
                 LDA     #0
                 STA     _fcc_img0
-_lshiftvar_L16
+_lshiftvar_L8
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #7
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _lshiftvar_L19
+                BVC     _lshiftvar_L11
                 EOR     #$8000
-_lshiftvar_L19
+_lshiftvar_L11
                 BPL     *+5
-                BRL     _lshiftvar_L18
+                BRL     _lshiftvar_L10
                 LDA     _fcc_img7
                 STA     _fcc_long_hi
                 LDA     _fcc_img6
@@ -365,7 +255,7 @@ _lshiftvar_L19
                 SEC
                 SBC     _fcc_img0
                 STA     _fcc_img2
-_lshiftvar_L20
+_lshiftvar_L12
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -374,44 +264,30 @@ _lshiftvar_L20
                 DEC
                 STA     _fcc_img2
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _lshiftvar_L22
+                BVC     _lshiftvar_L14
                 EOR     #$8000
-_lshiftvar_L22
-                BMI     *+5
-                BRL     _lshiftvar_L21
+_lshiftvar_L14
+                BPL     _lshiftvar_L13
                 LDA     _fcc_img9
                 STA     _fcc_long_hi
                 LDA     _fcc_img8
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #2
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_divs
                 STA     _fcc_img8
                 TAY
                 LDA     _fcc_long_hi
                 STA     _fcc_img9
                 TYA
-                BRL     _lshiftvar_L20
-_lshiftvar_L21
+                BRA     _lshiftvar_L12
+_lshiftvar_L13
                 LDA     _fcc_img13
                 STA     _fcc_long_hi
                 LDA     _fcc_img12
@@ -433,8 +309,7 @@ _lshiftvar_L21
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L23
+                BEQ     _lshiftvar_L15
                 LDA     #10
                 CLC
                 ADC     _fcc_img0
@@ -447,11 +322,11 @@ _lshiftvar_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_lshiftvar_L23
-_lshiftvar_L17
+_lshiftvar_L15
+_lshiftvar_L9
                 INC     _fcc_img0
-                BRL     _lshiftvar_L16
-_lshiftvar_L18
+                BRL     _lshiftvar_L8
+_lshiftvar_L10
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0ABC
@@ -462,23 +337,21 @@ _lshiftvar_L18
                 TYA
                 LDA     #0
                 STA     _fcc_img0
-_lshiftvar_L24
+_lshiftvar_L16
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
-                TXA
                 LDX     #7
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _lshiftvar_L27
+                BVC     _lshiftvar_L19
                 EOR     #$8000
-_lshiftvar_L27
+_lshiftvar_L19
                 BPL     *+5
-                BRL     _lshiftvar_L26
+                BRL     _lshiftvar_L18
                 LDA     _fcc_img7
                 STA     _fcc_long_hi
                 LDA     _fcc_img6
@@ -513,7 +386,7 @@ _lshiftvar_L27
                 TYA
                 LDA     _fcc_img0
                 STA     _fcc_img3
-_lshiftvar_L28
+_lshiftvar_L20
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -522,18 +395,15 @@ _lshiftvar_L28
                 DEC
                 STA     _fcc_img3
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _lshiftvar_L30
+                BVC     _lshiftvar_L22
                 EOR     #$8000
-_lshiftvar_L30
-                BMI     *+5
-                BRL     _lshiftvar_L29
+_lshiftvar_L22
+                BPL     _lshiftvar_L21
                 LDA     _fcc_img11
                 STA     _fcc_long_hi
                 LDA     _fcc_img10
@@ -544,8 +414,8 @@ _lshiftvar_L30
                 LDA     _fcc_long_hi
                 STA     _fcc_img11
                 TYA
-                BRL     _lshiftvar_L28
-_lshiftvar_L29
+                BRA     _lshiftvar_L20
+_lshiftvar_L21
                 LDA     _fcc_img15
                 STA     _fcc_long_hi
                 LDA     _fcc_img14
@@ -567,8 +437,7 @@ _lshiftvar_L29
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L31
+                BEQ     _lshiftvar_L23
                 LDA     #20
                 CLC
                 ADC     _fcc_img0
@@ -581,11 +450,11 @@ _lshiftvar_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_lshiftvar_L31
-_lshiftvar_L25
+_lshiftvar_L23
+_lshiftvar_L17
                 INC     _fcc_img0
-                BRL     _lshiftvar_L24
-_lshiftvar_L26
+                BRL     _lshiftvar_L16
+_lshiftvar_L18
                 LDA     #42
                 TAY
                 TSC

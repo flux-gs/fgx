@@ -19,6 +19,17 @@ layout_stkovf       JMP     _fcc_stkoflow
 layout_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      6+layout_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+layout_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+layout_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     _fcc_img0
 _g53_layout_L0
@@ -27,21 +38,19 @@ _g53_layout_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #300
                 BVC     _g53_layout_L3
                 EOR     #$8000
 _g53_layout_L3
-                BMI     *+5
-                BRL     _g53_layout_L2
+                BPL     _g53_layout_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #18
+                ADC     #20
                 PHA
                 LDA     _fcc_img0
                 CLC
@@ -52,7 +61,6 @@ _g53_layout_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -73,7 +81,7 @@ _g53_layout_L3
                 PLA
 _g53_layout_L1
                 INC     _fcc_img0
-                BRL     _g53_layout_L0
+                BRA     _g53_layout_L0
 _g53_layout_L2
                 LDA     #0
                 STA     _fcc_img0
@@ -83,14 +91,12 @@ _g53_layout_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #100
                 BVC     _g53_layout_L7
                 EOR     #$8000
 _g53_layout_L7
-                BMI     *+5
-                BRL     _g53_layout_L6
+                BPL     _g53_layout_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -99,7 +105,7 @@ _g53_layout_L7
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #318
+                ADC     #320
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 ASL
@@ -110,7 +116,7 @@ _g53_layout_L7
                 STA     [_fcc_fpr0]
 _g53_layout_L5
                 INC     _fcc_img0
-                BRL     _g53_layout_L4
+                BRA     _g53_layout_L4
 _g53_layout_L6
                 SEP     #$20
                 MX      %10
@@ -120,7 +126,7 @@ _g53_layout_L6
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #18
+                ADC     #20
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
@@ -141,21 +147,19 @@ _g53_layout_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #130
                 BVC     _g53_layout_L11
                 EOR     #$8000
 _g53_layout_L11
-                BMI     *+5
-                BRL     _g53_layout_L10
+                BPL     _g53_layout_L10
                 SEP     #$20
                 MX      %10
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #518
+                ADC     #520
                 PHA
                 LDA     _fcc_img1
                 ASL
@@ -180,7 +184,7 @@ _g53_layout_L11
                 PLA
 _g53_layout_L9
                 INC     _fcc_img1
-                BRL     _g53_layout_L8
+                BRA     _g53_layout_L8
 _g53_layout_L10
                 SEP     #$20
                 MX      %10
@@ -190,7 +194,7 @@ _g53_layout_L10
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #518
+                ADC     #520
                 PHA
                 LDA     #129
                 ASL
@@ -208,12 +212,9 @@ _g53_layout_L10
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #318
-                STA     _fcc_fpr0
-                LDA     #99
-                ASL
+                ADC     #320
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #198
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
@@ -233,8 +234,8 @@ _g53_layout_L10
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fb
-                CLC
-                ADC     #0
+                INC
+                INC
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
@@ -264,7 +265,7 @@ _g53_layout_L10
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #18
+                ADC     #20
                 PHA
                 LDA     #140
                 CLC
@@ -273,15 +274,13 @@ _g53_layout_L10
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 LDA     _fcc_img7
                 STA     _fcc_long_hi
@@ -291,24 +290,10 @@ _g53_layout_L10
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 SEC
                 SBC     #30
-                PHA
-                DO      8+layout_FRAMESIZE/256
-                TSC
                 CLC
-                ADC     #8+layout_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+layout_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_tmp_b
-                PLA
-                CLC
-                ADC     _fcc_tmp_b
+                ADC     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
                 CLC
@@ -318,7 +303,7 @@ _g53_layout_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-layout_FRAMESIZE   EQU     778
+layout_FRAMESIZE   EQU     780
 layout_STKGUARD    EQU     1
                 FGX2_EXPORT main
 main            ENT

@@ -39,23 +39,12 @@ _arrmemberassign_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _arrmemberassign_L3
                 EOR     #$8000
 _arrmemberassign_L3
-                BMI     *+5
-                BRL     _arrmemberassign_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_arr
-                STA     _fcc_fpr0
+                BPL     _arrmemberassign_L2
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -64,21 +53,22 @@ _arrmemberassign_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #g_arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #43690
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -120,18 +110,6 @@ _arrmemberassign_L1
 _arrmemberassign_L2
                 LDA     #1
                 STA     _fcc_img0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_arr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -139,8 +117,16 @@ _arrmemberassign_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #g_arr+2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -160,6 +146,7 @@ _arrmemberassign_L4
                 DEY
                 DEY
                 BPL     _arrmemberassign_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -167,32 +154,21 @@ _arrmemberassign_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+12
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _arrmemberassign_L5
+                BEQ     _arrmemberassign_L5
                 LDA     #1
                 TAY
                 TSC
@@ -214,26 +190,13 @@ _arrmemberassign_L5
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberassign_L6
+                BEQ     _arrmemberassign_L6
                 LDA     #2
                 TAY
                 TSC
@@ -253,10 +216,8 @@ _arrmemberassign_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _arrmemberassign_L7
+                BEQ     _arrmemberassign_L7
                 LDA     #3
                 TAY
                 TSC
@@ -274,10 +235,8 @@ _arrmemberassign_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #43690
-                BNE     *+5
-                BRL     _arrmemberassign_L8
+                BEQ     _arrmemberassign_L8
                 LDA     #4
                 TAY
                 TSC
@@ -289,17 +248,11 @@ _arrmemberassign_L7
                 TYA
                 RTL
 _arrmemberassign_L8
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #48059
-                BNE     *+5
-                BRL     _arrmemberassign_L9
+                BEQ     _arrmemberassign_L9
                 LDA     #5
                 TAY
                 TSC
@@ -311,6 +264,7 @@ _arrmemberassign_L8
                 TYA
                 RTL
 _arrmemberassign_L9
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -320,22 +274,12 @@ _arrmemberassign_L9
                 MX      %00
                 LDA     #g_arr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -343,26 +287,13 @@ _arrmemberassign_L9
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberassign_L10
+                BEQ     _arrmemberassign_L10
                 LDA     #6
                 TAY
                 TSC
@@ -374,6 +305,7 @@ _arrmemberassign_L9
                 TYA
                 RTL
 _arrmemberassign_L10
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -381,24 +313,14 @@ _arrmemberassign_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+24
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -406,26 +328,13 @@ _arrmemberassign_L10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberassign_L11
+                BEQ     _arrmemberassign_L11
                 LDA     #7
                 TAY
                 TSC
