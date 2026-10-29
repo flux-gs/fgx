@@ -372,12 +372,28 @@ _tar_ctor_L11
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
+                LDA     _fcc_fpr0+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr0
+                TAY
+                LDA     _fcc_long_hi
                 PHA
+                TYA
+                PHA
+                LDA     _fcc_fpr1+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr1
-                STA     _fcc_tmp_b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
                 PLA
-                JSR     _fcc_ltu16
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_ltu
                 CMP     #0
                 BEQ     _tar_ctor_L13
                 LDA     _fcc_img17

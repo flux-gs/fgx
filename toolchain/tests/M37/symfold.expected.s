@@ -108,6 +108,7 @@ addr_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 TAY
@@ -159,6 +160,7 @@ below_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 TAY
@@ -189,6 +191,7 @@ below_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     _fcc_long_b_lo
@@ -916,6 +919,7 @@ _symfold_L26
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 TAY
@@ -935,6 +939,7 @@ _symfold_L26
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     _fcc_long_b_lo

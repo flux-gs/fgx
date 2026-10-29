@@ -156,6 +156,7 @@ _stdcells_L6
                 RTL
 _stdcells_L4
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_long_hi
                 STZ     _fcc_long_hi
@@ -176,6 +177,7 @@ _stdcells_L4
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_long_hi
                 STZ     _fcc_long_hi

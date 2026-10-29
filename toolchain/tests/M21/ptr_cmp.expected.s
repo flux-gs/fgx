@@ -49,12 +49,28 @@ _ptr_cmp_L0
                 MX      %00
                 LDA     hi
                 STA     _fcc_fpr1
+                LDA     _fcc_fpr0+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr0
+                TAY
+                LDA     _fcc_long_hi
                 PHA
+                TYA
+                PHA
+                LDA     _fcc_fpr1+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr1
-                STA     _fcc_tmp_b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
                 PLA
-                JSR     _fcc_leu16
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_leu
                 CMP     #0
                 BEQ     _ptr_cmp_L2
                 INC     _fcc_img0
@@ -206,12 +222,28 @@ _ptr_cmp_L3
                 MX      %00
                 LDA     hi
                 STA     _fcc_fpr1
+                LDA     _fcc_fpr0+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr0
+                TAY
+                LDA     _fcc_long_hi
                 PHA
+                TYA
+                PHA
+                LDA     _fcc_fpr1+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr1
-                STA     _fcc_tmp_b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
                 PLA
-                JSR     _fcc_ltu16
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_ltu
                 CMP     #0
                 BNE     _ptr_cmp_L4
                 LDA     #2
@@ -241,12 +273,28 @@ _ptr_cmp_L4
                 MX      %00
                 LDA     lo
                 STA     _fcc_fpr1
+                LDA     _fcc_fpr0+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr0
+                TAY
+                LDA     _fcc_long_hi
                 PHA
+                TYA
+                PHA
+                LDA     _fcc_fpr1+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr1
-                STA     _fcc_tmp_b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
                 PLA
-                JSR     _fcc_gtu16
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_gtu
                 CMP     #0
                 BNE     _ptr_cmp_L5
                 LDA     #3
@@ -276,12 +324,28 @@ _ptr_cmp_L5
                 MX      %00
                 LDA     lo
                 STA     _fcc_fpr1
+                LDA     _fcc_fpr0+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr0
+                TAY
+                LDA     _fcc_long_hi
                 PHA
+                TYA
+                PHA
+                LDA     _fcc_fpr1+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr1
-                STA     _fcc_tmp_b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
                 PLA
-                JSR     _fcc_geu16
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_geu
                 CMP     #0
                 BNE     _ptr_cmp_L6
                 LDA     #4
