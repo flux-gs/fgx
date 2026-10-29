@@ -162,7 +162,8 @@ usage(void)
                     "[-Dname[=value]]... [-include <file>]...\n"
                     "       [-MD] [-MF <depfile>]   emit a make/ninja depfile\n"
                     "       [--libso] [--emit-blocks <file>]   libc.so library mode\n"
-                    "       [--libso-name <name>]   a library's name (block cells _<name>_blk_)\n");
+                    "       [--libso-name <name>]   a library's name (block cells _<name>_blk_)\n"
+                    "       [--signed-char]   char not declared unsigned is -128..127\n");
     exit(1);
 }
 
@@ -546,6 +547,8 @@ main(int argc, char **argv)
             g_sigs_path = argv[i];
         } else if (strcmp(argv[i], "--sections") == 0) {
             g_sections = 1;
+        } else if (strcmp(argv[i], "--signed-char") == 0) {
+            g_signed_char = 1;
         } else if (strcmp(argv[i], "--pile") == 0) {
             g_pile = 1;                /* T5-C C3: shared-libc pile TU */
         } else if (strcmp(argv[i], "--kernel-bank") == 0) {

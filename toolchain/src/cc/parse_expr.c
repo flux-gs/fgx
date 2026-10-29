@@ -1681,6 +1681,7 @@ build_unary(void)
                     g_ast[n].val = (unsigned)es;
                     g_ast[n].type = g_ast[d].type;
                     g_ast[n].struct_id = g_ast[d].struct_id;
+                    g_ast[n].is_unsigned = g_ast[d].is_unsigned;   /* A-1 pointee */
                     while (amp_paren-- > 0) expect(TOK_RPAREN, "')'");
                     return n;
                 }
@@ -1744,7 +1745,7 @@ build_unary(void)
                 g_ast[n].a = base; g_ast[n].b = idx;
                 g_ast[n].val = (unsigned)es;
                 g_ast[n].type = bt; g_ast[n].struct_id = bsid;
-                g_ast[n].is_unsigned = g_ast[idx].is_unsigned;
+                g_ast[n].is_unsigned = g_ast[base].is_unsigned;   /* A-1 pointee */
                 return n;
             }
             /* not a pointer value: restore and fall through to the die below. */
@@ -2014,7 +2015,7 @@ build_unary(void)
                 g_ast[pn].val = (unsigned)elem_size_for(DECREF(chain_ty),
                                                         g_ast[rd].struct_id);
                 g_ast[pn].type = DECREF(chain_ty);
-                g_ast[pn].is_unsigned = g_ast[idx2].is_unsigned;
+                g_ast[pn].is_unsigned = cu1_leaf->is_unsigned;   /* A-1 pointee */
                 while (amp_paren-- > 0) expect(TOK_RPAREN, "')'");
                 return pn;
             }
@@ -2473,7 +2474,7 @@ build_unary(void)
                     (unsigned)elem_size_for(ety, g_ast[base].struct_id);
                 g_ast[pn].type = ety;
                 g_ast[pn].struct_id = g_ast[base].struct_id;
-                g_ast[pn].is_unsigned = g_ast[idx2].is_unsigned;
+                g_ast[pn].is_unsigned = lc ? lc->is_unsigned : gv->is_unsigned;   /* A-1 pointee */
                 while (amp_paren-- > 0) expect(TOK_RPAREN, "')'");
                 return pn;
             }
@@ -2821,7 +2822,10 @@ lv_chain_value(int head, int line, int col)
     g_ast[n].a = head;
     g_ast[n].type = ISARY(lt) ? INCREF(DECREF(lt), DERIV_PTR) : lt;
     g_ast[n].struct_id = g_ast[head].struct_id;
-    g_ast[n].is_unsigned = addr ? 0 : g_ast[head].is_unsigned;
+    /* A pointer's is_unsigned marks its POINTEE (the A-1 convention), so an
+     * array decaying to a pointer keeps its elements' signedness: `(o)[0]'
+     * and `*(o)' on an unsigned short array read unsigned. */
+    g_ast[n].is_unsigned = (lt == LT_STRUCT) ? 0 : g_ast[head].is_unsigned;
     return n;
 }
 
@@ -3043,9 +3047,10 @@ build_postfix_value_chain(int base)
                 g_ast[rd].a = base; g_ast[rd].b = idx;
                 g_ast[rd].val = (unsigned)es; g_ast[rd].val_hi = (unsigned)pt;
                 g_ast[rd].type = elty;
+                g_ast[rd].is_unsigned = g_ast[base].is_unsigned;   /* A-1 pointee */
                 int bn = ast_new(N_BINOP, op_line, op_col);
                 g_ast[bn].a = rd; g_ast[bn].b = rhs; g_ast[bn].op = bop;
-                ast_type_scalar_binop(bn, 0, elty, 0,
+                ast_type_scalar_binop(bn, 0, elty, g_ast[rd].is_unsigned,
                                       g_ast[rhs].type, g_ast[rhs].is_unsigned);
                 int n = ast_new(N_IPV_STORE, op_line, op_col);
                 g_ast[n].a = base; g_ast[n].b = idx; g_ast[n].c = bn;
@@ -3065,6 +3070,12 @@ build_postfix_value_chain(int base)
                 else if (pt == LT_LLONG_PTR)           g_ast[n].type = LT_LLONG;
                 else if (pt == LT_DOUBLE_PTR)          g_ast[n].type = LT_DOUBLE;
                 else                                   g_ast[n].type = (es == 1) ? LT_CHAR : LT_INT;
+                /* The base pointer's is_unsigned marks its pointee (A-1):
+                 * `(o)[0]' on an unsigned short * read signed and widened
+                 * $F248 to $FFFFF248. An element that is itself a pointer
+                 * keeps the mark for its own pointee: `((unsigned char **)
+                 * t)[i][j]' read a signed char when it was cleared here. */
+                g_ast[n].is_unsigned = g_ast[base].is_unsigned;
             }
             g_ast[n].fn_sig = g_ast[base].fn_sig;      /* untouched by the read */
             base = n;
@@ -3478,6 +3489,7 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
             if (ptr_long) {
                 fpr_sym_flush(ks);
                 ir_emitf("                LDA     %s+2\n", fpr_name(ks));
+                ir_emitf("                AND     #$00FF\n");   /* bank, not the pad */
                 ir_emitf("                STA     _fcc_long_hi\n");
             }
             if (ks >= 0) { emit_fpr_to_a(ks); fpr_drop(ks); ks = -1; }
@@ -4487,6 +4499,9 @@ build_primary_ast(void)
                               ? LT_STRUCT
                               : INCREF(DECREF(lc->type), DERIV_PTR);
                 g_ast[n].struct_id = lc->struct_id;
+                /* The decayed pointer's is_unsigned marks its pointee (A-1). */
+                if (lc->type != LT_STRUCT)
+                    g_ast[n].is_unsigned = lc->is_unsigned;
             } else {
                 g_ast[n].type = lc->type;
                 g_ast[n].struct_id = lc->struct_id;
@@ -4499,6 +4514,9 @@ build_primary_ast(void)
                               ? LT_STRUCT
                               : INCREF(DECREF(gv->type), DERIV_PTR);
                 g_ast[n].struct_id = gv->struct_id;
+                /* The decayed pointer's is_unsigned marks its pointee (A-1). */
+                if (gv->type != LT_STRUCT)
+                    g_ast[n].is_unsigned = gv->is_unsigned;
             } else {
                 g_ast[n].type = gv->type;
                 g_ast[n].struct_id = gv->struct_id;
@@ -5713,7 +5731,7 @@ build_add_expr(void)
             g_ast[n].a = lhs; g_ast[n].b = rhs;
             g_ast[n].val = (unsigned)lhs_stride;
             g_ast[n].type = lhs_type; g_ast[n].struct_id = lhs_sid;
-            g_ast[n].is_unsigned = g_ast[rhs].is_unsigned;
+            g_ast[n].is_unsigned = lhs_u;   /* A-1: the pointer's pointee, not the index's */
             lhs = n;
             continue;
         }
@@ -5725,7 +5743,7 @@ build_add_expr(void)
             g_ast[n].a = lhs; g_ast[n].b = rhs;
             g_ast[n].val = (unsigned)lhs_stride;
             g_ast[n].type = LT_INT;
-            g_ast[n].is_unsigned = g_ast[rhs].is_unsigned;
+            g_ast[n].is_unsigned = 0;       /* A.7.7: a signed int */
             lhs = n;
             continue;
         }
@@ -5734,7 +5752,7 @@ build_add_expr(void)
             g_ast[n].a = lhs; g_ast[n].b = rhs;
             g_ast[n].val = (unsigned)lhs_stride;
             g_ast[n].type = lhs_type; g_ast[n].struct_id = lhs_sid;
-            g_ast[n].is_unsigned = g_ast[rhs].is_unsigned;
+            g_ast[n].is_unsigned = lhs_u;   /* A-1: the pointer's pointee, not the index's */
             lhs = n;
             continue;
         }
@@ -7341,6 +7359,37 @@ walk_expr(int n)
     if (n != g_discard_node && g_fpr_res < 0 &&
         store_object_type(n) == LT_CHAR)
         ir_emitf("                AND     #$00FF\n");
+    /* --signed-char: every char value reaches A zero-extended (0..255, the
+     * AND #$00FF at each byte load, char cast and char assignment), so one
+     * fold here makes a char that is not unsigned -128..127, by
+     * (v ^ $80) - $80.  Z still says whether the value is zero. */
+    /* A store's value is its object's (the A.7.17 block above), and
+     * N_STORE_VAR carries its right-hand side's type, so a store is judged
+     * by store_object_type and a discarded one is left alone. */
+    if (g_signed_char && g_fpr_res < 0 && n != g_discard_node) {
+        LocalType st = store_object_type(n);
+        int is_char, uns;
+        if (st == LT_VOID) {
+            is_char = (g_expr_type == LT_CHAR);
+            uns = g_expr_unsigned || g_ast[n].is_unsigned;
+        } else {
+            is_char = (st == LT_CHAR);
+            uns = (g_ast[n].kind == N_STORE_VAR)
+                ? (g_ast[n].sym_lc ? g_ast[n].sym_lc->is_unsigned
+                                   : g_ast[n].sym_gv->is_unsigned)
+                : g_expr_unsigned;
+        }
+        if (is_char) {
+            /* An assignment's value may still be the whole right-hand
+             * side: reduce it to the char first. */
+            ir_emitf("                AND     #$00FF\n");
+            if (!uns) {
+                ir_emitf("                EOR     #$0080\n");
+                ir_emitf("                SEC\n");
+                ir_emitf("                SBC     #$0080\n");
+            }
+        }
+    }
     g_expr_const_int = cast_operand_is_const(n);
 }
 
@@ -7431,18 +7480,33 @@ walk_expr_body(int n)
         if ((is_eq || is_rel) && (ISPTR(a->type) || ISPTR(b->type))) {
             /* Pointer comparison on the FPR carrier.  Equality under
              * --data-segment compares offset word + bank BYTE (the pad
-             * discipline; replaces the ptr->long reinterpret).  FGX1 and
-             * all relationals compare offset words as unsigned ints
-             * (bank equality assumed, as before). */
+             * discipline; replaces the ptr->long reinterpret).  A
+             * relational compares the whole address, bank:offset, as an
+             * unsigned long: one object may span banks (a heap block
+             * across a bank boundary), and A.7.9 orders the parts of one
+             * object by address.  Comparing the offset words alone put
+             * $09:0003 below $08:FF00. */
             int ka = walk_fpr(g_ast[n].a);
             int kb = walk_fpr(g_ast[n].b);
             if (is_eq) {
                 emit_fpr_cmp(ka, kb, op == TOK_NE);
             } else {
+                /* The bank word is read directly, so a symbolic register
+                 * (`&_iob[NSTATIC]') is built first. */
+                fpr_sym_flush(ka);
+                fpr_sym_flush(kb);
+                ir_emitf("                LDA     %s+2\n", fpr_name(ka));
+                ir_emitf("                AND     #$00FF\n");
+                ir_emitf("                STA     _fcc_long_hi\n");
                 emit_fpr_to_a(ka);
-                emit_push_a();
+                g_expr_type = LT_LONG;
+                emit_push_long();
+                ir_emitf("                LDA     %s+2\n", fpr_name(kb));
+                ir_emitf("                AND     #$00FF\n");
+                ir_emitf("                STA     _fcc_long_hi\n");
                 emit_fpr_to_a(kb);
-                emit_scalar_binop(LT_INT, LT_INT, is_rel, is_rel, fn);
+                g_expr_type = LT_LONG;
+                emit_scalar_binop(LT_LONG, LT_LONG, 1, 1, fn);
             }
             fpr_drop(kb);
             fpr_drop(ka);
@@ -8001,7 +8065,12 @@ walk_expr_body(int n)
              * by M37/fileops: write()'s buffer bank arrived as 0). */
             int k = walk_fpr(g_ast[n].a);
             fpr_sym_flush(k);
+            /* The high word is the BANK: a pointer stored through a pointer
+             * writes its offset and bank byte only, so the pad byte read
+             * back with it is whatever the slot held ($55E1191C for a
+             * Memory Manager handle at $E1:191C). */
             ir_emitf("                LDA     %s+2\n", fpr_name(k));
+            ir_emitf("                AND     #$00FF\n");
             ir_emitf("                STA     _fcc_long_hi\n");
             emit_fpr_to_a(k);
             fpr_drop(k);
@@ -8128,7 +8197,7 @@ walk_expr_body(int n)
             fpr_drop(ka);
             g_expr_type = (es == 1) ? LT_CHAR : LT_INT;
         }
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = ISPTR(elem) ? 0 : g_ast[n].is_unsigned;   /* A-1 */
         g_expr_struct_id = -1;
         break;
     }
@@ -8146,7 +8215,7 @@ walk_expr_body(int n)
             fpr_drop(ka);
             g_fpr_res        = -1;
             g_expr_type      = DECREF(pt);
-            g_expr_unsigned  = 0;
+            g_expr_unsigned  = g_ast[g_ast[n].a].is_unsigned;   /* the target's (--signed-char) */
             g_expr_struct_id = -1;
             break;
         }
@@ -8164,7 +8233,7 @@ walk_expr_body(int n)
             fpr_drop(ka);
             g_fpr_res        = -1;
             g_expr_type      = (pt == LT_FLOAT_PTR) ? LT_FLOAT : LT_LONG;
-            g_expr_unsigned  = 0;
+            g_expr_unsigned  = g_ast[g_ast[n].a].is_unsigned;   /* the target's (--signed-char) */
             g_expr_struct_id = -1;
             break;
         }
@@ -8176,6 +8245,16 @@ walk_expr_body(int n)
             emit_fpr_deref_store_ptr(ka, ks, 0);
             emit_fpr_to_a(ks);                 /* result = RHS offset (node is int-typed) */
             fpr_drop(ks);
+        } else if (ISPTR(DECREF(pt))) {
+            /* pointer element, non-pointer RHS (a literal 0, an int): all 4
+             * bytes, high word 0.  A word store left the bank and high byte
+             * of `(*(T ***)&x)[i] = 0' as they were, so a "null" entry kept
+             * stale memory's bank (SOMI: resources taken as loaded). */
+            if (g_expr_type == LT_INT || g_expr_type == LT_CHAR) {
+                g_expr_unsigned = 1;
+                emit_promote_a_to_long();
+            }
+            emit_fpr_deref_store_long(ka, 0);
         } else if (es == 1) {
             emit_fpr_deref_store_byte(ka, 0);
         } else {
@@ -8184,7 +8263,7 @@ walk_expr_body(int n)
         fpr_drop(ka);
         g_fpr_res        = -1;
         g_expr_type      = (es == 1) ? LT_CHAR : LT_INT;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = g_ast[g_ast[n].a].is_unsigned;   /* the target's (--signed-char) */
         g_expr_struct_id = -1;
         break;
     }
@@ -8871,7 +8950,7 @@ walk_expr_body(int n)
             g_fpr_res        = kd;
             g_expr_type      = LT_STRUCT;
             g_expr_struct_id = sid;
-            g_expr_unsigned  = 0;
+            g_expr_unsigned  = dlc ? dlc->is_unsigned : dgv->is_unsigned;   /* the target's (--signed-char) */
             break;
         }
         if (IS_QUAD(target) ||
@@ -8933,7 +9012,7 @@ walk_expr_body(int n)
             g_fpr_res        = -1;
             g_expr_type      = et;
             g_expr_struct_id = -1;
-            g_expr_unsigned  = 0;
+            g_expr_unsigned  = dlc ? dlc->is_unsigned : dgv->is_unsigned;   /* the target's (--signed-char) */
             break;
         }
         if (target == LT_LONG || target == LT_FLOAT) {
@@ -8951,7 +9030,7 @@ walk_expr_body(int n)
             g_fpr_res        = -1;
             g_expr_type      = target;
             g_expr_struct_id = -1;
-            g_expr_unsigned  = 0;
+            g_expr_unsigned  = dlc ? dlc->is_unsigned : dgv->is_unsigned;   /* the target's (--signed-char) */
             break;
         }
         if (g_ast[n].op != TOK_EQ) {
@@ -8982,7 +9061,7 @@ walk_expr_body(int n)
         g_fpr_res        = -1;                 /* A-preserving store */
         g_expr_type      = is_byte ? LT_CHAR : LT_INT;
         g_expr_struct_id = -1;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = dlc ? dlc->is_unsigned : dgv->is_unsigned;   /* the target's (--signed-char) */
         break;
     }
     case N_LV_STORE_E: {
@@ -9377,7 +9456,7 @@ walk_expr_body(int n)
         else                 emit_store_global_field(g_ast[n].sym_gv, &synth);
         g_expr_type      = g_ast[n].sym_f->type;
         g_expr_struct_id = -1;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = g_ast[n].sym_f->is_unsigned;   /* the target's (--signed-char) */
         if (ks >= 0) g_fpr_res = ks;   /* result = RHS, still live */
         else if (ISPTR(g_ast[n].type)) {
             int k = fpr_alloc();
@@ -9451,7 +9530,7 @@ walk_expr_body(int n)
         }
         g_expr_type      = f->type;
         g_expr_struct_id = -1;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = f->is_unsigned;   /* the target's (--signed-char) */
         break;
     }
     case N_STORE_SARR_MEMBER: {
@@ -9497,7 +9576,7 @@ walk_expr_body(int n)
         }
         g_expr_type      = f->type;
         g_expr_struct_id = -1;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = f->is_unsigned;   /* the target's (--signed-char) */
         break;
     }
     case N_STORE_ARR_ELEM: {
@@ -9517,7 +9596,7 @@ walk_expr_body(int n)
         fpr_drop(kd);
         g_expr_type      = is_byte ? LT_CHAR : LT_INT;
         g_expr_struct_id = -1;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = (g_ast[n].sym_lc ? g_ast[n].sym_lc->is_unsigned : g_ast[n].sym_gv->is_unsigned);   /* the target's (--signed-char) */
         break;
     }
     case N_POSTINC_MEMBER:
@@ -9756,6 +9835,8 @@ parse_const_atom(void)
                        (unsigned long)(g_cur.value & 0xFFFF));
         else if (g_cur.is_long)
             v = ((long)(g_cur.value_hi & 0xFFFF) << 16) | (g_cur.value & 0xFFFF);
+        else if (g_cur.kind == TOK_INT_LIT && g_cur.is_unsigned)
+            v = (long)(g_cur.value & 0xFFFF);   /* unsigned int: zero-extend */
         else
             v = (long)(short)g_cur.value;   /* sign-extend 16-bit int/char */
         next_tok();

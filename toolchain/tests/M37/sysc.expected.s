@@ -37,6 +37,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     3,S   ; fccstk d=0 b=3

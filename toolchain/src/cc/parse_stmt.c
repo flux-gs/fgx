@@ -9919,7 +9919,7 @@ parse_typedef_def(void)
         }
     }
     int is_ptr = 0;
-    while (g_cur.kind == TOK_STAR) { is_ptr = 1; next_tok(); }
+    while (g_cur.kind == TOK_STAR) { is_ptr++; next_tok(); }
     if (g_cur.kind != TOK_IDENT)
         die(g_cur.line, g_cur.col, "expected typedef name");
     FCC_GROW(g_typedefs, g_n_typedefs, g_typedefs_cap, Typedef);
@@ -9935,11 +9935,17 @@ parse_typedef_def(void)
      * this defect had in the first place. */
     td->is_unsigned = t.is_unsigned;
     if (is_ptr) {
-        if (t.base == LT_INT)         td->base_type = LT_INT_PTR;
-        else if (t.base == LT_CHAR)   td->base_type = LT_CHAR_PTR;
-        else if (t.base == LT_VOID)   td->base_type = LT_VOID_PTR;
-        else if (t.base == LT_STRUCT) td->base_type = LT_STRUCT_PTR;
-        else die(g_cur.line, g_cur.col, "bad typedef pointer base");
+        /* One pointer derivation per '*': `typedef void **Handle' is a
+         * pointer to a pointer (K&R A.8.9: the typedef name has the type
+         * its declarator would give a variable).  Recording only "is a
+         * pointer" made *h read one byte through h and rebuild a data-bank
+         * pointer from it. */
+        if (t.base != LT_INT && t.base != LT_CHAR && t.base != LT_VOID &&
+            t.base != LT_STRUCT && t.base != LT_LONG)
+            die(g_cur.line, g_cur.col, "bad typedef pointer base");
+        td->base_type = t.base;
+        while (is_ptr-- > 0)
+            td->base_type = INCREF(td->base_type, DERIV_PTR);
     } else {
         if (t.base == LT_VOID)
             die(g_cur.line, g_cur.col,

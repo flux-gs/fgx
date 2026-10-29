@@ -360,8 +360,19 @@ pat_bra_to_next(Line *lines, size_t n)
         if (strcmp(lines[i].mnem, "BRA") != 0 &&
             strcmp(lines[i].mnem, "BRL") != 0) continue;
         j = next_labeled_line(lines, i + 1, n);
-        if (j >= 0 && strcmp(lines[(size_t)j].label, lines[i].operand) == 0)
+        if (j >= 0 && strcmp(lines[(size_t)j].label, lines[i].operand) == 0) {
+            long k;
             lines[i].dead = 1;
+            /* A far conditional (`B?? *+5' / `BRL L') skips this BRL by its
+             * size: with the BRL gone, the skip would land 3 bytes past the
+             * target, mid-instruction.  Both ways now reach L: drop it too. */
+            for (k = (long)i - 1; k >= 0 && lines[(size_t)k].dead; k--)
+                ;
+            if (k >= 0 && lines[(size_t)k].label[0] == '\0' &&
+                lines[(size_t)k].mnem[0] == 'B' &&
+                strcmp(lines[(size_t)k].operand, "*+5") == 0)
+                lines[(size_t)k].dead = 1;
+        }
     }
 }
 

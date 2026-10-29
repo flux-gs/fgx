@@ -7084,7 +7084,6 @@ _specops_L110
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 PHA
-                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7095,10 +7094,28 @@ _specops_L110
                 LDA     #bfreelist+150
                 STA     _fcc_fpr1
                 PLA
+                LDA     _fcc_fpr0+2
+                AND     #$00FF
+                STA     _fcc_long_hi
+                LDA     _fcc_fpr0
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     _fcc_fpr1+2
+                AND     #$00FF
+                STA     _fcc_long_hi
                 LDA     _fcc_fpr1
-                STA     _fcc_tmp_b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
                 PLA
-                JSR     _fcc_ltu16
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_ltu
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L112

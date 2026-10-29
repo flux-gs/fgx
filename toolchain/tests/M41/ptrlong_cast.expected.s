@@ -39,6 +39,7 @@ f_stkok        TCS
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     _fcc_img2
@@ -51,6 +52,7 @@ f_stkok        TCS
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     g
@@ -84,6 +86,7 @@ f_stkok        TCS
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 TAY
@@ -110,6 +113,7 @@ f_stkok        TCS
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 BRA     _ptrlong_cast_L1

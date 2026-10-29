@@ -35,6 +35,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 TAY
@@ -43,6 +44,7 @@ main_stkok        TCS
                 TYA
                 PHA
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 TAY

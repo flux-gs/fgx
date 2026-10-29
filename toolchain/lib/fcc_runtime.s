@@ -690,7 +690,8 @@ _fcc_bank_from_carrier  MX  %00
 ; _fcc_long_from_int - sign-extend A → (A, _fcc_long_hi).
 ;------------------------------------------------------------------------------
 _fcc_long_from_int  MX  %00
-                BPL     @lfi_pos
+                CMP     #0                  ; N from A: callers may LDX/STX after
+                BPL     @lfi_pos            ; loading the value (zero-extend paths)
                 LDX     #$FFFF
                 STX     _fcc_long_hi
                 RTS

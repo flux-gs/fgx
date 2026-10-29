@@ -30,6 +30,7 @@ main_stkok        TCS
                 LDA     shr
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     _fcc_img1
@@ -46,6 +47,7 @@ main_stkok        TCS
                 LDA     shr4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     _fcc_img3
@@ -62,6 +64,7 @@ main_stkok        TCS
                 LDA     nul
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     _fcc_img5

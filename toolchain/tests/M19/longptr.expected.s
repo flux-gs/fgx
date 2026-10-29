@@ -246,6 +246,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
                 STA     19,S   ; fccstk d=0 b=19
@@ -274,6 +275,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
+                AND     #$00FF
                 STA     _fcc_long_hi
                 LDA     _fcc_long_hi
                 STZ     _fcc_long_hi

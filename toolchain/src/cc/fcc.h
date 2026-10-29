@@ -591,6 +591,7 @@ extern FILE       *g_commons_out;
 extern int         g_far_calls;
 extern int         g_pile;      /* T5-C C3: shared-libc pile TU */
 extern int         g_sections;  /* --sections: mark units for fgx_gc */
+extern int         g_signed_char; /* --signed-char: sign-extend non-unsigned chars */
 extern int         g_fltused;   /* this TU generated floating point code */
 /* apple/fgx#88: this TU is linked into a SINGLE-BANK image whose runtime bank
  * is not known at assembly (the far kernel bank).  Narrower than --pile on
