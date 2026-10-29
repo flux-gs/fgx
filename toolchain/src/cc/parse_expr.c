@@ -2826,6 +2826,9 @@ lv_chain_value(int head, int line, int col)
      * array decaying to a pointer keeps its elements' signedness: `(o)[0]'
      * and `*(o)' on an unsigned short array read unsigned. */
     g_ast[n].is_unsigned = (lt == LT_STRUCT) ? 0 : g_ast[head].is_unsigned;
+    /* A function-pointer leaf keeps its signature, so build_postfix_value_
+     * chain's call arm can call through it. */
+    g_ast[n].fn_sig = (lt == LT_FN_PTR) ? g_ast[head].fn_sig : -1;
     return n;
 }
 
@@ -4465,6 +4468,15 @@ build_primary_ast(void)
             g_ast[nn].type = g_ast[head].type;
             g_ast[nn].struct_id = g_ast[head].struct_id;
             g_ast[nn].is_unsigned = g_ast[head].is_unsigned;
+            /* A function-pointer leaf followed by '(' is a call through it
+             * (K&R A.7.3.2: the postfix expression "must be of type
+             * ``pointer to function returning T''"): `pack.who->func(args)'.
+             * The value chain's call arm builds it from the signature. */
+            if (g_ast[head].type == LT_FN_PTR) {
+                g_ast[nn].fn_sig = g_ast[head].fn_sig;
+                if (g_cur.kind == TOK_LPAREN)
+                    return build_postfix_value_chain(nn);
+            }
             return nn;
         }
         if (g_cur.kind == TOK_DOT && cur_type == LT_STRUCT)

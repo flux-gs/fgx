@@ -710,5 +710,10 @@
   "ptr_relbank": 42,
   "uconst_long": 42,
   "typedef_pp": 42,
-  "signed_char": 42
+  "signed_char": 42,
+  "return_comma": 42,
+  "paren_comma_void": 42,
+  "const_stmt": 42,
+  "sfld_subscript": 42,
+  "fnptr_chain_call": 42
 }

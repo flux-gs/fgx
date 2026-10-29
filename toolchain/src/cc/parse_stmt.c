@@ -3552,22 +3552,47 @@ sfld_ptr_addr_init(Global *g, int idx)
     if (tg == NULL)
         die(g_cur.line, g_cur.col, "pointer field init: unknown global");
     int off = 0, cur_sid = tg->struct_id;
+    LocalType cur_ty = tg->type;
     LexPeek pk;
     lex_peek_save(&pk);
     next_tok();                        /* tentatively consume the base IDENT */
-    while (g_cur.kind == TOK_DOT) {
-        next_tok();                    /* consume '.' */
-        if (g_cur.kind != TOK_IDENT)
-            die(g_cur.line, g_cur.col, "pointer field init: field name after '.'");
-        if (cur_sid < 0)
-            die(g_cur.line, g_cur.col, "pointer field init: '.' on a non-struct");
-        Field *mf = field_lookup_dot(cur_sid, g_cur.id_ptr, g_cur.id_len);
-        if (mf == NULL)
-            die(g_cur.line, g_cur.col, "pointer field init: no such field");
-        off += mf->byte_offset;
-        cur_sid = mf->struct_id;
-        lex_peek_save(&pk);            /* checkpoint at this field name */
-        next_tok();                    /* tentatively consume it */
+    for (;;) {
+        if (g_cur.kind == TOK_DOT) {
+            next_tok();                /* consume '.' */
+            if (g_cur.kind != TOK_IDENT)
+                die(g_cur.line, g_cur.col, "pointer field init: field name after '.'");
+            if (cur_sid < 0)
+                die(g_cur.line, g_cur.col, "pointer field init: '.' on a non-struct");
+            Field *mf = field_lookup_dot(cur_sid, g_cur.id_ptr, g_cur.id_len);
+            if (mf == NULL)
+                die(g_cur.line, g_cur.col, "pointer field init: no such field");
+            off += mf->byte_offset;
+            cur_ty = mf->type;
+            cur_sid = mf->struct_id;
+            lex_peek_save(&pk);        /* checkpoint at this field name */
+            next_tok();                /* tentatively consume it */
+            continue;
+        }
+        /* A constant subscript, as the scalar pointer initializer takes
+         * one: K&R A.7.19, "the unary & operator may be applied to
+         * external or static objects, and to external and static arrays
+         * subscripted with a constant expression": `&g.s[2]',
+         * `&g.c[2].v'. */
+        if (g_cur.kind == TOK_LBRACKET) {
+            int es = elem_size_for(cur_ty, cur_sid);
+            if (es == 0)
+                die(g_cur.line, g_cur.col, "pointer field init: subscripted "
+                    "operand is not an array or pointer");
+            next_tok();                /* consume '[' */
+            off += (int)(parse_const_bin(0) * es);
+            if (g_cur.kind != TOK_RBRACKET)
+                die(g_cur.line, g_cur.col, "expected ']'");
+            lex_peek_save(&pk);        /* checkpoint at the ']' */
+            next_tok();                /* tentatively consume it */
+            cur_ty = DECREF(cur_ty);
+            continue;
+        }
+        break;
     }
     lex_peek_restore(&pk);             /* leave g_cur AT the last value token */
     g->init_values[idx]    = (unsigned)(tg - g_globals) | ((unsigned)off << 16);
@@ -4813,6 +4838,9 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
      * sets it from the field, an index step INHERITS it (the element of an
      * `unsigned int[]` is unsigned).  See the head assignment below. */
     int unsig = 0;
+    /* The signature of a function-pointer leaf, which is what makes the
+     * chain's value callable: `pack.who->func(args)'. */
+    int sig = -1;
     /* A NAMED MULTI-DIMENSIONAL ARRAY keeps its rank in the symbol (n_dims,
      * dims[] outermost first) beside a single ARY derivation, so DECREF alone
      * would type `m[i]' as the ELEMENT and scale i by the element's size.
@@ -4907,6 +4935,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
             g_ast[stepn].struct_id = f->struct_id;
             g_ast[stepn].is_unsigned = f->is_unsigned;
             unsig = f->is_unsigned;
+            sig = (f->type == LT_FN_PTR) ? f->fn_sig_id : -1;
             cur = f->type;
             cur_sid = f->struct_id;
             /* M19b: `dk = -1' above ended the base's rank, which is right --
@@ -4939,6 +4968,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
     g_ast[head].b = first;
     g_ast[head].type = cur;
     g_ast[head].struct_id = cur_sid;
+    g_ast[head].fn_sig = (cur == LT_FN_PTR) ? sig : -1;
     /* Carry the LEAF's unsignedness out with the type.  Without this a read
      * routed through the walker silently lost it -- an `unsigned int` member
      * compared with `>` emitted the SIGNED helper (_fcc_gts16 instead of
@@ -6083,7 +6113,9 @@ build_stmt(void)
         if (ret_t == LT_VOID)
             die(g_cur.line, g_cur.col,
                 "void function must use 'return;' (no value)");
-        int rv = ast_build_assign();
+        /* K&R A.9.6: "return expression(opt);", and an expression is the
+         * comma level (A.7.18): `return (*s)++, 127;'. */
+        int rv = ast_build_comma();
         expect(TOK_SEMI, "';'");
         int n = ast_new(S_RETURN, rline, rcol);
         g_ast[n].a = rv;
@@ -8045,15 +8077,22 @@ build_stmt(void)
                 return build_stmt();         /* inner statement; ';' from stream */
             }
         }
-        /* Plain parenthesized expression statement (G20). */
-        {
-            int e = ast_build_comma();
-            expect(TOK_SEMI, "';'");
-            int n = ast_new(S_EXPR, g_cur.line, g_cur.col);
-            g_ast[n].a = e;
-            return n;
-        }
+        /* Plain parenthesized expression statement (G20).  It is a whole
+         * statement, so a void operand of its comma is allowed, as in
+         * `(x), voidcall();' -- K&R A.7.18: the result has "the type and
+         * value of the right operand". */
+        return build_comma_expr_stmt(g_cur.line, g_cur.col);
     }
+
+    /* Any other expression is a statement too: K&R A.9.2,
+     * "expression-statement: expression(opt) ;".  A macro that expands to
+     * a constant leaves `0;'. */
+    if (g_cur.kind == TOK_INT_LIT || g_cur.kind == TOK_CHAR_LIT ||
+        g_cur.kind == TOK_STR_LIT || g_cur.kind == TOK_FLOAT_LIT ||
+        g_cur.kind == TOK_MINUS || g_cur.kind == TOK_PLUS ||
+        g_cur.kind == TOK_TILDE || g_cur.kind == TOK_BANG ||
+        g_cur.kind == TOK_SIZEOF_KW)
+        return build_comma_expr_stmt(g_cur.line, g_cur.col);
 
     die(g_cur.line, g_cur.col, "expected statement");
 }
