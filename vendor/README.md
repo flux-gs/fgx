@@ -24,6 +24,8 @@ source is unproblematic (see the licence notes below), so it is simply shipped.
     4.3BSD-Reno/{kern,sys,ufs}                the VFS port SOURCE
     FreeBSD-2.2.8/{sbin/adjkerntz,sys}        adjkerntz(8) and the kernel time
                                               files it pairs with
+    netbsd-1-5/lib/libcurses                  keypad(3), ported into the 2.11BSD
+                                              curses pile
     netbsd-0-9/usr.bin/elvis                  elvis (vi)
     netbsd-0-9/sys/isofs, sbin/mount_isofs    the ISO 9660 filesystem, ported to
                                               src/kernel/vfs/isofs_*

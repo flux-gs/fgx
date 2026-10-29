@@ -126,6 +126,7 @@ assert a licence the source does not carry.
 | `src/userland/man/pages/cat8/adjkerntz.0` | `SPDX-License-Identifier: BSD-2-Clause` | FreeBSD 2.2.8 `vendor/FreeBSD-2.2.8/sbin/adjkerntz/adjkerntz.8` | Formatted from FreeBSD's roff with mandoc, VERBATIM but for a BUGS section: `-i` exits after the boot adjustment, /etc/rc backgrounds it (apple/fgx#494), and machdep.adjkerntz is a long |
 | `src/userland/adjkerntz/adjkerntz.c` | `SPDX-License-Identifier: BSD-2-Clause` | FreeBSD 2.2.8 `vendor/FreeBSD-2.2.8/sbin/adjkerntz/adjkerntz.c` (1.18.2.3) | adjkerntz(8), the kernel's zone offset for a local-time battery clock (libc time zones Task 5).  Upstream's body.  FGX deltas: `__P` is defined in the file, as 2.11BSD's own ports of 4.4BSD code do (`usr.bin/id/id.c:53`, `usr.sbin/inetd/inetd.c:162`), its headers having none; `kern_offset` is a long, machdep.adjkerntz being 4 bytes (FreeBSD's 32-bit int) where fcc's int is 16 bits; `tz_minuteswest * 60` is multiplied in long for the same reason; `-i` EXITS after the boot adjustment instead of waiting in `sigsuspend()` for a shutdown's SIGTERM, a resident adjkerntz holding a process slot and three banks for the whole uptime for a DST change the machine is up across, which `adjkerntz -a` from cron covers |
 | `src/userland/adjkerntz/pathnames.h` | `SPDX-License-Identifier: BSD-2-Clause` | FreeBSD 2.2.8 `vendor/FreeBSD-2.2.8/sbin/adjkerntz/pathnames.h` | **VERBATIM.**  `_PATH_CLOCK`, /etc/wall_cmos_clock |
+| `toolchain/lib/libcurses_c/keypad.c` | `SPDX-License-Identifier: BSD-3-Clause` | NetBSD 1.5 `vendor/netbsd-1-5/lib/libcurses/keypad.c` (Brett Lymn, 1998-1999) | keypad(3) for the 2.11BSD curses pile.  Upstream's body with 4.3BSD names: the flag is `_KEYPAD` in `_flags` (bit 0100, free in 4.3BSD's set), the termcap string is `KS`, output goes through `_putchar`, and `tputs` is skipped when the terminal has no `ks` |
 | `src/userland/cron/compat.c` | `SPDX-License-Identifier: LicenseRef-Vixie-Cron` | 2.11BSD `vendor/2.11BSD/usr/usr.sbin/cron/compat.c` (Vixie cron 2.1) | **VERBATIM.** |
 | `src/userland/cron/compat.h` | `SPDX-License-Identifier: LicenseRef-Vixie-Cron` | 2.11BSD `vendor/2.11BSD/usr/usr.sbin/cron/compat.h` (Vixie cron 2.1) | **VERBATIM.** |
 | `src/userland/cron/config.h` | `SPDX-License-Identifier: LicenseRef-Vixie-Cron` | 2.11BSD `vendor/2.11BSD/usr/usr.sbin/cron/config.h` (Vixie cron 2.1) | **VERBATIM.** |
@@ -528,7 +529,7 @@ handlers are flag-only and ^Z job control is kernel/jsh-side) and `test.c`
 | `toolchain/lib/libcurses_c/endwin.c` | |
 | `toolchain/lib/libcurses_c/erase.c` | |
 | `toolchain/lib/libcurses_c/fullname.c` | |
-| `toolchain/lib/libcurses_c/getch.c` | |
+| `toolchain/lib/libcurses_c/getch.c` | keypad mode added after NetBSD 1.5 `vendor/netbsd-1-5/lib/libcurses/getch.c` inkey(): a sequence matched against KU..K9 returns its KEY_ value, an unfinished one comes back a byte at a time.  The table is matched directly rather than built into keymaps, and the inter-key delay is a select(2) rather than termios VTIME; `wgetch` returns an int |
 | `toolchain/lib/libcurses_c/getstr.c` | |
 | `toolchain/lib/libcurses_c/id_subwins.c` | |
 | `toolchain/lib/libcurses_c/idlok.c` | accepted, no-op upstream too (al/dl never emitted by this curses) |
