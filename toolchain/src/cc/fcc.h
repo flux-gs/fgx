@@ -1174,15 +1174,26 @@ struct_field_lookup(int sid, const char *name, int name_len);
  * each for: an embedded struct VALUE member contributes its own leaves, a
  * non-char ARRAY member one per element, everything else one leaf.  For an
  * all-scalar struct the leaf list IS the field list, which is what keeps
- * existing initializer output byte-identical.  owners[] (may be NULL) records
- * the top-level field each leaf came from, so a caller can bound one nested
- * brace group.  Returns the leaf count, or -1 if it exceeds `max`. */
+ * existing initializer output byte-identical.  nest[] (may be NULL) records,
+ * for each leaf, the aggregate it belongs to at each brace level, so a caller
+ * can bound a nested brace group at any depth.  Returns the leaf count, or -1
+ * if it exceeds `max`. */
 #define MAX_STRUCT_INIT_LEAVES 96
+/* Brace levels recorded per leaf.  nest[i][k] is the aggregate leaf i belongs
+ * to at level k -- level 0 the top-level member, each deeper level a struct
+ * member, an array row or an array element inside the one above -- or -1
+ * where the leaf has no aggregate that deep.  A value is (id << 1) | is_array:
+ * ids are unique, so two leaves share a level-k aggregate exactly when their
+ * values are equal, and the low bit says whether it is an array (which a
+ * string literal may initialize).  Deeper levels are not recorded. */
+#define INIT_NEST 8
+#define NEST_IS_ARRAY(v) ((v) >= 0 && ((v) & 1))
 int
-struct_init_leaves(int sid, Field *out, int *owners, int max);
+struct_init_leaves(int sid, Field *out, int (*nest)[INIT_NEST], int max);
 int
-struct_init_leaves_at(int sid, int base_off, Field *out, int *owners, int max,
-                      int n, int owner);
+struct_init_leaves_at(int sid, int base_off, Field *out,
+                      int (*nest)[INIT_NEST], int max, int n, int *path,
+                      int depth);
 /* Strict-only member lookup by name+len (no global pun fallback). */
 Field *
 field_lookup_strict_named(int sid, const char *name, int name_len);

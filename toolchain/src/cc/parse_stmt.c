@@ -1,5 +1,9 @@
 #include "fcc.h"
 
+static int init_group_open(int (*nest)[INIT_NEST], int n_leaves, int f,
+                           int n_grp, const int *grp_lvl, int *end);
+static int init_char_array_end(int (*nest)[INIT_NEST], int n_leaves, int f);
+
 int
 parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
 {
@@ -2546,13 +2550,18 @@ walk_stmt(int n)
         break;
     }
     case S_DECL_STRUCTINIT: {
+        /* One kid per LEAF in order (struct_init_leaves), -1 for a leaf the
+         * list left out; leaves past the last kid are zero too.  For an
+         * all-scalar struct the leaves are the fields. */
         Local *lc = g_ast[n].sym_lc;
-        Struct *st = &g_structs[lc->struct_id];
-        int fi = 0;
-        for (; fi < g_ast[n].n_kids; fi++) {
-            int kid = g_ast_kids[g_ast[n].kid0 + fi];
-            Field *f = &st->fields[fi];
-            if (ISPTR(f->type) || f->type == LT_FN_PTR) {
+        Field leaves[MAX_STRUCT_INIT_LEAVES];
+        int   nl = struct_init_leaves(lc->struct_id, leaves, NULL,
+                                      MAX_STRUCT_INIT_LEAVES);
+        for (int fi = 0; fi < nl; fi++) {
+            int kid = (fi < g_ast[n].n_kids)
+                      ? g_ast_kids[g_ast[n].kid0 + fi] : -1;
+            Field *f = &leaves[fi];
+            if (kid >= 0 && (ISPTR(f->type) || f->type == LT_FN_PTR)) {
                 /* P3-2.7b: ptr / fn-ptr field straight from the FPR
                  * (was carrier-fed via fpr_out + _fcc_ptr+2). */
                 int k = walk_fpr(kid);
@@ -2560,16 +2569,11 @@ walk_stmt(int n)
                 fpr_drop(k);
                 continue;
             }
-            walk_expr_root(kid);
-            emit_store_local_field(lc, f);
-        }
-        for (; fi < st->n_fields; fi++) {       /* zero-fill scalar fields */
-            Field *f = &st->fields[fi];
-            if (f->type == LT_STRUCT || f->type == LT_CHAR_ARRAY ||
-                f->type == LT_INT_ARRAY || f->type == LT_LONG_ARRAY ||
-                f->type == LT_LLONG_ARRAY || f->type == LT_DOUBLE_ARRAY ||
-                f->type == LT_STRUCT_ARRAY)
+            if (kid >= 0) {
+                walk_expr_root(kid);
+                emit_store_local_field(lc, f);
                 continue;
+            }
             ir_emitf("                LDA     #0\n");
             g_expr_type = LT_INT;
             if (f->type == LT_DOUBLE) {          /* +0.0 is all-zero bits */
@@ -3088,25 +3092,66 @@ build_decl(TypeSpec t)
                 if (cnt >= 64) die(line, col, "too many declarators");
                 tmp[cnt++] = in;
             } else if (decl_type == LT_STRUCT && g_cur.kind == TOK_LBRACE) {
-                Struct *st = &g_structs[new_lc->struct_id];
-                next_tok();   /* '{' */
-                int etmp[64];
+                /* One expression per LEAF (struct_init_leaves), so an
+                 * aggregate member takes its nested list, braced or elided,
+                 * exactly as a static struct's does (K&R A.8.7).  A leaf the
+                 * list does not reach is -1, which the walker stores as zero:
+                 * "If there are fewer initializers in the list than members
+                 * of the structure, the trailing members are initialized with
+                 * 0", and a short brace group zero-fills its own aggregate. */
+                Field leaves[MAX_STRUCT_INIT_LEAVES];
+                int   nest[MAX_STRUCT_INIT_LEAVES][INIT_NEST];
+                int   nl = struct_init_leaves(new_lc->struct_id, leaves, nest,
+                                              MAX_STRUCT_INIT_LEAVES);
+                if (nl < 0)
+                    die(line, col, "struct initializer has too many leaf members");
+                int etmp[MAX_STRUCT_INIT_LEAVES];
+                int grp_end[INIT_NEST], grp_lvl[INIT_NEST], n_grp = 0;
                 int ecnt = 0;
-                while (g_cur.kind != TOK_RBRACE) {
-                    if (ecnt >= st->n_fields)
-                        die(g_cur.line, g_cur.col, "too many struct initializers");
-                    Field *f = &st->fields[ecnt];
-                    if (f->type == LT_STRUCT || f->type == LT_CHAR_ARRAY ||
-                        f->type == LT_INT_ARRAY || f->type == LT_LONG_ARRAY ||
-                        f->type == LT_STRUCT_ARRAY)
-                        die(g_cur.line, g_cur.col,
-                            "nested aggregate in local struct initializer not supported");
-                    if (ecnt >= 64)
-                        die(g_cur.line, g_cur.col, "too many struct initializers");
-                    etmp[ecnt++] = ast_build_assign();
+                next_tok();   /* '{' */
+                for (int f = 0; f < nl && g_cur.kind != TOK_RBRACE; f++) {
+                    while (g_cur.kind == TOK_LBRACE) {
+                        grp_lvl[n_grp] = init_group_open(nest, nl, f, n_grp,
+                                                         grp_lvl, &grp_end[n_grp]);
+                        n_grp++;
+                    }
+                    int ge = f;
+                    if (g_cur.kind == TOK_STR_LIT && leaves[f].type == LT_CHAR)
+                        ge = init_char_array_end(nest, nl, f);
+                    if (ge > f) {
+                        if (g_cur.str_len > ge - f + 1)
+                            die(g_cur.line, g_cur.col,
+                                "string initializer is longer than the char "
+                                "array member it initializes");
+                        for (int e = 0; f + e <= ge; e++) {
+                            int ln = ast_new(N_LIT_INT, g_cur.line, g_cur.col);
+                            g_ast[ln].val = (e < g_cur.str_len)
+                                ? (unsigned)(unsigned char)g_cur.str_ptr[e] : 0;
+                            etmp[ecnt++] = ln;
+                        }
+                        next_tok();   /* the string */
+                        f = ge;
+                    } else {
+                        etmp[ecnt++] = ast_build_assign();
+                    }
+                    /* Close the groups this leaf ends, or a '}' ends early;
+                     * the leaves a short group leaves out are zero. */
+                    while (n_grp > 0 &&
+                           (f == grp_end[n_grp - 1] || g_cur.kind == TOK_RBRACE)) {
+                        while (f < grp_end[n_grp - 1]) {
+                            f++;
+                            etmp[ecnt++] = -1;
+                        }
+                        expect(TOK_RBRACE, "'}' after struct member group");
+                        n_grp--;
+                    }
                     if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }
-                    break;
+                    if (g_cur.kind != TOK_RBRACE)
+                        die(g_cur.line, g_cur.col,
+                            "expected ',' between struct field inits");
                 }
+                if (g_cur.kind != TOK_RBRACE)
+                    die(g_cur.line, g_cur.col, "too many struct initializers");
                 expect(TOK_RBRACE, "'}'");
                 if (g_n_ast_kids + ecnt > MAX_AST_KIDS)
                     die(line, col, "struct-init kid pool overflow");
@@ -3682,6 +3727,56 @@ parse_ldouble_init_bits(void)
     return bits;
 }
 
+/* A '{' at leaf f of a struct initializer, inside n_grp open brace groups
+ * (grp_lvl[] their nest[] levels, innermost last).  K&R A.8.7: "If an
+ * aggregate contains members of aggregate type, the initialization rules
+ * apply recursively", and "if the initializer for an aggregate's member that
+ * itself is an aggregate begins with a left brace, then the succeeding
+ * comma-separated list of initializers initializes the members of the
+ * subaggregate".  The brace opens the aggregate one level inside the
+ * innermost open group -- or deeper, when the levels between were elided and
+ * f is in the middle of them: it then belongs to the outermost aggregate f
+ * begins.  Consumes the '{', sets *end to the aggregate's last leaf, and
+ * returns its level. */
+static int
+init_group_open(int (*nest)[INIT_NEST], int n_leaves, int f, int n_grp,
+                const int *grp_lvl, int *end)
+{
+    int lv = n_grp ? grp_lvl[n_grp - 1] + 1 : 0;
+    while (lv < INIT_NEST && nest[f][lv] >= 0 && f > 0 &&
+           nest[f - 1][lv] == nest[f][lv])
+        lv++;
+    if (lv >= INIT_NEST || nest[f][lv] < 0 || n_grp >= INIT_NEST)
+        die(g_cur.line, g_cur.col, "too many braces in struct initializer");
+    next_tok();                                   /* consume '{' */
+    int e = f;
+    while (e + 1 < n_leaves && nest[e + 1][lv] == nest[f][lv])
+        e++;
+    *end = e;
+    return lv;
+}
+
+/* The last leaf of the char array whose first ELEMENT is leaf f, for a string
+ * literal initializing it (K&R A.8.7: "a character array may be initialized
+ * by a string literal; successive characters of the string initialize
+ * successive members of the array"); f itself when f begins no char array.
+ * The array is the level just above the leaf's own, so a scalar `char c'
+ * member and a char in a struct are not arrays here, and each row of a
+ * char[2][4] is its own array. */
+static int
+init_char_array_end(int (*nest)[INIT_NEST], int n_leaves, int f)
+{
+    int lv = INIT_NEST - 1, e = f;
+    while (lv > 0 && nest[f][lv] < 0)
+        lv--;                                     /* the leaf's own level */
+    lv--;                                         /* its array, if any */
+    if (lv >= 0 && NEST_IS_ARRAY(nest[f][lv]) &&
+        (f == 0 || nest[f - 1][lv] != nest[f][lv]))
+        while (e + 1 < n_leaves && nest[e + 1][lv] == nest[f][lv])
+            e++;
+    return e;
+}
+
 static int
 parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
 {
@@ -3705,8 +3800,8 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
          * exactly ONE slot per field and derived the element count by dividing
          * by n_fields, so neither shape could be expressed. */
         Field  leaves[MAX_STRUCT_INIT_LEAVES];
-        int    leaf_owner[MAX_STRUCT_INIT_LEAVES];
-        int    n_fields = struct_init_leaves(g->struct_id, leaves, leaf_owner,
+        int    nest[MAX_STRUCT_INIT_LEAVES][INIT_NEST];
+        int    n_fields = struct_init_leaves(g->struct_id, leaves, nest,
                                              MAX_STRUCT_INIT_LEAVES);
         if (n_fields < 0)
             die(g_cur.line, g_cur.col,
@@ -3758,19 +3853,24 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                         "expected '{' for struct-array element");
                 next_tok();   /* consume inner '{' */
             }
-            int grp_end = -1;          /* last leaf of an open member group */
-            /* Close an open member group: either this leaf was the group's
-             * last, or a '}' arrived early -- a SHORT group, whose remaining
-             * leaves zero-fill WITHIN the member rather than spilling into the
-             * next one (`{{1},{2}}` for two timevals is 1,0,2,0, not 1,2,...).
-             * A macro because the per-field tails are separate code paths (the
-             * int/char/long/float arm and the pointer/string arm each have
-             * their own comma handling) and both must close the group. */
+            /* The open brace groups, innermost last: each one's last leaf
+             * and the nest[] level it was opened at. */
+            int grp_end[INIT_NEST], grp_lvl[INIT_NEST];
+            int n_grp = 0;
+            /* Close open member groups: a group closes when this leaf was its
+             * last, or when a '}' arrives early -- a SHORT group, whose
+             * remaining leaves zero-fill WITHIN the member rather than
+             * spilling into the next one (`{{1},{2}}` for two timevals is
+             * 1,0,2,0, not 1,2,...).  Groups nested to the same last leaf
+             * close together, one '}' each.  A macro because the per-field
+             * tails are separate code paths (the int/char/long/float arm and
+             * the pointer/string arm each have their own comma handling) and
+             * both must close the group. */
 #define CLOSE_MEMBER_GROUP()                                                   \
             do {                                                               \
-                if (grp_end >= 0 &&                                            \
-                    (f == grp_end || g_cur.kind == TOK_RBRACE)) {              \
-                    while (f < grp_end) {                                      \
+                while (n_grp > 0 &&                                            \
+                       (f == grp_end[n_grp - 1] || g_cur.kind == TOK_RBRACE)) { \
+                    while (f < grp_end[n_grp - 1]) {                           \
                         f++;                                                   \
                         if (n >= MAX_INIT_VALUES)                              \
                             die(g_cur.line, g_cur.col,                         \
@@ -3786,31 +3886,34 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                         die(g_cur.line, g_cur.col,                             \
                             "expected '}' after struct member group");         \
                     next_tok();                                                \
-                    grp_end = -1;                                              \
+                    n_grp--;                                                   \
                 }                                                              \
             } while (0)
             for (int f = 0; f < n_fields; f++) {
                 if (n >= MAX_INIT_VALUES)
                     die(g_cur.line, g_cur.col,
                         "too many init values");
-                /* Optional MEMBER-group braces (K&R A.8.7: an aggregate member
-                 * takes a nested list, which may also be ELIDED -- eliding is
-                 * the flat form the rest of this loop already handles).  A
-                 * group covers exactly the leaves sharing this leaf's
-                 * top-level owner, so a SHORT group (`{1}` for a 2-member
-                 * timeval) zero-fills the rest of that member instead of
-                 * spilling into the next one, which is what makes brace
-                 * groups safe to accept rather than merely skip. */
-                if (g_cur.kind == TOK_LBRACE && grp_end < 0) {
-                    next_tok();                    /* consume member '{' */
-                    grp_end = f;
-                    while (grp_end + 1 < n_fields &&
-                           leaf_owner[grp_end + 1] == leaf_owner[f])
-                        grp_end++;
-                } else if (g_cur.kind == TOK_LBRACE) {
-                    die(g_cur.line, g_cur.col,
-                        "nested member-group braces deeper than one level "
-                        "not supported");
+                /* Optional MEMBER-group braces, at any depth.  K&R A.8.7: "If
+                 * an aggregate contains members of aggregate type, the
+                 * initialization rules apply recursively", and "if the
+                 * initializer for an aggregate's member that itself is an
+                 * aggregate begins with a left brace, then the succeeding
+                 * comma-separated list of initializers initializes the
+                 * members of the subaggregate".  Braces may also be ELIDED,
+                 * which is the flat form the rest of this loop handles.
+                 *
+                 * A '{' opens a group one level inside the innermost open
+                 * one -- or deeper, when the levels between were elided and
+                 * this leaf is in the middle of them: the brace then belongs
+                 * to the outermost aggregate this leaf begins.  The group
+                 * covers exactly that aggregate's leaves, so a SHORT group
+                 * (`{1}` for a 2-member timeval) zero-fills the rest of it
+                 * instead of spilling into the next one, which is what makes
+                 * brace groups safe to accept rather than merely skip. */
+                while (g_cur.kind == TOK_LBRACE) {
+                    grp_lvl[n_grp] = init_group_open(nest, n_fields, f, n_grp,
+                                                     grp_lvl, &grp_end[n_grp]);
+                    n_grp++;
                 }
                 Field *fld = &leaves[f];
                 /* A char ARRAY member initialized by a STRING LITERAL, which
@@ -3830,12 +3933,14 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                  * this the string would land in the first leaf and every
                  * following value would shift up by one member -- the silent
                  * mis-fill that expanding char arrays was previously avoided
-                 * to prevent.  Identified by the leaf's owner group rather
-                 * than by type, so a scalar `char c' member is untouched. */
+                 * to prevent.  The array is the one whose ELEMENT this leaf
+                 * is -- the level just above the leaf's own -- and the leaf
+                 * must begin it, so a scalar `char c' member, a char in a
+                 * struct, and a row of a char[2][4] other than at its start
+                 * are untouched; each row of a char[2][4] takes its own
+                 * string. */
                 if (g_cur.kind == TOK_STR_LIT && fld->type == LT_CHAR) {
-                    int ge = f;
-                    while (ge + 1 < n_fields && leaf_owner[ge + 1] == leaf_owner[f])
-                        ge++;
+                    int ge = init_char_array_end(nest, n_fields, f);
                     if (ge > f) {
                         int nchars = ge - f + 1;
                         if (g_cur.str_len > nchars)

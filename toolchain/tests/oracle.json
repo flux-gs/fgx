@@ -715,5 +715,7 @@
   "paren_comma_void": 42,
   "const_stmt": 42,
   "sfld_subscript": 42,
-  "fnptr_chain_call": 42
+  "fnptr_chain_call": 42,
+  "init_nested": 42,
+  "init_nested_local": 42
 }
