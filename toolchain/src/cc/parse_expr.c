@@ -484,7 +484,7 @@ fpr_load_sym(Local *lc, Global *gv)
         g_expr_type      = gv->type;
         g_expr_struct_id = gv->struct_id;
         g_expr_unsigned  = gv->is_unsigned;
-        g_expr_fn_sig    = (gv->type == LT_FN_PTR) ? gv->fn_sig_id : -1;
+        g_expr_fn_sig    = fnptr_based(gv->type) ? gv->fn_sig_id : -1;
         g_fpr_res = k;
     } else if (ISPTR(gv->type)) {
         k = fpr_alloc();
@@ -492,7 +492,7 @@ fpr_load_sym(Local *lc, Global *gv)
         g_expr_type      = gv->type;
         g_expr_struct_id = gv->struct_id;
         g_expr_unsigned  = gv->is_unsigned;
-        g_expr_fn_sig    = (gv->type == LT_FN_PTR) ? gv->fn_sig_id : -1;
+        g_expr_fn_sig    = fnptr_based(gv->type) ? gv->fn_sig_id : -1;
         g_fpr_res = k;
     } else {
         emit_load_global(gv);
@@ -1583,7 +1583,7 @@ build_unary(void)
         g_ast[n].type = lc->type;
         g_ast[n].struct_id = lc->struct_id;        /* from the load */
         g_ast[n].is_unsigned = lc->is_unsigned;    /* from the load */
-        g_ast[n].fn_sig = (lc->type == LT_FN_PTR) ? lc->fn_sig_id : -1;
+        g_ast[n].fn_sig = fnptr_based(lc->type) ? lc->fn_sig_id : -1;
         next_tok();
         while (pfx_paren-- > 0) expect(TOK_RPAREN, "')'");
         return n;
@@ -2562,6 +2562,8 @@ build_unary(void)
                         g_ast[n].type = deref_result_expr_type(DECREF(g_ast[a].type));
                         g_ast[n].struct_id = g_ast[a].struct_id;
                         g_ast[n].is_unsigned = g_ast[a].is_unsigned;   /* A-1 */
+                        if (fnptr_based(g_ast[n].type))   /* `*pp', pp a T (**)() */
+                            g_ast[n].fn_sig = g_ast[a].fn_sig;
                     }
                     return n;
                 }
@@ -2615,6 +2617,8 @@ build_unary(void)
                 g_ast[n].type = deref_result_expr_type(DECREF(lc->type));
                 g_ast[n].is_unsigned = lc->is_unsigned;
                 g_ast[n].struct_id = lc->struct_id;
+                if (fnptr_based(g_ast[n].type))       /* `*pp', pp a T (**)() */
+                    g_ast[n].fn_sig = lc->fn_sig_id;
                 return n;
             }
         }
@@ -2629,6 +2633,8 @@ build_unary(void)
             g_ast[n].type = deref_result_expr_type(DECREF(g_ast[a].type));
             g_ast[n].struct_id = g_ast[a].struct_id;
             g_ast[n].is_unsigned = g_ast[a].is_unsigned;   /* A-1 */
+            if (fnptr_based(g_ast[n].type))   /* `*pp', pp a T (**)() */
+                g_ast[n].fn_sig = g_ast[a].fn_sig;
         }
         return n;
     }
@@ -2869,7 +2875,7 @@ lv_chain_value(int head, int line, int col)
     g_ast[n].is_unsigned = (lt == LT_STRUCT) ? 0 : g_ast[head].is_unsigned;
     /* A function-pointer leaf keeps its signature, so build_postfix_value_
      * chain's call arm can call through it. */
-    g_ast[n].fn_sig = (lt == LT_FN_PTR) ? g_ast[head].fn_sig : -1;
+    g_ast[n].fn_sig = fnptr_based(lt) ? g_ast[head].fn_sig : -1;
     return n;
 }
 
@@ -3353,7 +3359,7 @@ build_postfix_value_chain(int base)
              * because an IDENT base takes a different path that already read
              * the field.  The base's own fn_sig is meaningless here: a chain
              * whose leaf is not a fn-ptr has no signature to carry. */
-            g_ast[n].fn_sig = (leaf_ty == LT_FN_PTR)
+            g_ast[n].fn_sig = fnptr_based(leaf_ty)
                             ? g_ast_fields[hop0 + n_hops - 1]->fn_sig_id
                             : g_ast[base].fn_sig;
             base = n;
@@ -3791,7 +3797,8 @@ build_primary_ast(void)
                  * arithmetic on the cast result knows the stride (K&R A.7.5
                  * cast -> A.7.7 pointer + int).  2.11BSD sh blok.c:
                  * `BLK(stakbas)-1` == `(BLKPTR)stakbas - 1`. */
-                cast_sid = g_typedefs[tdi].struct_id;
+                cast_sid = fnptr_based(bt) ? g_typedefs[tdi].fn_sig_id
+                                           : g_typedefs[tdi].struct_id;
                 /* `(u_int)x' is as unsigned as `(unsigned int)x'.  The
                  * explicit modifiers above already set saw_unsigned; a
                  * typedef has to say so through its own record. */
@@ -3819,7 +3826,21 @@ build_primary_ast(void)
             if (!from_typedef && (bt == LT_INT || bt == LT_CHAR ||
                                   bt == LT_LONG || bt == LT_LLONG))
                 consume_trailing_specifiers(&bt, &saw_unsigned);
+            /* `T (**)(params)', a pointer to a function pointer, is an
+             * ordinary pointer cast: parse_declarator takes it below and
+             * keeps its signature. */
+            int fnptr_pp = 0;
             if (g_cur.kind == TOK_LPAREN) {
+                LexPeek ppk;
+                lex_peek_save(&ppk);
+                next_tok();
+                if (g_cur.kind == TOK_STAR) {
+                    next_tok();
+                    fnptr_pp = (g_cur.kind == TOK_STAR);
+                }
+                lex_peek_restore(&ppk);
+            }
+            if (g_cur.kind == TOK_LPAREN && !fnptr_pp) {
                 /* Inline abstract fn-ptr declarator cast, `T (*)(params)`.
                  *
                  * The `!from_typedef` guard that used to be here served no
@@ -3848,19 +3869,26 @@ build_primary_ast(void)
                     die(g_cur.line, g_cur.col, "expected '*' in fn-ptr cast");
                 next_tok();
                 expect(TOK_RPAREN, "')' after '(*' in fn-ptr cast");
-                expect(TOK_LPAREN, "'(' for fn-ptr cast parameter list");
-                int pdepth = 1;
-                while (pdepth > 0 && g_cur.kind != TOK_EOF) {
-                    if (g_cur.kind == TOK_LPAREN)      pdepth++;
-                    else if (g_cur.kind == TOK_RPAREN) pdepth--;
-                    next_tok();
-                }
+                if (g_cur.kind != TOK_LPAREN)
+                    die(g_cur.line, g_cur.col,
+                        "expected '(' for fn-ptr cast parameter list");
+                /* The cast's own signature.  K&R A.7.5: a cast "causes
+                 * conversion of the value of the expression to the named
+                 * type", so `((int (*)())x)(20)' calls through x as an
+                 * int-returning function whatever x was declared as. */
+                TypeSpec fspec;
+                fspec.base        = bt;
+                fspec.struct_id   = cast_sid;
+                fspec.is_static   = 0;
+                fspec.is_extern   = 0;
+                fspec.is_unsigned = saw_unsigned;
+                int fsig = parse_fnptr_sig(fspec, 0);
                 expect(TOK_RPAREN, "')' closing fn-ptr cast");
                 int a = build_unary();
                 int n = ast_new(N_CAST_FNPTR, op_line, op_col);
                 g_ast[n].a = a;
                 g_ast[n].type = LT_FN_PTR;
-                g_ast[n].fn_sig = g_ast[a].fn_sig;   /* untouched by the cast */
+                g_ast[n].fn_sig = fsig;
                 return n;
             }
             /* declarator-refactor Increment 1: the abstract POINTER declarator
@@ -3895,6 +3923,8 @@ build_primary_ast(void)
             g_ast[n].val_hi = (unsigned)is_ptr;
             g_ast[n].type = target;
             if (target == LT_STRUCT_PTR) g_ast[n].struct_id = cast_sid;
+            if (fnptr_based(target))         /* `(int (**)())x' */
+                g_ast[n].fn_sig = cd.fn_sig_id;
             /* A-1: scalar unsigned casts mark the value; a POINTER cast
              * with an unsigned base type marks the POINTEE, so a deref of
              * the cast (`*(unsigned *)p` — stdarg's va_arg) reads unsigned
@@ -4402,7 +4432,7 @@ build_primary_ast(void)
                 g_ast[n].type = lc->type;
                 g_ast[n].struct_id = lc->struct_id;      /* from the load */
                 g_ast[n].is_unsigned = lc->is_unsigned;  /* from the load */
-                g_ast[n].fn_sig = (lc->type == LT_FN_PTR) ? lc->fn_sig_id : -1;
+                g_ast[n].fn_sig = fnptr_based(lc->type) ? lc->fn_sig_id : -1;
                 return n;
             }
             if (gv->type != LT_INT && gv->type != LT_CHAR &&
@@ -4419,7 +4449,7 @@ build_primary_ast(void)
             g_ast[n].type = gv->type;
             g_ast[n].struct_id = gv->struct_id;
             g_ast[n].is_unsigned = gv->is_unsigned;
-            g_ast[n].fn_sig = (gv->type == LT_FN_PTR) ? gv->fn_sig_id : -1;
+            g_ast[n].fn_sig = fnptr_based(gv->type) ? gv->fn_sig_id : -1;
             return n;
         }
 
@@ -4559,7 +4589,7 @@ build_primary_ast(void)
                 g_ast[n].type = lc->type;
                 g_ast[n].struct_id = lc->struct_id;
                 g_ast[n].is_unsigned = lc->is_unsigned;
-                g_ast[n].fn_sig = (lc->type == LT_FN_PTR) ? lc->fn_sig_id : -1;
+                g_ast[n].fn_sig = fnptr_based(lc->type) ? lc->fn_sig_id : -1;
             }
         } else {
             if (ISARY(gv->type) || gv->type == LT_STRUCT) {
@@ -4574,7 +4604,7 @@ build_primary_ast(void)
                 g_ast[n].type = gv->type;
                 g_ast[n].struct_id = gv->struct_id;
                 g_ast[n].is_unsigned = gv->is_unsigned;
-                g_ast[n].fn_sig = (gv->type == LT_FN_PTR) ? gv->fn_sig_id : -1;
+                g_ast[n].fn_sig = fnptr_based(gv->type) ? gv->fn_sig_id : -1;
             }
         }
         return n;
@@ -4773,7 +4803,7 @@ build_struct_elem_access(Local *lc, Global *gv, LocalType atype, int asid,
     g_ast[n].struct_id = f->struct_id;
     g_ast[n].struct_id = f->struct_id;
     g_ast[n].is_unsigned = f->is_unsigned;
-    g_ast[n].fn_sig = (f->type == LT_FN_PTR) ? f->fn_sig_id : -1;
+    g_ast[n].fn_sig = fnptr_based(f->type) ? f->fn_sig_id : -1;
     /* arr[i].fn(args) — dispatch through the fn-ptr field value */
     if (f->type == LT_FN_PTR && g_cur.kind == TOK_LPAREN) {
         int sig = f->fn_sig_id;
@@ -4948,8 +4978,8 @@ build_dot_access(Local *lc, Global *gv, int cur_sid, int line, int col)
     g_ast[n].val = (unsigned)cum_off;
     g_ast[n].type = leaf->type;
     g_ast[n].struct_id = leaf->struct_id;
-    g_ast[n].struct_id = leaf->struct_id;
     g_ast[n].is_unsigned = leaf->is_unsigned;
+    g_ast[n].fn_sig = fnptr_based(leaf->type) ? leaf->fn_sig_id : -1;
     /* G34: '.field->...' — arrow chain on the loaded pointer value */
     if (leaf->type == LT_STRUCT_PTR && g_cur.kind == TOK_ARROW) {
         int g34 = ast_new(N_G34_BANK, line, col);
@@ -5490,7 +5520,7 @@ build_arrow_access(Local *lc, Global *gv, int cur_sid, int line, int col)
     g_ast[n].struct_id = f->struct_id;
     g_ast[n].struct_id = f->struct_id;
     g_ast[n].is_unsigned = f->is_unsigned;
-    g_ast[n].fn_sig = (f->type == LT_FN_PTR) ? f->fn_sig_id : -1;
+    g_ast[n].fn_sig = fnptr_based(f->type) ? f->fn_sig_id : -1;
     /* G22: index the chain's pointer result */
     return build_postfix_value_chain(n);
 }
@@ -5776,6 +5806,7 @@ build_add_expr(void)
             g_ast[n].val = (unsigned)rhs_stride;
             g_ast[n].type = rhs_type; g_ast[n].struct_id = rhs_sid;
             g_ast[n].is_unsigned = g_ast[rhs].is_unsigned;  /* untouched by the arm */
+            g_ast[n].fn_sig = g_ast[rhs].fn_sig;            /* `1 + pp' */
             lhs = n;
             continue;
         }
@@ -5785,6 +5816,7 @@ build_add_expr(void)
             g_ast[n].val = (unsigned)lhs_stride;
             g_ast[n].type = lhs_type; g_ast[n].struct_id = lhs_sid;
             g_ast[n].is_unsigned = lhs_u;   /* A-1: the pointer's pointee, not the index's */
+            g_ast[n].fn_sig = g_ast[lhs].fn_sig;   /* `pp + 1', pp a T (**)() */
             lhs = n;
             continue;
         }
@@ -5806,6 +5838,7 @@ build_add_expr(void)
             g_ast[n].val = (unsigned)lhs_stride;
             g_ast[n].type = lhs_type; g_ast[n].struct_id = lhs_sid;
             g_ast[n].is_unsigned = lhs_u;   /* A-1: the pointer's pointee, not the index's */
+            g_ast[n].fn_sig = g_ast[lhs].fn_sig;
             lhs = n;
             continue;
         }
@@ -8930,7 +8963,7 @@ walk_expr_body(int n)
         g_expr_type      = f->type;
         g_expr_unsigned  = f->is_unsigned;
         g_expr_struct_id = f->struct_id;
-        g_expr_fn_sig = (f->type == LT_FN_PTR) ? f->fn_sig_id : -1;
+        g_expr_fn_sig = fnptr_based(f->type) ? f->fn_sig_id : -1;
         break;
     }
     case N_DSTORE: {
@@ -9822,7 +9855,19 @@ sizeof_type_value(void)
 {
     TypeSpec t = parse_type_spec();
     int is_ptr = 0;
+    LexPeek spk;
+    lex_peek_save(&spk);
     while (g_cur.kind == TOK_STAR) { is_ptr = 1; next_tok(); }
+    /* An abstract declarator group, `int (*)()' or `int (**)()' (K&R A.8.8,
+     * a type name): parse_declarator reads it, and every such type is a
+     * pointer -- a pointer to an array has no type here and is refused. */
+    if (g_cur.kind == TOK_LPAREN) {
+        lex_peek_restore(&spk);
+        Declarator d = parse_declarator(t, /*allow_abstract=*/1);
+        if (!ISPTR(d.type))
+            die(g_cur.line, g_cur.col, "bad sizeof type");
+        return 4;                               /* 24-bit long ptr = 4 B */
+    }
     if (g_cur.kind == TOK_LBRACKET) {
         next_tok();
         if (g_cur.kind != TOK_INT_LIT)

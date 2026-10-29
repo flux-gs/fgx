@@ -1178,6 +1178,27 @@ struct_field_lookup(int sid, const char *name, int name_len);
  * for each leaf, the aggregate it belongs to at each brace level, so a caller
  * can bound a nested brace group at any depth.  Returns the leaf count, or -1
  * if it exceeds `max`. */
+/* A function pointer under zero or more pointer or array layers -- the
+ * types whose symbol carries a call signature (fn_sig_id): `int (*fp)()',
+ * `int (*tab[4])()', `int (**pp)()'. */
+static inline int
+fnptr_based(LocalType t)
+{
+    while (t != LT_FN_PTR && (ISPTR(t) || ISARY(t)))
+        t = DECREF(t);
+    return t == LT_FN_PTR;
+}
+
+/* The function pointer under `levels' further pointer layers. */
+static inline LocalType
+fnptr_ptr_type(int levels)
+{
+    LocalType t = LT_FN_PTR;
+    while (levels-- > 0)
+        t = INCREF(t, DERIV_PTR);
+    return t;
+}
+
 #define MAX_STRUCT_INIT_LEAVES 96
 /* Brace levels recorded per leaf.  nest[i][k] is the aggregate leaf i belongs
  * to at level k -- level 0 the top-level member, each deeper level a struct
@@ -1493,7 +1514,10 @@ param_adjust_type(LocalType t);
 int
 parse_fn_ptr_declarator(TypeSpec base_t,
                         const char **out_name_ptr, int *out_name_len,
-                        int *out_sig_id);
+                        int *out_sig_id,
+                            int *out_pp);
+/* The `( params )' of a function-pointer declarator, as a signature. */
+int parse_fnptr_sig(TypeSpec base_t, int ret_stars);
 void
 parse_unary(void);
 void

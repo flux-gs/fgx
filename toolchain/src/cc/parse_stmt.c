@@ -64,7 +64,7 @@ parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
             const char *ff_name_ptr;
             int         ff_name_len;
             int         ff_sig_id;
-            if (parse_fn_ptr_declarator(t, &ff_name_ptr, &ff_name_len, &ff_sig_id)) {
+            if (parse_fn_ptr_declarator(t, &ff_name_ptr, &ff_name_len, &ff_sig_id, NULL)) {
                 expect(TOK_SEMI, "';' after fn-pointer field");
                 if (s->n_fields >= MAX_FIELDS_PER_STRUCT)
                     die(g_cur.line, g_cur.col, "too many struct fields");
@@ -131,7 +131,7 @@ parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
             int nl2 = md.name_len < MAX_IDENT - 1 ? md.name_len : MAX_IDENT - 1;
             f->name = lex_intern_ident(md.name, nl2);
             f->struct_id    = t.struct_id;
-            f->fn_sig_id    = -1;
+            f->fn_sig_id    = md.fn_sig_id;    /* -1 but for `int (**pp)()' */
             f->is_bit_field = 0;
             f->bit_offset   = 0;
             f->bit_width    = 0;
@@ -586,8 +586,8 @@ parse_type_spec(void)
          * stashed in TypeSpec.struct_id (overload).  parse_decl /
          * parse_global_decl recognise this and pick up the IDENT
          * directly. */
-        if (td->base_type == LT_FN_PTR) {
-            t.base = LT_FN_PTR;
+        if (fnptr_based(td->base_type)) {   /* `int (*)()', `int (**)()' */
+            t.base = td->base_type;
             t.struct_id = td->fn_sig_id;
             next_tok();
             return t;
@@ -637,7 +637,9 @@ parse_declarator(TypeSpec base, int allow_abstract)
     d.name_line   = g_cur.line;
     d.name_col    = g_cur.col;
     d.struct_id   = (BTYPE(base.base) == BT_STRUCT) ? base.struct_id : -1;
-    d.fn_sig_id   = -1;
+    /* A function-pointer base -- a typedef of one, or of a pointer to one --
+     * carries its signature in struct_id (parse_type_spec). */
+    d.fn_sig_id   = fnptr_based(base.base) ? base.struct_id : -1;
     d.n_dims      = 0;
     d.row_stride  = 0;
     for (int i = 0; i < MAX_DIMS; i++) d.dims[i] = 0;
@@ -665,23 +667,43 @@ parse_declarator(TypeSpec base, int allow_abstract)
          * outside UNLESS a `[` or `(` follows the group, which is the binding
          * change -- pointer to array / pointer to function.  Pointer to
          * function never reaches here (parse_fn_ptr_declarator owns it), and
-         * pointer to array has no tword, so that one case is refused. */
+         * pointer to array has no tword, so that one case is refused.
+         * Pointer to POINTER to function does reach here: `int (**pp)()'
+         * is, by A.8.6.1 applied twice, a pointer to a function pointer. */
         int depth = 0, inner = 0;
         while (g_cur.kind == TOK_LPAREN) {
             depth++;
             next_tok();
             while (g_cur.kind == TOK_STAR) { inner++; next_tok(); }
         }
-        if (g_cur.kind != TOK_IDENT)
+        if (g_cur.kind == TOK_IDENT) {
+            d.name      = g_cur.id_ptr;
+            d.name_len  = g_cur.id_len;
+            d.name_line = g_cur.line;
+            d.name_col  = g_cur.col;
+            next_tok();
+        } else if (!allow_abstract) {
             die(g_cur.line, g_cur.col,
                 "parse_declarator: expected a name inside `( declarator )'");
-        d.name      = g_cur.id_ptr;
-        d.name_len  = g_cur.id_len;
-        d.name_line = g_cur.line;
-        d.name_col  = g_cur.col;
-        next_tok();
+        }
         while (depth-- > 0)
             expect(TOK_RPAREN, "')'");
+        if (inner >= 1 && g_cur.kind == TOK_LPAREN) {
+            /* The innermost `*' and the `( params )' make the function
+             * pointer, whose return type is the base with the leading
+             * `*'s; each further inner `*' is a pointer to that (K&R
+             * A.8.6.1: "the type of the identifier of D is ... pointer to
+             * T").  The signature rides on the declarator, as a function
+             * pointer's rides on its symbol.  A named `(*fp)()' reaches
+             * here only from a type name -- a cast or sizeof -- since the
+             * declaration sites take parse_fn_ptr_declarator first. */
+            d.fn_sig_id = parse_fnptr_sig(base, stars);
+            d.struct_id = -1;
+            d.type      = LT_FN_PTR;
+            while (--inner > 0)
+                d.type = INCREF(d.type, DERIV_PTR);
+            return d;
+        }
         if (inner && (g_cur.kind == TOK_LBRACKET || g_cur.kind == TOK_LPAREN))
             die(g_cur.line, g_cur.col,
                 "parse_declarator: pointer to array/function declared as "
@@ -2600,74 +2622,12 @@ walk_stmt(int n)
     }
 }
 
+/* The parameter list of a function-pointer declarator, `( params )' with
+ * g_cur at its '(', interned as a signature whose return type is `base_t'
+ * with `ret_stars' pointer groups.  Consumes through the closing ')'. */
 int
-parse_fn_ptr_declarator(TypeSpec base_t,
-                        const char **out_name_ptr, int *out_name_len,
-                        int *out_sig_id)
+parse_fnptr_sig(TypeSpec base_t, int ret_stars)
 {
-    g_fnptr_decl_arr = 0;
-    if (g_cur.kind != TOK_LPAREN && g_cur.kind != TOK_STAR) return 0;
-
-    /* Snapshot lexer state. */
-    LexPeek save_pk;
-    lex_peek_save(&save_pk);
-
-    /* P3-2: pointer-returning fn-ptr — `T *(*name)(...)`.  Consume the
-     * return-type stars before requiring `(*`; the bail-restore below
-     * keeps ordinary `T *name` / `T **name` declarators (and the paren'd
-     * `T *(name)()` form) on their existing paths.  Struct-by-value
-     * return stays deferred; struct POINTER return works (base+PTR). */
-    int ret_stars = 0;
-    while (g_cur.kind == TOK_STAR) { ret_stars++; next_tok(); }
-    if (g_cur.kind != TOK_LPAREN) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
-
-    next_tok();                            /* past first '(' */
-    if (g_cur.kind != TOK_STAR) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
-    next_tok();                            /* past '*' */
-    /* Name is OPTIONAL: `(*name)(...)` OR the abstract `(*)(...)`.  The abstract
-     * form appears in prototype externs, e.g. `extern int f(int (*)(int), int)`.
-     * fcc previously required a name here and rejected such a declaration with
-     * "expected parameter name"; a prototype only needs the type. */
-    const char *id_ptr = "";
-    int id_len = 0;
-    if (g_cur.kind == TOK_IDENT) {
-        id_ptr = g_cur.id_ptr;
-        id_len = g_cur.id_len;
-        next_tok();                        /* past IDENT */
-    }
-    /* B-7: array of fn-ptrs — `T (*name[N])(args)` / `(*name[])(args)`. */
-    if (g_cur.kind == TOK_LBRACKET) {
-        next_tok();                        /* past '[' */
-        if (g_cur.kind == TOK_RBRACKET) {
-            g_fnptr_decl_arr = -1;         /* [] — size from init list */
-        } else {
-            long an = parse_const_bin(0);
-            if (an <= 0)
-                die(g_cur.line, g_cur.col,
-                    "fn-ptr array size must be a positive integer constant");
-            g_fnptr_decl_arr = (int)an;
-        }
-        if (g_cur.kind != TOK_RBRACKET) {
-            lex_peek_restore(&save_pk);
-            return 0;
-        }
-        next_tok();                        /* past ']' */
-    }
-    if (g_cur.kind != TOK_RPAREN) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
-    next_tok();                            /* past ')' */
-    if (g_cur.kind != TOK_LPAREN) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
     next_tok();                            /* past '(' (start of params) */
 
     /* Parse the param list into a fresh signature.  Params can be int,
@@ -2710,16 +2670,96 @@ parse_fn_ptr_declarator(TypeSpec base_t,
         die(g_cur.line, g_cur.col, "expected ')' after fn-ptr param list");
     next_tok();                            /* past closing ')' */
 
-    *out_name_ptr = id_ptr;
-    *out_name_len = id_len;
     /* Return type: base + ret_stars PTR groups.  type_for_decl only for
      * the starred case — a bare `void (*fp)()` return stays TW_VOID (the
      * historical sig encoding; type_for_decl would reject bare void). */
-    *out_sig_id   = fn_sig_intern(ret_stars ? type_for_decl(base_t, ret_stars, 0)
-                                            : base_t.base,
-                                   n_params, params,
-                                   param_struct_ids, is_variadic,
-                                   ret_stars ? 0 : base_t.is_unsigned);
+    return fn_sig_intern(ret_stars ? type_for_decl(base_t, ret_stars, 0)
+                                  : base_t.base,
+                         n_params, params,
+                         param_struct_ids, is_variadic,
+                         ret_stars ? 0 : base_t.is_unsigned);
+}
+
+int
+parse_fn_ptr_declarator(TypeSpec base_t,
+                        const char **out_name_ptr, int *out_name_len,
+                        int *out_sig_id, int *out_pp)
+{
+    g_fnptr_decl_arr = 0;
+    if (out_pp) *out_pp = 0;
+    if (g_cur.kind != TOK_LPAREN && g_cur.kind != TOK_STAR) return 0;
+
+    /* Snapshot lexer state. */
+    LexPeek save_pk;
+    lex_peek_save(&save_pk);
+
+    /* P3-2: pointer-returning fn-ptr — `T *(*name)(...)`.  Consume the
+     * return-type stars before requiring `(*`; the bail-restore below
+     * keeps ordinary `T *name` / `T **name` declarators (and the paren'd
+     * `T *(name)()` form) on their existing paths.  Struct-by-value
+     * return stays deferred; struct POINTER return works (base+PTR). */
+    int ret_stars = 0;
+    while (g_cur.kind == TOK_STAR) { ret_stars++; next_tok(); }
+    if (g_cur.kind != TOK_LPAREN) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+
+    next_tok();                            /* past first '(' */
+    if (g_cur.kind != TOK_STAR) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+    next_tok();                            /* past '*' */
+    /* Pointer to a function pointer, `(**name)(...)' -- K&R A.8.6.1 applied
+     * once more -- where the caller can declare one (out_pp non-NULL): the
+     * count of further `*'s.  Other callers leave it to parse_declarator,
+     * whose declarations take an ordinary pointer initializer. */
+    while (out_pp && g_cur.kind == TOK_STAR) {
+        (*out_pp)++;
+        next_tok();
+    }
+    /* Name is OPTIONAL: `(*name)(...)` OR the abstract `(*)(...)`.  The abstract
+     * form appears in prototype externs, e.g. `extern int f(int (*)(int), int)`.
+     * fcc previously required a name here and rejected such a declaration with
+     * "expected parameter name"; a prototype only needs the type. */
+    const char *id_ptr = "";
+    int id_len = 0;
+    if (g_cur.kind == TOK_IDENT) {
+        id_ptr = g_cur.id_ptr;
+        id_len = g_cur.id_len;
+        next_tok();                        /* past IDENT */
+    }
+    /* B-7: array of fn-ptrs — `T (*name[N])(args)` / `(*name[])(args)`. */
+    if (g_cur.kind == TOK_LBRACKET) {
+        next_tok();                        /* past '[' */
+        if (g_cur.kind == TOK_RBRACKET) {
+            g_fnptr_decl_arr = -1;         /* [] — size from init list */
+        } else {
+            long an = parse_const_bin(0);
+            if (an <= 0)
+                die(g_cur.line, g_cur.col,
+                    "fn-ptr array size must be a positive integer constant");
+            g_fnptr_decl_arr = (int)an;
+        }
+        if (g_cur.kind != TOK_RBRACKET) {
+            lex_peek_restore(&save_pk);
+            return 0;
+        }
+        next_tok();                        /* past ']' */
+    }
+    if (g_cur.kind != TOK_RPAREN) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+    next_tok();                            /* past ')' */
+    if (g_cur.kind != TOK_LPAREN) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+    *out_name_ptr = id_ptr;
+    *out_name_len = id_len;
+    *out_sig_id   = parse_fnptr_sig(base_t, ret_stars);
     return 1;
 }
 
@@ -2787,7 +2827,7 @@ build_decl(TypeSpec t)
          * parse_fn_ptr_declarator restores the lexer when it declines, so
          * trying it per element costs a peek and no state. */
         while (parse_fn_ptr_declarator(t, &fn_name_ptr, &fn_name_len,
-                                       &fn_sig_id)) {
+                                       &fn_sig_id, NULL)) {
             declare_fnptr_local(fn_name_ptr, fn_name_len, fn_sig_id, tmp, &cnt);
             if (g_cur.kind != TOK_COMMA) {
                 expect(TOK_SEMI, "';' after fn-ptr local decl");
@@ -2855,7 +2895,7 @@ build_decl(TypeSpec t)
             int         fp_name_len;
             int         fp_sig_id;
             if (parse_fn_ptr_declarator(t, &fp_name_ptr, &fp_name_len,
-                                        &fp_sig_id)) {
+                                        &fp_sig_id, NULL)) {
                 declare_fnptr_local(fp_name_ptr, fp_name_len, fp_sig_id,
                                     tmp, &cnt);
                 if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }
@@ -3005,6 +3045,8 @@ build_decl(TypeSpec t)
         new_lc->struct_id = (BTYPE(decl_type) == BT_STRUCT)
                             ? t.struct_id : -1;
         new_lc->is_unsigned = t.is_unsigned;   /* A-1 */
+        if (d.fn_sig_id >= 0)                  /* `int (**pp)()' */
+            new_lc->fn_sig_id = d.fn_sig_id;
         new_lc->byte_size = slot_count * 2;
         if (is_array)
             new_lc->array_bytes = (decl_type == LT_STRUCT_ARRAY)
@@ -5040,7 +5082,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
             g_ast[stepn].struct_id = f->struct_id;
             g_ast[stepn].is_unsigned = f->is_unsigned;
             unsig = f->is_unsigned;
-            sig = (f->type == LT_FN_PTR) ? f->fn_sig_id : -1;
+            sig = fnptr_based(f->type) ? f->fn_sig_id : -1;
             cur = f->type;
             cur_sid = f->struct_id;
             /* M19b: `dk = -1' above ended the base's rank, which is right --
@@ -5073,7 +5115,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
     g_ast[head].b = first;
     g_ast[head].type = cur;
     g_ast[head].struct_id = cur_sid;
-    g_ast[head].fn_sig = (cur == LT_FN_PTR) ? sig : -1;
+    g_ast[head].fn_sig = fnptr_based(cur) ? sig : -1;
     /* Carry the LEAF's unsignedness out with the type.  Without this a read
      * routed through the walker silently lost it -- an `unsigned int` member
      * compared with `>` emitted the SIGNED helper (_fcc_gts16 instead of
@@ -8312,19 +8354,19 @@ parse_func_decl_with_spec(TypeSpec ret_t)
             const char *fn_pname_ptr;
             int         fn_pname_len;
             int         fn_psig_id;
-            if (parse_fn_ptr_declarator(pt, &fn_pname_ptr, &fn_pname_len, &fn_psig_id)) {
-                /* An ARRAY of fn-ptrs as a PARAMETER (`int (*g[N])()`) is not
-                 * supported — the array size is dropped and (*g)(..) would call
-                 * the array's address.  Fail loud instead of miscompiling
-                 * (Fable review 2026-07-19; same guard added to the K&R path). */
+            int         fn_pp;
+            if (parse_fn_ptr_declarator(pt, &fn_pname_ptr, &fn_pname_len, &fn_psig_id, &fn_pp)) {
+                /* An ARRAY of fn-ptrs as a PARAMETER (`int (*g[N])()`) is a
+                 * pointer to a function pointer: K&R A.8.6.3, "The types of
+                 * parameters that are arrays or functions are altered to
+                 * pointers".  `(**g)()' is one already. */
                 if (g_fnptr_decl_arr != 0)
-                    die(g_cur.line, g_cur.col,
-                        "array-of-function-pointer parameter not supported");
+                    fn_pp++;
                 params[n_params].ptr  = fn_pname_ptr;
                 params[n_params].len  = fn_pname_len;
                 params[n_params].line = g_cur.line;
                 params[n_params].col  = g_cur.col;
-                params[n_params].type = LT_FN_PTR;
+                params[n_params].type = fnptr_ptr_type(fn_pp);
                 params[n_params].struct_id = -1;
                 params[n_params].fn_sig_id = fn_psig_id;
                 params[n_params].row_stride = 0;
@@ -8478,7 +8520,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         params[n_params].type = param_adjust_type(ptype);
         params[n_params].struct_id =
             (BTYPE(ptype) == BT_STRUCT) ? pt.struct_id : -1;  /* G52: any depth */
-        params[n_params].fn_sig_id = -1;
+        params[n_params].fn_sig_id = fnptr_based(ptype) ? pt.struct_id : -1;
         params[n_params].row_stride = 0;
         params[n_params].is_unsigned = pt.is_unsigned;   /* A-1 */
         n_params++;
@@ -8546,12 +8588,14 @@ parse_func_decl_with_spec(TypeSpec ret_t)
              * buf[]` / plain idents), so fall through to the star/ident logic
              * below on 0.  On match, re-type the named parameter to LT_FN_PTR. */
             {
-                const char *fkp; int fkl, fk_sig;
+                const char *fkp; int fkl, fk_sig, fk_pp;
                 int fkln = g_cur.line, fkcl = g_cur.col;
-                if (parse_fn_ptr_declarator(kt, &fkp, &fkl, &fk_sig)) {
+                if (parse_fn_ptr_declarator(kt, &fkp, &fkl, &fk_sig, &fk_pp)) {
+                    /* An array of fn-ptrs is a pointer to one here (K&R
+                     * A.8.6.3: parameter arrays "are altered to pointers"),
+                     * and `(**pp)()' is one already. */
                     if (g_fnptr_decl_arr != 0)
-                        die(fkln, fkcl,
-                            "array-of-function-pointer parameter not supported");
+                        fk_pp++;
                     if (fkl == 0)
                         die(fkln, fkcl,
                             "K&R function-pointer declaration must name a parameter");
@@ -8559,7 +8603,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                     for (int pi = 0; pi < n_params; pi++) {
                         if (params[pi].len == fkl &&
                             memcmp(params[pi].ptr, fkp, (size_t)fkl) == 0) {
-                            params[pi].type       = LT_FN_PTR;
+                            params[pi].type       = fnptr_ptr_type(fk_pp);
                             params[pi].fn_sig_id  = fk_sig;
                             params[pi].struct_id  = -1;
                             fmatched = 1;
@@ -8600,6 +8644,8 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                     params[pi].struct_id =
                         (BTYPE(kdt) == BT_STRUCT)      /* G52: any depth */
                         ? kt.struct_id : -1;
+                    if (fnptr_based(kdt))              /* a typedef'd `int (**)()' */
+                        params[pi].fn_sig_id = kt.struct_id;
                     params[pi].is_unsigned = kt.is_unsigned;
                     matched = 1;
                     break;
@@ -9384,7 +9430,7 @@ parse_global_decl(TypeSpec t)
          * init-declarator-list are independent declarators sharing only the
          * declaration-specifiers. */
         while (parse_fn_ptr_declarator(t, &fn_name_ptr, &fn_name_len,
-                                       &fn_sig_id)) {
+                                       &fn_sig_id, NULL)) {
             if (g_fnptr_decl_arr != 0) {   /* B-7: array of fn-ptrs (conv_vec) */
                 parse_fnptr_global_array(fn_name_ptr, fn_name_len, fn_sig_id,
                                          g_fnptr_decl_arr, t.is_static, t.is_extern);
@@ -9470,7 +9516,7 @@ parse_global_decl(TypeSpec t)
             int         fp_name_len;
             int         fp_sig_id;
             if (parse_fn_ptr_declarator(t, &fp_name_ptr, &fp_name_len,
-                                        &fp_sig_id)) {
+                                        &fp_sig_id, NULL)) {
                 if (g_fnptr_decl_arr != 0) {
                     parse_fnptr_global_array(fp_name_ptr, fp_name_len, fp_sig_id,
                                              g_fnptr_decl_arr, t.is_static,
@@ -9573,6 +9619,8 @@ parse_global_decl(TypeSpec t)
                                     t.is_extern || tentative_extern);
         g->is_static = t.is_static;
         g->is_unsigned = t.is_unsigned;   /* A-1 */
+        if (d.fn_sig_id >= 0)             /* `int (**pp)()' */
+            g->fn_sig_id = d.fn_sig_id;
         if (decl_type == LT_STRUCT) {
             g->struct_id = t.struct_id;
             g->n_bytes   = (g_structs[t.struct_id].total_size + 1) & ~1;
@@ -10048,13 +10096,14 @@ parse_typedef_def(void)
         const char *td_name_ptr;
         int         td_name_len;
         int         td_sig_id;
-        if (parse_fn_ptr_declarator(t, &td_name_ptr, &td_name_len, &td_sig_id)) {
+        int         td_pp;
+        if (parse_fn_ptr_declarator(t, &td_name_ptr, &td_name_len, &td_sig_id, &td_pp)) {
             expect(TOK_SEMI, "';' after typedef fn-pointer");
             FCC_GROW(g_typedefs, g_n_typedefs, g_typedefs_cap, Typedef);
             Typedef *td = &g_typedefs[g_n_typedefs++];
             int nl = td_name_len < MAX_IDENT - 1 ? td_name_len : MAX_IDENT - 1;
             td->name = lex_intern_ident(td_name_ptr, nl);
-            td->base_type = LT_FN_PTR;
+            td->base_type = fnptr_ptr_type(td_pp);
             td->struct_id = -1;
             td->fn_sig_id = td_sig_id;
             td->n_elems   = 1;
