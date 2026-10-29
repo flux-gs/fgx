@@ -47,8 +47,10 @@ LIB = fgx_libso.LIB
 TC = fgx_libso.TC
 SEG0_EQUS = fgx_static.SEG0_EQUS + [("SYS_LDCTL", "8")]
 CRT0_DYN = os.path.join(LIB, "crt0_dyn.s")
-# Every file link_once and Merlin32 write in a link directory.
-OUTPUT = re.compile(r"^(?:(?:seg[0-8]|seg[2-8]_rt|rt|inits|dyn\.data|prog\.data|imports_layout|"
+# Every file link_once and Merlin32 write in a link directory -- any segment
+# number, since a link that packs more segments than fgx_ld accepts writes them
+# before the refusal, and the rerun has to clear them.
+OUTPUT = re.compile(r"^(?:(?:seg\d+|seg\d+_rt|rt|inits|dyn\.data|prog\.data|imports_layout|"
                     r"dataptr_mac|seg1_layout|pack_rt|rt_data|m\d+|\w+_reach)(?:\.s|\.link\.s|_Output\.txt)?|"
                     r"dyn\.json|shift|move|prog\.bin|error_output\.txt|_FileInformation\.txt)$")
 
@@ -591,6 +593,10 @@ def build(name, d, code, data, out, lib_names, override=None, extra=(), pack=(),
 
 
 def self_test():
+    # A refused over-cap link leaves seg9 behind; it is still this driver's.
+    for nm in ("seg0.s", "seg9", "seg9.link.s", "seg9_Output.txt", "seg10_rt.s"):
+        assert OUTPUT.match(nm), nm
+    assert not OUTPUT.match("notes.txt")
     far = far_helpers()
     assert "_fcc_fdiv" in far and "_fcc_fsub" not in far and len(far) == 9, far
     rows = thunked_runtime(far)
