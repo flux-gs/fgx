@@ -702,5 +702,13 @@
   "longconst": 42,
   "pfdigits": 42,
   "bcopyovl": 42,
-  "dpband": 42
+  "dpband": 42,
+  "asg_unsigned": 42,
+  "bra_next": 42,
+  "ptee_unsigned": 42,
+  "ptr_elem0": 42,
+  "ptr_relbank": 42,
+  "uconst_long": 42,
+  "typedef_pp": 42,
+  "signed_char": 42
 }
