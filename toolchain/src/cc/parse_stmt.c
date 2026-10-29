@@ -853,13 +853,28 @@ emit_lvalue_addr(int head)
 int
 emit_lvalue_addr_off(int head, int *offp)
 {
-    int kd;
-    if (g_ast[head].c >= 0)
+    int kd, s = g_ast[head].b, off = 0;
+    if (g_ast[head].c >= 0) {
         kd = walk_fpr(g_ast[head].c);        /* computed pointer value = pointee addr */
-    else
+    } else if (s >= 0 &&
+               (g_ast[s].kind == N_LV_STEP_ARROW ||
+                g_ast[s].kind == N_LV_STEP_DEREF ||
+                (g_ast[s].kind == N_LV_STEP_INDEX && (g_ast[s].flags & 1)))) {
+        /* A named POINTER whose first step follows it -- `(p)->m', `(*p)',
+         * `(p)[i]': the step's object is at the pointer's VALUE, so load
+         * that rather than taking the variable's address and reading the
+         * pointer back through it.  Shorter, and the variable's address
+         * does not escape, so it can still be held in direct page. */
+        kd = fpr_load_sym(g_ast[head].sym_lc, g_ast[head].sym_gv);
+        if (g_ast[s].kind == N_LV_STEP_ARROW)
+            off = (int)g_ast[s].val;
+        else if (g_ast[s].kind == N_LV_STEP_INDEX)
+            emit_fpr_add_index(kd, g_ast[s].b, g_ast[s].val);
+        s = g_ast[s].a;
+    } else {
         kd = fpr_addr_sym(g_ast[head].sym_lc, g_ast[head].sym_gv);  /* &named var */
-    int off = 0;
-    for (int s = g_ast[head].b; s >= 0; s = g_ast[s].a) {
+    }
+    for (; s >= 0; s = g_ast[s].a) {
         switch (g_ast[s].kind) {
         case N_LV_STEP_DOT:
             off += (int)g_ast[s].val;                       /* same object */

@@ -226,10 +226,12 @@ _arrfield_incdec_L2
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img2
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
                 CLC
                 ADC     #6
                 STA     _fcc_fpr0
@@ -254,9 +256,9 @@ _arrfield_incdec_L2
 _arrfield_incdec_L3
                 LDA     #2
                 STA     _fcc_img1
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img3
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img2
                 INC
                 INC
                 STA     _fcc_fpr0

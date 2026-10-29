@@ -35,20 +35,12 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     #41
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img0]
                 INC
-                STA     [_fcc_fpr0]
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     [_fcc_img0]
+                LDA     [_fcc_img0]
                 INC
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img0]
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0

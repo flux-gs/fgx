@@ -47,11 +47,11 @@ main_stkok        TCS
                 SBC     _fcc_tmp_b
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
                 LDA     #42
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img2]
                 LDA     #1
                 ASL
                 ASL

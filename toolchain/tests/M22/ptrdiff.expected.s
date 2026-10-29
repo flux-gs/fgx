@@ -31,9 +31,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img0
                 LDA     #3
                 ASL
                 ASL
@@ -48,9 +48,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
                 PHA
                 SEP     #$20
                 MX      %10
@@ -63,9 +63,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img4
                 LDA     #3
                 ASL
                 CLC
@@ -82,9 +82,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img7
                 LDA     _fcc_fpr0
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img6
                 PHA
                 SEP     #$20
                 MX      %10
@@ -97,9 +97,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img1
+                STA     _fcc_img9
                 LDA     _fcc_fpr0
-                STA     _fcc_img0
+                STA     _fcc_img8
                 LDA     #5
                 ASL
                 CLC
@@ -113,20 +113,16 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img3
+                STA     _fcc_img11
                 LDA     _fcc_fpr0
-                STA     _fcc_img2
-                LDA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img10
+                LDA     _fcc_img3
                 STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img2
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img0
                 LSR
                 LSR
                 TAX
@@ -143,17 +139,13 @@ main_stkok        TCS
                 TYA
                 RTL
 _ptrdiff_L0
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img7
                 STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img6
                 STA     _fcc_fpr0
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr1+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img4
                 LDX     #6
                 STX     _fcc_tmp_b
                 JSR     _fcc_divs16
@@ -171,17 +163,13 @@ _ptrdiff_L0
                 TYA
                 RTL
 _ptrdiff_L1
-                LDA     _fcc_img3
+                LDA     _fcc_img11
                 STA     _fcc_fpr0+2
-                LDA     _fcc_img2
+                LDA     _fcc_img10
                 STA     _fcc_fpr0
-                LDA     _fcc_img1
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img8
                 LSR
                 TAX
                 CMP     #5

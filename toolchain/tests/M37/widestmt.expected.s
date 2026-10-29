@@ -46,18 +46,18 @@ main_stkok        TCS
                 LDA     #$0003
                 STA     _fcc_long_hi
                 LDA     #$0005
-                STA     _fcc_img1
-                TAY
-                LDA     _fcc_long_hi
-                STA     _fcc_img2
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0002
                 STA     _fcc_img3
                 TAY
                 LDA     _fcc_long_hi
                 STA     _fcc_img4
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0002
+                STA     _fcc_img5
+                TAY
+                LDA     _fcc_long_hi
+                STA     _fcc_img6
                 TYA
                 LDA     ga+2
                 STA     _fcc_long_hi
@@ -67,17 +67,17 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_img2
+                LDA     _fcc_img4
                 STA     _fcc_long_hi
-                LDA     _fcc_img1
+                LDA     _fcc_img3
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_img4
+                LDA     _fcc_img6
                 STA     _fcc_long_hi
-                LDA     _fcc_img3
+                LDA     _fcc_img5
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -388,12 +388,12 @@ _widestmt_L3
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img1
+                LDA     [_fcc_img1]
                 INC
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img1]
                 SEP     #$20
                 MX      %10
                 LDA     cp+2

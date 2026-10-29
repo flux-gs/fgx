@@ -87,12 +87,12 @@ main_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img4
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img3
+                LDA     _fcc_img4
                 STA     _fcc_ptr+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img3
                 PHA
                 LDA     #0
                 ASL

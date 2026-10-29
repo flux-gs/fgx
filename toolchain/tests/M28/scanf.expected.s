@@ -204,9 +204,11 @@ _scanf_mag_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -317,12 +319,9 @@ _scanf_L3
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L2
                 SEP     #$20
                 MX      %10
@@ -399,12 +398,9 @@ _scanf_L5
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L4
                 SEP     #$20
                 MX      %10
@@ -476,12 +472,9 @@ _scanf_L7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L6
                 SEP     #$20
                 MX      %10
@@ -537,12 +530,9 @@ _scanf_L9
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L8
                 SEP     #$20
                 MX      %10
@@ -669,12 +659,9 @@ _scanf_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L10
                 SEP     #$20
                 MX      %10
@@ -780,12 +767,9 @@ _scanf_L13
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L12
                 SEP     #$20
                 MX      %10
@@ -857,12 +841,9 @@ _scanf_L15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L14
                 SEP     #$20
                 MX      %10
@@ -936,12 +917,9 @@ _scanf_L17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L16
                 SEP     #$20
                 MX      %10
@@ -1015,12 +993,9 @@ _scanf_L19
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L18
                 SEP     #$20
                 MX      %10
@@ -1095,12 +1070,9 @@ _scanf_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L20
                 SEP     #$20
                 MX      %10
@@ -1197,12 +1169,9 @@ _scanf_L23
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L22
                 SEP     #$20
                 MX      %10
@@ -1350,12 +1319,9 @@ _scanf_L25
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L24
                 SEP     #$20
                 MX      %10
@@ -1503,12 +1469,9 @@ _scanf_L27
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L26
                 SEP     #$20
                 MX      %10
@@ -1610,12 +1573,9 @@ _scanf_L29
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L28
                 LDA     #99
                 STA     1,S   ; fccstk d=0 b=1
@@ -1671,12 +1631,9 @@ _scanf_L31
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L30
                 SEP     #$20
                 MX      %10
@@ -1729,12 +1686,9 @@ _scanf_L33
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L32
                 SEP     #$20
                 MX      %10
@@ -1766,9 +1720,13 @@ _scanf_L32
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     41,S   ; fccstk d=0 b=41
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     39,S   ; fccstk d=0 b=39
+                STA     _fcc_img16
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -1793,16 +1751,13 @@ _scanf_L36
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L34
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1819,12 +1774,9 @@ _scanf_L34
                 CLC
                 ADC     #8
                 TCS
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -1860,9 +1812,13 @@ _scanf_L34
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     41,S   ; fccstk d=0 b=41
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     39,S   ; fccstk d=0 b=39
+                STA     _fcc_img16
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -1887,12 +1843,9 @@ _scanf_L39
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L37
                 SEP     #$20
                 MX      %10
@@ -1929,12 +1882,9 @@ _scanf_L37
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
-                LDA     53,S   ; fccstk d=12 b=41
-                STA     _fcc_fpr0+2
-                LDA     51,S   ; fccstk d=12 b=39
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fscanf
                 TAY
                 TSC
@@ -2000,29 +1950,22 @@ _scanf_L41
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _scanf_L40
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 DEC
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img16]
                 BMI     _scanf_L43
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img16],Y
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0
@@ -2030,9 +1973,9 @@ _scanf_L40
                 AND     #$00FF
                 BRA     _scanf_L44
 _scanf_L43
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL _filbuf
                 TAY
                 TSC
@@ -2048,12 +1991,9 @@ _scanf_L44
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _scanf_L42
                 SEP     #$20
                 MX      %10
@@ -2078,12 +2018,9 @@ _scanf_L42
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
-                LDA     49,S   ; fccstk d=8 b=41
-                STA     _fcc_fpr0+2
-                LDA     47,S   ; fccstk d=8 b=39
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fscanf
                 TAY
                 TSC
@@ -2097,19 +2034,13 @@ _scanf_L42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _scanf_L45
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -2135,12 +2066,17 @@ _scanf_L45
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     74
+main_FRAMESIZE   EQU     78
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 39

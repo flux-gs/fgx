@@ -217,9 +217,11 @@ below_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -340,12 +342,9 @@ _symfold_L1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L2
                 LDA     tab+16
                 DEC
@@ -380,12 +379,9 @@ _symfold_L4
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L5
                 LDA     #1
                 ASL
@@ -466,12 +462,9 @@ _symfold_L7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L6
                 LDA     tab+16
                 STA     _fcc_tmp_b
@@ -503,12 +496,9 @@ _symfold_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L10
                 LDA     tab+16
                 DEC
@@ -541,12 +531,9 @@ _symfold_L14
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L12
                 LDA     #2
                 ASL
@@ -586,12 +573,9 @@ _symfold_L12
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L15
                 LDA     #255
                 AND     #$00FF
@@ -614,12 +598,9 @@ _symfold_L15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L16
                 LDA     #2
                 ASL
@@ -663,12 +644,9 @@ _symfold_L16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L17
                 LDA     #3
                 PHA
@@ -699,12 +677,9 @@ _symfold_L17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L18
                 LDA     #1
                 ASL
@@ -757,12 +732,9 @@ _symfold_L20
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L21
                 LDA     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -788,12 +760,9 @@ _symfold_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L22
                 LDA     1,S   ; fccstk d=0 b=1
                 CMP     #0
@@ -833,12 +802,9 @@ _symfold_L25
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L23
                 PHA
                 SEP     #$20
@@ -900,12 +866,9 @@ _symfold_L23
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L26
                 PHA
                 SEP     #$20
@@ -962,12 +925,9 @@ _symfold_L26
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L27
                 LDA     #lg
                 PHA
@@ -1019,12 +979,9 @@ _symfold_L27
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _symfold_L28
                 PHA
                 SEP     #$20
@@ -1038,12 +995,11 @@ _symfold_L28
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     7,S   ; fccstk d=0 b=7
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                STA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1078,12 +1034,9 @@ _symfold_L28
                 PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
-                LDA     13,S   ; fccstk d=4 b=9
-                STA     _fcc_fpr0+2
-                LDA     11,S   ; fccstk d=4 b=7
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL below
                 TAY
                 TSC
@@ -1097,12 +1050,9 @@ _symfold_L30
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _symfold_L29
                 LDA     #5
                 SEP     #$20
@@ -1135,23 +1085,25 @@ _symfold_L29
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _symfold_L31
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     10
+main_FRAMESIZE   EQU     14
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 11

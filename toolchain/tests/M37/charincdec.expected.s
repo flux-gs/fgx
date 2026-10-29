@@ -176,9 +176,13 @@ clear_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
+                PEI     _fcc_img19
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-8
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -202,9 +206,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
                 PHA
                 SEP     #$20
                 MX      %10
@@ -217,9 +221,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img18
                 FGX2_FARCALL clear
                 LDA     #0
                 SEP     #$20
@@ -229,9 +233,9 @@ main_stkok        TCS
                 MX      %00
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 INC
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
@@ -320,9 +324,9 @@ _charincdec_L1
                 STA     9,S   ; fccstk d=0 b=9
 _charincdec_L2
                 FGX2_FARCALL clear
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 INC
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
@@ -455,26 +459,9 @@ _charincdec_L4
                 STA     9,S   ; fccstk d=0 b=9
 _charincdec_L5
                 FGX2_FARCALL clear
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img19
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img18
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -889,12 +876,20 @@ _charincdec_L15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-8
                 TCS
+                PLA
+                STA     _fcc_img19
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     18
+main_FRAMESIZE   EQU     26
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 17

@@ -7,9 +7,11 @@
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -158,15 +160,19 @@ _commast_L2
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 STA     9,S   ; fccstk d=0 b=9
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     11,S   ; fccstk d=0 b=11
@@ -188,13 +194,17 @@ _commast_L3
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     14
+main_FRAMESIZE   EQU     18
 main_STKGUARD    EQU     0
                 FGX2_EXPORT xstty
 xstty            ENT

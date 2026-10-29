@@ -31,12 +31,12 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img0
+                LDA     _fcc_img1
                 STA     _fcc_ptr+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 PHA
                 LDA     #1
                 ASL
@@ -52,10 +52,10 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img1
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     _fcc_img0
-                LDA     [_fcc_img0]
+                STA     _fcc_img2
+                LDA     [_fcc_img2]
                 AND     #$00FF
                 TAY
                 TSC

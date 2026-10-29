@@ -33,10 +33,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img2
                 PHA
                 SEP     #$20
                 MX      %10
@@ -50,25 +49,21 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr1
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img2],Y
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #4
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img2],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -86,17 +81,13 @@ main_stkok        TCS
                 AND     #$00FF
                 CMP     #120
                 BNE     _derefparen_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -135,17 +126,13 @@ _derefparen_L2
                 ADC     #2
                 STA     _fcc_img0
 _derefparen_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -172,17 +159,13 @@ _derefparen_L0
                 AND     #$00FF
                 CMP     #121
                 BNE     _derefparen_L3
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -221,17 +204,13 @@ _derefparen_L5
                 ADC     #4
                 STA     _fcc_img0
 _derefparen_L3
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -263,10 +242,7 @@ _derefparen_L3
                 ADC     #8
                 STA     _fcc_img0
 _derefparen_L6
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_img2
                 PHA
                 SEP     #$20
                 MX      %10
@@ -280,12 +256,12 @@ _derefparen_L6
                 PLA
                 LDA     _fcc_fpr1
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img2],Y
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #4
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img2],Y
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr1
@@ -298,17 +274,13 @@ _derefparen_L6
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -353,17 +325,13 @@ _derefparen_L9
                 ADC     #16
                 STA     _fcc_img0
 _derefparen_L7
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img2],Y
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0
@@ -379,17 +347,13 @@ _derefparen_L7
                 AND     #$00FF
                 CMP     #119
                 BNE     _derefparen_L10
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00

@@ -154,15 +154,15 @@ main_stkok        TCS
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img0
+                LDA     [_fcc_img0]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -195,9 +195,9 @@ _dotptr_arrow_store_L2
 _dotptr_arrow_store_L3
                 CMP     #0
                 BEQ     _dotptr_arrow_store_L0
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y

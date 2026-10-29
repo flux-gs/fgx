@@ -7,9 +7,11 @@
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -124,12 +126,11 @@ _libcadds_L0
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                STA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 LDA     #3
                 PHA
                 LDA     #1
@@ -150,12 +151,9 @@ _libcadds_L0
                 CLC
                 ADC     #12
                 TCS
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -205,9 +203,13 @@ _libcadds_L0
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -228,9 +230,9 @@ _libcadds_L3
 _libcadds_L4
                 CMP     #0
                 BEQ     _libcadds_L1
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 LDA     #3
                 PHA
                 LDA     #1
@@ -283,9 +285,9 @@ _libcadds_L2
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L5
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
@@ -307,9 +309,9 @@ _libcadds_L7
 _libcadds_L8
                 CMP     #0
                 BEQ     _libcadds_L6
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -368,9 +370,13 @@ _libcadds_L9
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -391,9 +397,9 @@ _libcadds_L11
 _libcadds_L12
                 CMP     #0
                 BEQ     _libcadds_L10
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 LDA     #1
                 PHA
                 LDA     #1
@@ -414,12 +420,9 @@ _libcadds_L12
                 CLC
                 ADC     #12
                 TCS
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -464,12 +467,11 @@ _libcadds_L13
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                STA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 LDA     #8
                 PHA
                 LDA     #1
@@ -495,12 +497,9 @@ _libcadds_L13
                 TCS
                 TYA
                 STA     11,S   ; fccstk d=0 b=11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -560,12 +559,11 @@ _libcadds_L14
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                STA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fgetc
                 TAY
                 TSC
@@ -577,12 +575,9 @@ _libcadds_L14
                 TAX
                 CMP     #97
                 BNE     _libcadds_L15
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 LDA     #90
                 PHA
                 FGX2_FARCALL ungetc
@@ -595,12 +590,9 @@ _libcadds_L14
                 TAX
                 CMP     #90
                 BNE     _libcadds_L15
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fgetc
                 TAY
                 TSC
@@ -611,12 +603,9 @@ _libcadds_L14
                 TAX
                 CMP     #90
                 BNE     _libcadds_L15
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fgetc
                 TAY
                 TSC
@@ -633,12 +622,9 @@ _libcadds_L14
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L15
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -674,19 +660,16 @@ _libcadds_L15
                 TCS
                 TYA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _libcadds_L16
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fgetc
                 TAY
                 TSC
@@ -698,12 +681,9 @@ _libcadds_L16
                 BMI     _libcadds_L17
                 BRA     _libcadds_L16
 _libcadds_L17
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 LDA     #81
                 PHA
                 FGX2_FARCALL ungetc
@@ -716,12 +696,9 @@ _libcadds_L17
                 TAX
                 CMP     #81
                 BNE     _libcadds_L18
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fgetc
                 TAY
                 TSC
@@ -738,12 +715,9 @@ _libcadds_L17
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L18
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL fclose
                 TSC
                 CLC
@@ -769,12 +743,16 @@ _libcadds_L18
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     12
+main_FRAMESIZE   EQU     16
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 33

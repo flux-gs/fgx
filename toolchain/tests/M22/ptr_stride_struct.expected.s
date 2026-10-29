@@ -31,13 +31,17 @@ bump_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img0
+                LDA     _fcc_img0
                 STA     gr
-                LDA     _fcc_fpr0+2
+                LDA     _fcc_img1
                 STA     gr+2
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 SEC
@@ -56,9 +60,25 @@ bump_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
+                PEI     _fcc_img19
+                PEI     _fcc_img20
+                PEI     _fcc_img21
+                PEI     _fcc_img22
+                PEI     _fcc_img23
+                PEI     _fcc_img24
+                PEI     _fcc_img25
+                PEI     _fcc_img26
+                PEI     _fcc_img27
+                PEI     _fcc_img28
+                PEI     _fcc_img29
+                PEI     _fcc_img30
+                PEI     _fcc_img31
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-32
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -175,9 +195,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
                 PHA
                 SEP     #$20
                 MX      %10
@@ -246,12 +266,9 @@ main_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L0
                 PHA
                 SEP     #$20
@@ -298,12 +315,9 @@ _ptr_stride_struct_L0
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L1
                 PHA
                 SEP     #$20
@@ -350,12 +364,9 @@ _ptr_stride_struct_L1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L2
                 PHA
                 SEP     #$20
@@ -404,12 +415,9 @@ _ptr_stride_struct_L2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L3
                 PHA
                 SEP     #$20
@@ -460,12 +468,9 @@ _ptr_stride_struct_L3
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L4
                 PHA
                 SEP     #$20
@@ -514,12 +519,9 @@ _ptr_stride_struct_L4
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L5
                 PHA
                 SEP     #$20
@@ -566,12 +568,9 @@ _ptr_stride_struct_L5
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L6
                 PHA
                 SEP     #$20
@@ -621,12 +620,9 @@ _ptr_stride_struct_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L7
                 PHA
                 SEP     #$20
@@ -677,12 +673,9 @@ _ptr_stride_struct_L7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L8
                 PHA
                 SEP     #$20
@@ -735,12 +728,9 @@ _ptr_stride_struct_L8
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L9
                 PHA
                 SEP     #$20
@@ -787,12 +777,9 @@ _ptr_stride_struct_L9
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L10
                 PHA
                 SEP     #$20
@@ -817,24 +804,16 @@ _ptr_stride_struct_L10
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 CLC
                 ADC     #4
-                STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     [_fcc_img16]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -848,12 +827,9 @@ _ptr_stride_struct_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L11
                 PHA
                 SEP     #$20
@@ -878,11 +854,7 @@ _ptr_stride_struct_L11
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
                 LDA     #1
                 ASL
@@ -891,17 +863,13 @@ _ptr_stride_struct_L11
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     [_fcc_img16]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -915,12 +883,9 @@ _ptr_stride_struct_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L12
                 PHA
                 SEP     #$20
@@ -945,24 +910,16 @@ _ptr_stride_struct_L12
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 SEC
                 SBC     #4
-                STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     [_fcc_img16]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -976,12 +933,9 @@ _ptr_stride_struct_L12
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L13
                 PHA
                 SEP     #$20
@@ -1006,11 +960,7 @@ _ptr_stride_struct_L13
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
                 LDA     #1
                 ASL
@@ -1019,17 +969,13 @@ _ptr_stride_struct_L13
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     [_fcc_img16]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1043,12 +989,9 @@ _ptr_stride_struct_L13
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L14
                 PHA
                 SEP     #$20
@@ -1073,12 +1016,8 @@ _ptr_stride_struct_L14
                 LDA     _fcc_ptr+2
                 STA     root+10
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 LDA     #2
                 ASL
@@ -1090,18 +1029,14 @@ _ptr_stride_struct_L14
                 CLC
                 ADC     _fcc_tmp_b
                 LDY     #8
-                STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                STA     [_fcc_img16],Y
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1115,12 +1050,9 @@ _ptr_stride_struct_L14
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L15
                 PHA
                 SEP     #$20
@@ -1145,27 +1077,19 @@ _ptr_stride_struct_L15
                 LDA     _fcc_ptr+2
                 STA     root+10
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 CLC
                 ADC     #6
                 LDY     #8
-                STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                STA     [_fcc_img16],Y
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1179,12 +1103,9 @@ _ptr_stride_struct_L15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L16
                 PHA
                 SEP     #$20
@@ -1229,12 +1150,9 @@ _ptr_stride_struct_L16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L17
                 PHA
                 SEP     #$20
@@ -1285,12 +1203,9 @@ _ptr_stride_struct_L17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L18
                 PHA
                 SEP     #$20
@@ -1335,12 +1250,9 @@ _ptr_stride_struct_L18
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L19
                 PHA
                 SEP     #$20
@@ -1365,34 +1277,13 @@ _ptr_stride_struct_L19
                 LDA     _fcc_ptr+2
                 STA     other+2
                 TYA
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1402,17 +1293,13 @@ _ptr_stride_struct_L19
                 CLC
                 ADC     #4
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1437,12 +1324,9 @@ _ptr_stride_struct_L19
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L20
                 PHA
                 SEP     #$20
@@ -1467,34 +1351,13 @@ _ptr_stride_struct_L20
                 LDA     _fcc_ptr+2
                 STA     other+2
                 TYA
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1504,17 +1367,13 @@ _ptr_stride_struct_L20
                 CLC
                 ADC     #4
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1539,12 +1398,9 @@ _ptr_stride_struct_L20
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L21
                 PHA
                 SEP     #$20
@@ -1569,17 +1425,13 @@ _ptr_stride_struct_L21
                 LDA     _fcc_ptr+2
                 STA     other+10
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1598,17 +1450,13 @@ _ptr_stride_struct_L21
                 ADC     _fcc_tmp_b
                 LDY     #8
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1634,12 +1482,9 @@ _ptr_stride_struct_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L22
                 PHA
                 SEP     #$20
@@ -1668,10 +1513,10 @@ _ptr_stride_struct_L22
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img23
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img22
+                LDA     [_fcc_img22]
                 PHA
                 LDA     #1
                 ASL
@@ -1680,7 +1525,7 @@ _ptr_stride_struct_L22
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img22]
                 SEP     #$20
                 MX      %10
                 LDA     gr+2
@@ -1697,12 +1542,9 @@ _ptr_stride_struct_L22
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L23
                 PHA
                 SEP     #$20
@@ -1731,13 +1573,13 @@ _ptr_stride_struct_L23
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img23
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img22
+                LDA     [_fcc_img22]
                 CLC
                 ADC     #4
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img22]
                 SEP     #$20
                 MX      %10
                 LDA     gr+2
@@ -1754,12 +1596,9 @@ _ptr_stride_struct_L23
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L24
                 PHA
                 SEP     #$20
@@ -1788,10 +1627,10 @@ _ptr_stride_struct_L24
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img29
                 LDA     _fcc_fpr0
-                STA     9,S   ; fccstk d=0 b=9
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img28
+                LDA     [_fcc_img28]
                 PHA
                 LDA     #1
                 ASL
@@ -1801,7 +1640,7 @@ _ptr_stride_struct_L24
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img28]
                 SEP     #$20
                 MX      %10
                 LDA     gt+2
@@ -1818,12 +1657,9 @@ _ptr_stride_struct_L24
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L25
                 LDA     #2
                 STA     13,S   ; fccstk d=0 b=13
@@ -1874,12 +1710,9 @@ _ptr_stride_struct_L25
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L26
                 PHA
                 SEP     #$20
@@ -1931,12 +1764,9 @@ _ptr_stride_struct_L26
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L27
                 LDA     #2
                 STA     15,S   ; fccstk d=0 b=15
@@ -1963,11 +1793,7 @@ _ptr_stride_struct_L27
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
                 LDA     17,S   ; fccstk d=2 b=15
                 ASL
@@ -1976,17 +1802,13 @@ _ptr_stride_struct_L27
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     [_fcc_img16]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2000,12 +1822,9 @@ _ptr_stride_struct_L27
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L28
                 PHA
                 SEP     #$20
@@ -2056,12 +1875,9 @@ _ptr_stride_struct_L28
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L29
                 PHA
                 SEP     #$20
@@ -2086,17 +1902,13 @@ _ptr_stride_struct_L29
                 LDA     _fcc_ptr+2
                 STA     other+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2112,17 +1924,13 @@ _ptr_stride_struct_L29
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2147,12 +1955,9 @@ _ptr_stride_struct_L29
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L30
                 PHA
                 SEP     #$20
@@ -2181,10 +1986,10 @@ _ptr_stride_struct_L30
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img31
                 LDA     _fcc_fpr0
-                STA     17,S   ; fccstk d=0 b=17
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img30
+                LDA     [_fcc_img30]
                 PHA
                 LDA     17,S   ; fccstk d=2 b=15
                 ASL
@@ -2193,7 +1998,7 @@ _ptr_stride_struct_L30
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img30]
                 SEP     #$20
                 MX      %10
                 LDA     gr+2
@@ -2210,12 +2015,9 @@ _ptr_stride_struct_L30
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L31
                 PHA
                 SEP     #$20
@@ -2240,12 +2042,8 @@ _ptr_stride_struct_L31
                 LDA     _fcc_ptr+2
                 STA     root+10
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 LDA     17,S   ; fccstk d=2 b=15
                 STA     _fcc_tmp_b
@@ -2258,18 +2056,14 @@ _ptr_stride_struct_L31
                 CLC
                 ADC     _fcc_tmp_b
                 LDY     #8
-                STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                STA     [_fcc_img16],Y
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2283,12 +2077,9 @@ _ptr_stride_struct_L31
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L32
                 LDA     #2
                 STA     21,S   ; fccstk d=0 b=21
@@ -2315,11 +2106,7 @@ _ptr_stride_struct_L32
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
                 LDA     23,S   ; fccstk d=2 b=21
                 ASL
@@ -2328,17 +2115,13 @@ _ptr_stride_struct_L32
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     [_fcc_img16]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2352,12 +2135,9 @@ _ptr_stride_struct_L32
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L33
                 PHA
                 SEP     #$20
@@ -2408,12 +2188,9 @@ _ptr_stride_struct_L33
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L34
                 PHA
                 SEP     #$20
@@ -2438,17 +2215,13 @@ _ptr_stride_struct_L34
                 LDA     _fcc_ptr+2
                 STA     other+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2464,17 +2237,13 @@ _ptr_stride_struct_L34
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2499,12 +2268,9 @@ _ptr_stride_struct_L34
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L35
                 PHA
                 SEP     #$20
@@ -2562,12 +2328,9 @@ _ptr_stride_struct_L35
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L36
                 PHA
                 SEP     #$20
@@ -2592,12 +2355,8 @@ _ptr_stride_struct_L36
                 LDA     _fcc_ptr+2
                 STA     root+10
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 LDA     #1
                 ASL
@@ -2608,18 +2367,14 @@ _ptr_stride_struct_L36
                 SEC
                 SBC     _fcc_tmp_b
                 LDY     #8
-                STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                STA     [_fcc_img16],Y
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -2633,12 +2388,9 @@ _ptr_stride_struct_L36
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L37
                 PHA
                 SEP     #$20
@@ -2706,12 +2458,9 @@ _ptr_stride_struct_L37
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L38
                 PHA
                 SEP     #$20
@@ -2774,12 +2523,9 @@ _ptr_stride_struct_L38
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L39
                 PHA
                 SEP     #$20
@@ -2842,12 +2588,9 @@ _ptr_stride_struct_L39
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L40
                 LDA     #iv
                 PHA
@@ -2995,12 +2738,9 @@ _ptr_stride_struct_L40
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L41
                 PHA
                 SEP     #$20
@@ -3050,12 +2790,9 @@ _ptr_stride_struct_L41
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L42
                 PHA
                 SEP     #$20
@@ -3105,12 +2842,9 @@ _ptr_stride_struct_L42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L43
                 PHA
                 SEP     #$20
@@ -3162,12 +2896,9 @@ _ptr_stride_struct_L43
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L44
                 PHA
                 SEP     #$20
@@ -3192,12 +2923,8 @@ _ptr_stride_struct_L44
                 LDA     _fcc_ptr+2
                 STA     root+14
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #12
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 LDA     29,S   ; fccstk d=2 b=27
                 STA     _fcc_tmp_b
@@ -3208,18 +2935,14 @@ _ptr_stride_struct_L44
                 CLC
                 ADC     _fcc_tmp_b
                 LDY     #12
-                STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                STA     [_fcc_img16],Y
                 LDY     #12
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #14
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -3233,12 +2956,9 @@ _ptr_stride_struct_L44
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L45
                 PHA
                 SEP     #$20
@@ -3263,14 +2983,10 @@ _ptr_stride_struct_L45
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL bump
                 TAY
                 PLA
@@ -3285,16 +3001,12 @@ _ptr_stride_struct_L45
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -3308,12 +3020,9 @@ _ptr_stride_struct_L45
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L46
                 PHA
                 SEP     #$20
@@ -3364,12 +3073,9 @@ _ptr_stride_struct_L46
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L47
                 PHA
                 SEP     #$20
@@ -3394,17 +3100,13 @@ _ptr_stride_struct_L47
                 LDA     _fcc_ptr+2
                 STA     other+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -3428,17 +3130,13 @@ _ptr_stride_struct_L47
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -3463,12 +3161,9 @@ _ptr_stride_struct_L47
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L48
                 LDA     #2
                 STA     29,S   ; fccstk d=0 b=29
@@ -3568,12 +3263,9 @@ _ptr_stride_struct_L48
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L49
                 LDA     #parr
                 PHA
@@ -3671,12 +3363,9 @@ _ptr_stride_struct_L49
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L50
                 LDA     #parr
                 PHA
@@ -3774,12 +3463,9 @@ _ptr_stride_struct_L50
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L51
                 LDA     #tarr
                 PHA
@@ -3878,12 +3564,9 @@ _ptr_stride_struct_L51
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L52
                 LDA     #tarr
                 PHA
@@ -3984,12 +3667,9 @@ _ptr_stride_struct_L52
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L53
                 LDA     #iarr
                 PHA
@@ -4086,12 +3766,9 @@ _ptr_stride_struct_L53
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L54
                 LDA     #iarr
                 PHA
@@ -4188,12 +3865,9 @@ _ptr_stride_struct_L54
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L55
                 PHA
                 SEP     #$20
@@ -4290,12 +3964,9 @@ _ptr_stride_struct_L55
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L56
                 LDA     #1
                 STA     31,S   ; fccstk d=0 b=31
@@ -4322,17 +3993,13 @@ _ptr_stride_struct_L56
                 LDA     _fcc_ptr+2
                 STA     root+10
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4346,10 +4013,13 @@ _ptr_stride_struct_L56
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
-                LDA     _fcc_fpr0
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4382,24 +4052,17 @@ _ptr_stride_struct_L59
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L57
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4413,9 +4076,13 @@ _ptr_stride_struct_L57
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #21
@@ -4424,24 +4091,17 @@ _ptr_stride_struct_L57
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L60
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4457,10 +4117,13 @@ _ptr_stride_struct_L60
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
-                LDA     _fcc_fpr0
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4493,24 +4156,17 @@ _ptr_stride_struct_L63
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L61
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #8
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4525,9 +4181,13 @@ _ptr_stride_struct_L61
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #22
@@ -4536,12 +4196,9 @@ _ptr_stride_struct_L61
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L64
                 PHA
                 SEP     #$20
@@ -4566,16 +4223,12 @@ _ptr_stride_struct_L64
                 LDA     _fcc_ptr+2
                 STA     root+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4588,10 +4241,13 @@ _ptr_stride_struct_L64
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     39,S   ; fccstk d=0 b=39
+                STA     _fcc_img25
                 LDA     _fcc_fpr0
-                STA     37,S   ; fccstk d=0 b=37
-                LDA     _fcc_fpr0
+                STA     _fcc_img24
+                LDA     _fcc_img25
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img24
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4624,23 +4280,16 @@ _ptr_stride_struct_L67
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L65
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4653,9 +4302,13 @@ _ptr_stride_struct_L65
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     39,S   ; fccstk d=0 b=39
+                STA     _fcc_img25
                 LDA     _fcc_fpr0
-                STA     37,S   ; fccstk d=0 b=37
+                STA     _fcc_img24
+                LDA     _fcc_img25
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img24
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #11
@@ -4664,12 +4317,9 @@ _ptr_stride_struct_L65
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L68
                 PHA
                 SEP     #$20
@@ -4694,17 +4344,13 @@ _ptr_stride_struct_L68
                 LDA     _fcc_ptr+2
                 STA     other+10
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4731,10 +4377,13 @@ _ptr_stride_struct_L68
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
-                LDA     _fcc_fpr0
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4767,24 +4416,17 @@ _ptr_stride_struct_L71
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L69
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4811,9 +4453,13 @@ _ptr_stride_struct_L69
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #22
@@ -4822,12 +4468,9 @@ _ptr_stride_struct_L69
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L72
                 PHA
                 SEP     #$20
@@ -4863,10 +4506,13 @@ _ptr_stride_struct_L72
                 ADC     #6
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
-                LDA     _fcc_fpr0
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4899,12 +4545,9 @@ _ptr_stride_struct_L75
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L73
                 SEP     #$20
                 MX      %10
@@ -4924,9 +4567,13 @@ _ptr_stride_struct_L73
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     35,S   ; fccstk d=0 b=35
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     33,S   ; fccstk d=0 b=33
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #21
@@ -4935,12 +4582,9 @@ _ptr_stride_struct_L73
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L76
                 LDA     #2
                 STA     41,S   ; fccstk d=0 b=41
@@ -4967,17 +4611,13 @@ _ptr_stride_struct_L76
                 LDA     _fcc_ptr+2
                 STA     root+14
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #12
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #14
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -4991,10 +4631,13 @@ _ptr_stride_struct_L76
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     45,S   ; fccstk d=0 b=45
+                STA     _fcc_img27
                 LDA     _fcc_fpr0
-                STA     43,S   ; fccstk d=0 b=43
-                LDA     _fcc_fpr0
+                STA     _fcc_img26
+                LDA     _fcc_img27
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img26
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5027,24 +4670,17 @@ _ptr_stride_struct_L79
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L77
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #12
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #14
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -5058,9 +4694,13 @@ _ptr_stride_struct_L77
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     45,S   ; fccstk d=0 b=45
+                STA     _fcc_img27
                 LDA     _fcc_fpr0
-                STA     43,S   ; fccstk d=0 b=43
+                STA     _fcc_img26
+                LDA     _fcc_img27
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img26
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #62
@@ -5069,12 +4709,9 @@ _ptr_stride_struct_L77
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L80
                 LDA     #1
                 STA     47,S   ; fccstk d=0 b=47
@@ -5144,10 +4781,13 @@ _ptr_stride_struct_L80
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     51,S   ; fccstk d=0 b=51
+                STA     _fcc_img21
                 LDA     _fcc_fpr0
-                STA     49,S   ; fccstk d=0 b=49
-                LDA     _fcc_fpr0
+                STA     _fcc_img20
+                LDA     _fcc_img21
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img20
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5180,12 +4820,9 @@ _ptr_stride_struct_L83
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L81
                 SEP     #$20
                 MX      %10
@@ -5217,9 +4854,13 @@ _ptr_stride_struct_L81
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     51,S   ; fccstk d=0 b=51
+                STA     _fcc_img21
                 LDA     _fcc_fpr0
-                STA     49,S   ; fccstk d=0 b=49
+                STA     _fcc_img20
+                LDA     _fcc_img21
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img20
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #21
@@ -5228,12 +4869,9 @@ _ptr_stride_struct_L81
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _ptr_stride_struct_L84
                 PHA
                 SEP     #$20
@@ -5283,10 +4921,13 @@ _ptr_stride_struct_L84
                 ADC     #6
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     51,S   ; fccstk d=0 b=51
+                STA     _fcc_img21
                 LDA     _fcc_fpr0
-                STA     49,S   ; fccstk d=0 b=49
-                LDA     _fcc_fpr0
+                STA     _fcc_img20
+                LDA     _fcc_img21
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img20
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5319,12 +4960,9 @@ _ptr_stride_struct_L87
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _ptr_stride_struct_L85
                 SEP     #$20
                 MX      %10
@@ -5358,9 +4996,13 @@ _ptr_stride_struct_L85
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     51,S   ; fccstk d=0 b=51
+                STA     _fcc_img21
                 LDA     _fcc_fpr0
-                STA     49,S   ; fccstk d=0 b=49
+                STA     _fcc_img20
+                LDA     _fcc_img21
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img20
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #21
@@ -5369,23 +5011,53 @@ _ptr_stride_struct_L85
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _ptr_stride_struct_L88
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-32
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img31
+                PLA
+                STA     _fcc_img30
+                PLA
+                STA     _fcc_img29
+                PLA
+                STA     _fcc_img28
+                PLA
+                STA     _fcc_img27
+                PLA
+                STA     _fcc_img26
+                PLA
+                STA     _fcc_img25
+                PLA
+                STA     _fcc_img24
+                PLA
+                STA     _fcc_img23
+                PLA
+                STA     _fcc_img22
+                PLA
+                STA     _fcc_img21
+                PLA
+                STA     _fcc_img20
+                PLA
+                STA     _fcc_img19
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     84
+main_FRAMESIZE   EQU     116
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 6

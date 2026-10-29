@@ -67,26 +67,18 @@ _gptr_heap_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
-                LDA     _fcc_img5
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img4
-                STA     _fcc_fpr1
-                LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img0
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_fpr1+2
+                LDA     _fcc_img5
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr1
+                LDA     _fcc_img4
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -204,10 +196,6 @@ parse_stkok        TCS
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
                 STA     _fcc_img0
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     zero+2
@@ -216,10 +204,10 @@ parse_stkok        TCS
                 MX      %00
                 LDA     zero
                 STA     _fcc_fpr1
-                LDA     _fcc_fpr0+2
+                LDA     _fcc_img1
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img0
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -240,10 +228,7 @@ parse_stkok        TCS
                 JSR     _fcc_long_ltu
                 CMP     #0
                 BNE     _gptr_heap_L3
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img0
-                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     dol+2
@@ -252,10 +237,10 @@ parse_stkok        TCS
                 MX      %00
                 LDA     dol
                 STA     _fcc_fpr1
-                LDA     _fcc_fpr0+2
+                LDA     _fcc_img1
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img0
                 TAY
                 LDA     _fcc_long_hi
                 PHA

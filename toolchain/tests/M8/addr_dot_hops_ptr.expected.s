@@ -149,9 +149,9 @@ main_stkok        TCS
                 ADC     #36
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img0
                 SEP     #$20
                 MX      %10
                 LDA     _addr_dot_hops_ptr_G+4
@@ -163,43 +163,31 @@ main_stkok        TCS
                 ADC     #18
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     11,S   ; fccstk d=0 b=11
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
+                STA     _fcc_img2
                 LDY     #16
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 INC
                 LDY     #16
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 LDY     #16
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 PHA
-                LDA     15,S   ; fccstk d=2 b=13
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=2 b=11
-                STA     _fcc_fpr0
                 LDY     #16
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img2],Y
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                LDA     11,S   ; fccstk d=2 b=9
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=2 b=7
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
-                LDA     15,S   ; fccstk d=2 b=13
-                STA     _fcc_fpr1+2
-                LDA     13,S   ; fccstk d=2 b=11
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img2
                 LDX     #18
                 STX     _fcc_tmp_b
                 JSR     _fcc_divs16

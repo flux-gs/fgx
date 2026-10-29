@@ -35,26 +35,18 @@ f_stkok        TCS
                 LDA     _fcc_fpr0
                 STA     _fcc_img0
                 LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img0
                 STA     _fcc_img2
                 TAY
                 LDA     _fcc_long_hi
                 STA     _fcc_img3
                 TYA
                 LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img0
                 STA     g
                 TAY
                 LDA     _fcc_long_hi

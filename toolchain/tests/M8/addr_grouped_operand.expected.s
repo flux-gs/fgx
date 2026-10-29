@@ -152,9 +152,9 @@ main_stkok        TCS
                 ADC     #12
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img4
                 LDA     _fcc_fpr0
-                STA     17,S   ; fccstk d=0 b=17
+                STA     _fcc_img3
                 LDA     _fcc_img2
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img1
@@ -191,11 +191,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                LDA     21,S   ; fccstk d=2 b=19
-                STA     _fcc_fpr0+2
-                LDA     19,S   ; fccstk d=2 b=17
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img3]
                 STA     _fcc_tmp_b
                 PLA
                 CLC

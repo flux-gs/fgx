@@ -49,11 +49,15 @@ main_stkok        TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img0
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

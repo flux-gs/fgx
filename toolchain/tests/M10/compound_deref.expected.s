@@ -35,14 +35,10 @@ main_stkok        TCS
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
                 STA     _fcc_img0
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img0]
                 CLC
                 ADC     #14
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img0]
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0

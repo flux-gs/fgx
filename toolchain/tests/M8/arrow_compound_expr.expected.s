@@ -30,9 +30,9 @@ main_stkok        TCS
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img0
                 LDA     #10
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #41
@@ -48,40 +48,28 @@ main_stkok        TCS
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_long_hi
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
-                LDA     [_fcc_fpr1]
+                LDA     [_fcc_img0]
                 TAX
                 SEC
                 SBC     #4
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img0]
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDA     _fcc_long_hi
                 STA     _fcc_long_b_hi
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 STA     _fcc_long_hi
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 JSR     _fcc_long_add
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #4
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 TXA
                 LDA     #$FFFF
                 JSR     _fcc_long_from_int
@@ -89,47 +77,35 @@ main_stkok        TCS
                 LDA     _fcc_long_hi
                 STA     _fcc_long_b_hi
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 STA     _fcc_long_hi
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 JSR     _fcc_long_add
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
                 LDY     #8
-                LDA     [_fcc_fpr1],Y
+                LDA     [_fcc_img0],Y
                 STA     _fcc_long_hi
                 LDY     #6
-                LDA     [_fcc_fpr1],Y
+                LDA     [_fcc_img0],Y
                 LDX     #16954
                 STX     _fcc_long_b_lo
                 LDX     #15
                 STX     _fcc_long_b_hi
                 JSR     _fcc_long_sub
                 LDY     #6
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #8
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img0]
                 PHA
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 STA     _fcc_long_hi
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -157,9 +133,9 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=4 b=1
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y

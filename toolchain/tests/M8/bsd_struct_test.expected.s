@@ -19,17 +19,6 @@ set_point_stkovf       JMP     _fcc_stkoflow
 set_point_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+set_point_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+set_point_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+set_point_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      6+set_point_FRAMESIZE/256
                 TSC
                 CLC
@@ -40,7 +29,19 @@ set_point_stkok        TCS
                 ELSE
                 LDA     6+set_point_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                STA     _fcc_fpr0
+                STA     _fcc_img0
+                DO      8+set_point_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+set_point_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+set_point_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                LDA     _fcc_img0
                 DO      10+set_point_FRAMESIZE/256
                 TSC
                 CLC
@@ -51,8 +52,8 @@ set_point_stkok        TCS
                 ELSE
                 LDA     10+set_point_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                STA     [_fcc_fpr0]
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0]
+                LDA     _fcc_img0
                 DO      12+set_point_FRAMESIZE/256
                 TSC
                 CLC
@@ -64,8 +65,11 @@ set_point_stkok        TCS
                 LDA     12+set_point_FRAMESIZE,S   ; fccstk d=0 b=12 fs
                 FIN
                 LDY     #2
-                STA     [_fcc_fpr0],Y
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0],Y
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 DO      14+set_point_FRAMESIZE/256
                 TSC
                 CLC
@@ -120,6 +124,28 @@ sum_xys_stkok        TCS
                 LDA     10+sum_xys_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_img2
+                DO      6+sum_xys_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+sum_xys_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+sum_xys_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                STA     _fcc_img3
+                DO      8+sum_xys_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+sum_xys_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+sum_xys_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img4
                 LDA     #0
                 STA     _fcc_img1
                 LDA     #0
@@ -138,31 +164,12 @@ _bsd_struct_test_L0
                 BVC     _bsd_struct_test_L2
                 EOR     #$8000
 _bsd_struct_test_L2
-                BMI     *+5
-                BRL     _bsd_struct_test_L1
+                BPL     _bsd_struct_test_L1
                 LDA     _fcc_img1
                 PHA
-                DO      10+sum_xys_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+sum_xys_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+sum_xys_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                DO      8+sum_xys_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+sum_xys_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+sum_xys_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
+                LDA     _fcc_img3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
@@ -179,27 +186,9 @@ _bsd_struct_test_L2
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      10+sum_xys_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+sum_xys_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+sum_xys_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                DO      8+sum_xys_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+sum_xys_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+sum_xys_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
+                LDA     _fcc_img3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
@@ -222,7 +211,7 @@ _bsd_struct_test_L2
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _bsd_struct_test_L0
+                BRA     _bsd_struct_test_L0
 _bsd_struct_test_L1
                 LDA     _fcc_img1
                 TAY

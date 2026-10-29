@@ -221,9 +221,17 @@ _addrarrowdot_clear_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
+                PEI     _fcc_img19
+                PEI     _fcc_img20
+                PEI     _fcc_img21
+                PEI     _fcc_img22
+                PEI     _fcc_img23
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-16
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -247,9 +255,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
                 PHA
                 SEP     #$20
                 MX      %10
@@ -262,38 +270,24 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img21
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img20
                 FGX2_FARCALL _addrarrowdot_clear
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img23
                 LDA     _fcc_fpr0
-                STA     9,S   ; fccstk d=0 b=9
-                LDA     _fcc_fpr0
+                STA     _fcc_img22
+                LDA     _fcc_img23
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img22
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -327,11 +321,11 @@ _addrarrowdot_L10
                 STA     _fcc_long_hi
                 LDA     #$3344
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img22],Y
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #4
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img22],Y
                 TXA
                 LDA     gt+8
                 STA     _fcc_long_hi
@@ -383,26 +377,9 @@ _addrarrowdot_L10
 _addrarrowdot_L11
 _addrarrowdot_L8
                 FGX2_FARCALL _addrarrowdot_clear
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #12
                 STA     _fcc_fpr0
@@ -474,34 +451,20 @@ _addrarrowdot_L14
 _addrarrowdot_L15
 _addrarrowdot_L12
                 FGX2_FARCALL _addrarrowdot_clear
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #6
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     13,S   ; fccstk d=0 b=13
-                LDA     _fcc_fpr0
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -533,11 +496,11 @@ _addrarrowdot_L18
                 LDA     #$7EED
                 STA     _fcc_long_hi
                 LDA     #$BEEF
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img18]
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img18],Y
                 TXA
                 LDA     gt+8
                 STA     _fcc_long_hi
@@ -571,26 +534,9 @@ _addrarrowdot_L16
                 FGX2_FARCALL _addrarrowdot_clear
                 LDA     #2
                 STA     27,S   ; fccstk d=0 b=27
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #14
                 STA     _fcc_fpr0
@@ -669,26 +615,9 @@ _addrarrowdot_L20
                 FGX2_FARCALL _addrarrowdot_clear
                 LDA     #1
                 STA     25,S   ; fccstk d=0 b=25
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #22
                 STA     _fcc_fpr0
@@ -778,26 +707,9 @@ _addrarrowdot_L24
                 FGX2_FARCALL _addrarrowdot_clear
                 LDA     #2
                 STA     25,S   ; fccstk d=0 b=25
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #22
                 STA     _fcc_fpr0
@@ -815,10 +727,13 @@ _addrarrowdot_L24
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img19
                 LDA     _fcc_fpr0
-                STA     13,S   ; fccstk d=0 b=13
-                LDA     _fcc_fpr0
+                STA     _fcc_img18
+                LDA     _fcc_img19
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img18
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -850,11 +765,11 @@ _addrarrowdot_L30
                 LDA     #$0123
                 STA     _fcc_long_hi
                 LDA     #$FEDC
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img18]
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img18],Y
                 TXA
                 LDA     gt+64
                 STA     _fcc_long_hi
@@ -886,34 +801,13 @@ _addrarrowdot_L30
 _addrarrowdot_L31
 _addrarrowdot_L28
                 FGX2_FARCALL _addrarrowdot_clear
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img20],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img20],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -984,34 +878,13 @@ _addrarrowdot_L34
 _addrarrowdot_L35
 _addrarrowdot_L32
                 FGX2_FARCALL _addrarrowdot_clear
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img20],Y
                 PHA
                 SEP     #$20
                 MX      %10
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img20],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
@@ -1078,26 +951,9 @@ _addrarrowdot_L38
 _addrarrowdot_L39
 _addrarrowdot_L36
                 FGX2_FARCALL _addrarrowdot_clear
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img21
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img20
                 CLC
                 ADC     #16
                 STA     _fcc_fpr0
@@ -1332,12 +1188,28 @@ _addrarrowdot_L47
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-16
                 TCS
+                PLA
+                STA     _fcc_img23
+                PLA
+                STA     _fcc_img22
+                PLA
+                STA     _fcc_img21
+                PLA
+                STA     _fcc_img20
+                PLA
+                STA     _fcc_img19
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     30
+main_FRAMESIZE   EQU     46
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 14

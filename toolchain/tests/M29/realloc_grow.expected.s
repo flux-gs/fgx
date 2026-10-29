@@ -131,12 +131,9 @@ _realloc_grow_L5
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_img17
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img16
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL realloc
                 TAY
                 TSC
@@ -330,12 +327,9 @@ _realloc_grow_L21
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_img17
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img16
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL realloc
                 TAY
                 TSC
@@ -425,12 +419,9 @@ _realloc_grow_L28
                 INC     _fcc_img18
                 BRA     _realloc_grow_L27
 _realloc_grow_L29
-                LDA     _fcc_img17
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img16
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL free
                 TSC
                 CLC
@@ -597,12 +588,9 @@ _realloc_grow_L35
                 TCS
                 BRA     main_bandx
 _realloc_grow_L36
-                LDA     _fcc_img17
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img16
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 FGX2_FARCALL free
                 TSC
                 CLC

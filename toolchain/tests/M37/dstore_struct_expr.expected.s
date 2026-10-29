@@ -45,10 +45,13 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img1
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -98,9 +101,9 @@ _dstore_struct_expr_L0
                 ADC     #14
                 STA     _fcc_img0
 _dstore_struct_expr_L1
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -140,9 +143,9 @@ _dstore_struct_expr_L2
                 ADC     #14
                 STA     _fcc_img0
 _dstore_struct_expr_L3
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10

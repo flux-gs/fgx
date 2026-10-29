@@ -64,9 +64,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img4
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -129,11 +129,7 @@ main_stkok        TCS
                 TYA
                 RTL
 _addr_member_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
-                LDA     [_fcc_fpr1]
+                LDA     [_fcc_img4]
                 CLC
                 ADC     #gb+2
                 STA     _fcc_fpr0
@@ -271,12 +267,12 @@ _addr_member_L3
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img5
+                STA     _fcc_img7
                 LDA     _fcc_fpr0
-                STA     _fcc_img4
-                LDA     _fcc_img5
+                STA     _fcc_img6
+                LDA     _fcc_img7
                 STA     _fcc_fpr0+2
-                LDA     _fcc_img4
+                LDA     _fcc_img6
                 STA     _fcc_fpr0
                 LDA     #40
                 STA     [_fcc_fpr0]

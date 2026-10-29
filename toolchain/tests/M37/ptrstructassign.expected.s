@@ -109,9 +109,9 @@ _ptrstructassign_L1
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img0
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -123,9 +123,9 @@ _ptrstructassign_L1
                 ADC     #44
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
                 LDA     #0
                 STA     45,S   ; fccstk d=0 b=45
                 LDA     #0
@@ -156,13 +156,13 @@ _ptrstructassign_L1
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_ptr+2
                 STA     53,S   ; fccstk d=0 b=53
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img3
                 STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img2
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 STA     _fcc_fpr1
                 LDY     #8
 _ptrstructassign_L2
@@ -314,10 +314,13 @@ _ptrstructassign_L7
                 ADC     #34
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img0
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -471,10 +474,13 @@ _ptrstructassign_L15
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     17,S   ; fccstk d=0 b=17
-                LDA     _fcc_fpr0
+                STA     _fcc_img4
+                LDA     _fcc_img5
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img4
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -560,10 +566,13 @@ _ptrstructassign_L21
                 ADC     #20
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     25,S   ; fccstk d=0 b=25
+                STA     _fcc_img7
                 LDA     _fcc_fpr0
-                STA     23,S   ; fccstk d=0 b=23
-                LDA     _fcc_fpr0
+                STA     _fcc_img6
+                LDA     _fcc_img7
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img6
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1450,9 +1459,9 @@ _ptrstructassign_L46
                 ADC     #34
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1464,9 +1473,9 @@ _ptrstructassign_L46
                 STA     _fcc_fpr0
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 STA     _fcc_fpr1
                 LDY     #8
 _ptrstructassign_L49

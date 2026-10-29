@@ -48,9 +48,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img7
                 LDA     _fcc_fpr0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img6
                 LDA     #0
                 STA     _fcc_img2
                 LDA     #0
@@ -73,14 +73,10 @@ _charasgval_L0
                 BNE     _charasgval_L1
                 INC     _fcc_img0
 _charasgval_L1
-                LDA     _fcc_img5
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img4
-                STA     _fcc_fpr0
                 LDA     _fcc_img1
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img4]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -110,9 +106,9 @@ _charasgval_L2
                 BNE     _charasgval_L3
                 INC     _fcc_img0
 _charasgval_L3
-                LDA     9,S   ; fccstk d=0 b=9
+                LDA     _fcc_img7
                 STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img6
                 STA     _fcc_fpr0
                 LDA     _fcc_img1
                 SEP     #$20

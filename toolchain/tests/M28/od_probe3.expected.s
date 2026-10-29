@@ -19,17 +19,6 @@ getput_stkovf       JMP     _fcc_stkoflow
 getput_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      12+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+getput_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      10+getput_FRAMESIZE/256
                 TSC
                 CLC
@@ -40,16 +29,31 @@ getput_stkok        TCS
                 ELSE
                 LDA     10+getput_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img0
+                DO      12+getput_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #12+getput_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     12+getput_FRAMESIZE,S   ; fccstk d=0 b=12 fs
+                FIN
+                STA     _fcc_img1
+                LDA     [_fcc_img0]
                 PHA
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -82,17 +86,6 @@ setit_stkovf       JMP     _fcc_stkoflow
 setit_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      6+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -103,7 +96,19 @@ setit_stkok        TCS
                 ELSE
                 LDA     6+setit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                STA     _fcc_fpr0
+                STA     _fcc_img0
+                DO      8+setit_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+setit_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                LDA     _fcc_img0
                 DO      10+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -114,8 +119,8 @@ setit_stkok        TCS
                 ELSE
                 LDA     10+setit_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                STA     [_fcc_fpr0]
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0]
+                LDA     _fcc_img0
                 DO      12+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -127,8 +132,8 @@ setit_stkok        TCS
                 LDA     12+setit_FRAMESIZE,S   ; fccstk d=0 b=12 fs
                 FIN
                 LDY     #2
-                STA     [_fcc_fpr0],Y
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0],Y
+                LDA     _fcc_img0
                 DO      14+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -140,8 +145,11 @@ setit_stkok        TCS
                 LDA     14+setit_FRAMESIZE,S   ; fccstk d=0 b=14 fs
                 FIN
                 LDY     #4
-                STA     [_fcc_fpr0],Y
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0],Y
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 DO      16+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -168,9 +176,11 @@ setit_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -214,12 +224,9 @@ main_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _od_probe3_L0
                 LDA     a+2
                 TAX
@@ -229,12 +236,9 @@ _od_probe3_L0
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _od_probe3_L1
                 LDA     a+4
                 TAX
@@ -244,12 +248,9 @@ _od_probe3_L1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _od_probe3_L2
                 LDA     a+10
                 BEQ     _od_probe3_L3
@@ -257,12 +258,9 @@ _od_probe3_L2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _od_probe3_L3
                 PHA
                 SEP     #$20
@@ -365,10 +363,13 @@ _od_probe3_L3
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     _fcc_fpr0
+                STA     _fcc_img16
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -401,13 +402,14 @@ _od_probe3_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _od_probe3_L4
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #6
@@ -416,13 +418,14 @@ _od_probe3_L4
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _od_probe3_L7
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -432,15 +435,12 @@ _od_probe3_L7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _od_probe3_L8
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 ASL
                 ASL
                 TAX
@@ -457,12 +457,9 @@ _od_probe3_L8
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -505,23 +502,25 @@ _od_probe3_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _od_probe3_L9
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     14
+main_FRAMESIZE   EQU     18
 main_STKGUARD    EQU     1
                 FGX2_RELOC_COUNT 5

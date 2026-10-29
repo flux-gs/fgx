@@ -19,17 +19,6 @@ nullslot_stkovf       JMP     _fcc_stkoflow
 nullslot_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+nullslot_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+nullslot_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+nullslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_ptr+2
                 DO      6+nullslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -40,6 +29,20 @@ nullslot_stkok        TCS
                 ELSE
                 LDA     6+nullslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_img0
+                DO      8+nullslot_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+nullslot_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+nullslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                STA     _fcc_ptr+2
+                LDA     _fcc_img0
                 PHA
                 DO      12+nullslot_FRAMESIZE/256
                 TSC
@@ -82,28 +85,9 @@ nullslot_stkok        TCS
                 MX      %00
                 PLA
                 PLA
-                LDA     _fcc_tmp_b
-                DO      8+nullslot_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+nullslot_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+nullslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img1
                 STA     _fcc_ptr+2
-                DO      6+nullslot_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+nullslot_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+nullslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img0
                 PHA
                 LDA     #0
                 ASL
@@ -139,27 +123,9 @@ _tar_ctor_L3
                 CMP     #0
                 BNE     *+5
                 BRL     _tar_ctor_L0
-                DO      8+nullslot_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+nullslot_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+nullslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img1
                 STA     _fcc_ptr+2
-                DO      6+nullslot_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+nullslot_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+nullslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img0
                 PHA
                 LDA     #1
                 ASL
@@ -194,27 +160,9 @@ _tar_ctor_L4
 _tar_ctor_L5
                 CMP     #0
                 BEQ     _tar_ctor_L0
-                DO      8+nullslot_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+nullslot_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+nullslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img1
                 STA     _fcc_ptr+2
-                DO      6+nullslot_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+nullslot_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+nullslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img0
                 PHA
                 LDA     #3
                 ASL
@@ -357,10 +305,6 @@ _tar_ctor_L11
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img17
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img16
-                STA     _fcc_fpr0
                 LDA     #8
                 CLC
                 ADC     #blk+4
@@ -372,10 +316,10 @@ _tar_ctor_L11
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0+2
+                LDA     _fcc_img17
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img16
                 TAY
                 LDA     _fcc_long_hi
                 PHA

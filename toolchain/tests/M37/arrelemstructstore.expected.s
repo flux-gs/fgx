@@ -254,17 +254,6 @@ _arrelemstructstore_landed_stkovf       JMP     _fcc_stkoflow
 _arrelemstructstore_landed_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+_arrelemstructstore_landed_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_arrelemstructstore_landed_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_arrelemstructstore_landed_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      6+_arrelemstructstore_landed_FRAMESIZE/256
                 TSC
                 CLC
@@ -275,6 +264,20 @@ _arrelemstructstore_landed_stkok        TCS
                 ELSE
                 LDA     6+_arrelemstructstore_landed_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_img0
+                DO      8+_arrelemstructstore_landed_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+_arrelemstructstore_landed_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+_arrelemstructstore_landed_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -291,6 +294,10 @@ _arrelemstructstore_landed_stkok        TCS
                 TYA
                 RTL
 _arrelemstructstore_L4
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -314,27 +321,9 @@ _arrelemstructstore_L4
                 TYA
                 RTL
 _arrelemstructstore_L5
-                DO      8+_arrelemstructstore_landed_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_arrelemstructstore_landed_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_arrelemstructstore_landed_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                DO      6+_arrelemstructstore_landed_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_arrelemstructstore_landed_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_arrelemstructstore_landed_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y

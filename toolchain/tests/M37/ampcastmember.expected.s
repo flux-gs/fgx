@@ -67,33 +67,21 @@ main_stkok        TCS
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img7
                 LDA     _fcc_fpr0
-                STA     9,S   ; fccstk d=0 b=9
-                LDA     _fcc_img3
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img2
-                STA     _fcc_fpr0
+                STA     _fcc_img6
                 LDA     #11
-                STA     [_fcc_fpr0]
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
+                STA     [_fcc_img2]
                 LDA     #22
-                STA     [_fcc_fpr0]
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
+                STA     [_fcc_img0]
                 LDA     #$0005
                 STA     _fcc_long_hi
                 LDA     #$1615
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img6]
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img6],Y
                 TXA
                 PHA
                 SEP     #$20
@@ -107,9 +95,13 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img4
+                LDA     _fcc_img5
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img4
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #11
@@ -125,6 +117,10 @@ main_stkok        TCS
                 TYA
                 RTL
 _ampcastmember_L0
+                LDA     _fcc_img5
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img4
+                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -141,6 +137,10 @@ _ampcastmember_L0
                 TYA
                 RTL
 _ampcastmember_L1
+                LDA     _fcc_img5
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img4
+                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -204,13 +204,9 @@ _ampcastmember_L3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
-                LDA     _fcc_img3
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img2
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img2
                 TAX
                 CMP     #2
                 BEQ     _ampcastmember_L6
@@ -225,17 +221,13 @@ _ampcastmember_L3
                 TYA
                 RTL
 _ampcastmember_L6
-                LDA     11,S   ; fccstk d=0 b=11
+                LDA     _fcc_img7
                 STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
+                LDA     _fcc_img6
                 STA     _fcc_fpr0
-                LDA     _fcc_img3
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img2
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img2
                 TAX
                 CMP     #4
                 BEQ     _ampcastmember_L7
@@ -260,15 +252,11 @@ _ampcastmember_L7
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
                 STA     _fcc_img0
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
                 LDA     #99
-                STA     [_fcc_fpr0]
-                LDA     15,S   ; fccstk d=0 b=15
+                STA     [_fcc_img0]
+                LDA     _fcc_img5
                 STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img4
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
@@ -337,10 +325,10 @@ _ampcastmember_L9
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img5
+                STA     _fcc_img9
                 LDA     _fcc_fpr0
-                STA     _fcc_img4
-                LDA     [_fcc_img4]
+                STA     _fcc_img8
+                LDA     [_fcc_img8]
                 AND     #$00FF
                 TAX
                 CMP     #77

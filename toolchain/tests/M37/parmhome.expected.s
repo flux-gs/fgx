@@ -123,9 +123,11 @@ kinds            ENT
                 PEI     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img18
+                PEI     _fcc_img19
+                PEI     _fcc_img20
                 TSC
                 SEC
-                SBC     #kinds_FRAMESIZE-6
+                SBC     #kinds_FRAMESIZE-10
                 DO      kinds_STKGUARD
                 BCC     kinds_stkovf
                 CMP     _fcc_stkfloor
@@ -227,8 +229,12 @@ kinds_stkok        TCS
                 STA     _fcc_img16
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_img17
-                LDA     #0
+                LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_img18
+                LDA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img19
+                LDA     #0
+                STA     _fcc_img20
                 LDA     #1
                 PHA
                 SEP     #$20
@@ -271,7 +277,7 @@ _parmhome_L1
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE-6
+                ADC     #kinds_FRAMESIZE-10
                 TCS
                 BRL     kinds_bandx
 _parmhome_L0
@@ -339,7 +345,7 @@ _parmhome_L3
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE-6
+                ADC     #kinds_FRAMESIZE-10
                 TCS
                 BRL     kinds_bandx
 _parmhome_L2
@@ -350,7 +356,7 @@ _parmhome_L4
                 LDA     [_fcc_img16]
                 AND     #$00FF
                 BEQ     _parmhome_L5
-                LDA     _fcc_img18
+                LDA     _fcc_img20
                 PHA
                 LDA     [_fcc_img16]
                 INC     _fcc_img16
@@ -359,10 +365,10 @@ _parmhome_L4
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     _fcc_img18
+                STA     _fcc_img20
                 BRA     _parmhome_L4
 _parmhome_L5
-                LDA     _fcc_img18
+                LDA     _fcc_img20
                 TAX
                 LDA     #97
                 TAY
@@ -392,7 +398,7 @@ _parmhome_L7
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE-6
+                ADC     #kinds_FRAMESIZE-10
                 TCS
                 BRL     kinds_bandx
 _parmhome_L6
@@ -400,19 +406,19 @@ _parmhome_L8
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img19
                 STA     _fcc_ptr+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img18
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 DEC
                 STA     [_fcc_ptr]
                 BMI     _parmhome_L9
-                LDA     _fcc_img18
+                LDA     _fcc_img20
                 PHA
-                LDA     17,S   ; fccstk d=2 b=15
+                LDA     _fcc_img19
                 STA     _fcc_ptr+2
-                LDA     15,S   ; fccstk d=2 b=13
+                LDA     _fcc_img18
                 INC
                 INC
                 STA     _fcc_ptr
@@ -437,10 +443,10 @@ _parmhome_L8
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     _fcc_img18
+                STA     _fcc_img20
                 BRA     _parmhome_L8
 _parmhome_L9
-                LDA     _fcc_img18
+                LDA     _fcc_img20
                 TAX
                 LDA     #97
                 TAY
@@ -459,9 +465,9 @@ _parmhome_L9
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     _parmhome_L11
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img19
                 STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img18
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #$FFFF
@@ -471,14 +477,16 @@ _parmhome_L11
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE-6
+                ADC     #kinds_FRAMESIZE-10
                 TCS
                 BRA     kinds_bandx
 _parmhome_L10
                 LDA     #0
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img18
+                TAY
                 LDA     #0
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img19
+                TYA
                 LDA     #3
                 PHA
                 SEP     #$20
@@ -498,9 +506,9 @@ _parmhome_L10
                 CLC
                 ADC     #6
                 TCS
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img19
                 STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img18
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
@@ -530,9 +538,13 @@ _parmhome_L13
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE-6
+                ADC     #kinds_FRAMESIZE-10
                 TCS
 kinds_bandx
+                PLA
+                STA     _fcc_img20
+                PLA
+                STA     _fcc_img19
                 PLA
                 STA     _fcc_img18
                 PLA
@@ -543,7 +555,7 @@ kinds_bandx
                 STA     _fcc_fb
                 TYA
                 RTL
-kinds_FRAMESIZE   EQU     324
+kinds_FRAMESIZE   EQU     328
 kinds_STKGUARD    EQU     1
                 FGX2_EXPORT addr
 addr            ENT

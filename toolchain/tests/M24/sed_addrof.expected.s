@@ -37,12 +37,12 @@ main_stkok        TCS
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img0
                 LDA     #9
                 LDY     #10
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 SEP     #$20
                 MX      %10
                 LDA     p+2
@@ -54,15 +54,11 @@ main_stkok        TCS
                 ADC     #10
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img1
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     _fcc_img0
-                LDA     _fcc_img1
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr0
+                STA     _fcc_img2
                 LDA     #4
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img2]
                 SEP     #$20
                 MX      %10
                 LDA     gpp+2

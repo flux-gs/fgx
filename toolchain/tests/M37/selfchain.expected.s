@@ -187,9 +187,13 @@ _selfchain_L7
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
+                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -207,9 +211,9 @@ _selfchain_L7
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img2
                 STA     _fcc_fpr1+2
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
@@ -241,9 +245,9 @@ _selfchain_L10
                 TYA
                 RTL
 _selfchain_L8
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDA     #1
                 ASL
@@ -262,6 +266,10 @@ _selfchain_L8
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                LDA     _fcc_img2
+                STA     _fcc_fpr1+2
+                LDA     _fcc_img1
+                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BNE     _selfchain_L12
@@ -292,9 +300,9 @@ _selfchain_L13
                 TYA
                 RTL
 _selfchain_L11
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
@@ -335,9 +343,9 @@ _selfchain_L6
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img4
                 LDA     _fcc_fpr0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 PHA
                 SEP     #$20
                 MX      %10
@@ -350,12 +358,12 @@ _selfchain_L6
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img6
                 LDA     _fcc_fpr0
-                STA     11,S   ; fccstk d=0 b=11
-                LDA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img5
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img3
                 STA     _fcc_fpr0
                 LDA     #0
                 ASL
@@ -374,9 +382,9 @@ _selfchain_L6
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img6
                 STA     _fcc_fpr1+2
-                LDA     11,S   ; fccstk d=0 b=11
+                LDA     _fcc_img5
                 STA     _fcc_fpr1
                 LDA     #0
                 ASL
@@ -435,9 +443,9 @@ _selfchain_L15
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img4
                 LDA     _fcc_fpr0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 PHA
                 SEP     #$20
                 MX      %10
@@ -450,12 +458,12 @@ _selfchain_L15
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img6
                 LDA     _fcc_fpr0
-                STA     11,S   ; fccstk d=0 b=11
-                LDA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img5
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img3
                 STA     _fcc_fpr0
                 LDA     #0
                 ASL
@@ -474,9 +482,9 @@ _selfchain_L15
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img6
                 STA     _fcc_fpr1+2
-                LDA     11,S   ; fccstk d=0 b=11
+                LDA     _fcc_img5
                 STA     _fcc_fpr1
                 LDA     #0
                 ASL

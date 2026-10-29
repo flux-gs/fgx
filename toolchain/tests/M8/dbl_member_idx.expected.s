@@ -8,9 +8,11 @@
 main            ENT
                 PEI     _fcc_fb
                 PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE-2
+                SBC     #main_FRAMESIZE-6
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -32,16 +34,16 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     #0
                 STA     _fcc_img16
+                LDA     #0
+                STA     _fcc_img18
 _dbl_member_idx_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img16
+                LDA     _fcc_img18
                 TAX
                 SEC
                 SBC     #4
@@ -50,37 +52,20 @@ _dbl_member_idx_L0
 _dbl_member_idx_L3
                 BMI     *+5
                 BRL     _dbl_member_idx_L2
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                INC
-                INC
-                STA     _fcc_fpr0
                 LDA     _fcc_img16
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     _fcc_img18
                 ASL
                 ASL
                 ASL
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
-                LDA     _fcc_img16
+                LDA     _fcc_img18
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -110,37 +95,20 @@ _dbl_member_idx_L3
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #34
                 STA     _fcc_fpr0
-                LDA     _fcc_img16
+                LDA     _fcc_img18
                 ASL
                 ASL
                 ASL
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
-                LDA     _fcc_img16
+                LDA     _fcc_img18
                 JSR     _fcc_long_from_int
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -165,29 +133,12 @@ _dbl_member_idx_L3
                 STA     [_fcc_fpr0],Y
                 TXA
 _dbl_member_idx_L1
-                INC     _fcc_img16
+                INC     _fcc_img18
                 BRL     _dbl_member_idx_L0
 _dbl_member_idx_L2
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #66
                 STA     _fcc_fpr0
@@ -212,26 +163,9 @@ _dbl_member_idx_L2
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #66
                 CLC
@@ -259,68 +193,33 @@ _dbl_member_idx_L2
                 STA     [_fcc_fpr0],Y
                 TXA
                 LDA     #3
-                STA     _fcc_img16
+                STA     _fcc_img18
 _dbl_member_idx_L4
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
+                LDA     _fcc_img18
+                BEQ     _dbl_member_idx_L6
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
                 LDA     _fcc_img16
-                BNE     *+5
-                BRL     _dbl_member_idx_L6
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
                 CLC
                 ADC     #34
                 STA     _fcc_fpr0
-                LDA     _fcc_img16
+                LDA     _fcc_img18
                 ASL
                 ASL
                 ASL
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr1
-                LDA     [_fcc_fpr1]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr1],Y
-                STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #34
                 STA     _fcc_fpr1
-                LDA     _fcc_img16
+                LDA     _fcc_img18
                 DEC
                 ASL
                 ASL
@@ -353,29 +252,12 @@ _dbl_member_idx_L4
                 STA     [_fcc_fpr0],Y
                 TXA
 _dbl_member_idx_L5
-                DEC     _fcc_img16
-                BRL     _dbl_member_idx_L4
+                DEC     _fcc_img18
+                BRA     _dbl_member_idx_L4
 _dbl_member_idx_L6
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 INC
                 INC
                 CLC
@@ -401,26 +283,9 @@ _dbl_member_idx_L6
                 PHA
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 INC
                 INC
                 CLC
@@ -458,26 +323,9 @@ _dbl_member_idx_L6
                 TAX
                 DEC
                 PHA
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #34
                 CLC
@@ -500,26 +348,9 @@ _dbl_member_idx_L6
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #66
                 CLC
@@ -545,26 +376,9 @@ _dbl_member_idx_L6
                 PHA
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #66
                 STA     _fcc_fpr0
@@ -601,26 +415,9 @@ _dbl_member_idx_L6
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img16
                 CLC
                 ADC     #34
                 CLC
@@ -645,14 +442,18 @@ _dbl_member_idx_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE-2
+                ADC     #main_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
                 PLA
                 STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     8
+main_FRAMESIZE   EQU     12
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 9

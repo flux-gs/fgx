@@ -19,17 +19,6 @@ probe_stkovf       JMP     _fcc_stkoflow
 probe_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+probe_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+probe_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+probe_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_ptr+2
                 DO      6+probe_FRAMESIZE/256
                 TSC
                 CLC
@@ -40,6 +29,20 @@ probe_stkok        TCS
                 ELSE
                 LDA     6+probe_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_img0
+                DO      8+probe_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+probe_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+probe_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                STA     _fcc_ptr+2
+                LDA     _fcc_img0
                 PHA
                 LDA     #0
                 ASL
@@ -70,27 +73,9 @@ probe_stkok        TCS
                 TYA
                 RTL
 _deref_postfix_L0
-                DO      8+probe_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+probe_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+probe_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img1
                 STA     _fcc_ptr+2
-                DO      6+probe_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+probe_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+probe_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img0
                 PHA
                 LDA     #1
                 ASL
@@ -121,27 +106,9 @@ _deref_postfix_L0
                 TYA
                 RTL
 _deref_postfix_L1
-                DO      8+probe_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+probe_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+probe_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img1
                 STA     _fcc_ptr+2
-                DO      6+probe_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+probe_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+probe_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img0
                 PHA
                 LDA     #1
                 ASL
