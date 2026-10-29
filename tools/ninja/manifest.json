@@ -92,6 +92,13 @@
    "name": "ed"
   },
   {
+   "name": "ee",
+   "main": "vendor/FreeBSD-2.2.8/usr.bin/ee/ee.c",
+   "flags": "-DNO_CATGETS -DHAS_UNISTD -DHAS_STDARG -DHAS_STDLIB -DHAS_CTYPE -DHAS_SYS_WAIT",
+   "libs": "termlib,curses",
+   "split": true
+  },
+  {
    "name": "expr",
    "yacc": true
   },
@@ -748,6 +755,10 @@
   {
    "src": "bin/ed.bin",
    "dst": "disk_src/bin/ed"
+  },
+  {
+   "src": "bin/ee.bin",
+   "dst": "disk_src/bin/ee"
   },
   {
    "src": "bin/expr.bin",

@@ -191,6 +191,9 @@ HARD_LINKS = [
     # Makefile:25), with test.c requiring the closing `]' when argv[0] ends in
     # `['.  /etc/rc's autoboot arm is its first caller.
     ("/bin/[", "/bin/test"),
+    # ree IS ee in restricted mode: `LINKS= ${BINDIR}/ee ${BINDIR}/ree'
+    # (FreeBSD 2.2.8 usr.bin/ee/Makefile), ee.c testing argv[0] for "ree".
+    ("/bin/ree", "/bin/ee"),
 ]
 
 
