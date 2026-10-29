@@ -6891,28 +6891,24 @@ emit_fpr_cmp(int k1, int k2, int is_ne)
  * (cost lever #1: no ADC-into-offset, no staging).  Transcribes
  * emit_deref_ptr_field's semantics onto the FPR carrier:
  *   - 4-byte scalar (long/float): hi @ off+2 -> _fcc_long_hi, lo -> A
- *   - pointer pointee: stored (offset,bank) under --data-segment /
- *     --far-calls-FN_PTR; bare offset + PB re-derivation single-bank
- *     (G22).  GENERALIZED from the legacy LT-name list to ISPTR, so
- *     char** / float* fields now read their stored bank under FGX2
- *     (the legacy list missed them — single-bank-invisible).  Both
- *     halves are read BEFORE fprK is overwritten.
+ *   - pointer pointee (any ISPTR, fn-ptrs included): the stored offset
+ *     and bank, both read BEFORE fprK is overwritten; the bank comes with
+ *     its don't-care pad as one word.
  *   - char/void: byte + mask; int: word.
  * Scalar results -> A; a pointer result lands back in fprK. */
 void
 emit_fpr_deref_field(int k, tword t, int off)
 {
-    int stored_bank = (t == LT_FN_PTR) || ISPTR(t);   /* one-mode: always stored */
     if (fpr_is_sym(k)) {
         /* The object is at a fixed address: read it there.  A pointer result
          * replaces the register, which then holds a value, not an address. */
         if (ISPTR(t)) {
+            /* The bank and pad as a word: the pad is don't-care (the PAD
+             * DISCIPLINE above), so no 8-bit read is needed for the bank. */
             const char *lo = fpr_sym_cell(k, off), *hi = fpr_sym_cell(k, off + 2);
             g_fpr_symg[k] = NULL;
-            emit_m8();
             ir_record_raw(IR_LDA_CELL, 0, 0, (void *)hi);
             ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp2(fpr_name(k)));
-            emit_m16();
             ir_record_raw(IR_LDA_CELL, 0, 0, (void *)lo);
             ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
             return;
@@ -6939,6 +6935,10 @@ emit_fpr_deref_field(int k, tword t, int off)
         return;
     }
     if (ISPTR(t)) {
+        /* The offset, then the bank and pad as one word: both read before
+         * fprK is written, and A = the offset at the end as before.  The
+         * pad is don't-care (the PAD DISCIPLINE above: every consumer
+         * masks it), so the bank needs no 8-bit read. */
         if (off > 0) {
             ir_emitf("                LDY     #%d\n", off);
             ir_record_raw(IR_LDA_DEREF, 1, 0, (void *)cellp(fpr_name(k)));
@@ -6946,16 +6946,14 @@ emit_fpr_deref_field(int k, tword t, int off)
             ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp(fpr_name(k)));
         }
         ir_record_raw(IR_PUSH_A, 0, 0, NULL);                       /* new offset */
-        emit_m8();
-        if (stored_bank) {
-            ir_emitf("                LDY     #%d\n", off + 2);
-            ir_record_raw(IR_LDA_DEREF, 1, 0, (void *)cellp(fpr_name(k)));
+        if (off > 0) {
+            ir_emitf("                INY\n");
+            ir_emitf("                INY\n");
         } else {
-            ir_emitf("                PHK\n");
-            ir_record_raw(IR_POP_A, 0, 0, NULL);
+            ir_emitf("                LDY     #2\n");
         }
+        ir_record_raw(IR_LDA_DEREF, 1, 0, (void *)cellp(fpr_name(k)));
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp2(fpr_name(k)));
-        emit_m16();
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp(fpr_name(k)));
         return;

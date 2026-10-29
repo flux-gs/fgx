@@ -572,13 +572,10 @@ _wide_bump_L3
                 LDY     #26
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #28
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #10
@@ -1356,13 +1353,10 @@ _wide_bump_L9
                 LDY     #26
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #28
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #14

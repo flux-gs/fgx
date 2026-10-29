@@ -137,13 +137,10 @@ main_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #36
@@ -152,12 +149,8 @@ main_stkok        TCS
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
                 STA     _fcc_img0
-                SEP     #$20
-                MX      %10
                 LDA     _addr_dot_hops_ptr_G+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _addr_dot_hops_ptr_G+2
                 CLC
                 ADC     #18

@@ -304,12 +304,8 @@ _arrowdotchain_L3
                 TYA
                 RTL
 _arrowdotchain_L4
-                SEP     #$20
-                MX      %10
                 LDA     _arrowdotchain_bx+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _arrowdotchain_bx
                 INC
                 INC
@@ -330,12 +326,8 @@ _arrowdotchain_L4
                 TYA
                 RTL
 _arrowdotchain_L5
-                SEP     #$20
-                MX      %10
                 LDA     _arrowdotchain_bx+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _arrowdotchain_bx
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -356,13 +348,10 @@ _arrowdotchain_L6
                 LDY     #6
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #2
@@ -384,13 +373,10 @@ _arrowdotchain_L7
                 LDY     #6
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -411,13 +397,10 @@ _arrowdotchain_L8
                 LDY     #10
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -445,13 +428,10 @@ _arrowdotchain_L9
                 LDY     #10
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -549,13 +529,10 @@ _arrowdotchain_L13
                 LDY     #10
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC

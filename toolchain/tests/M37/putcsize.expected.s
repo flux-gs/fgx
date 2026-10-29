@@ -94,18 +94,14 @@ _putcsize_L0
                 BVC     _putcsize_L4
                 EOR     #$8000
 _putcsize_L4
-                BMI     *+5
-                BRL     _putcsize_L2
+                BPL     _putcsize_L2
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 DO      6+put_FRAMESIZE/256
@@ -148,13 +144,10 @@ _putcsize_L5
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]

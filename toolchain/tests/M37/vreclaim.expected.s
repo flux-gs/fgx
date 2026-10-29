@@ -207,13 +207,10 @@ _vreclaim_L0
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -246,13 +243,10 @@ _vreclaim_L3
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -422,25 +416,19 @@ _vreclaim_bremhash_stkok        TCS
                 LDY     #6
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 LDY     #2
                 STA     [_fcc_fpr0],Y
@@ -454,25 +442,19 @@ _vreclaim_bremhash_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #6
@@ -557,13 +539,10 @@ _vreclaim_binshash_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_img2],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #2
@@ -588,13 +567,10 @@ _vreclaim_binshash_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_img2],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
@@ -672,25 +648,19 @@ _vreclaim_bremfree_stkok        TCS
                 LDY     #14
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 LDY     #10
                 STA     [_fcc_fpr0],Y
@@ -704,25 +674,19 @@ _vreclaim_bremfree_stkok        TCS
                 LDY     #10
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #14
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #14
@@ -807,13 +771,10 @@ _vreclaim_binsheadfree_stkok        TCS
                 LDY     #10
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img2
@@ -829,13 +790,10 @@ _vreclaim_binsheadfree_stkok        TCS
                 LDY     #10
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #10
@@ -944,13 +902,10 @@ _vreclaim_binstailfree_stkok        TCS
                 LDY     #14
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img2
@@ -966,13 +921,10 @@ _vreclaim_binstailfree_stkok        TCS
                 LDY     #14
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #14
@@ -1141,13 +1093,10 @@ _vreclaim_bufinsvn_stkok        TCS
                 LDY     #42
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -1157,13 +1106,10 @@ _vreclaim_bufinsvn_stkok        TCS
                 LDY     #42
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img1
@@ -1264,13 +1210,10 @@ _vreclaim_bufremvn_stkok        TCS
                 LDY     #46
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -1306,13 +1249,10 @@ _vreclaim_L6
                 LDY     #42
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -1326,13 +1266,10 @@ _vreclaim_L6
                 LDY     #46
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #46
@@ -1352,13 +1289,10 @@ _vreclaim_L9
                 LDY     #46
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img2
@@ -1935,13 +1869,10 @@ incore_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -2005,13 +1936,10 @@ _vreclaim_L26
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img21
@@ -2056,13 +1984,10 @@ _vreclaim_L23
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -2142,13 +2067,10 @@ _vreclaim_L30
                 LDY     #10
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img19
@@ -2191,13 +2113,10 @@ _vreclaim_L33
                 LDY     #10
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img19
@@ -2241,13 +2160,10 @@ _vreclaim_L32
                 LDY     #10
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -2284,13 +2200,10 @@ _vreclaim_L39
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -2439,13 +2352,10 @@ getblk_stkok        TCS
                 LDY     #22
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -2543,13 +2453,10 @@ getblk_uL_loop
                 LDY     #2
                 LDA     [_fcc_img20],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img20],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -2613,13 +2520,10 @@ _vreclaim_L48
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img19
@@ -2698,13 +2602,10 @@ _vreclaim_L45
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -3001,18 +2902,14 @@ _vreclaim_L57
                 LDA     [_fcc_img16]
                 TAX
                 AND     #2048
-                BNE     *+5
-                BRL     _vreclaim_L58
+                BEQ     _vreclaim_L58
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -3396,13 +3293,10 @@ _vreclaim_L73
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -3413,13 +3307,10 @@ _vreclaim_L73
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -3692,37 +3583,28 @@ _vreclaim_L80
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #116
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #118
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -3841,13 +3723,10 @@ bwrite_stkok        TCS
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -3867,13 +3746,10 @@ _vreclaim_L82
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #50
@@ -3884,37 +3760,28 @@ _vreclaim_L82
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #116
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #118
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -4040,13 +3907,10 @@ bdwrite_stkok        TCS
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -4213,13 +4077,10 @@ bgetvp_stkok        TCS
                 LDY     #38
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -4271,13 +4132,10 @@ _vreclaim_L88
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #12
@@ -4374,13 +4232,10 @@ brelvp_stkok        TCS
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -4421,13 +4276,10 @@ _vreclaim_L90
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -4701,13 +4553,10 @@ vflushbuf_uL_loop
                 LDY     #46
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -4730,13 +4579,10 @@ _vreclaim_L99
                 LDY     #42
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -4880,13 +4726,10 @@ _vreclaim_L108
                 LDY     #46
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -5018,13 +4861,10 @@ _vreclaim_L110
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -5059,8 +4899,7 @@ _vreclaim_L116
                 LDA     #1
 _vreclaim_L117
                 CMP     #0
-                BNE     *+5
-                BRL     _vreclaim_L115
+                BEQ     _vreclaim_L115
                 LDA     [_fcc_img16]
                 TAX
                 AND     #512
@@ -5112,13 +4951,10 @@ _vreclaim_L114
                 LDY     #10
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -5207,13 +5043,10 @@ _vreclaim_L120
                 LDY     #46
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -5229,13 +5062,10 @@ _vreclaim_L123
                 LDY     #42
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -5275,13 +5105,10 @@ _vreclaim_L127
                 LDY     #42
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -5350,13 +5177,10 @@ _vreclaim_L131
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img19
@@ -5383,13 +5207,10 @@ _vreclaim_L134
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -5434,13 +5255,10 @@ _vreclaim_L122
                 LDY     #46
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -5450,13 +5268,10 @@ _vreclaim_L122
                 LDY     #42
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -6212,25 +6027,19 @@ _vreclaim_L145
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #40
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #42
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -6416,13 +6225,10 @@ dead_strategy_stkok        TCS
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -6448,13 +6254,10 @@ _vreclaim_L150
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -6491,37 +6294,28 @@ _vreclaim_L147
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #116
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #118
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -6629,25 +6423,19 @@ _vreclaim_L152
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #104
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #106
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -6755,25 +6543,19 @@ _vreclaim_L154
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #112
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #114
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -7824,25 +7606,19 @@ vremfree_stkok        TCS
                 LDY     #30
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #32
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #26
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #28
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 STA     [_fcc_fpr0]
@@ -7856,13 +7632,10 @@ vremfree_stkok        TCS
                 LDY     #26
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #28
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -7872,25 +7645,19 @@ vremfree_stkok        TCS
                 LDY     #26
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #28
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #30
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #32
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #30
@@ -7907,13 +7674,10 @@ _vreclaim_L174
                 LDY     #30
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #32
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 STA     vnode_free_tail
@@ -8250,13 +8014,9 @@ _vreclaim_L180
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -8677,25 +8437,19 @@ _vreclaim_L189
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #96
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #98
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -8960,42 +8714,32 @@ insmntque_stkok        TCS
                 LDY     #38
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _vreclaim_L194
+                BEQ     _vreclaim_L194
                 LDY     #38
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #34
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #36
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 STA     [_fcc_fpr0]
@@ -9009,13 +8753,10 @@ insmntque_stkok        TCS
                 LDY     #34
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #36
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -9025,25 +8766,19 @@ insmntque_stkok        TCS
                 LDY     #34
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #36
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #38
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #40
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #38
@@ -9130,13 +8865,10 @@ _vreclaim_L196
                 LDY     #16
                 LDA     [_fcc_img2],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #34
@@ -9151,13 +8883,10 @@ _vreclaim_L196
                 LDY     #16
                 LDA     [_fcc_img2],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -9167,13 +8896,10 @@ _vreclaim_L196
                 LDY     #16
                 LDA     [_fcc_img2],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img1
@@ -9285,13 +9011,9 @@ _vreclaim_L203
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -9680,13 +9402,10 @@ _vreclaim_L208
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
@@ -9745,25 +9464,19 @@ _vreclaim_L209
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -9840,13 +9553,10 @@ _vreclaim_L216
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 DO      10+checkalias_FRAMESIZE/256
@@ -9864,13 +9574,10 @@ _vreclaim_L216
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     5,S   ; fccstk d=0 b=5
@@ -9907,13 +9614,10 @@ _vreclaim_L216
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -10001,13 +9705,10 @@ _vreclaim_L215
                 LDY     #22
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #22
@@ -10425,13 +10126,10 @@ _vreclaim_L227
                 LDY     #54
                 LDA     [_fcc_img2],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
@@ -10496,25 +10194,19 @@ _vreclaim_L228
                 LDY     #54
                 LDA     [_fcc_img2],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -10645,13 +10337,10 @@ _vreclaim_L235
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
@@ -10673,13 +10362,10 @@ _vreclaim_L238
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #10
@@ -10706,25 +10392,19 @@ _vreclaim_L236
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -10913,35 +10593,24 @@ vcount_uL_loop
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -10964,13 +10633,10 @@ _vreclaim_L244
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
@@ -10979,13 +10645,10 @@ _vreclaim_L244
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
@@ -11035,25 +10698,19 @@ _vreclaim_L245
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -11127,25 +10784,19 @@ vput_stkok        TCS
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #108
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #110
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -11281,25 +10932,19 @@ _vreclaim_L252
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #104
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #106
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -11357,13 +11002,10 @@ _vreclaim_L254
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -11398,13 +11040,10 @@ _vreclaim_L254
                 LDY     #108
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #110
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -11454,13 +11093,10 @@ _vreclaim_L255
                 LDY     #16
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -11502,13 +11138,10 @@ _vreclaim_L257
                 LDY     #96
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #98
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -11543,13 +11176,10 @@ _vreclaim_L256
                 LDY     #100
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #102
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -11765,13 +11395,10 @@ _vreclaim_L266
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -11814,35 +11441,24 @@ _vreclaim_L267
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img17
@@ -11869,48 +11485,35 @@ _vreclaim_L272
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #4
                 LDA     [_fcc_fpr1],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr1],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 STA     [_fcc_fpr0]
@@ -11926,35 +11529,24 @@ _vreclaim_L270
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -11973,25 +11565,19 @@ _vreclaim_L274
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img17
@@ -12020,37 +11606,28 @@ _vreclaim_L277
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #4
                 LDA     [_fcc_fpr1],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr1],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #4
@@ -12067,25 +11644,19 @@ _vreclaim_L275
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -12153,35 +11724,24 @@ _vreclaim_L273
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -12202,13 +11762,10 @@ _vreclaim_L284
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
@@ -12217,13 +11774,10 @@ _vreclaim_L284
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
@@ -12253,25 +11807,19 @@ _vreclaim_L285
                 LDY     #54
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -12325,13 +11873,10 @@ _vreclaim_L283
                 LDY     #54
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -12362,13 +11907,10 @@ _vreclaim_L265
                 LDY     #30
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #32
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -12611,13 +12153,10 @@ vflush_uL_loop
                 LDY     #16
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -12640,13 +12179,10 @@ _vreclaim_L295
                 LDY     #18
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #20
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img19
@@ -12678,13 +12214,10 @@ _vreclaim_L298
                 LDY     #34
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #36
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -13490,13 +13023,10 @@ _vreclaim_L330
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -13531,13 +13061,10 @@ _vreclaim_L327
                 LDY     #12
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -13596,13 +13123,10 @@ _vreclaim_L327
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -13637,25 +13161,19 @@ _vreclaim_L333
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -13744,13 +13262,9 @@ _vreclaim_L335
 _vreclaim_L336
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -13777,13 +13291,10 @@ _vreclaim_L339
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -13810,24 +13321,17 @@ _vreclaim_L341
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -13839,25 +13343,18 @@ _vreclaim_L341
                 MX      %00
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 LDY     #4
                 STA     [_fcc_fpr0],Y
@@ -14143,13 +13640,9 @@ _vreclaim_ncinshash_stkok        TCS
                 STA     _fcc_img3
                 LDA     [_fcc_img2]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 STA     [_fcc_img0]
@@ -14172,13 +13665,9 @@ _vreclaim_ncinshash_stkok        TCS
                 MX      %00
                 LDA     [_fcc_img2]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img2],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
@@ -14255,24 +13744,17 @@ _vreclaim_ncremhash_stkok        TCS
                 LDY     #4
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_img0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -14284,25 +13766,18 @@ _vreclaim_ncremhash_stkok        TCS
                 MX      %00
                 LDA     [_fcc_img0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #4
@@ -14365,13 +13840,10 @@ _vreclaim_nclru_totail_stkok        TCS
                 LDY     #8
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -14407,25 +13879,19 @@ _vreclaim_L345
                 LDY     #12
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -14438,25 +13904,19 @@ _vreclaim_L345
                 LDY     #8
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 LDY     #12
                 STA     [_fcc_fpr0],Y
@@ -14576,25 +14036,19 @@ _vreclaim_nclru_remove_stkok        TCS
                 LDY     #12
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 STA     [_fcc_fpr0]
@@ -14608,13 +14062,10 @@ _vreclaim_nclru_remove_stkok        TCS
                 LDY     #8
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -14624,25 +14075,19 @@ _vreclaim_nclru_remove_stkok        TCS
                 LDY     #8
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #12
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #12
@@ -14659,13 +14104,10 @@ _vreclaim_L348
                 LDY     #12
                 LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 STA     nchtail
@@ -15732,13 +15174,9 @@ _vreclaim_L373
                 STA     _fcc_img5
                 LDA     [_fcc_img5]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img5],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -15795,13 +15233,9 @@ _vreclaim_L378
 _vreclaim_L375
                 LDA     [_fcc_img1]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img1],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -15914,13 +15348,9 @@ _vreclaim_L382
                 STA     _fcc_img18
                 LDA     [_fcc_img18]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -15959,13 +15389,9 @@ _vreclaim_L387
                 BRL     _vreclaim_L385
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -15975,13 +15401,10 @@ _vreclaim_L387
                 LDY     #16
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -16007,25 +15430,19 @@ _vreclaim_L391
                 LDY     #16
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #20
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 DO      8+cache_purgevfs_FRAMESIZE/256
@@ -16286,13 +15703,10 @@ _vreclaim_L395
                 LDY     #52
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #54
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -16322,13 +15736,9 @@ _vreclaim_L395
                 STA     _fcc_img20
                 LDA     [_fcc_img20]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img20],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -16368,13 +15778,10 @@ _vreclaim_L401
                 LDY     #16
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img23
@@ -16442,13 +15849,10 @@ _vreclaim_L404
                 LDY     #28
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #30
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -16475,13 +15879,9 @@ _vreclaim_L402
 _vreclaim_L398
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -16587,13 +15987,10 @@ _vreclaim_L408
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -16673,13 +16070,10 @@ _vreclaim_L410
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #16
@@ -16765,13 +16159,10 @@ _vreclaim_L414
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #48
@@ -16985,13 +16376,10 @@ _vreclaim_L419
                 LDY     #48
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #50
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #24
@@ -17006,13 +16394,10 @@ _vreclaim_L419
                 LDY     #48
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #50
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -17022,13 +16407,10 @@ _vreclaim_L419
                 LDY     #48
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #50
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #16
@@ -17058,13 +16440,10 @@ _vreclaim_L423
                 LDY     #52
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #54
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #16
@@ -17079,13 +16458,10 @@ _vreclaim_L423
                 LDY     #52
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #54
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDY     #16
@@ -17148,13 +16524,10 @@ _vreclaim_L427
                 LDY     #28
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #30
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDA     _fcc_img20
@@ -17355,13 +16728,10 @@ _vreclaim_L428
                 LDY     #46
                 LDA     [_fcc_img1],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img1],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -17387,24 +16757,17 @@ _vreclaim_L434
                 LDY     #46
                 LDA     [_fcc_img1],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #48
+                INY
+                INY
                 LDA     [_fcc_img1],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img2
@@ -17473,13 +16836,10 @@ _vreclaim_L429
                 LDY     #42
                 LDA     [_fcc_img1],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #44
+                INY
+                INY
                 LDA     [_fcc_img1],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -17775,13 +17135,10 @@ _vreclaim_L445
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PHA
@@ -17860,25 +17217,19 @@ _vreclaim_L450
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #20
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #22
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -17937,25 +17288,19 @@ _vreclaim_L451
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #32
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #34
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -18019,25 +17364,19 @@ _vreclaim_L453
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #18
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -18116,25 +17455,19 @@ _vreclaim_L457
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #32
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #34
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -18596,13 +17929,10 @@ _vreclaim_L476
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #20
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -18722,13 +18052,10 @@ _vreclaim_L484
                 LDY     #26
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #28
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -19019,13 +18346,10 @@ _vreclaim_L493
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -19381,13 +18705,10 @@ _vreclaim_L506
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -19539,13 +18860,10 @@ _vreclaim_L508
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #26
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0

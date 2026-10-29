@@ -274,13 +274,10 @@ _dirchurn_L4
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -328,13 +325,10 @@ _dirchurn_L6
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -373,13 +367,10 @@ _dirchurn_L8
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -452,13 +443,10 @@ _dirchurn_L7
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -502,13 +490,10 @@ _dirchurn_L13
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -683,13 +668,10 @@ _dirchurn_L16
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -999,13 +981,10 @@ _dirchurn_L21
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -1204,13 +1183,10 @@ _dirchurn_L30
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -1287,13 +1263,10 @@ _dirchurn_L32
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -1650,13 +1623,10 @@ _dirchurn_L51
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0

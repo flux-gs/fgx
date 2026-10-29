@@ -932,24 +932,17 @@ main_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -982,25 +975,19 @@ _fnptr_vnodeops_L0
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #32
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #34
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -1037,25 +1024,19 @@ _fnptr_vnodeops_L1
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #60
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #62
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -1092,25 +1073,19 @@ _fnptr_vnodeops_L2
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #68
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #70
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -1147,25 +1122,19 @@ _fnptr_vnodeops_L3
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #124
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #126
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -1201,13 +1170,10 @@ _fnptr_vnodeops_L4
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -1219,13 +1185,10 @@ _fnptr_vnodeops_L4
                 LDY     #112
                 LDA     [_fcc_img18],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #114
+                INY
+                INY
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2

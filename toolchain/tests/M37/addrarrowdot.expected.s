@@ -804,13 +804,10 @@ _addrarrowdot_L28
                 LDY     #2
                 LDA     [_fcc_img20],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img20],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #20
@@ -881,13 +878,10 @@ _addrarrowdot_L32
                 LDY     #2
                 LDA     [_fcc_img20],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_img20],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #12
@@ -1112,12 +1106,8 @@ _addrarrowdot_L40
                 STA     29,S   ; fccstk d=0 b=29
 _addrarrowdot_L46
                 FGX2_FARCALL _addrarrowdot_clear
-                SEP     #$20
-                MX      %10
                 LDA     gh+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     gh+2
                 CLC
                 ADC     #20

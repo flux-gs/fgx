@@ -145,13 +145,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     7,S   ; fccstk d=0 b=7
@@ -326,13 +322,9 @@ _deref_store_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #6
@@ -464,13 +456,9 @@ _deref_store_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #16392
@@ -760,13 +748,9 @@ _deref_store_L5
                 STA     _fcc_img16
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -869,13 +853,9 @@ _deref_store_L5
 _deref_store_L6
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #7
@@ -982,13 +962,9 @@ _deref_store_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     23,S   ; fccstk d=0 b=23
@@ -1196,13 +1172,9 @@ _deref_store_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #7

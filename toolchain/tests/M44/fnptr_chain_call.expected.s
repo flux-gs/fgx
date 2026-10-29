@@ -93,23 +93,15 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     pack+4
                 TYA
-                SEP     #$20
-                MX      %10
                 LDA     pack+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     pack+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -142,23 +134,15 @@ _fnptr_chain_call_L0
                 TCS
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
                 LDA     pack+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     pack+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2

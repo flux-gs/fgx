@@ -646,13 +646,10 @@ _structval_L5
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -786,13 +783,10 @@ _structval_L9
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #8
@@ -1018,13 +1012,10 @@ _structval_L8
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2
@@ -1076,13 +1067,10 @@ _structval_L13
                 LDY     #22
                 LDA     [_fcc_fpr1],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr1],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2

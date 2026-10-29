@@ -240,13 +240,10 @@ main_stkok        TCS
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -287,24 +284,16 @@ _memfnptr_L4
 _memfnptr_L3
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -345,24 +334,16 @@ _memfnptr_L6
 _memfnptr_L5
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -394,13 +375,9 @@ _memfnptr_L7
                 TYA
                 LDA     [_fcc_img18]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -440,37 +417,25 @@ _memfnptr_L8
 _memfnptr_L9
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr1],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
@@ -510,13 +475,9 @@ _memfnptr_L10
                 STA     [_fcc_fpr0],Y
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #4

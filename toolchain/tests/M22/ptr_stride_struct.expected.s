@@ -810,13 +810,9 @@ _ptr_stride_struct_L10
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -866,13 +862,9 @@ _ptr_stride_struct_L11
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -916,13 +908,9 @@ _ptr_stride_struct_L12
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -972,13 +960,9 @@ _ptr_stride_struct_L13
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1033,13 +1017,10 @@ _ptr_stride_struct_L14
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1086,13 +1067,10 @@ _ptr_stride_struct_L15
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1134,12 +1112,8 @@ _ptr_stride_struct_L16
                 CLC
                 ADC     #4
                 STA     root
-                SEP     #$20
-                MX      %10
                 LDA     root+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1187,12 +1161,8 @@ _ptr_stride_struct_L17
                 CLC
                 ADC     _fcc_tmp_b
                 STA     root+0
-                SEP     #$20
-                MX      %10
                 LDA     root+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1234,12 +1204,8 @@ _ptr_stride_struct_L18
                 CLC
                 ADC     #6
                 STA     root+8
-                SEP     #$20
-                MX      %10
                 LDA     root+10
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     root+8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1280,13 +1246,10 @@ _ptr_stride_struct_L19
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1296,24 +1259,17 @@ _ptr_stride_struct_L19
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1354,13 +1310,10 @@ _ptr_stride_struct_L20
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1370,24 +1323,17 @@ _ptr_stride_struct_L20
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1428,13 +1374,10 @@ _ptr_stride_struct_L21
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #8
@@ -1453,25 +1396,19 @@ _ptr_stride_struct_L21
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1805,13 +1742,9 @@ _ptr_stride_struct_L27
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1859,12 +1792,8 @@ _ptr_stride_struct_L28
                 CLC
                 ADC     _fcc_tmp_b
                 STA     root+0
-                SEP     #$20
-                MX      %10
                 LDA     root+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1905,13 +1834,10 @@ _ptr_stride_struct_L29
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1927,24 +1853,17 @@ _ptr_stride_struct_L29
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2060,13 +1979,10 @@ _ptr_stride_struct_L31
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2118,13 +2034,9 @@ _ptr_stride_struct_L32
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2172,12 +2084,8 @@ _ptr_stride_struct_L33
                 SEC
                 SBC     _fcc_tmp_b
                 STA     root+0
-                SEP     #$20
-                MX      %10
                 LDA     root+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2218,13 +2126,10 @@ _ptr_stride_struct_L34
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2240,24 +2145,17 @@ _ptr_stride_struct_L34
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2371,13 +2269,10 @@ _ptr_stride_struct_L36
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2441,13 +2336,9 @@ _ptr_stride_struct_L37
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2506,13 +2397,9 @@ _ptr_stride_struct_L38
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2571,13 +2458,9 @@ _ptr_stride_struct_L39
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -2939,13 +2822,10 @@ _ptr_stride_struct_L44
                 LDY     #12
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -3003,13 +2883,9 @@ _ptr_stride_struct_L45
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -3057,12 +2933,8 @@ _ptr_stride_struct_L46
                 CLC
                 ADC     _fcc_tmp_b
                 STA     root+0
-                SEP     #$20
-                MX      %10
                 LDA     root+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     root
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -3103,13 +2975,10 @@ _ptr_stride_struct_L47
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -3133,24 +3002,17 @@ _ptr_stride_struct_L47
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -3996,13 +3858,10 @@ _ptr_stride_struct_L56
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
@@ -4059,13 +3918,10 @@ _ptr_stride_struct_L57
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
@@ -4098,13 +3954,10 @@ _ptr_stride_struct_L60
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     31,S   ; fccstk d=0 b=31
@@ -4163,13 +4016,10 @@ _ptr_stride_struct_L61
                 LDY     #8
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
@@ -4225,13 +4075,9 @@ _ptr_stride_struct_L64
                 TYA
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
@@ -4286,13 +4132,9 @@ _ptr_stride_struct_L67
 _ptr_stride_struct_L65
                 LDA     [_fcc_img16]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     31,S   ; fccstk d=0 b=31
@@ -4347,25 +4189,19 @@ _ptr_stride_struct_L68
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
@@ -4423,25 +4259,19 @@ _ptr_stride_struct_L69
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
@@ -4495,12 +4325,8 @@ _ptr_stride_struct_L72
                 LDA     _fcc_ptr+2
                 STA     gh+10
                 TYA
-                SEP     #$20
-                MX      %10
                 LDA     gh+10
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     gh+8
                 CLC
                 ADC     #6
@@ -4549,12 +4375,8 @@ _ptr_stride_struct_L75
                 TCS
                 BRL     main_bandx
 _ptr_stride_struct_L73
-                SEP     #$20
-                MX      %10
                 LDA     gh+10
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     gh+8
                 STA     _fcc_fpr0
                 LDA     31,S   ; fccstk d=0 b=31
@@ -4614,13 +4436,10 @@ _ptr_stride_struct_L76
                 LDY     #12
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
@@ -4677,13 +4496,10 @@ _ptr_stride_struct_L77
                 LDY     #12
                 LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #14
+                INY
+                INY
                 LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     41,S   ; fccstk d=0 b=41
@@ -4764,13 +4580,10 @@ _ptr_stride_struct_L80
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
@@ -4835,13 +4648,10 @@ _ptr_stride_struct_L81
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     47,S   ; fccstk d=0 b=47
@@ -4909,13 +4719,10 @@ _ptr_stride_struct_L84
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #6
@@ -4977,13 +4784,10 @@ _ptr_stride_struct_L85
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #10
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     47,S   ; fccstk d=0 b=47

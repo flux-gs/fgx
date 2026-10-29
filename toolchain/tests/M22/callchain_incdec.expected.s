@@ -567,12 +567,8 @@ _callchain_incdec_L15
                 TYA
                 RTL
 _callchain_incdec_L16
-                SEP     #$20
-                MX      %10
                 LDA     root+6
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     root+4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]

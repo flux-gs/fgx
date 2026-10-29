@@ -850,13 +850,10 @@ _lvrun_bump_L7
                 LDY     #14
                 LDA     [_fcc_img3],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
+                INY
+                INY
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 STA     _fcc_fpr0
@@ -872,13 +869,10 @@ _lvrun_bump_L7
                 LDY     #14
                 LDA     [_fcc_img3],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
+                INY
+                INY
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -997,10 +991,10 @@ _lvrun_bump_L8
                 LDA     _fcc_fpr1+2
                 LDY     #16
                 STA     [_fcc_fpr0],Y
-                LDA     _lvrun_bump_vs+42
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
+                LDA     _lvrun_bump_vs+42
+                STA     _fcc_fpr0+2
                 LDA     _lvrun_bump_vs+40
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]

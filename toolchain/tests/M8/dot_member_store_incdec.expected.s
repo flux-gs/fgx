@@ -98,23 +98,15 @@ _dot_member_store_incdec_L0
                 EOR     #$8000
 _dot_member_store_incdec_L3
                 BPL     _dot_member_store_incdec_L2
-                SEP     #$20
-                MX      %10
                 LDA     B+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     B
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img0

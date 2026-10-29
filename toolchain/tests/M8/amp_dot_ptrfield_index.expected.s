@@ -208,12 +208,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #3
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     B+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     B
                 CLC
                 ADC     #4

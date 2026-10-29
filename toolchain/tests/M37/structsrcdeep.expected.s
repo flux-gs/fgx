@@ -966,13 +966,9 @@ _structsrcdeep_L17
                 STA     _fcc_fpr0+2
                 LDA     [_fcc_img18]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img18],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2

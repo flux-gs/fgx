@@ -255,12 +255,8 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -316,12 +312,8 @@ _callchain_ptr_compound_L0
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -375,12 +367,8 @@ _callchain_ptr_compound_L1
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -436,12 +424,8 @@ _callchain_ptr_compound_L2
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -483,13 +467,10 @@ _callchain_ptr_compound_L3
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -505,12 +486,8 @@ _callchain_ptr_compound_L3
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     other+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     other+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -552,13 +529,10 @@ _callchain_ptr_compound_L4
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -576,12 +550,8 @@ _callchain_ptr_compound_L4
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     other+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     other+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -627,13 +597,8 @@ _callchain_ptr_compound_L5
                 ADC     #6
                 STA     [_fcc_fpr0],Y
                 LDY     #4
-                LDA     _fcc_tmp_b
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -679,13 +644,8 @@ _callchain_ptr_compound_L6
                 SBC     #6
                 STA     [_fcc_fpr0],Y
                 LDY     #4
-                LDA     _fcc_tmp_b
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -762,12 +722,8 @@ _callchain_ptr_compound_L7
                 TCS
                 BRL     main_bandx
 _callchain_ptr_compound_L8
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]

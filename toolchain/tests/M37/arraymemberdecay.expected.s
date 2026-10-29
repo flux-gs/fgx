@@ -429,13 +429,8 @@ _arraymemberdecay_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
                 LDA     vp+4
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 LDA     vp+2
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0

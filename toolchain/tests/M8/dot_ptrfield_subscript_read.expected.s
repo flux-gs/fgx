@@ -247,12 +247,8 @@ main_stkok        TCS
                 STA     P+2
                 LDA     #0
                 STA     _fcc_img0
-                SEP     #$20
-                MX      %10
                 LDA     B+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     B
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
@@ -263,13 +259,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 STA     r0
@@ -315,13 +307,9 @@ _dot_ptrfield_subscript_rea_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
@@ -332,13 +320,9 @@ _dot_ptrfield_subscript_rea_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 STA     r1
@@ -372,23 +356,15 @@ _dot_ptrfield_subscript_rea_L0
                 TYA
                 RTL
 _dot_ptrfield_subscript_rea_L1
-                SEP     #$20
-                MX      %10
                 LDA     B+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     B
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 STA     r2
@@ -422,25 +398,17 @@ _dot_ptrfield_subscript_rea_L1
                 TYA
                 RTL
 _dot_ptrfield_subscript_rea_L2
-                SEP     #$20
-                MX      %10
                 LDA     B+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     B
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -482,22 +450,18 @@ _dot_ptrfield_subscript_rea_L3
                 LDA     _fcc_ptr+2
                 STA     B+6
                 TYA
-                SEP     #$20
-                MX      %10
                 LDA     B+6
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     B+4
                 STA     _fcc_fpr0
                 LDA     #67
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
-                LDA     B+6
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
+                LDA     B+6
+                STA     _fcc_fpr0+2
                 LDA     B+4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -562,25 +526,17 @@ _dot_ptrfield_subscript_rea_L4
                 TYA
                 RTL
 _dot_ptrfield_subscript_rea_L5
-                SEP     #$20
-                MX      %10
                 LDA     B+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     B
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -637,25 +593,17 @@ _dot_ptrfield_subscript_rea_L6
                 LDA     _fcc_ptr+2
                 STA     F+2
                 TYA
-                SEP     #$20
-                MX      %10
                 LDA     F+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     F
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]

@@ -483,13 +483,9 @@ _arrowarraychain_L8
 _arrowarraychain_L9
                 LDA     [_fcc_img3]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -549,24 +545,16 @@ _arrowarraychain_L10
 _arrowarraychain_L11
                 LDA     [_fcc_img3]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -595,23 +583,15 @@ _arrowarraychain_L11
                 TYA
                 RTL
 _arrowarraychain_L12
-                SEP     #$20
-                MX      %10
                 LDA     wr+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     wr+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -642,26 +622,18 @@ _arrowarraychain_L12
 _arrowarraychain_L13
                 LDA     [_fcc_img3]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_img3]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -715,13 +687,9 @@ _arrowarraychain_L14
                 STA     _fcc_img9
                 LDA     [_fcc_img3]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -766,13 +734,9 @@ _arrowarraychain_L19
 _arrowarraychain_L17
                 LDA     [_fcc_img3]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -816,13 +780,9 @@ _arrowarraychain_L20
                 STA     _fcc_img7
                 LDA     [_fcc_img7]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img7],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -848,13 +808,9 @@ _arrowarraychain_L20
 _arrowarraychain_L21
                 LDA     [_fcc_img7]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img7],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -878,13 +834,9 @@ _arrowarraychain_L21
 _arrowarraychain_L22
                 LDA     [_fcc_img3]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4
@@ -1078,13 +1030,9 @@ _arrowarraychain_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PHA
@@ -1134,13 +1082,9 @@ _arrowarraychain_L26
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #4

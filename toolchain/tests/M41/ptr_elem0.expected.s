@@ -83,12 +83,8 @@ main_stkok        TCS
                 LDA     _fcc_long_hi
                 STA     x+2
                 TYA
-                SEP     #$20
-                MX      %10
                 LDA     x+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     x
                 STA     _fcc_fpr0
                 LDA     #1

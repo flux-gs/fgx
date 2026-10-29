@@ -195,13 +195,9 @@ fill_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 SEP     #$20
@@ -244,13 +240,9 @@ _addr_member_elem_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -287,13 +279,9 @@ _addr_member_elem_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -752,12 +740,8 @@ main_stkok        TCS
                 STA     21,S   ; fccstk d=0 b=21
                 LDA     #7
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     c+12
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     c+10
                 STA     _fcc_fpr0
                 SEP     #$20
@@ -785,12 +769,8 @@ _addr_member_elem_L18
 _addr_member_elem_L19
                 CMP     #0
                 BNE     _addr_member_elem_L17
-                SEP     #$20
-                MX      %10
                 LDA     c+8
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     c+6
                 STA     _fcc_fpr0
                 LDA     #0
@@ -1313,13 +1293,9 @@ _addr_member_elem_L37
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 SEP     #$20
@@ -1362,13 +1338,9 @@ _addr_member_elem_L42
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0

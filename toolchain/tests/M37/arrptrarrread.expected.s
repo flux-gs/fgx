@@ -253,12 +253,8 @@ _arrptrarrread_L5
                 INC     _fcc_img0
                 BRL     _arrptrarrread_L4
 _arrptrarrread_L6
-                SEP     #$20
-                MX      %10
                 LDA     one+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     one
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -276,12 +272,8 @@ _arrptrarrread_L6
                 TYA
                 RTL
 _arrptrarrread_L8
-                SEP     #$20
-                MX      %10
                 LDA     one+14
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     one+12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -325,13 +317,9 @@ _arrptrarrread_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -375,13 +363,9 @@ _arrptrarrread_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -424,13 +408,9 @@ _arrptrarrread_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -473,13 +453,9 @@ _arrptrarrread_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -523,13 +499,9 @@ _arrptrarrread_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -580,13 +552,9 @@ _arrptrarrread_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
@@ -806,13 +774,9 @@ _arrptrarrread_L18
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
