@@ -148,9 +148,7 @@ _m10_flags_test_L6
                 AND     7,S   ; fccstk d=2 b=5
                 PHA
                 FGX2_FARCALL score
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

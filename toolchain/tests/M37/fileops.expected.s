@@ -35,13 +35,11 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL creat
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
+                CMP     #0
                 BMI     _fileops_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
@@ -65,12 +63,10 @@ _fileops_L0
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL write
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #6
                 BNE     _fileops_L1
@@ -83,9 +79,8 @@ _fileops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
+                CMP     #0
                 BNE     _fileops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
@@ -107,13 +102,11 @@ _fileops_L2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
+                CMP     #0
                 BMI     _fileops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
@@ -134,12 +127,10 @@ _fileops_L3
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL lseek
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -191,12 +182,10 @@ _fileops_L4
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL read
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #4
                 BNE     _fileops_L5
@@ -248,9 +237,7 @@ _fileops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -265,12 +252,9 @@ _fileops_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _fileops_L7
                 LDA     3,S   ; fccstk d=0 b=3
@@ -291,12 +275,9 @@ _fileops_L7
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fileops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
@@ -317,12 +298,9 @@ _fileops_L8
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getwd
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _fileops_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX

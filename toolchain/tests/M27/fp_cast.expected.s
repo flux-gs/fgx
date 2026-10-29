@@ -124,9 +124,7 @@ main_stkok        TCS
                 PHA
                 RTL
 _fp_cast_L1
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 SEP     #$20
                 MX      %10
@@ -158,9 +156,7 @@ _fp_cast_L1
                 PHA
                 RTL
 _fp_cast_L3
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

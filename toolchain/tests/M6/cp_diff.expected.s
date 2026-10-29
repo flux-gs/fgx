@@ -55,13 +55,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
                 STA     _fcc_fpr0
-                LDA     _fcc_img1
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img0
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img0
                 TAX
                 CLC
                 ADC     #37

@@ -141,39 +141,29 @@ main_stkok        TCS
                 LDA     #7
                 PHA
                 FGX2_FARCALL _mul_const_left_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #$FFFD
                 PHA
                 FGX2_FARCALL _mul_const_left_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #2
                 PHA
                 FGX2_FARCALL _mul_const_left_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$9C40
                 PHA
                 FGX2_FARCALL _mul_const_left_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     #9
                 PHA
                 FGX2_FARCALL _mul_const_left_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 AND     #$00FF
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #$0001
@@ -185,12 +175,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL _mul_const_left_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     11,S   ; fccstk d=0 b=11
                 TAY
                 LDA     _fcc_long_hi
@@ -718,9 +704,7 @@ _mul_const_left_L18
                 LDA     #1
                 PHA
                 FGX2_FARCALL _mul_const_left_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 ASL
                 ASL

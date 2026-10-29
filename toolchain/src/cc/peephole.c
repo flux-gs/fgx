@@ -536,8 +536,18 @@ static int reads_loc(const Line *L, const char *loc)
                 if (strcmp(loc, base) == 0) return 1;
                 {
                     size_t bbl = strlen(base);
+                    unsigned bn, ln;
                     if (strncmp(loc, base, bbl) == 0 &&
                         (strcmp(loc+bbl,"+1")==0 || strcmp(loc+bbl,"+2")==0)) return 1;
+                    /* An img pair holding a pointer is two word cells, so
+                     * the bank byte `[_fcc_img{n}]' reads is the next
+                     * cell's: _fcc_img{n+1} by name, not _fcc_img{n}+2. */
+                    if (sscanf(base, "_fcc_img%u", &bn) == 1 &&
+                        sscanf(loc, "_fcc_img%u", &ln) == 1 && ln == bn + 1) {
+                        char nm[PH_TOK];
+                        snprintf(nm, sizeof nm, "_fcc_img%u", ln);
+                        if (strcmp(loc, nm) == 0) return 1;
+                    }
                 }
             }
         }
@@ -1249,6 +1259,11 @@ do_arms_effect(Line *lines, size_t n, size_t d, size_t *fin,
  * conditional branch that does not read it is followed to its label as well
  * as through, and BRA/BRL to theirs, `depth' branches deep.  A call `eff'
  * does not name, a jump, `__asm' text or a line this does not know reads it. */
+static int is_helper_call(const Line *L);
+/* Set while the img alias asks: an _fcc_ runtime helper touches only the
+ * runtime's own cells ($E8 and up), so it is walked past like any other line. */
+static int g_dop_helpers_pass;
+
 static int
 dead_on_paths(Line *lines, size_t n, size_t from, int depth,
               int (*eff)(const Line *))
@@ -1288,6 +1303,7 @@ dead_on_paths(Line *lines, size_t n, size_t from, int depth,
             if (L->mnem[1] == 'R') return 1;   /* BRA/BRL: no fall-through */
             continue;
         }
+        if (g_dop_helpers_pass && is_helper_call(L)) continue;
         if (is_control(m) || insn_size_ub(L) < 0) return 0;
     }
     return 0;
@@ -1509,6 +1525,206 @@ out:
     free(pinned);
 }
 
+/* --- a promoted pointer's register copy, read in place ----------------------
+ *
+ * A pointer held in an img pair (ir.c's promotion) reaches member and element
+ * access through a far-pointer register the load fills:
+ *
+ *      LDA _fcc_img{s+1} / STA _fcc_fpr{k}+2 / LDA _fcc_img{s} / STA _fcc_fpr{k}
+ *
+ * The pair is itself a direct-page pointer, so the register's readers can read
+ * it instead: `[_fcc_fpr{k}],Y' becomes `[_fcc_img{s}],Y', and the copy goes,
+ * all but the `LDA _fcc_img{s}' that leaves the offset in A as the load
+ * promised.  Eight bytes per load.
+ *
+ * The readers taken are the ones up to the register's next write, the pair's
+ * next write (a reader past it would see the new pointer), or any line this
+ * does not follow (a label, a branch, a call, unknown text) -- and only if the
+ * register is then dead on every path, so no reader is left wanting the copy.
+ * A C call clobbers the far-pointer registers without reading them (they are
+ * caller-saved and arguments travel on the stack); an `_fcc_' runtime helper
+ * may read one, and a return reads _fcc_fpr0, the pointer return register. */
+
+static char g_al_lo[PH_TOK], g_al_hi[PH_TOK];   /* the register's two words */
+static int  g_al_k0;                             /* the register is _fcc_fpr0 */
+
+static int
+is_store_mn(const char *m)
+{
+    return strcmp(m, "STA") == 0 || strcmp(m, "STZ") == 0 ||
+           strcmp(m, "STX") == 0 || strcmp(m, "STY") == 0;
+}
+
+static int
+is_call(const Line *L)
+{
+    const char *m = L->mnem;
+    return strcmp(m, "JSL") == 0 || strcmp(m, "JSR") == 0 ||
+           strcmp(m, "FGX2_FARCALL") == 0;
+}
+
+/* A call to an _fcc_ runtime helper, which touches only the runtime's own
+ * direct-page cells ($E8 and up): never a far-pointer register or an img. */
+static int
+is_helper_call(const Line *L)
+{
+    return is_call(L) && strncmp(L->operand, "_fcc_", 5) == 0;
+}
+
+static int
+al_effect(const Line *L, const char *loc)
+{
+    if (reads_loc(L, loc)) return C_READ;
+    if (is_store_mn(L->mnem) && strcmp(L->operand, loc) == 0) return C_WRITE;
+    if (is_helper_call(L)) return C_NONE;
+    if (is_call(L)) return C_WRITE;
+    if (is_return(L->mnem) && g_al_k0) return C_READ;
+    return C_NONE;
+}
+static int al_effect_lo(const Line *L) { return al_effect(L, g_al_lo); }
+static int al_effect_hi(const Line *L) { return al_effect(L, g_al_hi); }
+
+/* 1 iff operand `op' names `reg' in any form; *form gets which: 1 `reg',
+ * 2 `reg+2', 3 `[reg]', 4 `[reg],Y', 0 anything else that mentions it. */
+static int
+names_reg(const char *op, const char *reg, int *form)
+{
+    char b[PH_TOK + 8];
+    const char *hit = strstr(op, reg);
+    size_t rl = strlen(reg);
+    *form = 0;
+    while (hit && isalnum((unsigned char)hit[rl]))      /* _fcc_img1 vs _fcc_img16 */
+        hit = strstr(hit + 1, reg);
+    if (!hit) return 0;
+    if (strcmp(op, reg) == 0) { *form = 1; return 1; }
+    snprintf(b, sizeof b, "%s+2", reg);
+    if (strcmp(op, b) == 0) { *form = 2; return 1; }
+    snprintf(b, sizeof b, "[%s]", reg);
+    if (strcmp(op, b) == 0) { *form = 3; return 1; }
+    snprintf(b, sizeof b, "[%s],Y", reg);
+    if (strcmp(op, b) == 0) { *form = 4; return 1; }
+    return 1;
+}
+
+/* 1 iff line L may write img word `w' (a store or read-modify-write naming it
+ * directly, or any form this does not recognise as a read). */
+static int
+writes_word(const Line *L, const char *w)
+{
+    int form;
+    if (!names_reg(L->operand, w, &form)) return 0;
+    if (form == 3 || form == 4) return 0;               /* through it: a read */
+    if (form == 1 && (reads_mem(L->mnem) && !is_rmw(L->mnem))) return 0;
+    return 1;
+}
+
+/* 1 iff the `*+N' at line `sk' lands at or before line `at': the exact sizes
+ * of the lines it skips reach N first.  0 when a size is not exact. */
+static int
+skip_lands_by(Line *lines, size_t n, size_t sk, size_t at)
+{
+    long want, got = 0;
+    size_t j;
+    if (strncmp(lines[sk].operand, "*+", 2) != 0) return 0;
+    want = strtol(lines[sk].operand + 2, NULL, 10);
+    got = insn_size_ub(&lines[sk]);
+    if (got != insn_size_lb(&lines[sk])) return 0;
+    for (j = sk + 1; j <= at && j < n; j++) {
+        int ub, lb;
+        if (got == want) return 1;
+        if (got > want) return 0;
+        if (lines[j].dead) continue;
+        ub = insn_size_ub(&lines[j]);
+        lb = insn_size_lb(&lines[j]);
+        if (ub < 0 || ub != lb) return 0;
+        got += ub;
+    }
+    return got == want;
+}
+
+static void
+pat_img_fpr_alias(Line *lines, size_t n)
+{
+    size_t i;
+    for (i = 0; i + 3 < n; i++) {
+        Line *a = &lines[i], *b = &lines[i + 1], *c = &lines[i + 2], *d = &lines[i + 3];
+        char k[PH_TOK], s0[PH_TOK], s1[PH_TOK];
+        unsigned sn, kn;
+        size_t j, e, back, rd[256];
+        int nrd = 0, ok = 1, form;
+        if (a->dead || b->dead || c->dead || d->dead) continue;
+        if (a->label[0] || b->label[0] || c->label[0] || d->label[0]) continue;
+        if (strcmp(a->mnem, "LDA") || strcmp(b->mnem, "STA") ||
+            strcmp(c->mnem, "LDA") || strcmp(d->mnem, "STA")) continue;
+        if (sscanf(c->operand, "_fcc_img%u", &sn) != 1 ||
+            sscanf(d->operand, "_fcc_fpr%u", &kn) != 1) continue;
+        snprintf(s0, sizeof s0, "_fcc_img%u", sn);
+        snprintf(s1, sizeof s1, "_fcc_img%u", sn + 1);
+        snprintf(k, sizeof k, "_fcc_fpr%u", kn);
+        snprintf(g_al_lo, sizeof g_al_lo, "%s", k);
+        snprintf(g_al_hi, sizeof g_al_hi, "%s+2", k);
+        if (strcmp(c->operand, s0) || strcmp(a->operand, s1) ||
+            strcmp(d->operand, g_al_lo) || strcmp(b->operand, g_al_hi)) continue;
+        g_al_k0 = (kn == 0);
+        /* a `*+N' skip may land past lines this deletes */
+        for (back = i; back > 0 && back + 8 > i; back--)
+            if (lines[back - 1].operand[0] == '*' &&
+                !skip_lands_by(lines, n, back - 1, i)) { ok = 0; break; }
+        if (!ok) continue;
+        for (j = i + 4; j < n; j++) {
+            Line *L = &lines[j];
+            if (L->label[0]) break;
+            if (L->dead || !L->mnem[0]) continue;
+            if (strcmp(L->mnem, "DO") == 0) {          /* a frame gate: see through */
+                size_t f;
+                for (f = j + 1; f < n && strcmp(lines[f].mnem, "FIN"); f++) {
+                    int fm;
+                    if (lines[f].label[0] || is_control(lines[f].mnem) ||
+                        names_reg(lines[f].operand, k, &fm) ||
+                        names_reg(lines[f].operand, s0, &fm) ||
+                        names_reg(lines[f].operand, s1, &fm))
+                        break;
+                }
+                if (f >= n || strcmp(lines[f].mnem, "FIN")) break;
+                j = f;
+                continue;
+            }
+            if (writes_word(L, s0) || writes_word(L, s1)) break;
+            if (names_reg(L->operand, k, &form)) {
+                if (is_store_mn(L->mnem) && (form == 1 || form == 2)) break;
+                if (form == 0 || is_rmw(L->mnem)) { ok = 0; break; }
+                if (nrd >= 256) { ok = 0; break; }
+                rd[nrd++] = j;
+                continue;
+            }
+            if (is_helper_call(L)) continue;
+            if (is_call(L) || is_control(L->mnem) ||
+                strcmp(L->mnem, "ELSE") == 0 || strcmp(L->mnem, "FIN") == 0 ||
+                insn_size_ub(L) < 0)
+                break;
+        }
+        if (!ok) continue;
+        e = j;
+        g_dop_helpers_pass = 1;
+        ok = e < n && dead_on_paths(lines, n, e, 4, al_effect_lo) &&
+             dead_on_paths(lines, n, e, 4, al_effect_hi);
+        g_dop_helpers_pass = 0;
+        if (!ok)
+            continue;
+        for (j = 0; j < (size_t)nrd; j++) {
+            Line *L = &lines[rd[j]];
+            char op[PH_TOK + 8];
+            names_reg(L->operand, k, &form);
+            snprintf(op, sizeof op, form == 1 ? "%s" : form == 2 ? "%s" :
+                                    form == 3 ? "[%s]" : "[%s],Y",
+                     form == 2 ? s1 : s0);
+            set_insn(L, L->mnem, op);
+        }
+        a->dead = b->dead = d->dead = 1;               /* c keeps A = offset */
+        i += 3;
+    }
+}
+
 char *
 peephole_optimize(const char *asm_text)
 {
@@ -1516,6 +1732,7 @@ peephole_optimize(const char *asm_text)
     int had_nl = (len > 0 && asm_text[len - 1] == '\n');
     Line *lines = split_lines(asm_text, &n);
     char *out;
+    int have_labels;
     if (!lines) return NULL;
 
     {   /* T5-C C4b __asm opacity: every line inside ;__ASM..;__ASM_END
@@ -1530,6 +1747,9 @@ peephole_optimize(const char *asm_text)
                 snprintf(lines[i].label, sizeof lines[i].label, "@__asm");
         }
     }
+    have_labels = labels_build(lines, n);
+    if (have_labels)
+        pat_img_fpr_alias(lines, n);
     pat_bra_to_next(lines, n);
     pat_neg_const(lines, n);
     if (tmpb_block_local(lines, n)) {
@@ -1542,7 +1762,7 @@ peephole_optimize(const char *asm_text)
     pat_dead_store(lines, n);
     pat_dead_lda(lines, n);
     pat_empty_width_roundtrip(lines, n);
-    if (labels_build(lines, n)) {
+    if (have_labels) {
         pat_tax_txa(lines, n);
         pat_dead_tax(lines, n);
         pat_relax_branches(lines, n);       /* the carry walk follows Bcc L */

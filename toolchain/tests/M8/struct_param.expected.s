@@ -108,10 +108,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL setp
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3

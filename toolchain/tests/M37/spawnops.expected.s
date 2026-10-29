@@ -113,12 +113,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnv
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 LDX     #0
                 STA     _fcc_tmp_b
@@ -152,12 +150,10 @@ _spawnops_L0
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL waitpid
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 LDA     3,S   ; fccstk d=2 b=1
                 STA     _fcc_tmp_b
@@ -203,12 +199,10 @@ _spawnops_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnv
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _spawnops_L4
                 LDA     5,S   ; fccstk d=0 b=5
@@ -282,12 +276,10 @@ _spawnops_L6
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL waitpid
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 LDA     3,S   ; fccstk d=2 b=1
                 STA     _fcc_tmp_b

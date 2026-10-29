@@ -397,12 +397,10 @@ _f_knr_L1
                 TYA
                 PHA
                 FGX2_FARCALL dpar
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #6
                 BEQ     _f_knr_L2

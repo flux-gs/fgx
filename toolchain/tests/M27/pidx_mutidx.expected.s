@@ -116,13 +116,9 @@ main_stkok        TCS
                 INC
                 INC
                 STA     _fcc_img0
-                LDA     _fcc_img3
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img2
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_fpr1
+                SBC     _fcc_img2
                 LSR
                 ASL
                 CLC

@@ -48,13 +48,12 @@ _seekrw_filesize_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
+                CMP     #0
                 BPL     _seekrw_L0
                 LDA     #$FFFF
                 TAY
@@ -80,19 +79,15 @@ _seekrw_L0
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL lseek
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC
@@ -188,13 +183,12 @@ _seekrw_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
+                CMP     #0
                 BPL     _seekrw_L5
                 LDA     #$FFFF
                 TAY
@@ -222,16 +216,14 @@ _seekrw_L5
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL write
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -281,13 +273,12 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
+                CMP     #0
                 BPL     _seekrw_L6
                 LDA     #0
                 TAY
@@ -310,10 +301,10 @@ _seekrw_L6
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL lseek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #3
                 PHA
                 SEP     #$20
@@ -330,16 +321,14 @@ _seekrw_L6
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL write
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 PHA
                 LDA     #0
@@ -356,12 +345,10 @@ _seekrw_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
@@ -381,19 +368,15 @@ _seekrw_L6
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL read
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     #0
@@ -464,10 +447,8 @@ _seekrw_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _seekrw_mk35
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 LDA     #1
@@ -484,12 +465,10 @@ _seekrw_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #0
                 PHA
@@ -504,10 +483,10 @@ _seekrw_L12
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL lseek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #8
                 PHA
                 SEP     #$20
@@ -524,16 +503,14 @@ _seekrw_L12
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL write
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -546,12 +523,8 @@ _seekrw_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _seekrw_filesize
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 PHA
@@ -569,12 +542,10 @@ _seekrw_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
@@ -594,16 +565,14 @@ _seekrw_L12
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL read
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #35
@@ -647,10 +616,8 @@ _seekrw_L13
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _seekrw_mk35
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 LDA     #2
@@ -667,12 +634,10 @@ _seekrw_L13
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #8
                 PHA
@@ -692,12 +657,10 @@ _seekrw_L13
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL read
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     _fcc_img16
                 LDA     #0
                 PHA
@@ -712,10 +675,10 @@ _seekrw_L13
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL lseek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img16
                 TAX
                 CMP     #8
@@ -736,12 +699,10 @@ _seekrw_L13
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL write
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #8
                 BNE     _seekrw_L14
@@ -755,9 +716,7 @@ _seekrw_L15
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -770,12 +729,8 @@ _seekrw_L15
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _seekrw_filesize
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 PHA
@@ -793,12 +748,10 @@ _seekrw_L15
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
@@ -818,17 +771,16 @@ _seekrw_L15
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL read
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_img16
+                CMP     #0
                 BEQ     _seekrw_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -873,10 +825,8 @@ _seekrw_L16
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _seekrw_mk35
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 LDA     #2
@@ -893,12 +843,10 @@ _seekrw_L16
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #16
                 PHA
@@ -918,12 +866,10 @@ _seekrw_L16
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL read
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     _fcc_img16
                 LDA     #1
                 PHA
@@ -939,12 +885,10 @@ _seekrw_L16
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL lseek
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_img16
                 TAX
@@ -970,12 +914,10 @@ _seekrw_L16
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL write
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #8
                 BNE     _seekrw_L17
@@ -1000,13 +942,12 @@ _seekrw_L18
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL lseek
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
+                CMP     #0
                 BNE     _seekrw_L20
                 LDA     #8
                 PHA
@@ -1024,12 +965,10 @@ _seekrw_L18
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL write
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #8
                 BEQ     _seekrw_L19
@@ -1040,9 +979,7 @@ _seekrw_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1055,12 +992,8 @@ _seekrw_L19
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _seekrw_filesize
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 PHA
@@ -1078,12 +1011,10 @@ _seekrw_L19
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
@@ -1103,16 +1034,14 @@ _seekrw_L19
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL read
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_img16
                 BEQ     _seekrw_L21
                 LDA     5,S   ; fccstk d=0 b=5
@@ -1172,10 +1101,8 @@ _seekrw_L21
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

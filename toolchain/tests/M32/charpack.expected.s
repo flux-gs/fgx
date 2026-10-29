@@ -628,9 +628,7 @@ _charpack_L21
                 DEY
                 BPL     _charpack_L21
                 FGX2_FARCALL take
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #17
                 ASL

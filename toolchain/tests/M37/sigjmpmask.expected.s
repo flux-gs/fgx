@@ -73,10 +73,9 @@ main_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL signal
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -100,10 +99,8 @@ _sigjmpmask_L2
                 FGX2_FARCALL getpid
                 PHA
                 FGX2_FARCALL kill
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
 _sigjmpmask_L1
                 LDA     sjm_hits
                 TAX
@@ -124,12 +121,8 @@ _sigjmpmask_L4
                 TYA
                 PHA
                 FGX2_FARCALL sigblock
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #2
                 STX     _fcc_long_b_lo
                 LDX     #0

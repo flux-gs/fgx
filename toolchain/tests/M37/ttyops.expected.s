@@ -67,12 +67,10 @@ main_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL gtty
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _ttyops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -96,12 +94,10 @@ _ttyops_L0
                 LDA     #0
                 PHA
                 FGX2_FARCALL stty
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _ttyops_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -127,12 +123,10 @@ _ttyops_L1
                 LDA     #99
                 PHA
                 FGX2_FARCALL ioctl
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _ttyops_L2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -154,12 +148,9 @@ _ttyops_L2
                 LDA     #2
                 PHA
                 FGX2_FARCALL signal
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -194,12 +185,9 @@ _ttyops_L3
                 LDA     #2
                 PHA
                 FGX2_FARCALL signal
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -236,12 +224,9 @@ _ttyops_L7
                 LDA     #2
                 PHA
                 FGX2_FARCALL signal
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -276,12 +261,9 @@ _ttyops_L10
                 LDA     #2
                 PHA
                 FGX2_FARCALL signal
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr1+2
                 LDA     1,S   ; fccstk d=0 b=1

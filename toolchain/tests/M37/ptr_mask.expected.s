@@ -41,10 +41,7 @@ main_stkok        TCS
                 LDA     #15
                 STA     _fcc_img3
                 PHA
-                LDA     _fcc_img5
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img4
-                STA     _fcc_fpr0
                 STA     _fcc_tmp_b
                 PLA
                 AND     _fcc_tmp_b
@@ -61,10 +58,7 @@ main_stkok        TCS
                 ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L0
-                LDA     _fcc_img5
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img4
-                STA     _fcc_fpr0
                 AND     _fcc_img3
                 STA     _fcc_img1
                 PHA
@@ -79,10 +73,7 @@ _ptr_mask_L0
                 ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L1
-                LDA     _fcc_img5
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img4
-                STA     _fcc_fpr0
                 ORA     #1
                 STA     _fcc_img1
                 PHA
@@ -99,10 +90,7 @@ _ptr_mask_L1
 _ptr_mask_L2
                 LDA     #90
                 PHA
-                LDA     _fcc_img5
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img4
-                STA     _fcc_fpr0
                 STA     _fcc_tmp_b
                 PLA
                 EOR     _fcc_tmp_b
@@ -119,10 +107,7 @@ _ptr_mask_L2
                 ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L3
-                LDA     _fcc_img5
-                STA     _fcc_fpr0+2
                 LDA     _fcc_img4
-                STA     _fcc_fpr0
                 AND     #1
                 PHA
                 LDA     _fcc_img2

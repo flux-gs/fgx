@@ -64,12 +64,10 @@ fwdb_stkok        TCS
                 FIN
                 PHA
                 FGX2_FARCALL chk
-                TAY
-                PLA
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -147,10 +145,8 @@ main_stkok        TCS
                 LDA     3,S   ; fccstk d=2 b=1
                 PHA
                 FGX2_FARCALL nar
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #5
                 BEQ     _sigsfwd_L0
@@ -314,12 +310,10 @@ fwd_stkok        TCS
                 FIN
                 PHA
                 FGX2_FARCALL chk
-                TAY
-                PLA
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

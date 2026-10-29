@@ -136,12 +136,10 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL probe
-                TAY
-                PLA
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #10
                 BEQ     _labelarm_L8
@@ -165,12 +163,10 @@ _labelarm_L8
                 LDA     #1
                 PHA
                 FGX2_FARCALL probe
-                TAY
-                PLA
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _labelarm_L9
@@ -194,12 +190,10 @@ _labelarm_L9
                 LDA     #0
                 PHA
                 FGX2_FARCALL probe
-                TAY
-                PLA
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _labelarm_L10
@@ -223,12 +217,10 @@ _labelarm_L10
                 LDA     #1
                 PHA
                 FGX2_FARCALL probe
-                TAY
-                PLA
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #990
                 BEQ     _labelarm_L11

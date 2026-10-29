@@ -99,16 +99,12 @@ main_stkok        TCS
                 LDA     #9
                 PHA
                 FGX2_FARCALL _inline_spec_twice
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #8
                 PHA
                 FGX2_FARCALL thrice
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

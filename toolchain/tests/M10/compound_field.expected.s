@@ -41,13 +41,17 @@ main_stkok        TCS
                 ADC     #0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img0
+                LDA     [_fcc_img0]
                 TAX
                 DEC
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img0]
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3

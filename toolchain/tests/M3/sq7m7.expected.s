@@ -72,9 +72,7 @@ main_stkok        TCS
                 LDA     #7
                 PHA
                 FGX2_FARCALL sq
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 SEC
                 SBC     #7

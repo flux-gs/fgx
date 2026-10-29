@@ -24,10 +24,8 @@ main_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL relay
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #235
                 BNE     _krvarencl_L0
@@ -94,11 +92,9 @@ relay_stkok        TCS
                 FIN
                 PHA
                 FGX2_FARCALL mix3
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

@@ -127,9 +127,11 @@ ivec_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -253,12 +255,8 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -269,12 +267,9 @@ main_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L0
                 PHA
                 SEP     #$20
@@ -317,12 +312,8 @@ _callchain_ptr_compound_L0
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -333,12 +324,9 @@ _callchain_ptr_compound_L0
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L1
                 PHA
                 SEP     #$20
@@ -379,12 +367,8 @@ _callchain_ptr_compound_L1
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -395,12 +379,9 @@ _callchain_ptr_compound_L1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L2
                 PHA
                 SEP     #$20
@@ -443,12 +424,8 @@ _callchain_ptr_compound_L2
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -459,12 +436,9 @@ _callchain_ptr_compound_L2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L3
                 PHA
                 SEP     #$20
@@ -493,13 +467,10 @@ _callchain_ptr_compound_L3
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -515,12 +486,8 @@ _callchain_ptr_compound_L3
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     other+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     other+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -531,12 +498,9 @@ _callchain_ptr_compound_L3
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L4
                 PHA
                 SEP     #$20
@@ -565,13 +529,10 @@ _callchain_ptr_compound_L4
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -589,12 +550,8 @@ _callchain_ptr_compound_L4
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
                 LDA     other+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     other+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -605,12 +562,9 @@ _callchain_ptr_compound_L4
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L5
                 PHA
                 SEP     #$20
@@ -643,13 +597,8 @@ _callchain_ptr_compound_L5
                 ADC     #6
                 STA     [_fcc_fpr0],Y
                 LDY     #4
-                LDA     _fcc_tmp_b
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -660,12 +609,9 @@ _callchain_ptr_compound_L5
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L6
                 PHA
                 SEP     #$20
@@ -698,13 +644,8 @@ _callchain_ptr_compound_L6
                 SBC     #6
                 STA     [_fcc_fpr0],Y
                 LDY     #4
-                LDA     _fcc_tmp_b
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -715,12 +656,9 @@ _callchain_ptr_compound_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L7
                 PHA
                 SEP     #$20
@@ -761,15 +699,16 @@ _callchain_ptr_compound_L7
                 CLC
                 ADC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
+                TAY
                 LDA     _fcc_ptr+2
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img17
+                TYA
                 STA     _fcc_fpr0
                 JSR     _fcc_bank_for_int
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -779,19 +718,12 @@ _callchain_ptr_compound_L7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L8
-                SEP     #$20
-                MX      %10
                 LDA     hroot+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     hroot+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -802,12 +734,9 @@ _callchain_ptr_compound_L8
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L9
                 PHA
                 SEP     #$20
@@ -850,15 +779,16 @@ _callchain_ptr_compound_L9
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
+                TAY
                 LDA     _fcc_ptr+2
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img17
+                TYA
                 STA     _fcc_fpr0
                 JSR     _fcc_bank_for_int
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -868,12 +798,9 @@ _callchain_ptr_compound_L9
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L10
                 LDA     #0
                 STA     calls
@@ -924,12 +851,9 @@ _callchain_ptr_compound_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L11
                 LDA     #ivv
                 PHA
@@ -969,12 +893,9 @@ _callchain_ptr_compound_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L12
                 LDA     calls
                 TAX
@@ -984,12 +905,9 @@ _callchain_ptr_compound_L12
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L13
                 FGX2_FARCALL ivec
                 LDA     _fcc_fpr0
@@ -1011,12 +929,9 @@ _callchain_ptr_compound_L13
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L14
                 LDA     #pvv
                 PHA
@@ -1098,12 +1013,9 @@ _callchain_ptr_compound_L14
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L15
                 LDA     calls
                 TAX
@@ -1113,12 +1025,9 @@ _callchain_ptr_compound_L15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L16
                 LDA     #pvv
                 PHA
@@ -1200,12 +1109,9 @@ _callchain_ptr_compound_L16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _callchain_ptr_compound_L17
                 LDA     #pvv
                 PHA
@@ -1287,23 +1193,25 @@ _callchain_ptr_compound_L17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _callchain_ptr_compound_L18
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     6
+main_FRAMESIZE   EQU     10
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 21

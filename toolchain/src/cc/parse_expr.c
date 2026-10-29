@@ -8524,23 +8524,8 @@ walk_expr_body(int n)
             emit_call_indirect(kc);
             fpr_drop(kc);
         }
-        if (g_ast[n].flags & AF_STMT_DISCARD) {
-            if (total_arg_bytes > 0) {
-                ir_emitf("                TSC\n");
-                ir_record_raw(IR_ADD_CONST, (unsigned)(total_arg_bytes), 0, NULL);
-                ir_emitf("                TCS\n");
-                g_s_delta -= total_arg_bytes;
-            }
-        } else if (total_arg_bytes == 2 * actual_argc) {
-            emit_drop_args(actual_argc);
-        } else {
-            ir_record_raw(IR_TAY, 0, 0, NULL);
-            ir_emitf("                TSC\n");
-            ir_record_raw(IR_ADD_CONST, (unsigned)(total_arg_bytes), 0, NULL);
-            ir_emitf("                TCS\n");
-            ir_record_raw(IR_TYA, 0, 0, NULL);
-            g_s_delta -= total_arg_bytes;
-        }
+        emit_drop_arg_bytes(total_arg_bytes,
+                            (g_ast[n].flags & AF_STMT_DISCARD) != 0);
         g_expr_type      = g_fn_sigs[sig].return_type;
         g_expr_struct_id = -1;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
@@ -8566,21 +8551,8 @@ walk_expr_body(int n)
                                          &actual_argc);
         rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         emit_call(g_ast[n].name, g_ast[n].name_len, !g_pile);
-        if (total_arg_bytes == 2 * actual_argc) {
-            emit_drop_args(actual_argc);
-        } else if (g_ast[n].flags & AF_STMT_DISCARD) {
-            ir_emitf("                TSC\n");
-            ir_record_raw(IR_ADD_CONST, (unsigned)(total_arg_bytes), 0, NULL);
-            ir_emitf("                TCS\n");
-            g_s_delta -= total_arg_bytes;
-        } else {
-            ir_record_raw(IR_TAY, 0, 0, NULL);
-            ir_emitf("                TSC\n");
-            ir_record_raw(IR_ADD_CONST, (unsigned)(total_arg_bytes), 0, NULL);
-            ir_emitf("                TCS\n");
-            ir_record_raw(IR_TYA, 0, 0, NULL);
-            g_s_delta -= total_arg_bytes;
-        }
+        emit_drop_arg_bytes(total_arg_bytes,
+                            (g_ast[n].flags & AF_STMT_DISCARD) != 0);
         g_expr_type      = g_funcs[fn_idx].return_type;
         g_expr_struct_id = g_funcs[fn_idx].return_struct_id;
         g_expr_unsigned  = g_funcs[fn_idx].ret_unsigned;
@@ -8749,16 +8721,7 @@ walk_expr_body(int n)
             emit_call_indirect(kc);
             fpr_drop(kc);
         }
-        if (total_arg_bytes == 2 * actual_argc) {
-            emit_drop_args(actual_argc);
-        } else {
-            ir_record_raw(IR_TAY, 0, 0, NULL);
-            ir_emitf("                TSC\n");
-            ir_record_raw(IR_ADD_CONST, (unsigned)(total_arg_bytes), 0, NULL);
-            ir_emitf("                TCS\n");
-            ir_record_raw(IR_TYA, 0, 0, NULL);
-            g_s_delta -= total_arg_bytes;
-        }
+        emit_drop_arg_bytes(total_arg_bytes, 0);
         g_expr_type      = g_fn_sigs[sig].return_type;
         g_expr_struct_id = -1;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */

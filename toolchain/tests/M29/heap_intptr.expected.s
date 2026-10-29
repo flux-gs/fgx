@@ -27,12 +27,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL malloc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0

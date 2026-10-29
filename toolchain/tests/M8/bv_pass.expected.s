@@ -106,12 +106,8 @@ _bv_pass_L0
                 DEY
                 BPL     _bv_pass_L0
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

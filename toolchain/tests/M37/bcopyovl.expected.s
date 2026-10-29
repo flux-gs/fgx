@@ -418,11 +418,9 @@ one_stkok        TCS
                 FIN
                 PHA
                 FGX2_FARCALL ref
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -458,11 +456,10 @@ main_stkok        TCS
                 LDA     #4
                 PHA
                 FGX2_FARCALL one
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L17
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -477,11 +474,10 @@ _bcopyovl_L17
                 LDA     #4
                 PHA
                 FGX2_FARCALL one
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L18
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -496,11 +492,10 @@ _bcopyovl_L18
                 LDA     #5
                 PHA
                 FGX2_FARCALL one
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L19
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -515,11 +510,10 @@ _bcopyovl_L19
                 LDA     #5
                 PHA
                 FGX2_FARCALL one
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L20
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -534,11 +528,10 @@ _bcopyovl_L20
                 LDA     #0
                 PHA
                 FGX2_FARCALL one
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L21
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -553,11 +546,10 @@ _bcopyovl_L21
                 LDA     #3
                 PHA
                 FGX2_FARCALL one
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L22
                 LDA     #1
                 PHA
@@ -566,11 +558,10 @@ _bcopyovl_L21
                 LDA     #2
                 PHA
                 FGX2_FARCALL one
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L22
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -656,11 +647,10 @@ _bcopyovl_L22
                 LDA     #0
                 PHA
                 FGX2_FARCALL ref
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _bcopyovl_L23
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX

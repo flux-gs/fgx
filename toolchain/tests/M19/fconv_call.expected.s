@@ -280,9 +280,7 @@ _fconv_call_L1
                 JSR     _fcc_ftoi
                 PHA
                 FGX2_FARCALL ti
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #7
                 BNE     _fconv_call_L2
@@ -302,12 +300,8 @@ _fconv_call_L2
                 TYA
                 PHA
                 FGX2_FARCALL tl
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #7
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -331,12 +325,8 @@ _fconv_call_L3
                 TYA
                 PHA
                 FGX2_FARCALL tf
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 JSR     _fcc_ftol
                 LDX     #4464
                 STX     _fcc_long_b_lo

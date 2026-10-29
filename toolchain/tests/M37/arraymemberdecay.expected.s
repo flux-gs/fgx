@@ -429,13 +429,8 @@ _arraymemberdecay_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
                 LDA     vp+4
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 LDA     vp+2
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
@@ -645,12 +640,8 @@ _arraymemberdecay_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arraymemberdecay_firstlong
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #3855
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -705,12 +696,8 @@ _arraymemberdecay_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arraymemberdecay_firstlong
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #255
                 STX     _fcc_long_b_lo
                 LDX     #0

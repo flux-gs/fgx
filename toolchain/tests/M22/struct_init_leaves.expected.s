@@ -210,12 +210,8 @@ _struct_init_leaves_L9
                 ADC     #4
                 STA     _fcc_img0
 _struct_init_leaves_L5
-                SEP     #$20
-                MX      %10
                 LDA     _struct_init_leaves_nulv+10
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _struct_init_leaves_nulv+8
                 STA     _fcc_fpr0
                 LDA     #0
@@ -238,12 +234,8 @@ _struct_init_leaves_L11
 _struct_init_leaves_L12
                 CMP     #0
                 BEQ     _struct_init_leaves_L10
-                SEP     #$20
-                MX      %10
                 LDA     _struct_init_leaves_nulv+14
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _struct_init_leaves_nulv+12
                 STA     _fcc_fpr0
                 LDA     #0
@@ -266,12 +258,8 @@ _struct_init_leaves_L13
 _struct_init_leaves_L14
                 CMP     #0
                 BEQ     _struct_init_leaves_L10
-                SEP     #$20
-                MX      %10
                 LDA     _struct_init_leaves_nulv+18
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _struct_init_leaves_nulv+16
                 STA     _fcc_fpr0
                 LDA     #0

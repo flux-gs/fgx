@@ -7,9 +7,11 @@
                 FGX2_EXPORT put
 put            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #put_FRAMESIZE
+                SBC     #put_FRAMESIZE-4
                 DO      put_STKGUARD
                 BCC     put_stkovf
                 CMP     _fcc_stkfloor
@@ -19,17 +21,6 @@ put_stkovf       JMP     _fcc_stkoflow
 put_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      10+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+put_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      8+put_FRAMESIZE/256
                 TSC
                 CLC
@@ -40,18 +31,29 @@ put_stkok        TCS
                 ELSE
                 LDA     8+put_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img16
+                DO      10+put_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+put_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+put_FRAMESIZE,S   ; fccstk d=0 b=10 fs
+                FIN
+                STA     _fcc_img17
+                LDA     [_fcc_img16]
                 DEC
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img16]
                 BMI     _putcsize_L0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img16],Y
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0
@@ -74,17 +76,17 @@ put_stkok        TCS
                 BRL     _putcsize_L1
 _putcsize_L0
                 LDY     #12
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 TAX
                 AND     #128
                 BNE     *+5
                 BRL     _putcsize_L2
-                LDA     [_fcc_fpr0]
+                LDA     [_fcc_img16]
                 EOR     #$FFFF
                 INC
                 PHA
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_tmp_b
                 PLA
                 SEC
@@ -92,18 +94,14 @@ _putcsize_L0
                 BVC     _putcsize_L4
                 EOR     #$8000
 _putcsize_L4
-                BMI     *+5
-                BRL     _putcsize_L2
+                BPL     _putcsize_L2
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 DO      6+put_FRAMESIZE/256
@@ -125,36 +123,14 @@ _putcsize_L4
                 TAX
                 CMP     #10
                 BEQ     _putcsize_L5
-                DO      10+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+put_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+put_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img16],Y
                 LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0
@@ -162,58 +138,31 @@ _putcsize_L4
                 AND     #$00FF
                 BRA     _putcsize_L6
 _putcsize_L5
-                DO      10+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+put_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+put_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img16],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img16],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 PHA
                 FGX2_FARCALL _flsbuf
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
 _putcsize_L6
                 BRA     _putcsize_L3
 _putcsize_L2
-                LDA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
+                LDA     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img16
                 DO      10+put_FRAMESIZE/256
                 TSC
                 CLC
@@ -227,24 +176,25 @@ _putcsize_L2
                 AND     #$00FF
                 PHA
                 FGX2_FARCALL _flsbuf
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
 _putcsize_L3
 _putcsize_L1
                 TAY
                 TSC
                 CLC
-                ADC     #put_FRAMESIZE
+                ADC     #put_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-put_FRAMESIZE   EQU     0
+put_FRAMESIZE   EQU     4
 put_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
@@ -318,12 +268,9 @@ main_stkok        TCS
                 LDA     #97
                 PHA
                 FGX2_FARCALL put
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #97
                 BNE     _putcsize_L7
@@ -342,12 +289,9 @@ main_stkok        TCS
                 LDA     #98
                 PHA
                 FGX2_FARCALL put
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #98
                 BNE     _putcsize_L7
                 LDA     1,S   ; fccstk d=0 b=1
@@ -374,12 +318,9 @@ _putcsize_L7
                 LDA     #99
                 PHA
                 FGX2_FARCALL put
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #99
                 BNE     _putcsize_L8
                 LDA     3,S   ; fccstk d=0 b=3

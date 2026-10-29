@@ -790,12 +790,10 @@ _float_promote_L4
                 TYA
                 PHA
                 FGX2_FARCALL half
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 FGX2_FARCALL _fcc_dtof
                 STA     13,S   ; fccstk d=0 b=13
                 TAY
@@ -849,12 +847,10 @@ _float_promote_L5
                 TYA
                 PHA
                 FGX2_FARCALL _float_promote_twice
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -898,12 +894,10 @@ _float_promote_L6
                 TYA
                 PHA
                 FGX2_FARCALL _float_promote_twice
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1012,12 +1006,10 @@ _float_promote_L8
                 PHA
                 RTL
 _float_promote_L10
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA

@@ -178,9 +178,7 @@ apply_stkok        TCS
                 PHA
                 RTL
 _m18_fnptr_L0
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC
@@ -235,9 +233,7 @@ main_stkok        TCS
                 PHA
                 RTL
 _m18_fnptr_L2
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     13,S   ; fccstk d=0 b=13
                 PHA
                 LDA     #4
@@ -253,12 +249,9 @@ _m18_fnptr_L2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL apply
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -324,9 +317,7 @@ _m18_fnptr_L2
                 PHA
                 RTL
 _m18_fnptr_L6
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -352,9 +343,7 @@ _m18_fnptr_L6
                 PHA
                 RTL
 _m18_fnptr_L7
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

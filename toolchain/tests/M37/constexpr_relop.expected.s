@@ -112,9 +112,7 @@ main_stkok        TCS
                 LDA     #10
                 PHA
                 FGX2_FARCALL classify
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -123,9 +121,7 @@ main_stkok        TCS
                 LDA     #20
                 PHA
                 FGX2_FARCALL classify
-                TAY
-                PLA
-                TYA
+                PLY
                 ASL
                 STA     _fcc_tmp_b
                 PLA

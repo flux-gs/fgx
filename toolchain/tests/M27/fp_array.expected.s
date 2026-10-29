@@ -168,9 +168,7 @@ main_stkok        TCS
                 PHA
                 RTL
 _fp_array_L0
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #1
                 ASL
@@ -207,9 +205,7 @@ _fp_array_L0
                 PHA
                 RTL
 _fp_array_L1
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -250,9 +246,7 @@ _fp_array_L1
                 PHA
                 RTL
 _fp_array_L2
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

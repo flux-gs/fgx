@@ -1813,9 +1813,7 @@ main_stkok        TCS
                 LDA     #18
                 PHA
                 FGX2_FARCALL scalarfar
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

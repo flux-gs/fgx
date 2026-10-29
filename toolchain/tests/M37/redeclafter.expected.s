@@ -88,9 +88,7 @@ main_stkok        TCS
                 LDA     #20
                 PHA
                 FGX2_FARCALL f
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 FGX2_FARCALL g
                 STA     _fcc_tmp_b

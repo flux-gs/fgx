@@ -115,16 +115,12 @@ main_stkok        TCS
                 LDA     #5
                 PHA
                 FGX2_FARCALL f
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #1
                 PHA
                 FGX2_FARCALL g
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

@@ -195,10 +195,8 @@ main_stkok        TCS
                 LDA     #20
                 PHA
                 FGX2_FARCALL pick
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -208,9 +206,7 @@ main_stkok        TCS
                 LDA     #274
                 PHA
                 FGX2_FARCALL mask
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -226,12 +222,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL big
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

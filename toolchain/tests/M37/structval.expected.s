@@ -162,17 +162,6 @@ _structval_same_stkovf       JMP     _fcc_stkoflow
 _structval_same_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+_structval_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structval_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structval_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      6+_structval_same_FRAMESIZE/256
                 TSC
                 CLC
@@ -183,6 +172,20 @@ _structval_same_stkok        TCS
                 ELSE
                 LDA     6+_structval_same_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_img0
+                DO      8+_structval_same_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+_structval_same_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+_structval_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -200,6 +203,10 @@ _structval_same_stkok        TCS
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     _structval_L2
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -217,6 +224,10 @@ _structval_same_stkok        TCS
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     _structval_L2
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -265,17 +276,6 @@ _structval_fill_stkovf       JMP     _fcc_stkoflow
 _structval_fill_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+_structval_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structval_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      6+_structval_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -286,7 +286,19 @@ _structval_fill_stkok        TCS
                 ELSE
                 LDA     6+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                STA     _fcc_fpr0
+                STA     _fcc_img0
+                DO      8+_structval_fill_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+_structval_fill_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                LDA     _fcc_img0
                 DO      10+_structval_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -297,8 +309,8 @@ _structval_fill_stkok        TCS
                 ELSE
                 LDA     10+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                STA     [_fcc_fpr0]
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0]
+                LDA     _fcc_img0
                 DO      10+_structval_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -311,8 +323,11 @@ _structval_fill_stkok        TCS
                 FIN
                 INC
                 LDY     #2
-                STA     [_fcc_fpr0],Y
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0],Y
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 DO      10+_structval_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -376,10 +391,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #13
                 PHA
                 LDA     #1
@@ -400,10 +414,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -443,10 +456,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #23
                 PHA
                 LDA     #1
@@ -467,10 +479,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #30
                 PHA
                 PHA
@@ -487,10 +498,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #33
                 PHA
                 LDA     #1
@@ -511,10 +521,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #40
                 PHA
                 PHA
@@ -531,10 +540,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #43
                 PHA
                 LDA     #1
@@ -555,10 +563,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -631,13 +638,10 @@ _structval_L5
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -771,13 +775,10 @@ _structval_L9
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #8
@@ -1003,13 +1004,10 @@ _structval_L8
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2
@@ -1061,13 +1059,10 @@ _structval_L13
                 LDY     #22
                 LDA     [_fcc_fpr1],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
+                INY
+                INY
                 LDA     [_fcc_fpr1],Y
                 STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2

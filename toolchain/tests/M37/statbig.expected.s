@@ -34,12 +34,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL creat
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
                 BPL     _statbig_L0
@@ -83,10 +80,10 @@ _statbig_L4
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 FGX2_FARCALL write
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _statbig_L2
                 INC     _fcc_img16
                 BRA     _statbig_L1
@@ -94,9 +91,7 @@ _statbig_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -121,12 +116,11 @@ _statbig_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL stat
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _statbig_L5
                 SEP     #$20
                 MX      %10
@@ -140,10 +134,8 @@ _statbig_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #2
                 TAY
                 TSC
@@ -172,10 +164,8 @@ _statbig_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5

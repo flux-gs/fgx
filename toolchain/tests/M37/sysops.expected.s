@@ -33,12 +33,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL system
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BNE     _sysops_L0
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
@@ -58,12 +55,8 @@ _sysops_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL system
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
                 SEP     #$20
                 MX      %10
@@ -78,6 +71,7 @@ _sysops_L0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #127
+                CMP     #0
                 BNE     _sysops_L1
                 SEP     #$20
                 MX      %10
@@ -111,12 +105,8 @@ _sysops_L1
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL time
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 LDA     _fcc_long_hi
@@ -158,10 +148,8 @@ _sysops_L2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL time
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5

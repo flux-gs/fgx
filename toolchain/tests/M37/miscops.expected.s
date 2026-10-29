@@ -33,12 +33,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL atoi
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFD6
                 BNE     _miscops_L0
                 LDA     7,S   ; fccstk d=0 b=7
@@ -59,12 +55,8 @@ _miscops_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL atol
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #34464
                 STX     _fcc_long_b_lo
                 LDX     #1
@@ -90,12 +82,8 @@ _miscops_L1
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getenv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -127,10 +115,8 @@ _miscops_L2
                 LDA     #30000
                 PHA
                 FGX2_FARCALL kill
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _miscops_L5
                 LDA     7,S   ; fccstk d=0 b=7
@@ -156,12 +142,10 @@ _miscops_L5
                 LDA     #$FFFF
                 PHA
                 FGX2_FARCALL waitpid
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _miscops_L6
                 LDA     7,S   ; fccstk d=0 b=7
@@ -189,12 +173,10 @@ _miscops_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getfsstat
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 SEC
                 SBC     #1

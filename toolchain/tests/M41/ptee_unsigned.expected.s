@@ -197,12 +197,9 @@ _ptee_unsigned_L2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL viaptr
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 TAY
                 LDA     _fcc_long_hi

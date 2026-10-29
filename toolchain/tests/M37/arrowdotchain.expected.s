@@ -31,20 +31,22 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img0
                 LDA     #1911
-                STA     [_fcc_fpr0]
-                LDA     _fcc_fpr0
+                STA     [_fcc_img0]
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
                 LDA     #4369
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -54,10 +56,7 @@ main_stkok        TCS
                 STA     _arrowdotchain_detached+0
                 LDA     #17476
                 STA     _arrowdotchain_detached+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_img0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -71,12 +70,12 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr1
                 LDY     #6
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #8
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 REP     #$20
                 MX      %00
                 LDA     #21845
@@ -137,10 +136,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #26211
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_img0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -154,12 +150,12 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr1
                 LDY     #10
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #12
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img0],Y
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr1+2
@@ -186,9 +182,9 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     _arrowdotchain_bx+2
                 TYA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -207,9 +203,9 @@ main_stkok        TCS
                 TYA
                 RTL
 _arrowdotchain_L0
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -228,9 +224,9 @@ _arrowdotchain_L0
                 TYA
                 RTL
 _arrowdotchain_L1
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -250,9 +246,9 @@ _arrowdotchain_L1
                 TYA
                 RTL
 _arrowdotchain_L2
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -283,12 +279,12 @@ _arrowdotchain_L3
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img3
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     _fcc_img2
-                LDA     _fcc_img3
+                STA     _fcc_img4
+                LDA     _fcc_img5
                 STA     _fcc_fpr0+2
-                LDA     _fcc_img2
+                LDA     _fcc_img4
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -308,12 +304,8 @@ _arrowdotchain_L3
                 TYA
                 RTL
 _arrowdotchain_L4
-                SEP     #$20
-                MX      %10
                 LDA     _arrowdotchain_bx+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _arrowdotchain_bx
                 INC
                 INC
@@ -334,12 +326,8 @@ _arrowdotchain_L4
                 TYA
                 RTL
 _arrowdotchain_L5
-                SEP     #$20
-                MX      %10
                 LDA     _arrowdotchain_bx+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _arrowdotchain_bx
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -357,20 +345,13 @@ _arrowdotchain_L5
                 TYA
                 RTL
 _arrowdotchain_L6
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #2
@@ -389,20 +370,13 @@ _arrowdotchain_L6
                 TYA
                 RTL
 _arrowdotchain_L7
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #8
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -420,20 +394,13 @@ _arrowdotchain_L7
                 TYA
                 RTL
 _arrowdotchain_L8
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -458,20 +425,13 @@ _arrowdotchain_L8
                 TYA
                 RTL
 _arrowdotchain_L9
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -489,17 +449,17 @@ _arrowdotchain_L9
                 TYA
                 RTL
 _arrowdotchain_L10
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     #2989
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -518,9 +478,9 @@ _arrowdotchain_L10
                 TYA
                 RTL
 _arrowdotchain_L11
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -539,9 +499,9 @@ _arrowdotchain_L11
                 TYA
                 RTL
 _arrowdotchain_L12
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -558,26 +518,21 @@ _arrowdotchain_L12
                 TYA
                 RTL
 _arrowdotchain_L13
-                LDA     _fcc_fpr0
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     #8738
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -588,10 +543,10 @@ _arrowdotchain_L13
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img1
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     _fcc_img0
-                LDA     [_fcc_img0]
+                STA     _fcc_img2
+                LDA     [_fcc_img2]
                 TAX
                 CMP     #26209
                 BEQ     _arrowdotchain_L14
@@ -606,9 +561,9 @@ _arrowdotchain_L13
                 TYA
                 RTL
 _arrowdotchain_L14
-                LDA     _fcc_img1
+                LDA     _fcc_img3
                 STA     _fcc_ptr+2
-                LDA     _fcc_img0
+                LDA     _fcc_img2
                 PHA
                 LDA     #1
                 ASL
@@ -631,9 +586,9 @@ _arrowdotchain_L14
                 TYA
                 RTL
 _arrowdotchain_L15
-                LDA     _fcc_img1
+                LDA     _fcc_img3
                 STA     _fcc_fpr0+2
-                LDA     _fcc_img0
+                LDA     _fcc_img2
                 STA     _fcc_fpr0
                 LDA     #2748
                 STA     [_fcc_fpr0]

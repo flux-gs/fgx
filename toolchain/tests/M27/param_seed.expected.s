@@ -89,9 +89,7 @@ main_stkok        TCS
                 LDA     #6
                 PHA
                 FGX2_FARCALL p_sum
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

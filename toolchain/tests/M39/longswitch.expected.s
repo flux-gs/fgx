@@ -218,12 +218,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL _longswitch_pick
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _longswitch_L12
@@ -271,12 +267,8 @@ _longswitch_L12
                 TYA
                 PHA
                 FGX2_FARCALL _longswitch_pick
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _longswitch_L13
@@ -324,12 +316,8 @@ _longswitch_L13
                 TYA
                 PHA
                 FGX2_FARCALL _longswitch_pick
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #4
                 BEQ     _longswitch_L14
@@ -352,12 +340,8 @@ _longswitch_L14
                 TYA
                 PHA
                 FGX2_FARCALL _longswitch_pick
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #8
                 BEQ     _longswitch_L15
@@ -381,12 +365,8 @@ _longswitch_L15
                 TYA
                 PHA
                 FGX2_FARCALL _longswitch_pick
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #16
                 BEQ     _longswitch_L16
@@ -434,12 +414,8 @@ _longswitch_L16
                 TYA
                 PHA
                 FGX2_FARCALL _longswitch_pick
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #32
                 BEQ     _longswitch_L17
@@ -463,12 +439,8 @@ _longswitch_L17
                 TYA
                 PHA
                 FGX2_FARCALL _longswitch_pick
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #32
                 BEQ     _longswitch_L18

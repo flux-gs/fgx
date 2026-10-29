@@ -141,16 +141,12 @@ main_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #1234
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -170,16 +166,12 @@ _mul_var_L0
                 LDA     #1234
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #0
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -199,16 +191,12 @@ _mul_var_L1
                 LDA     #1
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #$FFF9
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -228,16 +216,12 @@ _mul_var_L2
                 LDA     #$FFF9
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #1
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -257,16 +241,12 @@ _mul_var_L3
                 LDA     #300
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #300
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -287,16 +267,12 @@ _mul_var_L4
                 LDA     #$FFFF
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #$FFFF
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -317,16 +293,12 @@ _mul_var_L5
                 LDA     #$FFFD
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #7
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -346,16 +318,12 @@ _mul_var_L6
                 LDA     #7
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #$FFFD
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -375,16 +343,12 @@ _mul_var_L7
                 LDA     #65535
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #65535
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -405,18 +369,14 @@ _mul_var_L8
                 LDA     #12345
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$D431
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -439,16 +399,12 @@ _mul_var_L9
                 LDA     #$D431
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #12345
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -469,16 +425,12 @@ _mul_var_L10
                 LDA     #32768
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #2
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -498,16 +450,12 @@ _mul_var_L11
                 LDA     #2
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #32768
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -527,16 +475,12 @@ _mul_var_L12
                 LDA     #255
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #255
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -557,16 +501,12 @@ _mul_var_L13
                 LDA     #181
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #181
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -587,16 +527,12 @@ _mul_var_L14
                 LDA     #32767
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #3
                 PHA
                 FGX2_FARCALL _mul_var_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -619,18 +555,14 @@ _mul_var_L15
                 LDA     #$9C40
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$9C40
                 PHA
                 FGX2_FARCALL _mul_var_uv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -657,12 +589,8 @@ _mul_var_L16
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -677,12 +605,8 @@ _mul_var_L16
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -719,12 +643,8 @@ _mul_var_L17
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -739,12 +659,8 @@ _mul_var_L17
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -782,12 +698,8 @@ _mul_var_L18
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -803,12 +715,8 @@ _mul_var_L18
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -845,12 +753,8 @@ _mul_var_L19
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -865,12 +769,8 @@ _mul_var_L19
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -908,12 +808,8 @@ _mul_var_L20
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -928,12 +824,8 @@ _mul_var_L20
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -970,12 +862,8 @@ _mul_var_L21
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -991,12 +879,8 @@ _mul_var_L21
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -1033,12 +917,8 @@ _mul_var_L22
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1053,12 +933,8 @@ _mul_var_L22
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -1095,12 +971,8 @@ _mul_var_L23
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1115,12 +987,8 @@ _mul_var_L23
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -1157,12 +1025,8 @@ _mul_var_L24
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1177,12 +1041,8 @@ _mul_var_L24
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -1219,12 +1079,8 @@ _mul_var_L25
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1239,12 +1095,8 @@ _mul_var_L25
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -1282,12 +1134,8 @@ _mul_var_L26
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1302,12 +1150,8 @@ _mul_var_L26
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -1344,12 +1188,8 @@ _mul_var_L27
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1364,12 +1204,8 @@ _mul_var_L27
                 TYA
                 PHA
                 FGX2_FARCALL _mul_var_lv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi

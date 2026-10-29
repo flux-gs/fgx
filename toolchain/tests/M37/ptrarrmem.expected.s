@@ -60,13 +60,8 @@ main_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1+2
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -115,13 +110,8 @@ _ptrarrmem_L0
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1+2
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+8
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -174,13 +164,8 @@ _ptrarrmem_L1
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1+2
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+12
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -228,12 +213,8 @@ _ptrarrmem_L3
                 TYA
                 RTL
 _ptrarrmem_L4
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+16
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+14
                 STA     _fcc_fpr0
                 LDA     #0
@@ -290,13 +271,8 @@ _ptrarrmem_L5
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1+2
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+2
                 STA     _fcc_fpr0
                 LDA     #0
@@ -330,12 +306,8 @@ _ptrarrmem_L10
                 TYA
                 RTL
 _ptrarrmem_L8
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+8
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -429,41 +401,20 @@ _ptrarrmem_L11
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                STA     _fcc_img0
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -481,9 +432,9 @@ _ptrarrmem_L11
                 TYA
                 RTL
 _ptrarrmem_L12
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -495,13 +446,9 @@ _ptrarrmem_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -547,29 +494,12 @@ _ptrarrmem_L13
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                STA     _fcc_img0
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img0
                 INC
                 INC
                 CLC
@@ -577,13 +507,9 @@ _ptrarrmem_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -601,9 +527,9 @@ _ptrarrmem_L13
                 TYA
                 RTL
 _ptrarrmem_L16
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -615,13 +541,9 @@ _ptrarrmem_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #0
@@ -667,12 +589,12 @@ _ptrarrmem_L17
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img0
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -700,24 +622,11 @@ _ptrarrmem_L17
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                LDA     #0
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img0
                 INC
                 INC
                 CLC
@@ -725,13 +634,9 @@ _ptrarrmem_L17
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -749,12 +654,8 @@ _ptrarrmem_L17
                 TYA
                 RTL
 _ptrarrmem_L20
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+16
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -826,25 +727,17 @@ _ptrarrmem_L21
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1+2
-                SEP     #$20
-                MX      %10
                 LDA     _ptrarrmem_tbl+4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _ptrarrmem_tbl+2
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]

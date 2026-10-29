@@ -106,12 +106,9 @@ _aud_shr_or_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL side
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _aud_shr_or_L1
 _aud_shr_or_L2
                 LDA     5,S   ; fccstk d=0 b=5

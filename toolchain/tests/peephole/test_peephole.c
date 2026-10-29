@@ -414,6 +414,34 @@ int main(void)
           "                TAX\n                BEQ     L9\n                RTL\nL9                 RTL\n",
           "                TAX\n                BEQ     L9\n                RTL\nL9                 RTL\n");
 
+    /* A promoted pointer's register copy, read in place (pat_img_fpr_alias):
+     * the copy into _fcc_fpr0 goes and its readers read the img pair. */
+    check("img_alias",
+          "                LDA     _fcc_img1\n                STA     _fcc_fpr0+2\n                LDA     _fcc_img0\n                STA     _fcc_fpr0\n                LDY     #4\n                LDA     [_fcc_fpr0],Y\n                STA     gx\n                LDA     #1\n                STA     _fcc_fpr0\n                STA     _fcc_fpr0+2\n                RTL\n",
+          "                LDY     #4\n                LDA     [_fcc_img0],Y\n                STA     gx\n                LDA     #1\n                STA     _fcc_fpr0\n                STA     _fcc_fpr0+2\n                RTL\n");
+    /* the pair is written before the reader: the reader wants the OLD
+     * pointer, which only the register still holds -- keep the copy */
+    check("img_alias_pair_written",
+          "                LDA     _fcc_img1\n                STA     _fcc_fpr0+2\n                LDA     _fcc_img0\n                STA     _fcc_fpr0\n                LDA     #9\n                STA     _fcc_img0\n                LDY     #4\n                LDA     [_fcc_fpr0],Y\n                STA     gx\n                STZ     _fcc_fpr0\n                STZ     _fcc_fpr0+2\n                RTL\n",
+          "                LDA     _fcc_img1\n                STA     _fcc_fpr0+2\n                LDA     _fcc_img0\n                STA     _fcc_fpr0\n                LDA     #9\n                STA     _fcc_img0\n                LDY     #4\n                LDA     [_fcc_fpr0],Y\n                STA     gx\n                STZ     _fcc_fpr0\n                STZ     _fcc_fpr0+2\n                RTL\n");
+    /* _fcc_fpr0 is the pointer return register: a return reads it */
+    check("img_alias_return_fpr0",
+          "                LDA     _fcc_img1\n                STA     _fcc_fpr0+2\n                LDA     _fcc_img0\n                STA     _fcc_fpr0\n                LDY     #4\n                LDA     [_fcc_fpr0],Y\n                STA     gx\n                RTL\n",
+          "                LDA     _fcc_img1\n                STA     _fcc_fpr0+2\n                LDA     _fcc_img0\n                STA     _fcc_fpr0\n                LDY     #4\n                LDA     [_fcc_fpr0],Y\n                STA     gx\n                RTL\n");
+    /* an _fcc_ runtime helper touches neither register nor pair */
+    check("img_alias_past_helper",
+          "                LDA     _fcc_img1\n                STA     _fcc_fpr0+2\n                LDA     _fcc_img0\n                STA     _fcc_fpr0\n                JSR     _fcc_mul16\n                LDY     #4\n                LDA     [_fcc_fpr0],Y\n                STA     gx\n                STZ     _fcc_fpr0\n                STZ     _fcc_fpr0+2\n                RTL\n",
+          "                LDA     _fcc_img0\n                JSR     _fcc_mul16\n                LDY     #4\n                LDA     [_fcc_img0],Y\n                STA     gx\n                STZ     _fcc_fpr0\n                STZ     _fcc_fpr0+2\n                RTL\n");
+    /* a C call clobbers the far-pointer registers without reading them */
+    check("img_alias_c_call",
+          "                LDA     _fcc_img1\n                STA     _fcc_fpr0+2\n                LDA     _fcc_img0\n                STA     _fcc_fpr0\n                LDY     #4\n                LDA     [_fcc_fpr0],Y\n                PHA\n                JSL     foo\n                PLY\n                RTL\n",
+          "                LDY     #4\n                LDA     [_fcc_img0],Y\n                PHA\n                JSL     foo\n                PLY\n                RTL\n");
+    /* `[_fcc_img0]' reads the bank byte in _fcc_img1, so the first store
+     * of _fcc_img1 is live, not overwritten unread */
+    check("img_bank_cell_read",
+          "                LDA     #1\n                STA     _fcc_img1\n                LDY     #2\n                LDA     [_fcc_img0],Y\n                STA     gx\n                LDA     #2\n                STA     _fcc_img1\n                RTL\n",
+          "                LDA     #1\n                STA     _fcc_img1\n                LDY     #2\n                LDA     [_fcc_img0],Y\n                STA     gx\n                LDA     #2\n                STA     _fcc_img1\n                RTL\n");
+
     /* (option C pattern 3 redundant-restore was dropped: 0 corpus yield.) */
 
     printf("\n%d/%d passed\n", g_tests - g_fails, g_tests);

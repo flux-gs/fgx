@@ -216,13 +216,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     t
                 LDA     _fcc_fpr0+2
@@ -332,24 +328,16 @@ _paren_base_chain_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     t
                 LDA     _fcc_fpr0+2
@@ -492,12 +480,8 @@ _paren_base_chain_L10
                 ADC     #6
                 STA     _fcc_img0
 _paren_base_chain_L8
-                SEP     #$20
-                MX      %10
                 LDA     b+10
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     b+8
                 STA     _fcc_fpr0
                 PHA
@@ -550,13 +534,9 @@ _paren_base_chain_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 PHA
@@ -599,12 +579,8 @@ _paren_base_chain_L16
                 ADC     #5
                 STA     _fcc_img0
 _paren_base_chain_L14
-                SEP     #$20
-                MX      %10
                 LDA     b+2
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     b
                 STA     _fcc_fpr0
                 PHA

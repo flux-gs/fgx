@@ -103,11 +103,9 @@ main_stkok        TCS
                 LDA     #10
                 PHA
                 FGX2_FARCALL calc
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

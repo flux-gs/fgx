@@ -31,9 +31,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img0
                 LDA     #0
                 ASL
                 ASL
@@ -77,9 +77,9 @@ main_stkok        TCS
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     #2
                 ASL
@@ -117,9 +117,9 @@ main_stkok        TCS
                 TYA
                 RTL
 _longfield_L0
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     #0
                 ASL
@@ -131,14 +131,14 @@ _longfield_L0
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                STA     _fcc_img0
+                STA     _fcc_img2
                 TAY
                 LDA     _fcc_long_hi
-                STA     _fcc_img1
+                STA     _fcc_img3
                 TYA
-                LDA     _fcc_img1
+                LDA     _fcc_img3
                 STA     _fcc_long_hi
-                LDA     _fcc_img0
+                LDA     _fcc_img2
                 LDX     #4464
                 STX     _fcc_long_b_lo
                 LDX     #1
@@ -157,9 +157,9 @@ _longfield_L0
                 TYA
                 RTL
 _longfield_L1
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img1
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     #1
                 ASL

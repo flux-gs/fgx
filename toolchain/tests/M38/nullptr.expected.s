@@ -131,12 +131,8 @@ _nullptr_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ident
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 BRA     _nullptr_L4
 _nullptr_L3
                 LDA     #0
@@ -202,12 +198,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ident
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 BRA     _nullptr_L6
 _nullptr_L5
                 LDA     #0
@@ -217,12 +209,8 @@ _nullptr_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ident
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -268,9 +256,7 @@ _nullptr_L6
                 LDA     #1
                 PHA
                 FGX2_FARCALL pick
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -302,9 +288,7 @@ _nullptr_L6
                 LDA     #0
                 PHA
                 FGX2_FARCALL pick
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2

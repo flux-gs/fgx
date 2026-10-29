@@ -583,6 +583,11 @@ static int g_band_n;        /* band words this function saves, from IR_BAND0 */
 /* P1.4 B1b: min static pointer-op accesses to promote a pointer local to an img
  * PAIR.  A deref is ~5 instrs -> 1, so even 2 accesses pay for the 2 slots. */
 #define IR_PTR_PROMOTE_MIN 2
+/* The same for a pointer promoted for size rather than speed (ir_ptr_value_only):
+ * loads saved, at 8 bytes each, must cover a param's 8-byte entry seed and a
+ * band pair's save and restore. */
+#define IR_PTR_SIZE_MIN_PARAM 3
+#define IR_PTR_SIZE_MIN_LOCAL 2
 
 /* P1.4 B1b: a pointer local is promotable to a DP-IMG PAIR iff it is a single-
  * level pointer whose pointee is a 2-byte-or-smaller scalar (int/char/void) so
@@ -600,6 +605,60 @@ ir_ptr_promotable(Local *lc)
     return BTYPE(pointee) == BT_INT  ||
            BTYPE(pointee) == BT_CHAR ||
            BTYPE(pointee) == BT_VOID;
+}
+
+/* A pointer to anything else -- a struct, another pointer, a long -- whose
+ * every access is a whole-value move between its slot and a register:
+ * IR_FPR_LOAD/STORE_PTR_LOCAL and IR_LOAD/STORE_PTR_LOCAL, whose img forms
+ * move the four bytes whatever they point at.  Member and element access
+ * then goes through the far-pointer register the load filled, and the
+ * peephole reads it from the img pair in place (pat_img_fpr_alias). */
+static int
+ir_ptr_value_only(Local *lc)
+{
+    int j;
+    if (!ISPTR(lc->type) || ISFTN(DECREF(lc->type))) return 0;
+    for (j = 0; j < g_ir_n; j++) {
+        if (g_ir[j].ptr != lc) continue;
+        switch (g_ir[j].op) {
+        case IR_FPR_LOAD_PTR_LOCAL: case IR_FPR_STORE_PTR_LOCAL:
+        case IR_LOAD_PTR_LOCAL:     case IR_STORE_PTR_LOCAL:
+            break;
+        default:
+            return 0;
+        }
+    }
+    return 1;
+}
+
+/* 1 iff any IR_TEXT line addresses lc's stack slot (its `; fccstk b=' annotation
+ * names a byte of it): an access the promotion rewrite cannot retarget.  The
+ * raw_accessed flag covers emit_slot_lda16/sta16; this covers every other
+ * printer of a slot operand, so a promoted variable's slot is never read or
+ * written behind its img pair's back. */
+static int
+ir_text_touches_slot(Local *lc)
+{
+    int j, b, base, fs = (lc->kind != LK_LOCAL);
+    base = fs ? 3 + 1 + 2 + g_param_byte_offsets[lc->slot_first]
+              : 2 * lc->slot_first + 1;
+    for (j = 0; j < g_ir_n; j++) {
+        const char *t = g_ir[j].text, *q;
+        if (g_ir[j].op != IR_TEXT || !t) continue;
+        for (q = strstr(t, "; fccstk d="); q; q = strstr(q + 1, "; fccstk d=")) {
+            const char *bp = strstr(q, " b=");
+            const char *eol = strchr(q, '\n');
+            int is_fs;
+            if (!bp || (eol && bp > eol)) continue;
+            b = atoi(bp + 3);
+            for (bp += 3; isdigit((unsigned char)*bp); bp++)
+                ;                                         /* past " b=N" */
+            is_fs = (strncmp(bp, " fs", 3) == 0);
+            if (is_fs == fs && b >= base && b < base + 4)
+                return 1;
+        }
+    }
+    return 0;
 }
 
 /* B1c-2a-step-2: 1 iff `op` is safe to sit in a walk-store RHS span being
@@ -878,10 +937,16 @@ ir_promote_ptrs(int *chosenp, int lim, int band)
      * its img pair. */
     {
         Local *pc[MAX_LOCALS];
-        int    pn[MAX_LOCALS];
+        int    pn[MAX_LOCALS], pmin[MAX_LOCALS];
         int    nptr = 0, pi;
+        /* Per local: -1 unasked, 0/1 whether a pointer outside
+         * ir_ptr_promotable's set may still take a pair (ir_ptr_value_only
+         * and no raw slot text). */
+        signed char wide_ok[MAX_LOCALS];
+        memset(wide_ok, -1, sizeof wide_ok);
         for (j = 0; j < g_ir_n; j++) {
             Local *lc; IrOp op = g_ir[j].op;
+            int wide;
             if (op != IR_DEREF_LOCAL && op != IR_LOAD_PTR_LOCAL &&
                 op != IR_STORE_PTR_LOCAL && op != IR_STORE_PTR_OFFSET &&
                 op != IR_FPR_LOAD_PTR_LOCAL &&
@@ -894,15 +959,31 @@ ir_promote_ptrs(int *chosenp, int lim, int band)
             if (op == IR_INDEX_DEREF_LOCAL && (g_ir[j].u1 & 2u)) continue;
             lc = (Local *)g_ir[j].ptr;
             if (!lc || (lc->kind != LK_LOCAL && lc->kind != LK_PARAM)) continue;
-            if (!ir_ptr_promotable(lc)) continue;
             if (lc->addr_taken || lc->raw_accessed) continue;
+            wide = !ir_ptr_promotable(lc);
+            if (wide) {
+                int li = (int)(lc - g_locals);
+                if (wide_ok[li] < 0)
+                    wide_ok[li] = (signed char)(ir_ptr_value_only(lc) &&
+                                                !ir_text_touches_slot(lc));
+                if (!wide_ok[li]) continue;
+            }
             /* PARAMS cost a 4-byte entry seed, and a band pair its save and
-             * restore -> only promote when loop-hot. */
-            if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed) continue;
+             * restore -> only promote when loop-hot.  A pointer outside
+             * ir_ptr_promotable's set pays for itself in bytes instead: each
+             * load it saves is 8 (LDA/STA of both words), so a param needs 3
+             * to cover its seed and a band pair's save, a local 2. */
+            if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed && !wide)
+                continue;
             for (c = 0; c < nptr; c++) if (pc[c] == lc) break;
             if (c == nptr) {
                 if (nptr >= MAX_LOCALS) continue;
-                pc[nptr] = lc; pn[nptr] = 0; nptr++;
+                pc[nptr] = lc; pn[nptr] = 0;
+                pmin[nptr] = (wide && !lc->loop_accessed)
+                             ? (lc->kind == LK_PARAM ? IR_PTR_SIZE_MIN_PARAM
+                                                     : IR_PTR_SIZE_MIN_LOCAL)
+                             : IR_PTR_PROMOTE_MIN;
+                nptr++;
             }
             /* B1c: a folded `*p++` is one deref + one offset bump = 2 pointer
              * touches; weight it 2 so a lone `*p++` still meets IR_PTR_PROMOTE_MIN
@@ -915,7 +996,7 @@ ir_promote_ptrs(int *chosenp, int lim, int band)
         while (chosen + 1 < lim) {         /* a pointer needs 2 contiguous slots */
             int best = -1;
             for (pi = 0; pi < nptr; pi++)
-                if (pn[pi] >= IR_PTR_PROMOTE_MIN && (best < 0 || pn[pi] > pn[best]))
+                if (pn[pi] >= pmin[pi] && (best < 0 || pn[pi] > pn[best]))
                     best = pi;
             if (best < 0) break;
             for (j = 0; j < g_ir_n; j++) {

@@ -28,12 +28,11 @@ main_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL socket
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
+                CMP     #0
                 BMI     _sockops_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
@@ -59,12 +58,10 @@ _sockops_L0
                 LDA     #99
                 PHA
                 FGX2_FARCALL bind
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _sockops_L1
                 LDA     3,S   ; fccstk d=0 b=3
@@ -91,12 +88,10 @@ _sockops_L1
                 LDA     #99
                 PHA
                 FGX2_FARCALL connect
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _sockops_L2
                 LDA     3,S   ; fccstk d=0 b=3
@@ -323,12 +318,9 @@ _sockops_L7
                 LDA     #0
                 PHA
                 FGX2_FARCALL ifctl
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _sockops_L8
                 LDA     3,S   ; fccstk d=0 b=3
@@ -340,9 +332,7 @@ _sockops_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC

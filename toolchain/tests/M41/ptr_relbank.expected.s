@@ -52,26 +52,18 @@ main_stkok        TCS
                 LDA     #0
                 STA     _fcc_img0
                 LDA     _fcc_img2
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img1
-                STA     _fcc_fpr0
-                LDA     _fcc_img4
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img3
-                STA     _fcc_fpr1
-                LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img1
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_fpr1+2
+                LDA     _fcc_img4
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr1
+                LDA     _fcc_img3
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -89,26 +81,18 @@ main_stkok        TCS
                 STA     _fcc_img0
 _ptr_relbank_L0
                 LDA     _fcc_img4
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     _fcc_img2
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img1
-                STA     _fcc_fpr1
-                LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img3
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_fpr1+2
+                LDA     _fcc_img2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr1
+                LDA     _fcc_img1
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -126,26 +110,18 @@ _ptr_relbank_L0
                 STA     _fcc_img0
 _ptr_relbank_L1
                 LDA     _fcc_img4
-                STA     _fcc_fpr0+2
-                LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     _fcc_img2
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img1
-                STA     _fcc_fpr1
-                LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr0
+                LDA     _fcc_img3
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_fpr1+2
+                LDA     _fcc_img2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr1
+                LDA     _fcc_img1
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -166,10 +142,6 @@ _ptr_relbank_L2
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img1
                 STA     _fcc_fpr0
-                LDA     _fcc_img4
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img3
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
@@ -179,10 +151,10 @@ _ptr_relbank_L2
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_fpr1+2
+                LDA     _fcc_img4
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr1
+                LDA     _fcc_img3
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -198,10 +170,6 @@ _ptr_relbank_L2
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img3
                 STA     _fcc_fpr0
-                LDA     _fcc_img2
-                STA     _fcc_fpr1+2
-                LDA     _fcc_img1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 STA     _fcc_long_hi
@@ -211,10 +179,10 @@ _ptr_relbank_L2
                 PHA
                 TYA
                 PHA
-                LDA     _fcc_fpr1+2
+                LDA     _fcc_img2
                 AND     #$00FF
                 STA     _fcc_long_hi
-                LDA     _fcc_fpr1
+                LDA     _fcc_img1
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi

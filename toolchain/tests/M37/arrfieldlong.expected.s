@@ -31,18 +31,22 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img1
                 LDA     #$1111
                 STA     _fcc_long_hi
                 LDA     #$2222
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img1]
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img1],Y
                 TXA
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
+                STA     _fcc_fpr0
                 LDA     #$3333
                 STA     _fcc_long_hi
                 LDA     #$4444
@@ -66,9 +70,9 @@ _arrfieldlong_L0
                 EOR     #$8000
 _arrfieldlong_L3
                 BPL     _arrfieldlong_L2
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -87,9 +91,9 @@ _arrfieldlong_L3
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #20
                 STA     _fcc_fpr0
@@ -100,9 +104,9 @@ _arrfieldlong_L3
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #28
                 STA     _fcc_fpr0
@@ -120,9 +124,9 @@ _arrfieldlong_L1
                 INC     _fcc_img0
                 BRA     _arrfieldlong_L0
 _arrfieldlong_L2
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -141,9 +145,9 @@ _arrfieldlong_L2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -175,9 +179,9 @@ _arrfieldlong_L2
                 TYA
                 RTL
 _arrfieldlong_L4
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -209,9 +213,9 @@ _arrfieldlong_L4
                 TYA
                 RTL
 _arrfieldlong_L5
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -243,9 +247,9 @@ _arrfieldlong_L5
                 TYA
                 RTL
 _arrfieldlong_L6
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -279,9 +283,9 @@ _arrfieldlong_L8
                 TYA
                 RTL
 _arrfieldlong_L7
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -316,9 +320,9 @@ _arrfieldlong_L7
 _arrfieldlong_L9
                 LDA     #3
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -337,9 +341,9 @@ _arrfieldlong_L9
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -371,9 +375,9 @@ _arrfieldlong_L9
                 TYA
                 RTL
 _arrfieldlong_L10
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -407,9 +411,9 @@ _arrfieldlong_L10
 _arrfieldlong_L11
                 LDA     #4660
                 STA     _fcc_img0
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -427,9 +431,9 @@ _arrfieldlong_L11
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -461,9 +465,9 @@ _arrfieldlong_L11
                 TYA
                 RTL
 _arrfieldlong_L12
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -498,9 +502,9 @@ _arrfieldlong_L14
 _arrfieldlong_L13
                 LDA     #$FFFE
                 STA     _fcc_img0
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -518,9 +522,9 @@ _arrfieldlong_L13
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -552,9 +556,9 @@ _arrfieldlong_L13
                 TYA
                 RTL
 _arrfieldlong_L15
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #20
                 STA     _fcc_fpr0
@@ -565,9 +569,9 @@ _arrfieldlong_L15
                 STA     _fcc_fpr0
                 LDA     #17185
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #20
                 STA     _fcc_fpr0
@@ -591,9 +595,9 @@ _arrfieldlong_L15
                 TYA
                 RTL
 _arrfieldlong_L16
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #20
                 STA     _fcc_fpr0
@@ -604,9 +608,9 @@ _arrfieldlong_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 BNE     _arrfieldlong_L18
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #20
                 STA     _fcc_fpr0
@@ -629,9 +633,9 @@ _arrfieldlong_L18
                 TYA
                 RTL
 _arrfieldlong_L17
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #28
                 STA     _fcc_fpr0
@@ -646,9 +650,9 @@ _arrfieldlong_L17
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #28
                 STA     _fcc_fpr0
@@ -676,9 +680,9 @@ _arrfieldlong_L17
                 TYA
                 RTL
 _arrfieldlong_L19
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #28
                 STA     _fcc_fpr0
@@ -695,9 +699,9 @@ _arrfieldlong_L19
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     _arrfieldlong_L21
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #28
                 STA     _fcc_fpr0
@@ -726,9 +730,9 @@ _arrfieldlong_L21
                 TYA
                 RTL
 _arrfieldlong_L20
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
@@ -752,9 +756,9 @@ _arrfieldlong_L20
                 TYA
                 RTL
 _arrfieldlong_L22
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDY     #34
                 LDA     [_fcc_fpr0],Y
@@ -779,9 +783,9 @@ _arrfieldlong_L22
                 TYA
                 RTL
 _arrfieldlong_L23
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -813,9 +817,9 @@ _arrfieldlong_L23
                 TYA
                 RTL
 _arrfieldlong_L24
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -847,9 +851,9 @@ _arrfieldlong_L24
                 TYA
                 RTL
 _arrfieldlong_L25
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -881,9 +885,9 @@ _arrfieldlong_L25
                 TYA
                 RTL
 _arrfieldlong_L26
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0

@@ -179,33 +179,33 @@ _paren_postincdec_value_L12
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$1170
-                STA     _fcc_img6
+                STA     _fcc_img10
                 TAY
                 LDA     _fcc_long_hi
-                STA     _fcc_img7
+                STA     _fcc_img11
                 TYA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDA     _fcc_long_hi
                 STA     _fcc_long_b_hi
-                LDA     _fcc_img7
+                LDA     _fcc_img11
                 STA     _fcc_long_hi
-                LDA     _fcc_img6
+                LDA     _fcc_img10
                 JSR     _fcc_long_add
-                STA     _fcc_img6
+                STA     _fcc_img10
                 TAY
                 LDA     _fcc_long_hi
-                STA     _fcc_img7
+                STA     _fcc_img11
                 TYA
                 LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDA     _fcc_long_hi
                 STA     _fcc_long_b_hi
-                LDA     _fcc_img7
+                LDA     _fcc_img11
                 STA     _fcc_long_hi
-                LDA     _fcc_img6
+                LDA     _fcc_img10
                 JSR     _fcc_long_add
                 STA     19,S   ; fccstk d=0 b=19
                 TAY
@@ -222,9 +222,9 @@ _paren_postincdec_value_L12
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     _paren_postincdec_value_L15
-                LDA     _fcc_img7
+                LDA     _fcc_img11
                 STA     _fcc_long_hi
-                LDA     _fcc_img6
+                LDA     _fcc_img10
                 LDX     #4465
                 STX     _fcc_long_b_lo
                 LDX     #1
@@ -810,12 +810,12 @@ _paren_postincdec_value_L32
                 INC
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img5
+                STA     _fcc_img7
                 LDA     _fcc_fpr0
-                STA     _fcc_img4
-                LDA     _fcc_img5
+                STA     _fcc_img6
+                LDA     _fcc_img7
                 STA     _fcc_fpr0+2
-                LDA     _fcc_img4
+                LDA     _fcc_img6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
@@ -897,9 +897,13 @@ _paren_postincdec_value_L34
                 ADC     #18
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     25,S   ; fccstk d=0 b=25
+                STA     _fcc_img9
                 LDA     _fcc_fpr0
-                STA     23,S   ; fccstk d=0 b=23
+                STA     _fcc_img8
+                LDA     _fcc_img9
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img8
+                STA     _fcc_fpr0
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -926,14 +930,14 @@ _paren_postincdec_value_L34
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
                 JSR     _fcc_long_add
-                STA     _fcc_img6
+                STA     _fcc_img10
                 TAY
                 LDA     _fcc_long_hi
-                STA     _fcc_img7
+                STA     _fcc_img11
                 TYA
-                LDA     _fcc_img7
+                LDA     _fcc_img11
                 STA     _fcc_long_hi
-                LDA     _fcc_img6
+                LDA     _fcc_img10
                 LDX     #65535
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -976,9 +980,9 @@ _paren_postincdec_value_L36
                 ADC     #38
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     47,S   ; fccstk d=0 b=47
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     45,S   ; fccstk d=0 b=45
+                STA     _fcc_img4
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1014,9 +1018,9 @@ _paren_postincdec_value_L39
                 TYA
                 RTL
 _paren_postincdec_value_L38
-                LDA     47,S   ; fccstk d=0 b=47
+                LDA     _fcc_img5
                 STA     _fcc_ptr+2
-                LDA     45,S   ; fccstk d=0 b=45
+                LDA     _fcc_img4
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 STA     _fcc_tmp_b
@@ -1065,9 +1069,9 @@ _paren_postincdec_value_L40
                 STA     41,S   ; fccstk d=0 b=41
                 LDA     _fcc_ptr+2
                 STA     43,S   ; fccstk d=0 b=43
-                LDA     47,S   ; fccstk d=0 b=47
+                LDA     _fcc_img5
                 STA     _fcc_ptr+2
-                LDA     45,S   ; fccstk d=0 b=45
+                LDA     _fcc_img4
                 INC
                 INC
                 STA     _fcc_ptr

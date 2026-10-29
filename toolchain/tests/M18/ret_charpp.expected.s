@@ -148,9 +148,11 @@ fill_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -183,19 +185,17 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fill
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img16
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 PHA
                 LDA     #0
                 ASL
@@ -217,9 +217,9 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     3,S   ; fccstk d=2 b=1
+                LDA     _fcc_img16
                 PHA
                 LDA     #1
                 ASL
@@ -247,12 +247,16 @@ main_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     4
+main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

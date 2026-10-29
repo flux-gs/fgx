@@ -248,12 +248,10 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL addf
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 JSR     _fcc_ftoi
                 TAX
                 CMP     #3
@@ -296,12 +294,10 @@ _f_param_L0
                 TYA
                 PHA
                 FGX2_FARCALL addf
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 JSR     _fcc_ftoi
                 TAX
                 CMP     #42
@@ -333,12 +329,9 @@ _f_param_L1
                 TYA
                 PHA
                 FGX2_FARCALL scale
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 JSR     _fcc_ftoi
                 TAX
                 CMP     #42
@@ -373,12 +366,8 @@ _f_param_L2
                 TYA
                 PHA
                 FGX2_FARCALL negf
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 JSR     _fcc_ftoi
                 TAX
                 CMP     #42

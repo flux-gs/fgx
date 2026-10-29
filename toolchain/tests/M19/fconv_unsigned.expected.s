@@ -412,12 +412,8 @@ _fconv_unsigned_L6
                 TYA
                 PHA
                 FGX2_FARCALL arg_f
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 JSR     _fcc_ftol
                 LDX     #40000
                 STX     _fcc_long_b_lo

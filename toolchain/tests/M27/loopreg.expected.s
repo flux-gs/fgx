@@ -63,9 +63,7 @@ _loopreg_sum_loop_stkok        TCS
                 STA     _fcc_img17
                 PHA
                 FGX2_FARCALL _loopreg_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_img17
                 LDA     #0
                 STA     _fcc_img16
@@ -153,9 +151,7 @@ _loopreg_with_break_stkok        TCS
                 STA     _fcc_img17
                 PHA
                 FGX2_FARCALL _loopreg_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_img17
                 LDA     #0
                 STA     _fcc_img16
@@ -249,9 +245,7 @@ _loopreg_with_cont_stkok        TCS
                 STA     _fcc_img17
                 PHA
                 FGX2_FARCALL _loopreg_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_img17
                 LDA     #0
                 STA     _fcc_img16
@@ -345,9 +339,7 @@ _loopreg_with_goto_stkok        TCS
                 STA     _fcc_img17
                 PHA
                 FGX2_FARCALL _loopreg_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_img17
                 LDA     #0
                 STA     _fcc_img16
@@ -424,17 +416,13 @@ main_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL _loopreg_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 PHA
                 LDA     #5
                 PHA
                 FGX2_FARCALL _loopreg_sum_loop
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -444,9 +432,7 @@ main_stkok        TCS
                 LDA     #10
                 PHA
                 FGX2_FARCALL _loopreg_with_break
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -456,9 +442,7 @@ main_stkok        TCS
                 LDA     #5
                 PHA
                 FGX2_FARCALL _loopreg_with_cont
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -468,9 +452,7 @@ main_stkok        TCS
                 LDA     #5
                 PHA
                 FGX2_FARCALL _loopreg_with_goto
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

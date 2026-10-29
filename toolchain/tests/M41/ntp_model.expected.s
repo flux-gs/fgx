@@ -1085,12 +1085,8 @@ _ntp_model_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ul_fixed_to_double
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     33,S   ; fccstk d=0 b=33
                 TAY
                 LDA     _fcc_long_hi
@@ -1113,12 +1109,8 @@ _ntp_model_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ul_fixed_to_double
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     41,S   ; fccstk d=0 b=41
                 TAY
                 LDA     _fcc_long_hi
@@ -1141,12 +1133,8 @@ _ntp_model_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ul_fixed_to_double
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     49,S   ; fccstk d=0 b=49
                 TAY
                 LDA     _fcc_long_hi
@@ -1169,12 +1157,8 @@ _ntp_model_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ul_fixed_to_double
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     57,S   ; fccstk d=0 b=57
                 TAY
                 LDA     _fcc_long_hi
@@ -1513,12 +1497,10 @@ _ntp_model_L5
                 TYA
                 PHA
                 FGX2_FARCALL _ntp_model_mag
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1616,12 +1598,10 @@ _ntp_model_L6
                 TYA
                 PHA
                 FGX2_FARCALL _ntp_model_mag
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA

@@ -352,12 +352,11 @@ _lprobe_L6
                 TYA
                 PHA
                 FGX2_FARCALL htabof_eq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     *+5
                 BRL     _lprobe_L7
                 LDA     3,S   ; fccstk d=0 b=3

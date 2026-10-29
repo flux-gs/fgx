@@ -269,10 +269,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcpy
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -297,10 +297,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcpy
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -314,13 +314,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL mkstemp
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
+                CMP     #0
                 BMI     _mkstemp_uniq_L5
                 SEP     #$20
                 MX      %10
@@ -335,12 +332,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL hasx
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BNE     _mkstemp_uniq_L5
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
@@ -367,12 +361,10 @@ _mkstemp_uniq_L5
                 LDA     15,S   ; fccstk d=6 b=9
                 PHA
                 FGX2_FARCALL write
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #4
                 BEQ     *+5
@@ -390,20 +382,17 @@ _mkstemp_uniq_L5
                 LDA     15,S   ; fccstk d=6 b=9
                 PHA
                 FGX2_FARCALL lseek
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDX     #0
                 STX     _fcc_long_b_lo
                 LDX     #0
                 STX     _fcc_long_b_hi
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _mkstemp_uniq_L7
+                BEQ     _mkstemp_uniq_L7
                 LDA     #4
                 PHA
                 SEP     #$20
@@ -421,12 +410,10 @@ _mkstemp_uniq_L5
                 LDA     15,S   ; fccstk d=6 b=9
                 PHA
                 FGX2_FARCALL read
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #4
                 BNE     _mkstemp_uniq_L7
@@ -490,13 +477,10 @@ _mkstemp_uniq_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL mkstemp
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     11,S   ; fccstk d=0 b=11
+                CMP     #0
                 BMI     _mkstemp_uniq_L8
                 SEP     #$20
                 MX      %10
@@ -523,12 +507,11 @@ _mkstemp_uniq_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sameis
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _mkstemp_uniq_L8
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
@@ -541,9 +524,7 @@ _mkstemp_uniq_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -557,19 +538,15 @@ _mkstemp_uniq_L8
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _mkstemp_uniq_L9
                 LDA     11,S   ; fccstk d=0 b=11
                 BMI     _mkstemp_uniq_L10
                 LDA     11,S   ; fccstk d=0 b=11
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -583,10 +560,8 @@ _mkstemp_uniq_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _mkstemp_uniq_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY

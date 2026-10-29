@@ -56,17 +56,6 @@ _chain_structcopy_same_stkovf       JMP     _fcc_stkoflow
 _chain_structcopy_same_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      8+_chain_structcopy_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_chain_structcopy_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_chain_structcopy_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
                 DO      6+_chain_structcopy_same_FRAMESIZE/256
                 TSC
                 CLC
@@ -77,6 +66,20 @@ _chain_structcopy_same_stkok        TCS
                 ELSE
                 LDA     6+_chain_structcopy_same_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_img0
+                DO      8+_chain_structcopy_same_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+_chain_structcopy_same_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+_chain_structcopy_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -94,6 +97,10 @@ _chain_structcopy_same_stkok        TCS
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     _chain_structcopy_L0
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -111,6 +118,10 @@ _chain_structcopy_same_stkok        TCS
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     _chain_structcopy_L0
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -240,12 +251,8 @@ main_stkok        TCS
                 STA     _chain_structcopy_g3+0
                 LDA     #10
                 STA     _chain_structcopy_g3+8
-                SEP     #$20
-                MX      %10
                 LDA     _chain_structcopy_g0+12
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     _chain_structcopy_g0+10
                 CLC
                 ADC     #2
@@ -323,25 +330,19 @@ _chain_structcopy_L3
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2
@@ -419,13 +420,10 @@ _chain_structcopy_L5
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2
@@ -568,25 +566,19 @@ _chain_structcopy_L9
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2
@@ -666,13 +658,10 @@ _chain_structcopy_L11
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
+                INY
+                INY
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 CLC
                 ADC     #2

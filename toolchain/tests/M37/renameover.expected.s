@@ -46,13 +46,11 @@ _renameover_put_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL creat
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
+                CMP     #0
                 BPL     _renameover_L0
                 LDA     #$FFFF
                 TAY
@@ -103,12 +101,10 @@ _renameover_L0
                 LDA     7,S   ; fccstk d=6 b=1
                 PHA
                 FGX2_FARCALL write
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 DO      16+_renameover_put_FRAMESIZE/256
                 TSC
@@ -127,9 +123,7 @@ _renameover_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -144,9 +138,7 @@ _renameover_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -285,12 +277,11 @@ _renameover_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL rename
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _renameover_L4
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
@@ -312,13 +303,11 @@ _renameover_L4
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
+                CMP     #0
                 BPL     *+5
                 BRL     _renameover_L5
                 LDA     #6
@@ -338,19 +327,15 @@ _renameover_L4
                 LDA     15,S   ; fccstk d=6 b=9
                 PHA
                 FGX2_FARCALL read
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CMP     #3
@@ -436,13 +421,11 @@ _renameover_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
+                CMP     #0
                 BPL     _renameover_L7
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
@@ -454,9 +437,7 @@ _renameover_L7
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
 _renameover_L8
                 LDA     #1
                 PHA
@@ -513,12 +494,11 @@ _renameover_L8
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL rename
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _renameover_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
@@ -538,10 +518,8 @@ _renameover_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -554,10 +532,8 @@ _renameover_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _renameover_L9
                 SEP     #$20
                 MX      %10
@@ -571,10 +547,8 @@ _renameover_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC

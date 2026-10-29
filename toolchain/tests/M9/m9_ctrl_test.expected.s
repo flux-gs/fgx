@@ -169,9 +169,7 @@ _m9_ctrl_test_L15
                 ADC     _fcc_tmp_b
                 PHA
                 FGX2_FARCALL classify
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

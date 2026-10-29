@@ -634,10 +634,8 @@ _clhash_L8
                 TYA
                 PHA
                 FGX2_FARCALL cl_hash_idiom
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 ASL
                 ASL

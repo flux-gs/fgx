@@ -22,9 +22,7 @@ early_stkok        TCS
                 LDA     #3
                 PHA
                 FGX2_FARCALL _fwd_static_call_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 FGX2_FARCALL _fwd_static_call_tail
                 STA     _fcc_tmp_b
@@ -158,9 +156,7 @@ main_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL _fwd_static_call_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC

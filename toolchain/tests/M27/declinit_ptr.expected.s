@@ -34,9 +34,11 @@ f7_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -268,12 +270,9 @@ _declinit_ptr_L2
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L1
                 SEP     #$20
                 MX      %10
@@ -319,12 +318,9 @@ _declinit_ptr_L1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -367,12 +363,9 @@ _declinit_ptr_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -395,12 +388,9 @@ _declinit_ptr_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L14
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_fpr0+2
@@ -426,12 +416,9 @@ _declinit_ptr_L16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L15
                 LDA     #10
                 STA     gi
@@ -467,12 +454,9 @@ _declinit_ptr_L15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L17
                 PHA
                 SEP     #$20
@@ -524,12 +508,9 @@ _declinit_ptr_L17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L18
                 SEP     #$20
                 MX      %10
@@ -542,12 +523,12 @@ _declinit_ptr_L18
                 ADC     #24
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     21,S   ; fccstk d=0 b=21
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     19,S   ; fccstk d=0 b=19
-                LDA     [_fcc_fpr0]
+                STA     _fcc_img16
+                LDA     [_fcc_img16]
                 INC
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img16]
                 LDA     _fcc_fb
                 CLC
                 ADC     #24
@@ -603,12 +584,9 @@ _declinit_ptr_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L19
                 SEP     #$20
                 MX      %10
@@ -652,12 +630,9 @@ _declinit_ptr_L19
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L22
                 LDA     #1
                 STA     23,S   ; fccstk d=0 b=23
@@ -780,12 +755,9 @@ _declinit_ptr_L24
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _declinit_ptr_L23
                 SEP     #$20
                 MX      %10
@@ -907,23 +879,25 @@ _declinit_ptr_L26
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _declinit_ptr_L25
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     60
+main_FRAMESIZE   EQU     64
 main_STKGUARD    EQU     1
                 FGX2_RELOC_COUNT 3

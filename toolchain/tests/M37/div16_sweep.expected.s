@@ -165,10 +165,8 @@ _div16_sweep_L10
                 LDA     _fcc_img23
                 PHA
                 FGX2_FARCALL refu
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_img23
                 TAX
                 LDA     _fcc_img20

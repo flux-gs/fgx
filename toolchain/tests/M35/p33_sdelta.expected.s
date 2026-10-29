@@ -130,30 +130,22 @@ main_stkok        TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL g
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 FGX2_FARCALL g
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     3,S   ; fccstk d=2 b=1
                 PHA
                 LDA     5,S   ; fccstk d=4 b=1
                 PHA
                 FGX2_FARCALL g
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 FGX2_FARCALL add3
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #33
@@ -172,16 +164,12 @@ _p33_sdelta_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL g
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     3,S   ; fccstk d=2 b=1
                 PHA
                 FGX2_FARCALL g
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     7,S   ; fccstk d=4 b=3
                 STA     _fcc_tmp_b
@@ -213,27 +201,21 @@ _p33_sdelta_L1
                 LDA     5,S   ; fccstk d=4 b=1
                 PHA
                 FGX2_FARCALL g
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     9,S   ; fccstk d=6 b=3
                 PHA
                 LDA     9,S   ; fccstk d=8 b=1
                 PHA
                 FGX2_FARCALL add3
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
                 PHA
                 FGX2_FARCALL add3
-                TAY
-                PLA
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #37

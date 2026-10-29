@@ -167,17 +167,17 @@ _addrarrfieldidx_L2
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img4
                 LDA     #$4433
                 STA     _fcc_long_hi
                 LDA     #$2211
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img4]
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img4],Y
                 TXA
                 LDA     #1
                 ASL
@@ -517,17 +517,17 @@ _addrarrfieldidx_L14
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img4
                 LDA     #$0A0B
                 STA     _fcc_long_hi
                 LDA     #$0C0D
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img4]
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img4],Y
                 TXA
                 LDA     #0
                 ASL
@@ -643,17 +643,17 @@ _addrarrfieldidx_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img4
                 LDA     #$0E0F
                 STA     _fcc_long_hi
                 LDA     #$1011
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img4]
                 TAX
                 LDA     _fcc_long_hi
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img4],Y
                 TXA
                 LDA     #2
                 ASL
@@ -757,9 +757,9 @@ _addrarrfieldidx_L18
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img7
                 LDA     _fcc_fpr0
-                STA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img6
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -789,12 +789,16 @@ _addrarrfieldidx_L18
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img5
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img4
+                LDA     _fcc_img5
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img4
+                STA     _fcc_fpr0
+                LDA     _fcc_img7
                 STA     _fcc_fpr1+2
-                LDA     9,S   ; fccstk d=0 b=9
+                LDA     _fcc_img6
                 INC
                 INC
                 STA     _fcc_fpr1
@@ -922,11 +926,15 @@ _addrarrfieldidx_L29
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
                 LDA     #0
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img2]
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
+                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #2
                 STA     [_fcc_fpr0],Y
@@ -968,14 +976,14 @@ _addrarrfieldidx_L24
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
                 LDA     #21845
-                STA     [_fcc_fpr0]
+                STA     [_fcc_img2]
                 LDA     #26214
                 LDY     #2
-                STA     [_fcc_fpr0],Y
+                STA     [_fcc_img2],Y
                 LDA     #2
                 ASL
                 ASL
@@ -990,9 +998,13 @@ _addrarrfieldidx_L24
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #21845
@@ -1008,6 +1020,10 @@ _addrarrfieldidx_L24
                 TYA
                 RTL
 _addrarrfieldidx_L30
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
+                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -1038,9 +1054,13 @@ _addrarrfieldidx_L31
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 BEQ     _addrarrfieldidx_L32
                 LDA     #32
@@ -1068,9 +1088,13 @@ _addrarrfieldidx_L32
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 BEQ     _addrarrfieldidx_L33
                 LDA     #33
@@ -1098,9 +1122,13 @@ _addrarrfieldidx_L33
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img3
                 LDA     _fcc_fpr0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
+                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 BEQ     _addrarrfieldidx_L34
                 LDA     #34

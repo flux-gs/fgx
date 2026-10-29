@@ -44,7 +44,8 @@ _arrmemberassign_L0
                 BVC     _arrmemberassign_L3
                 EOR     #$8000
 _arrmemberassign_L3
-                BPL     _arrmemberassign_L2
+                BMI     *+5
+                BRL     _arrmemberassign_L2
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -63,20 +64,22 @@ _arrmemberassign_L3
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img1
                 LDA     #43690
-                STA     [_fcc_fpr0]
-                LDA     _fcc_fpr0
+                STA     [_fcc_img1]
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
                 INC
                 INC
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -89,17 +92,17 @@ _arrmemberassign_L3
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDA     #48059
                 LDY     #10
@@ -158,10 +161,12 @@ _arrmemberassign_L4
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img1
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -180,9 +185,9 @@ _arrmemberassign_L4
                 TYA
                 RTL
 _arrmemberassign_L5
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -208,9 +213,9 @@ _arrmemberassign_L5
                 TYA
                 RTL
 _arrmemberassign_L6
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
@@ -229,9 +234,9 @@ _arrmemberassign_L6
                 TYA
                 RTL
 _arrmemberassign_L7
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img2
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -248,6 +253,10 @@ _arrmemberassign_L7
                 TYA
                 RTL
 _arrmemberassign_L8
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
+                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -276,10 +285,12 @@ _arrmemberassign_L9
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img1
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -317,10 +328,12 @@ _arrmemberassign_L10
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img2
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_fpr0
+                STA     _fcc_img1
+                LDA     _fcc_img2
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img1
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0

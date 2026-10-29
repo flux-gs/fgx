@@ -33,9 +33,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img4
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img3
                 LDA     #7
                 STA     _lvrun_bump_obj+0
                 LDA     #0
@@ -155,26 +155,9 @@ _lvrun_bump_L0
                 MX      %00
                 LDA     #1
                 STA     _fcc_img2
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img3
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -386,26 +369,9 @@ _lvrun_bump_L2
                 STA     _lvrun_bump_obj+18
                 LDA     #50
                 STA     _lvrun_bump_obj+20
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img3
                 CLC
                 ADC     #18
                 STA     _fcc_fpr0
@@ -778,26 +744,9 @@ _lvrun_bump_L5
                 ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L6
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img3
                 CLC
                 ADC     #20
                 STA     _fcc_fpr0
@@ -898,37 +847,13 @@ _lvrun_bump_L7
                 LDA     _fcc_ptr+2
                 STA     _lvrun_bump_obj+16
                 TYA
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
                 LDY     #14
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img3],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 STA     _fcc_fpr0
@@ -941,20 +866,13 @@ _lvrun_bump_L7
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #14
-                LDA     [_fcc_fpr0],Y
+                LDA     [_fcc_img3],Y
                 PHA
-                SEP     #$20
-                MX      %10
-                LDY     #16
-                LDA     [_fcc_fpr0],Y
+                INY
+                INY
+                LDA     [_fcc_img3],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -1073,10 +991,10 @@ _lvrun_bump_L8
                 LDA     _fcc_fpr1+2
                 LDY     #16
                 STA     [_fcc_fpr0],Y
-                LDA     _lvrun_bump_vs+42
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
+                LDA     _lvrun_bump_vs+42
+                STA     _fcc_fpr0+2
                 LDA     _lvrun_bump_vs+40
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
@@ -1111,26 +1029,9 @@ _lvrun_bump_L8
                 ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L11
-                SEP     #$20
-                MX      %10
-                LDA     #0
+                LDA     _fcc_img4
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _fcc_img3
                 CLC
                 ADC     #6
                 CLC

@@ -236,8 +236,7 @@ _m2d_row_L6
                 LDA     #0
 _m2d_row_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L5
+                BEQ     _m2d_row_L5
                 SEP     #$20
                 MX      %10
                 LDA     ph+2
@@ -248,13 +247,9 @@ _m2d_row_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 INC
                 INC
@@ -727,12 +722,8 @@ _m2d_row_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _m2d_row_rowlen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #3
                 BNE     _m2d_row_L23

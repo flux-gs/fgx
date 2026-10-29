@@ -205,9 +205,7 @@ main_stkok        TCS
                 LDA     [_fcc_fpr1]
                 PHA
                 FGX2_FARCALL sink
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -383,13 +381,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 LDA     #98
@@ -545,8 +539,7 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #97
-                BEQ     *+5
-                BRL     _libso_shapes_L0
+                BNE     _libso_shapes_L0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -577,13 +570,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                SEP     #$20
-                MX      %10
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 PLA
                 STA     _fcc_fpr0
                 SEP     #$20
