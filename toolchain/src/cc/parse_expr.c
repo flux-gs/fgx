@@ -7363,14 +7363,31 @@ walk_expr(int n)
      * AND #$00FF at each byte load, char cast and char assignment), so one
      * fold here makes a char that is not unsigned -128..127, by
      * (v ^ $80) - $80.  Z still says whether the value is zero. */
-    if (g_signed_char && g_expr_type == LT_CHAR && g_fpr_res < 0) {
-        /* An assignment's value may still be the whole right-hand side:
-         * reduce it to the char first. */
-        ir_emitf("                AND     #$00FF\n");
-        if (!g_expr_unsigned && !g_ast[n].is_unsigned) {
-            ir_emitf("                EOR     #$0080\n");
-            ir_emitf("                SEC\n");
-            ir_emitf("                SBC     #$0080\n");
+    /* A store's value is its object's (the A.7.17 block above), and
+     * N_STORE_VAR carries its right-hand side's type, so a store is judged
+     * by store_object_type and a discarded one is left alone. */
+    if (g_signed_char && g_fpr_res < 0 && n != g_discard_node) {
+        LocalType st = store_object_type(n);
+        int is_char, uns;
+        if (st == LT_VOID) {
+            is_char = (g_expr_type == LT_CHAR);
+            uns = g_expr_unsigned || g_ast[n].is_unsigned;
+        } else {
+            is_char = (st == LT_CHAR);
+            uns = (g_ast[n].kind == N_STORE_VAR)
+                ? (g_ast[n].sym_lc ? g_ast[n].sym_lc->is_unsigned
+                                   : g_ast[n].sym_gv->is_unsigned)
+                : g_expr_unsigned;
+        }
+        if (is_char) {
+            /* An assignment's value may still be the whole right-hand
+             * side: reduce it to the char first. */
+            ir_emitf("                AND     #$00FF\n");
+            if (!uns) {
+                ir_emitf("                EOR     #$0080\n");
+                ir_emitf("                SEC\n");
+                ir_emitf("                SBC     #$0080\n");
+            }
         }
     }
     g_expr_const_int = cast_operand_is_const(n);
@@ -7474,6 +7491,10 @@ walk_expr_body(int n)
             if (is_eq) {
                 emit_fpr_cmp(ka, kb, op == TOK_NE);
             } else {
+                /* The bank word is read directly, so a symbolic register
+                 * (`&_iob[NSTATIC]') is built first. */
+                fpr_sym_flush(ka);
+                fpr_sym_flush(kb);
                 ir_emitf("                LDA     %s+2\n", fpr_name(ka));
                 ir_emitf("                AND     #$00FF\n");
                 ir_emitf("                STA     _fcc_long_hi\n");
