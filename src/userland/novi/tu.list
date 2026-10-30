@@ -1,0 +1,6 @@
+# novi(1) translation units.  The main TU is novi.c (the editor loop and the
+# screen); these two are its halves: buffer.c is the disk-backed gap buffer,
+# terminal.c the raw-mode/key/cursor layer.  No optional libraries -- novi
+# writes its own ANSI sequences rather than going through termcap/curses.
+src/userland/novi/buffer.c
+src/userland/novi/terminal.c

@@ -140,9 +140,8 @@ campaigns", item 6.
 
 FGX is developed on GitHub, at <https://github.com/flux-gs/fgx>; this tree
 is the repository's root, and the earlier history is archived.  Every licence
-is stated in `docs/PROVENANCE.md`.  novi, two NinjaTracker modules and the
-`small` and `vga` console fonts are not in the tree until their terms are
-known.  Archive: "Chartered campaigns", item 7.
+is stated in `docs/PROVENANCE.md`.  Two NinjaTracker modules and the `small`
+and `vga` console fonts are not in the tree until their terms are known.  Archive: "Chartered campaigns", item 7.
 
 ### Hand-asm retirement adjunct -- landed for userland; H5 partial
 

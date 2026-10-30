@@ -1,0 +1,81 @@
+NOVI(1)              UNIX Programmer's Manual              NOVI(1)
+
+
+
+NAME
+     novi - full-screen text editor
+
+SYNOPSIS
+     novi [ file ]
+
+DESCRIPTION
+     Novi is a small full-screen editor with nano-like key
+     bindings.  If file is given it is read for editing; a name
+     that does not exist starts an empty buffer under that name.
+     With no argument, novi starts empty and ^O prompts for a
+     name.
+
+     The document is never held in memory.  Two scratch files
+     under /tmp form a gap at the cursor: text before the cursor
+     is written to one and text after it is written to the other
+     in reverse, so both editing and cursor motion cost a bounded
+     amount of memory whatever the size of the file.  Saving
+     streams the two halves into a replacement file.  This is what
+     lets novi edit a file larger than the 64K bank a task's data
+     lives in; see the CAVEATS below for what it costs.
+
+     The screen expects an ANSI/VT100-compatible terminal.  The
+     window size comes from TIOCGWINSZ, falling back to 80x24.
+
+COMMANDS
+     Arrow keys move the cursor.  Home and End go to the start and
+     end of the line, Page Up and Page Down move a screenful, and
+     Insert toggles between insert and overwrite mode.  Insert
+     mode is the default; overwrite replaces characters without
+     consuming the newline that ends a line.
+
+     ^A      start of line             ^E      end of line
+     ^B      left                      ^F      right
+     ^P      up                        ^N      down
+     ^Y      page up                   ^V      page down
+     ^D      delete character          ^G      help
+     ^O      write the buffer out      ^R      insert a file
+     ^W      search forward            ^K      cut a line
+     ^U      uncut (paste)             ^C      report position
+     ^X      exit
+
+     Consecutive ^K's accumulate into the cut buffer; a ^K after
+     any other command starts a new one.  ^U pastes the whole cut
+     buffer at the cursor.
+
+     ^X on a modified buffer asks before discarding it.
+
+FILES
+     /tmp/novi*      the two halves of the gap buffer
+     /tmp/novicut*   the cut buffer
+                     (each unlinked as soon as it is created)
+
+SEE ALSO
+     ed(1), elvis(1)
+
+CAVEATS
+     Every keystroke that moves the cursor moves a byte between
+     the two scratch files, so novi's speed is the speed of the
+     disk, not of the machine.  It is meant for editing files that
+     do not fit in memory; ed(1) or elvis(1) are quicker for files
+     that do.
+
+     A save writes a temporary file beside the target and renames
+     it over the original.  On a ProDOS volume the rename removes
+     the original first, so an interruption at that moment loses
+     the file.
+
+     The scratch files keep the size they reached at their largest
+     until novi exits.
+
+     Novi has no undo.
+
+COPYING
+     Novi is Dave Plummer's, under the BSD 2-Clause License; in
+     its author's words, "you can assume NOVI is under the 2_BSD
+     license".  See docs/PROVENANCE.md.

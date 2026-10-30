@@ -1,0 +1,40 @@
+{
+ "name": "novimode",
+ "description": "A novi(1) save keeps the file's mode.  buf_save writes a temporary file with mkstemp -- created 0600 -- and renames it over the original, so the original's mode survives only if it is copied across: upstream stats the original and fchmods the temporary.  Workload: create /tmp/nvm, chmod it 755, open it in novi, type `a`, ^O, Enter, ^X; the same command line then lists and prints it.  `-rwxr-xr-x` can come only from the listing (the command echo spells the mode as 755), and `ahi` only from the saved file, so a save that did not happen fails too.  Without the fchmod the listing reads -rw-------, which is how this test was checked against itself.",
+ "command": "echo hi >/tmp/nvm; chmod 755 /tmp/nvm; novi /tmp/nvm; ls -l /tmp/nvm; cat /tmp/nvm",
+ "exit_on_prompt": false,
+ "timeout_s": 240,
+ "post_gap_frames": 1500,
+ "raw_inject": [
+  [
+   1500,
+   97,
+   0
+  ],
+  [
+   1600,
+   15,
+   0
+  ],
+  [
+   1700,
+   13,
+   0
+  ],
+  [
+   1800,
+   24,
+   0
+  ]
+ ],
+ "expect": {
+  "screen_contains": [
+   "-rwxr-xr-x",
+   "ahi"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}
