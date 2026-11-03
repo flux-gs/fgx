@@ -25,6 +25,7 @@ void  exit(int status);
 char *getenv(char *name);       /* far-ptr return -> needs the prototype in scope */
 int setenv();                  /* (name, value, rewrite); no prototype: su(1) has its own */
 void unsetenv();
+int   getloadavg(double loadavg[], int nelem);  /* vm.loadavg, as 2.11BSD's */
 
 /* One shared 32-bit LCG (see libc_c.c): rand() is 15-bit, random() is
  * 31-bit (two steps spliced); srand/srandom seed the same state. */

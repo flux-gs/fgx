@@ -45,6 +45,7 @@
 #include <sys/wait.h>             /* union wait (pclose) */
 #include <sys/mount.h>          /* struct statfs, MNT_* (getmntinfo, df) */
 #include <sys/sysctl.h>         /* CTL_KERN, KERN_SECURELVL (sysctl) */
+#include <sys/vmparam.h>         /* VM_LOADAVG (getloadavg) */
 #include <stdlib.h>             /* malloc/free -- PROTOTYPED, apple/fgx#327 */
 #include <pwd.h>                /* struct passwd (the /etc/passwd database) */
 #include <grp.h>                /* struct group (the /etc/group database) */
@@ -146,6 +147,7 @@ extern char _libc_lstrBufB[];
 #include "sockopt.c"
 #include "err.c"
 #include "getmntinfo.c"
+#include "getloadavg.c"
 #include "malloc.c"
 #include "popen.c"
 #include "ioctl.c"
