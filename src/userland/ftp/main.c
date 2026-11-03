@@ -9,8 +9,10 @@
  *
  * vendor/2.11BSD/usr/ucb/ftp/main.c, verbatim below this comment except for
  * passive mode, which 2.11BSD's ftp predates: passivemode's initialization,
- * from 4.4BSD-Lite2's main.c 8.6 (vendor/4.4BSD-Lite2/usr.bin/ftp/main.c),
- * verbatim.
+ * from 4.4BSD-Lite2's main.c 8.6 (vendor/4.4BSD-Lite2/usr.bin/ftp/main.c).
+ * Lite2 starts with passive mode off; here it starts on, as later BSD ftp
+ * does, because active mode cannot work behind NAT, where MAME's Uthernet
+ * always is.  `passive' turns it off.
  */
 /*
  * Copyright (c) 1985, 1989 Regents of the University of California.
@@ -126,7 +128,7 @@ main(argc, argv)
 		verbose++;
 	cpend = 0;           /* no pending replies */
 	proxy = 0;	/* proxy not active */
-	passivemode = 0; /* passive mode not active */
+	passivemode = 1; /* passive mode active */
 	crflag = 1;    /* strip c.r. on ascii gets */
 	/*
 	 * Set up the home directory in case we're globbing.

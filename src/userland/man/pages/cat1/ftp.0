@@ -410,7 +410,7 @@ FTP(1)		    UNIX Programmer's Manual		   FTP(1)
 
      passive
 	  Toggle passive mode.  If passive mode is turned on
-	  (default is off), the ftp client will send a PASV
+	  (default is on), the ftp client will send a PASV
 	  command for all data connections instead of the usual
 	  PORT command.  The PASV command requests that the
 	  remote server open a port for the data connection and
@@ -841,6 +841,11 @@ BUGS
      correction may result in incorrect transfers of binary files
      to and from 4.2BSD servers using the ascii type.  Avoid this
      problem by using the binary image type.
+
+     Passive mode is on by default, where 4.4BSD-Lite2 has it
+     off, because active mode cannot work behind NAT.  A server
+     that refuses PASV prints ``Passive mode refused.''; turn
+     passive mode off and try again.
 
 
 
