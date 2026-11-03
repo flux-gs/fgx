@@ -2020,6 +2020,26 @@ pp_next_tok_above(int base, int raw_ok, Tok *out)
             return 0;               /* span drained */
         }
         if (t.kind != TOK_IDENT) { *out = t; return 1; }
+        /* K&R A.12.10: "__LINE__ A decimal constant containing the current
+         * source line number.  __FILE__ A string literal containing the name
+         * of the file being compiled."  Both at the place of use, which a
+         * token from a macro body already carries: assert()'s __LINE__ is
+         * the line that calls assert. */
+        if (t.id_len == 8 && memcmp(t.id_ptr, "__LINE__", 8) == 0) {
+            t.kind = TOK_INT_LIT;
+            t.value = (unsigned)t.line & 0xFFFFu;
+            t.value_hi = (unsigned)t.line >> 16;
+            t.is_long = t.value_hi != 0;
+            t.value2 = t.value3 = 0;
+            t.is_llong = t.is_dbl = t.is_unsigned = 0;
+            *out = t; return 1;
+        }
+        if (t.id_len == 8 && memcmp(t.id_ptr, "__FILE__", 8) == 0) {
+            t.kind = TOK_STR_LIT;
+            t.str_ptr = g_cur_path ? g_cur_path : "";
+            t.str_len = (int)strlen(t.str_ptr);
+            *out = t; return 1;
+        }
         {
             int midx = pp_macro_lookup(t.id_ptr, t.id_len);
             PpMacro *m;

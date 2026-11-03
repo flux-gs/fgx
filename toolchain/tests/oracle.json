@@ -724,5 +724,7 @@
   "getfsstat_room": 42,
   "param_array": 42,
   "spec_order": 42,
-  "field_ptr_disp": 42
+  "field_ptr_disp": 42,
+  "field_ptr_disp": 42,
+  "predef_line_file": 42
 }
