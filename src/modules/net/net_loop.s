@@ -1453,7 +1453,11 @@ _Loop_BindTry   MX      %00
                 REP     #$30
                 MX      %00
                 STA     _loopDstPort
-                LDA     #1
+                BNE     @nl_bt_named            ; in_pcbbind (in_pcb.c:97): port 0
+                JSR     _Sock_EphemPort         ;   picks one at bind, as
+                LDA     _sockTmp2               ;   net_op_bind does
+                STA     _loopDstPort
+@nl_bt_named    LDA     #1
                 STA     _loopHandled
                 LDA     _Sys_SavedX
                 AND     #$00FF

@@ -1,0 +1,16 @@
+{
+ "name": "bindzero",
+ "description": "bind(2) to port 0 picks the port, as 2.11BSD in_pcbbind does (in_pcb.c:97), so getsockname(2) can name it before listen(2).  ftp(1) binds its data socket that way and sends the port to the server in a PORT command; with the 0 recorded it sent `PORT a,b,c,d,0,0' and vsftpd answered `500 Illegal PORT command'.  loopprobe -0 binds port 0 on the wildcard (net_op_bind's hardware arm) and on 127.0.0.1 (_Loop_BindTry): both ports must be at least 1024 and differ, and a connect to the loopback one must reach its listener, which is what tells a bound port from a reported one.",
+ "command": "/testbin/loopprobe -0",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "ZERO OK bind picks the port"
+  ],
+  "screen_lacks": [
+   "loopprobe: FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}
