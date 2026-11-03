@@ -104,7 +104,8 @@ ISVTX = 0o1000
 # `other' and would therefore be unexecutable by them here, which is not what
 # 751 means anywhere else.
 # ---------------------------------------------------------------------------
-EXEC_DIRS = ("/bin/", "/sbin/", "/testbin/", "/tests/fcc/", "/usr/fgx/bin/")
+EXEC_DIRS = ("/bin/", "/sbin/", "/usr/libexec/", "/testbin/", "/tests/fcc/",
+             "/usr/fgx/bin/")
 SETUID_FILES = ("/bin/su", "/bin/passwd", "/bin/login", "/bin/crontab")
 
 
