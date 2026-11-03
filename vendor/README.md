@@ -34,6 +34,10 @@ source is unproblematic (see the licence notes below), so it is simply shipped.
     4.4BSD-Lite2/sys/isofs/cd9660             cd9660, the same code grown: its
                                               node numbering, name handling and
                                               Rock Ridge support
+    4.4BSD-Lite2/usr.bin/ftp                  ftp(1) 8.x, from the CSRG archive
+                                              (sergev/4.4BSD-Lite2 on GitHub):
+                                              its passive mode, carried into
+                                              the 2.11BSD ftp in src/userland/ftp
     SunOS-4.1.3/bin/ldd.c                     ldd(1), ported to src/userland/ldd
     SunOS-4.1.3/usr.bin/eject.c, man1/eject.1 eject(1), ported to src/userland/eject
     frotz-2.44/                               Frotz, ported to src/userland/frotz

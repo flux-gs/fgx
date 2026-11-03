@@ -7,7 +7,10 @@
  *   All rights reserved.  UCB notice retained per the BSD license; FGX
  *   changes are BSD-2-Clause (see LICENSE / docs/PROVENANCE.md).
  *
- * vendor/2.11BSD/usr/ucb/ftp/cmds.c, verbatim below this comment.
+ * vendor/2.11BSD/usr/ucb/ftp/cmds.c, verbatim below this comment except for
+ * passive mode, which 2.11BSD's ftp predates: setpassive(), from 4.4BSD-
+ * Lite2's cmds.c 8.6 (vendor/4.4BSD-Lite2/usr.bin/ftp/cmds.c), its body
+ * verbatim.
  */
 /*
  * Copyright (c) 1985, 1989 Regents of the University of California.
@@ -1998,6 +2001,14 @@ LOOP:
 		return(name);
 	}
 	return(new);
+}
+
+setpassive()
+{
+
+	passivemode = !passivemode;
+	printf("Passive mode %s.\n", onoff(passivemode));
+	code = passivemode;
 }
 
 setsunique()

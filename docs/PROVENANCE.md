@@ -531,14 +531,14 @@ did not write, which this registry's preamble calls the worse error.
 | `src/userland/diff/diffreg.c` | 2.11BSD `vendor/2.11BSD/usr/bin/diff/diffreg.c` (4.16.1) | **VERBATIM**, with `diff.c` above. |
 | `src/userland/diffh/diffh.c` | 2.11BSD `vendor/2.11BSD/usr/bin/diff/diffh.c` (4.4, 11/27/85) | **VERBATIM**, installed at `/usr/libexec/diffh` as the Makefile does, for `diff -h`. |
 | `src/userland/diff3/diff3.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/diff3/diff3.c` (4.4.1, 2.11BSD GTE, 1/1/94) | **VERBATIM**, installed at `/usr/libexec/diff3`; `diff3.sh` (4.1.1) is `/bin/diff3`, verbatim behind its header. |
-| `src/userland/ftp/ftp.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/ftp.c` (5.28.1, 1997/10/2) | ftp(1).  **VERBATIM** with the files below.  `ftp_var.h` defines its globals in every file, linked as commons; the code is packed across segments.  `command()` reaches its printf arguments by walking from `&args` under lint's `VARARGS1`, which fcc honors. |
-| `src/userland/ftp/cmds.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/cmds.c` (5.18.1, 1997/10/2) | **VERBATIM**, with `ftp.c` above. |
-| `src/userland/ftp/cmdtab.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/cmdtab.c` (5.9.1, 1/1/94) | **VERBATIM**, with `ftp.c` above. |
+| `src/userland/ftp/ftp.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/ftp.c` (5.28.1, 1997/10/2); passive mode from 4.4BSD-Lite2 `vendor/4.4BSD-Lite2/usr.bin/ftp/ftp.c` (8.6, 10/27/94) | ftp(1).  **VERBATIM** with the files below, except passive mode, which 2.11BSD's ftp predates and which a client behind NAT needs: Lite2's `passive` command, initconn's PASV arm and dataconn's early return, taken verbatim into `ftp.c`, `cmds.c`, `cmdtab.c`, `main.c` and `ftp_var.h`, and its man text added to the cat page.  `ftp_var.h` defines its globals in every file, linked as commons; the code is packed across segments.  `command()` reaches its printf arguments by walking from `&args` under lint's `VARARGS1`, which fcc honors. |
+| `src/userland/ftp/cmds.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/cmds.c` (5.18.1, 1997/10/2); 4.4BSD-Lite2 `vendor/4.4BSD-Lite2/usr.bin/ftp/cmds.c` (8.6) | **VERBATIM** but for Lite2's `setpassive()`, with `ftp.c` above. |
+| `src/userland/ftp/cmdtab.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/cmdtab.c` (5.9.1, 1/1/94); 4.4BSD-Lite2 `vendor/4.4BSD-Lite2/usr.bin/ftp/cmdtab.c` (8.4) | **VERBATIM** but for Lite2's `passive` entry, with `ftp.c` above. |
 | `src/userland/ftp/domacro.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/domacro.c` (1.6, 2/28/89) | **VERBATIM**, with `ftp.c` above. |
 | `src/userland/ftp/glob.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/glob.c` (5.7, 12/14/88) | **VERBATIM**, with `ftp.c` above. |
-| `src/userland/ftp/main.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/main.c` (5.13.1, 1997/10/2) | **VERBATIM**, with `ftp.c` above. |
+| `src/userland/ftp/main.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/main.c` (5.13.1, 1997/10/2); 4.4BSD-Lite2 `vendor/4.4BSD-Lite2/usr.bin/ftp/main.c` (8.6) | **VERBATIM** but for Lite2's `passivemode = 0`, with `ftp.c` above. |
 | `src/userland/ftp/ruserpass.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/ruserpass.c` (5.1.2, 1997/10/2) | **VERBATIM**, with `ftp.c` above. |
-| `src/userland/ftp/ftp_var.h` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/ftp_var.h` (5.5.1, 1/1/94) | **VERBATIM**, with `ftp.c` above. |
+| `src/userland/ftp/ftp_var.h` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/ftp_var.h` (5.5.1, 1/1/94); 4.4BSD-Lite2 `vendor/4.4BSD-Lite2/usr.bin/ftp/ftp_var.h` | **VERBATIM** but for Lite2's `passivemode`, with `ftp.c` above. |
 | `src/userland/ftp/pathnames.h` | 2.11BSD `vendor/2.11BSD/usr/ucb/ftp/pathnames.h` | **VERBATIM**, with `ftp.c` above. |
 | `src/userland/pr/pr.c` | 2.11BSD `vendor/2.11BSD/usr/bin/pr.c` (4.5, 12/12/84) | **VERBATIM**.  diff -l pipes through it. |
 | `src/userland/hostname/hostname.c` | 2.11BSD `hostname(1)` | print-only |

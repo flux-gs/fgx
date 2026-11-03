@@ -408,6 +408,22 @@ FTP(1)		    UNIX Programmer's Manual		   FTP(1)
 	  (default), _f_t_p will also attempt to automatically log
 	  the user in to the FTP server (see below).
 
+     passive
+	  Toggle passive mode.  If passive mode is turned on
+	  (default is off), the ftp client will send a PASV
+	  command for all data connections instead of the usual
+	  PORT command.  The PASV command requests that the
+	  remote server open a port for the data connection and
+	  return the address of that port.  The remote server
+	  listens on that port and the client connects to it.
+	  When using the more traditional PORT command, the
+	  client listens on a port and sends that address to the
+	  remote server, who connects back to it.  Passive mode
+	  is useful when using _f_t_p through a gateway router or
+	  host that controls the directionality of traffic.
+	  (Note that though ftp servers are required to support
+	  the PASV command by RFC 1123, some do not.)
+
      prompt
 	  Toggle interactive prompting.  Interactive prompting
 	  occurs during multiple file transfers to allow the user

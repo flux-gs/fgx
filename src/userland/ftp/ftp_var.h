@@ -7,7 +7,9 @@
  *   All rights reserved.  UCB notice retained per the BSD license; FGX
  *   changes are BSD-2-Clause (see LICENSE / docs/PROVENANCE.md).
  *
- * vendor/2.11BSD/usr/ucb/ftp/ftp_var.h, verbatim below this comment.
+ * vendor/2.11BSD/usr/ucb/ftp/ftp_var.h, verbatim below this comment except
+ * for passive mode, which 2.11BSD's ftp predates: passivemode, from 4.4BSD-
+ * Lite2's ftp_var.h (vendor/4.4BSD-Lite2/usr.bin/ftp/ftp_var.h), verbatim.
  */
 /*
  * Copyright (c) 1985 Regents of the University of California.
@@ -56,6 +58,7 @@ int	mapflag;		/* use mapin mapout templates on file names */
 int	code;			/* return/reply code for ftp command */
 int	crflag;			/* if 1, strip car. rets. on ascii gets */
 char	pasv[64];		/* passive port for proxy data connection */
+int	passivemode;		/* passive mode enabled */
 char	*altarg;		/* argv[1] with no shell-like preprocessing  */
 char	ntin[17];		/* input translation table */
 char	ntout[17];		/* output translation table */

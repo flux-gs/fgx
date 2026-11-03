@@ -7,7 +7,10 @@
  *   All rights reserved.  UCB notice retained per the BSD license; FGX
  *   changes are BSD-2-Clause (see LICENSE / docs/PROVENANCE.md).
  *
- * vendor/2.11BSD/usr/ucb/ftp/ftp.c, verbatim below this comment.
+ * vendor/2.11BSD/usr/ucb/ftp/ftp.c, verbatim below this comment except for
+ * passive mode, which 2.11BSD's ftp predates: initconn's PASV arm and
+ * dataconn's early return for a passive connection, from 4.4BSD-Lite2's
+ * ftp.c 8.6 (vendor/4.4BSD-Lite2/usr.bin/ftp/ftp.c), verbatim.
  */
 /*
  * Copyright (c) 1985, 1989 Regents of the University of California.
@@ -1111,6 +1114,62 @@ initconn()
 	register char *p, *a;
 	int result, len, tmpno = 0;
 	int on = 1;
+	int a0, a1, a2, a3, p0, p1;
+
+	if (passivemode) {
+		data = socket(AF_INET, SOCK_STREAM, 0);
+		if (data < 0) {
+			perror("ftp: socket");
+			return(1);
+		}
+		if ((options & SO_DEBUG) &&
+		    setsockopt(data, SOL_SOCKET, SO_DEBUG, (char *)&on,
+			       sizeof (on)) < 0)
+			perror("ftp: setsockopt (ignored)");
+		if (command("PASV") != COMPLETE) {
+			printf("Passive mode refused.\n");
+			goto bad;
+		}
+
+		/*
+		 * What we've got at this point is a string of comma
+		 * separated one-byte unsigned integer values.
+		 * The first four are the an IP address. The fifth is
+		 * the MSB of the port number, the sixth is the LSB.
+		 * From that we'll prepare a sockaddr_in.
+		 */
+
+		if (sscanf(pasv,"%d,%d,%d,%d,%d,%d",
+			   &a0, &a1, &a2, &a3, &p0, &p1) != 6) {
+			printf("Passive mode address scan failure. "
+			       "Shouldn't happen!\n");
+			goto bad;
+		}
+
+		bzero(&data_addr, sizeof(data_addr));
+		data_addr.sin_family = AF_INET;
+		a = (char *)&data_addr.sin_addr.s_addr;
+		a[0] = a0 & 0xff;
+		a[1] = a1 & 0xff;
+		a[2] = a2 & 0xff;
+		a[3] = a3 & 0xff;
+		p = (char *)&data_addr.sin_port;
+		p[0] = p0 & 0xff;
+		p[1] = p1 & 0xff;
+
+		if (connect(data, (struct sockaddr *)&data_addr,
+			    sizeof(data_addr)) < 0) {
+			perror("ftp: connect");
+			goto bad;
+		}
+#ifdef IP_TOS
+		on = IPTOS_THROUGHPUT;
+		if (setsockopt(data, IPPROTO_IP, IP_TOS, (char *)&on,
+			       sizeof(int)) < 0)
+			perror("ftp: setsockopt TOS (ignored)");
+#endif
+		return(0);
+	}
 
 noport:
 	data_addr = myctladdr;
@@ -1175,6 +1234,9 @@ dataconn(mode)
 {
 	struct sockaddr_in from;
 	int s, fromlen = sizeof (from);
+
+	if (passivemode)
+		return (fdopen(data, mode));
 
 	s = accept(data, (struct sockaddr *) &from, &fromlen);
 	if (s < 0) {

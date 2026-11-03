@@ -7,7 +7,10 @@
  *   All rights reserved.  UCB notice retained per the BSD license; FGX
  *   changes are BSD-2-Clause (see LICENSE / docs/PROVENANCE.md).
  *
- * vendor/2.11BSD/usr/ucb/ftp/cmdtab.c, verbatim below this comment.
+ * vendor/2.11BSD/usr/ucb/ftp/cmdtab.c, verbatim below this comment except
+ * for passive mode, which 2.11BSD's ftp predates: the `passive' command and
+ * its help string, from 4.4BSD-Lite2's cmdtab.c 8.4
+ * (vendor/4.4BSD-Lite2/usr.bin/ftp/cmdtab.c), verbatim.
  */
 /*
  * Copyright (c) 1985, 1989 Regents of the University of California.
@@ -47,6 +50,7 @@ int	quote(), rmthelp(), shell(), site();
 int	pwd(), makedir(), removedir(), setcr();
 int	account(), doproxy(), reset(), setcase(), setntrans(), setnmap();
 int	setsunique(), setrunique(), cdup(), macdef(), domacro();
+int	setpassive();
 int	sizecmd(), modtime(), newer(), rmtstatus();
 int	do_chmod(), do_umask(), idle();
 
@@ -86,6 +90,7 @@ char	newerhelp[] =	"get file if remote file is newer than local file ";
 char	nlisthelp[] =	"nlist contents of remote directory";
 char	nmaphelp[] =	"set templates for default file name mapping";
 char	ntranshelp[] =	"set translation table for default file name mapping";
+char	passivehelp[] =	"enter passive transfer mode";
 char	porthelp[] =	"toggle use of PORT cmd for each data connection";
 char	prompthelp[] =	"force interactive prompting on multiple commands";
 char	proxyhelp[] =	"issue command on alternate connection";
@@ -158,6 +163,7 @@ struct cmd cmdtab[] = {
 	{ "nlist",	nlisthelp,	1,	1,	1,	ls },
 	{ "ntrans",	ntranshelp,	0,	0,	1,	setntrans },
 	{ "open",	connecthelp,	0,	0,	1,	setpeer },
+	{ "passive",	passivehelp,	0,	0,	0,	setpassive },
 	{ "prompt",	prompthelp,	0,	0,	0,	setprompt },
 	{ "proxy",	proxyhelp,	0,	0,	1,	doproxy },
 	{ "sendport",	porthelp,	0,	0,	0,	setport },
