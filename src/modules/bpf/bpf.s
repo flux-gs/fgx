@@ -383,7 +383,10 @@ mod_init        MX      %00
 ;------------------------------------------------------------------------------
 ; bpf_open - open("/dev/bpf0"): start MACRAW capture, mark the fd record-mode.
 ;   In:  _fcbPtr -> caller's FCB (live; set by Fs_Open before _Chardev_Open).
-;   Out: C=1 ok; C=0 + A=EBUSY if a capture is already active (single opener).
+;   Out: C=1 ok; C=0 + A=EBUSY if a capture is already active (single opener),
+;        or if a connection holds socket 0.  MACRAW exists only on socket 0, and
+;        the net stack hands that socket out last rather than keeping it back
+;        (_W5_SockAlloc), so capture claims it through the same bitmap.
 ;------------------------------------------------------------------------------
 bpf_open        MX      %00
                 ; --- single-opener guard: refuse if already capturing ---
@@ -398,6 +401,18 @@ bpf_open        MX      %00
                 CLC
                 RTL
 @bo_free        MX      %10
+                LDA     _w5SockInUse            ; DBR = kernel bank
+                LSR                             ; socket 0's bit -> C
+                BCC     @bo_s0free
+                REP     #$20
+                MX      %00
+                LDA     #EBUSY                  ; a connection holds socket 0
+                CLC
+                RTL
+@bo_s0free      MX      %10
+                LDA     _w5SockInUse
+                ORA     #$01
+                STA     _w5SockInUse
                 REP     #$20
                 MX      %00
                 JSR     _Net_CaptureStart       ; socket 0 -> MACRAW, arm RECV IRQ;
@@ -414,6 +429,13 @@ bpf_open        MX      %00
 ;------------------------------------------------------------------------------
 bpf_close       MX      %00
                 JSR     _Net_CaptureStop        ; sets _bpfCapState=0
+                SEP     #$20
+                MX      %10
+                LDA     _w5SockInUse            ; socket 0 back to the allocator
+                AND     #$FE
+                STA     _w5SockInUse
+                REP     #$20
+                MX      %00
                 SEC
                 RTL
 
