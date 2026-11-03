@@ -4203,7 +4203,10 @@ build_primary_ast(void)
                         "defined with %d\n",
                         g_input_path, line, col, name_len, name_ptr, n_kids,
                         n_kids == 1 ? "" : "s", expected_argc);
-            } else if (n_kids > expected_argc) {
+            } else if (n_kids > expected_argc && g_funcs[fn_idx].n_fixed < 0) {
+                /* Not under lint's VARARGSn: that marker on the definition says
+                 * the parameters past n_fixed take whatever the call passes
+                 * (2.11BSD ftp's `command(fmt, args)', VARARGS1). */
                 char buf[96];
                 snprintf(buf, sizeof buf,
                          "'%.*s' expects %d argument%s, got %d",
