@@ -8461,6 +8461,14 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                         if (g_cur.kind != TOK_RBRACKET) { ok = 0; break; }
                         next_tok();
                     }
+                    /* A single `T name[]' of any other base is the scalar
+                     * path's: K&R A.10.1, "If a parameter is declared to have
+                     * type `array of type,' the declaration is adjusted to
+                     * read `pointer to type'", which its decay arm applies
+                     * (2.11BSD getloadavg's `double loadavg[]'). */
+                    if (param_n_dims == 1 && pt.base != LT_INT &&
+                        pt.base != LT_CHAR)
+                        ok = 0;
                     if (ok) {
                         LocalType ptype;
                         int es = 2;
