@@ -722,5 +722,6 @@
   "fnptr_ptr": 42,
   "ptr_held": 42,
   "getfsstat_room": 42,
-  "param_array": 42
+  "param_array": 42,
+  "spec_order": 42
 }
