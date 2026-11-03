@@ -1,0 +1,33 @@
+{
+ "name": "texttools2",
+ "description": "The second batch of 2.11BSD text tools runs from a staged script, so the needles are outputs and never the typed command: sort orders three words and sorts numbers with -n; find names the one file both -name and -type match; xargs appends its input to echo's arguments; diff's normal output for a one-line change; diff -h goes through /usr/libexec/diffh, whose range for a change at end of file is `3,$'; diff3's first line names the file that differs; patch applies diff's output to a copy; pr's header carries -h's title and the page number.  find's needle went red with its predicates still reading struct anode through the PDP-11 overlay.",
+ "command": "sh /etc/texttools2.sh",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "apple fig pear",
+   "9,10,100,",
+   "/tmp/fd/qzz",
+   "xx xa xb",
+   "2c2:< b:---:> B:",
+   "3,$c3,$",
+   "====2",
+   "a-B-c-",
+   "prhdr Page 1"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "not found",
+   "cannot"
+  ]
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/texttools2.sh",
+   "prodos_dir": "/FGX/etc",
+   "name": "texttools2.sh",
+   "replace": false
+  }
+ ]
+}

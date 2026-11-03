@@ -1,0 +1,5 @@
+# patch(1) translation units after patch.c.
+src/userland/patch/pch.c
+src/userland/patch/inp.c
+src/userland/patch/util.c
+src/userland/patch/version.c
