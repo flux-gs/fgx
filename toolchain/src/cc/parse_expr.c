@@ -690,7 +690,13 @@ set_arr_read_type(int n, Local *lc, Global *gv, int cnt, int n_dims)
         } else if (gv->type == LT_LONG_ARRAY || gv->type == LT_FLOAT_ARRAY) {
             g_ast[n].type = (gv->type == LT_FLOAT_ARRAY) ? LT_FLOAT : LT_LONG;
         } else if (is_ptr_array(gv->type)) {
+            /* The element is a pointer, and a struct pointer keeps its
+             * struct: the local arm above carries it, and without it a
+             * further subscript has no stride.  2.11BSD diff's
+             * `struct line *file[2]', read as `file[0][i].value'. */
             g_ast[n].type = DECREF(gv->type);
+            g_ast[n].struct_id = (BTYPE(DECREF(gv->type)) == BT_STRUCT)
+                               ? gv->struct_id : -1;
         } else if (gv->type == LT_CHAR_PTR || gv->type == LT_INT_PTR ||
                    gv->type == LT_VOID_PTR) {
             g_ast[n].type = (gv->type == LT_CHAR_PTR ||

@@ -726,5 +726,8 @@
   "spec_order": 42,
   "field_ptr_disp": 42,
   "field_ptr_disp": 42,
-  "predef_line_file": 42
+  "predef_line_file": 42,
+  "field_ptr_disp": 42,
+  "predef_line_file": 42,
+  "gptr_struct_arr": 42
 }
