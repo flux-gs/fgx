@@ -483,6 +483,13 @@
    "flags": "-I src/userland/patch"
   },
   {
+   "name": "ftp",
+   "tu_list": "src/userland/ftp/tu.list",
+   "flags": "-I src/userland/ftp",
+   "commons": true,
+   "pack": true
+  },
+  {
    "name": "exectime"
   },
   {
@@ -1141,6 +1148,10 @@
   {
    "src": "bin/patch.bin",
    "dst": "disk_src/bin/patch"
+  },
+  {
+   "src": "bin/ftp.bin",
+   "dst": "disk_src/bin/ftp"
   },
   {
    "src": "src/userland/diff3/diff3.sh",

@@ -1,0 +1,26 @@
+{
+ "name": "ftp",
+ "description": "2.11BSD ftp(1) runs its command loop from a staged script, so every needle is ftp's output and never the typed command.  `help' prints the command table from cmdtab.c; `status' reports the defaults, including PORT mode; and `open 127.0.0.1 21' goes through socket(2) and connect(2) on loopback, where nothing listens, and is refused.  No server is involved, so nothing is transferred.",
+ "command": "sh /etc/ftp.sh",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": [
+   "Commands may be abbreviated.",
+   "Use of PORT cmds: on",
+   "ftp: connect: Connection refused"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "not found"
+  ]
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/ftp.sh",
+   "prodos_dir": "/FGX/etc",
+   "name": "ftp.sh",
+   "replace": false
+  }
+ ]
+}
