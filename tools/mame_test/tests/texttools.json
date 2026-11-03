@@ -1,0 +1,35 @@
+{
+ "name": "texttools",
+ "description": "The 2.11BSD text tools ported together run, from a staged script so the needles are outputs and never the typed command: printf joins `pf' and 42; tail -2 and rev reverse `bravo' and `zulu9'; split's second piece, tee's file and comm's one common line reversed; tsort's last item reversed; expand's tab made visible with tr; unexpand's leading blanks folded to a tab that od -c spells; sum's 2.11BSD checksum of the 18-byte file (48226, computed on the host from sum.c's loop); dd's first six bytes (a line) reversed and its record count; du -a naming a file split created.  dd's needles went red with BIG left at 2147483647 (`dd: argument 1 out of range').",
+ "command": "sh /etc/texttools.sh",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": [
+   "pf-42",
+   "ovarb",
+   "9uluz",
+   "eetwxy",
+   "woc",
+   "cctrost",
+   "x_______y",
+   "\\t   z   9",
+   "48226     1",
+   "ahpla",
+   "6+0 records in",
+   "/tmp/dud/paa"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "not found"
+  ]
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/texttools.sh",
+   "prodos_dir": "/FGX/etc",
+   "name": "texttools.sh",
+   "replace": false
+  }
+ ]
+}

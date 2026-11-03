@@ -501,6 +501,19 @@ did not write, which this registry's preamble calls the worse error.
 | `src/userland/basename/basename.c` | 2.11BSD `basename(1)` | |
 | `src/userland/dirname/dirname.c`   | 2.11BSD `dirname(1)`  | |
 | `src/userland/head/head.c`         | 2.11BSD `vendor/2.11BSD/usr/ucb/head.c` | **VERBATIM -- no FGX delta** but the provenance header; by Bill Joy.  The rewrite it replaced wrote one byte per write(2) and took a POSIX `-n N`, which upstream does not. |
+| `src/userland/tail/tail.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/tail.c` (5.2.1, 2.11BSD GTE, 1/1/94) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/tee/tee.c` | 2.11BSD `vendor/2.11BSD/usr/bin/tee.c` (5.4, 12/14/85) | **VERBATIM -- no FGX delta** but the provenance header.  Its `int register r,w,p;` needed fcc to take a storage class after the type (K&R A.8). |
+| `src/userland/comm/comm.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/comm.c` (4.2, 4/29/83) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/split/split.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/split.c` (4.2, 4/29/83) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/tsort/tsort.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/tsort.c` (4.2, 10/20/82) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/rev/rev.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/rev.c` (4.1, 10/1/80) | **VERBATIM -- no FGX delta** but the provenance header.  A last line with no newline is dropped, as upstream does. |
+| `src/userland/expand/expand.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/expand.c` (5.1, 5/31/85) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/unexpand/unexpand.c` | 2.11BSD `vendor/2.11BSD/usr/ucb/unexpand.c` (5.1, 5/31/85) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/printf/printf.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/printf/printf.c` (8.1, 7/20/93) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/sum/sum.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/sum.c` (4.1, 10/1/80) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/tty/tty.c` | 2.11BSD `vendor/2.11BSD/usr/usr.bin/tty.c` (4.1, 10/1/80) | **VERBATIM -- no FGX delta** but the provenance header. |
+| `src/userland/dd/dd.c` | 2.11BSD `vendor/2.11BSD/usr/bin/dd.c` (4.4, 1/22/85) | Upstream's body.  FGX delta: `BIG` is 32767, not 2147483647.  `number(big)` takes `big` as an undeclared, so int, parameter and is passed that long; the PDP-11 stores a long's high word first, so 2.11BSD's dd read 32767, while the 65816 stores the low word first, read -1 and refused every argument.  32767 is the bound dd had on its own machine. |
+| `src/userland/du/du.c` | 2.11BSD `vendor/2.11BSD/usr/bin/du.c` (4.11, 7/1/83) | Upstream's body.  FGX delta: `descend()`'s `long curoff` starts at 0, not NULL: 2.11BSD's NULL is a bare 0, FGX's is `((char *)0)`, and a pointer converts to a long only by a cast (K&R A.6.6).  Its telldir/seekdir across a closedir and reopen are libc's `telldir.c`. |
 | `src/userland/hostname/hostname.c` | 2.11BSD `hostname(1)` | print-only |
 | `src/userland/uname/uname.c`       | 2.11BSD `uname(1)`    | UCB 1993 |
 | `src/userland/echo/echo.c`         | 2.11BSD `echo(1)`     | |

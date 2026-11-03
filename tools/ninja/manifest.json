@@ -414,6 +414,45 @@
    "name": "eject"
   },
   {
+   "name": "tail"
+  },
+  {
+   "name": "tee"
+  },
+  {
+   "name": "comm"
+  },
+  {
+   "name": "split"
+  },
+  {
+   "name": "tsort"
+  },
+  {
+   "name": "rev"
+  },
+  {
+   "name": "expand"
+  },
+  {
+   "name": "unexpand"
+  },
+  {
+   "name": "printf"
+  },
+  {
+   "name": "sum"
+  },
+  {
+   "name": "tty"
+  },
+  {
+   "name": "dd"
+  },
+  {
+   "name": "du"
+  },
+  {
    "name": "exectime"
   },
   {
@@ -988,6 +1027,58 @@
   {
    "src": "bin/eject.bin",
    "dst": "disk_src/bin/eject"
+  },
+  {
+   "src": "bin/tail.bin",
+   "dst": "disk_src/bin/tail"
+  },
+  {
+   "src": "bin/tee.bin",
+   "dst": "disk_src/bin/tee"
+  },
+  {
+   "src": "bin/comm.bin",
+   "dst": "disk_src/bin/comm"
+  },
+  {
+   "src": "bin/split.bin",
+   "dst": "disk_src/bin/split"
+  },
+  {
+   "src": "bin/tsort.bin",
+   "dst": "disk_src/bin/tsort"
+  },
+  {
+   "src": "bin/rev.bin",
+   "dst": "disk_src/bin/rev"
+  },
+  {
+   "src": "bin/expand.bin",
+   "dst": "disk_src/bin/expand"
+  },
+  {
+   "src": "bin/unexpand.bin",
+   "dst": "disk_src/bin/unexpand"
+  },
+  {
+   "src": "bin/printf.bin",
+   "dst": "disk_src/bin/printf"
+  },
+  {
+   "src": "bin/sum.bin",
+   "dst": "disk_src/bin/sum"
+  },
+  {
+   "src": "bin/tty.bin",
+   "dst": "disk_src/bin/tty"
+  },
+  {
+   "src": "bin/dd.bin",
+   "dst": "disk_src/bin/dd"
+  },
+  {
+   "src": "bin/du.bin",
+   "dst": "disk_src/bin/du"
   },
   {
    "src": "src/userland/lddig/ld.so.conf.t",
