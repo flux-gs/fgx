@@ -4402,6 +4402,38 @@ parse_char_ptr_arr_item(Global *g, int n)
     }
 }
 
+/* The hidden file-scope global behind a static local.
+ *
+ * The mangled name is only the EMITTED global label -- use sites resolve
+ * the source name through the static-alias table (symtab), never by
+ * reconstructing this string -- so it just has to be unique in the TU and
+ * fit a Merlin symbol (< MAX_IDENT).  Normal form `func_sl_var` keeps
+ * existing labels byte-identical; when func+var overflow (tcsh tc.prompt
+ * `print_prompt` + `print_prompt_did_ding`), fall back to a compact
+ * `func(trunc)_slN` with a monotonic per-TU counter (still unique). */
+static Global *
+static_local_global(const char *nm, int nl, LocalType ty, int n_elems,
+                    int line, int col)
+{
+    if (g_n_static_aliases >= MAX_STATIC_ALIASES)
+        die(line, col, "too many static locals in one function (max 32)");
+    static int g_sl_seq = 0;
+    char mangled[MAX_IDENT * 2];
+    int mlen = snprintf(mangled, sizeof mangled, "%s_sl_%.*s",
+                        g_func_name, nl, nm);
+    if (mlen >= MAX_IDENT) {
+        mlen = snprintf(mangled, sizeof mangled, "%.20s_sl%d",
+                        g_func_name, g_sl_seq++);
+        if (mlen >= MAX_IDENT)   /* pathological: truncate the prefix harder */
+            mlen = snprintf(mangled, sizeof mangled, "_sl%d", g_sl_seq++);
+    }
+    Global *g = globals_declare(mangled, mlen, ty, n_elems, line, col, 0);
+    g->is_local_static = 1;
+    return g;
+}
+
+static void parse_fnptr_global_init(Global *g);
+
 void
 parse_static_local(TypeSpec t)              /* `static <type>' already consumed */
 {
@@ -4409,6 +4441,31 @@ parse_static_local(TypeSpec t)              /* `static <type>' already consumed 
      * (`static int offset = 0, size = 0;`).  Loop per declarator; the
      * trailing ';' is consumed once, after the last declarator. */
     for (;;) {
+    /* A function-pointer declarator, `static int (*hupval)(), (*intval)();'
+     * (2.11BSD patch util.c's set_signals).  K&R A.4.1: "Static objects
+     * may be local to a block or external to all blocks, but in either case
+     * retain their values across exit from and reentry to functions and
+     * blocks."  So it takes the file-scope fn-ptr global's shape and
+     * initializer, under the static-local alias. */
+    {
+        const char *fp_nm;
+        int fp_nl, fp_sig;
+        int fp_line = g_cur.line, fp_col = g_cur.col;
+        if (parse_fn_ptr_declarator(t, &fp_nm, &fp_nl, &fp_sig, NULL)) {
+            if (g_fnptr_decl_arr != 0)
+                die(fp_line, fp_col,
+                    "static-local array of function pointers not supported");
+            Global *g = static_local_global(fp_nm, fp_nl, LT_FN_PTR, 1,
+                                            fp_line, fp_col);
+            g->fn_sig_id = fp_sig;
+            parse_fnptr_global_init(g);
+            StaticAlias *a = &g_static_aliases[g_n_static_aliases++];
+            a->name = lex_intern_ident(fp_nm, fp_nl);
+            a->global_idx = (int)(g - g_globals);
+            if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }
+            break;
+        }
+    }
     int stars = 0;                              /* B-3: pointer depth */
     while (g_cur.kind == TOK_STAR) { stars++; next_tok(); }
     if (g_cur.kind != TOK_IDENT)
@@ -4457,28 +4514,7 @@ parse_static_local(TypeSpec t)              /* `static <type>' already consumed 
      * the only thing that was missing is sizing this global and routing its
      * initializer (tcsh ed.screen's anonymous `static struct { int key, fun; }
      * ar[] = {...}`). */
-    if (g_n_static_aliases >= MAX_STATIC_ALIASES)
-        die(line, col, "too many static locals in one function (max 32)");
-
-    /* The mangled name is only the EMITTED global label -- use sites resolve
-     * the source name through the static-alias table (symtab), never by
-     * reconstructing this string -- so it just has to be unique in the TU and
-     * fit a Merlin symbol (< MAX_IDENT).  Normal form `func_sl_var` keeps
-     * existing labels byte-identical; when func+var overflow (tcsh tc.prompt
-     * `print_prompt` + `print_prompt_did_ding`), fall back to a compact
-     * `func(trunc)_slN` with a monotonic per-TU counter (still unique). */
-    static int g_sl_seq = 0;
-    char mangled[MAX_IDENT * 2];
-    int mlen = snprintf(mangled, sizeof mangled, "%s_sl_%.*s",
-                        g_func_name, nl, nm);
-    if (mlen >= MAX_IDENT) {
-        mlen = snprintf(mangled, sizeof mangled, "%.20s_sl%d",
-                        g_func_name, g_sl_seq++);
-        if (mlen >= MAX_IDENT)   /* pathological: truncate the prefix harder */
-            mlen = snprintf(mangled, sizeof mangled, "_sl%d", g_sl_seq++);
-    }
-    Global *g = globals_declare(mangled, mlen, ty, n_elems, line, col, 0);
-    g->is_local_static = 1;
+    Global *g = static_local_global(nm, nl, ty, n_elems, line, col);
     g->is_unsigned = t.is_unsigned;             /* A-1 */
     if (ty == LT_STRUCT || ty == LT_STRUCT_ARRAY) {  /* G11: size + struct id */
         if (g_structs[t.struct_id].is_forward)
