@@ -1530,7 +1530,7 @@ unsigned long
 parse_case_const(void);   /* full 32-bit; the switch builder truncates
                              to 16 unless the selector is LONG */
 void
-parse_static_local(void);
+parse_static_local(TypeSpec t);
 void
 parse_func_decl_with_spec(TypeSpec ret_t);
 int

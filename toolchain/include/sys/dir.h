@@ -67,5 +67,7 @@ int  dirfd(DIR *dirp);
 struct direct *readdir(DIR *dirp);
 int closedir(DIR *dirp);
 void rewinddir(DIR *dirp);
+long telldir(DIR *dirp);
+void seekdir(DIR *dirp, long loc);
 
 #endif

@@ -463,8 +463,37 @@ long_double_or_die(void)
     next_tok();
 }
 
+static TypeSpec parse_type_spec_base(void);
+
+/* The storage class specifiers and qualifiers after the base type: K&R A.8,
+ * "the declaration-specifiers consist of a sequence of type and storage
+ * class specifiers", in a grammar with no order, so `int register r' and
+ * `char static *p' are `register int r' and `static char *p'.  2.11BSD
+ * tee.c's `int register r,w,p;' is the case. */
 TypeSpec
 parse_type_spec(void)
+{
+    TypeSpec t = parse_type_spec_base();
+    for (;;) {
+        if (g_cur.kind == TOK_STATIC_KW) {
+            t.is_static = 1;
+        } else if (g_cur.kind == TOK_IDENT &&
+                   ((g_cur.id_len == 6 && memcmp(g_cur.id_ptr, "extern", 6) == 0) ||
+                    (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "register", 8) == 0) ||
+                    (g_cur.id_len == 4 && memcmp(g_cur.id_ptr, "auto", 4) == 0) ||
+                    (g_cur.id_len == 5 && memcmp(g_cur.id_ptr, "const", 5) == 0) ||
+                    (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "volatile", 8) == 0))) {
+            if (g_cur.id_len == 6)
+                t.is_extern = 1;
+        } else {
+            return t;
+        }
+        next_tok();
+    }
+}
+
+static TypeSpec
+parse_type_spec_base(void)
 {
     TypeSpec t;
     t.base = LT_INT;
@@ -2821,7 +2850,13 @@ build_decl(TypeSpec t)
     int dline = g_cur.line, dcol = g_cur.col;
     int tmp[64];
     int cnt = 0;
-    /* type-spec already consumed by caller. */
+    /* type-spec already consumed by caller.  A `static' among the specifiers
+     * after the type (`int static n = 1;', K&R A.8's unordered sequence) is
+     * the same static local as a leading one. */
+    if (t.is_static) {
+        parse_static_local(t);
+        return ast_new(S_EMPTY, dline, dcol);
+    }
     /* M18: function-pointer local decl: T (*name)(params); */
     {
         const char *fn_name_ptr;
@@ -4340,9 +4375,8 @@ parse_char_ptr_arr_item(Global *g, int n)
 }
 
 void
-parse_static_local(void)
+parse_static_local(TypeSpec t)              /* `static <type>' already consumed */
 {
-    TypeSpec t = parse_type_spec();             /* consumes `static <type>` */
     /* Multiple comma-separated declarators share the base type `t`
      * (`static int offset = 0, size = 0;`).  Loop per declarator; the
      * trailing ';' is consumed once, after the last declarator. */
@@ -5780,7 +5814,7 @@ build_stmt(void)
     /* C-3: `static <type> ...;` static-local declaration. */
     if (g_cur.kind == TOK_STATIC_KW) {
         int sline = g_cur.line, scol = g_cur.col;
-        parse_static_local();          /* registration + data init: no code */
+        parse_static_local(parse_type_spec());   /* registration + data init: no code */
         return ast_new(S_EMPTY, sline, scol);
     }
 

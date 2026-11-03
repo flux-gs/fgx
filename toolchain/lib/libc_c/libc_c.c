@@ -216,6 +216,7 @@ extern char _libc_lstrBufB[];
 #include "inet.c"
 #include "netdb.c"
 #include "dir.c"
+#include "telldir.c"
 /* AFTER dir.c and stat.c: getwd walks the tree with opendir/readdir and
  * stats each level.  One pile TU, so an include that came first would meet
  * them undeclared. */
