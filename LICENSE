@@ -52,6 +52,9 @@ one with its upstream:
   the W65816 fork of llvm-mos; the licence text is
   vendor/65816-llvm-mos/LICENSE.TXT (Apache License v2.0 with LLVM
   Exceptions).
+- patch (src/userland/patch): LicenseRef-Larry-Wall-Patch, Larry Wall's
+  terms as patch.c states them: "This program may be copied as long as you
+  don't try to make any money off of it, or pretend that you wrote it."
 - cron and crontab: LicenseRef-Vixie-Cron, Paul Vixie's terms, reproduced in
   each file.
 - ntp: LicenseRef-UMD-NTP, the University of Maryland NTP 3.4 sources as

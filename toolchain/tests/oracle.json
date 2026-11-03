@@ -723,5 +723,9 @@
   "ptr_held": 42,
   "getfsstat_room": 42,
   "param_array": 42,
-  "spec_order": 42
+  "spec_order": 42,
+  "field_ptr_disp": 42,
+  "predef_line_file": 42,
+  "gptr_struct_arr": 42,
+  "static_fnptr": 42
 }

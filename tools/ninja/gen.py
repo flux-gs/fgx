@@ -630,7 +630,7 @@ def rebase_flags(flags):
                 tok = pre + tok[len(pre) + 6:]
                 break
         out.append(tok)
-    return " ".join(out)
+    return shlex.join(out)
 
 
 def read_tu_list(path):

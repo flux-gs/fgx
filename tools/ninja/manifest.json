@@ -453,6 +453,36 @@
    "name": "du"
   },
   {
+   "name": "sort",
+   "flags": "-Dpdp11"
+  },
+  {
+   "name": "find"
+  },
+  {
+   "name": "xargs"
+  },
+  {
+   "name": "diff",
+   "tu_list": "src/userland/diff/tu.list",
+   "commons": true,
+   "flags": "-I src/userland/diff -Dpdp11 -DDIFF='\"/bin/diff\"' -DDIFFH='\"/usr/libexec/diffh\"' -DPR='\"/bin/pr\"'"
+  },
+  {
+   "name": "diffh"
+  },
+  {
+   "name": "diff3"
+  },
+  {
+   "name": "pr"
+  },
+  {
+   "name": "patch",
+   "tu_list": "src/userland/patch/tu.list",
+   "flags": "-I src/userland/patch"
+  },
+  {
    "name": "exectime"
   },
   {
@@ -1079,6 +1109,42 @@
   {
    "src": "bin/du.bin",
    "dst": "disk_src/bin/du"
+  },
+  {
+   "src": "bin/sort.bin",
+   "dst": "disk_src/bin/sort"
+  },
+  {
+   "src": "bin/find.bin",
+   "dst": "disk_src/bin/find"
+  },
+  {
+   "src": "bin/xargs.bin",
+   "dst": "disk_src/bin/xargs"
+  },
+  {
+   "src": "bin/diff.bin",
+   "dst": "disk_src/bin/diff"
+  },
+  {
+   "src": "bin/diffh.bin",
+   "dst": "disk_src/usr/libexec/diffh"
+  },
+  {
+   "src": "bin/diff3.bin",
+   "dst": "disk_src/usr/libexec/diff3"
+  },
+  {
+   "src": "bin/pr.bin",
+   "dst": "disk_src/bin/pr"
+  },
+  {
+   "src": "bin/patch.bin",
+   "dst": "disk_src/bin/patch"
+  },
+  {
+   "src": "src/userland/diff3/diff3.sh",
+   "dst": "disk_src/bin/diff3"
   },
   {
    "src": "src/userland/lddig/ld.so.conf.t",

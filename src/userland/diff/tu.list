@@ -1,0 +1,3 @@
+# diff(1) translation units after diff.c.
+src/userland/diff/diffdir.c
+src/userland/diff/diffreg.c
