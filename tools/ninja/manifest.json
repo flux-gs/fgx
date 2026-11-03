@@ -274,6 +274,11 @@
    "tu_list": "src/userland/novi/tu.list"
   },
   {
+   "name": "top",
+   "tu_list": "src/userland/top/tu.list",
+   "libs": "termlib"
+  },
+  {
    "name": "ensoniqplay"
   },
   {
@@ -911,6 +916,10 @@
   {
    "src": "bin/novi.bin",
    "dst": "disk_src/bin/novi"
+  },
+  {
+   "src": "bin/top.bin",
+   "dst": "disk_src/bin/top"
   },
   {
    "src": "bin/od.bin",
