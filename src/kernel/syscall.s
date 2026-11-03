@@ -2401,8 +2401,8 @@ _kfp995         JSL     KFAR_VFS_SYSCTL         ; slot 72; bank byte patched
 ;   VM_CPTIME  6  FGX's: long cp_time[CPUSTATES].
 ; 2.11BSD's vmstat reads `sum' and `cp_time' through /dev/kmem, which FGX
 ; does not have yet (apple/fgx#538); these two leaves serve them until it
-; does.  VM_LOADAVG and VM_SWAPMAP answer EOPNOTSUPP: FGX keeps no load
-; average and has no swap.
+; does.  VM_LOADAVG is 2.11BSD's, the averages _Vm_Loadav keeps (sched.s).
+; VM_SWAPMAP answers EOPNOTSUPP: FGX has no swap.
 ;
 ; THE CHECKS ARE UPSTREAM'S, IN ITS ORDER: a write needs the super user
 ; (__sysctl, :100), the name has 2..CTL_MAXNAME parts (:105), every name
@@ -2416,6 +2416,7 @@ _kfp995         JSL     KFAR_VFS_SYSCTL         ; slot 72; bank byte patched
 ; the flags word tells libc so.  Every leaf is an even number of bytes, copied by words.
 ;------------------------------------------------------------------------------
 VM_METER        EQU     1               ; h/vmparam.h:21
+VM_LOADAVG      EQU     2               ; h/vmparam.h:22
 VM_COREMAP      EQU     4               ; h/vmparam.h:24
 VM_SUM          EQU     5               ; FGX's, past 2.11BSD's VM_MAXID
 VM_CPTIME       EQU     6
@@ -2469,6 +2470,8 @@ _Sys_VmSysctl   MX      %00
                 BEQ     @vm_sum
                 CMP     #VM_CPTIME
                 BEQ     @vm_cptime
+                CMP     #VM_LOADAVG
+                BEQ     @vm_loadavg
                 LDA     #ENOTSUP
                 CLC
                 RTS
@@ -2477,6 +2480,9 @@ _Sys_VmSysctl   MX      %00
                 BRA     @vm_rdstruct
 @vm_cptime      LDX     #_cp_time
                 LDA     #CPUSTATES*4
+                BRA     @vm_rdstruct
+@vm_loadavg     LDX     #_avenrun               ; struct loadavg, as upstream's
+                LDA     #8                      ;   averunnable (kern_sysctl.c:438)
                 BRA     @vm_rdstruct
 @vm_sum         ; struct vmsum: v_swtch, v_trap, v_syscall, v_intr, then ten
                 ; counters FGX has no event for, all longs.
@@ -5737,7 +5743,7 @@ _Sys_Chdir      MX      %00
 ; _Sys_Procs (SYS_PROCS = 87) - procs(buf, max) -> count.
 ;
 ; A = caller-bank buf offset; X = max records.  Fills buf with up to `max`
-; PROCINFO_SIZE records {pid, ppid, pgid, state, name[16]} -- the kernel (pid 0,
+; PROCINFO_SIZE records (struct procinfo, PI_* in kernel.s) -- the kernel (pid 0,
 ; synthetic) followed by every live task slot.  Returns A = count, C=1.  MX %00.
 ;
 ; Caller-bank writes use [_libcTmp2] (= CallerBank:cursor), the _Sys_Getcwd idiom.
@@ -5838,6 +5844,31 @@ _sp_emitTcb     MX      %00
                 BRA     @prc_haveHeap
 @prc_noHeap     LDA     #0
 @prc_haveHeap   LDY     #PI_HeapHwm
+                STA     [_libcTmp2],Y
+                ; --- priority, CPU time, and the owner from the u-area ---
+                LDA:    TCB_Priority,X
+                AND     #$00FF
+                LDY     #PI_Pri
+                STA     [_libcTmp2],Y
+                LDA:    TCB_Utime,X
+                LDY     #PI_Utime
+                STA     [_libcTmp2],Y
+                LDA:    TCB_Utime+2,X
+                LDY     #PI_Utime+2
+                STA     [_libcTmp2],Y
+                LDA:    TCB_Stime,X
+                LDY     #PI_Stime
+                STA     [_libcTmp2],Y
+                LDA:    TCB_Stime+2,X
+                LDY     #PI_Stime+2
+                STA     [_libcTmp2],Y
+                JSR     _Uarea_FromTCB          ; X kept
+                BCC     @prc_rootUid
+                LDY     #U_Uid
+                LDA     [_u],Y
+                BRA     @prc_haveUid
+@prc_rootUid    LDA     #0                      ; no u-area: root, as getuid says
+@prc_haveUid    LDY     #PI_Uid
                 STA     [_libcTmp2],Y
 
                 ; --- the controlling terminal's NAME ---

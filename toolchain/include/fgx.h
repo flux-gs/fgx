@@ -59,6 +59,10 @@ struct procinfo {
                                  * signed int reads as negative. */
     char ttyname[PROC_TTY_MAX]; /* controlling terminal, NUL-padded, no "/dev/"
                                  * prefix ("console", "ttyv1"); "" = none */
+    int  uid;                   /* effective uid, 2.11BSD's p_uid */
+    int  pri;                   /* scheduling priority */
+    long utime;                 /* clock ticks charged in user mode (u_ru.ru_utime) */
+    long stime;                 /* clock ticks charged in system mode (u_ru.ru_stime) */
 };
 
 int  procs(char *buf, int max);         /* fill an array of struct procinfo */

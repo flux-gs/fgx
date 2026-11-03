@@ -27,19 +27,15 @@
  * (procinfo.ttyname against utmp.ut_line) where upstream compares dev_t, so
  * gettty() goes with them: a name is what both sides have here.
  *
- * WHAT IS NOT PRINTED, AND WHY.  Three columns and one header clause are gone
- * because the numbers behind them do not exist:
+ * WHAT IS NOT PRINTED, AND WHY.  Three columns are gone because the numbers
+ * behind them do not exist:
  *
  *   idle   findidle() stats /dev/<line> and subtracts st_atime.  Nothing
  *          updates a device node's atime on read, so the column would be the
  *          age of the node rather than of the session.
- *   JCPU   per-process CPU time.  The TCB has no live counter for it.
- *   PCPU   the same number for the interesting process alone.
- *
- *   the load-average clause, the scheduler keeping no run-queue average.
- *   Upstream's own fallback for that case prints ", no load average
- *   information available", which on every single run is noise rather than
- *   information.
+ *   JCPU   upstream adds each process's u_cru, the CPU time of its finished
+ *          children, which the kernel does not keep.
+ *   PCPU   left out with JCPU, the two being one block of upstream's code.
  *
  * A column of zeroes would read as "nobody has typed for 0 minutes", which is
  * a worse answer than not offering the column.  w(1)'s BUGS section says so.
@@ -70,6 +66,7 @@ char	*program;
 int	header = 1;		/* 0 once -h says not to print one */
 int	lflag = 1;		/* long-style output */
 int	nusers;			/* users logged in now */
+double	avenrun[3];
 char	*sel_user;		/* the single login selected, if any */
 int	wcmd = 1;		/* running as w rather than as uptime */
 long	now;			/* the current time of day */
@@ -158,7 +155,19 @@ main(argc, argv)
 					nusers++;
 			rewind(ut);
 		}
-		printf("  %d user%s\n", nusers, nusers == 1 ? "" : "s");
+		printf("  %d user%s", nusers, nusers == 1 ? "" : "s");
+
+		if (getloadavg(avenrun, sizeof(avenrun) / sizeof(avenrun[0])) == -1)
+			printf(", no load average information available\n");
+		else {
+			printf(",  load averages:");
+			for (i = 0; i < (sizeof(avenrun)/sizeof(avenrun[0])); i++) {
+				if (i > 0)
+					printf(",");
+				printf(" %.2f", avenrun[i]);
+			}
+		}
+		printf("\n");
 		if (wcmd == 0)
 			exit(0);
 

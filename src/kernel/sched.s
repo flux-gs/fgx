@@ -869,12 +869,94 @@ _Lbolt_Wake     ENT
                 LDA     _kLboltDue
                 BEQ     @lbw_none               ; the common path: 59 ticks in 60
                 STZ     _kLboltDue
-                LDA     #WCHAN_LBOLT
+                DEC     _kLoadTick              ; vmmeter's `time.tv_sec % 5 == 0'
+                BNE     @lbw_wake               ;   (vm_sched.c:178)
+                LDA     #5
+                STA     _kLoadTick
+                JSR     _Vm_Loadav
+@lbw_wake       LDA     #WCHAN_LBOLT
                 JSR     _wakeup
                 SEC
                 RTS
 @lbw_none       CLC
                 RTS
+
+;=============================================================================
+; _Vm_Loadav - 2.11BSD's load average, every five seconds: vmtotal()'s nrun
+; and loadav() (sys/vm_sched.c:191, :346).  Upstream's arithmetic is
+;
+;       avg[i] = (cexp[i] * (avg[i]-(n<<8)) + (((long)n)<<16)) >> 8;
+;
+; with avg and cexp scaled by 256.  Multiplied out, the numerator is
+; cexp*avg + 256*n*(256-cexp), and the second term is a multiple of 256, so
+; the shift gives exactly
+;
+;       avg[i] = ((cexp[i] * avg[i]) >> 8) + (256-cexp[i]) * n
+;
+; which is what this computes: one 8x16 multiply and no signed arithmetic.
+; nrun is the READY and RUNNING tasks.  Upstream also counts a sleep that is
+; not interruptible (`!(p->p_flag & P_SINTR)'); FGX records no such flag, so
+; a task blocked in the disk path is not counted.
+; In: MX %00, DBR = kernel bank.  Clobbers A, X, Y.
+;=============================================================================
+_Vm_Loadav      MX      %00
+                STZ     _lvN
+                LDX     #FGX_TASK_TBL_OFF
+                LDY     #TASK_MAX_SLOTS
+@lv_cnt         LDA:    TCB_Status,X
+                AND     #$00FF
+                CMP     #TASK_READY
+                BEQ     @lv_run
+                CMP     #TASK_RUNNING
+                BNE     @lv_next
+@lv_run         INC     _lvN
+@lv_next        TXA
+                CLC
+                ADC     #TCB_SIZE
+                TAX
+                DEY
+                BNE     @lv_cnt
+                LDX     #0                      ; i*2
+@lv_avg         STZ     _lvAcc                  ; acc = 0 (32 bits)
+                STZ     _lvAcc+2
+                LDA     _avenrun,X              ; m = avg[i] (32 bits)
+                STA     _lvM
+                STZ     _lvM+2
+                LDA     _lvCexp,X
+                STA     _lvC
+@lv_mul         LSR     _lvC                    ; next bit of cexp
+                BCC     @lv_shift
+                LDA     _lvAcc
+                CLC
+                ADC     _lvM
+                STA     _lvAcc
+                LDA     _lvAcc+2
+                ADC     _lvM+2
+                STA     _lvAcc+2
+@lv_shift       ASL     _lvM
+                ROL     _lvM+2
+                LDA     _lvC
+                BNE     @lv_mul
+                LDA     #256                    ; (256-cexp) * n
+                SEC
+                SBC     _lvCexp,X
+                TAY
+                LDA     _lvAcc+1                ; bytes 1-2: acc >> 8
+@lv_addn        CPY     #0
+                BEQ     @lv_store
+                CLC
+                ADC     _lvN
+                DEY
+                BRA     @lv_addn
+@lv_store       STA     _avenrun,X
+                INX
+                INX
+                CPX     #6
+                BCC     @lv_avg
+                RTS
+
+_lvCexp         DW      235,251,254             ; 256*exp(-1/12), -1/60, -1/180:
+                                                ;   upstream's 0353, 0373, 0376
 
 ;=============================================================================
 ; _Timer_WakeExpired - mark every WCHAN_TIMER-blocked task whose SE_WakeTime
@@ -1214,6 +1296,15 @@ _vmIntr         DS      4               ; v_intr:    every hardware IRQ
 _cp_time        DS      CPUSTATES*4     ; ticks charged per CP_* state
 _kCpState       DW      CP_SYS          ; the CP_* state the next tick goes to;
                                         ; the boot is system time
+; struct loadavg (h/resource.h): 2.11BSD's `short avenrun[3]' scaled by 256,
+; then fscale.  VM_LOADAVG copies all eight bytes.
+_avenrun        DW      0,0,0
+                DW      256                     ; fscale
+_kLoadTick      DW      5               ; lbolts until the next _Vm_Loadav
+_lvN            DS      2               ; _Vm_Loadav scratch: nrun,
+_lvC            DS      2               ;   cexp's remaining bits,
+_lvM            DS      4               ;   the shifted multiplicand,
+_lvAcc          DS      4               ;   and the product
 
 ;==============================================================================
 ; END sched.s

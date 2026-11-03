@@ -142,6 +142,12 @@ Task_Alloc      ENT
                 STA:     TCB_BankList+2,X
                 STA:     TCB_BankList+4,X
                 STA:     TCB_BankList+6,X
+                ; A new process starts with no CPU time charged, as 2.11BSD's
+                ; fork clears the child's u_ru.
+                STA:     TCB_Utime,X
+                STA:     TCB_Utime+2,X
+                STA:     TCB_Stime,X
+                STA:     TCB_Stime+2,X
                 ; Clear this pid's signal ENTRY slot.  Stale on pid reuse;
                 ; the kernel now posts SIGCHLD at every child exit (2026-07-27), so
                 ; a recycled slot would deliver into the PREVIOUS occupant's
@@ -3200,7 +3206,7 @@ _Uimg_VRes      MX      %00
 ; hand-off, for any range.
 ;
 ; ponytail: no slptime scoring among candidates; the first range that
-; qualifies in a pass wins.  Score by TCB_LastRun when a workload shows the
+; qualifies in a pass wins.  Score by a last-run tick when a workload shows the
 ; wrong sleeper being parked.
 ;------------------------------------------------------------------------------
 _Uimg_Overlap   MX      %00

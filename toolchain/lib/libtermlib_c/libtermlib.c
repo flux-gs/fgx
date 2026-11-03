@@ -147,6 +147,8 @@ int tgetnum(char *id)
 
 char *tgetstr(char *id, char **area)
 {
+    char *s, *d;
+
     __asm_p0 = id;
     __asm(
         "LDA __asm_p0",
@@ -169,9 +171,20 @@ char *tgetstr(char *id, char **area)
         return (char *)0;
     /* Cap strings (tc_*) live in the DATA bank; &UP is built with PHB, so
      * its bank is the process's data bank.  A caller needs tgetstr's
-     * prototype, or an implicit int return drops the bank. */
-    return (char *)(((unsigned long)(char *)&UP >> 16 << 16)
-                    | (unsigned)__asm_w0);
+     * prototype, or an implicit int return drops the bank.
+     *
+     * THE STRING IS COPIED INTO *area AND *area ADVANCED PAST ITS NUL, as
+     * 2.11BSD's tdecode() places it (termcap.c: "the strings are placed in
+     * area, which is a ref parameter which is updated").  A caller may keep
+     * only that area: top(1) sizes and copies out the bytes tgetstr used. */
+    s = (char *)(((unsigned long)(char *)&UP >> 16 << 16)
+                 | (unsigned)__asm_w0);
+    d = *area;
+    while ((*d++ = *s++) != 0)
+        ;
+    s = *area;
+    *area = d;
+    return s;
 }
 
 /* ---- tgoto/tputs — cursor addressing + (delay-free) padding output ------- */

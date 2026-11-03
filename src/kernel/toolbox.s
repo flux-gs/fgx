@@ -288,6 +288,37 @@ _HBTickCount    DW      1                       ; tickCount (fire every VBL)
                 BNE     @hb_cpDone
                 INC    |_cp_time+2,X
 @hb_cpDone
+                ; The running process's u_ru, as kern_clock.c:78-90 charges it:
+                ; a user tick to ru_utime, a system tick to ru_stime, and an
+                ; idle tick (2.11BSD's `noproc') to nobody.  _kCurPid is the
+                ; kernel-bank copy of the running pid; this body cannot read
+                ; the DP _curTask.
+                LDA    |_kCpState
+                CMP     #CP_IDLE
+                BEQ     @hb_ruDone
+                LDA    |_kCurPid
+                AND     #$00FF
+                BEQ     @hb_ruDone              ; pid 0: no process
+                DEC
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL                             ; (pid-1)*64 (TCB_SIZE)
+                CLC
+                ADC     #FGX_TASK_TBL_OFF
+                TAX
+                LDA    |_kCpState
+                BNE     @hb_ruSys               ; CP_USER is 0
+                INC:    TCB_Utime,X
+                BNE     @hb_ruDone
+                INC:    TCB_Utime+2,X
+                BRA     @hb_ruDone
+@hb_ruSys       INC:    TCB_Stime,X
+                BNE     @hb_ruDone
+                INC:    TCB_Stime+2,X
+@hb_ruDone
                 LDA     _kTodFrac               ; the time of day, 32.32: Reno
                 CLC                             ;   kern_clock.c:223 BUMPTIME
                 ADC     _kTickFrac

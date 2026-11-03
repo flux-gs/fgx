@@ -1,0 +1,83 @@
+TOP(1)               UNIX Programmer's Manual               TOP(1)
+
+
+
+NAME
+     top - display and update the busiest processes
+
+SYNOPSIS
+     top [ -s seconds ] [ -o column ] [ -n rows ] [ -I ] [ -h ]
+
+DESCRIPTION
+     Top shows a summary of the system and a table of its
+     processes, and refreshes both until it is told to quit.  It
+     must be run from a terminal; TERM names its termcap entry.
+
+     The first line gives the host name, the time, how long the
+     system has been up, the number of users logged in and the
+     load averages: the number of runnable processes averaged
+     over 1, 5 and 15 minutes.  Then come the processes by state,
+     the share of clock ticks spent in user, nice, system and
+     idle time since the previous sample, memory, and swap.
+
+     Each process row shows:
+
+     PID      the process ID
+     USER     the owner's name
+     PR       the scheduling priority
+     NI       the nice value
+     TEXT     the text size
+     DATA     the heap's high-water break
+     STACK    the bank-0 stack reserved for it
+     S        R running or runnable, S sleeping, T stopped,
+              Z zombie
+     TIME     user plus system CPU seconds since it started
+     DTIME    CPU seconds since the previous sample
+     COMMAND  its name
+
+     The first screen appears at once; the CPU percentages and
+     DTIME need a second sample and say so until there is one.
+
+OPTIONS
+     -s seconds  Refresh interval, 0.1 to 1800 seconds (default
+                 1).
+     -o column   Sort column, 0 to 10 (default 9, DTIME then
+                 TIME).
+     -n rows     Show at most rows processes (0 fills the
+                 screen).
+     -I          Hide idle processes at first.
+     -h          Print a usage summary.
+
+KEYS
+     q           Quit.
+     Space       Refresh now.
+     ^L          Redraw the screen.
+     I or i      Show or hide idle processes.
+     P           Sort by DTIME, then TIME.
+     T           Sort by TIME.
+     N           Sort by PID.
+     M           Sort by data size.
+     s           Prompt for the refresh interval (Escape
+                 cancels).
+     o           Prompt for the sort column (Escape cancels).
+     h or ?      Show or hide the key help.
+
+     The sort columns are 0 PID, 1 UID, 2 priority, 3 nice,
+     4 text size, 5 data size, 6 stack size, 7 state, 8 TIME,
+     9 DTIME and 10 command.
+
+SEE ALSO
+     ps(1), w(1), vmstat(1), getloadavg(3)
+
+AUTHOR
+     Dave Plummer, for 2.11BSD on the PDP-11.
+
+BUGS
+     The kernel keeps no nice value, text size or swap, so NI is
+     always 0, TEXT is shown as -, and the swap line says none.
+     Memory is the user bank pool: the banks processes hold and
+     the pages still free.
+
+     A process ID that is reused within one refresh interval may
+     be charged the earlier process's DTIME, the kernel keeping
+     no start time to tell the two apart.

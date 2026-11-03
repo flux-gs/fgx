@@ -43,6 +43,10 @@ source is unproblematic (see the licence notes below), so it is simply shipped.
                                               ported to src/userland/novi; its
                                               author states BSD-2-Clause
                                               (docs/PROVENANCE.md)
+    pdpsrc/bsd/top, pdpsrc/bsd/pdp11_unistd.h top(1), Dave Plummer's process
+                                              monitor at davepl/pdpsrc commit
+                                              f489ca9, ported to src/userland/top
+                                              (BSD-2-Clause, docs/PROVENANCE.md)
     65816-llvm-mos/                           the soft double runtime behind
                                               toolchain/lib/libdouble (its README)
     tzcode-2026d/, tzdata-2026d/              host zic and the zone files

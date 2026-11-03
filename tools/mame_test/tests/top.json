@@ -1,0 +1,33 @@
+{
+ "name": "top",
+ "description": "top(1) shows the kernel's per-process CPU time and load average.  A staged script starts a CPU-bound copy of yes under the name spinme, waits eight seconds, runs top -s 2 and quits it with an injected q after about 22 seconds.  top_check.py reads top's last frame: the 1-minute load average is not 0.00, spinme's TIME is at least one second and its DTIME is not 0.00.  Each is 0 without its kernel half (the heartbeat's tick charging, procs(2)'s utime/stime, _Vm_Loadav).",
+ "command": "sh /etc/toptest.sh",
+ "timeout_s": 300,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/toptest.sh",
+   "prodos_dir": "/FGX/etc",
+   "name": "toptest.sh",
+   "replace": false
+  }
+ ],
+ "raw_inject": [
+  [
+   1320,
+   113,
+   0
+  ]
+ ],
+ "expect": {
+  "screen_contains": [
+   "load average:",
+   "[kernel]"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "top: "
+  ],
+  "check_script": "top_check.py"
+ }
+}

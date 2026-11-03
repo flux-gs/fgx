@@ -13,8 +13,10 @@ SYNOPSIS
 DESCRIPTION
      _W prints a summary of the current activity on the system,
      beginning with a header line showing the current time, how
-     long the system has been up, and the number of users logged
-     in.  The following entries are then printed for each user:
+     long the system has been up, the number of users logged in,
+     and the load averages: the number of jobs in the run queue
+     averaged over 1, 5 and 15 minutes.  The following entries
+     are then printed for each user:
      login name, the terminal name, the time the user logged on,
      and the command line of the most recent process on that
      terminal.
@@ -44,12 +46,11 @@ SEE ALSO
      who(1), ps(1), utmp(5)
 
 BUGS
-     There are no idle, JCPU or PCPU columns, and the heading
-     carries no load average, because this system measures none
-     of those.  A terminal's last-input time is not recorded, no
-     per-process CPU time is kept, and the scheduler holds no
-     run-queue average.  Columns of zeroes would read as real
-     measurements, so they are omitted rather than filled in.
+     There are no idle, JCPU or PCPU columns.  A terminal's
+     last-input time is not recorded, and the CPU time of a
+     process's finished children is not kept.  Columns of zeroes
+     would read as real measurements, so they are omitted rather
+     than filled in.
 
      The most recent process on a terminal is chosen by process
      number alone.  Upstream prefers a process that is not

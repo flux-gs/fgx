@@ -70,4 +70,11 @@ int wait3(int *status, int options, struct rusage *rusage);
 int getpriority(int which, int who);
 int setpriority(int which, int who, int prio);
 
+/* Load average structure: 2.11BSD h/resource.h, what sysctl's vm.loadavg
+ * (VM_LOADAVG) returns.  Each average is scaled by fscale. */
+struct loadavg {
+    short ldavg[3];
+    int fscale;
+};
+
 #endif /* _SYS_RESOURCE_H */

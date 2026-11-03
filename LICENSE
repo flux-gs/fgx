@@ -45,6 +45,9 @@ one with its upstream:
 - novi (src/userland/novi): BSD-2-Clause, Copyright (c) Dave Plummer.  The
   upstream carries no license file; its author stated the terms: "you can
   assume NOVI is under the 2_BSD license".
+- top (src/userland/top): BSD-2-Clause, Copyright (c) Dave Plummer, from
+  the same repository, whose author states his own code there is
+  BSD-2-Clause.
 - The soft double (toolchain/lib/libdouble/softdouble.c): Apache-2.0, from
   the W65816 fork of llvm-mos; the licence text is
   vendor/65816-llvm-mos/LICENSE.TXT (Apache License v2.0 with LLVM
