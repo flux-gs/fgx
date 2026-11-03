@@ -3729,6 +3729,34 @@ sfld_ptr_addr_init(Global *g, int idx)
             cur_ty = DECREF(cur_ty);
             continue;
         }
+        /* A constant displacement, `g + k' or `g - k', as the scalar pointer
+         * initializer takes one: A.7.19, "the address of a previously
+         * declared external or static object plus or minus a constant".
+         * POINTER arithmetic, so k scales by the pointee as a subscript
+         * does.  2.11BSD sort's `struct field proto = { nofold+128, ... }'.
+         * The constant is parsed once for its value and end, then walked
+         * again token by token so g_cur can be left AT its last token.
+         * ponytail: the end is found by source position, so a constant
+         * whose macro expansion also supplies the token after it would
+         * stop early; tokenize-with-checkpoints if one ever does. */
+        if (g_cur.kind == TOK_PLUS || g_cur.kind == TOK_MINUS) {
+            int neg = (g_cur.kind == TOK_MINUS);
+            int es  = elem_size_for(cur_ty, cur_sid);
+            if (es == 0)
+                break;                 /* not pointer arithmetic */
+            LexPeek at_op;
+            lex_peek_save(&at_op);
+            next_tok();                /* consume '+' / '-' */
+            long k = parse_const_bin(0);
+            int end_line = g_cur.line, end_col = g_cur.col;
+            lex_peek_restore(&at_op);
+            while (g_cur.line != end_line || g_cur.col != end_col) {
+                lex_peek_save(&pk);    /* checkpoint at this token */
+                next_tok();
+            }
+            off += (int)((neg ? -k : k) * es);
+            continue;
+        }
         break;
     }
     lex_peek_restore(&pk);             /* leave g_cur AT the last value token */
