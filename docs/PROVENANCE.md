@@ -403,6 +403,7 @@ did not write, which this registry's preamble calls the worse error.
 | `toolchain/lib/libc_c/ftell.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/ftell.c` (5.2 3/9/86) | ftell(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/rew.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/rew.c` (5.2 3/9/86) | rewind(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/clrerr.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/clrerr.c` (5.2 3/9/86) | clearerr(3) as a function.  **VERBATIM in the body.** |
+| `toolchain/lib/libc_c/herror.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/net/herror.c` (6.1, 12/4/87) | herror(3), h_errlist and h_nerr, for ftp(1).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/setvbuf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/setvbuf.c` (8.1.1 1997/7/27) | setvbuf(3), 2.11BSD's 1997 trim of 4.4BSD's.  **VERBATIM in the body**; `_IOFBF` (0, 4.4BSD's) is defined in stdio.h, which the 1986 header lacks. |
 | `toolchain/lib/libc_c/setbuf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/setbuf.c` (8.1.1 1997/7/29) | setbuf(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/setbuffer.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/setbuffer.c` (8.1.1 1997/7/29) | setbuffer(3), setlinebuf(3).  **VERBATIM in the body.** |
