@@ -728,5 +728,6 @@
   "predef_line_file": 42,
   "gptr_struct_arr": 42,
   "static_fnptr": 42,
-  "varargs_lint": 42
+  "varargs_lint": 42,
+  "blk_extern_struct": 42
 }
