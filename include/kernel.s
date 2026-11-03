@@ -536,7 +536,8 @@ TCB_EntryPoint  DS      2               ; Entry point offset
 TCB_ParentID    DS      2               ; Parent task ID
 TCB_ExitCode    DS      2               ; Exit status (when ZOMBIE)
 
-TCB_WakeTime    DS      4               ; Tick count for timed wakeup
+TCB_Utime       DS      4               ; ticks charged in user mode: 2.11BSD's
+                                        ;   u.u_ru.ru_utime (kern_clock.c:78)
 TCB_WaitingOn   DS      2               ; Resource/task being waited for
 TCB_WaitType    DS      2               ; Type of wait (v3-only; aliased TCB_SavedPB in v1)
 
@@ -544,7 +545,12 @@ TCB_MsgQHead    DS      2               ; Message queue head index
 TCB_MsgQTail    DS      2               ; Message queue tail index
 TCB_MsgQCount   DS      2               ; Number of pending messages
 
-TCB_LastRun     DS      4               ; Tick count when last run (for aging)
+TCB_Stime       DS      4               ; ticks charged in system mode: u.u_ru.ru_stime
+                                        ;   (kern_clock.c:90).  Both are the
+                                        ;   heartbeat's and live here, not in the
+                                        ;   u-area, because the heartbeat can reach
+                                        ;   the TCB table (kernel bank) and not a
+                                        ;   u-area (a far pointer through DP)
 TCB_CPUTime     DS      4               ; Total CPU time used (ticks)
 
 TCB_NextReady   DS      2               ; Next task in ready queue
@@ -907,7 +913,12 @@ PI_TtyName      EQU     34              ; 8  the controlling terminal's name,
                                         ;    lines by this name; it is the name
                                         ;    and not a device number because
                                         ;    that is what both sides have.
-PROCINFO_SIZE   EQU     42
+PI_Uid          EQU     42              ; 2  effective uid (U_Uid), 2.11BSD's p_uid
+PI_Pri          EQU     44              ; 2  scheduling priority (TCB_Priority)
+PI_Utime        EQU     46              ; 4  user ticks (TCB_Utime)
+PI_Stime        EQU     50              ; 4  system ticks (TCB_Stime).  The pid-0
+                                        ;    record leaves all four 0.
+PROCINFO_SIZE   EQU     54
 
 SEF_FRESH       EQU     %00000001       ; never run; first resume -> _Task_FirstRun
 SEF_STOPREPORTED EQU    %00000010       ; this stop already reported by a

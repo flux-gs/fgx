@@ -3,8 +3,8 @@
  *
  * VM_SUM and VM_CPTIME are what 2.11BSD's vmstat reads through /dev/kmem as
  * `_sum' and `_cp_time'; FGX has no /dev/kmem yet (apple/fgx#538), so the vm
- * node serves them.  VM_LOADAVG and VM_SWAPMAP answer ENOTSUP: FGX keeps no
- * load average and has no swap.
+ * node serves them.  VM_LOADAVG is 2.11BSD's struct loadavg.  VM_SWAPMAP
+ * answers ENOTSUP: FGX has no swap.
  */
 #ifndef _SYS_VMPARAM_H
 #define _SYS_VMPARAM_H
