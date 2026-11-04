@@ -1816,6 +1816,59 @@ emit_store_local_field(Local *lc, Field *f)
     }
 }
 
+/* A bit-field member reached through a member chain: the chain's address
+ * (far pointer in FPR kd) is the field's CONTAINING word, as the direct
+ * paths above address it by byte_offset.  The field is unsigned there too
+ * (K&R A.8.3: "whether an int field is treated as signed is
+ * implementation-dependent").  extract: A = container -> A = field value. */
+void
+emit_lv_bitfield_extract(Field *f)
+{
+    for (int i = 0; i < f->bit_offset; i++)
+        ir_emitf("                LSR\n");
+    ir_emitf("                AND     #$%04X\n", ((1 << f->bit_width) - 1) & 0xFFFF);
+}
+
+/* Store A as a word member through FPR kd at its byte offset, or, for a
+ * bit-field, into its bits of the containing word. */
+void
+emit_fpr_deref_store_wordmember(int kd, Field *f)
+{
+    if (f->is_bit_field) emit_lv_bitfield_store(kd, f, f->byte_offset);
+    else                 emit_fpr_deref_store_word(kd, f->byte_offset);
+}
+
+/* Load a member through FPR k at its byte offset: a bit-field is extracted
+ * from its containing word, anything else is emit_fpr_deref_field's. */
+void
+emit_fpr_deref_member(int k, Field *f)
+{
+    if (f->is_bit_field) {
+        emit_fpr_deref_field(k, LT_INT, f->byte_offset);
+        emit_lv_bitfield_extract(f);
+        return;
+    }
+    emit_fpr_deref_field(k, f->type, f->byte_offset);
+}
+
+/* store: A = the value -> the field at [kd] holds its low bit_width bits, the
+ * rest of the container is untouched, and A = the value stored (A.7.17). */
+void
+emit_lv_bitfield_store(int kd, Field *f, int off)
+{
+    int field_mask = ((1 << f->bit_width) - 1) & 0xFFFF;
+    int clear_mask = (~(field_mask << f->bit_offset)) & 0xFFFF;
+    ir_emitf("                AND     #$%04X\n", field_mask);
+    for (int i = 0; i < f->bit_offset; i++)
+        ir_emitf("                ASL\n");
+    ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
+    emit_fpr_deref_field(kd, LT_INT, off);            /* A = container */
+    ir_emitf("                AND     #$%04X\n", clear_mask);
+    ir_emitf("                ORA     _fcc_tmp_b\n");
+    emit_fpr_deref_store_word(kd, off);
+    emit_lv_bitfield_extract(f);                      /* A = value stored */
+}
+
 /* P3-2.7b: 4-byte pointer store from FPR k into a local aggregate slot
  * (decl-init: struct ptr / fn-ptr fields and ptr-array elements).  off is
  * the byte offset within the local's slots; emit_field_sta supplies the

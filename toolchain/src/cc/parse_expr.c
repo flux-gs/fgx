@@ -4698,7 +4698,7 @@ build_struct_elem_access(Local *lc, Global *gv, LocalType atype, int asid,
             if (f2->type == LT_STRUCT && g_cur.kind == TOK_DOT) continue;
             break;
         }
-        f = elem_synth_leaf(f2->type, cum, f2->struct_id, f2->is_unsigned);
+        f = elem_synth_leaf(f2->type, cum, f2->struct_id, f2->is_unsigned, f2);
         f->n_dims = f2->n_dims;            /* the rank rides the fold too */
         f->row_stride = f2->row_stride;
     }
@@ -5026,7 +5026,7 @@ build_dot_access(Local *lc, Global *gv, int cur_sid, int line, int col)
 static Field g_elem_synth[256];
 static int   g_n_elem_synth = 0;
 Field *
-elem_synth_leaf(LocalType type, int off, int sid, int uns)
+elem_synth_leaf(LocalType type, int off, int sid, int uns, const Field *bits)
 {
     if (g_n_elem_synth >= 256)
         die(g_cur.line, g_cur.col,
@@ -5034,8 +5034,12 @@ elem_synth_leaf(LocalType type, int off, int sid, int uns)
     Field *f = &g_elem_synth[g_n_elem_synth++];
     f->name = "(elem)"; f->type = type; f->struct_id = sid;
     f->fn_sig_id = -1; f->n_elems = 1; f->byte_offset = off;
-    f->byte_size = 0; f->is_bit_field = 0; f->bit_offset = 0;
-    f->bit_width = 0; f->is_unsigned = uns;
+    f->byte_size = 0; f->is_unsigned = uns;
+    /* A bit-field leaf keeps its place in the containing word, which the
+     * cumulative byte offset addresses (`p->arr[i].hl'). */
+    f->is_bit_field = bits ? bits->is_bit_field : 0;
+    f->bit_offset   = bits ? bits->bit_offset : 0;
+    f->bit_width    = bits ? bits->bit_width : 0;
     f->n_dims = 1; f->row_stride = 0;      /* callers carry a rank-2 leaf's */
     return f;
 }
@@ -5378,7 +5382,7 @@ build_arrow_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         int n = ast_new(N_ELEM_FIELD, line, col);
         g_ast[n].a = base;
         g_ast[n].sym_f2 = elem_synth_leaf(f2->type, cum2, f2->struct_id,
-                                          f2->is_unsigned);
+                                          f2->is_unsigned, f2);
         g_ast[n].type = f2->type;
         g_ast[n].struct_id = f2->struct_id;
         g_ast[n].is_unsigned = f2->is_unsigned;
@@ -7961,7 +7965,7 @@ walk_expr_body(int n)
                 g_expr_struct_id = f->struct_id;
                 continue;
             }
-            emit_fpr_deref_field(k, f->type, f->byte_offset);
+            emit_fpr_deref_member(k, f);
             g_expr_type      = f->type;
             g_expr_struct_id = f->struct_id;
         }
@@ -8410,7 +8414,7 @@ walk_expr_body(int n)
                 g_expr_unsigned  = 0;
                 continue;
             }
-            emit_fpr_deref_field(ka, f->type, f->byte_offset);
+            emit_fpr_deref_member(ka, f);
             g_expr_type      = f->type;
             g_expr_struct_id = f->struct_id;
             g_expr_unsigned  = 0;
@@ -8807,7 +8811,7 @@ walk_expr_body(int n)
     case N_ELEM_FIELD: {
         Field *f2 = g_ast[n].sym_f2;
         int ka = walk_fpr(g_ast[n].a);
-        emit_fpr_deref_field(ka, f2->type, f2->byte_offset);
+        emit_fpr_deref_member(ka, f2);
         if (ISPTR(f2->type)) g_fpr_res = ka;
         else                 fpr_drop(ka);
         g_expr_type = f2->type;
@@ -8870,7 +8874,7 @@ walk_expr_body(int n)
     case N_FIELD_DEREF: {
         Field *f = g_ast[n].sym_f;
         int ka = walk_fpr(g_ast[n].a);
-        emit_fpr_deref_field(ka, f->type, f->byte_offset);
+        emit_fpr_deref_member(ka, f);
         if (ISPTR(f->type)) g_fpr_res = ka;
         else                fpr_drop(ka);
         g_expr_type = f->type;
@@ -8931,6 +8935,14 @@ walk_expr_body(int n)
         Field *leaf = g_ast[n].sym_f;
         int k = fpr_load_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
         emit_fpr_add_const(k, (int)g_ast[n].val);
+        if (leaf->is_bit_field) {              /* within the containing word */
+            emit_fpr_deref_field(k, LT_INT, 0);
+            emit_lv_bitfield_extract(leaf);
+            fpr_drop(k);
+            g_fpr_res = -1; g_expr_type = LT_INT;
+            g_expr_struct_id = -1; g_expr_unsigned = 1;
+            break;
+        }
         emit_fpr_deref_field(k, leaf->type, 0);
         if (ISPTR(leaf->type)) g_fpr_res = k;
         else                   fpr_drop(k);
@@ -8946,7 +8958,7 @@ walk_expr_body(int n)
             Field *hop = g_ast_fields[g_ast[n].kid0 + h];
             emit_fpr_deref_field(k, LT_STRUCT_PTR, hop->byte_offset);
         }
-        emit_fpr_deref_field(k, f->type, f->byte_offset);
+        emit_fpr_deref_member(k, f);
         if (ISPTR(f->type)) g_fpr_res = k;
         else                fpr_drop(k);
         g_expr_type      = f->type;
@@ -9149,6 +9161,18 @@ walk_expr_body(int n)
         int is_byte = (leaf == LT_CHAR);
         int is_long = (leaf == LT_LONG || leaf == LT_FLOAT);
         int is_ptr  = ISPTR(leaf);
+        if (g_ast[head].sym_f) {                     /* a bit-field leaf */
+            if (g_ast[n].op != TOK_EQ)
+                die(g_ast[n].line, g_ast[n].col,
+                    "op= on a bit-field reached through a member chain");
+            int kd = emit_lvalue_addr(head);
+            walk_val(g_ast[n].c);
+            emit_lv_bitfield_store(kd, g_ast[head].sym_f, 0);
+            fpr_drop(kd);
+            g_fpr_res = -1; g_expr_type = LT_INT;
+            g_expr_struct_id = -1; g_expr_unsigned = 1;
+            break;
+        }
         if (IS_QUAD(leaf) ||
             (g_ast[n].op != TOK_EQ &&
              llong_opassign_applies(leaf, g_ast[n].op, g_ast[n].c))) {
@@ -9327,6 +9351,14 @@ walk_expr_body(int n)
          * kd (rides the fpr), a LONG into A:_fcc_long_hi, a scalar into A. */
         LocalType leaf = g_ast[n].type;
         int kd = emit_lvalue_addr(g_ast[n].a);
+        if (g_ast[g_ast[n].a].sym_f) {               /* a bit-field leaf */
+            emit_fpr_deref_field(kd, LT_INT, 0);
+            emit_lv_bitfield_extract(g_ast[g_ast[n].a].sym_f);
+            fpr_drop(kd);
+            g_fpr_res = -1; g_expr_type = LT_INT;
+            g_expr_struct_id = -1; g_expr_unsigned = 1;
+            break;
+        }
         emit_fpr_deref_field(kd, leaf, 0);
         if (ISPTR(leaf)) {
             g_fpr_res        = kd;               /* far pointer in kd */
@@ -9348,6 +9380,9 @@ walk_expr_body(int n)
          * yielded far pointer is captured by fpr_in. */
         int op        = g_ast[n].a;
         int is_inc    = (g_ast[n].flags & AF_IS_INC) ? 1 : 0;
+        if (g_ast[op].kind == N_LV_CHAIN && g_ast[op].sym_f)
+            die(g_ast[n].line, g_ast[n].col,
+                "++/-- on a bit-field reached through a member chain");
         int is_prefix = (g_ast[n].flags & AF_RET_OLD) ? 0 : 1;
         LocalType lt  = g_ast[n].type;
         int is_ptr    = ISPTR(lt);
@@ -9600,7 +9635,7 @@ walk_expr_body(int n)
         } else {
             fpr_collapse();
             emit_assign_conv(LT_INT);   /* A.7.17: a float truncates */
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
             fpr_drop(kd);
         }
         g_expr_type      = f->type;
@@ -9646,7 +9681,7 @@ walk_expr_body(int n)
         } else {
             fpr_collapse();
             emit_assign_conv(LT_INT);   /* A.7.17: a float truncates */
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
             fpr_drop(kd);
         }
         g_expr_type      = f->type;

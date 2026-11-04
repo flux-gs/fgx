@@ -1447,6 +1447,12 @@ walk_stmt(int n)
         Field *leaf = g_ast[n].sym_f;
         int kd = fpr_load_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
         emit_fpr_add_const(kd, (int)g_ast[n].val);   /* kd = &leaf */
+        if (leaf->is_bit_field) {              /* within the containing word */
+            walk_val(g_ast[n].b);
+            emit_lv_bitfield_store(kd, leaf, 0);
+            fpr_drop(kd);
+            break;
+        }
         if (ISPTR(leaf->type)) {               /* pointer leaf: 4-byte ptr store */
             int ks = walk_fpr(g_ast[n].b);     /* RHS pointer into an fpr */
             emit_fpr_deref_store_ptr(kd, ks, 0);
@@ -1545,8 +1551,11 @@ walk_stmt(int n)
              * pointer instead of into it; the offset word keeps kd intact and
              * the word store leaves the bank alone.  And the operand has to be
              * scaled by the pointee, or `p->q->next += 1' moves one byte. */
-            emit_fpr_deref_field(kd, ISPTR(f->type) ? LT_INT : f->type,
-                                 f->byte_offset);               /* current */
+            if (f->is_bit_field)
+                emit_fpr_deref_member(kd, f);                   /* current */
+            else
+                emit_fpr_deref_field(kd, ISPTR(f->type) ? LT_INT : f->type,
+                                     f->byte_offset);           /* current */
             emit_push_a();
             walk_val(g_ast[n].b);
             emit_scale_compound_ptr(f->type, f->struct_id, g_ast[n].op);
@@ -1558,7 +1567,7 @@ walk_stmt(int n)
             else if (f->type == LT_LONG || f->type == LT_FLOAT)
                 emit_fpr_deref_store_long(kd, f->byte_offset);
             else
-                emit_fpr_deref_store_word(kd, f->byte_offset);
+                emit_fpr_deref_store_wordmember(kd, f);
             fpr_drop(kd);
             break;
         }
@@ -1581,7 +1590,7 @@ walk_stmt(int n)
             emit_fpr_deref_store_byte(kd, f->byte_offset);
         } else {
             walk_val(g_ast[n].b);
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
         }
         fpr_drop(kd);
         break;
@@ -1695,15 +1704,18 @@ walk_stmt(int n)
         /* read the member's OFFSET WORD (a ptr member's ++ rewrites only
          * the offset; the stored bank byte is untouched in memory — and a
          * ptr-typed deref_field would consume kd, losing the base). */
-        emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                             f->byte_offset);
+        if (f->is_bit_field)
+            emit_fpr_deref_member(kd, f);
+        else
+            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                 f->byte_offset);
         if (g_ast[n].flags & AF_IS_INC) {
             ir_record_raw(IR_ADD_CONST, (unsigned)(st), 0, NULL);
         } else {
             ir_record_raw(IR_SUB_CONST, (unsigned)(st), 0, NULL);
         }
         if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-        else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+        else                    emit_fpr_deref_store_wordmember(kd, f);
         fpr_drop(kd);
         break;
     }
@@ -1738,8 +1750,11 @@ walk_stmt(int n)
             emit_compound_op(g_ast[n].op, f->is_unsigned, et);
             emit_fpr_deref_store_long(kd, f->byte_offset);
         } else {
-            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                                 f->byte_offset);       /* A = current (offset word) */
+            if (f->is_bit_field)
+                emit_fpr_deref_member(kd, f);
+            else
+                emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                     f->byte_offset);       /* A = current (offset word) */
             emit_push_a();                              /* current @ 1,S */
             walk_val(g_ast[n].a);
             /* A POINTER member scales its operand like any other pointer
@@ -1751,7 +1766,7 @@ walk_stmt(int n)
             emit_pop_a();                                /* A = current */
             emit_compound_op(g_ast[n].op, f->is_unsigned, LT_INT);
             if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-            else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+            else                    emit_fpr_deref_store_wordmember(kd, f);
         }
         fpr_drop(kd);
         break;
@@ -1765,6 +1780,16 @@ walk_stmt(int n)
         int is_byte = (leaf == LT_CHAR);
         int is_long = (leaf == LT_LONG || leaf == LT_FLOAT);
         int is_ptr  = ISPTR(leaf);
+        if (g_ast[head].sym_f) {                     /* a bit-field leaf */
+            if (g_ast[n].op != TOK_EQ)
+                die(g_ast[n].line, g_ast[n].col,
+                    "op= on a bit-field reached through a member chain");
+            int kd = emit_lvalue_addr(head);
+            walk_val(g_ast[n].c);
+            emit_lv_bitfield_store(kd, g_ast[head].sym_f, 0);
+            fpr_drop(kd);
+            break;
+        }
         if (g_ast[n].op == TOK_EQ) {                 /* plain store */
             int kd = emit_lvalue_addr(head);
             if (is_ptr) {
@@ -1850,6 +1875,9 @@ walk_stmt(int n)
         /* Uniform lvalue ++/-- (statement, value discarded). */
         int head = g_ast[n].a;
         LocalType leaf = g_ast[head].type;
+        if (g_ast[head].sym_f)
+            die(g_ast[n].line, g_ast[n].col,
+                "++/-- on a bit-field reached through a member chain");
         int is_inc = (g_ast[n].flags & AF_IS_INC) != 0;
         int kd = emit_lvalue_addr(head);
         if (leaf == LT_LONG || leaf == LT_FLOAT) {
@@ -1986,7 +2014,7 @@ walk_stmt(int n)
             emit_fpr_deref_store_byte(kd, f->byte_offset);
         } else {
             walk_val(g_ast[n].b);
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
         }
         fpr_drop(kd);
         break;
@@ -1995,30 +2023,36 @@ walk_stmt(int n)
         Field *f = g_ast[n].sym_f;
         int st = (int)g_ast[n].val;
         int kd = walk_fpr(g_ast[n].a);              /* &elem */
-        emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                             f->byte_offset);       /* A = current (offset word) */
+        if (f->is_bit_field)
+            emit_fpr_deref_member(kd, f);
+        else
+            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                 f->byte_offset);       /* A = current (offset word) */
         if (g_ast[n].flags & AF_IS_INC) {
             ir_record_raw(IR_ADD_CONST, (unsigned)(st), 0, NULL);
         } else {
             ir_record_raw(IR_SUB_CONST, (unsigned)(st), 0, NULL);
         }
         if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-        else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+        else                    emit_fpr_deref_store_wordmember(kd, f);
         fpr_drop(kd);
         break;
     }
     case S_FIELD_COMPOUND_AT: {
         Field *f = g_ast[n].sym_f;
         int kd = walk_fpr(g_ast[n].a);              /* &elem */
-        emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                             f->byte_offset);       /* A = current (offset word) */
+        if (f->is_bit_field)
+            emit_fpr_deref_member(kd, f);
+        else
+            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                 f->byte_offset);       /* A = current (offset word) */
         emit_push_a();                              /* current @ 1,S */
         walk_val(g_ast[n].b);
         emit_stash_rhs();
         emit_pop_a();                               /* A = current */
         emit_compound_op(g_ast[n].op, f->is_unsigned, LT_INT);
         if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-        else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+        else                    emit_fpr_deref_store_wordmember(kd, f);
         fpr_drop(kd);
         break;
     }
@@ -5145,6 +5179,10 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
      * pointed at this scratch -- the loop below is then unchanged, and a field
      * row steps exactly as a named base's row does. */
     int fdv[2];
+    /* The member the chain ends on, kept so a BIT-FIELD leaf is known: its
+     * byte offset addresses the containing word, and the chain's load and
+     * store must shift and mask within it (emit_lv_bitfield_*). */
+    Field *leaf_f = NULL;
     while (g_cur.kind == TOK_DOT || g_cur.kind == TOK_ARROW ||
            g_cur.kind == TOK_LBRACKET) {
         int line = g_cur.line, col = g_cur.col, stepn;
@@ -5166,6 +5204,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
             next_tok();                              /* consume '[' */
             int idx = ast_build_assign();
             expect(TOK_RBRACKET, "']'");
+            leaf_f = NULL;
             stepn = ast_new(N_LV_STEP_INDEX, line, col);
             g_ast[stepn].b = idx;
             g_ast[stepn].val = (unsigned)es;
@@ -5212,6 +5251,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
                 deref = (mtok == TOK_ARROW);
             }
             next_tok();
+            leaf_f = f;
             stepn = ast_new(deref ? N_LV_STEP_ARROW : N_LV_STEP_DOT, line, col);
             g_ast[stepn].val = (unsigned)f->byte_offset;
             g_ast[stepn].type = f->type;
@@ -5251,6 +5291,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
     g_ast[head].b = first;
     g_ast[head].type = cur;
     g_ast[head].struct_id = cur_sid;
+    g_ast[head].sym_f = (leaf_f && leaf_f->is_bit_field) ? leaf_f : NULL;
     g_ast[head].fn_sig = fnptr_based(cur) ? sig : -1;
     /* Carry the LEAF's unsignedness out with the type.  Without this a read
      * routed through the walker silently lost it -- an `unsigned int` member
@@ -6753,9 +6794,9 @@ build_stmt(void)
                      * N_LV_STORE_E and the chain read); the fixture is
                      * tests/M37/arrelemstructstore.c.  If those arms are ever
                      * removed this routing has to narrow with them. */
-                    if (f2->type != LT_CHAR && f2->type != LT_INT &&
-                        f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
-                        f2->type != LT_VOID_PTR) {
+                    if ((f2->type != LT_CHAR && f2->type != LT_INT &&
+                         f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
+                         f2->type != LT_VOID_PTR) || f2->is_bit_field) {
                         lex_peek_restore(&m8_pk);
                         return build_comma_expr_stmt(m8_line, m8_col);
                     }
@@ -7189,9 +7230,9 @@ build_stmt(void)
                      * N_LV_STORE_E and the chain read); the fixture is
                      * tests/M37/arrelemstructstore.c.  If those arms are ever
                      * removed this routing has to narrow with them. */
-                    if (f2->type != LT_CHAR && f2->type != LT_INT &&
-                        f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
-                        f2->type != LT_VOID_PTR) {
+                    if ((f2->type != LT_CHAR && f2->type != LT_INT &&
+                         f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
+                         f2->type != LT_VOID_PTR) || f2->is_bit_field) {
                         lex_peek_restore(&m8_pk);
                         return build_comma_expr_stmt(m8_line, m8_col);
                     }
@@ -7575,7 +7616,7 @@ build_stmt(void)
                         break;
                     }
                     f = elem_synth_leaf(f2->type, cum, f2->struct_id,
-                                        f2->is_unsigned);
+                                        f2->is_unsigned, f2);
                 }
                 /* THE TWIN of the ptr-array routing above, and the fixture
                  * found it: fixing `s.pa[i] = p;' left `arr[k].pa[i] = p;'

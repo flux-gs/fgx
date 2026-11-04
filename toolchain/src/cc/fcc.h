@@ -917,6 +917,10 @@ const char *cellpf(const char *fmt, ...);  /* T2-3: composed interned cell name 
 extern int  g_ast_kids[MAX_AST_KIDS];
 extern int  g_n_ast_kids;
 extern Field *g_ast_fields[MAX_AST_KIDS];   /* arrow-chain hop lists */
+void emit_lv_bitfield_extract(Field *f);
+void emit_lv_bitfield_store(int kd, Field *f, int off);
+void emit_fpr_deref_store_wordmember(int kd, Field *f);
+void emit_fpr_deref_member(int k, Field *f);
 extern int    g_n_ast_fields;
 tword deref_result_expr_type(tword result);
 void ast_reset(void);
@@ -1231,7 +1235,7 @@ field_lookup_dot(int sid, const char *name, int name_len);
  * sees a single member at the cumulative offset and needs no depth of its own.
  * Its pool is per-function and bounded; see the definition. */
 Field *
-elem_synth_leaf(LocalType type, int off, int sid, int uns);
+elem_synth_leaf(LocalType type, int off, int sid, int uns, const Field *bits);
 /* K&R global member-namespace lookup (A.7.3): resolve a member by its offset in
  * whichever struct defines it.  out_container_sid (nullable) gets that struct's
  * id, for coercing a non-struct base pointer to the punned struct type. */

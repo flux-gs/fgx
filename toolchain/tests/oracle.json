@@ -733,5 +733,6 @@
   "pp_paste": 42,
   "extern_incomplete": 42,
   "struct_elem_assign": 42,
-  "ptrarr_addr_disp": 42
+  "ptrarr_addr_disp": 42,
+  "bitfield_access": 42
 }
