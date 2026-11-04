@@ -777,3 +777,4 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/sys/proc.h` | `vendor/2.11BSD/usr/sys/h/proc.h` | **written for FGX**: `p_wchan` |
 | `src/kernel/bsdnet/machine/machparam.h` | `vendor/2.11BSD/usr/sys/pdp/machparam.h` | **written for FGX**: little-endian, the byte-swap macros, the page constants |
 | `src/kernel/bsdnet/machine/net_mac.h` | `vendor/2.11BSD/usr/sys/pdp/net_mac.h` | **written for FGX**: upstream's declarations, and each cross-space macro as the direct call |
+| `src/kernel/bsdnet/machine/net_kern.c` | `vendor/2.11BSD/usr/sys/pdp/net_copy.s` | **written for FGX**: `cpfromkern` and `mfkd` by upstream's interface, reading the kernel clock through `kc_time` and `kc_ticks`; `bcopy` and friends as C loops, as `tty_dev.c` has |

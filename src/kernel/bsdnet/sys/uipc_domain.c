@@ -40,7 +40,9 @@ domaininit()
 	register struct protosw *pr;
 
 #ifndef lint
+#ifndef fgx	/* AF_UNIX stays on the kernel's own descriptors at this phase */
 	ADDDOMAIN(unix);
+#endif
 #ifdef INET
 	ADDDOMAIN(inet);
 #endif

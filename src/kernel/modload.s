@@ -116,7 +116,7 @@ _mlcPathBuf     DS      _MLC_PATH_MAX   ; "/lib/modules/<name>",NUL
 ; change -- but note the table GROWS, which moves every kernel static after it,
 ; and the MAME harness resolves _modBankTab by address (the probe-address-rot
 ; class).
-MOD_BANK_MAX    EQU     12
+MOD_BANK_MAX    EQU     13
 _modBankTab     DS      MOD_BANK_MAX
 _modSharedBank  EQU     _modBankTab
 _mlBankOrd      DS      2               ; this load's ordinal, parsed from the
@@ -136,7 +136,7 @@ _mlBankOrd      DS      2               ; this load's ordinal, parsed from the
 ; 16 entries: thirteen modules load today, across every chain.  Overflow
 ; REFUSES rather than skipping the check, and the refusal names the module.
 ;------------------------------------------------------------------------------
-MOD_EXT_MAX     EQU     20
+MOD_EXT_MAX     EQU     24
 _modExtCount    DS      2               ; entries in use
 _modExtLo       DS      MOD_EXT_MAX*2   ; start offset, inclusive
 _modExtHi       DS      MOD_EXT_MAX*2   ; end offset, exclusive
@@ -640,7 +640,7 @@ _modLoadSfx     ASC     ' loaded',$00
 ; Refusal, not a crash: the module was built against a different kernel, so
 ; every kernel address it baked is wrong.  Logged with the module name in
 ; front of it (see _Mod_CheckBuild).
-_modBuildErr    ASC     ': kernel build mismatch, not loaded',$00
+_modBuildErr    ASC     ': kernel build mismatch',$00
 ; A pre-staged module placed anywhere but offset 0.  THE LIMITATION IS STAGE
 ; 2'S, not the registrar's: the boot loader MVNs an image to offset 0 and
 ; cannot honour a placement offset, so this is a build-configuration error --
@@ -651,7 +651,7 @@ _modPreStageOff ASC     'mod: pre-staged at offset !=0',$00
 ; One message for all three placement refusals -- overlap, past the bank end,
 ; and extent table full.  They are the same fact from the module's point of
 ; view: this image and the running layout disagree about where it goes.
-_modPlaceErr    ASC     ': cannot place in the module bank',$00
+_modPlaceErr    ASC     ': cannot place',$00
 
 ;==============================================================================
 ; _Mod_ClaimExtent - reserve this module's byte range in the SHARED bank.

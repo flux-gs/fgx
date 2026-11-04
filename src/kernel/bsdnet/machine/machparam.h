@@ -27,5 +27,6 @@
 #define	PGSHIFT		9		/* LOG2(NBPG) */
 #define	CLSIZE		2
 #define	CLSIZELOG2	1
-#define	MAXBSIZE_M	1024
+#define	btoc(x)		(((unsigned)(x)+63)>>6)
+#define	ctob(x)		((x)<<6)
 #endif

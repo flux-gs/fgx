@@ -1,7 +1,7 @@
 {
  "name": "netprobe",
  "description": "The network modules on the machine: code banks over one data bank, linked at load. Only means anything at kernel.netprobe = 1.",
- "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2; dmesg | tail -4",
+ "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; dmesg | tail -4",
  "timeout_s": 40,
  "expect": {
   "screen_contains": ["bsdnet: ok", "fgx#"],

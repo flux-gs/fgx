@@ -1,6 +1,8 @@
 /* bsdnet_init -- the C entered once, when the last network module has loaded
- * and every bank is linked.  Returns 0, or the number of the first failed
- * probe case; mod_init logs which. */
+ * and every bank is linked.  2.11BSD's netstart() order: mbinit, then the
+ * domains.  Returns 0, or the number of the first failed probe case; mod_init
+ * logs which. */
+extern int mbinit(), domaininit();
 #ifdef NETPROBE
 extern int netprobe();
 #endif
@@ -8,6 +10,8 @@ extern int netprobe();
 int
 bsdnet_init()
 {
+	mbinit();
+	domaininit();
 #ifdef NETPROBE
 	return (netprobe());
 #else

@@ -8,7 +8,7 @@ modules share a data bank instead: DBR is bsdnetd's in all of them.
   bsdnetd          every .data.s, the coalesced tentative definitions, one set
                    of fcc_runtime_data.s, and a JML stub per function a data
                    cell names.  Every cell in it is stamped with its own bank.
-  bsdnet0,1,2      a jump table at the start of the text, one JMP per function
+  bsdnet0-3        a jump table at the start of the text, one JMP per function
                    another module needs; a JML stub per function it imports; EQUs
                    for the data symbols; the TU code and the fcc runtime code.
 
@@ -20,8 +20,8 @@ bsdnetd is assembled first, twice, because its cell table comes from its own
 listing and goes last, where it cannot move what it describes.
 
 The bank bytes of stubs are stamped when the last module loads, since no bank is
-known before then: each module records its bank in bsdnetd, bsdnet2 calls each
-one's _bnLink, then enters bsdnet_init.
+known before then: each module records its bank in bsdnetd, and the last to load
+calls each one's _bnLink, then enters bsdnet_init.
 
 Usage: build_bsdnet.py <split.list> <object dir> <modules out dir> <stem>...
 """
@@ -31,10 +31,12 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CODE = ("0", "1", "2")
-ORDINAL = {"d": 8, "0": 9, "1": 10, "2": 11}
-NAME = {"d": "bsdnetd", "0": "bsdnet0", "1": "bsdnet1", "2": "bsdnet2"}
-BANKIDX = {"d": 0, "0": 1, "1": 2, "2": 3}
+CODE = ("0", "1", "2", "3")
+LAST = CODE[-1]
+ORDINAL = {"d": 8, **{m: 9 + i for i, m in enumerate(CODE)}}
+NAME = {"d": "bsdnetd", **{m: "bsdnet" + m for m in CODE}}
+BANKIDX = {"d": 0, **{m: 1 + i for i, m in enumerate(CODE)}}
+BANKBYTES = 2 * len(BANKIDX)
 HDR = 40
 INC = ("config", "macros", "kernel", "dpmap", "modules", "kernelc")
 RT_CODE = ("src/kernel/far/fcc_rt.s", "src/kernel/far/fcc_ktrap.s")
@@ -104,28 +106,20 @@ bn_text         EQU     *
 """
 
 
-LINK = """
-; _bnLink -- stamp this module's stub bank bytes.  Entered with DBR on bsdnetd,
-; where the banks are; left there.
-_bnLink         MX      %00
-                PHB
-                LDA     bn_banks+6
-                PHA
-                LDA     bn_banks+4
-                PHA
-                LDA     bn_banks+2
-                PHA
-                LDA     bn_banks
+def link_routine():
+    """_bnLink -- stamp this module's stub bank bytes.  Entered with DBR on
+    bsdnetd, where the banks are; left there."""
+    s = "\n_bnLink         MX      %00\n                PHB\n"
+    for off in range(BANKBYTES - 2, 0, -2):
+        s += f"                LDA     bn_banks+{off}\n                PHA\n"
+    s += """                LDA     bn_banks
                 PHK
                 PLB
                 STA     |_bnBanks
-                PLA
-                STA     |_bnBanks+2
-                PLA
-                STA     |_bnBanks+4
-                PLA
-                STA     |_bnBanks+6
-                LDY     #0
+"""
+    for off in range(2, BANKBYTES, 2):
+        s += f"                PLA\n                STA     |_bnBanks+{off}\n"
+    s += f"""                LDY     #0
 @l              CPY     #_bnStubBytes
                 BCS     @d
                 LDA     |_bnStubTab,Y
@@ -147,8 +141,9 @@ _bnLink         MX      %00
                 BRA     @l
 @d              PLB
                 RTL
-_bnBanks        DS      8
+_bnBanks        DS      {BANKBYTES}
 """
+    return s
 
 
 def stubs(imports, where):
@@ -215,14 +210,22 @@ def main():
             if p:
                 place[p[0]] = p[1]
     tus = {m: [] for m in CODE}
+    asm = {m: [] for m in CODE}
     for s in stems:
-        tus[place[s]].append(os.path.join(objdir, s.replace("/", "_")))
+        if s.endswith(".s"):
+            asm[place[s]].append(os.path.join(ROOT, "src/kernel/bsdnet", s))
+        else:
+            tus[place[s]].append(os.path.join(objdir, s.replace("/", "_")))
     workdir = objdir
 
     defs = {m: set() for m in CODE}
     for m in CODE:
         for t in tus[m]:
             defs[m] |= functions(t + ".s")
+        for a in asm[m]:
+            defs[m] |= functions(a)
+            if os.path.basename(a) == "net_asm.s":
+                defs[m] |= functions(os.path.join(ROOT, "src/modules/common/kc_sys.s"))
     owner = {}
     for m in CODE:
         for fn in defs[m]:
@@ -236,6 +239,10 @@ def main():
     for m in CODE:
         for t in tus[m]:
             used[m] |= operands(t + ".s")
+        for a in asm[m]:
+            used[m] |= operands(a)
+            if os.path.basename(a) == "net_asm.s":
+                used[m] |= operands(os.path.join(ROOT, "src/modules/common/kc_sys.s"))
     alld = [t + ".data.s" for m in CODE for t in tus[m]]
     usedd = set()
     for p in alld:
@@ -247,8 +254,8 @@ def main():
     for fn, m in sorted(owner.items()):
         if fn in usedd or any(fn in used[o] for o in CODE if o != m):
             exports[m].append(fn)
-    # bsdnet_init is entered by bsdnet2's mod_init.
-    if owner.get("bsdnet_init", "2") != "2" and "bsdnet_init" not in exports[owner["bsdnet_init"]]:
+    # bsdnet_init is entered by the last module's mod_init.
+    if owner.get("bsdnet_init", LAST) != LAST and "bsdnet_init" not in exports[owner["bsdnet_init"]]:
         exports[owner["bsdnet_init"]].append("bsdnet_init")
         exports[owner["bsdnet_init"]].sort()
     slot = {}
@@ -275,11 +282,11 @@ def main():
                 DA      VT_BSDNET
                 DA      bn_banks-bn_text
                 DA      VT_END
-bn_banks        DS      8               ; bsdnetd, bsdnet0, 1, 2: each module's bank
-bn_links        DS      8               ; each module's _bnLink, in its own bank
+bn_banks        DS      """ + str(BANKBYTES) + """               ; each module's bank, bsdnetd first
+bn_links        DS      """ + str(BANKBYTES) + """               ; each module's _bnLink, in its own bank
 """
         s += stubs(dstubs, "d")
-        s += LINK
+        s += link_routine()
         s += """
 mod_init        MX      %00
                 PHP
@@ -368,7 +375,7 @@ mod_init        MX      %00
             eq += f"{name:<15} EQU     ${base + dsyms[name]:06X}\n"
         imports = {fn: slot[fn] for fn in slot
                    if slot[fn][0] != m and fn in used[m]}
-        if m == "2" and owner.get("bsdnet_init", "2") != "2":
+        if m == LAST and owner.get("bsdnet_init", LAST) != LAST:
             imports["bsdnet_init"] = slot["bsdnet_init"]
         idx = BANKIDX[m]
         s = header(m) + eq
@@ -378,7 +385,7 @@ mod_init        MX      %00
         s += """bn_vtdir        ASC     'VTDR'
                 DA      VT_END
 """
-        s += stubs(imports, m) + LINK
+        s += stubs(imports, m) + link_routine()
         s += f"""
 _bnDataBank     DS      2               ; MODBANK-OK: read under PHK/PLB
 mod_init        MX      %00
@@ -423,7 +430,7 @@ mod_init        MX      %00
                 LDA     #_bnLink
                 STA     bn_links+{idx * 2}
 """
-        if m == "2":
+        if m == LAST:
             s += _last_module()
         s += """@back           PHK
                 PLB
@@ -432,16 +439,21 @@ mod_init        MX      %00
                 SEC
                 RTL
 """
-        if m == "2":
+        if m == LAST:
             s += _last_strings()
         s += f"                PUT     {rel(os.path.join(ROOT, 'src/kernel/far/fcc_dp.s'), workdir)}\n"
         for p in RT_CODE:
             s += f"                PUT     {rel(os.path.join(ROOT, p), workdir)}\n"
+        for a in asm[m]:
+            if os.path.basename(a) == "net_asm.s":
+                s += f"                PUT     {rel(os.path.join(ROOT, 'src/modules/common/kc_sys.s'), workdir)}\n"
+            s += f"                PUT     {rel(a, workdir)}\n"
         for t in tus[m]:
             s += f"                PUT     ../{os.path.basename(t)}.s\n"
         s += "bn_end          EQU     *\n"
         write_module(workdir, m, s)
-        assemble(workdir, m)
+        subprocess.check_call([sys.executable, os.path.join(ROOT, "tools/check_mx.py"),
+                               assemble(workdir, m)], stdout=subprocess.DEVNULL)
 
     os.makedirs(modout, exist_ok=True)
     for m in ("d",) + CODE:
@@ -450,10 +462,10 @@ mod_init        MX      %00
 
 
 def _last_module():
-    """bsdnet2's mod_init continues here with DBR on the data bank: stamp every
+    """The last module's mod_init continues here with DBR on the data bank: stamp every
     module's stubs, enter the C, log its answer."""
     s = ""
-    for i in range(4):
+    for i in range(len(BANKIDX)):
         s += f"""                PHK
                 PEA     @ret{i}-1
                 SEP     #$20

@@ -3,33 +3,37 @@
 # when that key of cfg/system.cfg is nonzero, and module `-' compiles but does
 # not link until its phase gives it what it needs.
 machine/bsdnet_init	0
-netprobe		0	kernel.netprobe
-netprobe2		1	kernel.netprobe
-net/af	-
-net/if	-
-net/if_loop	-
-net/raw_cb	-
-net/raw_usrreq	-
-net/route	-
-netinet/if_ether	-
-netinet/in	-
-netinet/in_pcb	-
-netinet/in_proto	-
-netinet/ip_icmp	-
-netinet/ip_input	-
-netinet/ip_output	-
-netinet/raw_ip	-
-netinet/tcp_debug	-
-netinet/tcp_input	-
-netinet/tcp_output	-
-netinet/tcp_subr	-
-netinet/tcp_timer	-
-netinet/tcp_usrreq	-
-netinet/udp_usrreq	-
-sys/uipc_domain	-
-sys/uipc_mbuf	-
+netprobe	0	kernel.netprobe
+netprobe2	2	kernel.netprobe
+netprobe3	0	kernel.netprobe
+machine/net_kern	0
+machine/s2_stubs	0
+machine/net_asm.s	0
+net/af	2
+net/if	2
+net/if_loop	2
+net/raw_cb	2
+net/raw_usrreq	2
+net/route	2
+netinet/if_ether	2
+netinet/in	2
+netinet/in_pcb	1
+netinet/in_proto	2
+netinet/ip_icmp	1
+netinet/ip_input	1
+netinet/ip_output	1
+netinet/raw_ip	1
+netinet/tcp_debug	3
+netinet/tcp_input	3
+netinet/tcp_output	3
+netinet/tcp_subr	3
+netinet/tcp_timer	3
+netinet/tcp_usrreq	3
+netinet/udp_usrreq	1
+sys/uipc_domain	0
+sys/uipc_mbuf	0
 sys/uipc_proto	-
-sys/uipc_socket	-
-sys/uipc_socket2	-
+sys/uipc_socket	0
+sys/uipc_socket2	0
 sys/uipc_syscalls	-
 sys/uipc_usrreq	-

@@ -8,7 +8,7 @@ int	np_inited = 7;		/* an initializer reaches the data image */
 int	*np_ptr = &np_inited;	/* so does a pointer one */
 char	*np_str = "direct";
 
-extern	int np2_read0(), np2_write1();
+extern	int np2_read0(), np2_write1(), netprobe3();
 extern	long np2_call();
 extern	int *np2_commonaddr();
 extern	char *np2_string();
@@ -64,5 +64,5 @@ netprobe()
 	if (l * 3L != 210000L || np2_lmul(70000L, 3L) != 210000L ||
 	    l / 7L != 10000L || l != 70000L)
 		return (6);
-	return (0);
+	return (netprobe3());
 }

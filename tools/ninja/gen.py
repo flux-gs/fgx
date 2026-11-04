@@ -2139,6 +2139,9 @@ def emit(tools, out_path):
                     bn_link.append(_p[0])
     bn_all = []
     for _s in bn_stems:
+        if _s.endswith(".s"):
+            bn_all.append(f"src/kernel/bsdnet/{_s}")
+            continue
         _b = "build/bsdnet/" + _s.replace("/", "_")
         lines.append(f"build {_b}.s | {_b}.data.s {_b}.comm: bsdnetc "
                      f"src/kernel/bsdnet/{_s}.c | toolchain/fcc cfg/system.cfg\n"
@@ -2147,7 +2150,7 @@ def emit(tools, out_path):
         if _s in bn_link:
             bn_objs += [f"{_b}.s", f"{_b}.data.s", f"{_b}.comm"]
     bn_outs = [f"disk_src/lib/modules/{n}" for n in
-               ("bsdnetd", "bsdnet0", "bsdnet1", "bsdnet2")]
+               ("bsdnetd", "bsdnet0", "bsdnet1", "bsdnet2", "bsdnet3")]
     lines.append(f"build {' '.join(bn_outs)}: bsdnet {' '.join(bn_objs)} | "
                  + " ".join(bn_all) + " "
                  "src/kernel/bsdnet/split.list tools/build_bsdnet.py "
