@@ -40,6 +40,22 @@
 **Interfaces:**
 - Produces: the audit script `$SCRATCH/netaudit/audit.sh`, re-run by Task 8; a table, in the commit body, of each file's first fcc failure and its class.
 
+**Result (2026-11-03).**  `audit.sh` compiles each file as CURLY's `Make.net` does (`-Dpdp11 -DKERNEL -DCURLY -DUCB_METER -DINET -DQUOTA -DUCB_CLIST -DSUPERVISOR`, CURLY's config headers, `<sys/...>` mapped to `h/`).  With seam gaps patched and the known fcc items masked in scratch, the first failures were:
+
+| Class | Item | Where |
+|---|---|---|
+| fcc | 3.2 `##` (port writes `##` for the Reiser `x/**/domain`) | `sys/uipc_domain.c:36` |
+| fcc | 3.7 `&` of a parenthesized or cast primary followed by `->` | `sys/uipc_socket.c:322` (`sblock`), `netinet/tcp_subr.c:284` and `udp_usrreq.c:154` (`sorwakeup`), `netinet/ip_input.c:606` (`IA_SIN`) |
+| fcc | 3.8 struct return, declaration and definition | `netinet/in.h:178`, `netinet/in.c:56` |
+| fcc | NEW: call through a function pointer at the end of a member chain | `netinet/if_ether.c:132`, `:339` (Task 7a) |
+| fcc | NEW: typedef of a sized array | `pdp/seg.h:127` (Task 7b) |
+| seam | `h/signal.h:129` missing `;` (non-conforming, not ported) | every file |
+| seam | `label_t` and other PDP arms under `-Dpdp11` | `h/types.h` |
+| seam | `FMARK`/`FDEFER`, `FREAD` defined nowhere in 2.11BSD's `h/` (4.3BSD-Reno's `sys/file.h` has them) | `sys/uipc_usrreq.c:572`, `sys/uipc_syscalls.c:63` |
+| seam | PDP segmentation | `pdp/seg.h` |
+
+Items 3.4, 3.5 and 3.6 did not surface as a first failure in this set (`in_proto.c`'s `&inetsw[...]` initializer now compiles); their tasks stay, from the approved S0 list, and Task 8's unmasked re-run shows whether they are reached.  `uipc_socket2.c`, `uipc_mbuf.c`, `net/if.c`, `net/route.c` compile with no change.
+
 - [ ] **Step 1: Build the include tree.**  Copy `examples/2.11BSD/usr/sys/h` to `netaudit/sys`, `netaudit/net`, `netaudit/netinet` from the same tree, and make `netaudit/machine` a directory of empty or minimal headers for what the PDP `machine/*.h` and `pdp/net_mac.h` supply (`spl*`, `KScall`, `label_t`, `UCHAR`) -- stubs only, enough to get past them; they are S1's real work.
 - [ ] **Step 2: Write `audit.sh`.**  For each file below, run `toolchain/fcc --module-bank -DKERNEL -DINET -I netaudit -I netaudit/sys -o /dev/null --data-segment /dev/null <file>` and print the first error:
   `sys/uipc_socket.c uipc_socket2.c uipc_mbuf.c uipc_domain.c uipc_usrreq.c uipc_syscalls.c`,
@@ -117,7 +133,7 @@
 **Interfaces:**
 - Consumes: the uniform lvalue walker (`build_lvalue_suffixes` / `N_LV_CHAIN`); read the current `&` arms first and delete the shape list rather than extend it.
 
-- [ ] **Step 1: Fixture:** `struct sa { int f; }; struct ia { int x; struct sa addr; int arr[3]; };` and a `char *` holding an `ia`'s address; take `&(((struct ia *)cp)->addr)`, `&(p)->addr`, `&p->arr[2]`, `&a[1].addr`, `&*p`; write through each and return 42 when every write landed in the right member.
+- [ ] **Step 1: Fixture:** `struct sa { int f; }; struct ia { int x; struct sa addr; int arr[3]; };` and a `char *` holding an `ia`'s address; take `&(((struct ia *)cp)->addr)` (2.11BSD's `IA_SIN`), `&(&s->m)->f` (`sblock`'s `&(sb)->sb_flags` with `sb` = `&so->so_snd`), `&(q->p)->addr` (`sorwakeup`'s `&(so)->so_rcv` with `so` = `inp->inp_socket`), `&((q->p)->addr)`, `&p->arr[2]`, `&a[1].addr`, `&*p`; write through each and return 42 when every write landed in the right member.  The audit found the first three failing today; the simple forms already pass.
 - [ ] **Step 2: Reject fixtures:** `&s.bits` with `bits` a bit-field (`/* expect: bit-field */`); `&r` with `register int r` (`/* expect: register */`).
 - [ ] **Step 3: See the fixture fail** ("expected identifier after '&'"); check whether the two rejects already pass.
 - [ ] **Step 4: Implement:** `&` takes its operand through the lvalue walker; the bit-field and register refusals stay.
@@ -142,6 +158,34 @@
 - [ ] **Step 6: Document** in `docs/userland-abi.md`: replace the "not supported" row with the hidden-pointer sequence (pushed last, offset 0, address back in `_fcc_fpr0`).
 - [ ] **Step 7: Run** goldens, rejects, `run_runtime.py --names struct_ret,<two-TU fixture>`.
 - [ ] **Step 8: Commit** `fcc: a function may return a struct by value`, quoting A.10.1.
+
+### Task 7a: a call through a function pointer at the end of a member chain
+
+Found by the Task 1 audit: `netinet/if_ether.c:132` and `:339`, `(*ac->ac_if.if_output)(&ac->ac_if, m, &sa)`.
+
+**Files:**
+- Modify: `toolchain/src/cc/parse_expr.c` (the postfix call on a member-access chain)
+- Test: `toolchain/tests/M46/fnptr_member_chain.c`
+
+- [ ] **Step 1: Fixture:** `struct in { int (*fn)(); int z; }; struct out { int y; struct in s; };` with `fn` set to a function returning its argument plus 20; call `(*p->s.fn)(1)`, `p->s.fn(1)`, `(*q.s.fn)(1)` with `p` a pointer to and `q` a local `struct out`; return 42 when the three calls give 21 each and `p->s.z`/`q.y` are untouched (sum the calls, subtract 21).  Today `(*p->s.fn)(1)` and `p->s.fn(1)` fail "expected ';'" and `(*q.s.fn)(1)` fails "no such field"; `(*p->fn)(1)` and `(*q.fn)(1)` already pass.
+- [ ] **Step 2: See it fail.**
+- [ ] **Step 3: Implement:** a function call applies to a function-pointer value reached by any member/arrow chain, through the same lvalue walker as Task 6.
+- [ ] **Step 4: Run** goldens and `run_runtime.py --names fnptr_member_chain`.
+- [ ] **Step 5: Commit** `fcc: a call through a function pointer at the end of a member chain`, quoting A.7.3.2.
+
+### Task 7b: a typedef of a sized array
+
+Found by the Task 1 audit: `pdp/seg.h:127`, `typedef struct segm_reg mapinfo[2];` ("sized array typedef not yet supported").  The PDP `seg.h` itself is not ported, but the declaration is conforming C and fcc refuses it.
+
+**Files:**
+- Modify: `toolchain/src/cc/parse_stmt.c` (typedef declarators)
+- Test: `toolchain/tests/M46/typedef_sized_array.c`
+
+- [ ] **Step 1: Fixture:** `typedef int vec3[3]; typedef struct pt { int x, y; } pair[2]; vec3 g; pair gp;` and a local `vec3 v;`; check `sizeof(vec3) == 6`, `sizeof(pair) == 8`, store through `v[2]`, `g[1]`, `gp[1].y` and a `vec3` parameter (which adjusts to `int *`); return 42 when all hold.
+- [ ] **Step 2: See it fail** ("sized array typedef not yet supported").
+- [ ] **Step 3: Implement:** a typedef name may stand for an array of known size; declarations through it get that array type, and a parameter declared with it adjusts to a pointer (A.8.6.3, A.10.1).
+- [ ] **Step 4: Run** goldens and `run_runtime.py --names typedef_sized_array`.
+- [ ] **Step 5: Commit** `fcc: a typedef may name an array of known size`, quoting A.8.9.
 
 ### Task 8: Close S0
 
