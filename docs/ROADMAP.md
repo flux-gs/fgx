@@ -235,11 +235,17 @@ archived tracker; new work is tracked in GitHub Issues.
   the W5100 driver is self-mod-bound to one detected slot (`_w5PatchTbl`), so a
   2nd card is detected but undriven.  Needs per-card indexed base addressing +
   ifnet multi-registration + slotscan-all.  Shares the P1 `ifnet` seam.
-- **Software IP/ICMP/ARP stack (Backend B)** -- a software path over MACRAW so
-  netdump sees ICMP and nothing is intercepted in hardware; keep UDP/TCP on the
-  offload.  Plans: `docs/history/plans/2026-07-19-networking-roadmap-scope.md`
-  (Track A/B; P4 as a faithful 2.11BSD `netinet` port) and
-  `docs/history/plans/2026-07-20-loopback-multinic-ifconfig-caps-scope.md`.
+- **No socket limit: 2.11BSD TCP/IP in the kernel, over the W5100's MACRAW
+  socket.**  The chip runs TCP and UDP itself in four hardware sockets, so the
+  whole machine holds four endpoints; a multiuser system needs as many as
+  memory allows.  2.11BSD's networking (sockets, mbufs, TCP, UDP, IP, ARP,
+  `lo0`, AF_UNIX) is ported into the kernel, the Uthernet II becomes one
+  `ifnet` driver on socket 0, and nothing above the driver knows the card.
+  Phases S0 (fcc prerequisites) to S5, on `feat/net-mux`, tested and tuned
+  locally before any upstream PR.  Design:
+  `docs/history/plans/2026-11-03-net-multiplex-design.md`, which replaces
+  Track B's S1-S3 (`2026-09-27-trackb-s0-fcc-design.md`) and the earlier
+  Backend B / Track A/B plans.
 - **IPv6** -- needs the software stack (the W5100 is IPv4-only).
 - **AppleTalk driver** -- LocalTalk over the SCC; would own the printer port
   and set `_apTalkPort`, which `serial.mod` already honours.  Big effort
