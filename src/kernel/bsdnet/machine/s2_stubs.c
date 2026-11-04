@@ -73,13 +73,6 @@ sysctl_int(oldp, oldlenp, newp, newlen, valp)
 	return (0);
 }
 
-/* Task 5 replaces these. */
-int splimp() { return (0); }
-int splnet() { return (0); }
-int splhigh() { return (0); }
-void splx(s) int s; { }
-int in_cksum(m, len) char *m; int len; { return (0); }
-
 int
 copyout(from, to, n)
 	char *from, *to;

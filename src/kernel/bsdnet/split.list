@@ -6,9 +6,11 @@ machine/bsdnet_init	0
 netprobe	0	kernel.netprobe
 netprobe2	2	kernel.netprobe
 netprobe3	0	kernel.netprobe
+netprobe4	0	kernel.netprobe
 machine/net_kern	0
 machine/s2_stubs	0
 machine/net_asm.s	0
+machine/in_cksum.s	1
 net/af	2
 net/if	2
 net/if_loop	2

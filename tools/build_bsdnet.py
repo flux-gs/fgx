@@ -344,6 +344,11 @@ mod_init        MX      %00
         s += "                PUT     ../commons.data.s\n"
         s += "                PUT     fnptr_patchsites.s\n"
         s += "bn_end          EQU     *\n"
+        # Wait channels are these addresses' low 16 bits, and the kernel's fixed
+        # ones are $FFxx (check_wchans.py): this image stays below them.  So a
+        # network channel can alias only another module's address channel, whose
+        # sleeper re-tests its condition as BSD's all do.
+        s += f"                ERR     bn_end-${org('d'):06X}/$FF00\n"
         return s
 
     write_module(workdir, "d", dbody())

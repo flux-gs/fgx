@@ -135,6 +135,14 @@ struct mbuf {
  */
 #define	MPULL_EXTRA	32
 
+#ifdef fgx
+/* ms is the I bit splimp saved, not a PDP priority: only an unmasked caller may
+ * spend time in the protocol drains. */
+#define	MGET_LONG(ms, i)	((!(ms) && (i)==M_DONTWAIT) ? M_DONTWAITLONG : (i))
+#else
+#define	MGET_LONG(ms, i)	((((ms)&0340) <= 0100 && (i)==M_DONTWAIT) ? M_DONTWAITLONG : (i))
+#endif
+
 #define	MGET(m, i, t) \
 	{ int ms = splimp(); \
 	  if ((m)=mfree) \
@@ -143,7 +151,7 @@ struct mbuf {
 		  mfree = (m)->m_next; (m)->m_next = 0; \
 		  (m)->m_off = MMINOFF; } \
 	  else \
-		(m) = m_more((((ms&0340) <= 0100) && (i==M_DONTWAIT)) ? M_DONTWAITLONG : i, t); \
+		(m) = m_more(MGET_LONG(ms, i), t); \
 	  splx(ms); }
 /*
  * Mbuf page cluster macros.

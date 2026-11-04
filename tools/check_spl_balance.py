@@ -74,10 +74,20 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FILES = ["src/kernel/tty/tty.c", "src/kernel/tty/tty_subr.c",
          "src/kernel/tty/tty_dev.c"]
+# The network code's linked files, for splimp and splhigh, which set I.  splnet
+# is not checked: it masks nothing (src/kernel/bsdnet/machine/net_asm.s).
+_NET = "src/kernel/bsdnet/"
+FILES += [_NET + f + ".c" for f in (
+    "sys/uipc_mbuf", "sys/uipc_socket", "sys/uipc_socket2", "sys/uipc_domain",
+    "net/if", "net/route", "net/if_loop", "net/raw_cb", "net/raw_usrreq",
+    "netinet/if_ether", "netinet/in", "netinet/in_pcb", "netinet/ip_icmp",
+    "netinet/ip_input", "netinet/ip_output", "netinet/raw_ip",
+    "netinet/udp_usrreq", "netinet/tcp_input", "netinet/tcp_output",
+    "netinet/tcp_subr", "netinet/tcp_timer", "netinet/tcp_usrreq")]
 
-SPLTTY = re.compile(r"\bspltty\s*\(\s*\)")
+SPLTTY = re.compile(r"\bspl(tty|imp|high)\s*\(\s*\)")
 SPLX = re.compile(r"\bsplx\s*\(")
-BLOCKING = re.compile(r"\b(kc_sleep|kc_sleepun|kc_lbolt)\s*\(")
+BLOCKING = re.compile(r"\b(kc_sleep|kc_sleepun|kc_lbolt|sleep|SLEEP)\s*\(")
 RETURN = re.compile(r"^\s*return\b")
 FUNC = re.compile(r"^([a-z_][a-z0-9_]*)\s*\(")
 
