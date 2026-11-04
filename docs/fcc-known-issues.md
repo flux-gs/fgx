@@ -25,6 +25,7 @@ last fail closed with the message quoted.
 
 | Gap | Probe | fcc says |
 |-----|-------|----------|
+| A pointer to, or an array of, an array typedef | `typedef long A[4]; A x[2]; A *p;` | `a pointer to or an array of an array typedef is not supported` |
 | Multi-dimensional arrays of `struct` | `struct p grid[3][4];` | `multi-dim arrays of struct not supported (M19)` |
 | A nested aggregate in a local initializer | `struct l v = {{1,2},3};` (local) | `nested aggregate in local struct initializer not supported` |
 | More than 8 parameters in a function-like macro | `#define M(a,b,c,d,e,f,g,h,i) a` | `too many params in function-like #define (max 8)` |
