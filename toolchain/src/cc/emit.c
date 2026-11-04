@@ -6029,7 +6029,7 @@ emit_one_global(Global *g)
                          * reloc resolves label+offset (telnet Setlist's
                          * `char *charp = &nttyb.sg_erase`). */
                         Global *tg = &g_globals[v & 0xFFFF];
-                        int goff = (int)(v >> 16);
+                        int goff = (int)(short)(v >> 16);
                         if (goff != 0)
                             emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
                         else
@@ -6108,7 +6108,7 @@ emit_one_global(Global *g)
                     if (prefix_needed) fprintf(dst, "                ");
                     if (provided && g->init_values_hi[idx] == 3) {
                         Global *tg = &g_globals[v & 0xFFFF];
-                        int goff = (int)(v >> 16);
+                        int goff = (int)(short)(v >> 16);
                         if (goff != 0)
                             emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
                         else
@@ -6175,8 +6175,14 @@ emit_one_global(Global *g)
                  * char* struct fields above): 0 = string-pool label,
                  * 1 = NULL, 3 = &global (curses cr_tty.c sflags[]). */
                 if (g->init_values_hi[j] == 3) {
-                    Global *tg = &g_globals[g->init_values[j]];
-                    emit_mac_dataptr("_Ga", "%s", gname(tg));
+                    /* &global(+offset): the index low, a signed byte offset
+                     * high, as for a pointer struct field. */
+                    Global *tg = &g_globals[g->init_values[j] & 0xFFFF];
+                    int goff = (int)(short)(g->init_values[j] >> 16);
+                    if (goff != 0)
+                        emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
+                    else
+                        emit_mac_dataptr("_Ga", "%s", gname(tg));
                 } else if (g->init_values_hi[j] == 1) {
                     fprintf(dst, "DA      $0000\n");   /* NULL: 4-byte zero */
                     fprintf(dst, "                DFB     $00\n");
@@ -6191,8 +6197,12 @@ emit_one_global(Global *g)
                  * mode: same-segment far pointer (assembly-resolved
                  * offset + bank reloc — works for extern targets in
                  * another TU).  Single-bank: baked address. */
-                Global *tg = &g_globals[g->init_values[j]];
-                emit_mac_dataptr("_Ga", "%s", gname(tg));
+                Global *tg = &g_globals[g->init_values[j] & 0xFFFF];
+                int goff = (int)(short)(g->init_values[j] >> 16);
+                if (goff != 0)
+                    emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
+                else
+                    emit_mac_dataptr("_Ga", "%s", gname(tg));
             } else if (is_char_arr) {
                 fprintf(dst, "DFB     $%02X\n",
                         g->init_values[j] & 0xFFu);

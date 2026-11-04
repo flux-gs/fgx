@@ -4372,6 +4372,8 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
 static void
 parse_char_ptr_arr_item(Global *g, int n)
 {
+    LexPeek item_pk;
+    lex_peek_save(&item_pk);
     if (g_cur.kind == TOK_AMP) {
         next_tok();
         if (g_cur.kind != TOK_IDENT)
@@ -4380,9 +4382,8 @@ parse_char_ptr_arr_item(Global *g, int n)
         if (tg == NULL)
             die(g_cur.line, g_cur.col,
                 "unknown global in char*[] init (must be a prior global)");
-        tg->is_reloc_target  = 1;
-        g->init_values[n]    = (unsigned)(tg - g_globals);
-        g->init_values_hi[n] = 3;
+        lex_peek_restore(&item_pk);
+        sfld_ptr_addr_init(g, n);      /* `&g', `&g[k]', `&g.m', with any +- k */
         next_tok();
     } else if ((g_cur.kind == TOK_INT_LIT && g_cur.value == 0) ||
                field_init_is_null()) {
@@ -4410,9 +4411,7 @@ parse_char_ptr_arr_item(Global *g, int n)
             die(g_cur.line, g_cur.col,
                 "char*[] init item must be a string literal, a global "
                 "array name, '&global', or 0");
-        tg->is_reloc_target  = 1;
-        g->init_values[n]    = (unsigned)(tg - g_globals);
-        g->init_values_hi[n] = 3;
+        sfld_ptr_addr_init(g, n);      /* `a', `a + k', `a - k' */
         next_tok();
     } else {
         if (g_cur.kind != TOK_STR_LIT)
@@ -9923,6 +9922,8 @@ parse_global_decl(TypeSpec t)
                          * bank — the char*-field &global pattern). */
                         if (is_ptr_array(decl_type)) {
                             Global *tg;
+                            LexPeek item_pk;
+                            lex_peek_save(&item_pk);
                             if (g_cur.kind == TOK_AMP) {
                                 next_tok();
                                 if (g_cur.kind != TOK_IDENT)
@@ -9956,8 +9957,14 @@ parse_global_decl(TypeSpec t)
                                 die(g_cur.line, g_cur.col,
                                     "T*[] init item must be '&global' or an array name");
                             }
-                            tg->is_reloc_target = 1;
-                            g->init_values[n] = (unsigned)(tg - g_globals);
+                            /* The item proper -- `&g', `g', `&g[k]', `&g.m',
+                             * `g + k' -- packs the global and a byte offset
+                             * (K&R A.7.19: "the address of a previously
+                             * declared external or static object plus or
+                             * minus a constant"). */
+                            (void)tg;
+                            lex_peek_restore(&item_pk);
+                            sfld_ptr_addr_init(g, n);
                             n++;
                             next_tok();
                             if (g_cur.kind == TOK_COMMA) {
