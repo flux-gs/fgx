@@ -224,7 +224,7 @@ Each phase ends with the system working and the gate green.
 | | Phase | Delivers |
 |---|---|---|
 | S0 | fcc prerequisites | the remaining items of the Track B S0 document: 3.2 `##`, 3.4 extern of an incomplete struct, 3.5 struct assignment into an array element, 3.6 address constants in static initializers, 3.7 `&` of any lvalue, 3.8 struct return by value.  3.1 landed in !399; 3.3 landed in #46 (`b2305ec`, the block-scope extern fix).  **Done** on feat/net-mux (`46dba3b`..`084ecce`), with three items the S0 audit found: a call through a function pointer at the end of a member chain, a typedef of a sized array, and `sizeof` of `*` applied to a member chain.  All 23 files of the port set then compile, under `-Dpdp11`, which S1 found to be the wrong arm (section 3); all of them, with the `net/` files added, compile under `fgx`.  Left for S1, all seams: `h/signal.h:129` lacks a `;`; `FMARK`/`FDEFER` and `FREAD`/`FWRITE` are defined nowhere in 2.11BSD's `h/` (4.3BSD-Reno `sys/file.h` has them); `uipc_domain.c`'s `ADDDOMAIN` pastes with the Reiser `x/**/domain`, which the port writes as `##`; and the PDP arms of `h/types.h` and `pdp/seg.h`. |
-| S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split.  **Done** on feat/net-mux (`f07f1da`..): `bsdnetd` and `bsdnet0`-`3` are built and staged, and no boot loads them; `modload` of all five on a `kernel.netprobe = 1` kernel runs the probe.  182 KB of code and a 41 KB data image, 35 KB of that the mbuf pool: five banks.  Callout and bpf stay in S2, as this table says; `in_cksum` landed here, since IP cannot link without it.  S2 inherits `machine/s2_stubs.c` (`timeout` does nothing, so no timer fires), one global `u`, which is not safe across a sleep and is S3's to fix, `printf` that logs only its format, C byte loops for `bcopy`, and adding the modules to `/etc/rc.in`. |
+| S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split.  **Done** on feat/net-mux (`f07f1da`..): `bsdnetd` and `bsdnet0`-`3` are built and staged, and no boot loads them; `modload` of all five on a `kernel.netprobe = 1` kernel runs the probe.  182 KB of code and a 41 KB data image, 35 KB of that the mbuf pool: five banks.  Callout and bpf stay in S2, as this table says; `in_cksum` landed here, since IP cannot link without it.  S2 inherits `machine/s2_stubs.c` (`timeout` does nothing, so no timer fires), one global `u`, which is not safe across a sleep and is S3's to fix, `printf` that logs only its format, C byte loops for `bcopy`, `sleep()` discarding `kc_sleepi`'s signal answer, which is S3's with `u`, and adding the modules to `/etc/rc.in`. |
 | S2 | substrate running | mbufs, domains/protosw, sockbufs, `in_pcb`, `lo0`, `ip_input`/`ip_output`, ARP, the callout facility, the MACRAW driver on socket 0 and bpf as its tap, proven by an in-kernel probe: ARP resolves the gateway, an ICMP echo goes out and the reply comes back; netdump still captures |
 | S3 | UDP | every AF_INET UDP socket is a BSD socket on the kernel stack, wire and loopback; ntpd, ntpdc 127.0.0.1, dhclient (4.7) and syslogd -u on it; the chip's UDP core retires |
 | S4 | TCP + AF_UNIX | `tcp_*` on the wire and loopback; AF_UNIX on `uipc_usrreq.c`; telnet/telnetd, inetd, ftp, nc and the unixdgram users on it; `net_loop.s` rings, `unp.s`, the old descriptor table and the chip's TCP core retire; socket count limited by memory |
@@ -336,14 +336,20 @@ rather than trust the estimate.
   in module banks from the process bank pool (accepted, section 3); S2 and
   S4 report the real figure.
 - **The chip's duplicate ARP replies** (4.1).
-- **The kernel stack.**  A task's kernel C runs on `kernel.kstk`, 1024 bytes.
-  `tools/net_stack_depth.py` (S1, static) puts the deepest `netintr` chain at
-  515 bytes and `sosend` at 391, each taking in `PRU_CONTROL` paths a real
-  call cannot reach and a 40-byte guess for the driver.  Both leave room, with
-  the system call's own entry above them; S2 measures it on the machine, with the
-  painted stack (`tools/mame_test/kstkhwm_check.py`), against real TCP.  The
-  512-byte `FGX_KSTK_SIZE` is the interrupt context's, which is one more reason
-  protocol code stays out of the interrupt.
+- **The kernel stack, and S2 opens with it.**  `netintr` runs on one of two
+  stacks.  At syscall exit it is the task's `kernel.kstk`, 1024 bytes.  In the idle
+  loop, the common case on a quiet machine, it is the scheduler's own
+  `FGX_STK_SWITCH`, **512 bytes**, whose only guard is a canary that reports.
+  `tools/net_stack_depth.py` (static, S1) puts the deepest `netintr` chain at about
+  460 bytes with `PRU_CONTROL` and the sleeping allocator taken out, and `sosend`
+  at 336; it still counts `sonewconn` -> `tcp_usrreq` chains a packet may not take,
+  and the driver is a 40-byte guess.  With about 30 bytes of entry and an interrupt
+  frame, 460 does not safely fit 512.  Before any protocol code runs from the drain,
+  S2 measures the reachable chain and picks: keep it there with a halting canary,
+  switch to a stack of the network's own around `netintr`, or run it only at syscall
+  exit and have the idle arm wake a task.  `tools/mame_test/kstkhwm_check.py` paints
+  task stacks, not this one.  `FGX_KSTK_SIZE`'s 512 bytes is the interrupt context's,
+  which is one more reason protocol code stays out of the interrupt.
 
 ## 8. Left to the builder
 
