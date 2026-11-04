@@ -739,5 +739,7 @@
   "fnptr_member_chain": 42,
   "typedef_sized_array": 42,
   "sizeof_deref_chain": 42,
+  "long_ptr_add": 42,
+  "paren_member_unsigned": 42,
   "bitfield_access": 42
 }

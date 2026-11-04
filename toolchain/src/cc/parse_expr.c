@@ -3556,7 +3556,7 @@ build_postfix_value_chain(int base)
             g_ast[n].kid0 = hop0; g_ast[n].n_kids = n_hops;
             g_ast[n].type = leaf_ty;
             g_ast[n].struct_id = leaf_sid;
-            g_ast[n].is_unsigned = 0;      /* leaf load resets via helpers */
+            g_ast[n].is_unsigned = g_ast_fields[hop0 + n_hops - 1]->is_unsigned;
             /* A chain ENDING IN A FUNCTION POINTER carries that field's
              * signature, which is what makes the value callable.  Inheriting
              * the base's fn_sig instead (as this did) left it at -1, and the
@@ -5516,6 +5516,7 @@ build_arrow_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         g_ast[n].sym_f = leaf;
         g_ast[n].type = lt;
         g_ast[n].struct_id = leaf->struct_id;
+        g_ast[n].is_unsigned = leaf->is_unsigned;
         /* A function-pointer leaf carries its signature, and a call may
          * follow it directly: `p->s.fn(x)' (K&R A.7.3.2). */
         g_ast[n].fn_sig = fnptr_based(lt) ? leaf->fn_sig_id : -1;
@@ -8648,7 +8649,7 @@ walk_expr_body(int n)
             emit_fpr_deref_member(ka, f);
             g_expr_type      = f->type;
             g_expr_struct_id = f->struct_id;
-            g_expr_unsigned  = 0;
+            g_expr_unsigned  = f->is_unsigned;
         }
         if (ISPTR(g_ast[n].type)) g_fpr_res = ka;
         else                      fpr_drop(ka);
@@ -9184,7 +9185,7 @@ walk_expr_body(int n)
         else                   fpr_drop(k);
         g_expr_type      = leaf->type;
         g_expr_struct_id = leaf->struct_id;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = leaf->is_unsigned;
         break;
     }
     case N_ARROW_LOAD_CHAIN: {
