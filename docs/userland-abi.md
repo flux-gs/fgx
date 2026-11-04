@@ -267,7 +267,7 @@ same 3-byte return frame as a direct `JSL` (`emit_call_indirect`,
 | `long`                    | A = low word, `_fcc_long_hi` (DP `$EC`) = high word |
 | `T *` (any pointer)       | `_fcc_fpr0` (DP `$98`: offset +0, bank +2); the offset also in A |
 | `void`                    | --                                     |
-| `struct` / `union`        | not supported: fcc rejects a function returning a struct by value ("return-by-value struct not supported") |
+| `struct` / `union`        | through a hidden pointer: the caller passes the address of a temporary of its own as parameter 0 (pushed last, so at offset 0), the callee copies the value there and returns that address as a pointer (`_fcc_fpr0`) |
 
 **Frames.** The prologue saves `_fcc_fb` (`PEI`), then each band word the
 function uses (`PEI _fcc_img16`...), carves locals with

@@ -1200,6 +1200,38 @@ addr_of_run(Local *lc, Global *gv, LocalType bt, int sid, int line, int col)
     return an;
 }
 
+/* A call to a function that returns a struct by value (Func.sret): a hidden
+ * temporary of the struct in this function's frame, its address prepended to
+ * the call's arguments as the callee's `__sret' (parse_func_decl_with_spec).
+ * Each call has its own, so two calls in one expression keep two values.
+ * *kid0/*n_kids are the argument span, rebuilt with the address first. */
+void
+call_add_sret(int *kid0, int *n_kids, int sid, int line, int col)
+{
+    static int seq;
+    char nm[24];
+    int nl = snprintf(nm, sizeof nm, "__srt%d", seq++);
+    int saved_reg = g_decl_is_register;
+    g_decl_is_register = 0;
+    locals_declare(nm, nl, LK_LOCAL, LT_STRUCT,
+                   (g_structs[sid].total_size + 1) / 2, line, col);
+    g_decl_is_register = saved_reg;
+    Local *lc = &g_locals[g_n_locals - 1];
+    lc->struct_id = sid;
+    int a = ast_new(N_ADDR_VAR, line, col);
+    g_ast[a].sym_lc = lc;
+    g_ast[a].type = INCREF(LT_STRUCT, DERIV_PTR);
+    g_ast[a].struct_id = sid;
+    if (g_n_ast_kids + *n_kids + 1 > MAX_AST_KIDS)
+        die(line, col, "call-arg kid pool overflow (struct return)");
+    int k0 = g_n_ast_kids;
+    g_ast_kids[g_n_ast_kids++] = a;
+    for (int i = 0; i < *n_kids; i++)
+        g_ast_kids[g_n_ast_kids++] = g_ast_kids[*kid0 + i];
+    *kid0 = k0;
+    (*n_kids)++;
+}
+
 int build_postfix_value_chain(int base);
 
 /* The token kind just after the ')' that closes the '(' at g_cur.  g_cur is
@@ -3049,12 +3081,16 @@ build_postfix_value_chain(int base)
             int kid0, n_kids;
             build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            if (g_fn_sigs[sig].sret_sid >= 0)
+                call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                              op_line, op_col);
             int cn = ast_new(N_CALL_STASHED, op_line, op_col);
             g_ast[cn].a = base;
             g_ast[cn].kid0 = kid0; g_ast[cn].n_kids = n_kids;
             g_ast[cn].val = (unsigned)sig;
             g_ast[cn].type = g_fn_sigs[sig].return_type;
             g_ast[cn].is_unsigned = g_fn_sigs[sig].ret_unsigned;
+            g_ast[cn].struct_id = g_fn_sigs[sig].sret_sid;
             g_ast[cn].fn_sig = -1;
             base = cn;
             continue;
@@ -4158,14 +4194,20 @@ build_primary_ast(void)
             int kid0, n_kids;
             build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            if (g_fn_sigs[sig].sret_sid >= 0)
+                call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                              op_line2, op_col2);
             int n = ast_new(N_CALL_STASHED, op_line2, op_col2);
             g_ast[n].a = chained;
             g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
             g_ast[n].val = (unsigned)sig;
             g_ast[n].type = g_fn_sigs[sig].return_type;
             g_ast[n].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
+            g_ast[n].struct_id = g_fn_sigs[sig].sret_sid;
             g_ast[n].fn_sig = -1;
-            return n;
+            /* a struct value takes `.m' (K&R A.7.3) */
+            return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(n)
+                                                 : n;
         }
         /* Every lvalue a group can hold was taken above (the rotation, the
          * deref arm), so a '++'/'--' still here follows a non-lvalue such as
@@ -4294,13 +4336,17 @@ build_primary_ast(void)
                     int kid0, n_kids;
                     build_call_args(&kid0, &n_kids);
                     expect(TOK_RPAREN, "')'");
+                    if (g_fn_sigs[fp_sig].sret_sid >= 0)
+                        call_add_sret(&kid0, &n_kids, g_fn_sigs[fp_sig].sret_sid,
+                                      line, col);
                     int n = ast_new(N_CALL_FPVAR, line, col);
                     g_ast[n].sym_lc = fp_lc; g_ast[n].sym_gv = fp_gv;
                     g_ast[n].val = (unsigned)fp_sig;
                     g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
                     g_ast[n].type = g_fn_sigs[fp_sig].return_type;
                     g_ast[n].is_unsigned = g_fn_sigs[fp_sig].ret_unsigned;   /* A-1 */
-                    return n;
+                    g_ast[n].struct_id = g_fn_sigs[fp_sig].sret_sid;
+                    return g_fn_sigs[fp_sig].sret_sid >= 0 ? build_postfix_value_chain(n) : n;
                 }
             }
             /* Named function call. */
@@ -4311,6 +4357,7 @@ build_primary_ast(void)
                 g_funcs[fn_idx].return_type = LT_INT;
                 g_funcs[fn_idx].is_variadic = 1;
                 g_funcs[fn_idx].is_extern   = 1;
+                g_funcs[fn_idx].is_implicit = 1;
             }
             int expected_argc = g_funcs[fn_idx].n_params;
             next_tok();                           /* consume '(' */
@@ -4321,6 +4368,10 @@ build_primary_ast(void)
             int kid0, n_kids;
             build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            /* A struct by value: the caller's temporary goes first (Func.sret). */
+            if (g_funcs[fn_idx].sret)
+                call_add_sret(&kid0, &n_kids, g_funcs[fn_idx].return_struct_id,
+                              line, col);
             if (g_funcs[fn_idx].is_variadic) {
                 if (n_kids < expected_argc) {
                     char buf[96];
@@ -4376,7 +4427,8 @@ build_primary_ast(void)
             g_ast[n].val = (unsigned)fn_idx;
             g_ast[n].name = name_ptr; g_ast[n].name_len = name_len;
             g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
-            g_ast[n].type = g_funcs[fn_idx].return_type;
+            g_ast[n].type = g_funcs[fn_idx].sret ? LT_STRUCT
+                                                 : g_funcs[fn_idx].return_type;
             g_ast[n].struct_id = g_funcs[fn_idx].return_struct_id;
             g_ast[n].is_unsigned = g_funcs[fn_idx].ret_unsigned;
             /* postfix chain on the call RESULT: f()->field / f()[i] */
@@ -4543,14 +4595,20 @@ build_primary_ast(void)
                     int akid0, an_kids;
                     build_call_args(&akid0, &an_kids);
                     expect(TOK_RPAREN, "')'");
+                    if (g_fn_sigs[sig].sret_sid >= 0)
+                        call_add_sret(&akid0, &an_kids, g_fn_sigs[sig].sret_sid,
+                                      op_line2, op_col2);
                     int cn = ast_new(N_CALL_STASHED, op_line2, op_col2);
                     g_ast[cn].a = chained;
                     g_ast[cn].kid0 = akid0; g_ast[cn].n_kids = an_kids;
                     g_ast[cn].val = (unsigned)sig;
                     g_ast[cn].type = g_fn_sigs[sig].return_type;
                     g_ast[cn].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
+                    g_ast[cn].struct_id = g_fn_sigs[sig].sret_sid;
                     g_ast[cn].fn_sig = -1;
-                    return cn;
+                    /* a struct value takes `.m' (K&R A.7.3) */
+                    return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(cn)
+                                                         : cn;
                 }
                 return chained;
             }
@@ -4964,14 +5022,20 @@ build_struct_elem_access(Local *lc, Global *gv, LocalType atype, int asid,
         int kid0, n_kids;
         build_call_args(&kid0, &n_kids);
         expect(TOK_RPAREN, "')'");
+        if (g_fn_sigs[sig].sret_sid >= 0)
+            call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                          op_line, op_col);
         int cn = ast_new(N_CALL_STASHED, op_line, op_col);
         g_ast[cn].a = n;
         g_ast[cn].kid0 = kid0; g_ast[cn].n_kids = n_kids;
         g_ast[cn].val = (unsigned)sig;
         g_ast[cn].type = g_fn_sigs[sig].return_type;
         g_ast[cn].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
+        g_ast[cn].struct_id = g_fn_sigs[sig].sret_sid;
         g_ast[cn].fn_sig = -1;
-        return cn;
+        /* a struct value takes `.m' (K&R A.7.3) */
+        return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(cn)
+                                             : cn;
     }
     /* G49: chained subscript on a pointer-valued field */
     return build_postfix_value_chain(n);
@@ -5064,6 +5128,9 @@ build_dot_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         int kid0, n_kids;
         build_call_args(&kid0, &n_kids);
         expect(TOK_RPAREN, "')'");
+        if (g_fn_sigs[sig].sret_sid >= 0)
+            call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                          op_line, op_col);
         int n = ast_new(N_CALL_FPFIELD, op_line, op_col);
         g_ast[n].sym_lc = lc; g_ast[n].sym_gv = gv;
         g_ast[n].sym_f = leaf;
@@ -5072,7 +5139,8 @@ build_dot_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
         g_ast[n].type = g_fn_sigs[sig].return_type;
         g_ast[n].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
-        return n;
+        g_ast[n].struct_id = g_fn_sigs[sig].sret_sid;
+        return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(n) : n;
     }
     /* Bare array-member decay, for EVERY element type.  K&R A.7.1, p.161:
      * "the value of the expression is a pointer to the first object in the
@@ -8566,10 +8634,11 @@ walk_expr_body(int n)
         rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         call_stashed_fnptr(total_arg_bytes, g_ast[n].line, g_ast[n].col);
         g_expr_type      = g_fn_sigs[sig].return_type;
-        g_expr_struct_id = -1;
+        g_expr_struct_id = g_fn_sigs[sig].sret_sid;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
         g_expr_fn_sig    = -1;
-        if (ISPTR(g_expr_type) && !(g_ast[n].flags & AF_STMT_DISCARD))
+        if ((ISPTR(g_expr_type) || g_expr_type == LT_STRUCT)
+            && !(g_ast[n].flags & AF_STMT_DISCARD))
             fpr_capture_ret(nspill);
         else
             emit_fpr_restore_live(nspill);
@@ -8683,9 +8752,10 @@ walk_expr_body(int n)
         emit_drop_arg_bytes(total_arg_bytes,
                             (g_ast[n].flags & AF_STMT_DISCARD) != 0);
         g_expr_type      = g_fn_sigs[sig].return_type;
-        g_expr_struct_id = -1;
+        g_expr_struct_id = g_fn_sigs[sig].sret_sid;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
-        if (ISPTR(g_expr_type) && !(g_ast[n].flags & AF_STMT_DISCARD))
+        if ((ISPTR(g_expr_type) || g_expr_type == LT_STRUCT)
+            && !(g_ast[n].flags & AF_STMT_DISCARD))
             fpr_capture_ret(nspill);
         else
             emit_fpr_restore_live(nspill);
@@ -8719,6 +8789,8 @@ walk_expr_body(int n)
         } else {
             emit_fpr_restore_live(nspill);
         }
+        /* A struct by value is its address, the pointer the callee returned. */
+        if (g_funcs[fn_idx].sret) g_expr_type = LT_STRUCT;
         break;
     }
     case N_ENUM_CONST:
@@ -8879,9 +8951,10 @@ walk_expr_body(int n)
         }
         emit_drop_arg_bytes(total_arg_bytes, 0);
         g_expr_type      = g_fn_sigs[sig].return_type;
-        g_expr_struct_id = -1;
+        g_expr_struct_id = g_fn_sigs[sig].sret_sid;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
-        if (ISPTR(g_expr_type) && !(g_ast[n].flags & AF_STMT_DISCARD))
+        if ((ISPTR(g_expr_type) || g_expr_type == LT_STRUCT)
+            && !(g_ast[n].flags & AF_STMT_DISCARD))
             fpr_capture_ret(nspill);
         else
             emit_fpr_restore_live(nspill);

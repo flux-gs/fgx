@@ -440,6 +440,9 @@ typedef struct {
     int       ret_unsigned;   /* A-1 closure: part of the dedup KEY, so
                                * signed/unsigned-returning ptr types don't
                                * alias; call-through results carry it. */
+    int       sret_sid;       /* the struct a by-value return is (return_type
+                               * LT_STRUCT), else -1.  Part of the key; the
+                               * hidden pointer is param 0, as in Func.sret. */
 } FnSig;
 typedef struct TypeSpec_s TypeSpec;
 #define MAX_ENUM_CONSTS 512        /* C89 floor 127; sized well past it */
@@ -492,6 +495,15 @@ typedef struct {
     int        fn_sig_id;         /* M18: interned signature for fn-ptr rvalue */
     int        return_struct_id;  /* -1 unless return_type is LT_STRUCT*; lets
                                     * `f()->field` / `f()[i]` chain on the result */
+    int        sret;              /* returns a struct BY VALUE: the caller
+                                    * passes a hidden pointer to its own
+                                    * temporary as parameter 0 (`__sret'), the
+                                    * callee copies the value through it and
+                                    * returns it, so return_type is the struct
+                                    * POINTER the ABI carries (K&R A.10.1). */
+    int        is_implicit;       /* declared only by an undeclared call (int
+                                    * assumed); a struct-returning definition
+                                    * after it is refused */
     int        ret_unsigned;      /* A-1: `unsigned ...` return type — call
                                     * results carry it into g_expr_unsigned so
                                     * compares/div pick the unsigned helpers.
@@ -927,6 +939,7 @@ void emit_lv_bitfield_extract(Field *f);
 void emit_lv_bitfield_store(int kd, Field *f, int off);
 void emit_fpr_deref_store_wordmember(int kd, Field *f);
 void emit_fpr_deref_member(int k, Field *f);
+void call_add_sret(int *kid0, int *n_kids, int sid, int line, int col);
 extern int    g_n_ast_fields;
 tword deref_result_expr_type(tword result);
 void ast_reset(void);
@@ -1076,7 +1089,8 @@ int
 enum_consts_lookup(const char *name, int name_len);
 int
 fn_sig_intern(LocalType ret, int n_params, LocalType *params,
-              int *param_struct_ids, int is_variadic, int ret_unsigned);
+              int *param_struct_ids, int is_variadic, int ret_unsigned,
+              int sret_sid);
 Global *
 globals_declare(const char *name, int name_len, LocalType type,
                 int n_elems, int line, int col, int is_extern_decl);

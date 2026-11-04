@@ -1029,7 +1029,19 @@ walk_stmt(int n)
         }
         {
         LocalType ret_t = (LocalType)g_ast[n].val;
-        if (ISPTR(ret_t)) {
+        if (g_ast[n].sym_lc) {
+            /* A struct by value: copy it through the caller's `__sret'
+             * pointer and return that pointer (parse_func_decl_with_spec). */
+            int sid = g_ast[n].struct_id;
+            int nb  = (g_structs[sid].total_size + 1) & ~1;
+            int ks  = walk_fpr(g_ast[n].a);
+            if (ks < 0) { ks = fpr_alloc(); emit_fpr_from_carrier(ks); }
+            int kd  = fpr_load_sym(g_ast[n].sym_lc, NULL);
+            emit_fpr_struct_copy(kd, ks, nb);
+            emit_fpr_ret(kd);
+            fpr_drop(kd);
+            fpr_drop(ks);
+        } else if (ISPTR(ret_t)) {
             /* Pointer return: the value rides an FPR; an int RHS (NULL)
              * materializes with a ZERO bank inside walk_fpr — the c35
              * normalization in ONE place.  P3-2.4 ABI: the return home
@@ -2760,6 +2772,21 @@ parse_fnptr_sig(TypeSpec base_t, int ret_stars)
         die(g_cur.line, g_cur.col, "expected ')' after fn-ptr param list");
     next_tok();                            /* past closing ')' */
 
+    /* A struct by value: the hidden pointer is parameter 0 of a listed
+     * parameter set, as in the definition (Func.sret). */
+    int sret_sid = (!ret_stars && base_t.base == LT_STRUCT) ? base_t.struct_id
+                                                            : -1;
+    if (sret_sid >= 0 && n_params > 0) {
+        if (n_params >= MAX_LOCALS)
+            die(g_cur.line, g_cur.col, "too many fn-ptr params");
+        memmove(params + 1, params, n_params * sizeof params[0]);
+        memmove(param_struct_ids + 1, param_struct_ids,
+                n_params * sizeof param_struct_ids[0]);
+        params[0] = LT_STRUCT_PTR;
+        param_struct_ids[0] = sret_sid;
+        n_params++;
+    }
+
     /* Return type: base + ret_stars PTR groups.  type_for_decl only for
      * the starred case — a bare `void (*fp)()` return stays TW_VOID (the
      * historical sig encoding; type_for_decl would reject bare void). */
@@ -2767,7 +2794,7 @@ parse_fnptr_sig(TypeSpec base_t, int ret_stars)
                                   : base_t.base,
                          n_params, params,
                          param_struct_ids, is_variadic,
-                         ret_stars ? 0 : base_t.is_unsigned);
+                         ret_stars ? 0 : base_t.is_unsigned, sret_sid);
 }
 
 int
@@ -6450,6 +6477,14 @@ build_stmt(void)
         int n = ast_new(S_RETURN, rline, rcol);
         g_ast[n].a = rv;
         g_ast[n].val = (unsigned)ret_t;
+        if (g_funcs[g_cur_fn_idx].sret) {        /* copy through `__sret' */
+            g_ast[n].sym_lc = locals_lookup("__sret", 6);
+            g_ast[n].struct_id = g_funcs[g_cur_fn_idx].return_struct_id;
+            if (g_ast[rv].type != LT_STRUCT ||
+                g_ast[rv].struct_id != g_ast[n].struct_id)
+                die(rline, rcol, "return of a struct function needs a value "
+                    "of the same struct type");
+        }
         return n;
     }
     g_last_stmt_returned = 0;
@@ -8030,6 +8065,9 @@ build_stmt(void)
                     ast_build_call_args(&kid0, &n_kids);
                     expect(TOK_RPAREN, "')'");
                     expect(TOK_SEMI, "';'");
+                    if (g_fn_sigs[fp_sig].sret_sid >= 0)
+                        call_add_sret(&kid0, &n_kids, g_fn_sigs[fp_sig].sret_sid,
+                                      line, col);
                     int n = ast_new(N_CALL_FPVAR, line, col);
                     g_ast[n].sym_lc = fp_lc; g_ast[n].sym_gv = fp_gv;
                     g_ast[n].val = (unsigned)fp_sig;
@@ -8048,6 +8086,7 @@ build_stmt(void)
                 g_funcs[fn_idx].return_type = LT_INT;
                 g_funcs[fn_idx].is_variadic = 1;
                 g_funcs[fn_idx].is_extern   = 1;
+                g_funcs[fn_idx].is_implicit = 1;
             }
             int expected_argc = g_funcs[fn_idx].n_params;
             next_tok();  /* consume '(' */
@@ -8058,6 +8097,10 @@ build_stmt(void)
             int kid0, n_kids;
             ast_build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            /* A struct by value: the caller's temporary goes first (Func.sret). */
+            if (g_funcs[fn_idx].sret)
+                call_add_sret(&kid0, &n_kids, g_funcs[fn_idx].return_struct_id,
+                              line, col);
             if (g_funcs[fn_idx].is_variadic) {
                 if (n_kids < expected_argc) {
                     char buf[96];
@@ -8109,7 +8152,8 @@ build_stmt(void)
             g_ast[n].val = (unsigned)fn_idx;
             g_ast[n].name = name_ptr; g_ast[n].name_len = name_len;
             g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
-            g_ast[n].type = g_funcs[fn_idx].return_type;
+            g_ast[n].type = g_funcs[fn_idx].sret ? LT_STRUCT
+                                                 : g_funcs[fn_idx].return_type;
             g_ast[n].struct_id = g_funcs[fn_idx].return_struct_id;
             g_ast[n].is_unsigned = g_funcs[fn_idx].ret_unsigned;
             /* A postfix chain on the call RESULT: `f(x)->m = v;' / `f(x)[i]++;'.
@@ -8466,9 +8510,24 @@ parse_func_decl_with_spec(TypeSpec ret_t)
     if (!rd.is_func_proto)
         die(rd.name_line, rd.name_col, "expected '(' after function name");
     LocalType ret_type = rd.type;
-    if (BTYPE(ret_type) == BT_STRUCT && !ISPTR(ret_type))
-        die(rd.name_line, rd.name_col,
-            "return-by-value struct not supported (M8); use a pointer parameter");
+    /* A struct returned BY VALUE (K&R A.10.1: "A function may return an
+     * arithmetic type, a structure, a union, a pointer, or void").  The caller
+     * passes a hidden pointer to a temporary of its own as parameter 0
+     * (`__sret'), the callee copies the value through it and returns that
+     * pointer, so the ABI return type is the struct POINTER; Func.sret
+     * remembers it is a struct value at the source level.  Not 2.11BSD ccom's
+     * static return block (c04.c doret()), which a signal handler or a
+     * preempted task calling the same function would overwrite. */
+    int sret = 0;
+    if (BTYPE(ret_type) == BT_STRUCT && !ISPTR(ret_type)) {
+        int pf = funcs_lookup(rd.name, rd.name_len);
+        if (pf >= 0 && g_funcs[pf].is_implicit)
+            die(rd.name_line, rd.name_col,
+                "a function returning a struct must be declared before it is "
+                "called");
+        sret = 1;
+        ret_type = INCREF(ret_type, DERIV_PTR);
+    }
     const char *name_ptr = rd.name;
     int         name_len = rd.name_len;
     int         line     = rd.name_line, col = rd.name_col;
@@ -8865,6 +8924,21 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         }
     }
 
+    if (sret) {                                  /* the hidden parameter 0 */
+        if (n_params >= MAX_LOCALS)
+            die(line, col, "too many parameters");
+        memmove(&params[1], &params[0], (size_t)n_params * sizeof params[0]);
+        memmove(&kr_float[1], &kr_float[0], (size_t)n_params * sizeof kr_float[0]);
+        memset(&params[0], 0, sizeof params[0]);
+        params[0].ptr = lex_intern_ident("__sret", 6);
+        params[0].len = 6;
+        params[0].line = line; params[0].col = col;
+        params[0].type = ret_type;
+        params[0].struct_id = ret_t.struct_id;
+        params[0].fn_sig_id = -1;
+        kr_float[0] = 0;
+        n_params++;
+    }
     for (int i = 0; i < n_params; i++)
         pabi[i] = kr_float[i] ? LT_DBL : params[i].type;
 
@@ -8905,6 +8979,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
     g_funcs[fidx].is_variadic_expl |= (saw_ellipsis || empty_parens);
     g_funcs[fidx].is_static   = ret_t.is_static;
     g_funcs[fidx].is_extern   = ret_t.is_extern;
+    g_funcs[fidx].sret        = sret;
     }   /* !redecl_defined */
     else if (g_fn_kept_proto) {
         /* A bare `T f();' over a richer entry keeps the PARAMETERS and nothing
@@ -9023,8 +9098,9 @@ parse_func_decl_with_spec(TypeSpec ret_t)
             psids[i] = params[i].struct_id;
         }
         g_funcs[fidx].fn_sig_id =
-            fn_sig_intern(ret_type, n_params, pts, psids, saw_ellipsis,
-                          g_funcs[fidx].ret_unsigned);
+            fn_sig_intern(sret ? LT_STRUCT : ret_type, n_params, pts, psids,
+                          saw_ellipsis, g_funcs[fidx].ret_unsigned,
+                          sret ? g_funcs[fidx].return_struct_id : -1);
     }
 
     /* main(int argc, char **argv) binding.  When the function being
@@ -9142,8 +9218,9 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                 psids[i] = params[i].struct_id;
             }
             g_funcs[fidx].fn_sig_id =
-                fn_sig_intern(ret_type, n_params, pts, psids, saw_ellipsis,
-                              g_funcs[fidx].ret_unsigned);
+                fn_sig_intern(sret ? LT_STRUCT : ret_type, n_params, pts,
+                              psids, saw_ellipsis, g_funcs[fidx].ret_unsigned,
+                              sret ? g_funcs[fidx].return_struct_id : -1);
         }
         redecl_defined = 0;
     }
