@@ -738,5 +738,6 @@
   "struct_ret": 42,
   "fnptr_member_chain": 42,
   "typedef_sized_array": 42,
+  "sizeof_deref_chain": 42,
   "bitfield_access": 42
 }

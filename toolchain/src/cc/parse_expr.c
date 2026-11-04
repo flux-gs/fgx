@@ -819,6 +819,13 @@ sizeof_node_size(int e)
 {
     LocalType t = g_ast[e].type;
 
+    /* `*E' has the type E points to (K&R A.7.4.3); the node's own type is
+     * what a load leaves in A, which narrows a struct or a short. */
+    if (g_ast[e].kind == N_DEREF_GENERAL && t != LT_FN_PTR)
+        t = DECREF(g_ast[g_ast[e].a].type);
+    else if (g_ast[e].kind == N_DEREF_FAST)
+        t = DECREF(g_ast[e].sym_lc->type);
+
     if (ISPTR(t))
         return 4;
     if (t == LT_STRUCT)
@@ -866,6 +873,23 @@ sizeof_global(const Global *gv)
         g_structs[gv->struct_id].is_forward)
         die(g_cur.line, g_cur.col, "sizeof an object of incomplete struct type");
     return (int)gv->n_bytes;
+}
+
+/* At the first `*': do the stars apply to a bare name, `*p' or `**p'?
+ * Anything else -- `*p->m', `*(p)' -- is an expression for the builder. */
+static int
+sizeof_star_is_bare_name(void)
+{
+    int i = g_tok_idx - 1;
+    while (g_toks[i].kind == TOK_STAR) i++;
+    if (g_toks[i].kind != TOK_IDENT) return 0;
+    switch (g_toks[i + 1].kind) {
+    case TOK_ARROW: case TOK_DOT: case TOK_LBRACKET: case TOK_LPAREN:
+    case TOK_PLUSPLUS: case TOK_MINUSMINUS:
+        return 0;
+    default:
+        return 1;
+    }
 }
 
 static int
@@ -938,6 +962,8 @@ sizeof_operand_size(void)
                     }
                     sz = sizeof_member_subscripts(ff, ff->byte_size);
                 }
+            } else if (g_cur.kind == TOK_STAR && !sizeof_star_is_bare_name()) {
+                sz = sizeof_node_size(build_comma_entry());
             } else if (g_cur.kind == TOK_STAR) {
                 /* Parenthesized deref: sizeof(*ptr), sizeof(**ptr).  Same
                  * type-of-deref logic as the unparenthesized `sizeof *ptr`
@@ -1028,6 +1054,8 @@ sizeof_operand_size(void)
                     "sizeof(expr) not supported — use sizeof IDENT or sizeof(type)");
             }
             expect(TOK_RPAREN, "')'");
+        } else if (g_cur.kind == TOK_STAR && !sizeof_star_is_bare_name()) {
+            sz = sizeof_node_size(build_unary());
         } else if (g_cur.kind == TOK_STAR) {
             int derefs = 0;
             while (g_cur.kind == TOK_STAR) { derefs++; next_tok(); }
