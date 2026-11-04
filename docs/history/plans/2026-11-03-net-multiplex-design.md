@@ -125,6 +125,22 @@ Made in this design (the designer's calls, open to the maintainer):
   than a second owner of socket 0.
 - **The checksum is hand-written 65816 assembly, folded into the copy from
   the chip**, which measured at about 7% over today's drain (section 5).
+- **Several code banks over one data bank.**  A module's C runs with DBR on its
+  own bank, so it cannot name another module's global, and 2.11BSD's layers
+  share theirs throughout.  DBR is one data bank in all of them, so those stay
+  plain globals and no BSD source changes.  Far-pointer externs in fcc were
+  rejected: they touch every global-addressing path and slow every crossing
+  access.
+- **`fgx`, not `pdp11`.**  With 4-byte pointers the pdp11 arm is wrong: its pads
+  (`netinet/ip_var.h`) would misplace every overlaid IP header.  `fgx` takes the
+  VAX layout and the pdp11 word-size choices, site by site (`docs/PROVENANCE.md`).
+- **`splnet` masks nothing; `splimp` and `splhigh` set the I flag.**  `netintr`
+  runs only at the kernel's deferred-work drain, which kernel code reaches only
+  by sleeping, as upstream allows.  This holds only while no protocol code runs
+  from an interrupt: the driver's interrupt path may only queue.
+- **`netintr` shares `_Tty_DrainOutPend`'s drain.**  The cost is latency: about
+  67 ms past a compute-bound C program, and until the next system call past an
+  assembly or `goto` loop.
 
 ## 4. Design
 
@@ -183,7 +199,7 @@ What Track B's S1 described, unchanged in substance: `netparam.h`/`mbuf.h`
 for 4-byte pointers and a banked mbuf pool; `spl*` and the network software
 interrupt (`setsoftnet`/`netisr`) mapped onto FGX's scheduling; the
 supervisor-space and PDP-specific macros in `pdp/net_mac.h`; a multi-module
-split with import tables (the VFS precedent).  Plus, new here:
+split over one data bank (section 3, `tools/build_bsdnet.py`).  Plus, new here:
 
 - **The W5100 MACRAW interface driver** (`if_w5` or similar): an `ifnet`
   whose output writes a frame to socket 0's transmit buffer and whose
@@ -207,8 +223,8 @@ Each phase ends with the system working and the gate green.
 
 | | Phase | Delivers |
 |---|---|---|
-| S0 | fcc prerequisites | the remaining items of the Track B S0 document: 3.2 `##`, 3.4 extern of an incomplete struct, 3.5 struct assignment into an array element, 3.6 address constants in static initializers, 3.7 `&` of any lvalue, 3.8 struct return by value.  3.1 landed in !399; 3.3 landed in #46 (`b2305ec`, the block-scope extern fix).  **Done** on feat/net-mux (`46dba3b`..`084ecce`), with three items the S0 audit found: a call through a function pointer at the end of a member chain, a typedef of a sized array, and `sizeof` of `*` applied to a member chain.  All 23 files of the port set then compile.  Left for S1, all seams: `h/signal.h:129` lacks a `;`; `FMARK`/`FDEFER` and `FREAD`/`FWRITE` are defined nowhere in 2.11BSD's `h/` (4.3BSD-Reno `sys/file.h` has them); `uipc_domain.c`'s `ADDDOMAIN` pastes with the Reiser `x/**/domain`, which the port writes as `##`; and the PDP arms of `h/types.h` and `pdp/seg.h`. |
-| S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split |
+| S0 | fcc prerequisites | the remaining items of the Track B S0 document: 3.2 `##`, 3.4 extern of an incomplete struct, 3.5 struct assignment into an array element, 3.6 address constants in static initializers, 3.7 `&` of any lvalue, 3.8 struct return by value.  3.1 landed in !399; 3.3 landed in #46 (`b2305ec`, the block-scope extern fix).  **Done** on feat/net-mux (`46dba3b`..`084ecce`), with three items the S0 audit found: a call through a function pointer at the end of a member chain, a typedef of a sized array, and `sizeof` of `*` applied to a member chain.  All 23 files of the port set then compile, under `-Dpdp11`, which S1 found to be the wrong arm (section 3); all of them, with the `net/` files added, compile under `fgx`.  Left for S1, all seams: `h/signal.h:129` lacks a `;`; `FMARK`/`FDEFER` and `FREAD`/`FWRITE` are defined nowhere in 2.11BSD's `h/` (4.3BSD-Reno `sys/file.h` has them); `uipc_domain.c`'s `ADDDOMAIN` pastes with the Reiser `x/**/domain`, which the port writes as `##`; and the PDP arms of `h/types.h` and `pdp/seg.h`. |
+| S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split.  **Done** on feat/net-mux (`f07f1da`..): `bsdnetd` and `bsdnet0`-`3` are built and staged, and no boot loads them; `modload` of all five on a `kernel.netprobe = 1` kernel runs the probe.  182 KB of code and a 41 KB data image, 35 KB of that the mbuf pool: five banks.  Callout and bpf stay in S2, as this table says; `in_cksum` landed here, since IP cannot link without it.  S2 inherits `machine/s2_stubs.c` (`timeout` does nothing, so no timer fires), one global `u`, which is not safe across a sleep and is S3's to fix, `printf` that logs only its format, C byte loops for `bcopy`, and adding the modules to `/etc/rc.in`. |
 | S2 | substrate running | mbufs, domains/protosw, sockbufs, `in_pcb`, `lo0`, `ip_input`/`ip_output`, ARP, the callout facility, the MACRAW driver on socket 0 and bpf as its tap, proven by an in-kernel probe: ARP resolves the gateway, an ICMP echo goes out and the reply comes back; netdump still captures |
 | S3 | UDP | every AF_INET UDP socket is a BSD socket on the kernel stack, wire and loopback; ntpd, ntpdc 127.0.0.1, dhclient (4.7) and syslogd -u on it; the chip's UDP core retires |
 | S4 | TCP + AF_UNIX | `tcp_*` on the wire and loopback; AF_UNIX on `uipc_usrreq.c`; telnet/telnetd, inetd, ftp, nc and the unixdgram users on it; `net_loop.s` rings, `unp.s`, the old descriptor table and the chip's TCP core retire; socket count limited by memory |
