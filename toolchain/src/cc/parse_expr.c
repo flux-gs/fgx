@@ -9618,10 +9618,15 @@ walk_expr_body(int n)
          * yielded far pointer is captured by fpr_in. */
         int op        = g_ast[n].a;
         int is_inc    = (g_ast[n].flags & AF_IS_INC) ? 1 : 0;
-        if (g_ast[op].kind == N_LV_CHAIN && g_ast[op].sym_f)
-            die(g_ast[n].line, g_ast[n].col,
-                "++/-- on a bit-field reached through a member chain");
         int is_prefix = (g_ast[n].flags & AF_RET_OLD) ? 0 : 1;
+        if (g_ast[op].kind == N_LV_CHAIN && g_ast[op].sym_f) {   /* bit-field */
+            int kb = emit_lvalue_addr(op);
+            emit_bitfield_incdec_at_fpr(kb, g_ast[op].sym_f, 0, is_inc,
+                                        !is_prefix);
+            fpr_drop(kb);
+            g_fpr_res = -1;
+            break;
+        }
         LocalType lt  = g_ast[n].type;
         int is_ptr    = ISPTR(lt);
         int kd, off = 0;

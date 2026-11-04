@@ -2,7 +2,7 @@
  * s.w.b, p->b, p->w.b, q->r->w.b, (p)->w.b, a[i].b, p->arr[i].b.  Each
  * write must change only its own bits of the containing word -- the
  * neighbors a and c keep their values -- and each read must give the
- * field, not the word.  2.11BSD's IP and TCP headers are bit-fields
+ * field, not the word, and ++ and -- step only the field.  2.11BSD's IP and TCP headers are bit-fields
  * (ip_hl:4, ip_v:4; th_off:4, th_x2:4), read and set through pointers.
  * Fields are unsigned here (K&R A.8.3: "whether an int field is treated as
  * signed is implementation-dependent").  Returns 42. */
@@ -20,7 +20,7 @@ ok(x)
 int main()
 {
 	struct bf la[3], *bp;
-	int i;
+	int i, v;
 
 	hp = &gh; ghh.ph = &gh; hhp = &ghh; bp = &gh.w; i = 1;
 	gh.w.a = 1; gh.w.c = 2;
@@ -43,5 +43,14 @@ int main()
 	if (hp->arr[i].b != 8 || gh.arr[1].b != 8 || !ok(&gh.arr[1])) return (7);
 	gh.w.b = 31 + 32;	/* only the low five bits are stored */
 	if (gh.w.b != 31 || !ok(&gh.w)) return (8);
+	/* ++ and -- in value position step the field's bits and wrap in them */
+	v = ++bp->b;
+	if (v != 0 || gh.w.b != 0 || !ok(&gh.w)) return (9);
+	v = bp->b++;
+	if (v != 0 || gh.w.b != 1 || !ok(&gh.w)) return (10);
+	v = gh.w.b--;
+	if (v != 1 || gh.w.b != 0 || !ok(&gh.w)) return (11);
+	v = hp->w.b--;
+	if (v != 0 || gh.w.b != 31 || !ok(&gh.w)) return (12);
 	return (42);
 }

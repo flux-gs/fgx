@@ -1869,6 +1869,30 @@ emit_lv_bitfield_store(int kd, Field *f, int off)
     emit_lv_bitfield_extract(f);                      /* A = value stored */
 }
 
+/* ++/-- on a bit-field whose containing word is at fprK+off: the field's
+ * own bits step, and wrap within them (K&R A.7.4.1: "The operand is
+ * incremented"; A.8.3 gives the field its width).  A = NEW, or OLD when
+ * return_old; kd stays live for the caller to drop. */
+void
+emit_bitfield_incdec_at_fpr(int kd, Field *f, int off, int is_inc,
+                            int return_old)
+{
+    emit_fpr_deref_field(kd, LT_INT, off);            /* A = container */
+    emit_lv_bitfield_extract(f);                      /* A = OLD */
+    g_expr_type = LT_INT;
+    if (return_old)
+        emit_push_a();
+    ir_emitf(is_inc ? "                INC\n" : "                DEC\n");
+    emit_lv_bitfield_store(kd, f, off);               /* A = NEW */
+    if (return_old) {
+        ir_emitf("                PLA\n");
+        g_s_delta -= 2;
+    }
+    g_expr_type      = LT_INT;
+    g_expr_struct_id = -1;
+    g_expr_unsigned  = 0;
+}
+
 /* P3-2.7b: 4-byte pointer store from FPR k into a local aggregate slot
  * (decl-init: struct ptr / fn-ptr fields and ptr-array elements).  off is
  * the byte offset within the local's slots; emit_field_sta supplies the
@@ -2370,6 +2394,13 @@ emit_member_incdec(Local *lc, Global *gv, Field *f, int is_inc, int is_prefix)
     }
     if (f->byte_offset > 0) {
         ir_record_raw(IR_ADD_CONST, (unsigned)(f->byte_offset), 0, NULL);
+    }
+    if (f->is_bit_field) {
+        int kd = fpr_alloc();
+        emit_fpr_from_carrier_a(kd);                  /* kd = &container */
+        emit_bitfield_incdec_at_fpr(kd, f, 0, is_inc, !is_prefix);
+        fpr_drop(kd);
+        return;
     }
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));    /* _fcc_ptr -> &member (base bank) */
     emit_incdec_at_fcc_ptr(stride, is_inc, is_prefix, ISPTR(f->type),

@@ -821,7 +821,7 @@ _bitfield_access_L15
                 CLC
                 ADC     #main_FRAMESIZE-4
                 TCS
-                BRA     main_bandx
+                BRL     main_bandx
 _bitfield_access_L14
                 LDA     #31
                 CLC
@@ -869,8 +869,258 @@ _bitfield_access_L17
                 CLC
                 ADC     #main_FRAMESIZE-4
                 TCS
-                BRA     main_bandx
+                BRL     main_bandx
 _bitfield_access_L16
+                LDA     _fcc_img17
+                STA     _fcc_ptr+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
+                JSR     _fcc_bank_from_carrier
+                STA     _fcc_fpr0+2
+                LDA     [_fcc_fpr0]
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                INC
+                AND     #$001F
+                ASL
+                ASL
+                ASL
+                STA     _fcc_tmp_b
+                LDA     [_fcc_fpr0]
+                AND     #$FF07
+                ORA     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                STA     13,S   ; fccstk d=0 b=13
+                BNE     _bitfield_access_L19
+                LDA     gh+2
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                BNE     _bitfield_access_L19
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gh+2
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _bitfield_access_ok
+                PLY
+                PLY
+                CMP     #0
+                BNE     _bitfield_access_L18
+_bitfield_access_L19
+                LDA     #9
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE-4
+                TCS
+                BRL     main_bandx
+_bitfield_access_L18
+                LDA     _fcc_img17
+                STA     _fcc_ptr+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
+                JSR     _fcc_bank_from_carrier
+                STA     _fcc_fpr0+2
+                LDA     [_fcc_fpr0]
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                PHA
+                INC
+                AND     #$001F
+                ASL
+                ASL
+                ASL
+                STA     _fcc_tmp_b
+                LDA     [_fcc_fpr0]
+                AND     #$FF07
+                ORA     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                PLA
+                STA     13,S   ; fccstk d=0 b=13
+                BNE     _bitfield_access_L21
+                LDA     gh+2
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                TAX
+                CMP     #1
+                BNE     _bitfield_access_L21
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gh+2
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _bitfield_access_ok
+                PLY
+                PLY
+                CMP     #0
+                BNE     _bitfield_access_L20
+_bitfield_access_L21
+                LDA     #10
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE-4
+                TCS
+                BRL     main_bandx
+_bitfield_access_L20
+                LDA     gh+2
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                PHA
+                DEC
+                AND     #$001F
+                ASL
+                ASL
+                ASL
+                STA     _fcc_tmp_b
+                LDA     gh+2
+                AND     #$FF07
+                ORA     _fcc_tmp_b
+                STA     gh+2
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                PLA
+                STA     13,S   ; fccstk d=0 b=13
+                TAX
+                CMP     #1
+                BNE     _bitfield_access_L23
+                LDA     gh+2
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                BNE     _bitfield_access_L23
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gh+2
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _bitfield_access_ok
+                PLY
+                PLY
+                CMP     #0
+                BNE     _bitfield_access_L22
+_bitfield_access_L23
+                LDA     #11
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE-4
+                TCS
+                BRL     main_bandx
+_bitfield_access_L22
+                SEP     #$20
+                MX      %10
+                LDA     hp+2
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     hp
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                PHA
+                DEC
+                AND     #$001F
+                ASL
+                ASL
+                ASL
+                STA     _fcc_tmp_b
+                LDA     [_fcc_fpr0]
+                AND     #$FF07
+                ORA     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                PLA
+                STA     13,S   ; fccstk d=0 b=13
+                BNE     _bitfield_access_L25
+                LDA     gh+2
+                LSR
+                LSR
+                LSR
+                AND     #$001F
+                TAX
+                CMP     #31
+                BNE     _bitfield_access_L25
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gh+2
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _bitfield_access_ok
+                PLY
+                PLY
+                CMP     #0
+                BNE     _bitfield_access_L24
+_bitfield_access_L25
+                LDA     #12
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE-4
+                TCS
+                BRA     main_bandx
+_bitfield_access_L24
                 LDA     #42
                 TAY
                 TSC
@@ -886,6 +1136,6 @@ main_bandx
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     16
+main_FRAMESIZE   EQU     18
 main_STKGUARD    EQU     0
-                FGX2_RELOC_COUNT 11
+                FGX2_RELOC_COUNT 15

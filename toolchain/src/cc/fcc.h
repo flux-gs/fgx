@@ -937,6 +937,8 @@ extern int  g_n_ast_kids;
 extern Field *g_ast_fields[MAX_AST_KIDS];   /* arrow-chain hop lists */
 extern int g_decl_is_register;   /* the last type specifier said `register' */
 void emit_lv_bitfield_extract(Field *f);
+void emit_bitfield_incdec_at_fpr(int kd, Field *f, int off, int is_inc,
+                                 int return_old);
 void emit_lv_bitfield_store(int kd, Field *f, int off);
 void emit_fpr_deref_store_wordmember(int kd, Field *f);
 void emit_fpr_deref_member(int k, Field *f);
