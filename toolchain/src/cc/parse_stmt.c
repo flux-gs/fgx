@@ -6482,7 +6482,22 @@ build_stmt(void)
         if (g_funcs[g_cur_fn_idx].sret) {        /* copy through `__sret' */
             g_ast[n].sym_lc = locals_lookup("__sret", 6);
             g_ast[n].struct_id = g_funcs[g_cur_fn_idx].return_struct_id;
-            if (g_ast[rv].type != LT_STRUCT ||
+            /* `*p', p a pointer to the struct: the value is the struct p
+             * points to, and a struct value is its address -- p itself, as
+             * parse_struct_src reads the source of an assignment. */
+            LocalType vt = g_ast[rv].type;
+            if (g_ast[rv].kind == N_DEREF_GENERAL &&
+                g_ast[g_ast[rv].a].type == LT_STRUCT_PTR) {
+                rv = g_ast[rv].a;
+                vt = LT_STRUCT;
+            } else if (g_ast[rv].kind == N_DEREF_FAST &&
+                       g_ast[rv].sym_lc->type == LT_STRUCT_PTR) {
+                g_ast[rv].kind = N_VAR_LOAD;
+                g_ast[rv].type = LT_STRUCT_PTR;
+                vt = LT_STRUCT;
+            }
+            g_ast[n].a = rv;
+            if (vt != LT_STRUCT ||
                 g_ast[rv].struct_id != g_ast[n].struct_id)
                 die(rline, rcol, "return of a struct function needs a value "
                     "of the same struct type");
