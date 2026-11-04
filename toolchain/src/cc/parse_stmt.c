@@ -2726,6 +2726,20 @@ walk_stmt(int n)
     }
 }
 
+/* A function declaration's return type into its Func.  A struct returned
+ * by value is carried as Func.sret, as parse_func_decl_with_spec records
+ * a definition, so a call before the definition passes the hidden pointer. */
+static void
+func_decl_return(int fi, LocalType ret, int sid)
+{
+    if (BTYPE(ret) == BT_STRUCT && !ISPTR(ret)) {
+        g_funcs[fi].sret = 1;
+        g_funcs[fi].return_struct_id = sid;
+        ret = INCREF(ret, DERIV_PTR);
+    }
+    g_funcs[fi].return_type = ret;
+}
+
 /* The parameter list of a function-pointer declarator, `( params )' with
  * g_cur at its '(', interned as a signature whose return type is `base_t'
  * with `ret_stars' pointer groups.  Consumes through the closing ')'. */
@@ -3047,7 +3061,7 @@ build_decl(TypeSpec t)
             }
             if (funcs_lookup(name_ptr, name_len) < 0) {
                 int fi = funcs_declare(name_ptr, name_len, 0, line, col);
-                g_funcs[fi].return_type = ret;
+                func_decl_return(fi, ret, d.struct_id);
                 g_funcs[fi].ret_unsigned = ISPTR(d.type) ? 0 : t.is_unsigned; /* A-1 */
                 g_funcs[fi].is_variadic = 1;   /* K&R () = unspecified args */
                 g_funcs[fi].is_variadic_expl = 1;
@@ -9857,7 +9871,7 @@ parse_global_decl(TypeSpec t)
             }
             if (funcs_lookup(name_ptr, name_len) < 0) {
                 int fi = funcs_declare(name_ptr, name_len, 0, line, col);
-                g_funcs[fi].return_type = ret;
+                func_decl_return(fi, ret, d.struct_id);
                 g_funcs[fi].ret_unsigned = ISPTR(d.type) ? 0 : t.is_unsigned;
                 g_funcs[fi].is_variadic = 1;   /* K&R () = unspecified args */
                 g_funcs[fi].is_variadic_expl = 1;

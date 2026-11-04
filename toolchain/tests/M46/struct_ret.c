@@ -53,6 +53,20 @@ viacast(q)
 	return (*(struct pt *)&q);
 }
 
+/* Declared before the definition at block scope, as 2.11BSD's ip_icmp.c
+ * declares `extern struct in_addr in_makeaddr();', and in a file-scope
+ * list beside an object. */
+int
+blk()
+{
+	struct pt late(), r;
+
+	r = late(4);
+	return (r.y);
+}
+
+struct pt gq, late2();
+
 int main()
 {
 	struct pt s, (*fp)();
@@ -71,7 +85,29 @@ int main()
 	s = mk(13, 14);
 	if (viap(&s).y != 14 || viacast(s).x != 13)
 		return (5);
+	gq = late2(6);
+	if (blk() != 4 || gq.y != 6 || late2(7).y != 7)
+		return (6);
 	i = mk(30, 12).x + mk(0, 12).y;
 	mk(9, 9);
 	return (i);
+}
+
+struct pt
+late(a)
+	int a;
+{
+	struct pt p;
+
+	p.x = 0;
+	p.y = a;
+	p.z = 0L;
+	return (p);
+}
+
+struct pt
+late2(a)
+	int a;
+{
+	return (late(a));
 }
