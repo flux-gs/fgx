@@ -7,6 +7,8 @@ netprobe	0	kernel.netprobe
 netprobe2	2	kernel.netprobe
 netprobe3	0	kernel.netprobe
 netprobe4	0	kernel.netprobe
+netprobe5	0	kernel.netprobe
+machine/net_intr	0
 machine/net_kern	0
 machine/s2_stubs	0
 machine/net_asm.s	0

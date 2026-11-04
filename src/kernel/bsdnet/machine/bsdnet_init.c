@@ -2,7 +2,7 @@
  * and every bank is linked.  2.11BSD's netstart() order: mbinit, then the
  * domains.  Returns 0, or the number of the first failed probe case; mod_init
  * logs which. */
-extern int mbinit(), domaininit();
+extern int mbinit(), domaininit(), net_hookinit();
 #ifdef NETPROBE
 extern int netprobe();
 #endif
@@ -12,6 +12,7 @@ bsdnet_init()
 {
 	mbinit();
 	domaininit();
+	net_hookinit();
 #ifdef NETPROBE
 	return (netprobe());
 #else

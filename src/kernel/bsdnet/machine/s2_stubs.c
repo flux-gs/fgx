@@ -81,6 +81,3 @@ copyout(from, to, n)
 	panic("copyout: no socket calls yet");
 	return (0);
 }
-
-/* Task 6 replaces this. */
-void setsoftnet() { }

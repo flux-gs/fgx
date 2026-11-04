@@ -132,6 +132,7 @@ MANIFESTS = {
     # row in a generated table that no build step can tell from a live one.
     'tty': [
         ('_FarSh_LogStr',   '_FarSh_LogStr',   0, 'abs24'),
+        ('_kTtyOutAny',     '_kTtyOutAny',     0, 'abs24'),
         ('_FarSh_KernDP',   '_FarSh_KernDP',   0, 'abs24'),
         ('_FarSh_Wakeup',   '_FarSh_Wakeup',   0, 'abs24'),
         # The INTERRUPTIBLE sleep, T6 increment 4b.  `_FarSh_SleepUn' below is

@@ -81,6 +81,9 @@ KTTY_LD_EXEC        EQU     KTTY_SLOT0+4*52
 KTTY_LD_TALLOC      EQU     KTTY_SLOT0+4*53
 ; Slot 54: reclaim -> C=1 a bank went back to the pool; preserves Y.
 KTTY_LD_RECLAIM     EQU     KTTY_SLOT0+4*54
+; Slots 64-65: the network drain, src/kernel/tty/net_hooks.s.
+KTTY_NET_SOFT       EQU     KTTY_SLOT0+4*64
+KTTY_NET_HOOK       EQU     KTTY_SLOT0+4*65
 ; Slot 55: _KTty_SigHold -- A = a pending signal -> C=1 if it stays pending (a
 ; stop while the running task still holds its parent).  D = the kernel's real
 ; page.  Clobbers A, Y.

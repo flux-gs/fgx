@@ -8,7 +8,7 @@ int	np_inited = 7;		/* an initializer reaches the data image */
 int	*np_ptr = &np_inited;	/* so does a pointer one */
 char	*np_str = "direct";
 
-extern	int np2_read0(), np2_write1(), netprobe3(), netprobe4();
+extern	int np2_read0(), np2_write1(), netprobe3(), netprobe4(), netprobe5();
 extern	long np2_call();
 extern	int *np2_commonaddr();
 extern	char *np2_string();
@@ -66,5 +66,7 @@ netprobe()
 		return (6);
 	if ((local = netprobe3()) != 0)
 		return (local);
-	return (netprobe4());
+	if ((local = netprobe4()) != 0)
+		return (local);
+	return (netprobe5());
 }

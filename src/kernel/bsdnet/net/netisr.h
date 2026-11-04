@@ -33,6 +33,9 @@
 #ifdef pdp11
 #define	setsoftnet()	{ extern int knetisr; mtkd(&knetisr, 1); }
 #endif
+#ifdef fgx
+extern int setsoftnet();	/* machine/net_asm.s: the deferred-work drain */
+#endif
 
 /*
  * Each ``pup-level-1'' input queue has a bit in a ``netisr'' status

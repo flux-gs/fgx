@@ -294,7 +294,7 @@
                 ; --- slot 39: kc_ttdrain, the SOFT half of the output rail
                 ; (T6 increment 4b).  The ISR marks TS_TIMEOUT; this restarts
                 ; every marked line from task context, through `ttrstrt'. ---
-                JMP     kc_ttdrain
+                JMP     _Net_TtDrain
                 DFB     0
 
                 ; --- slot 40: kc_ttgetraw, ONE RAW BYTE from a line
@@ -391,11 +391,17 @@
                 JMP     _KTty_TextTotal         ; 63
                 DFB     0
 
-                ; --- slots 64.. unassigned, stride 4 (3-byte JMP + 1 pad).
+                ; --- slots 64-65: the network drain (net_hooks.s) ---
+                JMP     _Net_SetSoft            ; 64
+                DFB     0
+                JMP     _Net_Hook               ; 65
+                DFB     0
+
+                ; --- slots 66.. unassigned, stride 4 (3-byte JMP + 1 pad).
                 ; Growing KTTY_SLOT_COUNT is on the terms include/ktty.s states:
                 ; it moves where the bank's code starts and renumbers nothing --
                 ; slot n is KTTY_SLOT0 + 4n and KTTY_SLOT0 is fixed. ---
-                LUP     KTTY_SLOT_COUNT-64
+                LUP     KTTY_SLOT_COUNT-66
                 JMP     _Ktty_StubHalt
                 DFB     0
                 --^
@@ -1309,6 +1315,7 @@ _kttyScrSave    DS      _kttyScrHi-_kttyScrLo+1
                 PUT     kern_time.s
                 PUT     kern_time.data.s
                 PUT     ld_hooks.s
+                PUT     net_hooks.s
 
 ;--- The shared-text table: a tenant for this bank's room, like the clock.
                 PUT     text.s

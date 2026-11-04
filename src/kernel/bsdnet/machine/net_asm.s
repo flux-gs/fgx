@@ -74,3 +74,55 @@ splx            MX      %00
                 RTL
 @sx_keep        SEI
                 RTL
+
+;------------------------------------------------------------------------------
+; The drain's two doors, in the tty bank (src/kernel/tty/net_hooks.s).  The kernel
+; bank comes from SYS_KCALL's bank-0 JML cell, so nothing here needs a core entry.
+;------------------------------------------------------------------------------
+setsoftnet      MX      %00
+_nhSoft         JSL     KTTY_NET_SOFT   ; the bank byte is stamped by net_hookinit
+                RTL
+
+; net_hookinit() - stamp that JSL and hand the drain netintr_enter.
+net_hookinit    MX      %00
+                PHB
+                PHK
+                PLB
+                SEP     #$20
+                MX      %10
+                LDAL    SYS_KCALL+3     ; the live kernel bank
+                CLC
+                ADC     #2              ; the tty bank
+                STA     |_nhSoft+3
+                STA     |@hook+3
+                PHK
+                PLA
+                REP     #$20
+                MX      %00
+                AND     #$00FF
+                TAX
+                LDA     #netintr_enter
+@hook           JSL     KTTY_NET_HOOK
+                PLB
+                RTL
+
+; netintr_enter - the drain calls this.  D is already kernel C's: the tty bank's
+; bracket set it.  DBR is set here to the data bank.
+netintr_enter   MX      %00
+                PHB
+                PHK
+                PLB
+                SEP     #$20
+                MX      %10
+                LDA     |_bnDataBank
+                PHA
+                PLB
+                REP     #$20
+                MX      %00
+                PHK
+                PEA     @ret-1
+                PHK
+                PEA     netintr-1
+                RTL
+@ret            PLB
+                RTL

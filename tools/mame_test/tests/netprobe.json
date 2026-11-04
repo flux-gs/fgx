@@ -4,7 +4,7 @@
  "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; dmesg | tail -4",
  "timeout_s": 40,
  "expect": {
-  "screen_contains": ["bsdnet: ok", "fgx#"],
+  "screen_contains": ["bsdnet: ok", "bsdnet: netintr first pass", "bsdnet: netintr second pass, same entry", "fgx#"],
   "screen_lacks": ["bsdnet: BROKEN", "bsdnet: no", "BRK", "PANIC", "GUARD stkhwm"]
  },
  "requires": {
