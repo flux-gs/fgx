@@ -1238,6 +1238,8 @@ call_add_sret(int *kid0, int *n_kids, int sid, int line, int col)
 {
     static int seq;
     char nm[24];
+    if (g_structs[sid].is_forward)
+        die(line, col, "call of a function returning an incomplete struct");
     int nl = snprintf(nm, sizeof nm, "__srt%d", seq++);
     int saved_reg = g_decl_is_register;
     g_decl_is_register = 0;
