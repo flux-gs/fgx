@@ -1,7 +1,7 @@
 {
  "name": "netpartial",
  "description": "A partial set of network modules is refused by name, and the machine survives it. A missing module used to send the link loop to bank 0.",
- "command": "modload bsdnet3; modload bsdnetd bsdnet3; echo survived; dmesg | tail -6",
+ "command": "modload bsdnet3; modload bsdnetd bsdnet3; echo sur'vived'; dmesg | tail -6",
  "timeout_s": 40,
  "expect": {
   "screen_contains": ["bsdnet: no bsdnetd", "bsdnet: bsdnet0 not loaded", "survived", "fgx#"],
