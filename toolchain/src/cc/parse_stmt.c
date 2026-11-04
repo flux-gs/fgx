@@ -811,6 +811,11 @@ parse_declarator(TypeSpec base, int allow_abstract)
      * so the caller's existing init-sizing path (A.8.7) completes it.  sh's
      * array typedefs are all sizeless; a use-site `[`/`*` is not part of the
      * Bourne source and falls through to the normal merge below. */
+    /* A pointer to, or an array of, an array typedef has no type here
+     * (Declarator carries one array derivation); refused, not mis-sized. */
+    if ((is_array || stars) && ISARY(base.base))
+        die(d.name_line, d.name_col,
+            "a pointer to or an array of an array typedef is not supported");
     if (!is_array && stars == 0 && ISARY(base.base)) {
         d.n_dims   = 1;
         d.dims[0]  = base.ary_n;
