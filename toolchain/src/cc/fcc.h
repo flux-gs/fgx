@@ -621,6 +621,8 @@ extern int         g_fltused;   /* this TU generated floating point code */
  * pointer.  Kernel C has no such caller. */
 extern int         g_kernel_bank;
 extern int         g_module_bank;
+extern int         g_shared_data; /* --shared-data: code banks over one data
+                                    * bank; DBR is that bank in all of them */
 extern int         g_emit_safepoints; /* preemption P2': loop-top yield safepoints */
 void emit_safepoint(void);   /* apple/fgx#371: inline fast path + slow-path call */
 extern int         g_libso;          /* --libso: libc.so library mode */

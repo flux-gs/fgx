@@ -3321,7 +3321,7 @@ emit_call_indirect(int kc)
          * to a direct FGX2_FARCALL (JSL) entry.  A/X stay 16-bit. */
         ir_emitf("                PHK\n");                     /* return bank = this code bank */
         ir_emitf("                PEA     %s_L%d-1\n", g_tu_prefix, lab_r); /* return offset-1 */
-        if (g_module_bank || g_kernel_bank) {
+        if ((g_module_bank || g_kernel_bank) && !g_shared_data) {
             /* A SINGLE-BANK IMAGE -- an FGXM module (--module-bank) or a
              * statically linked kernel bank, far or tty (--kernel-bank).  In
              * both, DBR is the program bank: mod_init and every far- and
@@ -3385,7 +3385,7 @@ emit_call_indirect(int kc)
         ir_emitf("                RTL\n");
     }
     ir_emitf("%s_L%d\n", g_tu_prefix, lab_r);
-    if (g_module_bank || g_kernel_bank) {
+    if ((g_module_bank || g_kernel_bank) && !g_shared_data) {
         /* Our own DBR back, recovered from the program bank -- see above. */
         ir_emitf("                PHK\n");
         ir_emitf("                PLB\n");

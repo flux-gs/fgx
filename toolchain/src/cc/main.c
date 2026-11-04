@@ -557,6 +557,14 @@ main(int argc, char **argv)
                                         * at load -- nothing can ever write it,
                                         * so PHK is the only answer.  The KERNEL
                                         * FAR BANK only; see --module-bank. */
+        } else if (strcmp(argv[i], "--shared-data") == 0) {
+            g_module_bank = 1;         /* an FGXM module in every other respect:
+                                        * its &function cells carry a real bank */
+            g_shared_data = 1;         /* several code banks over ONE data bank,
+                                        * so DBR never moves on a call.  K&R
+                                        * A.7.3.2's "same syntax" holds: a direct
+                                        * call between these banks leaves DBR
+                                        * alone too. */
         } else if (strcmp(argv[i], "--module-bank") == 0) {
             g_module_bank = 1;         /* apple/fgx#173: an FGXM module.  Also a
                                         * single-bank image, but unlike the far

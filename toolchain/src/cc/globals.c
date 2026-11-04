@@ -103,6 +103,7 @@ int g_signed_char = 0;
 int g_fltused = 0;
 int g_kernel_bank = 0;
 int g_module_bank = 0;
+int g_shared_data = 0;
 int g_emit_safepoints = 1;      /* P2': on by default; -fno-safepoints disables */
 int g_pile_far_extern = 0;
 int g_libso = 0;
