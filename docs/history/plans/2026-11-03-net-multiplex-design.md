@@ -320,6 +320,14 @@ rather than trust the estimate.
   in module banks from the process bank pool (accepted, section 3); S2 and
   S4 report the real figure.
 - **The chip's duplicate ARP replies** (4.1).
+- **The kernel stack.**  A task's kernel C runs on `kernel.kstk`, 1024 bytes.
+  `tools/net_stack_depth.py` (S1, static) puts the deepest `netintr` chain at
+  515 bytes and `sosend` at 391, each taking in `PRU_CONTROL` paths a real
+  call cannot reach and a 40-byte guess for the driver.  Both leave room, with
+  the system call's own entry above them; S2 measures it on the machine, with the
+  painted stack (`tools/mame_test/kstkhwm_check.py`), against real TCP.  The
+  512-byte `FGX_KSTK_SIZE` is the interrupt context's, which is one more reason
+  protocol code stays out of the interrupt.
 
 ## 8. Left to the builder
 
