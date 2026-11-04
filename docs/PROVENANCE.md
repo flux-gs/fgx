@@ -719,7 +719,7 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/netinet/tcp_timer.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_timer.c` | verbatim |
 | `src/kernel/bsdnet/netinet/tcp_usrreq.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_usrreq.c` | verbatim |
 | `src/kernel/bsdnet/netinet/tcp_debug.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_debug.c` | verbatim |
-| `src/kernel/bsdnet/sys/uipc_mbuf.c` | `vendor/2.11BSD/usr/sys/sys/uipc_mbuf.c` | `mbinit`'s alignment goes through `long`; `m_expand` takes the pdp11 arm under `fgx` |
+| `src/kernel/bsdnet/sys/uipc_mbuf.c` | `vendor/2.11BSD/usr/sys/sys/uipc_mbuf.c` | `mbinit`'s alignment goes through `long`; `m_expand` takes the pdp11 arm under `fgx`; `xmbutl`'s slack is `XMBUTL_SLACK`, a whole cluster, where upstream's 7 mbufs can overrun by 128 bytes |
 | `src/kernel/bsdnet/sys/uipc_socket.c` | `vendor/2.11BSD/usr/sys/sys/uipc_socket.c` | verbatim |
 | `src/kernel/bsdnet/sys/uipc_socket2.c` | `vendor/2.11BSD/usr/sys/sys/uipc_socket2.c` | verbatim |
 | `src/kernel/bsdnet/sys/uipc_domain.c` | `vendor/2.11BSD/usr/sys/sys/uipc_domain.c` | `ADDDOMAIN` pastes with `##` where upstream used the Reiser `x/**/domain` |

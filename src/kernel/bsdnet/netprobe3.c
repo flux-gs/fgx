@@ -17,6 +17,8 @@
 #include "tcp_var.h"
 #include "tcpip.h"
 
+extern struct mbuf xmbutl[(NMBCLUSTERS*CLBYTES/sizeof (struct mbuf))+XMBUTL_SLACK];
+
 static int
 freecount()
 {
@@ -47,6 +49,11 @@ netprobe3()
 	if (sizeof(struct inpcb) > MLEN || sizeof(struct tcpcb) > MLEN ||
 	    sizeof(struct socket) > MLEN)
 		return (11);
+	/* 19: the cluster array has room for its alignment wherever it lands */
+	if (sizeof(xmbutl) < (NMBCLUSTERS + 1) * CLBYTES)
+		return (19);
+	if ((char *)mbutl + NMBCLUSTERS * CLBYTES > (char *)xmbutl + sizeof(xmbutl))
+		return (19);
 	/* 12: dtom undoes mtod */
 	m = m_get(M_DONTWAIT, MT_DATA);
 	if (m == 0)

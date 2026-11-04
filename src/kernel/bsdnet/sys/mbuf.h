@@ -52,6 +52,16 @@
 #define	MLEN		(MSIZE-MMINOFF-MTAIL)	/* mbuf data length */
 #define	NMBCLUSTERS	12
 #define	NMBPCL		(CLBYTES/MSIZE)		/* # mbufs per cluster */
+/*
+ * The cluster array's room for alignment.  Upstream's 7 mbufs is 896 bytes and
+ * mbinit can waste a whole cluster, 1024, when the array is already aligned, so a
+ * full cluster's worth.
+ */
+#ifdef fgx
+#define	XMBUTL_SLACK	NMBPCL
+#else
+#define	XMBUTL_SLACK	7
+#endif
 
 /*
  * Macros for type conversion

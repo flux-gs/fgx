@@ -22,7 +22,7 @@
 #include "protosw.h"
 
 struct mbuf *mbuf, *mbutl, xmbuf[NMBUFS + 1];
-struct mbuf xmbutl[(NMBCLUSTERS*CLBYTES/sizeof (struct mbuf))+7];
+struct mbuf xmbutl[(NMBCLUSTERS*CLBYTES/sizeof (struct mbuf))+XMBUTL_SLACK];
 memaddr miobase;			/* click address of dma region */
 					/* this is altered during allocation */
 memaddr miostart;			/* click address of dma region */
