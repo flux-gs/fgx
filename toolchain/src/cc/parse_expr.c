@@ -1204,7 +1204,7 @@ addr_of_run(Local *lc, Global *gv, LocalType bt, int sid, int line, int col)
  * temporary of the struct in this function's frame, its address prepended to
  * the call's arguments as the callee's `__sret' (parse_func_decl_with_spec).
  * Each call has its own, so two calls in one expression keep two values.
- * *kid0/*n_kids are the argument span, rebuilt with the address first. */
+ * kid0 and n_kids name the argument span, rebuilt with the address first. */
 void
 call_add_sret(int *kid0, int *n_kids, int sid, int line, int col)
 {
@@ -4060,6 +4060,7 @@ build_primary_ast(void)
                 fspec.is_static   = 0;
                 fspec.is_extern   = 0;
                 fspec.is_register = 0;
+                fspec.ary_n       = 0;
                 fspec.is_unsigned = saw_unsigned;
                 int fsig = parse_fnptr_sig(fspec, 0);
                 expect(TOK_RPAREN, "')' closing fn-ptr cast");
@@ -4084,6 +4085,7 @@ build_primary_ast(void)
             cspec.is_static  = 0;
             cspec.is_extern  = 0;
             cspec.is_unsigned = saw_unsigned;
+            cspec.ary_n      = 0;
             cspec.is_register = 0;
             Declarator cd = parse_declarator(cspec, /*allow_abstract=*/1);
             expect(TOK_RPAREN, "')'");
@@ -10116,6 +10118,15 @@ sizeof_type_value(void)
         return 0;   /* unreachable */
     }
     if (is_ptr) return 4;                       /* 24-bit long ptr = 4 B */
+    /* An array typedef: its element count times the element's size. */
+    if (ISARY(t.base)) {
+        LocalType et = DECREF(t.base);
+        if (t.ary_n == 0)
+            die(g_cur.line, g_cur.col, "sizeof of an array of unknown size");
+        if (et == LT_STRUCT)
+            return (long)((g_structs[t.struct_id].total_size + 1) & ~1) * t.ary_n;
+        return (long)type_size_bytes(et, 1) * t.ary_n;
+    }
     if (t.base == LT_STRUCT) {
         if (g_structs[t.struct_id].is_forward)
             die(g_cur.line, g_cur.col, "sizeof of incomplete struct");

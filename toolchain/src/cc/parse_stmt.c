@@ -510,6 +510,7 @@ parse_type_spec_base(void)
     t.is_extern = 0;
     t.is_unsigned = 0;
     t.is_register = 0;
+    t.ary_n = 0;
     g_decl_is_register = 0;
     int had_modifier = 0;
     /* multi-TU: 'static' (TOK_STATIC_KW) and 'extern' (TOK_IDENT) may
@@ -641,6 +642,7 @@ parse_type_spec_base(void)
         t.base = td->base_type;
         t.struct_id = td->struct_id;
         t.is_unsigned = td->is_unsigned;
+        if (ISARY(td->base_type)) t.ary_n = td->n_elems;
         next_tok();
     } else if (g_cur.kind == TOK_ENUM_KW) {
         /* enum as a TYPE: `typedef enum {..} T;` (tcsh tw.h COMMAND), plus
@@ -811,8 +813,8 @@ parse_declarator(TypeSpec base, int allow_abstract)
      * Bourne source and falls through to the normal merge below. */
     if (!is_array && stars == 0 && ISARY(base.base)) {
         d.n_dims   = 1;
-        d.dims[0]  = 0;
-        d.sizeless = 1;
+        d.dims[0]  = base.ary_n;
+        d.sizeless = (base.ary_n == 0);
         d.type     = base.base;             /* already the array tword */
         return d;
     }
@@ -10450,16 +10452,19 @@ parse_typedef_def(void)
      * ISARY-base seam re-materializes the sizeless array at the use site. */
     if (g_cur.kind == TOK_LBRACKET) {
         next_tok();                         /* past '[' */
-        if (g_cur.kind != TOK_RBRACKET)
-            die(g_cur.line, g_cur.col,
-                "sized array typedef not yet supported "
-                "(only `T name[]`; declarator-refactor follow-up)");
-        next_tok();                         /* past ']' */
+        long asz = 0;                       /* 0 == sizeless */
+        if (g_cur.kind != TOK_RBRACKET) {
+            asz = parse_const_bin(0);
+            if (asz <= 0)
+                die(g_cur.line, g_cur.col,
+                    "array size must be a positive integer constant");
+        }
+        expect(TOK_RBRACKET, "']'");
         if (g_cur.kind == TOK_LBRACKET)
             die(g_cur.line, g_cur.col,
                 "multidimensional array typedef not yet supported");
         td->base_type = INCREF(td->base_type, DERIV_ARY);
-        td->n_elems   = 0;                  /* sizeless */
+        td->n_elems   = (int)asz;
     }
     expect(TOK_SEMI, "';'");
 }
@@ -10603,7 +10608,7 @@ parse_program(void)
                 TypeSpec it;
                 it.base = LT_INT; it.struct_id = -1;
                 it.is_static = 0; it.is_extern = 0; it.is_unsigned = 0;
-                it.is_register = 0;
+                it.is_register = 0; it.ary_n = 0;
                 parse_func_decl_with_spec(it);
                 continue;
             }

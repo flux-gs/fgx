@@ -538,6 +538,7 @@ struct TypeSpec_s {
     int       is_extern;  /* multi-TU: 'extern' qualifier seen */
     int       is_unsigned;/* A-1: 'unsigned' qualifier seen (int/char/long) */
     int       is_register;/* 'register' storage class seen */
+    int       ary_n;      /* an array typedef's element count; 0 = sizeless */
 };
 
 /* Declarator — the result of the ONE recursive declarator parser
