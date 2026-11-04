@@ -491,6 +491,8 @@ parse_type_spec(void)
                     (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "volatile", 8) == 0))) {
             if (g_cur.id_len == 6)
                 t.is_extern = 1;
+            else if (g_cur.id_len == 8 && g_cur.id_ptr[0] == 'r')
+                t.is_register = g_decl_is_register = 1;
         } else {
             return t;
         }
@@ -507,6 +509,8 @@ parse_type_spec_base(void)
     t.is_static = 0;
     t.is_extern = 0;
     t.is_unsigned = 0;
+    t.is_register = 0;
+    g_decl_is_register = 0;
     int had_modifier = 0;
     /* multi-TU: 'static' (TOK_STATIC_KW) and 'extern' (TOK_IDENT) may
      * appear interleaved with other type-modifiers.  Consume them all. */
@@ -523,6 +527,8 @@ parse_type_spec_base(void)
                 t.is_extern = 1;
             else if (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "unsigned", 8) == 0)
                 t.is_unsigned = 1;
+            else if (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "register", 8) == 0)
+                t.is_register = g_decl_is_register = 1;
             else if (g_cur.id_len == 6 && memcmp(g_cur.id_ptr, "signed", 6) == 0)
                 t.is_unsigned = 0;
             had_modifier = 1;
@@ -8489,8 +8495,10 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         int       n_dims;       /* M19: effective dim count for indexing */
         int       dims[MAX_DIMS]; /* M19: dims[1..] for stride descent */
         int       is_unsigned;  /* A-1: unsigned scalar param */
+        int       is_register;  /* declared `register' */
     } params[MAX_LOCALS];
     int n_params      = 0;
+    memset(params, 0, sizeof params);
     int saw_ellipsis  = 0;
     /* The type each parameter arrives as.  A float named in an old-style
      * declaration list arrives promoted (K&R A.7.3.2: "each float argument
@@ -8719,6 +8727,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         params[n_params].fn_sig_id = fnptr_based(ptype) ? pt.struct_id : -1;
         params[n_params].row_stride = 0;
         params[n_params].is_unsigned = pt.is_unsigned;   /* A-1 */
+        params[n_params].is_register = pt.is_register;
         n_params++;
         if (g_cur.kind == TOK_IDENT) next_tok();
         /* C array-parameter decay: `T p[]` / `T p[N]` / `T *p[]` and the
@@ -8843,6 +8852,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                     if (fnptr_based(kdt))              /* a typedef'd `int (**)()' */
                         params[pi].fn_sig_id = kt.struct_id;
                     params[pi].is_unsigned = kt.is_unsigned;
+                    params[pi].is_register = kt.is_register;
                     matched = 1;
                     break;
                 }
@@ -8979,6 +8989,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         g_locals[g_n_locals - 1].struct_id = params[i].struct_id;
         g_locals[g_n_locals - 1].fn_sig_id = params[i].fn_sig_id;
         g_locals[g_n_locals - 1].is_unsigned = params[i].is_unsigned;   /* A-1 */
+        g_locals[g_n_locals - 1].is_register = params[i].is_register;
         if (params[i].row_stride > 0) {
             /* M19: multi-dim array param — row_stride drives chained indexing.
              * Storage stays 4 bytes (long-pointer shape from is_ptr_type).
@@ -10515,6 +10526,7 @@ parse_program(void)
                 TypeSpec it;
                 it.base = LT_INT; it.struct_id = -1;
                 it.is_static = 0; it.is_extern = 0; it.is_unsigned = 0;
+                it.is_register = 0;
                 parse_func_decl_with_spec(it);
                 continue;
             }

@@ -302,6 +302,10 @@ typedef struct {
      * its index into g_param_byte_offsets, the slot the caller pushed.
      * -1 for everything else.  kind is LK_LOCAL once it is homed. */
     int        homed_from;
+    /* Declared `register': K&R A.7.4.2 forbids its address ("The operand
+     * must be an lvalue referring neither to a bit-field nor to an object
+     * declared as register"). */
+    int        is_register;
 } Local;
 #define MAX_SOFT_SLOTS  6144        /* per-frame slot cap (~12KB of 2-byte slots).  The 16KB
                                        soft-stack region it derived from is gone (P3-3 3.3); the
@@ -521,6 +525,7 @@ struct TypeSpec_s {
     int       is_static;  /* multi-TU: 'static' qualifier seen */
     int       is_extern;  /* multi-TU: 'extern' qualifier seen */
     int       is_unsigned;/* A-1: 'unsigned' qualifier seen (int/char/long) */
+    int       is_register;/* 'register' storage class seen */
 };
 
 /* Declarator — the result of the ONE recursive declarator parser
@@ -917,6 +922,7 @@ const char *cellpf(const char *fmt, ...);  /* T2-3: composed interned cell name 
 extern int  g_ast_kids[MAX_AST_KIDS];
 extern int  g_n_ast_kids;
 extern Field *g_ast_fields[MAX_AST_KIDS];   /* arrow-chain hop lists */
+extern int g_decl_is_register;   /* the last type specifier said `register' */
 void emit_lv_bitfield_extract(Field *f);
 void emit_lv_bitfield_store(int kd, Field *f, int off);
 void emit_fpr_deref_store_wordmember(int kd, Field *f);

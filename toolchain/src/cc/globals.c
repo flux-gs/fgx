@@ -2,6 +2,7 @@
 
 int g_lint_varargs = -1;
 int g_decl_lint_varargs = -1;
+int g_decl_is_register = 0;
 const char *g_input_path = NULL;
 
 /* Shared helpers relocated from main.c so the lexer/parser unit tests

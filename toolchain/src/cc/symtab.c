@@ -129,6 +129,7 @@ locals_declare(const char *name, int name_len, LocalKind kind,
     g_locals[g_n_locals].loop_accessed = 0;
     g_locals[g_n_locals].scope_hidden  = 0;           /* K&R A.11.1 block scope */
     g_locals[g_n_locals].homed_from    = -1;
+    g_locals[g_n_locals].is_register   = (kind == LK_LOCAL) ? g_decl_is_register : 0;
     /* Use-before-set: entries are REUSED across functions and this routine
      * assigns field by field rather than clearing, so these must be reset
      * here or the previous occupant's verdict is inherited. */
