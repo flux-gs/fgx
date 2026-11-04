@@ -856,6 +856,18 @@ sizeof_subscripted(Local *lc, Global *gv)
     return type_size_bytes(t, 1);
 }
 
+/* sizeof applied to a global object.  A struct object declared extern while
+ * its type was incomplete has no size until the type completes (K&R A.8.3);
+ * sizeof needs one, so it is refused until then. */
+static int
+sizeof_global(const Global *gv)
+{
+    if (gv->type == LT_STRUCT && gv->struct_id >= 0 &&
+        g_structs[gv->struct_id].is_forward)
+        die(g_cur.line, g_cur.col, "sizeof an object of incomplete struct type");
+    return (int)gv->n_bytes;
+}
+
 static int
 sizeof_operand_size(void)
 {
@@ -887,7 +899,7 @@ sizeof_operand_size(void)
                     else
                         sz = type_size_bytes(lc->type, 1);
                 } else {
-                    sz = gv->n_bytes;
+                    sz = sizeof_global(gv);
                 }
                 next_tok();
                 /* sizeof(arr[i]) -> ONE element size (the array-count idiom
@@ -1051,7 +1063,7 @@ sizeof_operand_size(void)
                     sz = type_size_bytes(lc->type, 1);
                 }
             } else {
-                sz = gv->n_bytes;
+                sz = sizeof_global(gv);
             }
             next_tok();
             /* sizeof arr[i] -> ONE element size (the array-count idiom

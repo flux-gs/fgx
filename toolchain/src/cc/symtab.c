@@ -764,6 +764,10 @@ field_lookup_strict_named(int sid, const char *name, int name_len)
 Field *
 field_lookup_dot(int sid, const char *name, int name_len)
 {
+    /* A member of an object whose struct is still incomplete needs its size
+     * and layout, which K&R A.8.3 rules out ("but not otherwise"). */
+    if (sid >= 0 && g_structs[sid].is_forward)
+        die(g_cur.line, g_cur.col, "member of an object of incomplete struct type");
     return field_lookup_strict_named(sid, name, name_len);
 }
 

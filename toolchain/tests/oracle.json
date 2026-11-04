@@ -730,5 +730,6 @@
   "static_fnptr": 42,
   "varargs_lint": 42,
   "blk_extern_struct": 42,
-  "pp_paste": 42
+  "pp_paste": 42,
+  "extern_incomplete": 42
 }

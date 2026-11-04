@@ -311,6 +311,12 @@ parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
     s->total_size = ((is_union ? union_max : cur) + 1) & ~1;
     s->is_forward = 0;
     s->is_union   = is_union;
+    /* An object declared extern while this struct was incomplete gets its
+     * size now that the type is complete (K&R A.8.3). */
+    for (int gi = 0; gi < g_n_globals; gi++)
+        if (g_globals[gi].type == LT_STRUCT && g_globals[gi].struct_id == sid &&
+            g_globals[gi].n_bytes == 0)
+            g_globals[gi].n_bytes = s->total_size;
     return sid;
 }
 
@@ -9746,7 +9752,11 @@ parse_global_decl(TypeSpec t)
          * the right size. */
         int gn = n_elems;
         if (decl_type == LT_STRUCT) {
-            if (g_structs[t.struct_id].is_forward)
+            /* K&R A.8.3: an incomplete struct may be "mentioned in contexts
+             * where their size is not needed, for example in declarations
+             * (not definitions)" -- so an extern declaration is allowed, and
+             * the size is checked where it is needed. */
+            if (g_structs[t.struct_id].is_forward && !t.is_extern)
                 die(line, col, "by-value struct global requires complete type");
             /* Use a single "element" of n_bytes = total_size — we override
              * n_bytes after globals_declare. */
