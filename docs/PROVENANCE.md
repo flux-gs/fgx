@@ -691,3 +691,89 @@ When you port a BSD (or any third-party) utility:
 
 Original FGX code (the kernel, drivers, the fcc toolchain, hand-written tools)
 is solely under BSD-2-Clause and needs no provenance header.
+
+## The network stack (net-mux)
+
+Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration symbol: it does not define `pdp11`, whose pads misplace overlaid headers with 4-byte pointers.
+
+| FGX file | Upstream | Notes |
+|---|---|---|
+| `src/kernel/bsdnet/net/if.c` | `vendor/2.11BSD/usr/sys/net/if.c` | verbatim |
+| `src/kernel/bsdnet/net/route.c` | `vendor/2.11BSD/usr/sys/net/route.c` | verbatim |
+| `src/kernel/bsdnet/net/if_loop.c` | `vendor/2.11BSD/usr/sys/net/if_loop.c` | verbatim |
+| `src/kernel/bsdnet/net/af.c` | `vendor/2.11BSD/usr/sys/net/af.c` | verbatim |
+| `src/kernel/bsdnet/net/raw_cb.c` | `vendor/2.11BSD/usr/sys/net/raw_cb.c` | verbatim |
+| `src/kernel/bsdnet/net/raw_usrreq.c` | `vendor/2.11BSD/usr/sys/net/raw_usrreq.c` | verbatim |
+| `src/kernel/bsdnet/netinet/if_ether.c` | `vendor/2.11BSD/usr/sys/netinet/if_ether.c` | verbatim |
+| `src/kernel/bsdnet/netinet/in.c` | `vendor/2.11BSD/usr/sys/netinet/in.c` | verbatim |
+| `src/kernel/bsdnet/netinet/in_pcb.c` | `vendor/2.11BSD/usr/sys/netinet/in_pcb.c` | verbatim |
+| `src/kernel/bsdnet/netinet/in_proto.c` | `vendor/2.11BSD/usr/sys/netinet/in_proto.c` | verbatim |
+| `src/kernel/bsdnet/netinet/ip_icmp.c` | `vendor/2.11BSD/usr/sys/netinet/ip_icmp.c` | verbatim |
+| `src/kernel/bsdnet/netinet/ip_input.c` | `vendor/2.11BSD/usr/sys/netinet/ip_input.c` | verbatim |
+| `src/kernel/bsdnet/netinet/ip_output.c` | `vendor/2.11BSD/usr/sys/netinet/ip_output.c` | verbatim |
+| `src/kernel/bsdnet/netinet/raw_ip.c` | `vendor/2.11BSD/usr/sys/netinet/raw_ip.c` | verbatim |
+| `src/kernel/bsdnet/netinet/udp_usrreq.c` | `vendor/2.11BSD/usr/sys/netinet/udp_usrreq.c` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_input.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_input.c` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_output.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_output.c` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_subr.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_subr.c` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_timer.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_timer.c` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_usrreq.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_usrreq.c` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_debug.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_debug.c` | verbatim |
+| `src/kernel/bsdnet/sys/uipc_mbuf.c` | `vendor/2.11BSD/usr/sys/sys/uipc_mbuf.c` | `mbinit`'s alignment goes through `long`; `m_expand` takes the pdp11 arm under `fgx` |
+| `src/kernel/bsdnet/sys/uipc_socket.c` | `vendor/2.11BSD/usr/sys/sys/uipc_socket.c` | verbatim |
+| `src/kernel/bsdnet/sys/uipc_socket2.c` | `vendor/2.11BSD/usr/sys/sys/uipc_socket2.c` | verbatim |
+| `src/kernel/bsdnet/sys/uipc_domain.c` | `vendor/2.11BSD/usr/sys/sys/uipc_domain.c` | `ADDDOMAIN` pastes with `##` where upstream used the Reiser `x/**/domain` |
+| `src/kernel/bsdnet/sys/uipc_proto.c` | `vendor/2.11BSD/usr/sys/sys/uipc_proto.c` | verbatim |
+| `src/kernel/bsdnet/sys/uipc_usrreq.c` | `vendor/2.11BSD/usr/sys/sys/uipc_usrreq.c` | verbatim |
+| `src/kernel/bsdnet/sys/uipc_syscalls.c` | `vendor/2.11BSD/usr/sys/sys/uipc_syscalls.c` | both `#ifndef pdp11` arms stay off under `fgx` |
+| `src/kernel/bsdnet/net/af.h` | `vendor/2.11BSD/usr/sys/net/af.h` | verbatim |
+| `src/kernel/bsdnet/net/if.h` | `vendor/2.11BSD/usr/sys/net/if.h` | `IFQ_MAXLEN` takes the pdp11 arm under `fgx` |
+| `src/kernel/bsdnet/net/if_arp.h` | `vendor/2.11BSD/usr/sys/net/if_arp.h` | verbatim |
+| `src/kernel/bsdnet/net/netisr.h` | `vendor/2.11BSD/usr/sys/net/netisr.h` | verbatim |
+| `src/kernel/bsdnet/net/raw_cb.h` | `vendor/2.11BSD/usr/sys/net/raw_cb.h` | verbatim |
+| `src/kernel/bsdnet/net/route.h` | `vendor/2.11BSD/usr/sys/net/route.h` | verbatim |
+| `src/kernel/bsdnet/netinet/icmp_var.h` | `vendor/2.11BSD/usr/sys/netinet/icmp_var.h` | verbatim |
+| `src/kernel/bsdnet/netinet/if_ether.h` | `vendor/2.11BSD/usr/sys/netinet/if_ether.h` | verbatim |
+| `src/kernel/bsdnet/netinet/in_pcb.h` | `vendor/2.11BSD/usr/sys/netinet/in_pcb.h` | verbatim |
+| `src/kernel/bsdnet/netinet/in_systm.h` | `vendor/2.11BSD/usr/sys/netinet/in_systm.h` | `UCHAR` takes the pdp11 arm under `fgx` |
+| `src/kernel/bsdnet/netinet/in_var.h` | `vendor/2.11BSD/usr/sys/netinet/in_var.h` | verbatim |
+| `src/kernel/bsdnet/netinet/in.h` | `vendor/2.11BSD/usr/sys/netinet/in.h` | `ntohl` and friends are macros in machine/machparam.h, so their declarations are off under `fgx` |
+| `src/kernel/bsdnet/netinet/ip_icmp.h` | `vendor/2.11BSD/usr/sys/netinet/ip_icmp.h` | verbatim |
+| `src/kernel/bsdnet/netinet/ip_var.h` | `vendor/2.11BSD/usr/sys/netinet/ip_var.h` | verbatim |
+| `src/kernel/bsdnet/netinet/ip.h` | `vendor/2.11BSD/usr/sys/netinet/ip.h` | `BYTE_ORDER` takes the VAX arm under `fgx` |
+| `src/kernel/bsdnet/netinet/tcp_debug.h` | `vendor/2.11BSD/usr/sys/netinet/tcp_debug.h` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_fsm.h` | `vendor/2.11BSD/usr/sys/netinet/tcp_fsm.h` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_seq.h` | `vendor/2.11BSD/usr/sys/netinet/tcp_seq.h` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_timer.h` | `vendor/2.11BSD/usr/sys/netinet/tcp_timer.h` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_var.h` | `vendor/2.11BSD/usr/sys/netinet/tcp_var.h` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp.h` | `vendor/2.11BSD/usr/sys/netinet/tcp.h` | `BYTE_ORDER` takes the VAX arm under `fgx` |
+| `src/kernel/bsdnet/netinet/tcpip.h` | `vendor/2.11BSD/usr/sys/netinet/tcpip.h` | `ti_pad` aliases `ih_x1`: 2.11BSD clears a pad that exists only with 2-byte pointers |
+| `src/kernel/bsdnet/netinet/udp_var.h` | `vendor/2.11BSD/usr/sys/netinet/udp_var.h` | `ui_pad` aliases `ih_x1`, as `ti_pad` does |
+| `src/kernel/bsdnet/netinet/udp.h` | `vendor/2.11BSD/usr/sys/netinet/udp.h` | verbatim |
+| `src/kernel/bsdnet/sys/domain.h` | `vendor/2.11BSD/usr/sys/h/domain.h` | verbatim |
+| `src/kernel/bsdnet/sys/mbuf.h` | `vendor/2.11BSD/usr/sys/h/mbuf.h` | an `fgx` arm: `MMINOFF` 10 and `MTAIL` 4 for 4-byte pointers, and `dtom`, `mtod`, `cltom`, `mtocl`, `MTOCL` through `long`; `mtod` adds inside the bank |
+| `src/kernel/bsdnet/sys/protosw.h` | `vendor/2.11BSD/usr/sys/h/protosw.h` | verbatim |
+| `src/kernel/bsdnet/sys/socket.h` | `vendor/2.11BSD/usr/sys/h/socket.h` | verbatim |
+| `src/kernel/bsdnet/sys/socketvar.h` | `vendor/2.11BSD/usr/sys/h/socketvar.h` | `SB_MAX` takes the pdp11 arm under `fgx` |
+| `src/kernel/bsdnet/sys/un.h` | `vendor/2.11BSD/usr/sys/h/un.h` | verbatim |
+| `src/kernel/bsdnet/sys/unpcb.h` | `vendor/2.11BSD/usr/sys/h/unpcb.h` | verbatim |
+| `src/kernel/bsdnet/sys/errno.h` | `vendor/2.11BSD/usr/sys/h/errno.h` | verbatim |
+| `src/kernel/bsdnet/sys/uio.h` | `vendor/2.11BSD/usr/sys/h/uio.h` | verbatim |
+| `src/kernel/bsdnet/sys/ioctl.h` | `vendor/2.11BSD/usr/sys/h/ioctl.h` | verbatim |
+| `src/kernel/bsdnet/sys/ttychars.h` | `vendor/2.11BSD/usr/sys/h/ttychars.h` | verbatim |
+| `src/kernel/bsdnet/sys/ttydev.h` | `vendor/2.11BSD/usr/sys/h/ttydev.h` | verbatim |
+| `src/kernel/bsdnet/sys/ioctl_compat.h` | `vendor/2.11BSD/usr/sys/h/ioctl_compat.h` | verbatim |
+| `src/kernel/bsdnet/sys/time.h` | `vendor/2.11BSD/usr/sys/h/time.h` | verbatim |
+| `src/kernel/bsdnet/sys/stat.h` | `vendor/2.11BSD/usr/sys/h/stat.h` | verbatim |
+| `src/kernel/bsdnet/sys/file.h` | `vendor/2.11BSD/usr/sys/h/file.h` | `FREAD`, `FWRITE`, `FDEFER`, `FMARK` under `fgx`, from `vendor/4.3BSD-Reno/sys/file.h` and `fcntl.h` |
+| `src/kernel/bsdnet/sys/select.h` | `vendor/2.11BSD/usr/sys/h/select.h` | verbatim |
+| `src/kernel/bsdnet/sys/types.h` | `vendor/2.11BSD/usr/sys/h/types.h` | verbatim |
+| `src/kernel/bsdnet/sys/localopts.h` | `vendor/2.11BSD/usr/sys/h/localopts.h` | verbatim |
+| `src/kernel/bsdnet/sys/stddef.h` | `vendor/2.11BSD/usr/sys/h/stddef.h` | verbatim |
+| `src/kernel/bsdnet/sys/systm.h` | `vendor/2.11BSD/usr/sys/h/systm.h` | verbatim |
+| `src/kernel/bsdnet/sys/kernel.h` | `vendor/2.11BSD/usr/sys/h/kernel.h` | verbatim |
+| `src/kernel/bsdnet/sys/param.h` | `vendor/2.11BSD/usr/sys/h/param.h` | verbatim but for PDP `signal.h`, which is not ported; `SIGPIPE`, `SIGURG`, `SIGIO` from `toolchain/include/signal.h` |
+| `src/kernel/bsdnet/sys/user.h` | `vendor/2.11BSD/usr/sys/h/user.h` | **written for FGX**: the fields the network code reads, as one global |
+| `src/kernel/bsdnet/sys/proc.h` | `vendor/2.11BSD/usr/sys/h/proc.h` | **written for FGX**: `p_wchan` |
+| `src/kernel/bsdnet/machine/machparam.h` | `vendor/2.11BSD/usr/sys/pdp/machparam.h` | **written for FGX**: little-endian, the byte-swap macros, the page constants |
+| `src/kernel/bsdnet/machine/net_mac.h` | `vendor/2.11BSD/usr/sys/pdp/net_mac.h` | **written for FGX**: upstream's declarations, and each cross-space macro as the direct call |

@@ -1,6 +1,35 @@
 # Which module each network translation unit's code goes in.  The data of all
-# of them is one image, bsdnetd.  <stem> <module> [gate], and a gated line builds
-# only when that key of cfg/system.cfg is nonzero.
+# of them is one image, bsdnetd.  <stem> <module> [gate]: a gated line builds only
+# when that key of cfg/system.cfg is nonzero, and module `-' compiles but does
+# not link until its phase gives it what it needs.
 machine/bsdnet_init	0
 netprobe		0	kernel.netprobe
 netprobe2		1	kernel.netprobe
+net/af	-
+net/if	-
+net/if_loop	-
+net/raw_cb	-
+net/raw_usrreq	-
+net/route	-
+netinet/if_ether	-
+netinet/in	-
+netinet/in_pcb	-
+netinet/in_proto	-
+netinet/ip_icmp	-
+netinet/ip_input	-
+netinet/ip_output	-
+netinet/raw_ip	-
+netinet/tcp_debug	-
+netinet/tcp_input	-
+netinet/tcp_output	-
+netinet/tcp_subr	-
+netinet/tcp_timer	-
+netinet/tcp_usrreq	-
+netinet/udp_usrreq	-
+sys/uipc_domain	-
+sys/uipc_mbuf	-
+sys/uipc_proto	-
+sys/uipc_socket	-
+sys/uipc_socket2	-
+sys/uipc_syscalls	-
+sys/uipc_usrreq	-
