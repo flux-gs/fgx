@@ -717,6 +717,8 @@ VT_NET                  EQU     $0008       ; networking stack (net.mod) — mod
                                             ; exports a net_op_table (3-byte FOP-
                                             ; style long-ptrs); kernel dispatches
                                             ; via _Net_Dispatch (net_dispatch.s).
+VT_BSDNET               EQU     $000C       ; bsdnetd: the network modules' shared
+                                            ;   data bank (tools/build_bsdnet.py)
 VT_PDCORE               EQU     $000B       ; prodos.mod's C entry points, for
                                             ;   prodosw.mod, the write half
                                             ;   (ProDOS FST P6) -- PDCORE_* below

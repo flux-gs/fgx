@@ -1106,6 +1106,16 @@ rule kernelc
   deps = gcc
   description = fcc kernel C $in
 
+rule bsdnetc
+  command = ./toolchain/fcc -fno-safepoints --pile --shared-data --commons $base.comm -Isrc/kernel/bsdnet $flags -o $base.s $in -MD -MF $base.s.d && python3 tools/check_kernelc_calls.py $base.s
+  depfile = $base.s.d
+  deps = gcc
+  description = fcc network C $in
+
+rule bsdnet
+  command = python3 tools/build_bsdnet.py src/kernel/bsdnet/split.list build/bsdnet disk_src/lib/modules $stems
+  description = network modules
+
 rule modulec_bank
   command = ./toolchain/fcc -fno-safepoints --pile --module-bank -o $out $in -MD -MF $out.d && python3 tools/check_kernelc_calls.py $out
   depfile = $out.d
@@ -2113,6 +2123,32 @@ def emit(tools, out_path):
             f"build {out} build/module_{m}_Output.txt: module | "
             + " ".join(mdeps) + f"\n  name = {m}\n  upper = {m.upper()}")
         mod_outs.append(out)
+    # The network code: code banks over one data bank (tools/build_bsdnet.py).
+    # A gated line of split.list builds only when its key is on, and the gate
+    # also reaches the compile, since bsdnet_init calls the probe.
+    bn_stems, bn_objs = [], []
+    bn_flags = " ".join(f"-D{k.split('.')[1].upper()}"
+                        for k in ("kernel.netprobe",) if cfg.get(k, "0") != "0")
+    with open(os.path.join(ROOT, "src/kernel/bsdnet/split.list")) as _f:
+        for _l in _f:
+            _p = _l.split("#")[0].split()
+            if _p and (len(_p) < 3 or cfg.get(_p[2], "0") != "0"):
+                bn_stems.append(_p[0])
+    for _s in bn_stems:
+        _b = "build/bsdnet/" + _s.replace("/", "_")
+        lines.append(f"build {_b}.s | {_b}.data.s {_b}.comm: bsdnetc "
+                     f"src/kernel/bsdnet/{_s}.c | toolchain/fcc cfg/system.cfg\n"
+                     f"  base = {_b}\n  flags = {bn_flags}")
+        bn_objs += [f"{_b}.s", f"{_b}.data.s", f"{_b}.comm"]
+    bn_outs = [f"disk_src/lib/modules/{n}" for n in
+               ("bsdnetd", "bsdnet0", "bsdnet1", "bsdnet2")]
+    lines.append(f"build {' '.join(bn_outs)}: bsdnet {' '.join(bn_objs)} | "
+                 "src/kernel/bsdnet/split.list tools/build_bsdnet.py "
+                 "tools/gen_mod_bankpatch.py toolchain/tools/gen_commons.py "
+                 "src/kernel/far/fcc_rt.s src/kernel/far/fcc_ktrap.s "
+                 "src/kernel/far/fcc_dp.s toolchain/lib/fcc_runtime_data.s\n"
+                 f"  stems = {' '.join(bn_stems)}")
+    mod_outs += bn_outs
     mod_checked = []
     # Modules whose C is compiled --module-bank carry a MOD_FN_PTR table.
     # ufsprobe carries NO &function cells at the shipping configuration -- its

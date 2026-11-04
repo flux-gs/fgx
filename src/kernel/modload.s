@@ -116,7 +116,7 @@ _mlcPathBuf     DS      _MLC_PATH_MAX   ; "/lib/modules/<name>",NUL
 ; change -- but note the table GROWS, which moves every kernel static after it,
 ; and the MAME harness resolves _modBankTab by address (the probe-address-rot
 ; class).
-MOD_BANK_MAX    EQU     8
+MOD_BANK_MAX    EQU     12
 _modBankTab     DS      MOD_BANK_MAX
 _modSharedBank  EQU     _modBankTab
 _mlBankOrd      DS      2               ; this load's ordinal, parsed from the
@@ -136,7 +136,7 @@ _mlBankOrd      DS      2               ; this load's ordinal, parsed from the
 ; 16 entries: thirteen modules load today, across every chain.  Overflow
 ; REFUSES rather than skipping the check, and the refusal names the module.
 ;------------------------------------------------------------------------------
-MOD_EXT_MAX     EQU     16
+MOD_EXT_MAX     EQU     20
 _modExtCount    DS      2               ; entries in use
 _modExtLo       DS      MOD_EXT_MAX*2   ; start offset, inclusive
 _modExtHi       DS      MOD_EXT_MAX*2   ; end offset, exclusive
@@ -145,11 +145,8 @@ _modExtHi       DS      MOD_EXT_MAX*2   ; end offset, exclusive
 ; offset in DIFFERENT banks do not overlap, and reporting them as a collision
 ; would refuse a perfectly good image.  An offset alone stopped being an
 ; identity the moment a second chain existed.
-; Sized *2 and indexed by the SAME byte index the offset arrays use, rather
-; than by entry number.  Half of it is unused; that costs 12 bytes of kernel
-; data and saves an index division inside the scan loop, which is the kind of
-; arithmetic that goes wrong quietly.
-_modExtBank     DS      MOD_EXT_MAX*2
+; One byte per entry, indexed by entry number: the scan keeps that in Y.
+_modExtBank     DS      MOD_EXT_MAX
 _mceEnd         DS      2               ; scratch: this module's end offset
 _mlSaveExtCount DS      2               ; load-failure rollback (5.3a): _modExtCount
                                         ;   and _modRegCount as they were when this
@@ -650,7 +647,7 @@ _modBuildErr    ASC     ': kernel build mismatch, not loaded',$00
 ; /etc/preload.conf named a module that gen_modplace.py did not place first.
 ; A caller that CAN place sets _mlPlaceAny and is not refused; SYS_MODLOAD's
 ; streaming path does, because every module in modload.conf is a placed one.
-_modPreStageOff ASC     'mod: pre-staged module is not at offset 0',$00
+_modPreStageOff ASC     'mod: pre-staged at offset !=0',$00
 ; One message for all three placement refusals -- overlap, past the bank end,
 ; and extent table full.  They are the same fact from the module's point of
 ; view: this image and the running layout disagree about where it goes.
@@ -689,14 +686,15 @@ _Mod_ClaimExtent MX     %00
 
                 ; Two ranges overlap iff  start < hi[i]  AND  lo[i] < end.
                 LDX     #$0000
-                LDY     _modExtCount
-                BEQ     @mce_claim
+                LDY     #$0000
                 ; A range only collides with a range IN THE SAME BANK.  Two
                 ; modules at the same offset in different chains are both
                 ; correct, and testing offsets alone would refuse the second.
-@mce_scan       SEP     #$20
+@mce_scan       CPY     _modExtCount
+                BCS     @mce_claim
+                SEP     #$20
                 MX      %10
-                LDA     _modExtBank,X
+                LDA     _modExtBank,Y
                 CMP     _mlBankOrd              ; low byte; ordinals are < MOD_BANK_MAX
                 REP     #$20
                 MX      %00
@@ -709,8 +707,8 @@ _Mod_ClaimExtent MX     %00
                 BCC     @mce_refuse             ; lo[i] < end: overlap
 @mce_next       INX
                 INX
-                DEY
-                BNE     @mce_scan
+                INY
+                BRA     @mce_scan
 
 @mce_claim      LDA     _modExtCount
                 CMP     #MOD_EXT_MAX
@@ -724,7 +722,8 @@ _Mod_ClaimExtent MX     %00
                 SEP     #$20
                 MX      %10
                 LDA     _mlBankOrd
-                STA     _modExtBank,X
+                LDY     _modExtCount
+                STA     _modExtBank,Y
                 REP     #$20
                 MX      %00
                 INC     _modExtCount
@@ -843,8 +842,7 @@ _Mod_CheckBuild MX      %00
                 ; That is how _Ram_LoadOpsPtr patches the block stubs, and how
                 ; the console's chardev ops will be reached once pty migrates.
                 ; The extent half is smaller: a refused module kept its byte
-                ; range reserved for the life of the boot, and MOD_EXT_MAX is
-                ; 12 against a dozen expected modules.
+                ; range reserved for the life of the boot.
                 ;
                 ; A is the errno and must survive; PHA/PLA rather than a
                 ; scratch cell because this runs at most once per load.
@@ -974,9 +972,8 @@ Mod_RegisterHeader      ENT
                         ;
                         ; It matters more now than it did: this is the tail of a
                         ; repeatable SYSCALL rather than of a once-per-boot
-                        ; pre-stage, and MOD_EXT_MAX is 12 against the seven
-                        ; extents a boot already uses -- five failed `modload'
-                        ; runs and every later load is refused.
+                        ; pre-stage, so failed `modload' runs would otherwise fill
+                        ; the table and refuse every later load.
                         ;
                         ; AFTER STEP 1, NOT BEFORE IT: A HOLDS THE BANK on
                         ; entry to this routine, and taking the snapshot in

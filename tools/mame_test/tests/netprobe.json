@@ -1,0 +1,14 @@
+{
+ "name": "netprobe",
+ "description": "The network modules on the machine: code banks over one data bank, linked at load. Only means anything at kernel.netprobe = 1.",
+ "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2; dmesg | tail -4",
+ "timeout_s": 40,
+ "expect": {
+  "screen_contains": ["bsdnet: ok", "fgx#"],
+  "screen_lacks": ["bsdnet: BROKEN", "bsdnet: no", "BRK", "PANIC", "GUARD stkhwm"]
+ },
+ "requires": {
+  "config": {"kernel.netprobe": "1"},
+  "reason": "the probe C is compiled into the network modules only at kernel.netprobe = 1"
+ }
+}

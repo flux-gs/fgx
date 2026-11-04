@@ -1,0 +1,6 @@
+# Which module each network translation unit's code goes in.  The data of all
+# of them is one image, bsdnetd.  <stem> <module> [gate], and a gated line builds
+# only when that key of cfg/system.cfg is nonzero.
+machine/bsdnet_init	0
+netprobe		0	kernel.netprobe
+netprobe2		1	kernel.netprobe
