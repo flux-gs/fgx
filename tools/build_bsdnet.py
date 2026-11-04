@@ -409,7 +409,7 @@ mod_init        MX      %00
                 JSL     SYS_KCALL
                 LDX     #KSVC_LOGEOL
                 JSL     SYS_KCALL
-                BRL     @out
+                BRL     @fail
 @msgNoData      ASC     'bsdnet: no bsdnetd - load it first',$00
 @have           TXA
                 AND     #$00FF
@@ -443,6 +443,10 @@ mod_init        MX      %00
                 PLP
                 SEC
                 RTL
+@fail           PLB
+                PLP
+                CLC
+                RTL
 """
         if m == LAST:
             s += _last_strings()
@@ -470,6 +474,20 @@ def _last_module():
     """The last module's mod_init continues here with DBR on the data bank: stamp every
     module's stubs, enter the C, log its answer."""
     s = ""
+    # A module that never loaded has a zero link and a zero bank: refuse, by name.
+    for m, i in BANKIDX.items():
+        s += f"""                LDA     bn_links+{i * 2}
+                BNE     @have{i}
+                PHK
+                PLB
+                LDA     #@msgMiss{i}
+                LDX     #KSVC_LOGSTRNE
+                JSL     SYS_KCALL
+                LDX     #KSVC_LOGEOL
+                JSL     SYS_KCALL
+                BRL     @fail
+@have{i}        ANOP
+"""
     for i in range(len(BANKIDX)):
         s += f"""                PHK
                 PEA     @ret{i}-1
@@ -519,7 +537,8 @@ def _last_module():
 def _last_strings():
     return """@msgOk          ASC     'bsdnet: ok',$00
 @msgBad         ASC     'bsdnet: BROKEN ',$00
-"""
+""" + "".join(f"@msgMiss{i}      ASC     'bsdnet: {NAME[m]} not loaded',$00\n"
+              for m, i in BANKIDX.items())
 
 
 if __name__ == "__main__":
