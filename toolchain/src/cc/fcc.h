@@ -105,6 +105,8 @@ typedef enum {
     TOK_LSHIFTEQ,      /* <<=     */
     TOK_RSHIFTEQ,      /* >>=     */
     TOK_ELLIPSIS,      /* ...     */
+    TOK_PP_HASH,       /* #  in a macro body: stringize (K&R A.12.3) */
+    TOK_PP_PASTE,      /* ## in a macro body: token concatenation    */
     TOK_SKIP           /* Increment 1: dead vector slot — next_tok/peek_tok
                         * skip it transparently.  Written by the G21/G41
                         * paren-lvalue re-dispatch to splice out a ')'. */
