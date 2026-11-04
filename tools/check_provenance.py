@@ -568,7 +568,13 @@ PORTED_DIRS = ("src/userland", "src/kernel/vfs")
 
 
 def scan_userland_c():
-    """Every TRACKED .c under the ported directories.
+    """Every .c under the ported directories that git tracks OR would track.
+
+    Untracked files count: a port is checked while it is being written, and a
+    tracked-only scan passed one that was not yet added and then never ran
+    again, because committing it touched no input of the stamp (2.11BSD
+    diff's diffdir.c and diffreg.c reached main unregistered that way).  git's
+    ignore rules still keep every build product out.
 
     Deliberately not a raw file walk.  yacc-sourced tools (expr) generate
     <name>.c from the tracked <name>.y; build.sh deleted the .c immediately, so
@@ -578,7 +584,8 @@ def scan_userland_c():
 
     Asking git also means a build product can never be mistaken for a source.
     """
-    r = subprocess.run(["git", "ls-files"] + list(PORTED_DIRS),
+    r = subprocess.run(["git", "ls-files", "--cached", "--others",
+                        "--exclude-standard"] + list(PORTED_DIRS),
                        cwd=ROOT, capture_output=True, text=True)
     if r.returncode != 0:
         # No git (a source tarball): fall back to the walk, minus anything the

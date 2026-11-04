@@ -10,11 +10,15 @@
 ;==============================================================================
 
 ;------------------------------------------------------------------------------
-; _W5_SockAlloc - claim a free W5100 hardware socket (1..3).
-;   Out: C=1 + A = hw socket index (1..3), with that bit set in _w5SockInUse;
+; _W5_SockAlloc - claim a free W5100 hardware socket (0..3).
+;   Out: C=1 + A = hw socket index (0..3), with that bit set in _w5SockInUse;
 ;        C=0 if all are in use.  MX %00.  DBR=kernel-bank (for _w5SockInUse).
-;   Socket 0 is RESERVED for /dev/bpf0 MACRAW capture (_Net_CaptureStart) —
-;   the W5100 supports MACRAW mode ONLY on socket 0, so UDP sockets start at 1.
+;   Sockets 1..3 go first and socket 0 last: the W5100 supports MACRAW mode
+;   ONLY on socket 0, so /dev/bpf0 capture needs that one, and bpf_open claims
+;   it through this same bitmap (EBUSY while a connection holds it).  bpf is
+;   not loaded by default, and a socket held back for it left three for every
+;   connection on the machine -- inetd's listener, ntpd and an ftp control
+;   connection, and ftp's data connection failed ENOBUFS.
 ;------------------------------------------------------------------------------
 ;
 ; THE BIT MASK IS COMPUTED, NOT TABLED, AND THAT IS LOAD-BEARING (apple/fgx#93).
@@ -38,14 +42,18 @@ _W5_SockAlloc   MX      %00
                 PHP
                 SEP     #$20
                 MX      %10
-                LDX     #1                      ; skip socket 0 (MACRAW capture)
-                LDA     #$02                    ; ...so start at socket 1's bit
+                LDX     #1                      ; socket 1 first; 0 is the last
+                LDA     #$02                    ;   resort (MACRAW capture's)
 @wsa_l          BIT     _w5SockInUse            ; Z=1 -> this socket is free
                 BEQ     @wsa_free
                 ASL                             ; next socket's bit
                 INX
                 CPX     #W5_NSOCK
                 BCC     @wsa_l
+                LDX     #0                      ; 1..3 taken: socket 0
+                LDA     #$01
+                BIT     _w5SockInUse
+                BEQ     @wsa_free
                 ; all in use
                 REP     #$20
                 MX      %00

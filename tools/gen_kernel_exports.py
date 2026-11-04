@@ -247,6 +247,8 @@ MANIFESTS = {
     ],
     'bpf': [
         ('_Sys_RdMax', '_Sys_RdMax', 0, 'lo16'),
+        # The W5100 socket bitmap: open claims socket 0 for MACRAW through it.
+        ('_w5SockInUse', '_w5SockInUse', 0, 'lo16'),
         ('_Sys_RdBufOff', '_Sys_RdBufOff', 0, 'lo16'),
         ('_Sys_CallerBank', '_Sys_CallerBank', 0, 'lo16'),
         ('_u2Imr', '_u2Imr', 0, 'lo16'),

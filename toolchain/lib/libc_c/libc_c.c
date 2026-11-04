@@ -215,6 +215,7 @@ extern char _libc_lstrBufB[];
 #include "vsnprintf.c"
 #include "inet.c"
 #include "netdb.c"
+#include "herror.c"
 #include "dir.c"
 #include "telldir.c"
 /* AFTER dir.c and stat.c: getwd walks the tree with opendir/readdir and

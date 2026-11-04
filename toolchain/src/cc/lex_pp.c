@@ -498,8 +498,11 @@ scan_tok(void)
     g_cur.line     = g_line;
     g_cur.col      = g_col;
     g_cur.file     = g_cur_path;
-    g_cur.lint_varargs = g_lint_varargs;   /* the marker, if one came before */
-    g_lint_varargs = -1;
+    /* The marker, if one came before.  A raw-mode token (an #if expression,
+     * a macro body) is not the declaration it stands before, so it leaves it. */
+    g_cur.lint_varargs = g_pp_raw_mode ? -1 : g_lint_varargs;
+    if (!g_pp_raw_mode)
+        g_lint_varargs = -1;
     g_cur.value_hi = 0;        /* M20: reset per-token */
     g_cur.is_long  = 0;
     g_cur.value2   = 0;        /* long long words, and its flag */
@@ -517,6 +520,9 @@ scan_tok(void)
      * unexpected character — bodies/args/exprs contain no directives). */
     if (c == '#' && g_col == 1 && !g_pp_raw_mode) {
         adv_ch();   /* consume # */
+        /* A directive is not a token: a VARARGSn marker before it belongs to
+         * the token after it (2.11BSD ftp's `command' has an #ifdef between). */
+        g_lint_varargs = g_cur.lint_varargs;
         /* Read directive name. */
         while (peek_ch() == ' ' || peek_ch() == '\t') adv_ch();
         char dir[16]; int dl = 0;

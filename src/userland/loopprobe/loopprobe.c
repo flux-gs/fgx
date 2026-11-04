@@ -166,6 +166,65 @@ static int two_listener()
     exit(0);
 }
 
+/* ---- `-0`: bind(2) TO PORT 0 PICKS A PORT, and getsockname(2) says which.
+ *
+ * 2.11BSD in_pcbbind: `if (lport == 0) do { ... head->inp_lport++ ... }'
+ * (vendor/2.11BSD/usr/sys/netinet/in_pcb.c:97) -- the port is chosen AT BIND,
+ * so a program can name it before listen().  ftp(1)'s initconn does exactly
+ * that: bind the data socket to port 0, getsockname, and send the port to the
+ * server in a PORT command.  Both of this tree's bind arms recorded the 0, so
+ * ftp sent `PORT a,b,c,d,0,0' and vsftpd answered `500 Illegal PORT command'.
+ *
+ * Two binds, one per arm: 0.0.0.0 goes to net_op_bind's hardware path and
+ * 127.0.0.1 to _Loop_BindTry.  Each must report a port of at least
+ * IPPORT_RESERVED, and they must differ.  THE CONNECT IS THE PART THAT CAN TELL
+ * A REPORTED PORT FROM A BOUND ONE: a getsockname that invented a number would
+ * pass the first checks, but connecting to it finds no listener.
+ * ---- */
+static int zero_port()
+{
+    int wd, ls, cs, as, n, len;
+    unsigned wport, lport;
+    struct sockaddr_in sin, got;
+
+    for (n = 0; n < sizeof(sin); n++) ((char *)&sin)[n] = 0;
+    sin.sin_family = AF_INET;
+
+    wd = socket(AF_INET, SOCK_STREAM, 0);
+    if (wd < 0) fail("zero-socket-wild");
+    if (bind(wd, &sin, sizeof(sin)) < 0) fail("zero-bind-wild");
+    len = sizeof(got);
+    if (getsockname(wd, &got, &len) < 0) fail("zero-getsockname-wild");
+    wport = ntohs(got.sin_port);
+    close(wd);
+
+    sin.sin_addr.s_addr = htonl(0x7F000001);        /* 127.0.0.1 */
+    ls = socket(AF_INET, SOCK_STREAM, 0);
+    if (ls < 0) fail("zero-socket-loop");
+    if (bind(ls, &sin, sizeof(sin)) < 0) fail("zero-bind-loop");
+    len = sizeof(got);
+    if (getsockname(ls, &got, &len) < 0) fail("zero-getsockname-loop");
+    lport = ntohs(got.sin_port);
+    printf("loopprobe: zero ports wild %u loop %u\n", wport, lport);
+    if (wport < 1024) fail("zero-port-wild");
+    if (lport < 1024) fail("zero-port-loop");
+    if (wport == lport) fail("zero-port-same");
+    if (listen(ls, 1) < 0) fail("zero-listen");
+
+    cs = socket(AF_INET, SOCK_STREAM, 0);
+    if (cs < 0) fail("zero-socket-connect");
+    sin.sin_port = got.sin_port;
+    if (connect(cs, &sin, sizeof(sin)) < 0) fail("zero-connect");
+    as = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (as < 0) fail("zero-accept");
+
+    close(as);
+    close(cs);
+    close(ls);
+    printf("loopprobe: ZERO OK bind picks the port\n");
+    exit(0);
+}
+
 /* ---- `-x`: AN ACCEPT THAT FAILS ON RESOURCES MUST BE RETRYABLE
  *      (apple/fgx#145, second edge).
  *
@@ -389,6 +448,8 @@ char **argv;
         two_listener();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'x')
         accept_pressure();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == '0')
+        zero_port();
 
     datagram_argblk();
     sockopt_check();

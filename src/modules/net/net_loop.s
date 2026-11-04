@@ -100,7 +100,7 @@ _NlKC_SigRaise  MX      %00                     ; A = signum
 ; A loopback connection is two pipe.s rings — one per direction — with no
 ; hardware socket behind it.  It costs a socket DESCRIPTOR but none of the four
 ; W5100 hw sockets, so `telnet 127.0.0.1` -> local telnetd fits inside
-; SOCKD_MAX without contending with /dev/bpf0's socket 0 or a DHCP lease.
+; SOCKD_MAX without contending for a chip socket.
 ;
 ; WHY HERE AND NOT IN net.mod.  The obvious home looks like net_xport.s, beside
 ; the W5100 cores at the _Net_Xport_* seam — that is what this campaign's plan
@@ -1453,7 +1453,11 @@ _Loop_BindTry   MX      %00
                 REP     #$30
                 MX      %00
                 STA     _loopDstPort
-                LDA     #1
+                BNE     @nl_bt_named            ; in_pcbbind (in_pcb.c:97): port 0
+                JSR     _Sock_EphemPort         ;   picks one at bind, as
+                LDA     _sockTmp2               ;   net_op_bind does
+                STA     _loopDstPort
+@nl_bt_named    LDA     #1
                 STA     _loopHandled
                 LDA     _Sys_SavedX
                 AND     #$00FF

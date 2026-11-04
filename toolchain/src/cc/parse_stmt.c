@@ -2994,10 +2994,28 @@ build_decl(TypeSpec t)
          * is legal here (nothing is being allocated, so nothing needs a size)
          * where a true local `T a[];` still rightly needs an initializer. */
         if (t.is_extern) {
-            if (globals_lookup(name_ptr, name_len) == NULL)
-                globals_declare(name_ptr, name_len, d.type,
-                                (d.n_dims > 0 && d.dims[0] > 0) ? d.dims[0] : 1,
-                                line, col, /*is_extern_decl=*/1);
+            /* K&R A.11.2: with no external declaration visible, "its linkage
+             * is external" -- it declares the program's object, so the global
+             * carries the declared type whole, struct included, as a
+             * file-scope declaration does (2.11BSD ftp's block-scope
+             * `extern struct cmd cmdtab[];' and then `cmdtab + j * lines'). */
+            if (globals_lookup(name_ptr, name_len) == NULL) {
+                int ne = (d.n_dims > 0 && d.dims[0] > 0) ? d.dims[0] : 1;
+                Global *g = globals_declare(name_ptr, name_len, d.type,
+                                            d.type == LT_STRUCT ? 1 : ne,
+                                            line, col, /*is_extern_decl=*/1);
+                g->is_unsigned = t.is_unsigned;
+                if (d.fn_sig_id >= 0)
+                    g->fn_sig_id = d.fn_sig_id;
+                if (d.type == LT_STRUCT || d.type == LT_STRUCT_ARRAY ||
+                    BTYPE(d.type) == BT_STRUCT)
+                    g->struct_id = t.struct_id;
+                if (d.type == LT_STRUCT)
+                    g->n_bytes = (g_structs[t.struct_id].total_size + 1) & ~1;
+                else if (d.type == LT_STRUCT_ARRAY)
+                    g->n_bytes = ((g_structs[t.struct_id].total_size + 1) & ~1)
+                                 * ne;
+            }
             if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }
             expect(TOK_SEMI, "';'");
             goto make_decl_node;
@@ -8000,7 +8018,10 @@ build_stmt(void)
                         "defined with %d\n",
                         g_input_path, line, col, name_len, name_ptr, n_kids,
                         n_kids == 1 ? "" : "s", expected_argc);
-            } else if (n_kids > expected_argc) {
+            } else if (n_kids > expected_argc && g_funcs[fn_idx].n_fixed < 0) {
+                /* Not under lint's VARARGSn: that marker on the definition says
+                 * the parameters past n_fixed take whatever the call passes
+                 * (2.11BSD ftp's `command(fmt, args)', VARARGS1). */
                 char buf[96];
                 snprintf(buf, sizeof buf,
                          "'%.*s' expects %d argument%s, got %d",

@@ -1195,7 +1195,11 @@ net_op_bind     MX      %00
                 STA     _sockTmp2
                 REP     #$20
                 MX      %00
-                JSR     _Sock_NoteWildcard      ; SOCK_WILD if this was 0.0.0.0
+                LDA     _sockTmp2               ; in_pcbbind (in_pcb.c:97): port 0
+                BNE     @sb_named               ;   picks one AT BIND, so that
+                JSR     _Sock_EphemPort         ;   getsockname can name it before
+@sb_named       JSR     _Sock_NoteWildcard      ;   listen -- ftp's PORT. SOCK_WILD
+                                                ;   if this was 0.0.0.0
                 JSR     _Xport_LoadTag
                 CMP     #XPORT_ICMP
                 BNE     @sb_open
@@ -2479,12 +2483,13 @@ _Sock_HwShared  MX      %00
 ;------------------------------------------------------------------------------
 _Sock_EphemPort MX      %00
                 LDA     _tcpNextPort
-                STA     _sockTmp2
-                INC     _tcpNextPort
-                BNE     @sep_ok                 ; wrapped past $FFFF?
-                LDA     #49152
+                CMP     #49152                  ; in_pcbbind's range test: a
+                BCS     @sep_ok                 ;   counter below the base -- one
+                LDA     #49152                  ;   that wrapped, or that was never
+@sep_ok         STA     _sockTmp2               ;   seeded because no card came up
+                INC     A
                 STA     _tcpNextPort
-@sep_ok         RTS
+                RTS
 
 ;------------------------------------------------------------------------------
 ; _So_UdpPeer - C=1 if the descriptor at _sockTmpOff is a connected datagram

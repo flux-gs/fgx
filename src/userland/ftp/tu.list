@@ -1,0 +1,7 @@
+# ftp(1) translation units after ftp.c.
+src/userland/ftp/cmds.c
+src/userland/ftp/cmdtab.c
+src/userland/ftp/glob.c
+src/userland/ftp/main.c
+src/userland/ftp/ruserpass.c
+src/userland/ftp/domacro.c
