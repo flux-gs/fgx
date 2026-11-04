@@ -5484,6 +5484,11 @@ build_arrow_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         g_ast[n].sym_f = leaf;
         g_ast[n].type = lt;
         g_ast[n].struct_id = leaf->struct_id;
+        /* A function-pointer leaf carries its signature, and a call may
+         * follow it directly: `p->s.fn(x)' (K&R A.7.3.2). */
+        g_ast[n].fn_sig = fnptr_based(lt) ? leaf->fn_sig_id : -1;
+        if (lt == LT_FN_PTR && g_cur.kind == TOK_LPAREN)
+            return build_postfix_value_chain(n);
         return n;
     }
 
