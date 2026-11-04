@@ -4650,9 +4650,14 @@ build_struct_elem_access(Local *lc, Global *gv, LocalType atype, int asid,
     g_ast[base].flags = (atype == LT_STRUCT_PTR) ? AF_BASE_LOAD : 0;
     g_ast[base].type = LT_STRUCT_PTR;
     g_ast[base].struct_id = asid;
-    if (g_cur.kind != TOK_DOT)
-        die(g_cur.line, g_cur.col,
-            "struct-array indexed access requires '.field'");
+    if (g_cur.kind != TOK_DOT) {
+        /* The whole element, a struct value -- which this compiler carries
+         * as its address (apple/fgx#259), so the element's address node IS
+         * the value, typed as the struct.  K&R A.7.17 lets it be the right
+         * side of a struct assignment. */
+        g_ast[base].type = LT_STRUCT;
+        return base;
+    }
     next_tok();
     if (g_cur.kind != TOK_IDENT)
         die(g_cur.line, g_cur.col, "field name");

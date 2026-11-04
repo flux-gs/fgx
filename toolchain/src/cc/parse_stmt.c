@@ -6706,9 +6706,13 @@ build_stmt(void)
                 expect(TOK_RBRACKET, "']'");
                 Field *f2 = NULL;
                 if (leaf->type == LT_STRUCT_ARRAY) {
-                    if (g_cur.kind != TOK_DOT)
-                        die(g_cur.line, g_cur.col,
-                            "struct-array element LHS requires '.field'");
+                    /* The whole element: a struct assignment (K&R A.7.17,
+                     * "both operands are structures or unions of the same
+                     * type"), which the expression layer copies. */
+                    if (g_cur.kind != TOK_DOT) {
+                        lex_peek_restore(&m8_pk);
+                        return build_comma_expr_stmt(m8_line, m8_col);
+                    }
                     next_tok();
                     if (g_cur.kind != TOK_IDENT)
                         die(g_cur.line, g_cur.col, "field name");
@@ -7138,9 +7142,13 @@ build_stmt(void)
                 expect(TOK_RBRACKET, "']'");
                 Field *f2 = NULL;
                 if (f->type == LT_STRUCT_ARRAY) {
-                    if (g_cur.kind != TOK_DOT)
-                        die(g_cur.line, g_cur.col,
-                            "struct-array element LHS requires '.field'");
+                    /* The whole element: a struct assignment (K&R A.7.17,
+                     * "both operands are structures or unions of the same
+                     * type"), which the expression layer copies. */
+                    if (g_cur.kind != TOK_DOT) {
+                        lex_peek_restore(&m8_pk);
+                        return build_comma_expr_stmt(m8_line, m8_col);
+                    }
                     next_tok();
                     if (g_cur.kind != TOK_IDENT)
                         die(g_cur.line, g_cur.col, "field name");

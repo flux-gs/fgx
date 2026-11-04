@@ -731,5 +731,6 @@
   "varargs_lint": 42,
   "blk_extern_struct": 42,
   "pp_paste": 42,
-  "extern_incomplete": 42
+  "extern_incomplete": 42,
+  "struct_elem_assign": 42
 }
