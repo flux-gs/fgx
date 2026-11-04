@@ -173,6 +173,12 @@ emit_mac_longptr(const char *tag, int tgt_seg, const char *name_fmt, ...)
     vsnprintf(name, sizeof name, name_fmt, ap);
     va_end(ap);
     g_n_datamac++;   /* P3-5 I3: feeds the FGX2_RELOC_COUNT trailer */
+    if (g_module_bank) {
+        /* A module has no linker: the same cell a &function takes, stamped
+         * with the image's bank at init. */
+        fprintf(g_data_out, "MOD_FN_PTR %s;%s\n", tag, name);
+        return;
+    }
     fprintf(g_data_out, "FGX2_LONG_PTR %s;%s;%d\n", tag, name, tgt_seg);
 }
 
@@ -193,6 +199,10 @@ emit_mac_dataptr(const char *tag, const char *name_fmt, ...)
     vsnprintf(name, sizeof name, name_fmt, ap);
     va_end(ap);
     g_n_datamac++;   /* P3-5 I3: feeds the FGX2_RELOC_COUNT trailer */
+    if (g_module_bank) {
+        fprintf(g_data_out, "MOD_FN_PTR %s;%s\n", tag, name);
+        return;
+    }
     fprintf(g_data_out, "LIBC_DATA_PTR %s;%s\n", tag, name);
 }
 
