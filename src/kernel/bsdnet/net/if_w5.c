@@ -63,7 +63,8 @@ struct	arpcom w5_ac;
 long	w5_iqdrops;		/* frames with no mbuf to go into */
 static	int w5_up;
 #ifdef NETPROBE
-int	w5_force_badlen;	/* the probe's seam, once */
+int	w5_force_badlen;	/* the probe's seams: a nonsense length, once */
+int	w5_hold;		/* no draining, so the ring overruns */
 #endif
 
 int w5output(), w5ioctl();
@@ -455,6 +456,12 @@ w5rint()
 
 	if (!w5_up)
 		return;
+#ifdef NETPROBE
+	if (w5_hold) {
+		w5start();
+		return;
+	}
+#endif
 	for (frames = 0; frames < W5_MAXBURST; frames++) {
 		w5_lock();
 		rsr = w5_rreg16(S0_RX_RSR);

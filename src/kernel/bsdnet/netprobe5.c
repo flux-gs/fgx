@@ -74,7 +74,7 @@ callouts_verdict()
 	if (np_n35 != 1)
 		return (35);
 	d = np_fire35 - np_t0;
-	if (d < 30L || d > 38L)
+	if (d < 30L || d > 120L)
 		return (35);
 	if (np_n36 != 0)
 		return (36);

@@ -1,0 +1,53 @@
+{
+ "name": "netftp",
+ "description": "Hardware TCP beside the kernel stack: with socket 0 in MACRAW, a passive ftp get over sockets 1-3 from a real server, checked with sum(1) against the host's copy. The chip must route by port. The shipping rc.local is staged back, because the suite's starts inetd and ntpd, which with socket 0 gone leave ftp no socket for data. NOT in the gate: a real server. Only means anything at kernel.netprobe = 1.",
+ "command": "sh /etc/netftp.sh",
+ "timeout_s": 500,
+ "mame_slots": [
+  "-sl1",
+  "uthernet2"
+ ],
+ "stage_files": [
+  {
+   "host": "disk_src/etc/rc.in",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  },
+  {
+   "host": "disk_src/etc/rc.local",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc.local",
+   "replace": true
+  },
+  {
+   "host": "tools/mame_test/fixtures/netftp.sh",
+   "prodos_dir": "/FGX/etc",
+   "name": "netftp.sh",
+   "replace": true
+  },
+  {
+   "host": "tools/mame_test/local/netftp.host",
+   "prodos_dir": "/FGX/etc",
+   "name": "netftp.host",
+   "replace": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "1110016 /tmp/netftp.tar",
+   "59370"
+  ],
+  "screen_lacks": [
+   "bsdnet: BROKEN",
+   "PANIC",
+   "BRK"
+  ]
+ },
+ "requires": {
+  "files": [
+   "tools/mame_test/local/netftp.host"
+  ],
+  "reason": "the ftp server's name, one line; the tree does not name a server"
+ }
+}

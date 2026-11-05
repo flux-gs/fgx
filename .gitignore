@@ -172,6 +172,7 @@ cfg/*.cfg
 !cfg/system.cfg
 disk/cfg/
 tools/mame_test/cfg/
+tools/mame_test/local/
 tools/mame_test/results.jsonl
 # Ad-hoc debugging manifests.  run.py discovers tests/*.json NON-recursively,
 # so anything here is deliberately outside the suite: keep one-off probes here

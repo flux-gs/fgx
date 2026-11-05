@@ -23,6 +23,11 @@ extern	struct ifnet loif;
 extern	struct arpcom w5_ac;
 extern	int w5_force_badlen;
 extern	long w5_iqdrops;
+extern	int w5_hold;
+extern	struct arptab arptab[];
+extern	int arptab_size;
+extern	int kc_ticks();
+extern	void w5_lock(), w5_unlock(), w5_setar(), w5_rxcopy();
 extern	int in_cksum(), ip_output();
 extern	int net_stack_hwm();
 extern	int kc_printstr();
@@ -117,8 +122,153 @@ bad_header()
 	return (0);
 }
 
-/* 43, 45, 46, each on the next frame the LAN happens to send. */
+/* 48: ARP and echo on the wire, to the gateway the chip holds, then 44: a burst
+ * of replies into a ring that is not being drained.  At kernel.netprobe = 4 the
+ * target is an unused LAN address instead, so ARP goes unanswered. */
+#define	BURST		45
+#define	NP_NOREPLY	0xC8		/* a host number nothing here uses */
 static int w5_state;
+static u_long np_gw;
+static long np_now, np_t;
+static long np_rx0, np_err0;
+static u_long np_rep0;
+
+static struct arptab *
+arpfind(hostaddr)
+	u_long hostaddr;
+{
+	register int i;
+	u_long a;
+
+	a = htonl(hostaddr);
+	for (i = 0; i < arptab_size; i++)
+		if (arptab[i].at_iaddr.s_addr == a)
+			return (&arptab[i]);
+	return ((struct arptab *)0);
+}
+
+static void
+logmac(at)
+	register struct arptab *at;
+{
+	static char msg[] = "bsdnet: arp resolved 00:00:00:00:00:00";
+	static char hex[] = "0123456789abcdef";
+	register int i;
+	register char *p = msg + 21;
+
+	for (i = 0; i < 6; i++, p += 3) {
+		p[0] = hex[(at->at_enaddr[i] >> 4) & 15];
+		p[1] = hex[at->at_enaddr[i] & 15];
+	}
+	kc_printstr(msg);
+}
+
+static int
+wire_start()
+{
+	static u_long gar;
+
+	w5_lock();
+	w5_setar(1);		/* GAR */
+	w5_rxcopy((char *)&gar, 4);
+	w5_unlock();
+	np_gw = ntohl(gar);
+#if NETPROBE == 4
+	np_gw = (np_gw & 0xFFFFFF00L) | NP_NOREPLY;
+#endif
+	np_rep0 = icmpstat.icps_inhist[ICMP_ECHOREPLY];
+	if (net_echo(np_gw) != 0)
+		kc_printstr("bsdnet: BROKEN 48");
+#if NETPROBE == 4
+	return (10);
+#else
+	return (4);
+#endif
+}
+
+static void
+noreply_sample()
+{
+	/* The ager clears an incomplete entry after ARPT_KILLI minutes. */
+	if (arpfind(np_gw) != 0)
+		return;
+	if (icmpstat.icps_inhist[ICMP_ECHOREPLY] != np_rep0)
+		kc_printstr("bsdnet: BROKEN 48");
+	else
+		kc_printstr("bsdnet: arp unresolved");
+	w5_state = 11;
+}
+
+static void
+wire_sample()
+{
+	register struct ifnet *ifp = &w5_ac.ac_if;
+	register struct arptab *at;
+	register int i;
+
+	kc_ticks(&np_now);
+	switch (w5_state) {
+	case 4:		/* the echo that had to wait for ARP */
+		if (icmpstat.icps_inhist[ICMP_ECHOREPLY] == np_rep0)
+			break;
+		at = arpfind(np_gw);
+		if (at == 0)
+			kc_printstr("bsdnet: BROKEN 48");
+		else
+			logmac(at);
+		kc_printstr("bsdnet: echo reply from gateway");
+		np_rep0 = icmpstat.icps_inhist[ICMP_ECHOREPLY];
+		np_t = np_now;
+		(void) net_echo(np_gw);
+		w5_state = 5;
+		break;
+	case 5:		/* one with ARP resolved: the round trip */
+		if (icmpstat.icps_inhist[ICMP_ECHOREPLY] == np_rep0)
+			break;
+		np_logn("bsdnet: echo rtt ", (int)(np_now - np_t), " ticks");
+		np_rx0 = ifp->if_ipackets;
+		np_err0 = ifp->if_ierrors;
+		w5_hold = 1;
+		for (i = 0; i < BURST; i++)
+			(void) net_echo(np_gw);
+		np_t = np_now;
+		w5_state = 6;
+		break;
+	case 6:		/* sent, and two seconds for the answers */
+		if (ifp->if_snd.ifq_head != 0) {
+			np_t = np_now;
+			break;
+		}
+		if (np_now - np_t < 120L)
+			break;
+		w5_hold = 0;
+		np_t = np_now;
+		w5_state = 7;
+		break;
+	case 7:		/* a second to drain, measured */
+		if (np_now - np_t < 60L)
+			break;
+		np_logn("bsdnet: burst of 45 got ", (int)(ifp->if_ipackets - np_rx0),
+		    " frames");
+		np_logn("bsdnet: burst errors ", (int)(ifp->if_ierrors - np_err0), "");
+		if (ifp->if_ierrors == np_err0 &&
+		    ifp->if_ipackets - np_rx0 >= (long)BURST)
+			kc_printstr("bsdnet: BROKEN 44");
+		np_rep0 = icmpstat.icps_inhist[ICMP_ECHOREPLY];
+		(void) net_echo(np_gw);
+		w5_state = 8;
+		break;
+	case 8:
+		if (icmpstat.icps_inhist[ICMP_ECHOREPLY] == np_rep0)
+			break;
+		kc_printstr("bsdnet: alive after burst");
+		np_logn("bsdnet: net stack ", net_stack_hwm(), " of 1024");
+		w5_state = 9;
+		break;
+	}
+}
+
+/* 43, 45, 46, each on the next frame the LAN happens to send. */
 static long np_ierr0, np_drop0;
 static struct mbuf *np_hoard;
 
@@ -156,7 +306,18 @@ w5_sample()
 		m_freem(np_hoard);
 		np_hoard = 0;
 		kc_printstr("bsdnet: w5 pool empty dropped");
-		w5_state = 3;
+		w5_state = wire_start();
+		break;
+	case 4:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+		wire_sample();
+		break;
+	case 10:
+		noreply_sample();
 		break;
 	}
 }
