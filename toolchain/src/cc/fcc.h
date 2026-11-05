@@ -729,11 +729,8 @@ extern int   g_loop_depth;
 typedef struct {
     int active;
     int varargs;
-    int has_struct;
 } RtlArgs;
 void rtl_begin(RtlArgs *r, int active, int varargs);
-void rtl_note_struct(RtlArgs *r);
-void rtl_finish(RtlArgs *r, int line, int col);
 
 /* --- Increment 3a (IN PROGRESS, additive): per-function expression AST ---
  * build_* consume tokens into g_ast[] WITHOUT emitting; walk_expr replays the

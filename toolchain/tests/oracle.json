@@ -612,6 +612,7 @@
   "strops": 42,
   "strsub": 42,
   "struct_arg_member": 42,
+  "struct_arg_olddecl": 42,
   "struct_arr": 42,
   "struct_arr_init": 42,
   "struct_arrow": 42,

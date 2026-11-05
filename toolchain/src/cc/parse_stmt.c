@@ -5798,6 +5798,14 @@ parse_struct_src(void)
     if (!struct_src_is_named_run()) {
         int ln = g_cur.line, cl = g_cur.col;
         int e = ast_build_assign();
+        /* `(*p)' arrives here and `*p' above, and A.7.2 has a parenthesized
+         * expression "type and value ... identical to those of the unadorned
+         * expression": va_arg(ap, struct s) expands to the former.  The source
+         * is the pointer, as it is above. */
+        if (g_ast[e].kind == N_DEREF_GENERAL &&
+            DECREF(g_ast[g_ast[e].a].type) == LT_STRUCT &&
+            g_ast[g_ast[e].a].struct_id >= 0)
+            return g_ast[e].a;
         if (g_ast[e].type != LT_STRUCT || g_ast[e].struct_id < 0)
             die(ln, cl, "struct assignment RHS is not a struct");
         return e;

@@ -548,30 +548,15 @@ fpr_addr_sym(Local *lc, Global *gv)
  * stack depth, retiring the record-and-reverse machinery
  * (ir_reverse_call_args) and its unreachable-by-reversal die()s (long/float
  * param reads, &param, struct-local fields — the abiprobe sb.st_mode find).
- * Only the by-value-struct guard remains: a struct VALUE as a vararg is
- * unproven against va_arg's slot walk, so it still fails loud.
+ * A struct value goes in its own window at its true position, which the
+ * callee's parameter offsets and va_arg's walk by sizeof both agree on
+ * (M46 struct_arg_olddecl).
  * ------------------------------------------------------------------------ */
 void
 rtl_begin(RtlArgs *r, int active, int varargs)
 {
     r->active = active;
     r->varargs = varargs;
-    r->has_struct = 0;
-}
-
-void
-rtl_note_struct(RtlArgs *r) { if (r->varargs) r->has_struct = 1; }
-
-/* After the arg loop, before the call is emitted.  Only a by-value struct
- * passed to a genuine varargs/`()` callee is rejected — the uniform R-to-L
- * ordering (active) is otherwise universal and unguarded. */
-void
-rtl_finish(RtlArgs *r, int line, int col)
-{
-    if (r->varargs && r->has_struct)
-        die(line, col,
-            "right-to-left varargs ABI: a by-value struct argument is not "
-            "yet supported in a variadic call");
 }
 
 
@@ -3680,9 +3665,18 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
          * printf, so this program needs libc's float printer (main.c). */
         if (!decl && (at == LT_FLOAT || at == LT_DOUBLE))
             g_fltused = 1;
-        if (decl && pstruct_ids != NULL &&
-            ptypes[idx] == LT_STRUCT) {
-            int psid = pstruct_ids[idx];
+        /* A.7.3.2: "a copy is made of each argument; all argument-passing is
+         * strictly by value".  With no parameter type in scope, the argument's
+         * own struct type says how much to copy. */
+        int psid = -1, byval = 0;
+        if (decl && pstruct_ids != NULL && ptypes[idx] == LT_STRUCT) {
+            psid = pstruct_ids[idx];
+            byval = 1;
+        } else if (!decl && at == LT_STRUCT) {
+            psid = g_ast[arg].struct_id;
+            byval = 1;
+        }
+        if (byval) {
             int nb = (g_structs[psid].total_size + 1) & ~1;
             /* By-value copy on FPRs (P3-2.4, retires the arg copy's
              * _fcc_ptr2 staging): src = the walked &struct (struct
@@ -3698,7 +3692,6 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
             ks = -1;
             g_s_delta += nb;
             total_arg_bytes += nb;
-            rtl_note_struct(rtl);
         } else if ((decl &&
                     is_ptr_type(ptypes[idx])) ||
                    (!decl && is_ptr_type(at))) {
@@ -8669,7 +8662,6 @@ walk_expr_body(int n)
                                          g_fn_sigs[sig].param_types, NULL,
                                          g_fn_sigs[sig].n_params, -1, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         call_stashed_fnptr(total_arg_bytes, g_ast[n].line, g_ast[n].col);
         g_expr_type      = g_fn_sigs[sig].return_type;
         g_expr_struct_id = g_fn_sigs[sig].sret_sid;
@@ -8780,7 +8772,6 @@ walk_expr_body(int n)
                                          g_fn_sigs[sig].param_types, NULL,
                                          g_fn_sigs[sig].n_params, -1, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         {   /* P3-2.5b: the fn-ptr value rides an FPR into the dispatch
              * (locals via the 2.5a native IR op, globals native). */
             int kc = fpr_load_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
@@ -8813,7 +8804,6 @@ walk_expr_body(int n)
                                          g_funcs[fn_idx].n_params,
                                          g_funcs[fn_idx].n_fixed, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         emit_call(g_ast[n].name, g_ast[n].name_len, !g_pile);
         emit_drop_arg_bytes(total_arg_bytes,
                             (g_ast[n].flags & AF_STMT_DISCARD) != 0);
@@ -8974,7 +8964,6 @@ walk_expr_body(int n)
                                          g_fn_sigs[sig].param_types, NULL,
                                          g_fn_sigs[sig].n_params, -1, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         {   /* P3-2.5b: the stored (offset,bank) field pair rides an FPR
              * into the dispatch.  The stored bank is real under
              * --far-calls (FGX2_LONG_PTR reloc); single-bank dispatch
