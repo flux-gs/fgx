@@ -17,6 +17,7 @@ int net_in_intr;	/* nonzero while netintr runs; net_asm.s sets it */
 
 #ifdef NETPROBE
 int (*np_hook)();
+int (*np_tail)();	/* after the loop: what this entry did is visible */
 int np_entries;
 #endif
 
@@ -45,5 +46,9 @@ netintr()
 		if (bits & (1 << NETISR_RAW))	/* last: the others schedule it */
 			rawintr();
 	} while (netisr);
+#ifdef NETPROBE
+	if (np_tail)
+		(*np_tail)();
+#endif
 	return (0);
 }

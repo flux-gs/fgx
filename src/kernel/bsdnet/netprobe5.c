@@ -7,11 +7,12 @@ extern void sleep();
 #endif
 
 extern int (*np_hook)();
+extern int (*np_tail)();
 extern int np_entries;
 extern int kc_printstr();
 extern unsigned net_stack_bot();
 extern int kc_ticks();
-extern void np6_sample();
+extern int np6_sample();
 extern int netprobe6();
 extern void timeout(), untimeout();
 extern int np_slowruns;	/* machine/net_callout.c: pfslowtimo's runs */
@@ -122,7 +123,6 @@ hook(bits)
 
 	np_passes++;
 	callouts_sample();
-	np6_sample();
 	if (!np_oncedone) {
 		np_oncedone = 1;
 		/* 32: on netintr's own stack */
@@ -150,6 +150,7 @@ int
 netprobe5()
 {
 	np_hook = hook;
+	np_tail = np6_sample;
 	schednetisr(NETISR_NS);
 	/* 31: not synchronous */
 	if (np_passes != 0)

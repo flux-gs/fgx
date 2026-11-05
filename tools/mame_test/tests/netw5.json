@@ -1,7 +1,7 @@
 {
  "name": "netw5",
  "description": "The MACRAW driver on the host's real network (NOT in the gate: a real DHCP server and LAN traffic). The release /etc/rc is staged back so /etc/netstart takes a lease, then the network modules load and the driver attaches over what DHCP left in the chip. Only means anything at kernel.netprobe = 1.",
- "command": "/testbin/ifcprobe; modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; sleep 70; dmesg | tail -22",
+ "command": "/testbin/ifcprobe; modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; sleep 70; dmesg | tail -24",
  "timeout_s": 300,
  "mame_slots": ["-sl1", "uthernet2"],
  "stage_files": [

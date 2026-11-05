@@ -54,7 +54,7 @@ np_logn(s, n, tail)
 	for (q = s; *q; q++)
 		*p++ = *q;
 	for (div = 10000; div > 0; div /= 10) {
-		d = (n / div) % 10;
+		d = ((unsigned)n / div) % 10;
 		if (d || div == 1 || p[-1] != ' ')
 			*p++ = '0' + d;
 	}
@@ -132,6 +132,7 @@ static u_long np_gw;
 static long np_now, np_t;
 static long np_rx0, np_err0;
 static u_long np_rep0;
+static long np_rxlast, np_tlast;
 
 static struct arptab *
 arpfind(hostaddr)
@@ -243,11 +244,18 @@ wire_sample()
 			break;
 		w5_hold = 0;
 		np_t = np_now;
+		np_tlast = np_now;
+		np_rxlast = ifp->if_ipackets;
 		w5_state = 7;
 		break;
 	case 7:		/* a second to drain, measured */
+		if (ifp->if_ipackets != np_rxlast) {
+			np_rxlast = ifp->if_ipackets;
+			np_tlast = np_now;
+		}
 		if (np_now - np_t < 60L)
 			break;
+		np_logn("bsdnet: burst drained in ticks ", (int)(np_tlast - np_t), "");
 		np_logn("bsdnet: burst of 45 got ", (int)(ifp->if_ipackets - np_rx0),
 		    " frames");
 		np_logn("bsdnet: burst errors ", (int)(ifp->if_ierrors - np_err0), "");
@@ -323,7 +331,7 @@ w5_sample()
 }
 
 /* Called from the hook on every netintr entry. */
-void
+int
 np6_sample()
 {
 	w5_sample();
@@ -351,6 +359,7 @@ np6_sample()
 		}
 		break;
 	}
+	return (0);
 }
 
 int
