@@ -1,6 +1,6 @@
 /* netprobe -- the network modules' self-test: code banks over one data bank.
  * Built only at kernel.netprobe = 1.  This half is in bsdnet0, netprobe2.c in
- * bsdnet1.  Returns 0, or the first failed case. */
+ * bsdnet2.  Returns 0, or the first failed case. */
 int	np_seen0;		/* written here, read in bank 1 */
 extern	int np_seen1;		/* the reverse */
 int	np_common;		/* tentative in both files: one object */

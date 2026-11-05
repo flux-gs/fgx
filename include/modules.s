@@ -93,7 +93,9 @@ SYS_BLKPINZ             EQU     MOD_JT_BASE+$0E ; slot 2 (was SYS_BANKALLOC):
 ;       slot is the one place a module can ask for something the running
 ;       kernel does not have, and a refusal it can log beats a red border.
 ;       MX %00 in and out.  Your DBR is saved and restored.
-SYS_KCALL               EQU     MOD_JT_BASE+$12 ; slot 3 (was SYS_BANKFREE)
+SYS_KCALL               EQU     MOD_JT_BASE+$12 ; slot 3 (was SYS_BANKFREE); its bank byte
+                                                ; is the live kernel bank, which
+                                                ; bsdnet/machine/net_asm.s reads
 
 ; SYS_KCALL service numbers.  APPEND ONLY -- a module image baked these at
 ; build time, and NOTHING WILL CATCH A RENUMBER.  The build identity does

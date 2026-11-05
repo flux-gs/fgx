@@ -2127,7 +2127,7 @@ def emit(tools, out_path):
     # A gated line of split.list builds only when its key is on, and the gate
     # also reaches the compile, since bsdnet_init calls the probe.
     bn_stems, bn_objs, bn_link = [], [], []
-    bn_flags = " ".join(f"-D{k.split('.')[1].upper()}"
+    bn_flags = " ".join(f"-D{k.split('.')[1].upper()}={cfg[k]}"
                         for k in ("kernel.netprobe",) if cfg.get(k, "0") != "0")
     with open(os.path.join(ROOT, "src/kernel/bsdnet/split.list")) as _f:
         for _l in _f:

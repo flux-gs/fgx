@@ -357,6 +357,8 @@ mod_init        MX      %00
                            listing, table, "--bank", f"{org('d') >> 16:02X}", "--allow-empty"],
                           stdout=subprocess.DEVNULL)
     listing = assemble(workdir, "d")
+    subprocess.check_call([sys.executable, os.path.join(ROOT, "tools/check_mx.py"), listing],
+                          stdout=subprocess.DEVNULL)
     dsyms = symbol_addresses(listing, "d")
     for name in ("bn_banks", "bn_links"):
         if name not in dsyms:

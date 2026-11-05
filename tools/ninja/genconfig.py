@@ -116,6 +116,10 @@ KHOME_STRIDE = 2048       # a home image: the page, then up to kstk of stack
 # check_bank0_geometry.py the way KSTK_SIZE is.
 SWITCH_SIZE = 512
 LC_BANK_TOP = 0xE000      # the mapped $D000 bank ends where the flat 8 KB begins
+# netintr's stack, directly below it.  The drain reaches the network code from
+# the idle loop as well as from syscall exit, so the chain cannot be charged to
+# the scheduler's stack.  A MIRROR of FGX_STK_NET_SIZE, held equal the same way.
+NET_STK_SIZE = 1024
 
 # THE INTERRUPT-TIME KERNEL-C CONTEXT (apple/fgx#108 T6, 2026-08-26).
 #
@@ -208,13 +212,14 @@ def derive(nproc, kslots=6, kstk=1216):
     # The slot direct pages, in the mapped $D000 bank below the scheduler's
     # stack.
     switch_base = LC_BANK_TOP - SWITCH_SIZE
+    net_base = switch_base - NET_STK_SIZE
     kslot_dp_top = KSLOT_DP_BASE + kslots * 256
-    if kslot_dp_top > switch_base:
+    if kslot_dp_top > net_base:
         raise SystemExit(
             f"genconfig: kernel.kslots = {kslots} slot direct pages end at "
-            f"${kslot_dp_top:04X}, past the scheduler's stack at "
-            f"${switch_base:04X}; the $D000 bank holds at most "
-            f"{(switch_base - KSLOT_DP_BASE) // 256} of them.")
+            f"${kslot_dp_top:04X}, past netintr's stack at "
+            f"${net_base:04X}; the $D000 bank holds at most "
+            f"{(net_base - KSLOT_DP_BASE) // 256} of them.")
     # The home images: one per pid, in one bank.
     if 256 + kstk > KHOME_STRIDE:
         raise SystemExit(
@@ -253,6 +258,7 @@ def derive(nproc, kslots=6, kstk=1216):
         "CFG_STK_BOOT": f"${boot_stk:04X}",
         "CFG_KHOME_STRIDE": str(KHOME_STRIDE),
         "CFG_STK_SWITCH": f"${switch_base:04X}",
+        "CFG_STK_NET": f"${net_base:04X}",
         "CFG_STK_ARENA_PAGES": str(arena_pages),
     }
 
@@ -382,7 +388,7 @@ def _selftest():
     d = derive(10)
     for name, want in (("CFG_STK_KTASKS", "$E000"), ("CFG_BLK_STAGE", "$1800"),
                        ("CFG_STK_ARENA", "$1A00"), ("CFG_DP_KERNELC", "$BF00"),
-                       ("CFG_STK_SWITCH", "$DE00"),
+                       ("CFG_STK_SWITCH", "$DE00"), ("CFG_STK_NET", "$DA00"),
                        ("CFG_DP_KERNELC_IRQ", "$FC80"), ("CFG_STK_KIRQ", "$FD80"),
                        ("CFG_KSLOT_DP", "$D000"), ("CFG_STK_BOOT", "$F7C0"),
                        ("CFG_KHOME_STRIDE", "2048"),

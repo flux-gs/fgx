@@ -106,10 +106,44 @@ net_hookinit    MX      %00
                 PLB
                 RTL
 
+; net_stack_bot() - the lowest address of netintr's stack.
+net_stack_bot   MX      %00
+                LDA     #FGX_STK_NET
+                RTL
+
+; net_stack_paint() - fill it, so net_stack_hwm can read how deep it has been.
+net_stack_paint MX      %00
+                LDX     #FGX_STK_NET_SIZE-2
+                LDA     #$A5A5
+@sp_l           STAL    $000000+FGX_STK_NET,X
+                DEX
+                DEX
+                BPL     @sp_l
+                RTL
+
+; net_stack_hwm() - the bytes of it ever used.
+net_stack_hwm   MX      %00
+                LDX     #0
+@hw_l           LDAL    $000000+FGX_STK_NET,X
+                CMP     #$A5A5
+                BNE     @hw_d
+                INX
+                INX
+                CPX     #FGX_STK_NET_SIZE
+                BCC     @hw_l
+@hw_d           TXA
+                EOR     #$FFFF
+                SEC
+                ADC     #FGX_STK_NET_SIZE
+                RTL
+
 ; netintr_enter - the drain calls this.  D is already kernel C's: the tty bank's
-; bracket set it.  DBR is set here to the data bank.
+; bracket set it.  DBR is set here to the data bank.  S moves to netintr's stack,
+; whose floor stands in for the caller's while it is there.  The idle site drains
+; with I set, and the protocols run with it clear; the caller gets its own back.
 netintr_enter   MX      %00
                 PHB
+                PHP
                 PHK
                 PLB
                 SEP     #$20
@@ -119,10 +153,29 @@ netintr_enter   MX      %00
                 PLB
                 REP     #$20
                 MX      %00
+                TSC
+                TAX
+                LDA     _fcc_stkfloor
+                TAY
+                LDA     #FGX_STK_NET_TOP
+                TCS
+                PHX
+                PHY
+                LDA     #FGX_STK_NET+FCC_STK_FLOOR_MARGIN
+                STA     _fcc_stkfloor
+                LDA     #1
+                STA     |net_in_intr
+                CLI
                 PHK
                 PEA     @ret-1
                 PHK
                 PEA     netintr-1
                 RTL
-@ret            PLB
+@ret            STZ     |net_in_intr
+                PLA
+                STA     _fcc_stkfloor
+                PLA
+                TCS
+                PLP
+                PLB
                 RTL

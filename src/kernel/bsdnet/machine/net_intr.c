@@ -12,6 +12,8 @@
 
 extern int ipintr(), rawintr();
 
+int net_in_intr;	/* nonzero while netintr runs; net_asm.s sets it */
+
 #ifdef NETPROBE
 int (*np_hook)();
 int np_entries;

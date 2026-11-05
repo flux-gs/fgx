@@ -1,10 +1,10 @@
 {
  "name": "netprobe",
  "description": "The network modules on the machine: code banks over one data bank, linked at load. Only means anything at kernel.netprobe = 1.",
- "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; dmesg | tail -4",
+ "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; dmesg | tail -5",
  "timeout_s": 40,
  "expect": {
-  "screen_contains": ["bsdnet: ok", "bsdnet: netintr first pass", "bsdnet: netintr second pass, same entry", "fgx#"],
+  "screen_contains": ["bsdnet: ok", "bsdnet: netintr on its stack", "bsdnet: netintr first pass", "bsdnet: netintr second pass, same entry", "fgx#"],
   "screen_lacks": ["bsdnet: BROKEN", "bsdnet: no", "BRK", "PANIC", "GUARD stkhwm"]
  },
  "requires": {

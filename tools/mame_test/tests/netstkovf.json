@@ -1,0 +1,17 @@
+{
+ "name": "netstkovf",
+ "description": "A netintr that runs off its 1024-byte stack halts through _fcc_stkoflow with the report naming that stack's floor, instead of writing into the slot pages below it. Only means anything at kernel.netprobe = 2.",
+ "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; echo NOT''REACHED",
+ "timeout_s": 40,
+ "exit_on_prompt": false,
+ "memory_regions": [{"name": "trapmagic", "addr": 784, "len": 2}, {"name": "trapfloor", "addr": 790, "len": 2}],
+ "expect": {
+  "screen_contains": ["bsdnet: netintr on its stack"],
+  "screen_lacks": ["NOTREACHED", "bsdnet: BROKEN"],
+  "memory": [{"name": "trapmagic", "hex_eq": "d0c5"}, {"name": "trapfloor", "hex_eq": "80da"}]
+ },
+ "requires": {
+  "config": {"kernel.netprobe": "2"},
+  "reason": "the overflowing hook is compiled in only at kernel.netprobe = 2"
+ }
+}

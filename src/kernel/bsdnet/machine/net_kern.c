@@ -12,6 +12,7 @@
 
 extern	int kc_sleep(), kc_sleepi(), kc_wakeup(), kc_panic();
 extern	long kc_time(), kc_ticks();
+extern	int net_in_intr;
 
 struct	user u;
 int	hz = 60;
@@ -98,6 +99,8 @@ sleep(chan, pri)
 	caddr_t chan;
 	int pri;
 {
+	if (net_in_intr)
+		panic("sleep in netintr");
 	if ((pri & PRIMASK) > PZERO)
 		(void) kc_sleepi(chan);
 	else

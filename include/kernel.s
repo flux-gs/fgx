@@ -411,6 +411,15 @@ FGX_STK_SWITCH_SIZE EQU 512
 FGX_STK_SWITCH  EQU     CFG_STK_SWITCH  ; DERIVED: LC_BANK_TOP - SWITCH_SIZE
 FGX_STK_SWITCH_TOP EQU  CFG_STK_SWITCH+FGX_STK_SWITCH_SIZE-1
 
+; netintr's stack, directly below the scheduler's, entered from the deferred-work
+; drain by the network modules.  netintr never sleeps and the drain does not
+; re-enter, so one stack serves both drain sites.  The modules paint it when they
+; load; a kernel without them never touches it.  DERIVED; genconfig.py mirrors
+; the size.
+FGX_STK_NET_SIZE EQU    1024
+FGX_STK_NET     EQU     CFG_STK_NET     ; DERIVED: FGX_STK_SWITCH - NET_SIZE
+FGX_STK_NET_TOP EQU     CFG_STK_NET+FGX_STK_NET_SIZE-1
+
 ; P3-3 3.2b: the fcc prologue overflow guard reads a per-task hardware-stack
 ; floor from a fixed byte in the task's DP page; posix_spawn seeds it after
 ; Task_AllocStack (process.s).  These MUST match the fcc runtime:
