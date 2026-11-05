@@ -73,7 +73,7 @@ For the maintainer's review.  Task 7 writes the accepted ones into the spec.
 
 `NCALLOUT` is 20.  `conf/param.c`'s `NCALL` sizes a whole kernel; this table holds only what the stack arms: `pfslowtimo`, `pffasttimo`, `if_slowtimo`, `arptimer`, with room for the driver and for S3.  Overflow panics, as upstream's does.
 
-The heartbeat marks the drain every 8th tick, about 133 ms, by adding to `_HBTickTask`'s body: `LDA _kSystemTicks / AND #7 / BNE +3 / INC _kTtyOutAny`, 11 bytes.  That also makes the driver's backstop poll (Task 4).  Its cost on a kernel with no network modules is one `kc_ttdrain` line scan 7.5 times a second.
+The heartbeat marks the drain every 8th tick, about 133 ms, by adding to `_HBTickTask`'s body: `LDA _kSystemTicks / AND #7 / BNE +3 / INC _kTtyOutAny`, 11 bytes.  That also makes the driver's backstop poll (Task 4).  Its cost on a kernel with no network modules is one `kc_ttdrain` line scan 7.5 times a second.  The maintainer ruled to keep the constant and measure that cost in Task 7; a 2-byte mask cell the modules set is the fallback if it shows.  This step also corrects `net_hooks.s`'s header, which says a kernel with no modules pays nothing new.
 
 - [ ] **Step 1: Write the failing cases:** case 35, `timeout(f, 0, 30)` has not fired at once, and fires once after 30 ticks within a bound of 8 more; case 36, `untimeout` before it fires stops it; case 37, three armed out of order fire in order of expiry; case 38, `pfslowtimo` has run at least once, read from a counter the hook samples, so domaininit's timers really do run.  The answers arrive after load, so the hook logs `bsdnet: callouts ok` or `bsdnet: BROKEN <n>`.
 - [ ] **Step 2: Run them.**  Expected: FAIL, the stubs do nothing.
@@ -164,7 +164,7 @@ This is spec S2's proof.
 **Files:**
 - Modify: `docs/history/plans/2026-11-03-net-multiplex-design.md`, `docs/CHANGELOG.md` if the branch's convention wants it
 
-- [ ] **Step 1: Measure and record in spec sections 5 and 7:** the module footprint in banks; `net stack <n> of 1024` after echoes and a flood; round-trip time of the echo; frames per second `w5rint` drains in the flood; drop counts.  Update the risks.
+- [ ] **Step 1: Measure and record in spec sections 5 and 7:** the module footprint in banks; `net stack <n> of 1024` after echoes and a flood; round-trip time of the echo; frames per second `w5rint` drains in the flood; drop counts; and the heartbeat mark's cost on a kernel with no network modules, the same idle workload with and without the mark.  Update the risks.
 - [ ] **Step 2: Update the spec.**  S2 done with its commit range; the calls above; what S3 inherits: `/etc/rc.in`, the single `u`, `sleep`'s signal answer, `s2_stubs.c`'s remainder.  If the W5100 datasheet changed anything in 4.1, correct it.
 - [ ] **Step 3: Verify.**  Expected: `tools/gate.sh` green at `kernel.netprobe = 0`; `netprobe`, `netpartial`, `netw5`, `netnoreply`, `netdumptap` green at 1, not cached.
 - [ ] **Step 4: Leave a hardware image and STOP.**  Build `kernel.netprobe = 1` to a named image outside the tree's default output, with one page in `docs/history/` naming the commands to type on the real IIgs and what each should print.  Spec section 7 requires the maintainer's run before S3 starts: "If a real chip does not hand port-unclaimed TCP and UDP to MACRAW while other sockets are open, the 'UDP first, TCP later' phasing goes".  Report and wait.
