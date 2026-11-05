@@ -69,6 +69,62 @@ int	w5_hold;		/* no draining, so the ring overruns */
 
 int w5output(), w5ioctl();
 
+/* What bpf.mod reads while the stack holds socket 0: a ring of records in netdump's
+ * shape, {caplen.w, datalen.w, frame...}, found through bsdnetd's vtable.  The
+ * layout is bpf.s's TAP_* too.  Only task-level code and netintr touch it, and
+ * neither interrupts the other. */
+#define	TAP_NREC	8
+#define	TAP_SNAP	60
+struct {
+	int	t_up;		/* the driver is attached */
+	int	t_active;	/* bpf is open */
+	int	t_head, t_tail;
+	int	t_sat;		/* frames lost to a full ring */
+	char	t_rec[TAP_NREC][4 + TAP_SNAP];
+} w5_tapr;
+
+/* The first bytes of a frame: hdr if there is one, then the chain after skip. */
+static void
+w5_tap(hdr, m, skip, datalen)
+	char *hdr;
+	register struct mbuf *m;
+	int skip, datalen;
+{
+	register int n, room;
+	register char *r;
+	int next;
+
+	if (!w5_tapr.t_active)
+		return;
+	next = (w5_tapr.t_head + 1) & (TAP_NREC - 1);
+	if (next == w5_tapr.t_tail) {
+		w5_tapr.t_sat++;
+		return;
+	}
+	r = w5_tapr.t_rec[w5_tapr.t_head];
+	room = datalen < TAP_SNAP ? datalen : TAP_SNAP;
+	((int *)r)[0] = room;
+	((int *)r)[1] = datalen;
+	r += 4;
+	if (hdr) {
+		bcopy(hdr, r, sizeof(struct ether_header));
+		r += sizeof(struct ether_header);
+		room -= sizeof(struct ether_header);
+	}
+	for (; m && room > 0; m = m->m_next) {
+		n = m->m_len - skip;
+		if (n > room)
+			n = room;
+		if (n > 0) {
+			bcopy(mtod(m, char *) + skip, r, n);
+			r += n;
+			room -= n;
+		}
+		skip = 0;
+	}
+	w5_tapr.t_head = next;
+}
+
 static void
 w5_cmd(cmd)
 	int cmd;
@@ -184,6 +240,7 @@ w5attach()
 	ifp->if_output = w5output;
 	if_attach(ifp);
 	w5_up = 1;
+	w5_tapr.t_up = 1;
 	return (1);
 }
 
@@ -276,6 +333,7 @@ w5start()
 		w5_cmd(CR_SEND);
 		w5_unlock();
 		w5_ac.ac_if.if_opackets++;
+		w5_tap((char *)0, m, 0, len);
 		m_freem(m);
 	}
 }
@@ -505,6 +563,7 @@ w5rint()
 			continue;
 		}
 		ifp->if_ipackets++;
+		w5_tap((char *)&eh, m, sizeof(struct ifnet *), (int)len - 2);
 		w5input(&eh, m);
 	}
 	setsoftnet();		/* more may be waiting */

@@ -1,0 +1,20 @@
+{
+ "name": "netdumptap",
+ "description": "netdump over the kernel stack: bpf.mod leaves socket 0 alone and reads a ring the driver fills, so both directions of the probe's ARP and echo appear. NOT in the gate: a real network. Only means anything at kernel.netprobe = 1.",
+ "command": "sh /etc/netdumptap.sh",
+ "timeout_s": 180,
+ "mame_slots": ["-sl1", "uthernet2"],
+ "stage_files": [
+  {"host": "disk_src/etc/rc.in", "prodos_dir": "/FGX/etc", "name": "rc", "replace": true},
+  {"host": "disk_src/etc/rc.local", "prodos_dir": "/FGX/etc", "name": "rc.local", "replace": true},
+  {"host": "tools/mame_test/fixtures/netdumptap.sh", "prodos_dir": "/FGX/etc", "name": "netdumptap.sh", "replace": true}
+ ],
+ "expect": {
+  "screen_contains": ["listening on /dev/bpf0", "ARP who-has", "ARP is-at", "ICMP echo req", "ICMP echo rep"],
+  "screen_lacks": ["cannot open", "bsdnet: BROKEN", "PANIC", "BRK"]
+ },
+ "requires": {
+  "config": {"kernel.netprobe": "1"},
+  "reason": "the wire echo is the probe's, compiled in only at kernel.netprobe = 1"
+ }
+}

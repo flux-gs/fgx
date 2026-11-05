@@ -1605,7 +1605,8 @@ BPF_FrameLen    EQU  6      ; 2 bytes: drain scratch — MACRAW prefix length (p
 BPF_CapLen      EQU  8      ; 2 bytes: drain scratch — min(payload, BPF_SNAPLEN)
 BPF_Rxrd        EQU  10     ; 2 bytes: drain scratch — Sn_RX_RD value
 BPF_SnapBuf     EQU  12     ; 66 bytes: one record {caplen.w, datalen.w, frame...}
-BPF_BLK_SIZE    EQU  80     ; total block size (rounded up from 78)
+BPF_TapPtr      EQU  78     ; 4 bytes: bsdnet's tap ring, 0 when capture is direct
+BPF_BLK_SIZE    EQU  82     ; total block size
 
 ;------------------------------------------------------------------------------
 ; Compile-time guard.  Merlin32 `ERR expr` fails if expr is non-zero;

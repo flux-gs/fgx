@@ -293,6 +293,7 @@ def main():
                 DA      VT_END
 bn_banks        DS      """ + str(BANKBYTES) + """               ; each module's bank, bsdnetd first
 bn_links        DS      """ + str(BANKBYTES) + """               ; each module's _bnLink, in its own bank
+bn_tap          DA      w5_tapr             ; bpf.mod reads the driver's ring here
 """
         s += stubs(dstubs, "d")
         s += link_routine()

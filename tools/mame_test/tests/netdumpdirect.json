@@ -1,0 +1,14 @@
+{
+ "name": "netdumpdirect",
+ "description": "netdump with no network stack loaded: bpf.mod claims socket 0 itself and captures two LAN frames, reading them through /dev/bpf0's d_read. The suite's rc.local has already loaded it, and its ntpd makes the traffic. NOT in the gate: a real network.",
+ "command": "netdump 2",
+ "timeout_s": 150,
+ "mame_slots": ["-sl1", "uthernet2"],
+ "stage_files": [
+  {"host": "disk_src/etc/rc.in", "prodos_dir": "/FGX/etc", "name": "rc", "replace": true}
+ ],
+ "expect": {
+  "screen_contains": ["listening on /dev/bpf0", "netdump: 2 packets"],
+  "screen_lacks": ["cannot open", "PANIC", "BRK"]
+ }
+}
