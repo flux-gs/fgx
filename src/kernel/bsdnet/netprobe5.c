@@ -11,6 +11,8 @@ extern int np_entries;
 extern int kc_printstr();
 extern unsigned net_stack_bot();
 extern int kc_ticks();
+extern void np6_sample();
+extern int netprobe6();
 extern void timeout(), untimeout();
 extern int np_slowruns;	/* machine/net_callout.c: pfslowtimo's runs */
 
@@ -120,6 +122,7 @@ hook(bits)
 
 	np_passes++;
 	callouts_sample();
+	np6_sample();
 	if (!np_oncedone) {
 		np_oncedone = 1;
 		/* 32: on netintr's own stack */
@@ -160,5 +163,6 @@ netprobe5()
 	timeout(f37, (caddr_t)1L, 20);	/* 37: armed out of order */
 	timeout(f37, (caddr_t)3L, 40);
 	timeout(f37, (caddr_t)2L, 30);
+	return (netprobe6());
 	return (0);
 }

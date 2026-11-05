@@ -336,20 +336,14 @@ rather than trust the estimate.
   in module banks from the process bank pool (accepted, section 3); S2 and
   S4 report the real figure.
 - **The chip's duplicate ARP replies** (4.1).
-- **The kernel stack, and S2 opens with it.**  `netintr` runs on one of two
-  stacks.  At syscall exit it is the task's `kernel.kstk`, 1024 bytes.  In the idle
-  loop, the common case on a quiet machine, it is the scheduler's own
-  `FGX_STK_SWITCH`, **512 bytes**, whose only guard is a canary that reports.
-  `tools/net_stack_depth.py` (static, S1) puts the deepest `netintr` chain at about
-  460 bytes with `PRU_CONTROL` and the sleeping allocator taken out, and `sosend`
-  at 336; it still counts `sonewconn` -> `tcp_usrreq` chains a packet may not take,
-  and the driver is a 40-byte guess.  With about 30 bytes of entry and an interrupt
-  frame, 460 does not safely fit 512.  Before any protocol code runs from the drain,
-  S2 measures the reachable chain and picks: keep it there with a halting canary,
-  switch to a stack of the network's own around `netintr`, or run it only at syscall
-  exit and have the idle arm wake a task.  `tools/mame_test/kstkhwm_check.py` paints
-  task stacks, not this one.  `FGX_KSTK_SIZE`'s 512 bytes is the interrupt context's,
-  which is one more reason protocol code stays out of the interrupt.
+- **The kernel stack.**  `netintr` runs on a 1024-byte stack of its own,
+  `FGX_STK_NET`, with fcc's stack floor set so an overflow halts through
+  `_fcc_stkoflow`.  Both drain sites share it, since `netintr` never sleeps and the
+  drain does not re-enter.  `tools/net_stack_depth.py` (static) puts the deepest
+  `netintr` chain at 469 bytes, still counting `sonewconn` -> `tcp_usrreq` chains a
+  packet may not take, and with the driver a 40-byte guess.  Measured from the
+  stack's paint, a `lo0` echo reaches 330 bytes.  The measured figure on the wire is
+  in section 5.
 
 ## 8. Left to the builder
 

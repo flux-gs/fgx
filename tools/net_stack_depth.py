@@ -29,6 +29,8 @@ INDIRECT = {
     "arpresolve": OUTPUT,
     "arpwhohas": OUTPUT,
     "in_arpinput": OUTPUT,
+    "raw_usrreq": ["rip_output"],
+    "net_softclock": ["pfslowtimo", "pffasttimo", "if_slowtimo", "arptimer"],
     "sosend": USRREQ,
     "soreceive": USRREQ,
     "soclose": USRREQ,
@@ -73,6 +75,9 @@ INDIRECT = {
 LEAF = {"in_cksum": 15, "ifdriver": 40, "splimp": 4, "splnet": 4, "splhigh": 4,
         "splx": 3, "kc_sleep": 40, "kc_sleepi": 40, "kc_wakeup": 40, "kc_panic": 8,
         "kc_printstr": 16, "kc_ticks": 12, "kc_time": 12, "setsoftnet": 8}
+# in_control is PRU_CONTROL, an ioctl: every usrreq reaches it in the walk, and no
+# packet does.
+NOT_FROM_THE_DRAIN = {"in_control"}
 ROOTS = ["netintr", "sosend", "soreceive"]
 PUSH = {"PHA": 2, "PHX": 2, "PHY": 2, "PEI": 2, "PHP": 1, "PHB": 1, "PHD": 2,
         "PLA": -2, "PLX": -2, "PLY": -2, "PLP": -1, "PLB": -1, "PLD": -2}
@@ -145,6 +150,8 @@ def depth(fn, frames, calls, indirect, memo, path, notes):
         return memo[fn]
     if fn in LEAF:
         return LEAF[fn], [fn]
+    if fn in NOT_FROM_THE_DRAIN:
+        return 0, []
     if fn not in calls:
         notes.add("no body seen: " + fn)
         return 5, [fn]
