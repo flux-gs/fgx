@@ -259,6 +259,16 @@ MANIFESTS = {
         # at mod_init entry (DBR=kernel bank) to bind its own U2_* sites.
         ('_u2Slot',   '_u2Slot',   0, 'lo16'),
     ],
+    # bsdnet: the kernel network stack's W5100 driver (machine/w5_asm.s), which
+    # moves DBR to the live kernel bank for these.
+    'bsdnet': [
+        ('_u2Slot', '_u2Slot', 0, 'lo16'),
+        ('_u2SltBit', '_u2SltBit', 0, 'lo16'),
+        ('_u2Locked', '_u2Locked', 0, 'lo16'),
+        ('_u2Imr', '_u2Imr', 0, 'lo16'),
+        ('_u2RxReady', '_u2RxReady', 0, 'lo16'),
+        ('_w5SockInUse', '_w5SockInUse', 0, 'lo16'),
+    ],
     # net: the networking stack module (src/modules/net). Phase 1 = SYS_IFCONFIG.
     # The ifconfig scratch statics (_ifn*/_ifc*) STAY kernel-side in
     # ifconfig_sys.s and are reached DBR-relative (lo16, DBR=$02 during

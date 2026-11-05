@@ -82,6 +82,15 @@ def functions(path):
     return out
 
 
+def kern_id():
+    """Build-locked, as net.mod and bpf.mod are: the driver holds kernel addresses."""
+    with open(os.path.join(ROOT, "build/bsdnet/kernel_exports.s")) as f:
+        for line in f:
+            if line.startswith("KERN_BUILD_ID"):
+                return line.split()[2]
+    sys.exit("build_bsdnet: no KERN_BUILD_ID in build/bsdnet/kernel_exports.s")
+
+
 def header(m, bss="0"):
     b = org(m)
     n = NAME[m]
@@ -100,7 +109,7 @@ bn_hdr          ASC     'FGXM'
 bn_name         ASC     '{n}'
                 DS      {16 - len(n)}
                 DA      $0000
-                DA      $0000
+                DA      {kern_id()}
                 DS      4
 bn_text         EQU     *
 """
@@ -456,6 +465,8 @@ mod_init        MX      %00
         for p in RT_CODE:
             s += f"                PUT     {rel(os.path.join(ROOT, p), workdir)}\n"
         for a in asm[m]:
+            if os.path.basename(a) == "w5_asm.s":
+                s += "                PUT     ../kernel_exports.s\n"
             if os.path.basename(a) == "net_asm.s":
                 s += f"                PUT     {rel(os.path.join(ROOT, 'src/modules/common/kc_sys.s'), workdir)}\n"
             s += f"                PUT     {rel(a, workdir)}\n"
