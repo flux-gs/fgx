@@ -15,9 +15,11 @@ machine/net_kern	0
 machine/s2_stubs	0
 machine/net_asm.s	0
 machine/in_cksum.s	1
+machine/w5_asm.s	2
 net/af	2
 net/if	2
 net/if_loop	2
+net/if_w5	2
 net/raw_cb	2
 net/raw_usrreq	2
 net/route	2

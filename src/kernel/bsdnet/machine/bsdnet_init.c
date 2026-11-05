@@ -14,7 +14,7 @@
 #include "../netinet/in.h"
 
 extern int mbinit(), domaininit(), net_hookinit(), net_stack_paint();
-extern int loattach(), ifinit(), in_control();
+extern int loattach(), ifinit(), in_control(), w5attach(), w5address();
 extern void net_calloutinit();
 extern struct ifnet loif;
 #ifdef NETPROBE
@@ -43,6 +43,7 @@ bsdnet_init()
 	net_hookinit();		/* first: the initializers below may schedule */
 	net_calloutinit();
 	mbinit();
+	(void) w5attach();
 	loattach();
 	s = splimp();
 	ifinit();
@@ -50,6 +51,7 @@ bsdnet_init()
 	splx(s);
 	if (lo_up() != 0)
 		panic("lo0: no address");
+	(void) w5address();
 #ifdef NETPROBE
 	return (netprobe());
 #else

@@ -16,9 +16,13 @@
 #include "../netinet/ip.h"
 #include "../netinet/ip_var.h"
 #include "../netinet/ip_icmp.h"
+#include "../netinet/if_ether.h"
 #include "../netinet/icmp_var.h"
 
 extern	struct ifnet loif;
+extern	struct arpcom w5_ac;
+extern	int w5_force_badlen;
+extern	long w5_iqdrops;
 extern	int in_cksum(), ip_output();
 extern	int net_stack_hwm();
 extern	int kc_printstr();
@@ -113,10 +117,55 @@ bad_header()
 	return (0);
 }
 
+/* 43, 45, 46, each on the next frame the LAN happens to send. */
+static int w5_state;
+static long np_ierr0, np_drop0;
+static struct mbuf *np_hoard;
+
+static void
+w5_sample()
+{
+	register struct ifnet *ifp = &w5_ac.ac_if;
+	register struct mbuf *m;
+
+	if ((ifp->if_flags & IFF_UP) == 0)
+		return;
+	switch (w5_state) {
+	case 0:
+		if (ifp->if_ipackets == 0)
+			break;
+		kc_printstr("bsdnet: w5 received");
+		np_ierr0 = ifp->if_ierrors;
+		w5_force_badlen = 1;
+		w5_state = 1;
+		break;
+	case 1:
+		if (ifp->if_ierrors == np_ierr0)
+			break;
+		kc_printstr("bsdnet: w5 bad length reopened");
+		np_drop0 = w5_iqdrops;
+		while ((m = m_get(M_DONTWAIT, MT_DATA)) != 0) {
+			m->m_next = np_hoard;
+			np_hoard = m;
+		}
+		w5_state = 2;
+		break;
+	case 2:
+		if (w5_iqdrops == np_drop0)
+			break;
+		m_freem(np_hoard);
+		np_hoard = 0;
+		kc_printstr("bsdnet: w5 pool empty dropped");
+		w5_state = 3;
+		break;
+	}
+}
+
 /* Called from the hook on every netintr entry. */
 void
 np6_sample()
 {
+	w5_sample();
 	switch (np6_state) {
 	case 1:
 		/* Two passes of the same drain deliver the echo and its reply. */

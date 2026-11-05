@@ -11,7 +11,7 @@
 #include "../net/netisr.h"
 
 extern int ipintr(), rawintr();
-extern void net_softclock();
+extern void net_softclock(), w5rint();
 
 int net_in_intr;	/* nonzero while netintr runs; net_asm.s sets it */
 
@@ -30,6 +30,7 @@ netintr()
 	np_entries++;
 #endif
 	net_softclock();
+	w5rint();
 	do {
 		s = splhigh();
 		bits = netisr;

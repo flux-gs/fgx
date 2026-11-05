@@ -377,6 +377,8 @@ _Uthernet2_ISR  MX      %11
                 BRA     @u2i_shl
 @u2i_set        ORA     _u2RxReady              ; DBR=kernel-bank (SIM handler contract)
                 STA    |_u2RxReady
+                INC    |_kTtyOutAny             ; the network modules drain at the next
+                                                ;   soft site, if they are loaded
                 ; one-shot guard: disarm the W5100 IRQ (IMR=0) the instant we flag a
                 ; RECV, so the LEVEL-triggered RECV can't re-fire before foreground
                 ; drains the RX buffer (the lazy-ISR firehose that hung Phase 0b).
