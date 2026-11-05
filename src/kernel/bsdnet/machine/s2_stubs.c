@@ -1,23 +1,6 @@
 /* s2_stubs.c -- what a later phase replaces.  Nothing network-facing runs yet. */
 extern void panic();
 
-/* ponytail: S2's callout facility.  domaininit arms pfslowtimo and pffasttimo
- * through this, so at this phase a timer simply never fires. */
-void
-timeout(fun, arg, t)
-	int (*fun)();
-	char *arg;
-	int t;
-{
-}
-
-void
-untimeout(fun, arg)
-	int (*fun)();
-	char *arg;
-{
-}
-
 /* S3: a task behind a socket. */
 int selwait;
 

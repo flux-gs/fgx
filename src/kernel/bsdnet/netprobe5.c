@@ -10,6 +10,9 @@ extern int (*np_hook)();
 extern int np_entries;
 extern int kc_printstr();
 extern unsigned net_stack_bot();
+extern int kc_ticks();
+extern void timeout(), untimeout();
+extern int np_slowruns;	/* machine/net_callout.c: pfslowtimo's runs */
 
 static int np_passes;
 static int np_oncedone;
@@ -26,6 +29,89 @@ deep(n)
 }
 #endif
 
+/* 35-38.  The expiries land after the probe returns, so the hook samples them. */
+static long np_now, np_t0;
+static long np_fire35;
+static int np_n35, np_n36, np_done;
+static int np_order[4], np_norder;
+
+static int
+f35(arg, late)
+	caddr_t arg;
+	int late;
+{
+	kc_ticks(&np_fire35);
+	np_n35++;
+	return (0);
+}
+
+static int
+f36(arg, late)
+	caddr_t arg;
+	int late;
+{
+	np_n36++;
+	return (0);
+}
+
+static int
+f37(arg, late)
+	caddr_t arg;
+	int late;
+{
+	if (np_norder < 4)
+		np_order[np_norder++] = (int)(long)arg;
+	return (0);
+}
+
+static int
+callouts_verdict()
+{
+	long d;
+
+	if (np_n35 != 1)
+		return (35);
+	d = np_fire35 - np_t0;
+	if (d < 30L || d > 38L)
+		return (35);
+	if (np_n36 != 0)
+		return (36);
+	if (np_norder != 3 || np_order[0] != 1 || np_order[1] != 2 ||
+	    np_order[2] != 3)
+		return (37);
+	if (np_slowruns == 0)
+		return (38);
+	return (0);
+}
+
+static void
+callouts_sample()
+{
+	if (np_done)
+		return;
+	kc_ticks(&np_now);
+	if (np_now - np_t0 < 90L)
+		return;
+	np_done = 1;
+	switch (callouts_verdict()) {
+	case 0:
+		kc_printstr("bsdnet: callouts ok");
+		break;
+	case 35:
+		kc_printstr("bsdnet: BROKEN 35");
+		break;
+	case 36:
+		kc_printstr("bsdnet: BROKEN 36");
+		break;
+	case 37:
+		kc_printstr("bsdnet: BROKEN 37");
+		break;
+	default:
+		kc_printstr("bsdnet: BROKEN 38");
+		break;
+	}
+}
+
 static int
 hook(bits)
 	int bits;
@@ -33,6 +119,7 @@ hook(bits)
 	unsigned here;
 
 	np_passes++;
+	callouts_sample();
 	if (!np_oncedone) {
 		np_oncedone = 1;
 		/* 32: on netintr's own stack */
@@ -64,5 +151,14 @@ netprobe5()
 	/* 31: not synchronous */
 	if (np_passes != 0)
 		return (31);
+	kc_ticks(&np_t0);
+	timeout(f35, (caddr_t)0, 30);
+	if (np_n35 != 0)	/* 35: not at once */
+		return (35);
+	timeout(f36, (caddr_t)0, 10);
+	untimeout(f36, (caddr_t)0);
+	timeout(f37, (caddr_t)1L, 20);	/* 37: armed out of order */
+	timeout(f37, (caddr_t)3L, 40);
+	timeout(f37, (caddr_t)2L, 30);
 	return (0);
 }

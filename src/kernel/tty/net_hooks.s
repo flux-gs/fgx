@@ -3,8 +3,9 @@
 ;
 ; netintr runs where the tty bank's soft output work runs, at the sites that call
 ; _Tty_DrainOutPend: syscall exit and the idle loop.  No C context is live at
-; either, so the shared kernel-C register file is free.  Both exist already and
-; test one word, so a kernel with no network modules loaded pays nothing new.
+; either, so the shared kernel-C register file is free.  Both test one word.  The
+; heartbeat sets it every 8th tick for netintr's timers, so a kernel with no
+; network modules loaded pays one line scan that many times a second.
 ;
 ; A module reaches these slots from the live kernel bank + 2, and takes that bank
 ; from SYS_KCALL's bank-0 JML cell.

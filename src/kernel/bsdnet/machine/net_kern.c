@@ -11,7 +11,8 @@
 #include "time.h"
 
 extern	int kc_sleep(), kc_sleepi(), kc_wakeup(), kc_panic();
-extern	long kc_time(), kc_ticks();
+extern	long kc_time();
+extern	int kc_ticks();
 extern	int net_in_intr;
 
 struct	user u;
@@ -126,8 +127,12 @@ int
 mfkd(addr)
 	int *addr;
 {
-	if (addr == &lbolt)
-		return ((int)kc_ticks());
+	static long ticks;
+
+	if (addr == &lbolt) {
+		kc_ticks(&ticks);
+		return ((int)ticks);
+	}
 	return (*addr);
 }
 

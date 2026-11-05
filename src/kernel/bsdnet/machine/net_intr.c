@@ -11,6 +11,7 @@
 #include "../net/netisr.h"
 
 extern int ipintr(), rawintr();
+extern void net_softclock();
 
 int net_in_intr;	/* nonzero while netintr runs; net_asm.s sets it */
 
@@ -28,6 +29,7 @@ netintr()
 #ifdef NETPROBE
 	np_entries++;
 #endif
+	net_softclock();
 	do {
 		s = splhigh();
 		bits = netisr;
