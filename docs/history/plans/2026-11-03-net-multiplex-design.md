@@ -138,6 +138,27 @@ Made in this design (the designer's calls, open to the maintainer):
   runs only at the kernel's deferred-work drain, which kernel code reaches only
   by sleeping, as upstream allows.  This holds only while no protocol code runs
   from an interrupt: the driver's interrupt path may only queue.
+- **`netintr` has a 1024-byte stack of its own** (`FGX_STK_NET`, section 7).
+- **The modules stay out of `/etc/rc.in` until S3.**  Loading them takes socket 0
+  for good, and nothing yet uses the kernel stack.  The shipping `rc.local` starts
+  no daemon, so ftp still fits; with inetd and ntpd it does not.  S3 adds them when
+  UDP moves and a socket comes back.
+- **The drain copies plainly, and `ip_input` checksums.**  Folding the checksum into
+  the copy means changing ported code with no measured need yet; section 5's numbers
+  decide it at S4.
+- **The callout list is private to the network modules** (`machine/net_callout.c`,
+  20 entries), and `net_charge` brings it up to date before each insertion, since no
+  clock interrupt charges each tick.  A second user moves it.
+- **The driver addresses the chip through X, long-indexed from slot 0,** with no
+  patch table.  Not checked against a 65816 cycle table.
+- **The heartbeat marks the drain every 8th tick**, 11 core bytes, for timers and as
+  the driver's backstop poll.  It is unconditional: a kernel with no network modules
+  pays a `kc_ttdrain` scan 7.5 times a second, and section 5 measures that as nothing
+  visible.  A 2-byte mask cell the modules set is the fallback if that changes.
+- **bpf reads a ring in the network modules' data while the stack is attached,**
+  found through bsdnetd's vtable, so a boot without them pays 2 bytes of heap.
+- **`netintr_enter` opens interrupts.**  The idle site drains with I set, and protocol
+  code must not hold off the VBL.
 - **`netintr` shares `_Tty_DrainOutPend`'s drain.**  The cost is latency: about
   67 ms past a compute-bound C program, and until the next system call past an
   assembly or `goto` loop.
@@ -148,7 +169,10 @@ Made in this design (the designer's calls, open to the maintainer):
 
 Verified against the W5100 emulation the tests run on (Ample's MAME, source
 `ksherlock/mame` branch `a2uthernet2`, `src/devices/machine/w5100.cpp`),
-not yet against the WIZnet datasheet or real hardware (section 7):
+not yet against real hardware (section 7).  WIZnet's W5100 datasheet v1.1.6
+agrees on `Sn_MR` 0x04, socket 0 only, the 2-byte header and `MR_PB`, and is silent
+on MACRAW beside open sockets and on the MAC filter bit, which comes from Linux's
+`w5100.c` and the W5100S manual:
 
 - An incoming UDP or TCP packet goes to a hardware socket that claims its
   port; failing that, to the MACRAW socket if one is open; only failing
@@ -225,7 +249,7 @@ Each phase ends with the system working and the gate green.
 |---|---|---|
 | S0 | fcc prerequisites | the remaining items of the Track B S0 document: 3.2 `##`, 3.4 extern of an incomplete struct, 3.5 struct assignment into an array element, 3.6 address constants in static initializers, 3.7 `&` of any lvalue, 3.8 struct return by value.  3.1 landed in !399; 3.3 landed in #46 (`b2305ec`, the block-scope extern fix).  **Done** on feat/net-mux (`46dba3b`..`084ecce`), with three items the S0 audit found: a call through a function pointer at the end of a member chain, a typedef of a sized array, and `sizeof` of `*` applied to a member chain.  All 23 files of the port set then compile, under `-Dpdp11`, which S1 found to be the wrong arm (section 3); all of them, with the `net/` files added, compile under `fgx`.  Left for S1, all seams: `h/signal.h:129` lacks a `;`; `FMARK`/`FDEFER` and `FREAD`/`FWRITE` are defined nowhere in 2.11BSD's `h/` (4.3BSD-Reno `sys/file.h` has them); `uipc_domain.c`'s `ADDDOMAIN` pastes with the Reiser `x/**/domain`, which the port writes as `##`; and the PDP arms of `h/types.h` and `pdp/seg.h`. |
 | S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split.  **Done** on feat/net-mux (`f07f1da`..): `bsdnetd` and `bsdnet0`-`3` are built and staged, and no boot loads them; `modload` of all five on a `kernel.netprobe = 1` kernel runs the probe.  182 KB of code and a 41 KB data image, 35 KB of that the mbuf pool: five banks.  Callout and bpf stay in S2, as this table says; `in_cksum` landed here, since IP cannot link without it.  S2 inherits `machine/s2_stubs.c` (`timeout` does nothing, so no timer fires), one global `u`, which is not safe across a sleep and is S3's to fix, `printf` that logs only its format, C byte loops for `bcopy`, `sleep()` discarding `kc_sleepi`'s signal answer, which is S3's with `u`, and adding the modules to `/etc/rc.in`. |
-| S2 | substrate running | mbufs, domains/protosw, sockbufs, `in_pcb`, `lo0`, `ip_input`/`ip_output`, ARP, the callout facility, the MACRAW driver on socket 0 and bpf as its tap, proven by an in-kernel probe: ARP resolves the gateway, an ICMP echo goes out and the reply comes back; netdump still captures |
+| S2 | substrate running | mbufs, domains/protosw, sockbufs, `in_pcb`, `lo0`, `ip_input`/`ip_output`, ARP, the callout facility, the MACRAW driver on socket 0 and bpf as its tap, proven by an in-kernel probe: ARP resolves the gateway, an ICMP echo goes out and the reply comes back; netdump still captures.  **Done** on feat/net-mux under MAME (`d8cad04`..), and the maintainer's run on real hardware decides S3 (section 7); the modules stay out of `/etc/rc.in` until S3 |
 | S3 | UDP | every AF_INET UDP socket is a BSD socket on the kernel stack, wire and loopback; ntpd, ntpdc 127.0.0.1, dhclient (4.7) and syslogd -u on it; the chip's UDP core retires |
 | S4 | TCP + AF_UNIX | `tcp_*` on the wire and loopback; AF_UNIX on `uipc_usrreq.c`; telnet/telnetd, inetd, ftp, nc and the unixdgram users on it; `net_loop.s` rings, `unp.s`, the old descriptor table and the chip's TCP core retire; socket count limited by memory |
 | S5 | the rest | ICMP and raw sockets (ping), `ifconfig`/`route` ported from 2.11BSD against the real `ifnet`, the bespoke `SYS_IFCONFIG` retired |
@@ -307,6 +331,24 @@ is not CPU-bound (99 KB/s against a 246 KB/s drain ceiling); the chip's
 8 KB may win some of the cost back.  S2's probe and S4 must measure these
 rather than trust the estimate.
 
+S2, under MAME on `kernel.netprobe = 1`, with 2 KB of socket 0 receive buffer:
+
+| Measure | Result |
+|---|---|
+| Module footprint | 232,124 bytes in five banks, with the probe |
+| `netintr` stack, deepest seen | 332 bytes on a `lo0` echo, 368 after a wire burst, 394 with netdump tapping, of 1024 |
+| Static worst case (`net_stack_depth.py`) | 469 bytes |
+| ICMP echo round trip | 7-8 ticks, 117-133 ms; the chip's own `ping` answers within a tick |
+| A burst of 45 replies into an undrained ring | 33 frames kept, 2 near-full passes counted, machine answers afterward |
+| Draining those 33 frames | 18-19 ticks, up to 8 of them waiting for the poll |
+| Heartbeat mark with no network modules | 10.4 s against 10.3-10.4 s for 40 shell-run `dd`s |
+
+The round trip is not the poll: with the poll slowed to 64 ticks it stays 8.  Where
+those ticks go is not known yet, and real hardware may not show them.  The heartbeat
+figure is at `time`'s 0.1 s resolution on an exec-heavy load, so it says "not
+visible", not "zero".  No throughput is measured: nothing moves bulk data through
+the kernel stack until S3.
+
 ## 6. Testing
 
 - Every existing gate test keeps passing at every phase; the socket tests
@@ -344,6 +386,13 @@ rather than trust the estimate.
   packet may not take, and with the driver a 40-byte guess.  Measured from the
   stack's paint, a `lo0` echo reaches 330 bytes.  The measured figure on the wire is
   in section 5.
+
+- **S3 inherits:** `/etc/rc.in`; a default route, since only the interface's own net
+  is routed; `s2_stubs.c`'s remainder; `sleep`'s signal answer; the transmit path's
+  one-frame-at-a-time wait, which a frame still sending turns into up to 133 ms.
+- **Socket 0 and the suite's rc.local.**  With the stack loaded, inetd and ntpd take
+  two of the three sockets left, and ftp's data connection fails ENOBUFS.  That ends
+  when UDP moves.
 
 ## 8. Left to the builder
 
