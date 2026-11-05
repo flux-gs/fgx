@@ -8,7 +8,7 @@
   {"host": "disk_src/etc/rc.in", "prodos_dir": "/FGX/etc", "name": "rc", "replace": true}
  ],
  "expect": {
-  "screen_contains": ["w5: attached", "bsdnet: ok", "bsdnet: w5 received", "bsdnet: w5 bad length reopened", "bsdnet: w5 pool empty dropped", "bsdnet: arp resolved ", "bsdnet: echo reply from gateway", "bsdnet: echo rtt ", "bsdnet: burst of 45 got ", "bsdnet: alive after burst"],
+  "screen_contains": ["w5: attached", "bsdnet: ok", "bsdnet: w5 received", "bsdnet: w5 bad length reopened", "bsdnet: w5 pool empty dropped", "bsdnet: w5 torn read survived", "bsdnet: arp resolved ", "bsdnet: echo reply from gateway", "bsdnet: echo rtt ", "bsdnet: burst of 45 got ", "bsdnet: alive after burst"],
   "screen_lacks": ["bsdnet: BROKEN", "PANIC", "BRK"]
  },
  "requires": {

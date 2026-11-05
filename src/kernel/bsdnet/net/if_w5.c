@@ -65,6 +65,7 @@ static	int w5_up;
 #ifdef NETPROBE
 int	w5_force_badlen;	/* the probe's seams: a nonsense length, once */
 int	w5_hold;		/* no draining, so the ring overruns */
+int	w5_force_torn;		/* one torn read of RSR */
 #endif
 
 int w5output(), w5ioctl();
@@ -501,6 +502,28 @@ w5input(eh, m)
 	splx(s);
 }
 
+/* Sn_RX_RSR, read until two reads agree.  The chip updates it as frames land, and
+ * a pair of byte reads across a change to the high byte comes back 256 short,
+ * which looks like a nonsense length and would cost the whole ring. */
+static unsigned
+w5_rsr()
+{
+	register unsigned a, b;
+
+	b = w5_rreg16(S0_RX_RSR);
+	do {
+		a = b;
+#ifdef NETPROBE
+		if (w5_force_torn) {
+			w5_force_torn = 0;
+			a = 1;
+		}
+#endif
+		b = w5_rreg16(S0_RX_RSR);
+	} while (a != b);
+	return (a);
+}
+
 /* Drain the receive ring, at most W5_MAXBURST frames a pass. */
 void
 w5rint()
@@ -522,7 +545,7 @@ w5rint()
 #endif
 	for (frames = 0; frames < W5_MAXBURST; frames++) {
 		w5_lock();
-		rsr = w5_rreg16(S0_RX_RSR);
+		rsr = w5_rsr();
 		if (rsr == 0) {
 			w5_arm();
 			w5_unlock();

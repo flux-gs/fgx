@@ -24,6 +24,7 @@ extern	struct arpcom w5_ac;
 extern	int w5_force_badlen;
 extern	long w5_iqdrops;
 extern	int w5_hold;
+extern	int w5_force_torn;
 extern	struct arptab arptab[];
 extern	int arptab_size;
 extern	int kc_ticks();
@@ -314,6 +315,19 @@ w5_sample()
 		m_freem(np_hoard);
 		np_hoard = 0;
 		kc_printstr("bsdnet: w5 pool empty dropped");
+		/* a torn RSR, then the next frame must not read as a bad length */
+		np_ierr0 = ifp->if_ierrors;
+		np_rx0 = ifp->if_ipackets;
+		w5_force_torn = 1;
+		w5_state = 12;
+		break;
+	case 12:
+		if (ifp->if_ipackets == np_rx0 && ifp->if_ierrors == np_ierr0)
+			break;
+		if (ifp->if_ierrors != np_ierr0)
+			kc_printstr("bsdnet: BROKEN 50");
+		else
+			kc_printstr("bsdnet: w5 torn read survived");
 		w5_state = wire_start();
 		break;
 	case 4:
