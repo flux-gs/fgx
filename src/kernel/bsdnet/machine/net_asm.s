@@ -1,4 +1,11 @@
 ;==============================================================================
+; SPDX-License-Identifier: BSD-2-Clause
+; SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+; FGX-Provenance: 2.11BSD usr/sys/pdp/mch_xxx.s
+;   setjmp and longjmp written for FGX after usr/sys/pdp/mch_xxx.s, 2.11BSD.
+;   Original work: Copyright (c) 1987 Regents of the University of California.
+;   All rights reserved.
+;
 ; net_asm.s - the network code's assembly in bsdnet0: the C-to-kernel seam the
 ; other kernel modules share, unchanged.  kc_sys.s only moves D, and reads a C
 ; string through the caller's DBR, which is the data bank where C's strings are.
@@ -178,4 +185,105 @@ netintr_enter   MX      %00
                 TCS
                 PLP
                 PLB
+                RTL
+
+; setjmp(env) / longjmp(env, val) - the kernel's, after 2.11BSD pdp/mch_xxx.s:
+; sleep() longjmps to u.u_qsave when a signal breaks an interruptible sleep, and
+; uipc_syscalls.c's setjmp arms catch it.  fcc emits both as builtins with env in
+; X (an offset in DBR's bank, the data bank) and, for longjmp, val in A.
+; The layout is libc's (toolchain/lib/libc.s) less the signal mask, which is
+; libc's business and not the kernel's; its two words carry val across the
+; restore here instead.
+;   +0 PB  +1 DBR  +2 _fcc_fb  +4 PC  +6 S  +8 D  +10 _fcc_sfp  +12 val
+;   +16..+47 the callee-saved band _fcc_img16.._fcc_img31 ($78-$97)
+setjmp          MX      %00
+                PHP
+                REP     #$30
+                MX      %00
+                PHY
+                SEP     #$20
+                MX      %10
+                LDA     6,S                     ; the caller's PB
+                STA:    $0000,X
+                PHB
+                PLA
+                STA:    $0001,X
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                STA:    $0002,X
+                LDA     4,S                     ; the return PC
+                STA:    $0004,X
+                TSC
+                CLC
+                ADC     #6                      ; S at the call, once returned
+                STA:    $0006,X
+                TDC
+                STA:    $0008,X
+                LDA     _fcc_sfp
+                STA:    $000A,X
+                TXA
+                CLC
+                ADC     #16+30
+                TAY
+                LDX     #30
+@sj_band        LDA     $78,X
+                STA:    $0000,Y
+                DEY
+                DEY
+                DEX
+                DEX
+                BPL     @sj_band
+                PLY
+                PLP
+                LDA     #0
+                RTL
+
+longjmp         MX      %00
+                REP     #$30
+                MX      %00
+                CMP     #0
+                BNE     @lj_val
+                LDA     #1
+@lj_val         STA:    $000C,X
+                LDA:    $0008,X
+                TCD                             ; D first: the band is D-relative
+                PHX
+                TXA
+                CLC
+                ADC     #16+30
+                TAY
+                LDX     #30
+@lj_band        LDA:    $0000,Y
+                STA     $78,X
+                DEY
+                DEY
+                DEX
+                DEX
+                BPL     @lj_band
+                PLX
+                LDA:    $0002,X
+                STA     _fcc_fb
+                LDA:    $000A,X
+                STA     _fcc_sfp
+                LDA:    $0006,X
+                TCS
+                SEP     #$20
+                MX      %10
+                LDA:    $0000,X                 ; RTL pulls PC then PB
+                PHA
+                REP     #$20
+                MX      %00
+                LDA:    $0004,X
+                PHA
+                LDA:    $000C,X
+                TAY                             ; val, across the bank change
+                SEP     #$20
+                MX      %10
+                LDA:    $0001,X
+                PHA
+                PLB
+                REP     #$20
+                MX      %00
+                TYA
                 RTL

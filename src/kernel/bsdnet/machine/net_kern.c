@@ -12,7 +12,7 @@
 
 extern	int kc_sleep(), kc_sleepi(), kc_wakeup(), kc_panic();
 extern	long kc_time();
-extern	int kc_ticks();
+extern	int kc_ticks(), kc_curpid();
 extern	int net_in_intr;
 
 struct	user u;
@@ -93,19 +93,40 @@ printf(s)
 	return (0);
 }
 
-/* A pri above PZERO may be interrupted, as in 2.11BSD's sleep().  Returning from
- * an interrupted one is the same return: every caller re-tests its condition. */
+/* 2.11BSD's sleep() (sys/kern_synch.c): a pri above PZERO may be interrupted,
+ * and then u_error is EINTR and the call longjmps to u.u_qsave, where the socket
+ * call's setjmp arm returns it.  An ordinary wakeup leaves u_error 0, as
+ * upstream's `u.u_error = tsleep(...)' does.  u is one global, so the caller's
+ * copy is kept across the sleep in its process's slot: another process's socket
+ * call may fill u in the meantime.  A slot rather than a local, because sleep is
+ * at the bottom of the deepest socket call and the stack has no room for it. */
+#define	USAVE	((char *)&u.u_ofile[0] - (char *)&u)
+static	char u_saved[NPROC + 1][sizeof(struct user) - NOFILE * sizeof(struct file *)];
+
 void
 sleep(chan, pri)
 	caddr_t chan;
 	int pri;
 {
+	register int pid;
+	int intr;
+
 	if (net_in_intr)
 		panic("sleep in netintr");
+	pid = kc_curpid();
+	if (pid < 0 || pid > NPROC)
+		panic("sleep: pid");
+	bcopy((char *)&u, u_saved[pid], USAVE);
 	if ((pri & PRIMASK) > PZERO)
-		(void) kc_sleepi(chan);
-	else
+		intr = kc_sleepi(chan);
+	else {
 		(void) kc_sleep(chan);
+		intr = 0;
+	}
+	bcopy(u_saved[pid], (char *)&u, USAVE);
+	u.u_error = intr ? EINTR : 0;
+	if (intr)
+		longjmp(&u.u_qsave, 1);
 }
 
 void
@@ -115,10 +136,15 @@ wakeup(chan)
 	kc_wakeup(chan);
 }
 
+/* 2.11BSD sys/sys_net.c: a refusal is EPERM in u_error, which in_control
+ * returns. */
 int
 suser()
 {
-	return (u.u_uid == 0);
+	if (u.u_uid == 0)
+		return (1);
+	u.u_error = EPERM;
+	return (0);
 }
 
 /* The PDP-11's copies between kernel and supervisor space read kernel variables

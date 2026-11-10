@@ -1,7 +1,8 @@
 /* SPDX-License-Identifier: BSD-2-Clause
  * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
  * FGX-Provenance: 2.11BSD usr/sys/h/errno.h
- *   Ported from usr/sys/h/errno.h, 2.11BSD.  Original work:
+ *   Ported from usr/sys/h/errno.h, 2.11BSD, with EWOULDBLOCK as EAGAIN.
+ *   Original work:
  *   Copyright (c) 1982, 1986 Regents of the University of California.
  *   All rights reserved.
  */
@@ -55,7 +56,9 @@ extern	int	errno;			/* global error number */
 #define	ERANGE		34		/* Result too large */
 
 /* non-blocking and interrupt i/o */
-#define	EWOULDBLOCK	35		/* Operation would block */
+/* FGX: one would-block errno, userland's EAGAIN (include/errno.s, the
+ * toolchain's errno.h).  2.11BSD's 35 is unused. */
+#define	EWOULDBLOCK	EAGAIN		/* Operation would block */
 #define	EDEADLK		EWOULDBLOCK	/* ditto */
 #define	EINPROGRESS	36		/* Operation now in progress */
 #define	EALREADY	37		/* Operation already in progress */

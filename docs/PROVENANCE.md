@@ -757,7 +757,7 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/sys/socketvar.h` | `vendor/2.11BSD/usr/sys/h/socketvar.h` | `SB_MAX` takes the pdp11 arm under `fgx` |
 | `src/kernel/bsdnet/sys/un.h` | `vendor/2.11BSD/usr/sys/h/un.h` | verbatim |
 | `src/kernel/bsdnet/sys/unpcb.h` | `vendor/2.11BSD/usr/sys/h/unpcb.h` | verbatim |
-| `src/kernel/bsdnet/sys/errno.h` | `vendor/2.11BSD/usr/sys/h/errno.h` | verbatim |
+| `src/kernel/bsdnet/sys/errno.h` | `vendor/2.11BSD/usr/sys/h/errno.h` | verbatim but one line: EWOULDBLOCK is EAGAIN (11), FGX userland's one would-block errno, where 2.11BSD has 35 |
 | `src/kernel/bsdnet/sys/uio.h` | `vendor/2.11BSD/usr/sys/h/uio.h` | verbatim |
 | `src/kernel/bsdnet/sys/ioctl.h` | `vendor/2.11BSD/usr/sys/h/ioctl.h` | verbatim |
 | `src/kernel/bsdnet/sys/ttychars.h` | `vendor/2.11BSD/usr/sys/h/ttychars.h` | verbatim |
@@ -777,7 +777,8 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/sys/proc.h` | `vendor/2.11BSD/usr/sys/h/proc.h` | **written for FGX**: `p_wchan` |
 | `src/kernel/bsdnet/machine/machparam.h` | `vendor/2.11BSD/usr/sys/pdp/machparam.h` | **written for FGX**: little-endian, the byte-swap macros, the page constants |
 | `src/kernel/bsdnet/machine/net_mac.h` | `vendor/2.11BSD/usr/sys/pdp/net_mac.h` | **written for FGX**: upstream's declarations, and each cross-space macro as the direct call |
-| `src/kernel/bsdnet/machine/net_kern.c` | `vendor/2.11BSD/usr/sys/pdp/net_copy.s` | **written for FGX**: `cpfromkern` and `mfkd` by upstream's interface, reading the kernel clock through `kc_time` and `kc_ticks`; `bcopy` and friends as C loops, as `tty_dev.c` has |
+| `src/kernel/bsdnet/machine/net_kern.c` | `vendor/2.11BSD/usr/sys/pdp/net_copy.s`, `vendor/2.11BSD/usr/sys/sys/kern_synch.c` | **written for FGX**: `cpfromkern` and `mfkd` by upstream's interface, reading the kernel clock through `kc_time` and `kc_ticks`; `bcopy` and friends as C loops, as `tty_dev.c` has; `sleep` as `kern_synch.c`'s (EINTR in `u_error` and a longjmp to `u_qsave` when a signal breaks a sleep above PZERO), keeping the caller's `u` in a per-process slot across the sleep, since `u` is one global; `suser` as `sys_net.c`'s, with EPERM |
+| `src/kernel/bsdnet/machine/net_asm.s` | `vendor/2.11BSD/usr/sys/pdp/mch_xxx.s` | **written for FGX** in 65816 assembly: the spl levels, `netintr`'s stack entry, and `setjmp`/`longjmp` after `mch_xxx.s`'s kernel pair, in libc's layout less the signal mask |
 | `src/kernel/bsdnet/machine/in_cksum.s` | `vendor/2.11BSD/usr/sys/pdp/in_cksum.c` | **written for FGX** in 65816 assembly: upstream's `plen` odd-byte handling; the fused receive copy is the driver's |
 | `src/kernel/bsdnet/machine/net_callout.c` | `vendor/2.11BSD/usr/sys/sys/kern_clock.c` | **written for FGX**: `timeout`, `untimeout` and `softclock`'s list, private to the network modules; elapsed ticks charged in one pass where `hardclock` charges one, and no spl, as no interrupt touches the list |
 | `src/kernel/bsdnet/net/if_w5.c` | `vendor/2.11BSD/usr/sys/pdpif/if_de.c` | **written for FGX**: the W5100 on MACRAW socket 0, an `ifnet` shaped after `deoutput`, `destart`, `deread`, `deget` and `deioctl` |

@@ -9,6 +9,7 @@ netprobe3	0	kernel.netprobe
 netprobe4	0	kernel.netprobe
 netprobe5	0	kernel.netprobe
 netprobe6	0	kernel.netprobe
+netprobe7	0	kernel.netprobe
 machine/net_intr	0
 machine/net_callout	0
 machine/net_kern	0

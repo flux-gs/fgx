@@ -32,6 +32,7 @@ extern	void w5_lock(), w5_unlock(), w5_setar(), w5_rxcopy();
 extern	int in_cksum(), ip_output();
 extern	int net_stack_hwm();
 extern	int kc_printstr();
+extern	int netprobe7();
 
 #define	LOOPBACK	0x7f000001L
 #define	ECHO_LEN	(sizeof(struct ip) + ICMP_MINLEN)
@@ -390,5 +391,5 @@ netprobe6()
 	if (net_echo((u_long)LOOPBACK) != 0)
 		return (41);
 	np6_state = 1;
-	return (0);
+	return (netprobe7());
 }

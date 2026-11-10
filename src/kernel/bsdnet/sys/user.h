@@ -7,12 +7,15 @@
  */
 /* user.h -- the fields of 2.11BSD's u area the network code reads.
  *
- * ONE GLOBAL, so it is not per task.  Nothing behind a socket uses it until the
- * phase that gives a task a socket, which has to make it safe across a sleep. */
+ * ONE GLOBAL, filled for the calling process at each socket call
+ * (machine/bn_sys.c).  sleep() (machine/net_kern.c) keeps the caller's copy across
+ * the sleep, in a per-process slot, so another process's call in the meantime
+ * does not reach it.
+ * label_t is what the kernel's setjmp saves (machine/net_asm.s). */
 #ifndef _USER_H_
 #define _USER_H_
 #include "errno.h"
-typedef struct { int val[8]; } label_t;
+typedef struct { int val[24]; } label_t;
 struct user {
 	int	u_error;
 	int	*u_ap;
@@ -20,7 +23,6 @@ struct user {
 		int	r_val1;
 		int	r_val2;
 	} u_r;
-	struct	file *u_ofile[NOFILE];
 	label_t	u_qsave;
 	u_short	u_uid;
 	struct {
@@ -28,6 +30,7 @@ struct user {
 		long	ru_msgrcv;
 	} u_ru;
 	struct	proc *u_procp;
+	struct	file *u_ofile[NOFILE];	/* last: sleep() keeps what is above it */
 };
 extern struct user u;
 #endif
