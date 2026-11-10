@@ -21,5 +21,7 @@ _lc_errno_S3             HEX     49,6E,76,61,6C,69,64,20,61,72,67,75,6D,65,6E,74
                 FGX2_EXPORT _lc_errno_S4
 _lc_errno_S4             HEX     55,6E,6B,6E,6F,77,6E,20,65,72,72,6F,72,3A,20,39,39,39,39,00
                 FGX2_EXPORT _lc_errno_S5
-_lc_errno_S5             HEX     6C,63,5F,65,72,72,6E,6F,00
-                FGX2_RELOC_COUNT 7
+_lc_errno_S5             HEX     4E,65,74,77,6F,72,6B,20,69,73,20,75,6E,72,65,61,63,68,61,62,6C,65,00
+                FGX2_EXPORT _lc_errno_S6
+_lc_errno_S6             HEX     6C,63,5F,65,72,72,6E,6F,00
+                FGX2_RELOC_COUNT 8

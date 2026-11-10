@@ -68,6 +68,21 @@ extern int errno;
 #define EDESTADDRREQ    39      /* destination address required */
 #define EMSGSIZE        40      /* message too long for the buffer */
 #define ENAMETOOLONG    63      /* file name too long */
+/* The rest of 2.11BSD's socket errnos (usr/sys/h/errno.h), which the kernel's
+ * network stack answers.  EWOULDBLOCK is EAGAIN above, in the stack as here. */
+#define EINPROGRESS     36      /* operation now in progress */
+#define EALREADY        37      /* operation already in progress */
+#define EPROTONOSUPPORT 43      /* protocol not supported */
+#define ESOCKTNOSUPPORT 44      /* socket type not supported */
+#define EPFNOSUPPORT    46      /* protocol family not supported */
+#define ENETDOWN        50      /* network is down */
+#define ENETUNREACH     51      /* network is unreachable */
+#define ENETRESET       52      /* network dropped connection on reset */
+#define ECONNABORTED    53      /* software caused connection abort */
+#define ESHUTDOWN       58      /* can't send after socket shutdown */
+#define ETOOMANYREFS    59      /* too many references: can't splice */
+#define EHOSTDOWN       64      /* host is down */
+#define EHOSTUNREACH    65      /* no route to host */
 #define ENOSYS          78      /* function not implemented */
 
 #endif /* _ERRNO_H */

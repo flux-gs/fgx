@@ -241,6 +241,41 @@ _lc_errno_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                LDA     #51
+                PHA
+                FGX2_FARCALL strerror
+                PLY
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL strcmp
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
+                BEQ     _lc_errno_L7
+                LDA     #8
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_lc_errno_L7
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_lc_errno_S6
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
                 FGX2_FARCALL perror
                 PLY
                 PLY
@@ -256,4 +291,4 @@ _lc_errno_L6
                 RTL
 main_FRAMESIZE   EQU     4
 main_STKGUARD    EQU     0
-                FGX2_RELOC_COUNT 11
+                FGX2_RELOC_COUNT 13
