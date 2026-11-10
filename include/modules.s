@@ -721,6 +721,26 @@ VT_NET                  EQU     $0008       ; networking stack (net.mod) — mod
                                             ; via _Net_Dispatch (net_dispatch.s).
 VT_BSDNET               EQU     $000C       ; bsdnetd: the network modules' shared
                                             ;   data bank (tools/build_bsdnet.py)
+; A process's socket call on the kernel's stack: the call block's op, which
+; net.mod's net_kso.s names and src/kernel/bsdnet/machine/bn_sys.c switches on.
+; The C side spells them as its own #defines; the two must agree.
+BNOP_SOCKET             EQU     0
+BNOP_BIND               EQU     1
+BNOP_CONNECT            EQU     2
+BNOP_SENDTO             EQU     3
+BNOP_RECVFROM           EQU     4
+BNOP_SEND               EQU     5
+BNOP_RECV               EQU     6
+BNOP_SETSOCKOPT         EQU     7
+BNOP_GETSOCKNAME        EQU     8
+BNOP_GETPEERNAME        EQU     9
+BNOP_SHUTDOWN           EQU     10
+BNOP_READ               EQU     11
+BNOP_WRITE              EQU     12
+BNOP_IOCTL              EQU     13
+BNOP_SELECT             EQU     14
+BNOP_CLOSE              EQU     15
+BNOP_IFCHANGED          EQU     16
 VT_PDCORE               EQU     $000B       ; prodos.mod's C entry points, for
                                             ;   prodosw.mod, the write half
                                             ;   (ProDOS FST P6) -- PDCORE_* below

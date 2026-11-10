@@ -589,6 +589,11 @@ _Ifc_LoadName   MX      %00
 ; negative length is no room.
 ;==============================================================================
 net_op_ifioctl  MX      %00
+                JSR     _Kso_Is                 ; a kernel socket: its ifioctl
+                BCC     @nif_table              ;   answers from the kernel's ifnets
+                JSR     _Kso_DoIoctl
+                RTL
+@nif_table
                 LDA     _Sys_IoctlArgLo         ; the ifreq/ifconf far pointer
                 STA     _libcTmp2
                 SEP     #$20
@@ -1008,7 +1013,19 @@ net_op_socket   MX      %00
                 AND     #$00FF
                 CMP     #SOCK_DGRAM
                 BNE     @ss_tryStream
-                LDA     #XPORT_UDP
+                ; WITH THE NETWORK MODULES, A DATAGRAM SOCKET IS THE KERNEL'S:
+                ; a 2.11BSD struct socket, made below once the descriptor is
+                ; (net_kso.s).  It owns no chip socket.
+                LDA     #VT_BSDNET
+                LDX     #KSVC_FINDVTABLE
+                JSL     SYS_KCALL
+                BCC     @ss_chipUdp
+                LDA     #XPORT_KSO
+                STA     _sockTmpTag
+                LDA     #SOCK_HW_NONE
+                STA     _sockTmpHw
+                BRA     @ss_scan
+@ss_chipUdp     LDA     #XPORT_UDP
                 STA     _sockTmpTag
                 BRA     @ss_proceed
 @ss_tryStream   CMP     #SOCK_STREAM
@@ -1104,7 +1121,20 @@ net_op_socket   MX      %00
                 REP     #$30
                 MX      %00
                 JSR     _Sock_ClearXportState   ; bytes 8 onward are NOT set above
-                JSL     SYS_NETKC_FCBALLOC
+                LDA     _sockTmpTag
+                CMP     #XPORT_KSO
+                BNE     @ss_fcb
+                LDY     #BNOP_SOCKET            ; socreate, with this call's
+                JSR     _Kso_Do                 ;   domain, type and protocol
+                BCC     @ss_ksoFail
+                PHA                             ; the socket, into the record
+                LDA     _sockTmpOff
+                CLC
+                ADC     #SOCK_KsoSo
+                TAY
+                PLA
+                STA     [_sockTablePtr],Y
+@ss_fcb         JSL     SYS_NETKC_FCBALLOC
                 BCC     @ss_fcbFail
                 PHA
                 LDY     #FCB_Flags
@@ -1122,10 +1152,18 @@ net_op_socket   MX      %00
                 AND     #$00FF
                 SEC
                 RTL
+@ss_ksoFail     PHA                             ; socreate's errno: the record
+                REP     #$30                    ;   goes back unused
+                MX      %00
+                BRA     @ss_free0
 @ss_fcbFail     PHA
                 REP     #$30
                 MX      %00
-                LDY     _sockTmpOff
+                JSR     _Kso_Is                 ; a kernel socket made above
+                BCC     @ss_free0               ;   goes too
+                LDY     #BNOP_CLOSE
+                JSR     _Kso_Do
+@ss_free0       LDY     _sockTmpOff
                 SEP     #$20
                 MX      %10
                 LDA     #$00
@@ -1142,6 +1180,8 @@ net_op_socket   MX      %00
 ; A = sockaddr_in offset, X = fd, _Sys_CallerBank = bank.
 ;------------------------------------------------------------------------------
 net_op_bind     MX      %00
+                LDY     #BNOP_BIND            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 ; AF_UNIX FIRST -- see net_op_send for why this order.
                 JSR     _Unp_BindTry
                 PHP
@@ -1238,6 +1278,8 @@ net_op_bind     MX      %00
 ;
 ; Arg block: +0 level  +2 optname  +4 optval offset  +6 optlen  +8 optval bank.
 net_op_setsockopt MX    %00
+                LDY     #BNOP_SETSOCKOPT            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 LDA     _Sys_SavedA
                 LDX     _Sys_SavedX
                 STA     _libcTmp2
@@ -1342,6 +1384,8 @@ net_op_setsockopt MX    %00
 ;            +8 dst IP(4) +12 dst port(2).
 ;------------------------------------------------------------------------------
 net_op_sendto   MX      %00
+                LDY     #BNOP_SENDTO            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 LDA     #UIO_WRITE
                 JSR     _So_ArgUio              ; descriptor + uio from the block
                 BCS     @sx_have                ;   (_libcTmp2 left at the block)
@@ -1385,6 +1429,8 @@ net_op_sendto   MX      %00
 ;            its own staging and does the caller's copy itself.
 ;------------------------------------------------------------------------------
 net_op_recvfrom MX      %00
+                LDY     #BNOP_RECVFROM            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 LDA     #UIO_READ
                 JSR     _So_ArgUio
                 BCS     @rf_have
@@ -1405,6 +1451,8 @@ net_op_recvfrom MX      %00
 ; A = sockaddr_in offset, X = fd.
 ;------------------------------------------------------------------------------
 net_op_connect  MX      %00
+                LDY     #BNOP_CONNECT            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 ; AF_UNIX FIRST -- see net_op_send for why this order.  The arm
                 ; resolves the sockaddr's PATH through unp_nameop and checks that
                 ; the slot it answers still names a live AF_UNIX socket.
@@ -1480,6 +1528,8 @@ net_op_connect  MX      %00
 ; argblk: +0 buf off(2) +2 len(2) +4 flags(2) +6 buf bank(2).
 ;------------------------------------------------------------------------------
 net_op_send     MX      %00
+                LDY     #BNOP_SEND            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 LDA     #UIO_WRITE
                 JSR     _So_ArgUio
                 BCS     @snd_have
@@ -1498,6 +1548,8 @@ net_op_send     MX      %00
 ; argblk: +0 buf off(2) +2 buf max len(2) +4 flags(2) +6 buf bank(2).
 ;------------------------------------------------------------------------------
 net_op_recv     MX      %00
+                LDY     #BNOP_RECV            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 LDA     #UIO_READ
                 JSR     _So_ArgUio
                 BCS     @rcv_have
@@ -1848,6 +1900,9 @@ _So_UioBounce   MX      %00
 ; net_op_listen - SYS_LISTEN (#84): listen(fd, backlog).  A = fd.
 ;------------------------------------------------------------------------------
 net_op_listen   MX      %00
+                LDA     _Sys_SavedA             ; a kernel socket: udp_usrreq's
+                LDY     #ENOTSUP                ;   PRU_LISTEN, EOPNOTSUPP
+                JSR     _Kso_Refuse
                 ; LOOPBACK FIRST.  This test used to live in the kernel's
                 ; _Sys_Listen thunk, which cost a core-bank stub per op plus
                 ; the _loopHandled dance.  net_loop.s lives HERE now, so the
@@ -1921,6 +1976,9 @@ net_op_listen   MX      %00
 ; net_op_accept - SYS_ACCEPT (#85): accept(fd).  A = listen fd.
 ;------------------------------------------------------------------------------
 net_op_accept   MX      %00
+                LDA     _Sys_SavedA             ; a kernel socket is not
+                LDY     #EINVAL                 ;   listening: accept's EINVAL
+                JSR     _Kso_Refuse
                 ; LOOPBACK FIRST.  This test used to live in the kernel's
                 ; _Sys_Accept thunk, which cost a core-bank stub per op plus
                 ; the _loopHandled dance.  net_loop.s lives HERE now, so the
@@ -2147,6 +2205,8 @@ _Sock_SinPortFrom MX    %00
 ; port to loopback connectors is apple/fgx#156.
 ;------------------------------------------------------------------------------
 net_op_getpeername MX   %00
+                LDY     #BNOP_GETPEERNAME            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 JSR     _Sock_NameSetup         ; THUNK-Y-OK: Y is an OUTPUT here --
                                                 ;   SYS_NETKC_SOCKFDTODESC sets it and
                                                 ;   the STY inside stores that, not
@@ -2229,6 +2289,8 @@ net_op_getpeername MX   %00
 ; which is 0 until bind() or listen() sets one.
 ;------------------------------------------------------------------------------
 net_op_getsockname MX   %00
+                LDY     #BNOP_GETSOCKNAME            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_Try                ;   and returns from there
                 JSR     _Sock_NameSetup         ; THUNK-Y-OK: see net_op_getpeername
                 BCS     @gs_havefd
                 MX      %00
@@ -2603,9 +2665,13 @@ _Sock_CheckSrcAddr MX   %00
 ; soreceive with no address and no flags.  syscall.s has resolved the
 ; descriptor into _sockTmpOff and built the uio into _sockUio.
 net_op_sowrite  MX      %00
+                LDY     #BNOP_WRITE
+                JSR     _Kso_TryOff
                 JSR     _So_Send
                 RTL
 net_op_soread   MX      %00
+                LDY     #BNOP_READ
+                JSR     _Kso_TryOff
                 JSR     _So_Recv
                 RTL
 
@@ -2616,7 +2682,13 @@ net_op_soread   MX      %00
 ; always 0 — W5100 has no TCP urgent).  -> RTL.
 ;------------------------------------------------------------------------------
 net_op_sockstatus MX    %00
-                JSR     _Net_Xport_SockStatus
+                JSR     _Kso_Is                 ; a kernel socket: soo_select,
+                BCC     @nss_chip               ;   and FIONREAD's count from its
+                LDY     #BNOP_SELECT            ;   second value
+                JSR     _Kso_Do
+                STX     _sockRxLen
+                RTL
+@nss_chip       JSR     _Net_Xport_SockStatus
                 RTL
 
 ;------------------------------------------------------------------------------
@@ -2626,6 +2698,8 @@ net_op_sockstatus MX    %00
 ; are a no-op success.  Does NOT free the socket (close() does).  -> RTL.
 ;------------------------------------------------------------------------------
 net_op_shutdown MX      %00
+                LDY     #BNOP_SHUTDOWN
+                JSR     _Kso_TryOff
                 JSR     _Net_Xport_Shutdown
                 RTL
 
@@ -2655,6 +2729,12 @@ net_op_sockteardown MX  %00
                 MX      %00
                 AND     #$00FF
                 STA     _sockTmpHw
+                JSR     _Kso_Is                 ; a kernel socket: soclose, then
+                BCC     @st_notKso              ;   the descriptor goes as any does
+                LDY     #BNOP_CLOSE
+                JSR     _Kso_Do
+                BRA     @st_freeDesc
+@st_notKso      LDA     _sockTmpHw
                 ; A SENTINEL OWNS NO HARDWARE.  This tested only
                 ; SOCK_HW_NONE ($FF), so a LOOPBACK descriptor -- SOCK_HW_LOOP,
                 ; $FE, written over SOCK_HwIdx by _Loop_BindTry and
@@ -2779,6 +2859,7 @@ net_op_syspipe      MX      %00
                 PUT     pipe.s
                 PUT     unp.s
                 PUT     net_xport.s
+                PUT     net_kso.s
 
 ;==============================================================================
 ; W5100 slot-bind self-mod table (GENERATED: tools/gen_w5100_patchsites.py

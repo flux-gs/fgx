@@ -62,6 +62,10 @@ XPORT_UDP       EQU     1
 XPORT_ICMP      EQU     2
 XPORT_TCP       EQU     3           ; SOCK_STREAM over the W5100 (net.s,
                                     ; net_xport.s), or loopback (net_loop.s)
+XPORT_KSO       EQU     5           ; AF_INET SOCK_DGRAM on the kernel's network
+                                    ; stack: a 2.11BSD struct socket in the
+                                    ; network modules, at SOCK_KsoSo, reached
+                                    ; through net_kso.s for every op
 XPORT_UNIX      EQU     4           ; AF_UNIX SOCK_DGRAM (unp.s).  A new TAG
                                     ; rather than a SOCK_HwIdx sentinel like
                                     ; loopback's: loopback IS an ordinary
@@ -204,6 +208,10 @@ SOCK_UnpPeer    EQU     13          ; 1  peer descriptor index for a connected
 ; (_So_UdpPeer).  Network order, as the chip and the sockaddr carry them.
 SOCK_FAddr      EQU     14          ; 4  connected peer address (0 = none)
 SOCK_FPort      EQU     18          ; 2  connected peer port
+; An XPORT_KSO descriptor's struct socket, an offset in bsdnetd's bank.  It
+; overlays SOCK_FAddr, which only the chip's UDP reads; _Sock_ClearXportState
+; zeroes it with the rest.
+SOCK_KsoSo      EQU     SOCK_FAddr  ; 2
 SOCK_REC_SIZE   EQU     20
 
 SLF_PENDING     EQU     $01         ; listener: a connect is waiting for accept()

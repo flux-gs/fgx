@@ -11,72 +11,72 @@
 ;
 ; Counts: 0 MR, 7 ARH, 7 ARL, 20 DAT (34 total).
 _w5PatchTbl     ENT
-                DA  $4333
+                DA  $4533
                 DFB 1           ; ARH
-                DA  $4339
+                DA  $4539
                 DFB 2           ; ARL
-                DA  $433F
+                DA  $453F
                 DFB 3           ; DAT
-                DA  $4359
+                DA  $4559
                 DFB 1           ; ARH
-                DA  $435F
+                DA  $455F
                 DFB 2           ; ARL
-                DA  $4366
+                DA  $4566
                 DFB 3           ; DAT
-                DA  $437D
+                DA  $457D
                 DFB 1           ; ARH
-                DA  $4383
+                DA  $4583
                 DFB 2           ; ARL
-                DA  $438A
+                DA  $458A
                 DFB 3           ; DAT
-                DA  $44A9
+                DA  $46A9
                 DFB 1           ; ARH
-                DA  $44AE
-                DFB 2           ; ARL
-                DA  $44B9
-                DFB 3           ; DAT
-                DA  $44BE
-                DFB 3           ; DAT
-                DA  $44E4
-                DFB 3           ; DAT
-                DA  $44F4
-                DFB 3           ; DAT
-                DA  $4505
-                DFB 3           ; DAT
-                DA  $4523
-                DFB 3           ; DAT
-                DA  $4554
-                DFB 3           ; DAT
-                DA  $4564
-                DFB 3           ; DAT
-                DA  $458C
-                DFB 1           ; ARH
-                DA  $4592
-                DFB 2           ; ARL
-                DA  $4598
-                DFB 3           ; DAT
-                DA  $45B2
-                DFB 1           ; ARH
-                DA  $45B8
-                DFB 2           ; ARL
-                DA  $45BF
-                DFB 3           ; DAT
-                DA  $45F9
-                DFB 3           ; DAT
-                DA  $4608
-                DFB 3           ; DAT
-                DA  $464C
-                DFB 3           ; DAT
-                DA  $4688
-                DFB 3           ; DAT
-                DA  $468D
-                DFB 3           ; DAT
-                DA  $469D
-                DFB 3           ; DAT
                 DA  $46AE
-                DFB 1           ; ARH
-                DA  $46B4
                 DFB 2           ; ARL
-                DA  $46BB
+                DA  $46B9
+                DFB 3           ; DAT
+                DA  $46BE
+                DFB 3           ; DAT
+                DA  $46E4
+                DFB 3           ; DAT
+                DA  $46F4
+                DFB 3           ; DAT
+                DA  $4705
+                DFB 3           ; DAT
+                DA  $4723
+                DFB 3           ; DAT
+                DA  $4754
+                DFB 3           ; DAT
+                DA  $4764
+                DFB 3           ; DAT
+                DA  $478C
+                DFB 1           ; ARH
+                DA  $4792
+                DFB 2           ; ARL
+                DA  $4798
+                DFB 3           ; DAT
+                DA  $47B2
+                DFB 1           ; ARH
+                DA  $47B8
+                DFB 2           ; ARL
+                DA  $47BF
+                DFB 3           ; DAT
+                DA  $47F9
+                DFB 3           ; DAT
+                DA  $4808
+                DFB 3           ; DAT
+                DA  $484C
+                DFB 3           ; DAT
+                DA  $4888
+                DFB 3           ; DAT
+                DA  $488D
+                DFB 3           ; DAT
+                DA  $489D
+                DFB 3           ; DAT
+                DA  $48AE
+                DFB 1           ; ARH
+                DA  $48B4
+                DFB 2           ; ARL
+                DA  $48BB
                 DFB 3           ; DAT
                 DA  $FFFF        ; sentinel (no DFB)

@@ -437,6 +437,277 @@ static int sockopt_check()
     return 0;
 }
 
+/* ---- `-u`: UDP ON THE KERNEL'S STACK, over lo0 (net-mux S3).
+ *
+ * Every AF_INET datagram socket is a 2.11BSD socket in the network modules,
+ * reached through net.mod's descriptor, so each case below is upstream's
+ * behavior and names the file it comes from.  Each prints `UDP FAIL <case>'
+ * and the run goes on, so one failure does not hide the next; `UDP OK' only
+ * when none failed.  A blocking call that never returns is a failure too: the
+ * harness's frame cap catches it, and the cases that may block say so.
+ * ---- */
+#define UDPPORT  7790
+static int ufails;
+
+static void
+ufail(what, v)
+char *what;
+int v;
+{
+    printf("UDP FAIL %s %d\n", what, v);
+    ufails++;
+}
+
+static void
+uaddr(sin, port)
+struct sockaddr_in *sin;
+int port;
+{
+    int n;
+
+    for (n = 0; n < sizeof(*sin); n++) ((char *)sin)[n] = 0;
+    sin->sin_family = AF_INET;
+    sin->sin_port = htons(port);
+    sin->sin_addr.s_addr = htonl(0x7F000001);
+}
+
+static int
+ubound(port)
+int port;
+{
+    struct sockaddr_in sin;
+    int s;
+
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+    if (s < 0) { ufail("socket", errno); return -1; }
+    uaddr(&sin, port);
+    if (bind(s, &sin, sizeof(sin)) < 0) { ufail("bind", errno); close(s); return -1; }
+    return s;
+}
+
+/* readable now, by a zero-timeout select */
+static int
+uready(s)
+int s;
+{
+    fd_set rd;
+
+    FD_ZERO(&rd);
+    FD_SET(s, &rd);
+    g_tv.tv_sec = 0;
+    g_tv.tv_usec = 0;
+    return select(s + 1, &rd, (fd_set *)0, (fd_set *)0, &g_tv);
+}
+
+/* pair: a datagram both ways between two bound sockets, and recvfrom names
+ * the sender (udp_input hands the source to sbappendaddr). */
+static void
+u_pair()
+{
+    struct sockaddr_in to, from;
+    int a, b, n, fl;
+
+    a = ubound(UDPPORT);
+    b = ubound(UDPPORT + 1);
+    if (a < 0 || b < 0) return;
+    uaddr(&to, UDPPORT + 1);
+    if (sendto(a, "a2b", 3, 0, &to, sizeof(to)) != 3) ufail("pair-send", errno);
+    fl = sizeof(from);
+    n = recvfrom(b, g_buf, sizeof(g_buf), 0, &from, &fl);
+    if (n != 3 || strncmp(g_buf, "a2b", 3) != 0) ufail("pair-recv", n);
+    if (ntohs(from.sin_port) != UDPPORT || fl != sizeof(from)) ufail("pair-from", ntohs(from.sin_port));
+    uaddr(&to, UDPPORT);
+    if (sendto(b, "b2a!", 4, 0, &to, sizeof(to)) != 4) ufail("pair-back", errno);
+    n = recv(a, g_buf, sizeof(g_buf), 0);
+    if (n != 4 || strncmp(g_buf, "b2a!", 4) != 0) ufail("pair-backrecv", n);
+    close(a);
+    close(b);
+}
+
+/* zero: bind to port 0 picks one (in_pcbbind's noname arm), getsockname says it */
+static void
+u_zero()
+{
+    struct sockaddr_in sin;
+    int s, len;
+
+    s = ubound(0);
+    if (s < 0) return;
+    len = sizeof(sin);
+    if (getsockname(s, &sin, &len) < 0) ufail("zero-getsockname", errno);
+    else if (ntohs(sin.sin_port) < 1024) ufail("zero-port", ntohs(sin.sin_port));
+    close(s);
+}
+
+/* conn: a connected socket sends without an address and hears only its peer
+ * (in_pcblookup matches inp_faddr exactly). */
+static void
+u_conn()
+{
+    struct sockaddr_in to;
+    int a, b, c, n;
+
+    a = ubound(UDPPORT + 2);
+    b = ubound(UDPPORT + 3);
+    c = ubound(UDPPORT + 4);
+    if (a < 0 || b < 0 || c < 0) return;
+    uaddr(&to, UDPPORT + 3);
+    if (connect(a, &to, sizeof(to)) < 0) ufail("conn-connect", errno);
+    if (send(a, "hi", 2, 0) != 2) ufail("conn-send", errno);
+    n = recv(b, g_buf, sizeof(g_buf), 0);
+    if (n != 2) ufail("conn-recv", n);
+    uaddr(&to, UDPPORT + 2);
+    if (sendto(c, "stray", 5, 0, &to, sizeof(to)) != 5) ufail("conn-stray-send", errno);
+    if (uready(a) != 0) ufail("conn-stray-delivered", 1);
+    close(a);
+    close(b);
+    close(c);
+}
+
+/* sel: readable only once a datagram is queued (soo_select).  FIONREAD is
+ * soo_ioctl's so_rcv.sb_cc, which on a datagram socket counts the sender's
+ * address as well: sbappendaddr (uipc_socket2.c) sballoc's the address mbuf
+ * with the data, so 7 bytes from a sockaddr_in read 7 + 16. */
+static void
+u_sel()
+{
+    struct sockaddr_in to;
+    int a, b, n, nread;
+
+    a = ubound(UDPPORT + 5);
+    b = ubound(UDPPORT + 6);
+    if (a < 0 || b < 0) return;
+    if (uready(b) != 0) ufail("sel-idle-readable", 1);
+    nread = -1;
+    if (ioctl(b, FIONREAD, &nread) < 0 || nread != 0) ufail("sel-idle-nread", nread);
+    uaddr(&to, UDPPORT + 6);
+    if (sendto(a, "seven!!", 7, 0, &to, sizeof(to)) != 7) ufail("sel-send", errno);
+    if (uready(b) != 1) ufail("sel-not-readable", 0);
+    nread = -1;
+    if (ioctl(b, FIONREAD, &nread) < 0 || nread != 7 + sizeof(struct sockaddr_in))
+        ufail("sel-nread", nread);
+    n = recv(b, g_buf, sizeof(g_buf), 0);
+    if (n != 7) ufail("sel-recv", n);
+    close(a);
+    close(b);
+}
+
+/* selwake: a select with no timeout, blocked on an empty socket, returns when
+ * a child sends to it, within a second or so of the send.  sbselqueue arms
+ * sb_sel and sowakeup's selwakeup wakes the select channel; the kernel's idle
+ * loop rescans every blocked select at 60 Hz as well (sched.s), so this case
+ * shows the wakeup arrives, and cannot show which of the two delivered it.
+ * BLOCKS if neither does. */
+extern long time();
+
+static void
+u_selwake()
+{
+    struct sockaddr_in to;
+    fd_set rd;
+    long t0, t;
+    int a, s, n;
+
+    a = ubound(UDPPORT + 7);
+    if (a < 0) return;
+    t0 = time((long *)0);
+    if (fork() == 0) {
+        sleep(1);
+        s = socket(AF_INET, SOCK_DGRAM, 0);
+        uaddr(&to, UDPPORT + 7);
+        sendto(s, "wake", 4, 0, &to, sizeof(to));
+        exit(0);
+    }
+    FD_ZERO(&rd);
+    FD_SET(a, &rd);
+    n = select(a + 1, &rd, (fd_set *)0, (fd_set *)0, (struct timeval *)0);
+    t = time((long *)0) - t0;
+    if (n != 1 || !FD_ISSET(a, &rd)) ufail("selwake", n);
+    if (t >= 4) ufail("selwake-late", (int)t);
+    wait((int *)0);
+    close(a);
+}
+
+/* nbio: non-blocking reads of an empty socket answer EAGAIN, by FIONBIO and by
+ * MSG_DONTWAIT (soreceive's SS_NBIO arm).  BLOCKS if the bit is lost. */
+static void
+u_nbio()
+{
+    int b, on;
+
+    b = ubound(UDPPORT + 8);
+    if (b < 0) return;
+    errno = 0;
+    if (recv(b, g_buf, sizeof(g_buf), MSG_DONTWAIT) != -1 || errno != EAGAIN)
+        ufail("nbio-dontwait", errno);
+    on = 1;
+    if (ioctl(b, FIONBIO, &on) < 0) ufail("nbio-ioctl", errno);
+    errno = 0;
+    if (read(b, g_buf, 8) != -1 || errno != EAGAIN) ufail("nbio-read", errno);
+    close(b);
+}
+
+/* inuse: a second bind to a held port is EADDRINUSE, and SO_REUSEADDR on the
+ * wildcard and the specific address lets both bind (in_pcbbind) */
+static void
+u_inuse()
+{
+    struct sockaddr_in sin;
+    int a, b, on;
+
+    a = ubound(UDPPORT + 9);
+    if (a < 0) return;
+    b = socket(AF_INET, SOCK_DGRAM, 0);
+    uaddr(&sin, UDPPORT + 9);
+    errno = 0;
+    if (bind(b, &sin, sizeof(sin)) != -1 || errno != EADDRINUSE) ufail("inuse", errno);
+    close(b);
+    close(a);
+    a = socket(AF_INET, SOCK_DGRAM, 0);
+    b = socket(AF_INET, SOCK_DGRAM, 0);
+    on = 1;
+    setsockopt(a, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on));
+    setsockopt(b, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on));
+    uaddr(&sin, UDPPORT + 10);
+    sin.sin_addr.s_addr = 0;
+    if (bind(a, &sin, sizeof(sin)) < 0) ufail("reuse-wild", errno);
+    uaddr(&sin, UDPPORT + 10);
+    if (bind(b, &sin, sizeof(sin)) < 0) ufail("reuse-specific", errno);
+    close(a);
+    close(b);
+}
+
+/* closed: a send on a closed descriptor is EBADF, ahead of anything else */
+static void
+u_closed()
+{
+    struct sockaddr_in to;
+    int s;
+
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+    close(s);
+    uaddr(&to, UDPPORT);
+    errno = 0;
+    if (sendto(s, "x", 1, 0, &to, sizeof(to)) != -1 || errno != EBADF) ufail("closed", errno);
+}
+
+static int
+udp_main()
+{
+    u_pair();
+    u_zero();
+    u_conn();
+    u_sel();
+    u_selwake();
+    u_nbio();
+    u_inuse();
+    datagram_argblk();          /* oob: MSG_OOB is EOPNOTSUPP */
+    u_closed();
+    if (ufails == 0)
+        printf("UDP OK\n");
+    exit(ufails != 0);
+}
+
 main(argc, argv)
 int argc;
 char **argv;
@@ -450,6 +721,8 @@ char **argv;
         accept_pressure();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == '0')
         zero_port();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'u')
+        udp_main();
 
     datagram_argblk();
     sockopt_check();
