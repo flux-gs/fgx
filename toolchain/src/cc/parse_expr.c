@@ -3627,6 +3627,23 @@ build_call_args(int *kid0, int *n_kids)
  * push glue, with the weight decisions from the arg NODES' types (the same
  * values runtime g_expr_type held after each parse_expr).  Returns
  * total_arg_bytes. */
+/* The struct id when arg is `*p' and p points to a struct (not to a pointer
+ * or an array of them), else -1. */
+static int
+struct_deref_arg(int arg)
+{
+    tword pt;
+    if (g_ast[arg].kind == N_DEREF_FAST)
+        pt = g_ast[arg].sym_lc->type;
+    else if (g_ast[arg].kind == N_DEREF_GENERAL)
+        pt = g_ast[g_ast[arg].a].type;
+    else
+        return -1;
+    if (!ISPTR(pt) || BTYPE(DECREF(pt)) != BT_STRUCT || DERIV(DECREF(pt)) != 0)
+        return -1;
+    return g_ast[arg].struct_id;
+}
+
 static int
 walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
                const int *pstruct_ids, int n_declared, int n_fixed,
@@ -3640,10 +3657,24 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
          * (drives the declared-param type coercion either way). */
         int idx = rtl->active ? (n_kids - 1 - i) : i;
         int arg = g_ast_kids[kid0 + idx];
-        walk_expr(arg);
+        /* `*p' with p a struct pointer is the whole struct: K&R A.7.4.3, "If
+         * the type of the expression is ``pointer to T,'' the type of the
+         * result is T".  The deref node is typed for a scalar read of its
+         * first word, so the argument is walked as the POINTER and copied
+         * below like any struct value (2.11BSD arpresolve's
+         * in_broadcast(*destip)). */
+        int dsid = struct_deref_arg(arg);
+        if (dsid >= 0) {
+            if (g_ast[arg].kind == N_DEREF_FAST)
+                fpr_load_sym(g_ast[arg].sym_lc, NULL);
+            else
+                (void) walk_fpr(g_ast[arg].a);
+        } else
+            walk_expr(arg);
         int ks = g_fpr_res;               /* FPR result (new walker), or -1 */
         g_fpr_res = -1;
-        LocalType at = g_ast[arg].type;   /* walker purity: decisions from the
+        LocalType at = dsid >= 0 ? LT_STRUCT : g_ast[arg].type;
+                                          /* walker purity: decisions from the
                                            * node, not runtime g_expr_* (proven
                                            * equal by the FCC_AST_CHECK sweep) */
         /* Whether this argument goes out as its parameter's type.  Past the
@@ -3673,7 +3704,7 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
             psid = pstruct_ids[idx];
             byval = 1;
         } else if (!decl && at == LT_STRUCT) {
-            psid = g_ast[arg].struct_id;
+            psid = dsid >= 0 ? dsid : g_ast[arg].struct_id;
             byval = 1;
         }
         if (byval) {
