@@ -287,3 +287,56 @@ longjmp         MX      %00
                 MX      %00
                 TYA
                 RTL
+
+; kc_sigraise(sig) - post sig to the calling process (sosend's SIGPIPE).
+kc_sigraise     MX      %00
+                ENTERK
+                LDA     6,S
+                LDX     #KSVC_SIGRAISE
+                JSL     SYS_KCALL
+                LEAVEK
+                RTL
+
+; bn_sysent - net.mod's way in for a process's socket call (src/modules/net/
+; net_kso.s).  Entered as by JSL, with A = the offset in bank 0 of the call block
+; on the caller's kernel stack.  D becomes kernel C's register page and DBR the
+; data bank, as for any kernel C, and bn_sys (machine/bn_sys.c) is called with a
+; far pointer to the block.  Out: C=1 + A = u.u_r.r_val1 + X = r_val2, or C=0 +
+; A = u.u_error.
+bn_sysent       MX      %00
+                PHB
+                PHD
+                TAX
+                LDA     #FGX_DP_KERNELC
+                TCD
+                PHK
+                PLB
+                SEP     #$20
+                MX      %10
+                LDA     |_bnDataBank
+                PHA
+                PLB
+                REP     #$20
+                MX      %00
+                PEA     0                       ; the block's bank
+                PHX                             ; and offset
+                PHK
+                PEA     @bs_ret-1
+                PHK
+                PEA     bn_sys-1
+                RTL
+@bs_ret         PLX
+                PLX
+                LDA     |u                      ; u_error
+                BNE     @bs_err
+                LDA     |u+8                    ; u_r.r_val2
+                TAX
+                LDA     |u+6                    ; u_r.r_val1
+                PLD
+                PLB
+                SEC
+                RTL
+@bs_err         PLD
+                PLB
+                CLC
+                RTL

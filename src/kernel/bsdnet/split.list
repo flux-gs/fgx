@@ -14,6 +14,7 @@ machine/net_intr	0
 machine/net_callout	0
 machine/net_kern	0
 machine/s2_stubs	0
+machine/bn_sys	3
 machine/net_asm.s	0
 machine/in_cksum.s	1
 machine/w5_asm.s	2
@@ -44,5 +45,6 @@ sys/uipc_mbuf	0
 sys/uipc_proto	-
 sys/uipc_socket	0
 sys/uipc_socket2	0
-sys/uipc_syscalls	-
+sys/uipc_syscalls	3
+sys/sys_socket	3
 sys/uipc_usrreq	-

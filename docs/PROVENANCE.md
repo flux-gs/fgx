@@ -720,7 +720,9 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/netinet/tcp_usrreq.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_usrreq.c` | verbatim |
 | `src/kernel/bsdnet/netinet/tcp_debug.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_debug.c` | verbatim |
 | `src/kernel/bsdnet/sys/uipc_mbuf.c` | `vendor/2.11BSD/usr/sys/sys/uipc_mbuf.c` | `mbinit`'s alignment goes through `long`; `m_expand` takes the pdp11 arm under `fgx`; `xmbutl`'s slack is `XMBUTL_SLACK`, a whole cluster, where upstream's 7 mbufs can overrun by 128 bytes |
-| `src/kernel/bsdnet/sys/uipc_socket.c` | `vendor/2.11BSD/usr/sys/sys/uipc_socket.c` | verbatim |
+| `src/kernel/bsdnet/sys/uipc_socket.c` | `vendor/2.11BSD/usr/sys/sys/uipc_socket.c` | verbatim but two calls: `sogetnam` and `sogetpeer` pass `pr_usrreq` its unused mbuf arguments as `(struct mbuf *)0` where upstream writes `0`.  With no prototype in scope a bare 0 is an int (K&R A.7.3.2: "the effect of the call is undefined if ... the type of an argument after promotion disagrees with that of the corresponding parameter"), which on the PDP-11 is a pointer's size and here is half of one, so `udp_usrreq` read its arguments shifted and freed a stray mbuf |
+| `src/kernel/bsdnet/sys/sys_socket.c` | `vendor/2.11BSD/usr/sys/sys/sys_socket.c` | verbatim |
+| `src/kernel/bsdnet/machine/bn_sys.c` | `vendor/2.11BSD/usr/sys/pdp/trap.c` | **written for FGX**: a process's socket call from net.mod into `uipc_syscalls.c`'s bodies -- the argument fetch, `trap.c` `syscall`'s setjmp arm, `getf` answering one file for net.mod's descriptor, `copyin`/`copyout`/`uiomove` (`sys/kern_subr.c`) and `netcopyout` (`pdp/net_copy.s`) over far pointers, `selwakeup` as FGX's one select channel, and `MSG_DONTWAIT`, which 2.11BSD lacks, as `SS_NBIO` for the call |
 | `src/kernel/bsdnet/sys/uipc_socket2.c` | `vendor/2.11BSD/usr/sys/sys/uipc_socket2.c` | verbatim |
 | `src/kernel/bsdnet/sys/uipc_domain.c` | `vendor/2.11BSD/usr/sys/sys/uipc_domain.c` | `ADDDOMAIN` pastes with `##` where upstream used the Reiser `x/**/domain` |
 | `src/kernel/bsdnet/sys/uipc_proto.c` | `vendor/2.11BSD/usr/sys/sys/uipc_proto.c` | verbatim |
