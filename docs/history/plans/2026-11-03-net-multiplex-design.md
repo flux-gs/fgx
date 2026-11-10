@@ -399,10 +399,11 @@ the kernel stack until S3.
   a UDP `sendto` at 766 bytes (`sendto -> sendit -> sosend -> udp_usrreq -> udp_output
   -> ip_output -> w5output -> ...`); with about 60 bytes of entry from the dispatcher
   through net.mod and the vtable, and 64 for an interrupt frame, that is 890, 134
-  spare.  `sendit` alone is 300: 2.11BSD's `struct iovec aiov[MSG_MAXIOVLEN]`, 16
-  of them.  TCP's worst `sendto` is 826, 950 with the rest, which does not leave
-  128 spare: S4's to settle, by shrinking that array or measuring the real path,
-  before TCP sockets reach the stack.  Today's deepest slot, from a socket test
+  spare.  `sendit` alone is 300: two mbufs on its stack, `char sabuf[MSIZE],
+  ribuf[MSIZE]`, for the address and the access rights.  TCP's worst `sendto` is
+  826, 950 with the rest, which does not leave 128 spare: S4's to settle, by
+  moving those two off the stack or measuring the real path, before TCP sockets
+  reach the stack.  Today's deepest slot, from a socket test
   through net.mod, is 474 of 1024.
 
 - **S3 inherits:** `/etc/rc.in`; a default route, since only the interface's own net
