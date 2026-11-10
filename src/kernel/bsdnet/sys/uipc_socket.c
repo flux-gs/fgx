@@ -901,7 +901,8 @@ sogetnam(so, m)
 	register struct	socket	*so;
 	struct	mbuf	*m;
 	{
-	return(u.u_error=(*so->so_proto->pr_usrreq)(so, PRU_SOCKADDR, 0, m, 0));
+	return(u.u_error=(*so->so_proto->pr_usrreq)(so, PRU_SOCKADDR,
+	    (struct mbuf *)0, m, (struct mbuf *)0));	/* FGX: casts */
 	}
 
 sogetpeer(so, m)
@@ -911,6 +912,7 @@ sogetpeer(so, m)
 
 	if	((so->so_state & SS_ISCONNECTED) == 0)
 		return(u.u_error = ENOTCONN);
-	return(u.u_error=(*so->so_proto->pr_usrreq)(so, PRU_PEERADDR, 0, m, 0));
+	return(u.u_error=(*so->so_proto->pr_usrreq)(so, PRU_PEERADDR,
+	    (struct mbuf *)0, m, (struct mbuf *)0));	/* FGX: casts */
 	}
 #endif
