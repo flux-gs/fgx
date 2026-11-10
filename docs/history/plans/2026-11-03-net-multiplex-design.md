@@ -310,6 +310,12 @@ vsftpd 3.0.5 server on the LAN, today's hardware TCP:
 | to `/dev/null` | 11 s | 99 KB/s |
 | to a file on the UFS root | 38 s | 29 KB/s |
 
+On a real IIgs with an Uthernet II (2026-11-10), the same kind of transfer runs at
+9.9 KB/s to `/dev/null` and to a file alike, on `main` and on `feat/net-mux` with the
+stack unloaded, and 9.6 KB/s with the stack loaded beside it.  MAME's Uthernet is
+about ten times faster than the real card, so throughput measured under MAME says
+nothing about hardware; S4 measures on the machine.
+
 Cost per byte on the 65816, 1 MB per loop, timed by the emulator's cycle
 markers (a throwaway benchmark, not in the tree):
 
