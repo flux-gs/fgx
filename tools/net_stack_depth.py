@@ -18,11 +18,10 @@ import re
 import sys
 
 # Who a function may reach through a pointer, read from in_proto.c's inetsw and
-# the callers.  S2's driver joins if_output; `ifdriver' stands for it, at a guess
-# of what a frame-copying output routine costs.
+# the callers.  if_output is lo0's or the W5100 driver's.
 PR_INPUT = ["tcp_input", "udp_input", "icmp_input", "rip_input", "rip_input"]
 USRREQ = ["tcp_usrreq", "udp_usrreq", "raw_usrreq"]
-OUTPUT = ["looutput", "ifdriver"]
+OUTPUT = ["looutput", "w5output"]
 INDIRECT = {
     "ipintr": PR_INPUT,
     "ip_output": OUTPUT,
@@ -64,21 +63,25 @@ INDIRECT = {
     "sosetopt": [],
     "sorwakeup": [],
     "sonewconn": USRREQ,
-    "in_ifinit": ["ifdriver"],  # if_ioctl
+    "in_ifinit": ["w5ioctl"],  # if_ioctl
     # afswitch's af_hash and af_netmatch: small leaves
     "ifa_ifwithnet": [],
     "rtalloc": [],
     "rtredirect": [],
 }
 # Hand-written leaves: bytes below the caller.  in_cksum's frame is CK_L + saved D
-# + return; ifdriver is a guess until S2 measures it.
-LEAF = {"in_cksum": 15, "ifdriver": 40, "splimp": 4, "splnet": 4, "splhigh": 4,
+# + return.  The last four are written in S3 and are guesses until it measures
+# them: the copies to and from a process, the file lookup and setjmp.
+LEAF = {"in_cksum": 15, "splimp": 4, "splnet": 4, "splhigh": 4,
         "splx": 3, "kc_sleep": 40, "kc_sleepi": 40, "kc_wakeup": 40, "kc_panic": 8,
-        "kc_printstr": 16, "kc_ticks": 12, "kc_time": 12, "setsoftnet": 8}
+        "kc_printstr": 16, "kc_ticks": 12, "kc_time": 12, "setsoftnet": 8,
+        "copyin": 30, "netcopyout": 30, "getf": 20, "setjmp": 12}
 # in_control is PRU_CONTROL, an ioctl: every usrreq reaches it in the walk, and no
 # packet does.
 NOT_FROM_THE_DRAIN = {"in_control"}
-ROOTS = ["netintr", "sosend", "soreceive"]
+# The drain, and the socket calls a process makes, which run on its kernel slot.
+ROOTS = ["netintr", "sendto", "recvfrom", "connect", "bind", "setsockopt",
+         "getsockname", "shutdown", "soclose", "ifioctl", "sbselqueue"]
 PUSH = {"PHA": 2, "PHX": 2, "PHY": 2, "PEI": 2, "PHP": 1, "PHB": 1, "PHD": 2,
         "PLA": -2, "PLX": -2, "PLY": -2, "PLP": -1, "PLB": -1, "PLD": -2}
 

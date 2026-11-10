@@ -392,6 +392,18 @@ the kernel stack until S3.
   packet may not take, and with the driver a 40-byte guess.  Measured from the
   stack's paint, a `lo0` echo reaches 330 bytes.  The measured figure on the wire is
   in section 5.
+- **A socket call's stack.**  The calls a process makes run the stack's C on that
+  process's kernel slot, `kernel.kstk` = 1024 bytes, which cannot switch the way
+  `netintr`'s does, because `sbwait` sleeps on it, and cannot grow: seven slots already
+  fill 7 KB of the 8 KB `$E000` region.  `tools/net_stack_depth.py`'s static walk puts
+  a UDP `sendto` at 766 bytes (`sendto -> sendit -> sosend -> udp_usrreq -> udp_output
+  -> ip_output -> w5output -> ...`); with about 60 bytes of entry from the dispatcher
+  through net.mod and the vtable, and 64 for an interrupt frame, that is 890, 134
+  spare.  `sendit` alone is 300: 2.11BSD's `struct iovec aiov[MSG_MAXIOVLEN]`, 16
+  of them.  TCP's worst `sendto` is 826, 950 with the rest, which does not leave
+  128 spare: S4's to settle, by shrinking that array or measuring the real path,
+  before TCP sockets reach the stack.  Today's deepest slot, from a socket test
+  through net.mod, is 474 of 1024.
 
 - **S3 inherits:** `/etc/rc.in`; a default route, since only the interface's own net
   is routed; `s2_stubs.c`'s remainder; `sleep`'s signal answer; the transmit path's
