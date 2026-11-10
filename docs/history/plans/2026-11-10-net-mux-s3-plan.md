@@ -15,12 +15,12 @@
 For the maintainer's review.  Task 8 writes the accepted ones into the spec.
 
 1. **net.mod routes, through its existing descriptor.**  A UDP socket keeps a net.mod descriptor (tag `XPORT_KSO`) whose record holds the `struct socket` pointer, so read, write, ioctl, select and close reach the kernel stack through the paths that already exist.  The alternative, a new FCB kind that the core kernel dispatches itself, is S4's end state, but every core-bank seam would branch on it, and the core bank has 6 bytes free.  Cost: the 12-descriptor cap (`SOCKD_MAX`) stays until S4 retires the table, and the forwarding code is deleted then.
-2. **A blocking UDP receive blocks.**  Today an idle UDP `recvfrom` answers EAGAIN whether or not the socket is non-blocking, which no BSD does: 2.11BSD's `soreceive` sleeps in `sbwait` unless `SS_NBIO` is set (`sys/uipc_socket.c`).  Every UDP program in the tree was checked: ntpd, ntp and syslogd use `select`, and ntpdc uses `select` under `alarm`.  dhclient's wait loop and `unixprobe`'s idle check rely on the EAGAIN; both change (Tasks 4 and 5).
-3. **DHCP through an address of 0.0.0.0, as early BOOTP clients did** (spec 4.7, first option).  With no address in the chip, the driver gives `w5` 0.0.0.0, and `in_ifinit` (`netinet/in.c`) adds a route for network 0.  `rtalloc` (`net/route.c`) falls back to network 0 ("Check for wildcard gateway, by convention network 0"), so a send to 255.255.255.255 leaves through `w5`, from 0.0.0.0.  No bpf, no `SO_DONTROUTE`, and no change to 2.11BSD's files.
+2. **A blocking UDP receive blocks.**  Today an idle UDP `recvfrom` answers EAGAIN whether or not the socket is non-blocking, which no BSD does: 2.11BSD's `soreceive` sleeps in `sbwait` unless `SS_NBIO` is set (`sys/uipc_socket.c`).  Every UDP program in the tree was checked: ntpd, ntp and syslogd use `select`, and ntpdc uses `select` under `alarm`.  Three things rely on the EAGAIN, and all three change in Task 4, the task that makes it the default: dhclient's wait loop, `unixprobe`'s idle check, and libc's resolver, which polls `recvfrom` 90 times with no FIONBIO, `select` or `alarm` (`toolchain/lib/libc_c/netdb.c`, `_dns_resolve`'s loop) and would otherwise hang on any unanswered query.
+3. **DHCP through an address of 0.0.0.0, as early BOOTP clients did** (spec 4.7, first option).  With no address in the chip, the driver gives `w5` 0.0.0.0, and `in_ifinit` (`netinet/in.c`) adds a route for network 0.  `in_netof(255.255.255.255)` is 0 (the address is off the class ladder), so `rtalloc` (`net/route.c`) matches that route in its network pass, and a send to 255.255.255.255 leaves through `w5`, from 0.0.0.0.  `in_pcbconnect` keeps the destination at 255.255.255.255 because `in_ifaddr` is `lo0`, which has no IFF_BROADCAST; `lo0` must stay first.  The reply is accepted only because dhclient asks for a broadcast one (flags `0x80`, `dhclient.c` `build_dhcp`): `ip_input` takes INADDR_BROADCAST as ours, but drops a unicast to an address it does not have yet.  dhclient keeps that flag.  Once an address is set, the network-0 route is gone and 255.255.255.255 would follow the default route to the router, so the driver also keeps a host route for 255.255.255.255 on `w5` (Task 4), which a second dhclient run needs.  No bpf, no `SO_DONTROUTE`, and no change to 2.11BSD's files.
 4. **The stack's EWOULDBLOCK is EAGAIN.**  FGX userland has one would-block errno, 11 (`toolchain/include/errno.h`, `include/errno.s`), and 2.11BSD's is 35.  The port's `sys/errno.h` takes FGX's value, with a PROVENANCE note.  The socket errnos FGX userland lacks entirely (ENETUNREACH, EHOSTUNREACH, ENETDOWN, EINPROGRESS, EALREADY, EPROTONOSUPPORT, ESOCKTNOSUPPORT, ECONNABORTED, ESHUTDOWN, among others) go into libc with 2.11BSD's numbers and strings, toolchain first.
 5. **The modules load at every boot, card or not.**  With the chip's UDP retired, a machine without them has no AF_INET UDP at all, and `lo0` is what gives a cardless machine `syslogd -u` and `ntpdc 127.0.0.1`.  Spec 3 accepted the 4-5 banks.  The gate machine then pays them too, which may move the capacity tests (Task 4).
-6. **`MSG_DONTWAIT` is honored on a UDP socket** by setting `SS_NBIO` for that call.  2.11BSD has no such flag; FGX's `<sys/socket.h>` defines it and net.mod honors it on its other sockets.  It is a divergence, noted in the BUGS section of `recv(2)` and in PROVENANCE.
-7. **A UDP send with no route answers ENETUNREACH, not EADDRNOTAVAIL.**  With `lo0` always present, `in_ifaddr` is never empty, so `in_pcbconnect` no longer refuses, and `ip_output` reports the missing route.  `unixprobe`'s no-card case changes to that (Task 5).
+6. **`MSG_DONTWAIT` is honored on a UDP socket** by setting `SS_NBIO` for that call.  2.11BSD has no such flag; FGX's `<sys/socket.h>` defines it and net.mod honors it on its other sockets.  It is a divergence, noted in the BUGS section of `recv(2)` and in PROVENANCE.  The bit is on the shared socket for the call, so a process sharing it across fork can see it while the call is in `sblock`; the note says so.
+7. **A UDP send with no route answers ENETUNREACH, not EADDRNOTAVAIL.**  With `lo0` always present, `in_ifaddr` is never empty, so `in_pcbconnect` no longer refuses, and `ip_output` reports the missing route.  `unixprobe`'s no-card case changes to that (Task 4).
 
 ## Global Constraints
 
@@ -42,7 +42,7 @@ For the maintainer's review.  Task 8 writes the accepted ones into the spec.
 2. **Two processes inside the stack at once**: one asleep in `recvfrom` while another sends and errs.  Each gets its own errno and count, never the other's.  Task 5 case `-u two`.
 3. **A UDP socket shared across fork**: the child closes it and the parent keeps using it.  Expect `soclose` only at the last reference.  Task 5 case `-u fork`.
 4. **A datagram larger than the reader's buffer, and a send larger than the send buffer.**  Expect the excess discarded (2.11BSD's `soreceive` for an atomic protocol) and EMSGSIZE from `sosend`.  Task 5 case `-u size`.
-5. **The address changing under bound sockets**: dhclient run again, or ifconfig.  Expect exactly one default route afterward, through the new gateway, and sockets bound to the wildcard still receiving.  Task 4 case 55.
+5. **The address changing under bound sockets**: dhclient run again, or ifconfig.  Expect exactly one default route afterward, through the new gateway, a second dhclient's DISCOVER still leaving as an Ethernet broadcast, and sockets bound to the wildcard still receiving.  Task 4 case 55.
 
 ---
 
@@ -64,14 +64,14 @@ A socket call runs the stack's C on the calling task's kernel stack, `kernel.kst
 - Vendor: `pdp/mch_xxx.s` from `examples/2.11BSD/usr/sys/pdp/` if it is not already in `vendor/`
 
 **Interfaces:**
-- Produces: kernel `setjmp(label_t *)` and `longjmp(label_t *, int)`, matching fcc's builtin call shape (`emit_libc_call`; env address in X; for longjmp, the value in A); `label_t` sized to what they save; `sleep()` that keeps `u` across the sleep and longjmps to `u.u_qsave` when a pri > PZERO sleep is broken by a signal.
+- Produces: kernel `setjmp(label_t *)` and `longjmp(label_t *, int)`, matching fcc's builtin call shape (`emit_libc_call`; env address in X; for longjmp, the value in A); `label_t` sized to what they save; `sleep()` that keeps `u` across the sleep and, when a pri > PZERO sleep is broken by a signal, sets `u.u_error = EINTR` and longjmps to `u.u_qsave`; `suser()` that sets EPERM on refusal.
 
-`uipc_syscalls.c` already does 2.11BSD's `setjmp(&u.u_qsave)` around `sosend`, `soreceive` and the connect wait.  2.11BSD's kernel `sleep()` longjmps there on a signal (`sys/kern_synch.c`; the kernel's `setjmp` is in `pdp/mch_xxx.s`).  Read both before writing.
+`uipc_syscalls.c` already does 2.11BSD's `setjmp(&u.u_qsave)` around `sosend`, `soreceive` and the connect wait.  2.11BSD's kernel `sleep()` longjmps there on a signal (`sys/kern_synch.c`; the kernel's `setjmp` is in `pdp/mch_xxx.s`).  Read both before writing.  2.11BSD's `sleep()` sets `u.u_error` to EINTR before the longjmp ("EINTR - put into u_error for trap.c to find"), and `sendit`/`recvit`'s setjmp arm relies on it: `if (auio.uio_resid == len) return;` returns with whatever `u_error` holds.  2.11BSD's `suser()` (`sys/sys_net.c`) sets `u.u_error = EPERM`, and `in_control` returns `u.u_error` when it refuses.
 
-- [ ] **Step 1: Write the failing probe cases** in `netprobe6.c`.  Case 51: `setjmp` returns 0, `longjmp(…, 7)` from a nested call returns 7 to it, and a register local set before the `setjmp` survives.  Case 52: `EWOULDBLOCK == EAGAIN` in the stack's headers, a compile-time check.  In the toolchain, extend the `M11/lc_errno` fixture: `strerror(ENETUNREACH)` is "Network is unreachable", not 2.11BSD's "Unknown error: 51"; goldens green.
+- [ ] **Step 1: Write the failing probe cases** in `netprobe6.c`.  Case 51: `setjmp` returns 0, `longjmp(…, 7)` from a nested call returns 7 to it, a register local set before the `setjmp` survives, and a local whose address was taken before the `setjmp` reads correctly after it.  Case 52: `EWOULDBLOCK == EAGAIN` in the stack's headers, a compile-time check.  In the toolchain, extend the `M11/lc_errno` fixture: `strerror(ENETUNREACH)` is "Network is unreachable", not 2.11BSD's "Unknown error: 51"; goldens green.
 - [ ] **Step 2: Run them.**  Expected: fail to build or FAIL.
-- [ ] **Step 3: Implement.**  Kernel `setjmp`/`longjmp` go in `machine/net_asm.s`, after `mch_xxx.s`: S, DP, DBR, the return PB:PC, and fcc's callee-saved direct-page band, with no signal mask (that is libc's).  `user.h` drops `u_ofile`, since `getsock` is FGX's (Task 3).  `sleep()` copies `u` to a local before `kc_sleepi`/`kc_sleep` and back after.  On a signal at pri > PZERO it does `longjmp(&u.u_qsave, 1)`, after the copy back.  Add the errnos to libc; set EWOULDBLOCK to EAGAIN in the port's `errno.h`.
-- [ ] **Step 4: Run them.**  Expected: PASS.  Mutation: skip the restore of the direct-page band and see case 51's register local go wrong.
+- [ ] **Step 3: Implement.**  Kernel `setjmp`/`longjmp` go in `machine/net_asm.s`, after `mch_xxx.s`.  They save what libc's do (`toolchain/lib/libc.s`), less the signal mask: S, DP, DBR, the return PB:PC, fcc's frame cells `_fcc_fb` and `_fcc_sfp` (without them a local whose address was taken resolves in the wrong frame), and the callee-saved direct-page band.  `user.h` keeps `u_ofile`, which `uipc_syscalls.c` names (Task 3).  `sleep()` copies `u` to a local before `kc_sleepi`/`kc_sleep` and back after.  On a signal at pri > PZERO it then sets `u.u_error = EINTR` and does `longjmp(&u.u_qsave, 1)`.  `suser()` sets EPERM when it refuses.  Add the errnos to libc; set EWOULDBLOCK to EAGAIN in the port's `errno.h`.
+- [ ] **Step 4: Run them.**  Expected: PASS.  Mutations: skip the restore of the direct-page band and see case 51's register local go wrong; skip `_fcc_fb` and see its address-taken local go wrong.  The EINTR store is pinned by Task 5's `eintr`, whose control is to omit it.
 - [ ] **Step 5: Run `tools/gate.sh`; commit** the errnos (toolchain) separately from the kernel half.
 
 ### Task 3: The seam: net.mod forwards, uipc_syscalls answers
@@ -83,10 +83,18 @@ A socket call runs the stack's C on the calling task's kernel stack, `kernel.kst
 
 **Interfaces:**
 - Produces, in bsdnetd's vtable after `bn_tap`: `bn_sysent`, an assembly jump table in `machine/net_asm.s`.  It is entered by JSL with A = `BNOP_*` byte offset, X = the descriptor's socket pointer (an offset in bsdnetd's bank; 0 for `BNOP_SOCKET`), and Y = the offset of a 2.11BSD-shaped argument block (`u.u_ap`) that net.mod built in the kernel bank.  It sets DBR to bsdnetd's bank and enters C.  It returns C=1 with A = `u.u_r.r_val1`, or C=0 with A = errno.  `BNOP_*` are in `include/modules.s`, in the table's order: SOCKET, BIND, CONNECT, SENDTO, RECVFROM, SEND, RECV, SETSOCKOPT, GETSOCKNAME, GETPEERNAME, SHUTDOWN, READ, WRITE, IOCTL, SELECT, CLOSE, IFCHANGED.
-- Produces: `XPORT_KSO` (5) in `include/socket.s`, and `SOCK_KsoSo`, the 2-byte socket pointer, overlaying `SOCK_FAddr`, which only the chip's UDP used.
-- Consumes: `kc_wakeup`, `KSVC_SIGRAISE`, `KSVC_CURUID`, FGX's `struct uio` (`src/kernel/vfs/uio.h`; iov bases are far pointers).
+- Produces: `XPORT_KSO` (5) in `include/socket.s`, and `SOCK_KsoSo`, the 2-byte socket pointer, overlaying `SOCK_FAddr`, which only the chip's UDP reads (net_loop.s only clears it).
+- Consumes: `kc_wakeup`, `KSVC_SIGRAISE`, `KSVC_CURUID`, `KSVC_CURPID`, FGX's `struct uio` (`src/kernel/vfs/uio.h`; iov bases are far pointers).
 
-The FGX-written part is the argument fetch, as spec 4.5 says.  `bn_sys.c` sets `u.u_ap`, `u.u_error`, `u.u_uid` (from `KSVC_CURUID`) and `u.u_procp`, then calls the 2.11BSD body.  `getsock`/`gtsockf` return a static `struct file` whose `f_socket` is the pointer net.mod passed.  For `BNOP_SOCKET`, it returns the new socket's pointer in A for net.mod to store.
+The FGX-written part is the argument fetch, as spec 4.5 says.  `bn_sys.c` sets `u.u_ap`, `u.u_error`, `u.u_uid` (from `KSVC_CURUID`, for every op including `BNOP_IFCHANGED`) and `u.u_procp`, then calls the 2.11BSD body.  `u.u_procp` points at a static `struct proc` (`sys/proc.h` has only `p_wchan`), because `sbselqueue` reads `p->p_wchan` through `mfkd`; a null `u_procp` would quietly disable select wakeups.
+
+`uipc_syscalls.c` links whole, so every name it uses must resolve, even in bodies nothing calls:
+- `getf()` is FGX's.  2.11BSD's own `gtsockf` (in the same file) calls it, and it returns a static `struct file` with `f_type = DTYPE_SOCKET`, which `gtsockf` checks, and `f_socket` set to the pointer net.mod passed.
+- `int netoff = 0;` lives in `bn_sys.c`; every entry tests it.
+- `u_ofile` stays in `user.h`.  `socket()`, `accept()` and `socketpair()` write it.
+- `falloc` and `ufalloc` are panics, with a PROVENANCE note.  Nothing reaches them: `BNOP_SOCKET` calls `socreate()` directly, never 2.11BSD's `socket()`, and accept and socketpair are TCP and AF_UNIX, which stay in net.mod.
+
+For `BNOP_SOCKET`, `bn_sys.c` returns the new socket's pointer in A for net.mod to store.
 
 `s2_stubs.c`'s socket-call stubs become real:
 - `uiomove` copies through the far iov.
@@ -98,7 +106,7 @@ The FGX-written part is the argument fetch, as spec 4.5 says.  `bn_sys.c` sets `
 net.mod's side, in `net_kso.s`:
 - `net_op_socket` sends AF_INET/SOCK_DGRAM to `BNOP_SOCKET` when `VT_BSDNET` is registered, and still to the chip otherwise until Task 6.
 - Every other op on an `XPORT_KSO` descriptor tail-calls `_Kso_Forward`.  It builds the argument block from `_Sys_Saved*`, the caller's arg block and `_sockUio`.  It passes `SOCK_NB` and `MSG_DONTWAIT` as one non-blocking bit, which `bn_sys.c` turns into `SS_NBIO` for the call.
-- The select and FIONREAD status (`NETOP_SockStatus`) maps to `BNOP_SELECT`: soreadable and sowriteable, never sleeping.  `_sockRxLen` gets `so_rcv.sb_cc`.
+- The select and FIONREAD status (`NETOP_SockStatus`) maps to `BNOP_SELECT`, which calls 2.11BSD's `soo_select` for read and for write.  It never sleeps, and it arms `sb_sel` through `sbselqueue`.  That arming is what makes `sowakeup` call `selwakeup` when a datagram arrives; without it the only wakeups are the W5100 interrupt flag and idle (`src/kernel/sched.s`), and neither fires for `lo0`.  `_sockRxLen` gets `so_rcv.sb_cc`.
 - `SIOCGIF*` on a KSO socket goes to `BNOP_IOCTL`, which is `ifioctl`.
 - Teardown is `BNOP_CLOSE`.
 - Nothing in net.mod reads its `_sock*` scratch after the forward returns, because the forward may have slept.
@@ -108,6 +116,7 @@ net.mod's side, in `net_kso.s`:
   - `zero`: a bind to port 0 picks a port, and `getsockname` reports it.
   - `conn`: after `connect`, `send` works, and a datagram from a third socket is not delivered.
   - `sel`: `select` says readable only once a datagram is queued, and FIONREAD gives its length.
+  - `selwake`: a `select` with no timeout, blocked on an empty socket, returns within a second when a forked child sends to it.
   - `nbio`: FIONBIO, then `read` on an empty socket answers EAGAIN, and so does `recv` with `MSG_DONTWAIT`.
   - `inuse`: a second bind to the same port answers EADDRINUSE, and SO_REUSEADDR allows it as `in_pcbbind` says.
   - `oob`: `sendto` with MSG_OOB answers EOPNOTSUPP (loopprobe's existing `dgram` case).
@@ -116,59 +125,56 @@ net.mod's side, in `net_kso.s`:
   `netudp.json` runs `modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; /testbin/loopprobe -u`.
 - [ ] **Step 2: Run it.**  Expected: FAIL; the datagrams go to the chip's core, which has no `lo0`.
 - [ ] **Step 3: Implement** bsdnet's side, then net.mod's.  A defect found in ported code goes in its own commit with the BSD reference.
-- [ ] **Step 4: Run it.**  Expected: `UDP OK`, not cached.  Controls: make `_Kso_Forward` drop the non-blocking bit and see `nbio` hang until its timeout; send `BNOP_SELECT` to a stub that always answers ready and see `sel` fail.
+- [ ] **Step 4: Run it.**  Expected: `UDP OK`, not cached.  Controls: make `_Kso_Forward` drop the non-blocking bit and see `nbio` hang until its timeout; send `BNOP_SELECT` to a stub that always answers ready and see `sel` fail; skip `sbselqueue` and see `selwake` time out.
 - [ ] **Step 5: Run `tools/gate.sh`** (no modules loaded at boot yet, so the chip's UDP still carries the gate); **commit** bsdnet's half and net.mod's separately.
 
 ### Task 4: Every boot, an address, and a default route
 
 **Files:**
-- Modify: `disk_src/etc/rc.in`, `src/kernel/bsdnet/net/if_w5.c`, `machine/bn_sys.c`, `src/modules/net/net.s` (the IFC_SET path), `src/userland/dhclient/dhclient.c`, `netprobe6.c`, `tools/mame_test/tests/boot_netstart.json` (description only)
+- Modify: `disk_src/etc/rc.in`, `src/kernel/bsdnet/net/if_w5.c`, `machine/bn_sys.c`, `src/modules/net/net.s` (the IFC_SET path), `src/userland/dhclient/dhclient.c`, `src/userland/unixprobe/unixprobe.c`, `toolchain/lib/libc_c/netdb.c`, `netprobe6.c`, `tools/mame_test/tests/boot_netstart.json` (description only)
 
 **Interfaces:**
 - Consumes: `BNOP_IFCHANGED` (Task 3); `rtrequest` and `in_control` (upstream).
-- Produces: `w5address()` that gives `w5` 0.0.0.0 when the chip has no address, and otherwise the chip's address and mask, then replaces the default route with one through the chip's gateway register (GAR), or none when GAR is 0.
+- Produces: `w5address()` that gives `w5` 0.0.0.0 when the chip has no address, and otherwise the chip's address and mask, then replaces the default route with one through the chip's gateway register (GAR), or none when GAR is 0, and keeps a host route for 255.255.255.255 on `w5` (`RTF_HOST|RTF_UP`, gateway the interface's own address).  `rtrequest` deletes a route only when its gateway matches (`net/route.c`), so `if_w5.c` remembers the gateway and broadcast route it last added, and deletes those.
 
-`/etc/rc.in` loads `bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3` on the same `modload` line as `net`, before `/etc/netstart`, so dhclient's socket is already the kernel's.  net.mod's `IFC_SET`/`IFC_SETDHCP` path writes the chip as today, then calls `BNOP_IFCHANGED`, which re-runs `w5address()`.  The chip registers stay the source of truth until S5 retires `SYS_IFCONFIG`.  `w5ioctl` sends no gratuitous ARP for 0.0.0.0.
+`/etc/rc.in` loads `bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3` on the same `modload` line as `net`, before `/etc/netstart`, so dhclient's socket is already the kernel's.  net.mod's `IFC_SET`/`IFC_SETDHCP` path writes the chip as today, then calls `BNOP_IFCHANGED`, which re-runs `w5address()`.  The chip registers stay the source of truth until S5 retires `SYS_IFCONFIG`.  `w5ioctl` sends no gratuitous ARP for 0.0.0.0, and the driver drops inbound ARP while the address is 0.0.0.0.  Otherwise `in_arpinput` takes every RFC 5227 probe on the LAN (sender 0.0.0.0) for a duplicate of our address, logs it and answers it, and DHCP needs no ARP.
 
-dhclient waits with `select` and the remaining timeout instead of spinning on EAGAIN.
+Three programs stop relying on the old EAGAIN, because this is the task that makes the kernel's blocking UDP the default (call 2):
+- dhclient waits with `select` and the remaining timeout, and keeps the broadcast flag (call 3).
+- libc's resolver (`netdb.c`) waits with `select` and the remaining timeout too.  That is a toolchain commit of its own.  `ntpd.json`'s `time.apple.com: unknown host` must still appear, not hang.
+- `unixprobe`, for `unixdgram` in the gate, changes as calls 2 and 7 say.  The idle-socket check sets FIONBIO before its `recvfrom`, as it already does for `read`.  The no-card send expects ENETUNREACH (`ip_output`: `if (in_localaddr(ip->ip_dst)) error = EHOSTUNREACH; else error = ENETUNREACH;`).  "All three W5100 slots free" asserts the AF_UNIX half alone, since a UDP socket claims no chip socket.  Cite the 2.11BSD lines in the commit.
 
-- [ ] **Step 1: Write the failing cases.**  Probe case 54: with GAR set, `rtalloc` for an address off the local net returns an `RTF_GATEWAY` route to GAR.  Case 55: after two IFC_SETs with different gateways, exactly one default route exists, through the second gateway, and a socket bound to the wildcard before them still receives over `lo0`.  `boot_netstart.json` (real DHCP, not in the gate), with rc.in now loading the modules: `bound to` appears.  `netftp` still passes with the modules loaded at boot, which proves the chip's TCP beside them.
+- [ ] **Step 1: Write the failing cases.**  Probe case 54: with GAR set, `rtalloc` for an address off the local net returns an `RTF_GATEWAY` route to GAR.  Case 55: after two IFC_SETs with different gateways, exactly one default route exists, through the second gateway; `rtalloc` for 255.255.255.255 returns the host route on `w5`, not the gateway; and a socket bound to the wildcard before them still receives over `lo0`.  `boot_netstart.json` (real DHCP, not in the gate), with rc.in now loading the modules: `bound to` appears.  `netftp` still passes with the modules loaded at boot, which proves the chip's TCP beside them.
 - [ ] **Step 2: Run them.**  Expected: FAIL.  `boot_netstart` fails because dhclient's socket now blocks in `recvfrom` and its DISCOVER finds no route.
 - [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run them.**  Expected: PASS, not cached.  Control: skip the network-0 route and see `boot_netstart` fail with `no DHCPOFFER`.
+- [ ] **Step 4: Run them.**  Expected: PASS, not cached.  Controls: skip the network-0 route and see `boot_netstart` fail with `no DHCPOFFER`; skip the delete of the old gateway and see case 55 count two default routes; skip the broadcast host route and see case 55's `rtalloc` return the gateway.
 - [ ] **Step 5: Run `tools/gate.sh`.**  The gate now boots with the modules, 4-5 fewer pool banks, and the kernel carrying UDP over `lo0`.  If a capacity test goes red (`heapcap`, `mallocmax`, `bigfork`, `bigforkx`), STOP and report its numbers: re-baselining a capacity test is the maintainer's call, not a ruling.  Otherwise commit.
 
 ### Task 5: The programs on it
 
 **Files:**
-- Modify: `src/userland/unixprobe/unixprobe.c`, `src/userland/loopprobe/` (`-u` cases below), `tools/mame_test/tests/ntpd.json`, `tools/mame_test/tests/netudp.json`, the man pages of `recv(2)` (BUGS), `docs/CONFIGURING.md` if it says UDP is the chip's
+- Modify: `src/userland/loopprobe/` (`-u` cases below), `tools/mame_test/tests/ntpd.json`, `tools/mame_test/tests/netudp.json`, the man pages of `recv(2)` (BUGS), `docs/CONFIGURING.md` if it says UDP is the chip's
 
 The regression floor (spec 6) runs on the kernel's UDP from Task 4 on: `sockleak`, `sockemfile` and `unixdgram` in the gate; `ifcprobe`, `bindzero`, `ntpd` and `netudp` outside it.
 
 - [ ] **Step 1: Write the failing cases.**  More `loopprobe -u` cases:
   - `eintr`: `alarm(1)` with a handler, then a blocking `recvfrom` on an empty socket, returns -1 with EINTR, the handler ran, and a datagram sent afterward is still received.
-  - `two`: a child blocks in `recvfrom` while the parent sends to a closed port and gets ECONNREFUSED from the ICMP error if 2.11BSD's `udp_ctlinput` reports it on a connected socket, or a successful count otherwise.  The child's datagram arrives with its own length.  Read `udp_usrreq.c`'s `udp_ctlinput` before writing the expectation.
+  - `two`: a child blocks in `recvfrom` while the parent, on a socket connected to a closed port, sends and then gets ECONNREFUSED on its next call.  `udp_ctlinput` reaches only a pcb whose `inp_faddr` matches (`in_pcbnotify`), so an unconnected `sendto` just returns its count.  The child's datagram then arrives with its own length, and the child's errno is untouched.
   - `fork`: the child closes an inherited socket and the parent still sends and receives on it.
   - `size`: a 200-byte datagram read with a 50-byte buffer returns 50, and the next read gets the next datagram, not the rest.  A send over the send buffer's high water mark answers EMSGSIZE.
 
   `ntpd.json` starts ntpd and runs `ntpdc -n 127.0.0.1`, expecting its peer table rather than a timeout.  Change its description, which says the loopback carries TCP only.
 - [ ] **Step 2: Run them.**  Expected: `eintr` hangs to its timeout or FAILs until Task 2's longjmp reaches it; `ntpd` fails.  If either passes first, the case is not reaching the kernel path: fix the test.
-- [ ] **Step 3: Change `unixprobe` as calls 2 and 7 say:**
-  - The idle-socket check sets FIONBIO before its `recvfrom` (it already does for `read`).
-  - The no-card send expects ENETUNREACH.
-  - "All three W5100 slots free" no longer involves UDP, since a UDP socket claims no chip socket; it asserts the AF_UNIX half alone.
-
-  Cite the 2.11BSD lines in the commit.
-- [ ] **Step 4: Fix what the cases find,** each in its own commit.
-- [ ] **Step 5: Run them.**  Expected: PASS, not cached; `syslogd -u` receives a line sent by `logger` over `lo0` to 127.0.0.1:514 (add it to `netudp.json`).  Control for `two`: make `sleep()` skip the copy back of `u` and see one process report the other's errno.
-- [ ] **Step 6: Run `tools/gate.sh`; commit.**
+- [ ] **Step 3: Fix what the cases find,** each in its own commit.
+- [ ] **Step 4: Run them.**  Expected: PASS, not cached; `syslogd -u` receives a line sent by `logger` over `lo0` to 127.0.0.1:514 (add it to `netudp.json`).  Controls: for `two`, make `sleep()` skip the copy back of `u` and see one process report the other's errno; for `eintr`, omit `sleep()`'s EINTR store and see it return a count instead of -1.
+- [ ] **Step 5: Run `tools/gate.sh`; commit.**
 
 ### Task 6: The chip's UDP core retires
 
 **Files:**
 - Modify: `src/modules/net/net_xport.s`, `src/modules/net/net.s`, `include/socket.s`, `src/kernel/uthernet.s` and the regenerated `w5100_patchsites.s` files if anything there serves only UDP
 
-Spec 4.4.1: "A UDP socket must never open a hardware UDP socket after S3."  Delete `_Udp_OpenAt`, `_Udp_SendCore`, `_Udp_RecvCore`, `_Udp_PortShare` and `_Udp_Connect`, the `XPORT_UDP` arms of the `_Net_Xport_*` seams and `_So_Send`/`_So_Recv`, `_So_UdpPeer*` and `_So_UdpFrom`, and the comments that describe them.  `XPORT_UDP` goes; `socket(AF_INET, SOCK_DGRAM)` without the modules answers EPROTONOSUPPORT, which is what 2.11BSD's `socreate` answers when no protosw matches.  Search with counts, not `head`, for every user of each symbol.
+Spec 4.4.1: "A UDP socket must never open a hardware UDP socket after S3."  Delete `_Udp_OpenAt`, `_Udp_SendCore`, `_Udp_RecvCore`, `_Udp_PortShare` and `_Udp_Connect`, the `XPORT_UDP` arms of the `_Net_Xport_*` seams and of `_So_Send`/`_So_Recv` (which stay: loopback and AF_UNIX use them), `_So_UdpPeer*` and `_So_UdpFrom`, and the comments that describe them.  `XPORT_UDP` goes; `socket(AF_INET, SOCK_DGRAM)` without the modules answers EPROTONOSUPPORT, which is what 2.11BSD's `socreate` answers when no protosw matches.  Search with counts, not `head`, for every user of each symbol.
 
 - [ ] **Step 1: Write the failing check:** `netudp.json` gains a run with the modules not loaded that expects `socket: Protocol not supported` from a one-line UDP client in `loopprobe -u`.
 - [ ] **Step 2: Run it.**  Expected: FAIL; the chip core still answers.
@@ -200,7 +206,7 @@ S2 left the transmit path sending one frame per `netintr` pass when the previous
   - the module footprint;
   - the pool banks the gate machine has left;
   - the echo round trip, with and without Task 7.
-- [ ] **Step 2: Update the spec.**  S3 done, with its commit range; the calls above that were accepted; what S4 inherits: the descriptor table and its 12-slot cap, `net_kso.s`, `gsignal`/`netpfind`, and the chip's TCP.
+- [ ] **Step 2: Update the spec.**  S3 done, with its commit range; the calls above that were accepted; what S4 inherits: the descriptor table and its 12-slot cap, `net_kso.s`, `gsignal`/`netpfind`, the `falloc`/`ufalloc` panics that S4's accept and AF_UNIX make reachable, and the chip's TCP.
 - [ ] **Step 3: Verify.**  Expected: `tools/gate.sh` green at `kernel.netprobe = 0`.  Green at 1 and not cached: `netprobe`, `netudp`, `netw5`, `netftp`, `netdumptap`, `boot_netstart`, `ntpd`, `ntpnet`.
 - [ ] **Step 4: Leave a hardware image and STOP.**  Build the shipping configuration to `disk/fgxroot-s3.fs`.  Write one page naming what to check on the real IIgs and what each should show:
   - the boot's `bound to` line;
