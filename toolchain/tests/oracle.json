@@ -743,5 +743,6 @@
   "long_ptr_add": 42,
   "paren_member_unsigned": 42,
   "bitfield_access": 42,
-  "struct_arg_deref": 42
+  "struct_arg_deref": 42,
+  "store_index_arrow": 42
 }

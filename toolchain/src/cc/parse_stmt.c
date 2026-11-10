@@ -5605,8 +5605,28 @@ peek_mixed_lvalue_store(void)
         if (lastf != NULL && lastf->n_dims == 2 && g_toks[t].kind == TOK_LBRACKET)
             member_dbl_index = 1;
     }
+    /* (g) an ELEMENT of an array of struct pointers, then an arrow --
+     * `ms[k]->m_len = x'.  K&R A.7.3.1: "A postfix expression followed by an
+     * expression in square brackets is a postfix expression", and A.7.3.3 makes
+     * that followed by `->' and an identifier a postfix expression too, so this
+     * is a modifiable lvalue of the member's type.  The expression layer reads
+     * the same shape; the store had no arm and died "expected '='".  Type-gated
+     * on the base being such an array, so no shape with an arm today moves. */
+    int index_then_arrow = 0;
+    if (n_arrow >= 1 && g_toks[base_tok + 1].kind == TOK_LBRACKET) {
+        Local  *blc = locals_lookup(g_toks[base_tok].id_ptr,
+                                    g_toks[base_tok].id_len);
+        Global *bgv = (blc == NULL) ? globals_lookup(g_toks[base_tok].id_ptr,
+                                                     g_toks[base_tok].id_len)
+                                    : NULL;
+        LocalType bt   = blc ? blc->type      : (bgv ? bgv->type      : LT_INT);
+        int       bsid = blc ? blc->struct_id : (bgv ? bgv->struct_id : -1);
+        if (is_ptr_array(bt) && bsid >= 0)
+            index_then_arrow = 1;
+    }
     int routed = arrow_after_dot || (n_arrow >= 2 && has_index) || dot_then_index
-                 || arrow_then_dot || arrow_then_index || member_dbl_index;
+                 || arrow_then_dot || arrow_then_index || member_dbl_index
+                 || index_then_arrow;
     /* (d) a PLAIN dot chain ending in ++/-- (`B.n++;`, `B.s++;` -- tcsh
      * sh.lex's fseekp macro over B.Bfseekp, an off_t).  The statement dot path
      * has '=' and 'op=' arms but NO incdec arm, while the arrow twin `p->f++`
