@@ -250,7 +250,7 @@ Each phase ends with the system working and the gate green.
 | S0 | fcc prerequisites | the remaining items of the Track B S0 document: 3.2 `##`, 3.4 extern of an incomplete struct, 3.5 struct assignment into an array element, 3.6 address constants in static initializers, 3.7 `&` of any lvalue, 3.8 struct return by value.  3.1 landed in !399; 3.3 landed in #46 (`b2305ec`, the block-scope extern fix).  **Done** on feat/net-mux (`46dba3b`..`084ecce`), with three items the S0 audit found: a call through a function pointer at the end of a member chain, a typedef of a sized array, and `sizeof` of `*` applied to a member chain.  All 23 files of the port set then compile, under `-Dpdp11`, which S1 found to be the wrong arm (section 3); all of them, with the `net/` files added, compile under `fgx`.  Left for S1, all seams: `h/signal.h:129` lacks a `;`; `FMARK`/`FDEFER` and `FREAD`/`FWRITE` are defined nowhere in 2.11BSD's `h/` (4.3BSD-Reno `sys/file.h` has them); `uipc_domain.c`'s `ADDDOMAIN` pastes with the Reiser `x/**/domain`, which the port writes as `##`; and the PDP arms of `h/types.h` and `pdp/seg.h`. |
 | S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split.  **Done** on feat/net-mux (`f07f1da`..): `bsdnetd` and `bsdnet0`-`3` are built and staged, and no boot loads them; `modload` of all five on a `kernel.netprobe = 1` kernel runs the probe.  182 KB of code and a 41 KB data image, 35 KB of that the mbuf pool: five banks.  Callout and bpf stay in S2, as this table says; `in_cksum` landed here, since IP cannot link without it.  S2 inherits `machine/s2_stubs.c` (`timeout` does nothing, so no timer fires), one global `u`, which is not safe across a sleep and is S3's to fix, `printf` that logs only its format, C byte loops for `bcopy`, `sleep()` discarding `kc_sleepi`'s signal answer, which is S3's with `u`, and adding the modules to `/etc/rc.in`. |
 | S2 | substrate running | mbufs, domains/protosw, sockbufs, `in_pcb`, `lo0`, `ip_input`/`ip_output`, ARP, the callout facility, the MACRAW driver on socket 0 and bpf as its tap, proven by an in-kernel probe: ARP resolves the gateway, an ICMP echo goes out and the reply comes back; netdump still captures.  **Done** on feat/net-mux under MAME (`d8cad04`..), and the maintainer's run on real hardware decides S3 (section 7); the modules stay out of `/etc/rc.in` until S3 |
-| S3 | UDP | every AF_INET UDP socket is a BSD socket on the kernel stack, wire and loopback; ntpd, ntpdc 127.0.0.1, dhclient (4.7) and syslogd -u on it; the chip's UDP core retires |
+| S3 | UDP | every AF_INET UDP socket is a BSD socket on the kernel stack, wire and loopback; ntpd, ntpdc 127.0.0.1, dhclient (4.7) and syslogd -u on it; the chip's UDP core retires.  **Done** on feat/net-mux under MAME (`6905dc6`..), the modules loading at boot from `/etc/rc.in`; the maintainer's run on real hardware is next (`docs/history/2026-11-10-net-mux-s3-hardware-run.md`).  A process's `u` is saved per pid across `sleep`, which longjmps with EINTR as 2.11BSD's does; net.mod hands a datagram socket's every call to the stack through `net_kso.s` and `bn_sys.c`; dhclient takes its lease through the stack from 0.0.0.0 and the address it sets reaches the stack (`BNOP_IFCHANGED`); a default route goes through the gateway.  Found on the way: fcc pushed one word for a struct argument `*p` and could not store through `a[i]->f`; a pointer's pad byte broke every UDP checksum over 255 bytes; `ifioctl` passed its command as an int where `pr_usrreq` reads a pointer; the interface's name `w5` has a digit, which `ifunit` reads as the unit.  Without the modules `socket(AF_INET, SOCK_DGRAM)` is EPROTONOSUPPORT. |
 | S4 | TCP + AF_UNIX | `tcp_*` on the wire and loopback; AF_UNIX on `uipc_usrreq.c`; telnet/telnetd, inetd, ftp, nc and the unixdgram users on it; `net_loop.s` rings, `unp.s`, the old descriptor table and the chip's TCP core retire; socket count limited by memory |
 | S5 | the rest | ICMP and raw sockets (ping), `ifconfig`/`route` ported from 2.11BSD against the real `ifnet`, the bespoke `SYS_IFCONFIG` retired |
 
@@ -352,8 +352,22 @@ S2, under MAME on `kernel.netprobe = 1`, with 2 KB of socket 0 receive buffer:
 The round trip is not the poll: with the poll slowed to 64 ticks it stays 8.  Where
 those ticks go is not known yet, and real hardware may not show them.  The heartbeat
 figure is at `time`'s 0.1 s resolution on an exec-heavy load, so it says "not
-visible", not "zero".  No throughput is measured: nothing moves bulk data through
-the kernel stack until S3.
+visible", not "zero".
+
+S3, under MAME on the shipping configuration (`kernel.netprobe = 0`) unless named:
+
+| Measure | Result |
+|---|---|
+| Deepest process kernel slot, `netudp` (`loopprobe -u`, syslogd) | 740 of 1024 bytes, 284 spare; 474 with no modules (`netudp_nomod`); ntpd alike, 740.  The static walk said 766 + about 124 |
+| Module footprint | 252,325 bytes in five banks, without the probe |
+| Pool banks free at idle | 23.2 of 56 with the modules loaded, 28.2 without |
+| ICMP echo round trip (`kernel.netprobe = 1`) | 7-8 ticks before the transmit wait and after it |
+| A read of the chip's transmit free count | 23 us: 8000 in 11 ticks |
+| Five full frames queued together (case 56) | all leave in one `w5start`.  MAME's chip reports its ring free as soon as SEND is issued, so it passes there with no wait at all: only hardware tells |
+
+Throughput through the kernel stack is not measured under MAME: no bulk transfer
+uses UDP, and ftp is still the chip's TCP.  The hardware run re-measures ftp
+beside the stack.
 
 ## 6. Testing
 
@@ -403,15 +417,23 @@ the kernel stack until S3.
   ribuf[MSIZE]`, for the address and the access rights.  TCP's worst `sendto` is
   826, 950 with the rest, which does not leave 128 spare: S4's to settle, by
   moving those two off the stack or measuring the real path, before TCP sockets
-  reach the stack.  Today's deepest slot, from a socket test
-  through net.mod, is 474 of 1024.
+  reach the stack.  Measured from the slots' paint, a UDP workload reaches 740 of
+  1024 (section 5).
 
-- **S3 inherits:** `/etc/rc.in`; a default route, since only the interface's own net
-  is routed; `s2_stubs.c`'s remainder; `sleep`'s signal answer; the transmit path's
-  one-frame-at-a-time wait, which a frame still sending turns into up to 133 ms.
-- **Socket 0 and the suite's rc.local.**  With the stack loaded, inetd and ntpd take
-  two of the three sockets left, and ftp's data connection fails ENOBUFS.  That ends
-  when UDP moves.
+- **S3 settled** what S2 left it: the modules load from `/etc/rc.in`; a default route;
+  `sleep`'s signal answer; the transmit path waits up to 3 ms for a frame still
+  sending (130 reads of the free count) before leaving the rest for the next pass.
+  With UDP off the chip, ntpd no longer takes a chip socket, and the suite's
+  rc.local no longer starves ftp's data connection.
+- **S4 inherits:** net.mod's descriptor table and its 12-slot cap; `net_kso.s` as the
+  one door from a descriptor to a struct socket; `bn_sys.c`'s `getf`, whose `falloc`
+  and `ufalloc` panic, which S4's accept and AF_UNIX make reachable; `gsignal` and
+  `netpfind`; TCP's worst `sendto` (above); and the chip's TCP on sockets 1-3, with
+  its own ARP and routing beside the stack's.
+- **Two names for the card until S5:** the kernel stack calls it `wz0`, which is what
+  `SIOCGIFCONF` reports; net.mod's `SYS_IFCONFIG`, `ifconfig` and `dhclient` call it
+  `u2s1`.  2.11BSD's `ifunit` reads a name's first digit as its unit, so a kernel
+  name cannot carry the `2`.  S5's port of `ifconfig` against the real `ifnet` ends it.
 
 ## 8. Left to the builder
 
