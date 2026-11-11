@@ -235,7 +235,7 @@ w5attach()
 	}
 	bcopy((caddr_t)sh, (caddr_t)w5_ac.ac_enaddr, 6);
 	w5_logmac();
-	ifp->if_name = "w5";
+	ifp->if_name = "wz";
 	ifp->if_mtu = ETHERMTU;
 	ifp->if_flags = IFF_BROADCAST | IFF_NOTRAILERS;
 	ifp->if_ioctl = w5ioctl;
