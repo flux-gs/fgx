@@ -107,7 +107,7 @@ udp_input(m0, ifp)
 	 * Checksum extended UDP header and data.
 	 */
 	if (udpcksum && ui->ui_sum) {
-		ui->ui_next = ui->ui_prev = 0;
+		IH_CLRQ(&ui->ui_i);
 		ui->ui_pad = 0;
 		ui->ui_x1 = 0;
 		ui->ui_len = ui->ui_ulen;
@@ -246,7 +246,7 @@ udp_output(inp, m0, addr, control)
 	m->m_len = sizeof (struct udpiphdr);
 	m->m_next = m0;
 	ui = mtod(m, struct udpiphdr *);
-	ui->ui_next = ui->ui_prev = 0;
+	IH_CLRQ(&ui->ui_i);
 	ui->ui_pad = 0;
 	ui->ui_x1 = 0;
 	ui->ui_pr = IPPROTO_UDP;

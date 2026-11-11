@@ -76,7 +76,7 @@ tcp_template(tp)
 		m->m_len = sizeof (struct tcpiphdr);
 		n = mtod(m, struct tcpiphdr *);
 	}
-	n->ti_next = n->ti_prev = 0;
+	IH_CLRQ(&n->ti_i);
 	n->ti_x1 = 0;
 	n->ti_pad = 0;
 	n->ti_pr = IPPROTO_TCP;
@@ -148,7 +148,7 @@ tcp_respond(tp, ti, ack, seq, flags)
 		xchg(ti->ti_dport, ti->ti_sport, u_short);
 #undef xchg
 	}
-	ti->ti_next = ti->ti_prev = 0;
+	IH_CLRQ(&ti->ti_i);
 	ti->ti_x1 = 0;
 	ti->ti_pad = 0;
 	ti->ti_len = htons((u_short)(sizeof (struct tcphdr) + tlen));

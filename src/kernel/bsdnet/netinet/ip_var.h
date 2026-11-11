@@ -35,6 +35,17 @@ struct ipovly {
 };
 
 /*
+ * FGX: in_cksum sums the overlay's two queue pointers as eight bytes, and a
+ * pointer fcc stores is its offset and bank, the fourth byte left as it was.
+ * So clearing them for a checksum clears all eight.
+ */
+#ifdef fgx
+#define	IH_CLRQ(ih)	bzero((caddr_t)&(ih)->ih_next, 2 * sizeof (caddr_t))
+#else
+#define	IH_CLRQ(ih)	((ih)->ih_next = (ih)->ih_prev = 0)
+#endif
+
+/*
  * Ip reassembly queue structure.  Each fragment
  * being reassembled is attached to one of these structures.
  * They are timed out after ipq_ttl drops to 0, and may also

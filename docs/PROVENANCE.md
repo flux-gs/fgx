@@ -712,10 +712,10 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/netinet/ip_input.c` | `vendor/2.11BSD/usr/sys/netinet/ip_input.c` | verbatim |
 | `src/kernel/bsdnet/netinet/ip_output.c` | `vendor/2.11BSD/usr/sys/netinet/ip_output.c` | verbatim |
 | `src/kernel/bsdnet/netinet/raw_ip.c` | `vendor/2.11BSD/usr/sys/netinet/raw_ip.c` | verbatim |
-| `src/kernel/bsdnet/netinet/udp_usrreq.c` | `vendor/2.11BSD/usr/sys/netinet/udp_usrreq.c` | verbatim |
-| `src/kernel/bsdnet/netinet/tcp_input.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_input.c` | verbatim |
+| `src/kernel/bsdnet/netinet/udp_usrreq.c` | `vendor/2.11BSD/usr/sys/netinet/udp_usrreq.c` | verbatim but the checksum's clearing of the overlay's two queue pointers, which is `IH_CLRQ` (`ip_var.h`): fcc stores a pointer's offset and bank and leaves its fourth byte, which in_cksum sums |
+| `src/kernel/bsdnet/netinet/tcp_input.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_input.c` | verbatim but the checksum's clearing of the overlay's two queue pointers, which is `IH_CLRQ` (`ip_var.h`): fcc stores a pointer's offset and bank and leaves its fourth byte, which in_cksum sums |
 | `src/kernel/bsdnet/netinet/tcp_output.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_output.c` | verbatim |
-| `src/kernel/bsdnet/netinet/tcp_subr.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_subr.c` | verbatim |
+| `src/kernel/bsdnet/netinet/tcp_subr.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_subr.c` | verbatim but the checksum's clearing of the overlay's two queue pointers, which is `IH_CLRQ` (`ip_var.h`): fcc stores a pointer's offset and bank and leaves its fourth byte, which in_cksum sums |
 | `src/kernel/bsdnet/netinet/tcp_timer.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_timer.c` | verbatim |
 | `src/kernel/bsdnet/netinet/tcp_usrreq.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_usrreq.c` | verbatim |
 | `src/kernel/bsdnet/netinet/tcp_debug.c` | `vendor/2.11BSD/usr/sys/netinet/tcp_debug.c` | verbatim |
@@ -741,7 +741,7 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/netinet/in_var.h` | `vendor/2.11BSD/usr/sys/netinet/in_var.h` | verbatim |
 | `src/kernel/bsdnet/netinet/in.h` | `vendor/2.11BSD/usr/sys/netinet/in.h` | `ntohl` and friends are macros in machine/machparam.h, so their declarations are off under `fgx` |
 | `src/kernel/bsdnet/netinet/ip_icmp.h` | `vendor/2.11BSD/usr/sys/netinet/ip_icmp.h` | verbatim |
-| `src/kernel/bsdnet/netinet/ip_var.h` | `vendor/2.11BSD/usr/sys/netinet/ip_var.h` | verbatim |
+| `src/kernel/bsdnet/netinet/ip_var.h` | `vendor/2.11BSD/usr/sys/netinet/ip_var.h` | verbatim but `IH_CLRQ`, which clears the overlay's two queue pointers as eight bytes for a checksum: a pointer fcc stores is its offset and bank, the fourth byte left as it was, and in_cksum sums all four |
 | `src/kernel/bsdnet/netinet/ip.h` | `vendor/2.11BSD/usr/sys/netinet/ip.h` | `BYTE_ORDER` takes the VAX arm under `fgx` |
 | `src/kernel/bsdnet/netinet/tcp_debug.h` | `vendor/2.11BSD/usr/sys/netinet/tcp_debug.h` | verbatim |
 | `src/kernel/bsdnet/netinet/tcp_fsm.h` | `vendor/2.11BSD/usr/sys/netinet/tcp_fsm.h` | verbatim |

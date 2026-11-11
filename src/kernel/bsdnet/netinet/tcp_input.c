@@ -222,7 +222,7 @@ tcp_input(m0)
 	tlen = ((struct ip *)ti)->ip_len;
 	len = sizeof (struct ip) + tlen;
 	if (tcpcksum) {
-		ti->ti_next = ti->ti_prev = 0;
+		IH_CLRQ(&ti->ti_i);
 		ti->ti_x1 = 0;
 		ti->ti_pad = 0;
 		ti->ti_len = (u_short)tlen;
