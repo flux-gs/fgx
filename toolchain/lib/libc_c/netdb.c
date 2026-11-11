@@ -6,11 +6,10 @@
  */
 
 /* libc primitives the resolver calls that <stdio.h> does not declare. */
-extern int   nanosleep(int ticks);
 extern int   close(int fd);
 extern int   socket(int domain, int type, int proto);
 extern int   sendto(int s, char *buf, int len, int flags, char *to, int tolen);
-extern int   recvfrom(int s, char *buf, int maxlen, int flags, char *from, int fromlen);
+extern int   recvfrom(int s, char *buf, int maxlen, int flags, char *from, int *fromlen);
 
 /* ---- resolver: gethostbyname/gethostbyaddr -------------------------------
  * Slim, FGX-shaped: /etc/hosts first, then a single DNS A (or PTR) query over
@@ -246,13 +245,17 @@ static int _parse_resp(unsigned char *p, int len, int qtype, int id,
     return 0;
 }
 
-/* Send a DNS query (qtype A or PTR) for qname, poll for the reply.  1 on hit. */
+/* Send a DNS query (qtype A or PTR) for qname and wait for the reply.  1 on
+ * hit.  A datagram socket's receive blocks until something arrives, so each
+ * wait is select's, 1.5 s, and recvfrom runs only when there is a datagram. */
 static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_name)
 {
     static int seq = 0x4321;
     static unsigned char query[300], resp[PACKETSZ];   /* off the small bank-0 stack */
     unsigned char ns[4], sa[16], from[16];
-    int off, n, qlen, id, s, tries, poll, rc;
+    int off, n, qlen, id, s, tries, rc, fromlen;
+    fd_set rd;
+    struct timeval tv;
 
     if (!_nameserver(ns)) return 0;
 
@@ -280,15 +283,21 @@ static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_na
 
     for (tries = 0; tries < 3; tries++) {                /* 3 sends, ~1.5s each */
         sendto(s, (char *)query, qlen, 0, (char *)sa, 16);
-        for (poll = 0; poll < 90; poll++) {
-            n = recvfrom(s, (char *)resp, PACKETSZ, 0, (char *)from, 16);
+        for (;;) {
+            FD_ZERO(&rd);
+            FD_SET(s, &rd);
+            tv.tv_sec = 1;
+            tv.tv_usec = 500000L;
+            if (select(s + 1, &rd, (fd_set *)0, (fd_set *)0, &tv) <= 0)
+                break;                                   /* nothing: send again */
+            fromlen = sizeof from;
+            n = recvfrom(s, (char *)resp, PACKETSZ, 0, (char *)from, &fromlen);
             if (n >= HFIXEDSZ) {
                 if (resp[2] & DNS_TC) { close(s); return 0; }   /* truncated: no TCP */
                 rc = _parse_resp(resp, n, qtype, id, ip4, out_name);
                 if (rc == 1) { close(s); return 1; }
-                /* rc 0/-1: not our answer / malformed -> keep polling, then retry */
+                /* rc 0/-1: not our answer / malformed -> wait on, then retry */
             }
-            nanosleep(1);                                /* ~1 tick between polls */
         }
     }
     close(s);

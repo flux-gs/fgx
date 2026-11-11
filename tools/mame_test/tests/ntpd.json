@@ -1,6 +1,6 @@
 {
  "name": "ntpd",
- "description": "ntpd(8) detaches, reads /etc/ntp.conf and stays up: ps lists a process named ntpd (the marker is built only then, since its log lines also carry the name), and its log shows it resolving each configured server.  /etc/rc starts it only when /etc/netstart brought the network up, and the harness has no network card, so the command starts it; the servers are unknown here.  ntpdc(8) cannot reach it over lo0: the loopback transport carries TCP only.",
+ "description": "ntpd(8) detaches, reads /etc/ntp.conf and stays up: ps lists a process named ntpd (the marker is built only then, since its log lines also carry the name), and its log shows it resolving each configured server.  /etc/rc starts it only when /etc/netstart brought the network up, and the harness has no network card, so the command starts it; the servers are unknown here.  ntpdc(8) cannot reach it over lo0: the loopback transport carries TCP only.  /etc/resolv.conf names a nameserver no route reaches, so each lookup really queries and the resolver's wait has to end on its own: a datagram socket's receive blocks, and a resolver that polled recvfrom for EAGAIN hung here.",
  "command": "/sbin/ntpd; sleep 5; ps ax | grep 'ntp[d]$' > /tmp/p; test -s /tmp/p && echo NTPD''UP",
  "timeout_s": 120,
  "expect": {
@@ -14,5 +14,13 @@
    "can't open",
    "bind() fails"
   ]
- }
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/resolv.conf.unreach",
+   "prodos_dir": "/FGX/etc",
+   "name": "resolv.conf",
+   "replace": true
+  }
+ ]
 }
