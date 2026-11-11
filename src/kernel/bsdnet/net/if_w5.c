@@ -66,6 +66,7 @@ static	int w5_up;
 #ifdef NETPROBE
 int	w5_force_badlen;	/* the probe's seams: a nonsense length, once */
 int	w5_hold;		/* no draining, so the ring overruns */
+int	w5_txhold;		/* frames stay queued, to leave together */
 int	w5_force_torn;		/* one torn read of RSR */
 #endif
 
@@ -355,9 +356,12 @@ w5ioctl(ifp, cmd, data)
 }
 
 /* Copy queued frames to the transmit ring.  The chip sends one at a time, and its
- * free count is back to a full ring when it has.
- * ponytail: a frame still sending ends this pass, and the next netintr entry goes
- * on, within 133 ms.  S4 sizes the buffers and revisits this. */
+ * free count is back to a full ring when it has, so each frame waits for the one
+ * before it, for at most W5_TXPOLLS reads of the free count.
+ * ponytail: a read of the free count is 23 us (8000 in 11 ticks), so W5_TXPOLLS
+ * is 3 ms, over the 1.2 ms a full frame takes on a 10 Mb wire; past it the frame
+ * waits for the next netintr entry.  S4 revisits this with 8 KB transmit buffers. */
+#define	W5_TXPOLLS	130
 void
 w5start()
 {
@@ -365,14 +369,19 @@ w5start()
 	register int len;
 	unsigned wr;
 	static char zeros[W5_MINFRAME];
-	int s;
+	int s, polls;
 
+#ifdef NETPROBE
+	if (w5_txhold)
+		return;
+#endif
 	while (w5_up && w5_ac.ac_if.if_snd.ifq_head) {
 		w5_lock();
-		if ((unsigned)w5_rreg16(S0_TX_FSR) != W5_RINGSIZE) {
-			w5_unlock();
-			return;
-		}
+		for (polls = 0; (unsigned)w5_rreg16(S0_TX_FSR) != W5_RINGSIZE; polls++)
+			if (polls >= W5_TXPOLLS) {
+				w5_unlock();
+				return;
+			}
 		s = splimp();
 		IF_DEQUEUE(&w5_ac.ac_if.if_snd, m);
 		splx(s);

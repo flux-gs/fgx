@@ -26,6 +26,7 @@
    "bsdnet: arp resolved ",
    "bsdnet: echo reply from gateway",
    "bsdnet: echo rtt ",
+   "bsdnet: five full frames sent in ticks ",
    "bsdnet: burst of 45 got ",
    "bsdnet: alive after burst",
    "bsdnet: routes ok"

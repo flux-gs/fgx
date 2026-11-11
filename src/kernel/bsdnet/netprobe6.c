@@ -24,6 +24,7 @@ extern	struct arpcom w5_ac;
 extern	int w5_force_badlen;
 extern	long w5_iqdrops;
 extern	int w5_hold;
+extern	int w5_txhold;
 extern	int w5_force_torn;
 extern	struct arptab arptab[];
 extern	int arptab_size;
@@ -97,6 +98,47 @@ net_echo(dst)
 	return (ip_output(m, (struct mbuf *)0, (struct route *)0, 0));
 }
 
+/* The same with a cluster of zeros after the header: a 1066-byte frame. */
+int
+net_echo_big(dst)
+	u_long dst;
+{
+	register struct mbuf *m, *c;
+	register struct ip *ip;
+	register struct icmp *icp;
+
+	m = m_getclr(M_DONTWAIT, MT_HEADER);
+	if (m == 0)
+		return (ENOBUFS);
+	c = m_get(M_DONTWAIT, MT_DATA);
+	if (c != 0)
+		MCLGET(c);
+	if (c == 0 || c->m_len != MCLBYTES) {
+		if (c != 0)
+			m_freem(c);
+		m_freem(m);
+		return (ENOBUFS);
+	}
+	bzero(mtod(c, caddr_t), MCLBYTES);
+	m->m_next = c;
+	m->m_len = ECHO_LEN;
+	ip = mtod(m, struct ip *);
+	ip->ip_len = ECHO_LEN + MCLBYTES;
+	ip->ip_ttl = MAXTTL;
+	ip->ip_p = IPPROTO_ICMP;
+	ip->ip_dst.s_addr = htonl(dst);
+	icp = (struct icmp *)(ip + 1);
+	icp->icmp_type = ICMP_ECHO;
+	icp->icmp_id = 0x4647;
+	icp->icmp_seq = 2;
+	m->m_off += sizeof(struct ip);
+	m->m_len -= sizeof(struct ip);
+	icp->icmp_cksum = in_cksum(m, ICMP_MINLEN + MCLBYTES);
+	m->m_off -= sizeof(struct ip);
+	m->m_len += sizeof(struct ip);
+	return (ip_output(m, (struct mbuf *)0, (struct route *)0, 0));
+}
+
 /* 42: an echo whose IP header checksum is wrong, handed straight to ipintr. */
 static int
 bad_header()
@@ -138,6 +180,23 @@ static long np_now, np_t;
 static long np_rx0, np_err0;
 static u_long np_rep0;
 static long np_rxlast, np_tlast;
+static long np_op0;
+
+/* 44's burst: replies into a ring that is not being drained. */
+static void
+burst_start()
+{
+	register struct ifnet *ifp = &w5_ac.ac_if;
+	register int i;
+
+	np_rx0 = ifp->if_ipackets;
+	np_err0 = ifp->if_ierrors;
+	w5_hold = 1;
+	for (i = 0; i < BURST; i++)
+		(void) net_echo(np_gw);
+	np_t = np_now;
+	w5_state = 6;
+}
 
 static struct arptab *
 arpfind(hostaddr)
@@ -242,13 +301,22 @@ wire_sample()
 		if (icmpstat.icps_inhist[ICMP_ECHOREPLY] == np_rep0)
 			break;
 		np_logn("bsdnet: echo rtt ", (int)(np_now - np_t), " ticks");
-		np_rx0 = ifp->if_ipackets;
-		np_err0 = ifp->if_ierrors;
-		w5_hold = 1;
-		for (i = 0; i < BURST; i++)
-			(void) net_echo(np_gw);
-		np_t = np_now;
-		w5_state = 6;
+		/* 56: five full frames queued together all leave in one pass of
+		 * the transmitter: it waits for the chip to finish each one rather
+		 * than leaving the rest for a later netintr pass. */
+		w5_txhold = 1;
+		for (i = 0; i < 5; i++)
+			if (net_echo_big(np_gw) != 0)
+				kc_printstr("bsdnet: BROKEN 56");
+		w5_txhold = 0;
+		np_op0 = ifp->if_opackets;
+		kc_ticks(&np_t);
+		w5start();
+		kc_ticks(&np_now);
+		if (ifp->if_opackets - np_op0 != 5L)
+			kc_printstr("bsdnet: BROKEN 56");
+		np_logn("bsdnet: five full frames sent in ticks ", (int)(np_now - np_t), "");
+		burst_start();
 		break;
 	case 6:		/* sent, and two seconds for the answers */
 		if (ifp->if_snd.ifq_head != 0) {
