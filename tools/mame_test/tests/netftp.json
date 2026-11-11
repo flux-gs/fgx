@@ -1,6 +1,6 @@
 {
  "name": "netftp",
- "description": "Hardware TCP beside the kernel stack: with socket 0 in MACRAW, a passive ftp get over sockets 1-3 from a real server, checked with sum(1) against the host's copy. The chip must route by port. The shipping rc.local is staged back, because the suite's starts inetd and ntpd, which with socket 0 gone leave ftp no socket for data. NOT in the gate: a real server. Only means anything at kernel.netprobe = 1.",
+ "description": "Hardware TCP beside the kernel stack: with socket 0 in MACRAW, a passive ftp get over sockets 1-3 from a real server, checked with sum(1) against the host's copy. The chip must route by port. The shipping rc.local is staged back, because the suite's starts inetd and ntpd, which with socket 0 gone leave ftp no socket for data. NOT in the gate: a real server.  The network modules load at boot (/etc/rc), and the server's name is looked up through them.",
  "command": "sh /etc/netftp.sh",
  "timeout_s": 500,
  "mame_slots": [

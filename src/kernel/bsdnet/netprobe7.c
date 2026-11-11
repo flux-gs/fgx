@@ -119,8 +119,9 @@ np7_defaults(gwp)
 /* 54: an address off the local net goes through the gateway DHCP gave, and
  * the broadcast address to a host route on w5, not to the gateway.
  * 55: a new gateway replaces the default route rather than adding one.
- * They need the card and an address with a gateway: the netw5 run. */
-static int
+ * They need the card and an address with a gateway: the netw5 run, where
+ * netprobe6's wire start runs them again once dhclient has set one. */
+int
 np7_routes()
 {
 	u_long ip, mask, gw, gw2, seen;

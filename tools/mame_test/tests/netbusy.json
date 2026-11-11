@@ -1,18 +1,37 @@
 {
  "name": "netbusy",
- "description": "Socket 0 already held, by netdump's capture: the driver refuses to attach, says so, and the stack loads with lo0 alone. Only means anything at kernel.netprobe = 1.",
+ "description": "Socket 0 already held, by netdump's capture: the driver refuses to attach, says so, and the stack loads with lo0 alone. Only means anything at kernel.netprobe = 1.  The release /etc/rc less the network modules (fixtures/rc.netlate) is staged, so the command's modload is what loads them.",
  "command": "netdump > /dev/null & sleep 2; modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; sleep 3; dmesg | tail -10",
  "timeout_s": 120,
- "mame_slots": ["-sl1", "uthernet2"],
+ "mame_slots": [
+  "-sl1",
+  "uthernet2"
+ ],
  "stage_files": [
-  {"host": "disk_src/etc/rc.in", "prodos_dir": "/FGX/etc", "name": "rc", "replace": true}
+  {
+   "host": "tools/mame_test/fixtures/rc.netlate",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  }
  ],
  "expect": {
-  "screen_contains": ["w5: socket 0 busy", "bsdnet: lo0 echo ok", "bsdnet: ok"],
-  "screen_lacks": ["w5: attached", "bsdnet: BROKEN", "PANIC", "BRK"]
+  "screen_contains": [
+   "w5: socket 0 busy",
+   "bsdnet: lo0 echo ok",
+   "bsdnet: ok"
+  ],
+  "screen_lacks": [
+   "w5: attached",
+   "bsdnet: BROKEN",
+   "PANIC",
+   "BRK"
+  ]
  },
  "requires": {
-  "config": {"kernel.netprobe": "1"},
+  "config": {
+   "kernel.netprobe": "1"
+  },
   "reason": "the probe C is compiled into the network modules only at kernel.netprobe = 1"
  }
 }

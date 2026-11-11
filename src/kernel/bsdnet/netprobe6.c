@@ -33,6 +33,7 @@ extern	int in_cksum(), ip_output();
 extern	int net_stack_hwm();
 extern	int kc_printstr();
 extern	int netprobe7();
+extern	int np7_routes();
 
 #define	LOOPBACK	0x7f000001L
 #define	ECHO_LEN	(sizeof(struct ip) + ICMP_MINLEN)
@@ -125,7 +126,9 @@ bad_header()
 }
 
 /* 48: ARP and echo on the wire, to the gateway the chip holds, then 44: a burst
- * of replies into a ring that is not being drained.  At kernel.netprobe = 4 the
+ * of replies into a ring that is not being drained.  The modules load at boot,
+ * before dhclient has put a gateway in the chip, so the start waits (state 13)
+ * until there is one.  At kernel.netprobe = 4 the
  * target is an unused LAN address instead, so ARP goes unanswered. */
 #define	BURST		45
 #define	NP_NOREPLY	0xC8		/* a host number nothing here uses */
@@ -175,6 +178,16 @@ wire_start()
 	w5_setar(1);		/* GAR */
 	w5_rxcopy((char *)&gar, 4);
 	w5_unlock();
+	if (gar == 0)
+		return (13);
+	switch (np7_routes()) {
+	case 54:
+		kc_printstr("bsdnet: BROKEN 54");
+		break;
+	case 55:
+		kc_printstr("bsdnet: BROKEN 55");
+		break;
+	}
 	np_gw = ntohl(gar);
 #if NETPROBE == 4
 	np_gw = (np_gw & 0xFFFFFF00L) | NP_NOREPLY;
@@ -329,6 +342,9 @@ w5_sample()
 			kc_printstr("bsdnet: BROKEN 50");
 		else
 			kc_printstr("bsdnet: w5 torn read survived");
+		w5_state = wire_start();
+		break;
+	case 13:
 		w5_state = wire_start();
 		break;
 	case 4:

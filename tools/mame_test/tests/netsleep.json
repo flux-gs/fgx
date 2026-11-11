@@ -1,15 +1,30 @@
 {
  "name": "netsleep",
- "description": "A sleep inside netintr, on the one network stack a second entry would overwrite, panics by name. Only means anything at kernel.netprobe = 3.",
+ "description": "A sleep inside netintr, on the one network stack a second entry would overwrite, panics by name. Only means anything at kernel.netprobe = 3.  The release /etc/rc less the network modules (fixtures/rc.netlate) is staged, so the command's modload is what loads them.",
  "command": "modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; echo NOT''REACHED",
  "timeout_s": 40,
  "exit_on_prompt": false,
  "expect": {
-  "screen_contains": ["sleep in netintr"],
-  "screen_lacks": ["NOTREACHED", "bsdnet: BROKEN"]
+  "screen_contains": [
+   "sleep in netintr"
+  ],
+  "screen_lacks": [
+   "NOTREACHED",
+   "bsdnet: BROKEN"
+  ]
  },
  "requires": {
-  "config": {"kernel.netprobe": "3"},
+  "config": {
+   "kernel.netprobe": "3"
+  },
   "reason": "the sleeping hook is compiled in only at kernel.netprobe = 3"
- }
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/rc.netlate",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  }
+ ]
 }

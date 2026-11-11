@@ -1,7 +1,7 @@
 {
  "name": "netw5",
- "description": "The MACRAW driver on the host's real network (NOT in the gate: a real DHCP server and LAN traffic). The release /etc/rc, less the network modules on its modload line (fixtures/rc.netlate), is staged back so /etc/netstart takes a lease over the chip, then the network modules load and the driver attaches over what DHCP left in the chip. Only means anything at kernel.netprobe = 1.",
- "command": "/testbin/ifcprobe; modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; sleep 70; dmesg | tail -24",
+ "description": "The MACRAW driver on the host's real network (NOT in the gate: a real DHCP server and LAN traffic). The release /etc/rc is staged back, so the network modules load at boot and /etc/netstart's dhclient takes a lease through the kernel stack; the probe's wire cases wait for the gateway that lease puts in the chip. Only means anything at kernel.netprobe = 1.  ntpd starts at boot and asks for each interface's flags by the name SIOCGIFCONF gave it: 2.11BSD's ifunit takes the first digit as the unit, so an interface name must be letters.",
+ "command": "/testbin/ifcprobe; sleep 70; dmesg | tail -24",
  "timeout_s": 300,
  "mame_slots": [
   "-sl1",
@@ -9,7 +9,7 @@
  ],
  "stage_files": [
   {
-   "host": "tools/mame_test/fixtures/rc.netlate",
+   "host": "disk_src/etc/rc.in",
    "prodos_dir": "/FGX/etc",
    "name": "rc",
    "replace": true
@@ -33,7 +33,8 @@
   "screen_lacks": [
    "bsdnet: BROKEN",
    "PANIC",
-   "BRK"
+   "BRK",
+   "Device not configured"
   ]
  },
  "requires": {
