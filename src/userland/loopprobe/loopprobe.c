@@ -56,6 +56,7 @@
 #include <netinet/in.h>
 #include <unistd.h>           /* close */
 #include <fcntl.h>            /* open, O_RDONLY -- the `-x` fd-pressure mode */
+#include <signal.h>           /* SIGALRM -- the `-u' eintr case */
 
 #define LOOPPORT 7777
 
@@ -654,6 +655,147 @@ u_big()
     close(b);
 }
 
+/* eintr: a blocking recvfrom that a signal interrupts answers -1 and EINTR,
+ * the handler having run, and the socket still works afterward (2.11BSD's
+ * sleep: EINTR in u_error and a longjmp to the syscall's setjmp). */
+static int ualarmed;
+
+static void
+uonalarm(sig)
+int sig;
+{
+    ualarmed++;
+}
+
+static void
+u_eintr()
+{
+    struct sockaddr_in to;
+    int a, b, n;
+
+    a = ubound(UDPPORT + 13);
+    b = ubound(UDPPORT + 14);
+    if (a < 0 || b < 0) return;
+    ualarmed = 0;
+    signal(SIGALRM, uonalarm);
+    alarm(1);
+    errno = 0;
+    n = recv(a, g_buf, sizeof(g_buf), 0);
+    alarm(0);
+    if (n != -1 || errno != EINTR) ufail("eintr", errno);
+    if (ualarmed != 1) ufail("eintr-handler", ualarmed);
+    uaddr(&to, UDPPORT + 13);
+    if (sendto(b, "after", 5, 0, &to, sizeof(to)) != 5) ufail("eintr-send", errno);
+    n = recv(a, g_buf, sizeof(g_buf), 0);
+    if (n != 5) ufail("eintr-after", n);
+    close(a);
+    close(b);
+}
+
+/* two: two processes inside the stack at once.  A child sleeps in recvfrom
+ * while the parent, on a socket connected to a port nobody holds, sends, has
+ * the ICMP port unreachable come back, and gets ECONNREFUSED on its next send
+ * (udp_ctlinput reaches only a pcb whose inp_faddr matches, in_pcbnotify).
+ * Then a signal breaks the child's sleep: its recvfrom must answer -1 and
+ * EINTR, which means the longjmp went to the child's own setjmp and not to
+ * one the parent's calls made meanwhile -- the u area each sleeper keeps.
+ * The child's next read gets the parent's datagram with its own length. */
+static void
+u_two()
+{
+    struct sockaddr_in to;
+    int a, c, pid, n, st;
+
+    a = ubound(UDPPORT + 15);
+    if (a < 0) return;
+    pid = fork();
+    if (pid == 0) {
+        ualarmed = 0;
+        signal(SIGUSR1, uonalarm);
+        errno = 0;
+        n = recv(a, g_buf, sizeof(g_buf), 0);
+        if (n != -1 || errno != EINTR || ualarmed != 1)
+            exit(2);
+        n = recv(a, g_buf, sizeof(g_buf), 0);
+        exit(n == 6 ? 0 : 3);
+    }
+    c = socket(AF_INET, SOCK_DGRAM, 0);
+    uaddr(&to, UDPPORT + 16);                 /* bound by nobody */
+    if (connect(c, &to, sizeof(to)) < 0) ufail("two-connect", errno);
+    if (send(c, "x", 1, 0) != 1) ufail("two-send", errno);
+    sleep(1);                                 /* the unreachable comes back */
+    errno = 0;
+    if (send(c, "x", 1, 0) != -1 || errno != ECONNREFUSED)
+        ufail("two-refused", errno);
+    close(c);
+    kill(pid, SIGUSR1);
+    sleep(1);
+    c = socket(AF_INET, SOCK_DGRAM, 0);
+    uaddr(&to, UDPPORT + 15);
+    if (sendto(c, "child!", 6, 0, &to, sizeof(to)) != 6) ufail("two-tochild", errno);
+    st = -1;
+    wait(&st);
+    if (st != 0) ufail("two-child", st);
+    close(c);
+    close(a);
+}
+
+/* fork: a socket shared across fork stays open until its last reference
+ * goes; the child closing it leaves the parent able to use it (soclose runs
+ * once, at the last close). */
+static void
+u_fork()
+{
+    struct sockaddr_in to;
+    int a, b, n, st;
+
+    a = ubound(UDPPORT + 17);
+    b = ubound(UDPPORT + 18);
+    if (a < 0 || b < 0) return;
+    if (fork() == 0) {
+        close(a);
+        exit(0);
+    }
+    wait(&st);
+    uaddr(&to, UDPPORT + 18);
+    if (sendto(a, "still", 5, 0, &to, sizeof(to)) != 5) ufail("fork-send", errno);
+    n = recv(b, g_buf, sizeof(g_buf), 0);
+    if (n != 5) ufail("fork-recv", n);
+    close(a);
+    close(b);
+}
+
+/* size: a 200-byte datagram read with a 50-byte buffer gives 50, and the rest
+ * is gone -- the next read is the next datagram (soreceive drops the record
+ * of an atomic protocol).  A send over the send buffer's high water mark is
+ * EMSGSIZE (sosend, sosendallatonce). */
+static char usz[200];
+static char uhuge[2100];
+
+static void
+u_size()
+{
+    struct sockaddr_in to;
+    int a, b, n;
+
+    a = ubound(UDPPORT + 19);
+    b = ubound(UDPPORT + 20);
+    if (a < 0 || b < 0) return;
+    uaddr(&to, UDPPORT + 20);
+    if (sendto(a, usz, sizeof(usz), 0, &to, sizeof(to)) != sizeof(usz))
+        ufail("size-send", errno);
+    if (sendto(a, "next", 4, 0, &to, sizeof(to)) != 4) ufail("size-send2", errno);
+    n = recv(b, g_buf, 50, 0);
+    if (n != 50) ufail("size-trunc", n);
+    n = recv(b, g_buf, sizeof(g_buf), 0);
+    if (n != 4 || strncmp(g_buf, "next", 4) != 0) ufail("size-next", n);
+    errno = 0;
+    if (sendto(a, uhuge, sizeof(uhuge), 0, &to, sizeof(to)) != -1 || errno != EMSGSIZE)
+        ufail("size-emsgsize", errno);
+    close(a);
+    close(b);
+}
+
 /* nbio: non-blocking reads of an empty socket answer EAGAIN, by FIONBIO and by
  * MSG_DONTWAIT (soreceive's SS_NBIO arm).  BLOCKS if the bit is lost. */
 static void
@@ -717,6 +859,23 @@ u_closed()
     if (sendto(s, "x", 1, 0, &to, sizeof(to)) != -1 || errno != EBADF) ufail("closed", errno);
 }
 
+/* `-s': one syslog line, user.err, to 127.0.0.1:514, for syslogd -u to log
+ * (netudp's script).  The text is built so the screen can only show it if it
+ * arrived: the needle is the joined halves. */
+static int
+udp_syslog()
+{
+    struct sockaddr_in to;
+    int s;
+    static char line[] = "<11>loopprobe: kernel UDP to syslogd ok";
+
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+    uaddr(&to, 514);
+    if (s < 0 || sendto(s, line, sizeof(line) - 1, 0, &to, sizeof(to)) < 0)
+        printf("UDP FAIL syslog %d\n", errno);
+    exit(0);
+}
+
 static int
 udp_main()
 {
@@ -726,6 +885,10 @@ udp_main()
     u_sel();
     u_selwake();
     u_big();
+    u_eintr();
+    u_two();
+    u_fork();
+    u_size();
     u_nbio();
     u_inuse();
     datagram_argblk();          /* oob: MSG_OOB is EOPNOTSUPP */
@@ -750,6 +913,8 @@ char **argv;
         zero_port();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'u')
         udp_main();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
+        udp_syslog();
 
     datagram_argblk();
     sockopt_check();
