@@ -319,8 +319,9 @@ ifioctl(so, cmd, data)
 	default:
 		if (so->so_proto == 0)
 			return (EOPNOTSUPP);
-		return ((*so->so_proto->pr_usrreq)(so, PRU_CONTROL,
-			cmd, data, ifp));
+		return ((*so->so_proto->pr_usrreq)(so, PRU_CONTROL,	/* FGX: */
+			(struct mbuf *)cmd, (struct mbuf *)data,	/* casts */
+			(struct mbuf *)ifp));
 	}
 	return (0);
 }

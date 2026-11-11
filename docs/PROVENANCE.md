@@ -698,7 +698,7 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 
 | FGX file | Upstream | Notes |
 |---|---|---|
-| `src/kernel/bsdnet/net/if.c` | `vendor/2.11BSD/usr/sys/net/if.c` | verbatim |
+| `src/kernel/bsdnet/net/if.c` | `vendor/2.11BSD/usr/sys/net/if.c` | verbatim but one call: `ifioctl` passes `pr_usrreq` its command as `(struct mbuf *)cmd`, as `sys_socket.c`'s `soo_ioctl` already does, where upstream passes the int.  With no prototype an int argument is an int (K&R A.7.3.2), half a pointer here, and every argument after it shifted |
 | `src/kernel/bsdnet/net/route.c` | `vendor/2.11BSD/usr/sys/net/route.c` | verbatim |
 | `src/kernel/bsdnet/net/if_loop.c` | `vendor/2.11BSD/usr/sys/net/if_loop.c` | verbatim |
 | `src/kernel/bsdnet/net/af.c` | `vendor/2.11BSD/usr/sys/net/af.c` | verbatim |

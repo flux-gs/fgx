@@ -69,8 +69,8 @@ main()
 	strcpy(ifr.ifr_name, "lo0");
 	if (ioctl(s, SIOCGIFFLAGS, (char *)&ifr) < 0)
 		fail("flags", (long)errno);
-	else if (ifr.ifr_flags != (IFF_UP|IFF_LOOPBACK|IFF_RUNNING))
-		fail("flags-val", (long)ifr.ifr_flags);
+	else if (ifr.ifr_flags != (IFF_UP|IFF_LOOPBACK))	/* 2.11BSD if_loop.c: */
+		fail("flags-val", (long)ifr.ifr_flags);		/* never RUNNING */
 
 	strcpy(ifr.ifr_name, "lo0");
 	sin = (struct sockaddr_in *)&ifr.ifr_addr;
