@@ -386,12 +386,12 @@ static int datagram_argblk()
  * THE SUCCESSES ARE THE HALF THAT CAN GO RED THE OTHER WAY.  A handler that
  * refused everything would satisfy all four error arms below; the three
  * accepted calls are what pins it to upstream's list rather than to "no".
- * SO_LINGER is asked for by NUMBER because it is deliberately not in
- * <sys/socket.h>: it is a real BSD option with no implementation here, so
- * naming it in the header would be the absent-behaviour-behind-a-present-
- * interface pattern, and it must be refused like any other unknown.
+ * SO_LINGER is asked for by NUMBER, as <sys/socket.h> does not name it.  The
+ * socket is the network stack's, whose sosetopt is 2.11BSD's
+ * (uipc_socket.c): SO_LINGER takes a struct linger, and an int-sized value is
+ * EINVAL (`m->m_len != sizeof (struct linger)').
  *
- * Hardware-free: the handler resolves the descriptor and touches SOCK_Flags.
+ * Hardware-free: the socket is the kernel stack's, over lo0 or nothing.
  */
 static int sockopt_check()
 {
@@ -414,15 +414,15 @@ static int sockopt_check()
     if (r != -1)              fail("sockopt-unknown-accepted");
     if (errno != ENOPROTOOPT) fail("sockopt-unknown-errno");
 
-    errno = 0;                                  /* SO_LINGER: real, unimplemented */
+    errno = 0;                                  /* SO_LINGER: not a struct linger */
     r = setsockopt(s, SOL_SOCKET, 0x0080, (char *)&on, sizeof(on));
     if (r != -1)              fail("sockopt-linger-accepted");
-    if (errno != ENOPROTOOPT) fail("sockopt-linger-errno");
+    if (errno != EINVAL)      fail("sockopt-linger-errno");
 
-    errno = 0;                                  /* no pr_ctloutput at this level */
+    errno = 0;                                  /* udp's pr_ctloutput, ip_ctloutput: */
     r = setsockopt(s, IPPROTO_TCP, SO_BROADCAST, (char *)&on, sizeof(on));
     if (r != -1)              fail("sockopt-level-accepted");
-    if (errno != ENOPROTOOPT) fail("sockopt-level-errno");
+    if (errno != EINVAL)      fail("sockopt-level-errno");   /* not IPPROTO_IP */
 
     errno = 0;                                  /* too small to hold an int */
     r = setsockopt(s, SOL_SOCKET, SO_BROADCAST, (char *)&on, 1);
@@ -628,6 +628,32 @@ u_selwake()
     close(a);
 }
 
+/* big: 300 bytes, more than one mbuf holds, both ways and intact: udp_input
+ * checks the checksum over the chain (in_cksum across mbuf boundaries). */
+static char ubig[300], ubig2[300];
+
+static void
+u_big()
+{
+    struct sockaddr_in to;
+    int a, b, n, i;
+
+    a = ubound(UDPPORT + 11);
+    b = ubound(UDPPORT + 12);
+    if (a < 0 || b < 0) return;
+    for (i = 0; i < sizeof(ubig); i++) ubig[i] = i * 7 + 3;
+    uaddr(&to, UDPPORT + 12);
+    if (sendto(a, ubig, sizeof(ubig), 0, &to, sizeof(to)) != sizeof(ubig))
+        ufail("big-send", errno);
+    n = recv(b, ubig2, sizeof(ubig2), 0);
+    if (n != sizeof(ubig)) ufail("big-recv", n);
+    else
+        for (i = 0; i < sizeof(ubig); i++)
+            if (ubig2[i] != ubig[i]) { ufail("big-byte", i); break; }
+    close(a);
+    close(b);
+}
+
 /* nbio: non-blocking reads of an empty socket answer EAGAIN, by FIONBIO and by
  * MSG_DONTWAIT (soreceive's SS_NBIO arm).  BLOCKS if the bit is lost. */
 static void
@@ -699,6 +725,7 @@ udp_main()
     u_conn();
     u_sel();
     u_selwake();
+    u_big();
     u_nbio();
     u_inuse();
     datagram_argblk();          /* oob: MSG_OOB is EOPNOTSUPP */

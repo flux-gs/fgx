@@ -103,11 +103,7 @@ main()
         return (1);
     }
 
-    /* Three descriptors, none of which may consume a W5100 socket.  The
-     * machine has three usable -- socket 0 is reserved for /dev/bpf0 MACRAW,
-     * so _W5_SockAlloc hands out 1..3.  Three AF_UNIX sockets that each took
-     * one would exhaust the chip exactly, so this passing is necessary but not
-     * sufficient; the interleaved AF_INET check below is what makes it sharp. */
+    /* Three AF_UNIX descriptors, open together. */
     for (i = 0; i < 3; i++) {
         fd[i] = socket(AF_UNIX, SOCK_DGRAM, 0);
         if (fd[i] < 0) {
@@ -116,11 +112,9 @@ main()
         }
     }
 
-    /* THE SHARP ASSERTION: with three AF_UNIX sockets open, all three W5100
-     * slots must still be free.  A UDP socket needs a real one, so if the
-     * AF_UNIX arm had borrowed even one this fails -- and it fails HERE, where
-     * the cause is unambiguous, rather than in some later test whose socket()
-     * mysteriously ran out. */
+    /* An AF_INET datagram socket beside them.  It is the network stack's and
+     * claims no chip socket, so this shows only that the AF_UNIX three left a
+     * descriptor for it. */
     r = socket(AF_INET, SOCK_DGRAM, 0);
     if (r < 0) {
         printf("unixprobe: FAIL unix-stole-hw errno=%d\n", errno);
@@ -137,9 +131,12 @@ main()
      * daemon spun, logging `recvfrom inet' to the console several times a
      * second.  FOUR ROUNDS, because one clean answer from noise proves nothing.
      *
-     * With a card and no traffic the same three answers hold.  Without one, a
-     * send has no interface to leave by, and 2.11BSD's in_pcbconnect, which
-     * udp_output calls for a sendto, answers EADDRNOTAVAIL. */
+     * With a card and no traffic the same three answers hold.  The receive is
+     * non-blocking (FIONBIO), since a datagram socket's recvfrom waits for a
+     * datagram, as 2.11BSD's soreceive does.  Without a card a send has no
+     * route: lo0 is the only interface, so in_pcbconnect picks it and
+     * ip_output answers ENETUNREACH (`if (in_localaddr(ip->ip_dst)) error =
+     * EHOSTUNREACH; else error = ENETUNREACH;'). */
     {
         static char usin[16];
         static char uifr[32];
@@ -156,6 +153,11 @@ main()
         usin[3] = 0x02;
         if (us < 0 || bind(us, (struct sockaddr *)usin, sizeof usin) < 0) {
             printf("unixprobe: FAIL udp-bind errno=%d\n", errno);
+            return (1);
+        }
+        uk = 1;
+        if (ioctl(us, FIONBIO, &uk) != 0) {
+            printf("unixprobe: FAIL udp-fionbio errno=%d\n", errno);
             return (1);
         }
         for (uk = 0; uk < 4; uk++) {
@@ -181,15 +183,10 @@ main()
                 return (1);
             }
         }
-        /* AND THROUGH read(2) UNDER FIONBIO, which is how apple/fgx#296 first
-         * showed it: the ioctl succeeding and the read then returning 8 bytes
-         * off the floating bus as though a datagram had arrived.  read(2) is
-         * its own road into the transport, not recvfrom's. */
-        uk = 1;
-        if (ioctl(us, FIONBIO, &uk) != 0) {
-            printf("unixprobe: FAIL udp-fionbio errno=%d\n", errno);
-            return (1);
-        }
+        /* AND THROUGH read(2), which is how apple/fgx#296 first showed it: the
+         * ioctl succeeding and the read then returning 8 bytes off the floating
+         * bus as though a datagram had arrived.  read(2) is its own road into
+         * the transport, not recvfrom's. */
         errno = 0;
         un = read(us, rxbuf, 8);
         if (un >= 0 || errno != EAGAIN) {
@@ -202,7 +199,7 @@ main()
             usin[4] = 10;                       /* 10.0.0.1 */
             usin[7] = 1;
             if (sendto(us, txbuf, 1, 0, (struct sockaddr *)usin, sizeof usin) >= 0 ||
-                errno != EADDRNOTAVAIL) {
+                errno != ENETUNREACH) {
                 printf("unixprobe: FAIL udp-nocard-send errno=%d\n", errno);
                 return (1);
             }
