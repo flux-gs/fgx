@@ -3142,9 +3142,13 @@ def main():
     # outright.  Such a test declares `"serial": true` and runs alone after the
     # parallel batch drains.  A test that wants the boot save-state is serial
     # too: STATE_DIR is shared and regenerating it under concurrency would race.
+    # So is one with the Uthernet II: every emulated card has the same MAC, so
+    # two on the LAN at once lease the same address and take each other's
+    # frames (the kernel logs `duplicate IP address').
     def _is_serial(t):
         m = load_manifest(t)
-        return bool(m.get("serial")) or bool(m.get("use_state"))
+        return (bool(m.get("serial")) or bool(m.get("use_state"))
+                or any("uthernet2" in str(s) for s in (m.get("mame_slots") or [])))
 
     if args.jobs > 1:
         par = [t for t in tests if not _is_serial(t)]
