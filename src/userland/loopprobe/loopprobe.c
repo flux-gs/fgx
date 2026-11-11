@@ -915,6 +915,15 @@ char **argv;
         udp_main();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
         udp_syslog();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'n') {
+        /* -n: a UDP socket, which only the network modules provide */
+        if (socket(AF_INET, SOCK_DGRAM, 0) < 0) {
+            perror("socket");
+            exit(1);
+        }
+        printf("UDP socket opened\n");
+        exit(0);
+    }
 
     datagram_argblk();
     sockopt_check();

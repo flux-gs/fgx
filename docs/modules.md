@@ -27,7 +27,7 @@ Every directory under `src/modules/`:
 | `ld` | 0 | the shared-library registry `ldload(8)` fills; reached through `LD_TRAMP` (`$00031A`) | `/etc/rc`, first and alone |
 | `serial` | 0 | both SCC channels as ttys, `/dev/tty00` (channel A, printer port) and `/dev/tty01` (channel B, modem port), IRQ-driven through the Serial Interrupt Manager | `/etc/rc.local`, off by default |
 | `bpf` | 0 | `/dev/bpf0`, raw-frame capture through W5100 MACRAW | `/etc/rc.local`, off by default |
-| `net` | 0 | the socket layer, UDP/ICMP/TCP over the W5100, the 127.0.0.1 loopback transport, AF_UNIX datagram sockets, and the `pipe(2)` rings (`pipe.s`) | `/etc/rc` |
+| `net` | 0 | the socket layer, ICMP/TCP over the W5100, UDP handed to the network modules (`net_kso.s`), the 127.0.0.1 loopback transport, AF_UNIX datagram sockets, and the `pipe(2)` rings (`pipe.s`) | `/etc/rc` |
 | `ramdisk` | 0 | the Control Panel RAM disk (`RAM5`) as `/dev/ram0`, device row 8: adopts the ROM's, has the ROM make it on an 8 MB ROM 03 (GS/OS `CreateRAM5`), or registers nothing when battery RAM sets no size; `/etc/rc` mounts it writable on `/ram5` | `/etc/rc` |
 | `pty` | 0 | the pseudo-terminal pairs (`/dev/ptyp*`, `/dev/ttyp*`) | `/etc/rc` |
 | `sscon` | 0 | the console on a Second Sight card's Host Text mode; registers as a console backend via `KSVC_CONBACKEND`, and does nothing if the card is absent | `/etc/rc.local`, off by default |

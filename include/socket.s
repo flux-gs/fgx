@@ -21,9 +21,8 @@ SOL_SOCKET      EQU     $FFFF       ; setsockopt level
 ; sosetopt's boolean bag (2.11BSD usr/sys/sys/uipc_socket.c:666-672), less
 ; SO_LINGER -- that one carries a `struct linger' rather than an int and has no
 ; implementation here, so it is refused with the rest rather than half-accepted.
-; SO_BROADCAST and SO_REUSEADDR have consumers here -- the sendto broadcast
-; guard and the UDP bind's in_pcbbind lookup (_Udp_PortShare) -- and are kept
-; in SOCK_Flags at their own values.  The other five are ACCEPTED AND NOT
+; SO_BROADCAST has a consumer here -- the sendto broadcast guard -- and is
+; kept in SOCK_Flags at its own value.  The other six are ACCEPTED AND NOT
 ; STORED: upstream records them in `so_options' for its
 ; protocols to consult, and no transport here consults any of them -- a word to
 ; hold bits nothing reads would be the same absent-behaviour-behind-a-present-
@@ -58,7 +57,6 @@ SIOCATMARK      EQU     $7307       ; *arg <- at-OOB-mark? (always 0; no urgent)
 ; docs/superpowers/specs/2026-06-05-fgx-net-icmp-offload-design.md.
 ;------------------------------------------------------------------------------
 XPORT_NONE      EQU     0
-XPORT_UDP       EQU     1
 XPORT_ICMP      EQU     2
 XPORT_TCP       EQU     3           ; SOCK_STREAM over the W5100 (net.s,
                                     ; net_xport.s), or loopback (net_loop.s)
@@ -71,12 +69,11 @@ XPORT_UNIX      EQU     4           ; AF_UNIX SOCK_DGRAM (unp.s).  A new TAG
                                     ; loopback's: loopback IS an ordinary
                                     ; SOCK_STREAM to userland, so re-tagging it
                                     ; would break every SOCK_Proto == XPORT_TCP
-                                    ; test, but AF_UNIX must NOT inherit
-                                    ; XPORT_UDP's paths, which read sin_port and
+                                    ; test, but AF_UNIX must NOT take the
+                                    ; AF_INET paths, which read sin_port and
                                     ; sin_addr out of a sockaddr_in that an
                                     ; AF_UNIX caller never supplies.
 
-OFFLOAD_UDP     EQU     $01
 OFFLOAD_ICMP    EQU     $02
 OFFLOAD_TCP     EQU     $04         ; reserved; no consumer
 
@@ -202,15 +199,11 @@ SOCK_UnpRx      EQU     12          ; 1  pipe index this BOUND socket reads
                                     ;    (SOCK_LOOP_NONE = not bound)
 SOCK_UnpPeer    EQU     13          ; 1  peer descriptor index for a connected
                                     ;    client (SOCK_LOOP_NONE = unconnected)
-; The UDP peer: 2.11BSD's inp_faddr/inp_fport, set by connect(2) through
-; _Udp_Connect (in_pcbconnect) and zero on an unconnected socket.  udp_output
-; tests inp_faddr against INADDR_ANY for "connected", and so does this
-; (_So_UdpPeer).  Network order, as the chip and the sockaddr carry them.
-SOCK_FAddr      EQU     14          ; 4  connected peer address (0 = none)
-SOCK_FPort      EQU     18          ; 2  connected peer port
-; An XPORT_KSO descriptor's struct socket, an offset in bsdnetd's bank.  It
-; overlays SOCK_FAddr, which only the chip's UDP reads; _Sock_ClearXportState
-; zeroes it with the rest.
+; Six bytes of per-transport state, zeroed with the rest by
+; _Sock_ClearXportState.  An XPORT_KSO descriptor keeps its struct socket
+; there, an offset in bsdnetd's bank.
+SOCK_FAddr      EQU     14          ; 4
+SOCK_FPort      EQU     18          ; 2
 SOCK_KsoSo      EQU     SOCK_FAddr  ; 2
 SOCK_REC_SIZE   EQU     20
 

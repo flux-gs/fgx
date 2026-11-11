@@ -1,0 +1,24 @@
+{
+ "name": "netudp_nomod",
+ "description": "Without the network modules there is no UDP: socket(AF_INET, SOCK_DGRAM) answers EPROTONOSUPPORT, as 2.11BSD's socreate does when no protosw matches, and never opens one of the W5100's hardware sockets.  The release /etc/rc less the network modules on its modload line (fixtures/rc.netlate) is staged, and loopprobe -n asks for one socket.",
+ "command": "/testbin/loopprobe -n",
+ "timeout_s": 120,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/rc.netlate",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "socket: Protocol not supported"
+  ],
+  "screen_lacks": [
+   "UDP socket opened",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

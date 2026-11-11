@@ -1,7 +1,7 @@
 ;==============================================================================
 ; net_xport.s - W5100 transport cores + ring I/O, lifted from src/kernel/
 ; uthernet.s (② net-mod reclaim Phase 3).  PUT by net.s (same module assembly).
-;   _W5_SockAlloc/Free, _Net_Xport_*, _Xport_LoadTag, _Udp_*, _Icmp_*, _Tcp_*,
+;   _W5_SockAlloc/Free, _Net_Xport_*, _Xport_LoadTag, _Icmp_*, _Tcp_*,
 ;   _Sock_PollIntr, _W5_SetSnAR, _W5_TxStream, _W5_RxSetup/RxCopy/RxAdvance.
 ; Runs in net.mod bank w/ DBR=kernel-bank ($02 = assembly ORG) + kernel DP: reaches the _sock*/_u2*/
 ;   _w5SockInUse/_tcpNextPort kernel statics via the gen_kernel_exports manifest,
@@ -109,25 +109,10 @@ _W5_SockFree    MX      %00
 ; this is a tag branch; a 2nd driver would make it an indirect call through the
 ; ifnet's driver_ops.  Cross-file targets use JMP (in-bank absolute) — a branch
 ; can't reach socket.s.  MX %00 throughout.
-; (ICMP/IPRAW handlers land in Task 5; until then non-UDP -> EINVAL.)
 ;==============================================================================
 _Net_Xport_Open MX      %00
                 JSR     _Xport_LoadTag          ; A = SOCK_Proto
-                CMP     #XPORT_UDP
-                BNE     @nxo_icmp
-                JSR     _Xport_Chip             ; no chip: bound, nothing to open
-                BCC     @nxo_none
-                JSR     _Udp_PortShare          ; in_pcbbind's lookup
-                BCC     @nxo_out                ;   EADDRINUSE
-                CMP     #0
-                BNE     @nxo_shared             ;   bound onto a held chip socket
-                JSR     _Xport_Claim
-                BCC     @nxo_out
-                JMP     _Udp_OpenAt
-@nxo_shared     LDA     #0
-                SEC
-                RTS
-@nxo_icmp       CMP     #XPORT_ICMP
+                CMP     #XPORT_ICMP
                 BNE     @nxo_tcp
                 JSR     _Xport_Chip
                 BCC     @nxo_none
@@ -156,10 +141,7 @@ _Net_Xport_Send MX      %00
                 LDA     #ENOTCONN               ;   bound (sendto, connect), so
                 CLC                             ;   only a stream can be refused
                 RTS
-@nxs_chip       CMP     #XPORT_UDP
-                BNE     @nxs_icmp
-                JMP     _Udp_SendCore
-@nxs_icmp       CMP     #XPORT_ICMP
+@nxs_chip       CMP     #XPORT_ICMP
                 BNE     @nxs_tcp
                 JMP     _Icmp_SendCore
 @nxs_tcp        CMP     #XPORT_TCP
@@ -189,10 +171,7 @@ _Net_Xport_Recv MX      %00
 @nxr_dgram      LDA     #EAGAIN
                 CLC
                 RTS
-@nxr_hw         CMP     #XPORT_UDP
-                BNE     @nxr_icmp
-                JMP     _Udp_RecvCore
-@nxr_icmp       CMP     #XPORT_ICMP
+@nxr_hw         CMP     #XPORT_ICMP
                 BNE     @nxr_tcp
                 JMP     _Icmp_RecvCore
 @nxr_tcp        CMP     #XPORT_TCP
@@ -209,7 +188,7 @@ _Net_Xport_Recv MX      %00
 ; urgent), C=1.  NEVER sleeps, NEVER consumes RX (pure status-register reads).
 ;   TCP: readable = RX_RSR>0 OR SR in {CLOSE_WAIT,CLOSED} (data or EOF);
 ;        writable = SR==ESTABLISHED AND TX_FSR>0.
-;   UDP/ICMP: readable = RX_RSR>0; writable = always.
+;   ICMP: readable = RX_RSR>0; writable = always.
 ; _W5_SetSnAR preserves X/Y, so SR rides in X and the result rides in Y across
 ; the register reads; _sockTmp2 is the transient 16-bit hi|lo nonzero test.
 ;------------------------------------------------------------------------------
@@ -231,7 +210,7 @@ _Net_Xport_SockStatus MX %00
 @nss_go         JSR     _Xport_LoadTag          ; A = SOCK_Proto
                 CMP     #XPORT_TCP
                 BEQ     @nss_tcp
-                ; --- UDP / ICMP: readable = RSR>0, writable = always ---
+                ; --- ICMP: readable = RSR>0, writable = always ---
                 U2_LOCK
                 SEP     #$30
                 MX      %11
@@ -376,8 +355,8 @@ _Net_Xport_SockStatus MX %00
                 RTS
 
 ;------------------------------------------------------------------------------
-; _Net_Xport_Connect - TCP, and UDP's in_pcbconnect (_Udp_Connect).
-; _Net_Xport_Close - TCP only (UDP/ICMP have no chip teardown).  Tag-dispatch
+; _Net_Xport_Connect - TCP.
+; _Net_Xport_Close - TCP only (ICMP has no chip teardown).  Tag-dispatch
 ; like the other verbs; JMP to the cores.  MX %00.
 ;------------------------------------------------------------------------------
 _Net_Xport_Connect MX   %00
@@ -407,10 +386,7 @@ _Net_Xport_Connect MX   %00
 @nxc_chip       JSR     _Xport_LoadTag
                 CMP     #XPORT_TCP
                 BEQ     @nxc_tcp
-                CMP     #XPORT_UDP
-                BNE     @nxc_nosup
-                JMP     _Udp_Connect
-@nxc_nosup      LDA     #ENOTSUP               ; EOPNOTSUPP: connect on raw ICMP
+                LDA     #ENOTSUP               ; EOPNOTSUPP: connect on raw ICMP
                 CLC
                 RTS
 @nxc_nohw       LDA     #EINVAL
@@ -425,7 +401,7 @@ _Net_Xport_Close MX     %00
                 JSR     _Xport_LoadTag
                 CMP     #XPORT_TCP
                 BEQ     @nxcl_tcp
-                LDA     #0                     ; UDP/ICMP: no chip teardown (current)
+                LDA     #0                     ; ICMP: no chip teardown (current)
                 SEC
                 RTS
 @nxcl_tcp       JMP     _Tcp_Close
@@ -484,12 +460,9 @@ _Sock_FillSrc   MX      %00
 ; address in NETWORK order; _sockSrcPort[2] = port in NETWORK order (hi first).
 ; MX %00 in/out.  Clobbers A, Y.
 ;
-; This existed twice, spelled out by hand, in the UDP and IPRAW recv paths --
-; and the sockaddr layout comment in include/socket.s has said since it was
-; written that accept and getpeername would want the same fill.  They do, so it
-; is a routine now.  The FAMILY is the part worth having in one place: it is a
+; The IPRAW receive path, accept and getpeername share it.  The FAMILY is the part worth having in one place: it is a
 ; 2-byte 2.11BSD short and a caller that reads AF_INET back is relying on the
-; high byte being zeroed, which is exactly the kind of thing a fourth hand-copy
+; high byte being zeroed, which is exactly the kind of thing a hand copy
 ; forgets.
 ;------------------------------------------------------------------------------
 _Sock_FillSin   MX      %00
@@ -592,9 +565,9 @@ _Xport_Chip     MX      %00
 ; which the chip never serves, answers the same with a card as without.  MX %00.
 _Xport_ChipTag  MX      %00
                 JSR     _Xport_LoadTag
-                CMP     #XPORT_UNIX             ; UDP, ICMP and TCP are the
-                BCS     @xct_bad                ;   chip's: 1..3, below UNIX's 4
-                CMP     #XPORT_UDP              ;   and above NONE's 0
+                CMP     #XPORT_UNIX             ; ICMP and TCP are the chip's:
+                BCS     @xct_bad                ;   2..3, below UNIX's 4 and
+                CMP     #XPORT_ICMP             ;   above NONE's 0
                 BCC     @xct_bad
                 PHA
                 JSR     _Xport_Chip
@@ -678,352 +651,17 @@ _Xport_LoadTag  MX      %00
                 RTS
 
 ;==============================================================================
-; Shared W5100 ring helpers — transport-agnostic plumbing reused by the UDP and
-; ICMP/IPRAW transport cores.  The cores write the transport-specific framing
+; Shared W5100 ring helpers — transport-agnostic plumbing reused by the
+; ICMP/IPRAW and TCP transport cores.  The cores write the transport-specific framing
 ; (dest addr/port, header parse); these do the generic TX/RX ring mechanics.
 ; All assume the caller holds U2_LOCK.  In: _sockTmpHw + the named _sock* state.
 
 ;==============================================================================
-; W5100 transport cores (UDP + ICMP/IPRAW) — relocated from socket.s in
+; W5100 transport cores (ICMP/IPRAW) — relocated from socket.s in
 ; Increment 2 so the BSD socket core stays hardware-generic.  Reached only via
 ; the _Net_Xport_* seam (JMP); read their state from _sock* statics (socket.s,
 ; bank \$02).  Call the shared _W5_* helpers above.
 ;==============================================================================
-;==============================================================================
-; _Udp_OpenAt - W5100 UDP open for the descriptor at _sockTmpOff.
-; In: _sockTmp2 = port (hi at +1, lo at +0), _sockTmpHw, _sockTmpOff.  MX %00.
-; Opens Sn_MR=UDP on the port, waits SR=$22, marks SOCK_Bound.  Out: A=0, C=1.
-; Reached via _Net_Xport_Open; its RTS returns to the bind() syscall caller.
-;==============================================================================
-_Udp_OpenAt     MX      %00
-                U2_LOCK
-                SEP     #$30
-                MX      %11
-                LDA     #$00                    ; Sn_MR offset
-                JSR     _W5_SetSnAR
-                LDA     #$02                    ; UDP
-                STAL    U2_DAT
-                LDA     #$04                    ; Sn_PORT offset
-                JSR     _W5_SetSnAR
-                LDA     _sockTmp2+1             ; port hi
-                STAL    U2_DAT
-                LDA     _sockTmp2               ; port lo
-                STAL    U2_DAT
-                LDA     #$01                    ; Sn_CR offset
-                JSR     _W5_SetSnAR
-                LDA     #$01                    ; OPEN
-                STAL    U2_DAT
-                LDX     #$00
-@uo_srW         LDA     #$03                    ; Sn_SR offset
-                JSR     _W5_SetSnAR
-                LDAL    U2_DAT
-                CMP     #$22                    ; SOCK_UDP
-                BEQ     @uo_srOK
-                DEX
-                BNE     @uo_srW
-@uo_srOK        REP     #$30
-                MX      %00
-                U2_UNLOCK
-                LDA     _sockTmpOff             ; SOCK_LPort, host order: the
-                CLC                             ;   port _Udp_PortShare matches
-                ADC     #SOCK_LPort
-                TAY
-                LDA     _sockTmp2
-                STA     [_sockTablePtr],Y
-                ; mark bound
-                LDY     _sockTmpOff
-                TYA
-                CLC
-                ADC     #SOCK_Bound
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     #$01
-                STA     [_sockTablePtr],Y
-                REP     #$20
-                MX      %00
-                LDA     #0
-                SEC
-                RTS
-_Udp_SendCore   MX      %00
-                JSR     _So_TxFill              ; the uio -> the bounce (sosend's
-                                                ;   mbuf); _libcTmp2 = the bounce
-                ; --- W5100 UDP send (no ring wrap) ---
-                U2_LOCK
-                SEP     #$20
-                MX      %10
-                LDA     #$0C                    ; Sn_DIPR
-                JSR     _W5_SetSnAR
-                LDA     _sockDstIp
-                STAL    U2_DAT
-                LDA     _sockDstIp+1
-                STAL    U2_DAT
-                LDA     _sockDstIp+2
-                STAL    U2_DAT
-                LDA     _sockDstIp+3
-                STAL    U2_DAT
-                LDA     #$10                    ; Sn_DPORT
-                JSR     _W5_SetSnAR
-                LDA     _sockDstPort            ; hi
-                STAL    U2_DAT
-                LDA     _sockDstPort+1          ; lo
-                STAL    U2_DAT
-                JSR     _W5_TxStream            ; ring stream + SEND (MX %10 in, %00 out)
-                U2_UNLOCK
-                LDA     _sockLen
-                SEC
-                RTS
-_Udp_RecvCore   MX      %00
-                U2_LOCK
-                JSR     _W5_RxSetup             ; C=1 + AR at header / C=0 empty
-                BCS     @ur_have
-                U2_UNLOCK                       ; no datagram -> EAGAIN
-                LDA     #EAGAIN
-                CLC
-                RTS
-@ur_have        ; --- 8-byte UDP header [srcIP(4) srcPort(2) len(2)] (AR auto-inc) ---
-                SEP     #$20
-                MX      %10
-                LDAL    U2_DAT
-                STA     _sockSrcIp
-                LDAL    U2_DAT
-                STA     _sockSrcIp+1
-                LDAL    U2_DAT
-                STA     _sockSrcIp+2
-                LDAL    U2_DAT
-                STA     _sockSrcIp+3
-                LDAL    U2_DAT
-                STA     _sockSrcPort            ; hi (net order)
-                LDAL    U2_DAT
-                STA     _sockSrcPort+1          ; lo
-                LDAL    U2_DAT
-                STA     _sockRxLen+1            ; payload len hi (big-endian)
-                LDAL    U2_DAT
-                STA     _sockRxLen              ; lo
-                REP     #$20
-                MX      %00
-                LDA     #8                      ; UDP header length
-                STA     _w5RxHdrLen
-                ; A CONNECTED SOCKET HEARS ONLY ITS PEER.  udp_input finds the
-                ; socket with in_pcblookup(src, sport, dst, dport), and a pcb
-                ; whose inp_faddr is set matches only that exact source
-                ; (vendor/2.11BSD/usr/sys/netinet/in_pcb.c, in_pcblookup), so a
-                ; datagram from anyone else never reaches it.  The chip socket
-                ; has already taken it, so it is consumed here and the receive
-                ; answers as if nothing had come.
-                JSR     _So_UdpPeer
-                BCC     @ur_take
-                JSR     _So_UdpFrom
-                BCS     @ur_take
-                JSR     _W5_RxAdvance           ; drop it: Sn_RX_RD past it, RECV
-                U2_UNLOCK
-                LDA     #EAGAIN
-                CLC
-                RTS
-@ur_take        JSR     _W5_RxCopy              ; payload -> the bounce, set _sockCapLen
-                JSR     _So_RxDrain             ; the bounce -> the caller's uio
-                JSR     _W5_RxAdvance           ; Sn_RX_RD += 8 + rxLen, RECV
-                U2_UNLOCK
-                JSR     _Sock_FillSrc           ; the datagram's source address
-                LDA     _sockCapLen
-                SEC
-                RTS
-
-;------------------------------------------------------------------------------
-; _Udp_PortShare - in_pcbbind's EADDRINUSE lookup for a UDP bind to a port the
-; chip already has open.  In: _sockTmp2 = the port (host order), _sockTmpOff,
-; SOCK_Flags already carrying SOCK_WILD for this bind.  MX %00.  Clobbers X, Y.
-; Out: C=0 + A = EADDRINUSE; C=1 + A=0 no holder, open a chip socket as usual;
-; C=1 + A=1 bound onto the holder's chip socket (SOCK_HwIdx, SOCK_Bound,
-; SOCK_LPort written, _sockTmpHw set).
-;
-; vendor/2.11BSD/usr/sys/netinet/in_pcb.c, in_pcbbind: without SO_REUSEADDR
-; the lookup is INPLOOKUP_WILDCARD, so a pcb on the port with a wildcard
-; address on either side is a conflict; with it, only an exact local address
-; is.  This machine has one address, so a UDP pcb's local address is the
-; card's or the wildcard (SOCK_WILD), and the two outcomes are:
-;   same address as the holder                  -> EADDRINUSE
-;   the other one, and this socket SO_REUSEADDR -> both bound
-; ntpd's pair is the second case: 0.0.0.0:123 and <card>:123.  Both are the
-; same endpoint on the wire, because the W5100 demultiplexes UDP by port alone,
-; so the second descriptor takes the first one's chip socket rather than a
-; second socket on the same port.  A datagram then goes to whichever reads it
-; first; udp_input gives it to one pcb as well, the most specific.  Teardown
-; closes the chip socket with its last holder (_Sock_HwShared).
-;
-; Port 0 is not looked up: in_pcbbind picks an ephemeral port there, and
-; _Sock_EphemPort has already chosen one.
-;------------------------------------------------------------------------------
-_Udp_PortShare  MX      %00
-                LDA     _sockTmp2
-                BNE     @ups_scan
-                LDA     #0
-                SEC
-                RTS
-@ups_scan       LDX     #0
-@ups_l          CPX     _sockTmpOff
-                BEQ     @ups_next
-                TXY                             ; +0 InUse, +1 HwIdx
-                LDA     [_sockTablePtr],Y
-                AND     #$00FF
-                BEQ     @ups_next
-                LDA     [_sockTablePtr],Y
-                XBA
-                AND     #$00FF
-                CMP     #W5_NSOCK               ; holds a real chip socket
-                BCS     @ups_next
-                TXA
-                CLC
-                ADC     #SOCK_Proto
-                TAY
-                LDA     [_sockTablePtr],Y
-                AND     #$00FF
-                CMP     #XPORT_UDP
-                BNE     @ups_next
-                TXA
-                CLC
-                ADC     #SOCK_LPort
-                TAY
-                LDA     [_sockTablePtr],Y
-                CMP     _sockTmp2
-                BEQ     @ups_hit
-@ups_next       TXA
-                CLC
-                ADC     #SOCK_REC_SIZE
-                TAX
-                CPX     #SOCKTBL_BLK_SIZE
-                BCC     @ups_l
-                LDA     #0                      ; nobody holds the port
-                SEC
-                RTS
-@ups_hit        TXA                             ; the holder's SOCK_WILD ...
-                CLC
-                ADC     #SOCK_Flags
-                TAY
-                LDA     [_sockTablePtr],Y
-                PHA
-                LDA     _sockTmpOff             ; ... against this bind's
-                CLC
-                ADC     #SOCK_Flags
-                TAY
-                LDA     [_sockTablePtr],Y
-                EOR     1,S
-                AND     #SOCK_WILD
-                BEQ     @ups_inuse0             ; the same address: always a clash
-                PLA
-                LDA     [_sockTablePtr],Y       ; this socket's SO_REUSEADDR
-                AND     #SO_REUSEADDR
-                BEQ     @ups_inuse              ; wildcard lookup matches it
-                TXY                             ; share: this SOCK_HwIdx := the
-                INY                             ;   holder's
-                LDA     [_sockTablePtr],Y
-                AND     #$00FF
-                STA     _sockTmpHw
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_HwIdx
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     _sockTmpHw
-                STA     [_sockTablePtr],Y
-                INY                             ; SOCK_Flags
-                INY                             ; SOCK_Bound
-                LDA     #$01
-                STA     [_sockTablePtr],Y
-                REP     #$20
-                MX      %00
-                INY                             ; SOCK_LPort
-                LDA     _sockTmp2
-                STA     [_sockTablePtr],Y
-                LDA     #1
-                SEC
-                RTS
-@ups_inuse0     PLA
-@ups_inuse      LDA     #EADDRINUSE
-                CLC
-                RTS
-
-;------------------------------------------------------------------------------
-; _Udp_Connect - connect(2) on a UDP socket: 2.11BSD udp_usrreq PRU_CONNECT,
-; which is in_pcbconnect (vendor/2.11BSD/usr/sys/netinet/in_pcb.c) plus
-; soconnect's disconnect-first rule (sys/uipc_socket.c).  In: _libcTmp2 = the
-; caller's sockaddr_in, _sockDstIp / _sockDstPort staged from it, _sockTmpOff,
-; _sockTmpHw; a chip is fitted.  Out: A=0 + C=1, or A = errno + C=0.  MX %00.
-;
-; soconnect: "if connected, try to disconnect first.  This allows user to
-; disconnect by connecting to, e.g., a null address."  So the old peer goes
-; before the new address is judged, and a refused address leaves the socket
-; unconnected.  Then in_pcbconnect's order:
-;   sin_family != AF_INET              -> EAFNOSUPPORT
-;   sin_port == 0                      -> EADDRNOTAVAIL
-;   sin_addr == INADDR_ANY             -> the interface's own address
-;   inp_lport == 0                     -> in_pcbbind(inp, 0): an ephemeral port
-; and the peer is recorded.  It does not do in_pcbconnect's two other steps:
-; 255.255.255.255 is not rewritten to the interface's broadcast address, and
-; there is no in_pcblookup for an identical association (EADDRINUSE) -- one
-; interface and a chip socket per descriptor leave no second pcb to collide
-; with except through SO_REUSEADDR.
-;------------------------------------------------------------------------------
-_Udp_Connect    MX      %00
-                LDA     _sockTmpOff             ; soconnect: disconnect first
-                CLC
-                ADC     #SOCK_FAddr
-                TAY
-                LDA     #0
-                STA     [_sockTablePtr],Y       ; SOCK_FAddr 0..1
-                INY
-                INY
-                STA     [_sockTablePtr],Y       ; SOCK_FAddr 2..3
-                INY
-                INY
-                STA     [_sockTablePtr],Y       ; SOCK_FPort
-                LDY     #SIN_FAMILY
-                LDA     [_libcTmp2],Y
-                CMP     #AF_INET
-                BEQ     @uc_fam
-                LDA     #EAFNOSUPPORT
-                CLC
-                RTS
-@uc_fam         LDA     _sockDstPort
-                BNE     @uc_port
-                LDA     #EADDRNOTAVAIL
-                CLC
-                RTS
-@uc_port        LDA     _sockDstIp
-                ORA     _sockDstIp+2
-                BNE     @uc_addr
-                LDA     _ifS1Off                ; INADDR_ANY: the primary address
-                AND     #$00FF
-                CLC
-                ADC     #IF_Ip
-                TAY
-                LDA     [_ifTablePtr],Y
-                STA     _sockDstIp
-                INY
-                INY
-                LDA     [_ifTablePtr],Y
-                STA     _sockDstIp+2
-@uc_addr        JSR     _Sock_EnsureBound       ; in_pcbbind if unbound; claims
-                BCC     @uc_out                 ;   the chip socket
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_FAddr
-                TAY
-                LDA     _sockDstIp
-                STA     [_sockTablePtr],Y
-                INY
-                INY
-                LDA     _sockDstIp+2
-                STA     [_sockTablePtr],Y
-                INY
-                INY
-                LDA     _sockDstPort
-                STA     [_sockTablePtr],Y
-                LDA     #0
-                SEC
-@uc_out         RTS
-
 ;==============================================================================
 ; _Icmp_OpenAt - open the hw socket in IPRAW mode for ICMP (Sn_PROTO=1).
 ; In: _sockTmpHw, _sockTmpOff.  MX %00.  Sets Sn_PROTO=$01 (offset $14),
@@ -1358,7 +996,7 @@ _Tcp_Close      MX      %00
 ; _Net_Xport_Shutdown - TCP half-close: send FIN (CR_DISCON) on _sockTmpHw's
 ; socket, leaving it in FIN_WAIT so recv() still drains queued data + sees the
 ; peer FIN as EOF.  Does NOT CLOSE/free the hw socket (close() does the full
-; teardown).  No-hw / UDP / ICMP: no-op success.  Out: A=0, C=1.  MX %00.
+; teardown).  No-hw / ICMP: no-op success.  Out: A=0, C=1.  MX %00.
 ;------------------------------------------------------------------------------
 _Net_Xport_Shutdown MX  %00
                 ; BOUND, NOT AN ENUMERATION OF SENTINELS (see _Xport_HwOk).
@@ -1373,7 +1011,7 @@ _Net_Xport_Shutdown MX  %00
                 BCC     @nsh_ok                 ; sentinel or wild -> nothing to do
                 JSR     _Xport_LoadTag          ; A = SOCK_Proto
                 CMP     #XPORT_TCP
-                BNE     @nsh_ok                 ; UDP/ICMP: no FIN to send
+                BNE     @nsh_ok                 ; ICMP: no FIN to send
                 U2_LOCK
                 SEP     #$30
                 MX      %11

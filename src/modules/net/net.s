@@ -1015,21 +1015,20 @@ net_op_socket   MX      %00
                 AND     #$00FF
                 CMP     #SOCK_DGRAM
                 BNE     @ss_tryStream
-                ; WITH THE NETWORK MODULES, A DATAGRAM SOCKET IS THE KERNEL'S:
-                ; a 2.11BSD struct socket, made below once the descriptor is
-                ; (net_kso.s).  It owns no chip socket.
+                ; A DATAGRAM SOCKET IS THE KERNEL'S: a 2.11BSD struct socket,
+                ; made below once the descriptor is (net_kso.s), and it owns no
+                ; chip socket.  Without the network modules there is no UDP,
+                ; and socreate's answer when no protosw matches is
+                ; EPROTONOSUPPORT.
                 LDA     #VT_BSDNET
                 LDX     #KSVC_FINDVTABLE
                 JSL     SYS_KCALL
-                BCC     @ss_chipUdp
+                BCC     @ss_eprotonosup
                 LDA     #XPORT_KSO
                 STA     _sockTmpTag
                 LDA     #SOCK_HW_NONE
                 STA     _sockTmpHw
                 BRA     @ss_scan
-@ss_chipUdp     LDA     #XPORT_UDP
-                STA     _sockTmpTag
-                BRA     @ss_proceed
 @ss_tryStream   CMP     #SOCK_STREAM
                 BNE     @ss_tryRaw
                 LDA     #XPORT_TCP
@@ -1051,6 +1050,9 @@ net_op_socket   MX      %00
                 CLC
                 RTL
 @ss_eprototype  LDA     #EPROTOTYPE
+                CLC
+                RTL
+@ss_eprotonosup LDA     #EPROTONOSUPPORT
                 CLC
                 RTL
 ; No domain claims a W5100 hardware socket here.  An AF_INET descriptor starts
@@ -1344,18 +1346,15 @@ net_op_setsockopt MX    %00
                 BEQ     @so_known
                 CMP     #SO_OOBINLINE
                 BNE     @so_noproto
-                ; SO_BROADCAST and SO_REUSEADDR have consumers -- the sendto
-                ; guard and the UDP bind (_Udp_PortShare) -- and are kept in
-                ; SOCK_Flags at their own option values.  The other five are
+                ; SO_BROADCAST has a consumer -- the sendto guard -- and is kept
+                ; in SOCK_Flags at its own option value.  The other six are
                 ; accepted and not stored; see the option block in
                 ; include/socket.s for why a word of bits nothing reads is not
                 ; an improvement here.
 @so_known       LDA     _sockOptName
                 CMP     #SO_BROADCAST
-                BEQ     @so_store
-                CMP     #SO_REUSEADDR
                 BNE     @so_ok
-@so_store       LDA     _sockTmpOff
+                LDA     _sockTmpOff
                 CLC
                 ADC     #SOCK_Flags
                 TAY
@@ -1606,29 +1605,9 @@ _So_Send        MX      %00
                 BCC     @sosd_chip
                 LDA     #0                      ; send
                 JMP     _Loop_SoIo
-@sosd_chip        LDA     _sockTmpTag             ; (set by _So_Proto)
-                CMP     #XPORT_UDP
-                BNE     @sosd_dst
-                ; A DATAGRAM GOES TO ITS CONNECTED PEER OR TO THE ADDRESS GIVEN,
-                ; NEVER BOTH AND NEVER NEITHER.  udp_output: an address on a
-                ; connected socket is EISCONN; sosend: no address on an
-                ; unconnected one is EDESTADDRREQ.
-                JSR     _So_UdpPeer             ; C=1 connected
-                LDA     _soHasDst
-                BEQ     @sosd_nodst
-                BCC     @sosd_bind              ; sendto, unconnected
-                LDA     #EISCONN
-                CLC
-                RTS
-@sosd_nodst       BCS     @sosd_peer
-                LDA     #EDESTADDRREQ
-                CLC
-                RTS
-@sosd_peer        JSR     _So_UdpPeerLoad         ; bound by connect already
-                BRA     @sosd_bcast
-@sosd_dst         LDA     _soHasDst
+@sosd_chip         LDA     _soHasDst
                 BEQ     @sosd_hw
-@sosd_bind        JSR     _Sock_EnsureBound       ; sendto: implicit bind
+                JSR     _Sock_EnsureBound       ; sendto: implicit bind
                 BCS     @sosd_bcast
                 RTS                             ; ENOBUFS: no chip socket free
 @sosd_bcast       LDA     _sockDstIp              ; broadcast needs SO_BROADCAST:
@@ -2229,19 +2208,9 @@ net_op_getpeername MX   %00
                 AND     #$00FF
                 CMP     #TCP_ESTABLISHED
                 BEQ     @gp_conn
-                JSR     _So_UdpPeer             ; a connected datagram socket:
-                BCS     @gp_udp                 ;   in_setpeeraddr's inp_faddr
                 LDA     #ENOTCONN
                 CLC
                 RTL
-@gp_udp         JSR     _So_UdpPeerLoad
-                LDA     _sockDstIp
-                STA     _sockSrcIp
-                LDA     _sockDstIp+2
-                STA     _sockSrcIp+2
-                LDA     _sockDstPort
-                STA     _sockSrcPort
-                BRA     @gp_fill
 @gp_conn        LDA     _sockTmpHw
                 AND     #$00FF
                 CMP     #SOCK_HW_LOOP
@@ -2320,7 +2289,7 @@ net_op_getsockname MX   %00
 ;------------------------------------------------------------------------------
 ; _Sock_ClearXportState - reset the per-transport fields of the descriptor at
 ; _sockTmpOff to "no transport state": the four SOCK_Loop* bytes, the two
-; SOCK_Unp* bytes and the UDP peer (SOCK_FAddr, SOCK_FPort).  MX %00 in/out.  Clobbers A, Y.
+; SOCK_Unp* bytes and SOCK_FAddr/SOCK_FPort (an XPORT_KSO socket's SOCK_KsoSo).  MX %00 in/out.  Clobbers A, Y.
 ;
 ; Called from the two allocation sites whose initialisers STOP EARLY -- net_op_socket's
 ; @ss_free and _Sock_NewConnFd.  Both write their fields POSITIONALLY (INY through
@@ -2507,43 +2476,13 @@ _Sock_EnsureBound MX    %00
                 RTS
 
 ;------------------------------------------------------------------------------
-; _Sock_HwShared - C=1 if another descriptor in use holds _sockTmpHw, the chip
-; socket of the descriptor at _sockTmpOff.  MX %00.  Clobbers A, X, Y.
-; Two UDP descriptors hold one chip socket after an SO_REUSEADDR bind
-; (_Udp_PortShare); close releases it with the last of them.
-;------------------------------------------------------------------------------
-_Sock_HwShared  MX      %00
-                LDX     #0
-@shs_l          CPX     _sockTmpOff
-                BEQ     @shs_next
-                TXY                             ; +0 InUse, +1 HwIdx
-                LDA     [_sockTablePtr],Y
-                AND     #$00FF
-                BEQ     @shs_next
-                LDA     [_sockTablePtr],Y
-                XBA
-                AND     #$00FF
-                CMP     _sockTmpHw
-                BEQ     @shs_yes
-@shs_next       TXA
-                CLC
-                ADC     #SOCK_REC_SIZE
-                TAX
-                CPX     #SOCKTBL_BLK_SIZE
-                BCC     @shs_l
-                CLC
-                RTS
-@shs_yes        SEC
-                RTS
-
-;------------------------------------------------------------------------------
 ; _Sock_EphemPort - the next ephemeral local port, host order, into _sockTmp2
 ; (where bind stages a port for _Net_Xport_Open).  49152..65535, wrapping.
 ; MX %00.  Clobbers A.
 ;
 ; 2.11BSD in_pcbbind picks `lport == 0' ports from head->inp_lport, one
-; counter per protocol (in_pcb.c).  Here TCP and UDP share _tcpNextPort; a
-; port one of them skips is still unused.
+; counter per protocol (in_pcb.c).  Here the chip's transports share
+; _tcpNextPort; a port one of them skips is still unused.
 ;------------------------------------------------------------------------------
 _Sock_EphemPort MX      %00
                 LDA     _tcpNextPort
@@ -2553,70 +2492,6 @@ _Sock_EphemPort MX      %00
 @sep_ok         STA     _sockTmp2               ;   seeded because no card came up
                 INC     A
                 STA     _tcpNextPort
-                RTS
-
-;------------------------------------------------------------------------------
-; _So_UdpPeer - C=1 if the descriptor at _sockTmpOff is a connected datagram
-; socket: SOCK_FAddr is not INADDR_ANY, udp_output's own test.  MX %00.
-; Clobbers A, Y.
-; _So_UdpFrom - C=1 if _sockSrcIp/_sockSrcPort (a datagram just read) are that
-; peer.  MX %00.  Clobbers A, Y.
-; _So_UdpPeerLoad - the peer into _sockDstIp/_sockDstPort.  MX %00.  Clobbers
-; A, Y.
-;------------------------------------------------------------------------------
-_So_UdpPeer     MX      %00
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_FAddr
-                TAY
-                LDA     [_sockTablePtr],Y
-                INY
-                INY
-                ORA     [_sockTablePtr],Y
-                BEQ     @sup_no
-                SEC
-                RTS
-@sup_no         CLC
-                RTS
-
-_So_UdpFrom     MX      %00
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_FAddr
-                TAY
-                LDA     [_sockTablePtr],Y
-                CMP     _sockSrcIp
-                BNE     @suf_no
-                INY
-                INY
-                LDA     [_sockTablePtr],Y
-                CMP     _sockSrcIp+2
-                BNE     @suf_no
-                INY
-                INY
-                LDA     [_sockTablePtr],Y
-                CMP     _sockSrcPort
-                BNE     @suf_no
-                SEC
-                RTS
-@suf_no         CLC
-                RTS
-
-_So_UdpPeerLoad MX      %00
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_FAddr
-                TAY
-                LDA     [_sockTablePtr],Y
-                STA     _sockDstIp
-                INY
-                INY
-                LDA     [_sockTablePtr],Y
-                STA     _sockDstIp+2
-                INY
-                INY
-                LDA     [_sockTablePtr],Y
-                STA     _sockDstPort
                 RTS
 
 ;------------------------------------------------------------------------------
@@ -2756,8 +2631,6 @@ net_op_sockteardown MX  %00
                 ; the bitmap corruption it shows comes from elsewhere.
                 CMP     #W5_NSOCK               ; detached listener / loopback /
                 BCS     @st_sentinel            ;   AF_UNIX -> no hardware to free
-                JSR     _Sock_HwShared          ; a UDP port another descriptor
-                BCS     @st_freeDesc            ;   still holds stays open for it
                 JSR     _Net_Xport_Close
                 LDA     _sockTmpHw
                 JSR     _W5_SockFree

@@ -106,7 +106,7 @@ _w5SiteBase     STAL    U2_MR
                 ; stays CLOSED, so no IRQ fires at boot.  The firehose risk is
                 ; from MACRAW-promiscuous on an OPEN socket (netdump's job, on
                 ; /dev/bpf0 open), not from registering the ISR or arming IMR
-                ; over a closed socket.  Foreground UDP bus sequences mask the
+                ; over a closed socket.  Foreground bus sequences mask the
                 ; W5100 IRQ via U2_LOCK so an IRQ mid-sequence can't corrupt the
                 ; shared indirect AR.
                 JSR     _Net_BringUp            ; polled W5100 reset/mode + SHAR;
@@ -411,17 +411,14 @@ _Uthernet2_ISR  MX      %11
                 RTL
 
 ;==============================================================================
-; _Net_BringUp - polled W5100 reset/mode/init + SHAR-from-record.  DHCP is no
+; _Net_BringUp - polled W5100 reset/mode/init + SHAR-from-record.
 ;
 ; Runs at boot (from _ProbeUthernet2) with the chip IMR=0 — NO interrupts, so
 ; the indirect-bus address pointer is ours exclusively (no ISR re-entrancy).
 ; All loops are bounded so boot always completes.  Sequence:
 ;   1. reset + indirect/auto-inc mode;
-;   2. _W5_RunInit: RMSR/TMSR, RTR/RCR, SHAR (our MAC), socket-0 UDP + dest;
-;   3. open socket 0 (UDP, src port 68), bounded wait for SR=UDP;
-;   4. build a DHCP DISCOVER in the TX buffer and SEND it (broadcast, no ARP);
-;   5. bounded-poll S0_RX_RSR for the OFFER; log the received size and, if any,
-;      the offered IP (yiaddr) read straight from the RX buffer — never faked.
+;   2. _W5_RunInit: RMSR/TMSR, RTR/RCR;
+;   3. SHAR (our MAC) from the ifnet record, then the ISR armed.
 ; MX %00 in/out (PHP/PLP); DBR forced to the live kernel-bank (PHK/PLB) for the
 ; abs,X/abs,Y table reads ($02 = assembly ORG only).
 ;==============================================================================
@@ -435,7 +432,6 @@ W5_RXBASE       EQU     $6000           ; socket 0 RX buffer base (RMSR=$55)
 W5_RXMASK       EQU     $07FF           ; 2 KB RX ring mask (RMSR=$55)
 W5_S0_MR        EQU     $0400           ; socket 0 mode register
 W5_S0_RXRD      EQU     $0428           ; socket 0 RX read pointer (16-bit BE)
-W5_SR_UDP       EQU     $22             ; Sn_SR value for an open UDP socket
 W5_MR_MACRAW    EQU     $44             ; Sn_MR MACRAW($04) + MAC-filter($40) — capture
 W5_SR_MACRAW    EQU     $42             ; Sn_SR value for an open MACRAW socket
 W5_CR_RECV      EQU     $40             ; Sn_CR RECV (commit RX_RD advance)
@@ -499,7 +495,7 @@ _Net_BringUp    MX      %00
                 FIN
                 ; --- fixed-register init (MX %11 in/out) ---
                 JSR     _W5_RunInit
-                ; --- SHAR (our MAC) from the ifnet record (was in _w5InitTbl) ---
+                ; --- SHAR (our MAC) from the ifnet record ---
                 JSR     _W5_WriteSharFromRec
                 REP     #$30
                 MX      %00
@@ -563,9 +559,8 @@ _W5_RunInit     MX      %11
                 BRA     @ri_lp
 @ri_done        RTS
 
-; W5100 fixed-register init: RX/TX mem 2KB/socket, retry 200ms x8, socket 0 =
-; UDP src port 68, dest 255.255.255.255:67.  SHAR (our MAC) is NO LONGER here —
-; it is written by _W5_WriteSharFromRec from the ifnet record (derived default
+; W5100 fixed-register init: RX/TX mem 2KB/socket, retry 200ms x8.  SHAR (our
+; MAC) is written by _W5_WriteSharFromRec from the ifnet record (derived default
 ; 00:08:DC:F6:00:<slot> + /etc/hwaddr.conf override), so a per-card/per-machine
 ; MAC is possible.
 _w5InitTbl      HEX     001A55                  ; RMSR = 2KB/socket
@@ -573,15 +568,6 @@ _w5InitTbl      HEX     001A55                  ; RMSR = 2KB/socket
                 HEX     001707                  ; RTR hi  (retry timeout 0x07D0)
                 HEX     0018D0                  ; RTR lo
                 HEX     001908                  ; RCR = 8 retries
-                HEX     040002                  ; S0_MR = UDP
-                HEX     040400                  ; S0_PORT hi
-                HEX     040544                  ; S0_PORT lo = 68 (DHCP client)
-                HEX     040CFF                  ; S0_DIPR = 255.255.255.255
-                HEX     040DFF
-                HEX     040EFF
-                HEX     040FFF
-                HEX     041000                  ; S0_DPORT hi
-                HEX     041143                  ; S0_DPORT lo = 67 (DHCP server)
                 HEX     FF                       ; terminator
 
 ;------------------------------------------------------------------------------

@@ -13,12 +13,15 @@ The socket layer, the transports and the W5100 driver are the loadable
 bring-up and ISR (`uthernet.s`) and the `_Net_Dispatch` NETOP seam.
 
 FGX talks to the network through an **Uthernet II** card (a WIZnet **W5100**
-Ethernet controller). The W5100 does **TCP/UDP/IP/ARP offload in hardware**; FGX
-does not run a software IP stack for the wire. The kernel exposes a **BSD socket layer** (sockets
+Ethernet controller). The W5100 does **TCP and ICMP offload in hardware**, on its
+sockets 1-3; **UDP runs on the kernel's own network stack**, 2.11BSD's, in the
+network modules (`bsdnetd`, `bsdnet0`-`bsdnet3`), over the chip's MACRAW socket 0. The kernel exposes a **BSD socket layer** (sockets
 are first-class Unix fds) over a transport-agnostic seam, with BSD-shaped
 semantics so ported clients need few edits. What's shipped:
 
-- **UDP** datagrams (`socket(AF_INET, SOCK_DGRAM, 0)`)
+- **UDP** datagrams (`socket(AF_INET, SOCK_DGRAM, 0)`), on the kernel stack;
+  without its modules `socket` answers `EPROTONOSUPPORT`, as 2.11BSD's `socreate`
+  does when no protocol matches
 - **TCP** client *and* server (`SOCK_STREAM`; `connect` / `listen` / `accept`)
 - **ICMP / raw IP** (`socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)`) — used by `ping`
 - **DHCP** (userland `dhclient`)
@@ -55,9 +58,9 @@ masks IRQs around each multi-step sequence (see *U2_LOCK* below). Detection
 
 The W5100 has **four hardware sockets**, each with a 2 KB TX and 2 KB RX ring.
 **Socket 0 is permanently reserved** for `/dev/bpf0` MACRAW capture (the W5100
-only does MACRAW on socket 0); `_W5_SockAlloc` hands out sockets **1–3** to UDP /
+only does MACRAW on socket 0); `_W5_SockAlloc` hands out sockets **1–3** to
 TCP / ICMP (`W5_NSOCK EQU 4`). So there are at most **3 concurrent** sockets on
-the wire; loopback and AF_UNIX sockets do not count against them.
+the wire; UDP, loopback and AF_UNIX sockets do not count against them.
 
 ## Sockets are fds
 
@@ -73,10 +76,10 @@ fd inheritance all work on it; `Fs_Close` routes `FCB_FL_SOCKET` through
 socket + free descriptor).
 
 `socket()` flow: validate the family → map `(type, proto)` to a transport tag
-(`SOCK_DGRAM`→UDP, `SOCK_STREAM`→TCP, `SOCK_RAW`+`IPPROTO_ICMP`→ICMP, AF_UNIX
+(`SOCK_DGRAM`→`XPORT_KSO`, the kernel stack's, `SOCK_STREAM`→TCP, `SOCK_RAW`+`IPPROTO_ICMP`→ICMP, AF_UNIX
 →`XPORT_UNIX`, else `EINVAL`) → grab a descriptor → `_Fcb_Alloc` a real fd. Any
 failure rolls the whole thing back.  The W5100 socket is claimed later, when
-the descriptor first needs the wire -- a UDP/ICMP `bind`, a TCP `connect` or
+the descriptor first needs the wire -- an ICMP `bind`, a TCP `connect` or
 `listen` (`_Xport_Claim`, `net_xport.s`) -- and exhaustion is `ENOBUFS` from
 that call.  (2.11BSD's `socket()` likewise allocates no interface resource: UDP's
 `PRU_ATTACH` only calls `in_pcballoc`, `vendor/2.11BSD/usr/sys/netinet/udp_usrreq.c`.)
@@ -85,23 +88,25 @@ that call.  (2.11BSD's `socket()` likewise allocates no interface resource: UDP'
 
 The socket core (`net.s`) **never touches a W5100 register**. It dispatches
 through a transport seam (`net_xport.s`) keyed on `SOCK_Proto`; loopback is
-selected first by `SOCK_HwIdx == SOCK_HW_LOOP` and AF_UNIX by `XPORT_UNIX`:
+selected first by `SOCK_HwIdx == SOCK_HW_LOOP`, AF_UNIX by `XPORT_UNIX`, and a
+UDP socket (`XPORT_KSO`) goes to the kernel stack through `net_kso.s` before any
+of them:
 
 ```
 net.s     ──_Net_Xport_{Open,Send,Recv,Connect,Close,Listen,Accept}──▶  _Xport_LoadTag
                                                                          │ branch on tag
-                  ┌──────────────────────┬───────────────────┬──────────┘
-              XPORT_UDP              XPORT_ICMP           XPORT_TCP
-            _Udp_*Core             _Icmp_*Core          _Tcp_*Core
+                                         ┌───────────────┘
+                                   XPORT_ICMP           XPORT_TCP
+                                 _Icmp_*Core          _Tcp_*Core
 ```
 
-| Verb | UDP | ICMP/IPRAW | TCP |
-|------|-----|------------|-----|
-| Open | `_Udp_OpenAt` | `_Icmp_OpenAt` | `_Tcp_BindAt` (bind only) |
-| Connect | — | — | `_Tcp_Connect` (auto ephemeral local port) |
-| Send | `_Udp_SendCore` | `_Icmp_SendCore` | `_Tcp_SendCore` |
-| Recv | `_Udp_RecvCore` | `_Icmp_RecvCore` | `_Tcp_RecvCore` |
-| Listen / Accept | — | — | `_Tcp_Listen` / `_Tcp_Accept` |
+| Verb | ICMP/IPRAW | TCP |
+|------|------------|-----|
+| Open | `_Icmp_OpenAt` | `_Tcp_BindAt` (bind only) |
+| Connect | — | `_Tcp_Connect` (auto ephemeral local port) |
+| Send | `_Icmp_SendCore` | `_Tcp_SendCore` |
+| Recv | `_Icmp_RecvCore` | `_Tcp_RecvCore` |
+| Listen / Accept | — | `_Tcp_Listen` / `_Tcp_Accept` |
 | Close | nop | nop | `_Tcp_Close` (graceful FIN) |
 
 All three wire transports are **shipped and wired**; TCP client *and* server are
@@ -112,9 +117,8 @@ one driver, so it's a branch.
 Shared W5100 plumbing lives in `net_xport.s`: `_W5_SetSnAR` (point the indirect
 address at a socket register), `_W5_TxStream` (stream the TX ring, issue SEND,
 wait SEND_OK), and `_W5_RxSetup`/`_W5_RxCopy`/`_W5_RxAdvance` (RX ring, ring-wrap
-aware). The W5100's per-packet receive headers differ by transport: UDP prepends
-`[srcIP(4) srcPort(2) len(2)]`, IPRAW prepends `[srcIP(4) len(2)]`, TCP is a raw
-byte stream with no header.
+aware). The W5100's per-packet receive headers differ by transport: IPRAW
+prepends `[srcIP(4) len(2)]`, TCP is a raw byte stream with no header.
 
 ## Syscalls and wire formats
 
@@ -166,9 +170,9 @@ BSD semantics: **`connect` / `accept` / TCP `recv` block by default**, and are
 **`^C`-interruptible → `EINTR`**. Non-blocking I/O is per call
 (**`MSG_DONTWAIT`**) or per descriptor (**`ioctl(FIONBIO)`**, or
 `fcntl(F_SETFL)`, which issues `FIONBIO` as 4.3BSD-Reno's does); either gives
-`EAGAIN`. UDP/ICMP `recvfrom` does **not** block — it polls
-and returns `EAGAIN` when the ring is empty, so `ping`/`dhclient` poll in a
-userland timeout loop. **`read`/`write` work on a socket fd** (`read`≡`recv`,
+`EAGAIN`. A UDP receive blocks as 2.11BSD's `soreceive` does, and `select`
+waits on it; ICMP `recvfrom` does **not** block — it polls and returns `EAGAIN`
+when the ring is empty, so `ping` polls in a userland timeout loop. **`read`/`write` work on a socket fd** (`read`≡`recv`,
 `write`≡`send`), which is what the shell's redirection and most portable code use.
 
 Blocking goes through `_Sock_PollIntr`: if no `^C` is pending it `_sleep`s on
@@ -287,16 +291,18 @@ ICMP/UDP/TCP, and prints a tcpdump-style line per frame.
 
 ## Limits and caveats
 
-- **One W5100, three usable sockets.** Socket 0 is reserved for capture, so at
-  most three concurrent UDP/TCP/ICMP sockets.
+- **One W5100, three usable sockets.** Socket 0 is the kernel stack's MACRAW,
+  so at most three concurrent TCP/ICMP sockets; UDP sockets are the kernel
+  stack's and are not counted.
 - **Single-socket TCP server.** `listen` ignores its backlog; `accept` hands the
   one hardware socket to the new connection fd and detaches the listener, so a
   server (e.g. `echod`) must re-`socket`/`bind`/`listen` for each connection. This
   is a W5100 constraint, not a software limit.
-- **No software IP stack for the wire, no routing.** The W5100 offloads
-  TCP/UDP/IP/ARP; FGX does MACRAW (capture), the ICMP checksum in `ping`, and
-  the software loopback and AF_UNIX transports.  The gateway is stored in the
-  ifnet and pushed to the chip (`GAR`); routing is the chip's job.
+- **Two IP paths.** The W5100 offloads TCP and ICMP, with its own ARP and
+  routing through the gateway in `GAR`; UDP goes through the kernel stack,
+  which routes by its own table (a default route through the same gateway) and
+  does its own ARP over MACRAW.  FGX also does the ICMP checksum in `ping`, and
+  the software loopback and AF_UNIX transports.
 - **~1 MHz indirect cardbus, no DMA.** Throughput is modest and the paths are
   small-packet oriented (ring-wrap-aware on the TCP/RX paths).
 - **BSD subset.** `select(2)` works on socket fds; there is no `poll(2)`, no

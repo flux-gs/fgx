@@ -104,11 +104,11 @@ static void show(void)
     f = render_flags();
     fmt_mac();
     printf("%s: flags=%d<%s>\n", ifr, f, flagbuf);
-    /* W5100 hardware TCP/IP offload — a static property of the chip (there is
-     * no runtime cap mask; OFFLOAD_* is defined-only).  Honest token set: the
-     * card does IPv4/ARP/TCP/UDP and their checksums; inbound ICMP echo too.
-     * The options=<> framing already means "offloaded"; keep it under 80 cols. */
-    printf("        options=<TCP4,UDP4,ICMP4,ARP,CSUM_IP,CSUM_TCP,CSUM_UDP>\n");
+    /* The W5100's offload as FGX uses it -- a static property (there is no
+     * runtime cap mask).  The card does IPv4/ARP/TCP and their checksums, and
+     * inbound ICMP echo; UDP is the kernel stack's.  The options=<> framing
+     * already means "offloaded"; keep it under 80 cols. */
+    printf("        options=<TCP4,ICMP4,ARP,CSUM_IP,CSUM_TCP>\n");
     printf("        ether %s\n", macbuf);
     if (ifr[IFR_FLAGS] & IFF_IP_CONF) {
         fmt_mask();
