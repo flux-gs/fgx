@@ -346,6 +346,10 @@ bn_call(cp, so)
 		return;
 
 	case BNOP_IFCHANGED:
+		/* The chip has the address already: SYS_IFCONFIG is where a
+		 * refusal belongs, so in_control's suser check is passed here
+		 * rather than leave the stack on the old address. */
+		u.u_uid = 0;
 		u.u_error = w5address();
 		return;
 	}

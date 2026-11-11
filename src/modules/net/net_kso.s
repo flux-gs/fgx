@@ -178,6 +178,23 @@ _Kso_DoIoctl    MX      %00
                 PLY
                 RTS
 
+; _Kso_IfChanged - tell the kernel's stack the interface's address changed
+; (SYS_IFCONFIG's IFC_SET, net_op_ifconfig).  No descriptor: the block is all
+; zero but its op.  Without the modules, or if the stack refuses, the chip has
+; the address all the same and this is silent.  MX %00.  Clobbers A, X, Y.
+_Kso_IfChanged  MX      %00
+                LDX     #8                      ; +16 .. +2, eight words of 0
+@kic_z          PEA     0
+                DEX
+                BNE     @kic_z
+                PEA     BNOP_IFCHANGED          ; +0 op
+                JSR     _Kso_Call
+                LDX     #9
+@kic_p          PLY
+                DEX
+                BNE     @kic_p
+                RTS
+
 ; _Kso_SoOp - push +2 so and +0 op UNDER this routine's own return address,
 ; which it moves down, so the caller's block stays contiguous.  In: Y = op.
 _Kso_SoOp       MX      %00

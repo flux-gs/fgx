@@ -1,18 +1,45 @@
 {
  "name": "netw5",
- "description": "The MACRAW driver on the host's real network (NOT in the gate: a real DHCP server and LAN traffic). The release /etc/rc is staged back so /etc/netstart takes a lease, then the network modules load and the driver attaches over what DHCP left in the chip. Only means anything at kernel.netprobe = 1.",
+ "description": "The MACRAW driver on the host's real network (NOT in the gate: a real DHCP server and LAN traffic). The release /etc/rc, less the network modules on its modload line (fixtures/rc.netlate), is staged back so /etc/netstart takes a lease over the chip, then the network modules load and the driver attaches over what DHCP left in the chip. Only means anything at kernel.netprobe = 1.",
  "command": "/testbin/ifcprobe; modload bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3; sleep 70; dmesg | tail -24",
  "timeout_s": 300,
- "mame_slots": ["-sl1", "uthernet2"],
+ "mame_slots": [
+  "-sl1",
+  "uthernet2"
+ ],
  "stage_files": [
-  {"host": "disk_src/etc/rc.in", "prodos_dir": "/FGX/etc", "name": "rc", "replace": true}
+  {
+   "host": "tools/mame_test/fixtures/rc.netlate",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  }
  ],
  "expect": {
-  "screen_contains": ["w5: attached", "bsdnet: ok", "bsdnet: w5 received", "bsdnet: w5 bad length reopened", "bsdnet: w5 pool empty dropped", "bsdnet: w5 torn read survived", "bsdnet: arp resolved ", "bsdnet: echo reply from gateway", "bsdnet: echo rtt ", "bsdnet: burst of 45 got ", "bsdnet: alive after burst"],
-  "screen_lacks": ["bsdnet: BROKEN", "PANIC", "BRK"]
+  "screen_contains": [
+   "w5: attached",
+   "bsdnet: ok",
+   "bsdnet: w5 received",
+   "bsdnet: w5 bad length reopened",
+   "bsdnet: w5 pool empty dropped",
+   "bsdnet: w5 torn read survived",
+   "bsdnet: arp resolved ",
+   "bsdnet: echo reply from gateway",
+   "bsdnet: echo rtt ",
+   "bsdnet: burst of 45 got ",
+   "bsdnet: alive after burst",
+   "bsdnet: routes ok"
+  ],
+  "screen_lacks": [
+   "bsdnet: BROKEN",
+   "PANIC",
+   "BRK"
+  ]
  },
  "requires": {
-  "config": {"kernel.netprobe": "1"},
+  "config": {
+   "kernel.netprobe": "1"
+  },
   "reason": "the probe C is compiled into the network modules only at kernel.netprobe = 1"
  }
 }

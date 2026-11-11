@@ -447,6 +447,8 @@ net_op_ifconfig MX      %00
                 CMP     _ifS1Off
                 BNE     @sic_setOk
                 JSL     SYS_NETKC_W5WRITEIP    ; RTL wrapper -> _W5_WriteIpFromRec
+                JSR     _Kso_IfChanged          ; and to the kernel's stack, which
+                                                ;   reads it back from the chip
 @sic_setOk      LDA     #0
                 SEC
                 RTL

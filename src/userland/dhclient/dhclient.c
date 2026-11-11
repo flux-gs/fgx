@@ -32,6 +32,8 @@
  * (dhclient_ticks.s) over SYS_TICKS — fcc has no inline asm.
  */
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/time.h>             /* select */
 #include "../lib/socket_h.h"
 
 /* --- ifreq raw layout (mirrors include/ifnet.s IF_*; see ifconfig.c). --- */
@@ -202,18 +204,29 @@ static void write_lease(void)
     fclose(f);
 }
 
-/* Poll recvfrom until a DHCP reply of want_type with our xid arrives, or
- * timeout_sec elapses.  Returns the datagram length (in rx) or 0 on timeout. */
+/* Wait for a DHCP reply of want_type with our xid, or for timeout_sec to
+ * elapse.  Returns the datagram length (in rx) or 0 on timeout.  A UDP receive
+ * blocks until a datagram arrives, so the wait is select's, with what is left
+ * of the timeout, and recvfrom runs only when one is there. */
 static int wait_reply(int s, int want_type, int timeout_sec)
 {
-    unsigned int start, now, limit;
+    unsigned int start, now, limit, left;
     int n, mt, fromlen;
+    fd_set rd;
+    struct timeval tv;
     start = ticks();
     limit = timeout_sec * 60;
     while (1) {
         now = ticks();
         if ((unsigned int)(now - start) >= limit)
             return 0;
+        left = limit - (unsigned int)(now - start);
+        FD_ZERO(&rd);
+        FD_SET(s, &rd);
+        tv.tv_sec = left / 60;
+        tv.tv_usec = (long)(left % 60) * 16667L;
+        if (select(s + 1, &rd, (fd_set *)0, (fd_set *)0, &tv) <= 0)
+            continue;
         fromlen = sizeof sa_from;
         n = recvfrom(s, rx, RX_MAX, 0, sa_from, &fromlen);
         if (n > 240 &&
