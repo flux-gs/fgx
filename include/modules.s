@@ -741,6 +741,8 @@ BNOP_IOCTL              EQU     13
 BNOP_SELECT             EQU     14
 BNOP_CLOSE              EQU     15
 BNOP_IFCHANGED          EQU     16
+BNOP_LISTEN             EQU     17
+BNOP_ACCEPT             EQU     18
 VT_PDCORE               EQU     $000B       ; prodos.mod's C entry points, for
                                             ;   prodosw.mod, the write half
                                             ;   (ProDOS FST P6) -- PDCORE_* below

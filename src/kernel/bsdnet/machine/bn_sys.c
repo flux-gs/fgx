@@ -51,6 +51,8 @@
 #define	BNOP_SELECT	14
 #define	BNOP_CLOSE	15
 #define	BNOP_IFCHANGED	16
+#define	BNOP_LISTEN	17
+#define	BNOP_ACCEPT	18
 
 /* The call block net.mod builds on the caller's kernel stack. */
 struct bncall {
@@ -70,6 +72,7 @@ struct bncall {
 extern	int kc_curuid(), kc_sigraise(), kc_wakeup(), w5address();
 extern	int bind(), connect(), sendto(), send(), recvfrom(), recv();
 extern	int setsockopt(), getsockname(), getpeername(), shutdown();
+extern	int listen(), accept();
 
 int	netoff;			/* uipc_syscalls.c tests it: the network is on */
 
@@ -106,19 +109,25 @@ getf(fdes)
 	return (&bn_file);
 }
 
+/* accept()'s descriptor.  net.mod has taken the FCB before BNOP_ACCEPT, as
+ * 2.11BSD's accept() takes it before soqremque, so these cannot fail; accept()
+ * is their one caller (BNOP_SOCKET calls socreate, and socketpair is not
+ * reached), and the new socket comes back from bn_newfile.f_socket. */
+static struct file bn_newfile;
+
 struct file *
 falloc()
 {
-	panic("falloc: net.mod allocates descriptors");
-	return (0);
+	bn_newfile.f_socket = 0;
+	return (&bn_newfile);
 }
 
 int
 ufalloc(i)
 	int i;
 {
-	panic("ufalloc: net.mod allocates descriptors");
-	return (-1);
+	u.u_r.r_val1 = 0;
+	return (0);
 }
 
 /* The process's memory is reached through far pointers, so a copy either way
@@ -215,6 +224,8 @@ static	struct { int s; caddr_t buf; int len; int flags; caddr_t from; int *froml
 static	struct { int s; int level; int name; caddr_t val; u_int valsize; } a_sopt;
 static	struct { int fdes; caddr_t asa; int *alen; } a_name;
 static	struct { int s; int how; } a_shut;
+static	struct { int s; int backlog; } a_listen;
+static	struct { int s; caddr_t name; int *anamelen; } a_accept;
 
 #if NETPROBE == 5
 /* kernel.netprobe = 5: the first socket call runs off its slot, and the floor
@@ -323,6 +334,24 @@ bn_call(cp, so)
 			getsockname();
 		else
 			getpeername();
+		return;
+
+	case BNOP_LISTEN:
+		a_listen.backlog = cp->c_x;
+		u.u_ap = (int *)&a_listen;
+		listen();
+		return;
+
+	case BNOP_ACCEPT:
+		/* no name: the caller's libc asks getpeername for it */
+		a_accept.name = 0;
+		u.u_ap = (int *)&a_accept;
+		accept();
+		if (u.u_error == 0)
+			u.u_r.r_val1 = (int)(long)bn_newfile.f_socket;
+		else if (bn_newfile.f_socket)
+			soclose(bn_newfile.f_socket);
+		bn_newfile.f_socket = 0;
 		return;
 
 	case BNOP_SHUTDOWN:
