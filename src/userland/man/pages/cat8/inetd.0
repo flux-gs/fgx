@@ -42,11 +42,6 @@ DESCRIPTION
      needed only to serve a single address: 127.0.0.1 keeps a
      service off the network.
 
-     A wildcard listener on a machine with a card holds one of the
-     three hardware sockets for as long as inetd runs; a loopback
-     listener costs none.  Services past that limit are refused as
-     the file is read.
-
      This inetd honours `stream tcp nowait root' lines.  Every
      other combination is REPORTED and SKIPPED rather than silently
      ignored, so a stock configuration file works with the
@@ -89,14 +84,9 @@ BUGS
      required to read `root'.  Setting it to anything else refuses
      the line.
 
-     At most two services can be armed against the network at once:
-     the Ethernet controller has three usable sockets and a live
-     connection holds one for its lifetime, so the last is reserved
-     rather than handed to a listener.  Configurations past that
-     limit are refused as they are read, not partway through.
-
-     A service that cannot arm -- a wire listener with no card
-     fitted, say -- is retried on a timer rather than abandoned,
+     A service that cannot arm -- one bound to an address the
+     machine does not have yet, say -- is retried on a timer rather
+     than abandoned,
      and each failed attempt is logged.
 
      TCP wrappers, tcpmux, the RPC services and the connection rate

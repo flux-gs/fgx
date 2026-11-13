@@ -217,11 +217,6 @@ archived tracker; new work is tracked in GitHub Issues.
   cannot pass the flag, so loopback gets full semantics and W5100 TCP answers
   EOPNOTSUPP.  Design:
   `docs/history/plans/2026-09-13-tcp-urgent-mechanism-design.md`.
-- **Who re-arms a TCP listener.**  The W5100's listening socket becomes the
-  connection, and `inetd` rebuilds the listener today (measured working,
-  `wireacc`).  The BSD-shaped alternative is the kernel re-issuing OPEN +
-  LISTEN so `listen(2)` means what it says; design direction, belongs with the
-  P1 `ifnet` seam.
 - **Port `ifconfig(8)` and `route(8)` from 2.11BSD.**  The `SIOCGIF*` socket
   ioctls they are written against are in (`net_op_ifioctl`,
   `src/modules/net/net.s`); both tools are still FGX-native C against the
