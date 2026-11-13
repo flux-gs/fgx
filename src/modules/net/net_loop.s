@@ -762,7 +762,7 @@ _Loop_AcceptTry MX      %00
                 CLC
                 RTS
 @nl_at_gotdesc  STY     _loopAccOff
-                JSR     _NlKC_FcbAlloc          ; C=1 + A = fd (M=1!), _fcbPtr live
+                JSR     _NlKC_FcbAlloc          ; C=1 + A = fd, _fcbPtr live
                 BCS     @nl_at_gotfd
                 REP     #$30
                 MX      %00

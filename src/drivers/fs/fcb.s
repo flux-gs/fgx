@@ -27,10 +27,10 @@
 
 ;------------------------------------------------------------------------------
 ; _Fcb_Alloc - allocate the lowest free fd (POSIX: including 0/1/2 once closed).
-; Out: C=1 + A = fd (M=1), or C=0 + A=EMFILE.  M=1 X=0 on exit.
+; Out: C=1 + A = fd, or C=0 + A = EMFILE/ENOMEM.
 ;
-; MX:       Caller %00.  On exit, M=1, X=0 (Y is 16-bit).  PLP not used
-;           (caller's M/X is overwritten — explicitly).
+; MX:       Caller %00.  Every exit is a PLP, so the caller's M and X come
+;           back with it.
 ; Clobbers: A, X, Y, _shTmp0, _fcbPtr, _libcTmp2 (transitive via Kmalloc),
 ;           _kmem_*, _kmallocResult, _errno.  `_libcTmp2` left pointing at
 ;           the new chunk's header — see calling-conventions.md.
