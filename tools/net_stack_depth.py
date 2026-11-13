@@ -10,7 +10,12 @@ names the targets, and a function that makes one with no entry there is reported
 A report with no build edge: a number it prints settles a design point once.
 
 Usage: net_stack_depth.py <object dir> [root ...]
+       net_stack_depth.py --check <object dir>
        net_stack_depth.py --self-test
+
+--check walks bn_sys, the entry every socket call a process makes goes through,
+adds ENTRY bytes from the dispatcher through net.mod and the vtable and INTR for
+an interrupt frame, and exits 1 if that leaves under SPARE of the KSTK-byte slot.
 """
 import glob
 import os
@@ -63,6 +68,9 @@ INDIRECT = {
     "sosetopt": [],
     "sorwakeup": [],
     "sonewconn": USRREQ,
+    "socreate": USRREQ,
+    "sogetnam": USRREQ,
+    "sogetpeer": USRREQ,
     "in_ifinit": ["w5ioctl"],  # if_ioctl
     # afswitch's af_hash and af_netmatch: small leaves
     "ifa_ifwithnet": [],
@@ -82,6 +90,9 @@ NOT_FROM_THE_DRAIN = {"in_control"}
 # The drain, and the socket calls a process makes, which run on its kernel slot.
 ROOTS = ["netintr", "sendto", "recvfrom", "connect", "bind", "setsockopt",
          "getsockname", "shutdown", "soclose", "ifioctl", "sbselqueue"]
+# A process's kernel slot (kernel.kstk), what reaches bn_sys before its frame, an
+# interrupt taken at the deepest point, and the margin a call must leave.
+KSTK, ENTRY, INTR, SPARE = 1024, 60, 64, 128
 PUSH = {"PHA": 2, "PHX": 2, "PHY": 2, "PEI": 2, "PHP": 1, "PHB": 1, "PHD": 2,
         "PLA": -2, "PLX": -2, "PLY": -2, "PLP": -1, "PLB": -1, "PLD": -2}
 
@@ -240,12 +251,21 @@ def main():
     if sys.argv[1:] == ["--self-test"]:
         self_test()
         return
+    check = sys.argv[1:2] == ["--check"]
+    if check:
+        del sys.argv[1]
     lines = []
     for f in sorted(glob.glob(os.path.join(sys.argv[1], "*.s"))):
         if not f.endswith(".data.s"):
             lines += open(f, errors="replace").read().split("\n")
-    roots = sys.argv[2:] or ROOTS
+    roots = ["bn_sys"] if check else (sys.argv[2:] or ROOTS)
     out, notes = report(lines, roots)
+    if check:
+        d, chain = out["bn_sys"]
+        total = d + ENTRY + INTR
+        print(f"bn_sys: {d} + {ENTRY} entry + {INTR} interrupt = {total} of "
+              f"{KSTK}, {KSTK - total} spare (need {SPARE})\n  " + " -> ".join(chain))
+        sys.exit(0 if KSTK - total >= SPARE else 1)
     for r in roots:
         d, chain = out[r]
         print(f"{r}: {d} bytes\n  " + " -> ".join(chain))

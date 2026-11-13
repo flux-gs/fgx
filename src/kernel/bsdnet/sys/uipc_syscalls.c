@@ -47,6 +47,36 @@ MBZAP(m, len, type)
 	}
 
 /*
+ * A socket call's name or rights in an mbuf of their own, as 4.3BSD-Reno's
+ * sockargs (kern/uipc_syscalls.c) gets them, where 2.11BSD builds them in an
+ * MSIZE buffer on the kernel stack: a process's kernel slot here is 1024 bytes
+ * and TCP's sendto is deeper than 2.11BSD's supervisor stack needed.  Reno's
+ * COMPAT_43 arm and sa_len store go: 2.11BSD's sockaddr has no sa_len.
+ */
+static int
+sockargs(mp, buf, buflen, type)
+	struct mbuf **mp;
+	caddr_t buf;
+	int buflen, type;
+{
+	register struct mbuf *m;
+	int error;
+
+	if ((u_int)buflen > MLEN)
+		return (EINVAL);
+	m = m_get(M_WAIT, type);
+	if (m == NULL)
+		return (ENOBUFS);
+	m->m_len = buflen;
+	error = copyin(buf, mtod(m, caddr_t), (u_int)buflen);
+	if (error)
+		(void) m_free(m);
+	else
+		*mp = m;
+	return (error);
+}
+
+/*
  * System call interface to the socket abstraction.
  */
 
@@ -384,7 +414,6 @@ sendit(s, mp, flags)
 	register int i;
 	struct mbuf *to, *rights;
 	int len;
-	char sabuf[MSIZE], ribuf[MSIZE];
 
 	if (netoff)
 		return(u.u_error = ENETDOWN);
@@ -404,37 +433,35 @@ sendit(s, mp, flags)
 			continue;
 		auio.uio_resid += iov->iov_len;
 		}
+	to = rights = 0;
 	if (mp->msg_name) {
-		to = (struct mbuf *)sabuf;
-		MBZAP(to, mp->msg_namelen, MT_SONAME);
-		u.u_error =
-		    copyin(mp->msg_name, mtod(to, caddr_t), mp->msg_namelen);
+		u.u_error = sockargs(&to, mp->msg_name, mp->msg_namelen,
+		    MT_SONAME);
 		if (u.u_error)
 			return;
-	} else
-		to = 0;
+	}
 	if (mp->msg_accrights) {
-		rights = (struct mbuf *)ribuf;
-		MBZAP(rights, mp->msg_accrightslen, MT_RIGHTS);
-		if (mp->msg_accrightslen > MLEN)
-			return(u.u_error = EINVAL);
-		u.u_error = copyin(mp->msg_accrights, mtod(rights, caddr_t),
-				mp->msg_accrightslen);
+		u.u_error = sockargs(&rights, mp->msg_accrights,
+		    mp->msg_accrightslen, MT_RIGHTS);
 		if (u.u_error)
-			return;
-	} else
-		rights = 0;
+			goto bad;
+	}
 	len = auio.uio_resid;
 	if	(setjmp(&u.u_qsave))
 		{
 		if	(auio.uio_resid == len)
-			return;
+			goto bad;
 		else
 			u.u_error = 0;
 		}
 	else
 		u.u_error = SOSEND(fp->f_socket, to, &auio, flags, rights);
 	u.u_r.r_val1 = len - auio.uio_resid;
+bad:
+	if (to)
+		m_freem(to);
+	if (rights)
+		m_freem(rights);
 }
 
 recvfrom()

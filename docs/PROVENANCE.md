@@ -727,7 +727,7 @@ Ported from 2.11BSD and verbatim except as noted.  `fgx` is the configuration sy
 | `src/kernel/bsdnet/sys/uipc_domain.c` | `vendor/2.11BSD/usr/sys/sys/uipc_domain.c` | `ADDDOMAIN` pastes with `##` where upstream used the Reiser `x/**/domain` |
 | `src/kernel/bsdnet/sys/uipc_proto.c` | `vendor/2.11BSD/usr/sys/sys/uipc_proto.c` | verbatim |
 | `src/kernel/bsdnet/sys/uipc_usrreq.c` | `vendor/2.11BSD/usr/sys/sys/uipc_usrreq.c` | verbatim |
-| `src/kernel/bsdnet/sys/uipc_syscalls.c` | `vendor/2.11BSD/usr/sys/sys/uipc_syscalls.c` | both `#ifndef pdp11` arms stay off under `fgx` |
+| `src/kernel/bsdnet/sys/uipc_syscalls.c` | `vendor/2.11BSD/usr/sys/sys/uipc_syscalls.c` | both `#ifndef pdp11` arms stay off under `fgx`; `sendit` takes its name and rights in mbufs through `sockargs`, from `vendor/4.3BSD-Reno/kern/uipc_syscalls.c` less its COMPAT_43 arm and `sa_len`, not 2.11BSD's MSIZE stack buffers, because a process's kernel slot is 1024 bytes; a name longer than MLEN answers EINVAL as Reno's does |
 | `src/kernel/bsdnet/net/af.h` | `vendor/2.11BSD/usr/sys/net/af.h` | verbatim |
 | `src/kernel/bsdnet/net/if.h` | `vendor/2.11BSD/usr/sys/net/if.h` | `IFQ_MAXLEN` takes the pdp11 arm under `fgx` |
 | `src/kernel/bsdnet/net/if_arp.h` | `vendor/2.11BSD/usr/sys/net/if_arp.h` | verbatim |
