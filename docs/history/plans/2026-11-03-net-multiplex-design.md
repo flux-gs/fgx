@@ -369,6 +369,14 @@ Throughput through the kernel stack is not measured under MAME: no bulk transfer
 uses UDP, and ftp is still the chip's TCP.  The hardware run re-measures ftp
 beside the stack.
 
+S4, under MAME on the shipping configuration:
+
+| Measure | Result |
+|---|---|
+| mbufs an idle TCP connection holds | 8, four at each end (socket, inpcb, tcpcb, header template); a listener 3, an unconnected TCP socket 3 |
+| Pool | `NMBUFS` 280 (was 170) and 12 clusters: 16 connections and their listener hold 131.  bsdnetd's data runs to `$E5C2` of its bank |
+| What runs out first | the system file table (`NFILE` 64, ENFILE) at 39 TCP sockets beside the test's own; with half the pool (85) ENOBUFS comes at 26, and a socket(2) that meets an empty pool waits in `socreate` (M_WAIT) until a close frees one, as 2.11BSD's does |
+
 ## 6. Testing
 
 - Every existing gate test keeps passing at every phase; the socket tests

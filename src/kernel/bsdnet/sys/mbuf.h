@@ -27,7 +27,18 @@
  *
  * (NMBUFS / 8) + NMBCLUSTERS < 40
  */
+#ifdef fgx
+/*
+ * The network modules' data bank holds the pool, not a PDP-11's mapped
+ * window, so the formula above does not bind.  An idle TCP connection holds 8
+ * mbufs, 4 at each end (socket, inpcb, tcpcb, header template), and a listener
+ * 3, so 16 connections and their listener hold 131, under half of 280
+ * (tools/mame_test/tests/tcpmany.json).
+ */
+#define	NMBUFS		280			/* number of mbufs */
+#else
 #define	NMBUFS		170			/* number of mbufs */
+#endif
 #define	MSIZE		128			/* size of an mbuf */
 
 #if CLBYTES > 1024

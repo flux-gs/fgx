@@ -58,6 +58,7 @@
 #include <fcntl.h>            /* open, O_RDONLY -- the `-x` fd-pressure mode */
 #include <signal.h>           /* SIGALRM -- the `-u' eintr case */
 #include <sys/wait.h>         /* WIFSIGNALED -- the `-t' reset case */
+#include <time.h>             /* time -- the `-m' backlog case */
 
 #define LOOPPORT 7777
 
@@ -1192,10 +1193,13 @@ tcp_main()
 #define MANYPORT 7840
 #define MANYCONN 16
 
+static int m_backlog(), m_exhaust();
+
 static int
 many_main()
 {
     int ls, c[MANYCONN], a[MANYCONN], i, st, bad;
+    fd_set mrd;
 
     signal(SIGPIPE, SIG_IGN);
     ls = tlisten(MANYPORT, 5);
@@ -1218,6 +1222,18 @@ many_main()
     }
     bad = 0;
     for (i = 0; i < MANYCONN; i++) {
+        a[i] = -1;
+        if (uready(ls) == 0) {          /* no connection within 10 seconds: */
+            g_tv.tv_sec = 10;           /*   the child has stopped */
+            g_tv.tv_usec = 0;
+            FD_ZERO(&mrd);
+            FD_SET(ls, &mrd);
+            if (select(ls + 1, &mrd, (fd_set *)0, (fd_set *)0, &g_tv) != 1) {
+                printf("MANY FAIL accept-wait %d\n", i);
+                bad = 1;
+                break;
+            }
+        }
         a[i] = accept(ls, (struct sockaddr *)0, (int *)0);
         if (a[i] < 0) { printf("MANY FAIL accept %d %d\n", i, errno); bad = 1; break; }
     }
@@ -1231,9 +1247,144 @@ many_main()
     }
     st = 1;
     wait(&st);
+    for (i = 0; i < MANYCONN; i++)
+        if (a[i] >= 0) close(a[i]);
+    close(ls);
+    if (!m_backlog()) bad = 1;
+    if (!m_exhaust()) bad = 1;
     if (!bad && st == 0)
         printf("MANY OK\n");
     exit(0);
+}
+
+/* backlog: 8 connects against a backlog of 2 with nobody accepting.  2.11BSD's
+ * sonewconn refuses a SYN past 3 * so_qlimit / 2 queued, and the client's
+ * retransmission brings it back once accept has made room, so all 8 are
+ * accepted, within 30 seconds. */
+#define BACKPORT 7860
+static int
+m_backlog()
+{
+    int ls, c[8], a, i, st;
+    long t0;
+
+    ls = tlisten(BACKPORT, 2);
+    if (ls < 0) return 0;
+    if (fork() == 0) {
+        close(ls);
+        for (i = 0; i < 8; i++)
+            if ((c[i] = tconnect(BACKPORT)) < 0) exit(1);
+        for (i = 0; i < 8; i++)
+            read(c[i], tbuf, 1);            /* the server's close */
+        exit(0);
+    }
+    g_tv.tv_sec = 3;
+    g_tv.tv_usec = 0;
+    select(0, (fd_set *)0, (fd_set *)0, (fd_set *)0, &g_tv);
+    t0 = time((long *)0);
+    for (i = 0; i < 8; i++) {
+        if ((a = accept(ls, (struct sockaddr *)0, (int *)0)) < 0) {
+            printf("MANY FAIL backlog-accept %d %d\n", i, errno);
+            break;
+        }
+        close(a);
+    }
+    st = 1;
+    wait(&st);
+    close(ls);
+    if (i != 8 || st != 0 || time((long *)0) - t0 > 30) {
+        printf("MANY FAIL backlog %d %d %ld\n", i, st, time((long *)0) - t0);
+        return 0;
+    }
+    return 1;
+}
+
+/* exhaust: TCP sockets in XKIDS children, XPER each, until something runs
+ * out.  The system file table (NFILE, ENFILE) or the mbufs: socreate's mbuf
+ * waits for one (M_WAIT, uipc_mbuf.c m_more) and the protocol blocks do not
+ * (in_pcballoc, tcp_newtcpcb: M_DONTWAIT), so a socket(2) meets ENOBUFS or a
+ * wait that the other children's closes end.  Each child reports `+' per
+ * socket and its error; the parent stops counting when every child is done or
+ * none has moved for 5 seconds, then tells them all to close.  How: 1 ENOBUFS,
+ * 4 a wait, 8 ENFILE, 2 anything else, which fails.  A second round must make
+ * as many sockets as the first: a leak in any close would come back short. */
+#define XKIDS 5
+#define XPER  25
+static int
+m_round(nout, eout)
+int *nout, *eout;
+{
+    int up[2], down[2], k, i, s[XPER], n, done, st;
+    char ch;
+    fd_set rd;
+
+    if (pipe(up) < 0 || pipe(down) < 0) return -1;
+    for (k = 0; k < XKIDS; k++) {
+        if (fork() == 0) {
+            close(up[0]);
+            close(down[1]);
+            for (i = 0; i < XPER; i++) {
+                s[i] = socket(AF_INET, SOCK_STREAM, 0);
+                if (s[i] < 0) {
+                    if (errno == ENOBUFS) ch = 'E';
+                    else if (errno == ENFILE) ch = 'F';
+                    else { ch = 'X'; printf("EXHAUST errno %d\n", errno); }
+                    write(up[1], &ch, 1);
+                    break;
+                }
+                write(up[1], "+", 1);
+            }
+            write(up[1], "D", 1);
+            read(down[0], &ch, 1);
+            while (--i >= 0)
+                close(s[i]);
+            exit(0);
+        }
+    }
+    close(up[1]);
+    close(down[0]);
+    n = done = 0;
+    *eout = 0;
+    while (done < XKIDS) {
+        FD_ZERO(&rd);
+        FD_SET(up[0], &rd);
+        g_tv.tv_sec = 5;
+        g_tv.tv_usec = 0;
+        if (select(up[0] + 1, &rd, (fd_set *)0, (fd_set *)0, &g_tv) != 1)
+            break;                          /* a child waits for mbufs */
+        if (read(up[0], &ch, 1) != 1) break;
+        if (ch == '+') n++;
+        else if (ch == 'D') done++;
+        else if (ch == 'E') *eout |= 1;
+        else if (ch == 'F') *eout |= 8;
+        else *eout |= 2;
+    }
+    if (done < XKIDS) *eout |= 4;
+    for (k = 0; k < XKIDS; k++)
+        write(down[1], "q", 1);
+    for (k = 0; k < XKIDS; k++)
+        wait(&st);
+    close(up[0]);
+    close(down[1]);
+    *nout = n;
+    return 0;
+}
+
+static int
+m_exhaust()
+{
+    int n1, e1, n2, e2;
+
+    if (m_round(&n1, &e1) < 0 || m_round(&n2, &e2) < 0) {
+        printf("MANY FAIL exhaust-pipe %d\n", errno);
+        return 0;
+    }
+    printf("EXHAUST %d sockets, how %d; again %d, how %d\n", n1, e1, n2, e2);
+    if ((e1 & 2) || (e2 & 2) || e1 == 0 || n2 < n1) {
+        printf("MANY FAIL exhaust\n");
+        return 0;
+    }
+    return 1;
 }
 
 /* `-s': one syslog line, user.err, to 127.0.0.1:514, for syslogd -u to log
