@@ -42,6 +42,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <fgx.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 
 /* One byte past PIPE_MAX_BUFSZ (include/kernel.s), so the oversize case is
  * oversize even after the ring has grown to its ceiling. */
@@ -82,24 +84,209 @@ char *path;
         sa[2 + i] = path[i];
 }
 
+/* ---- `-s': AF_UNIX on the kernel stack's uipc_usrreq.c (net-mux S4): the
+ * stream type, and names past the old twelve.  Each case prints
+ * `unixprobe: FAIL <case> <value>' and the run goes on; `unixprobe: STREAM OK'
+ * when none failed. ---- */
+#define SPATH  "/tmp/unixs.sock"
+static int sfails;
+static char sbuf[1024], sbuf2[1024];
+
+static void
+sfail(what, v)
+char *what;
+int v;
+{
+    printf("unixprobe: FAIL %s %d\n", what, v);
+    sfails++;
+}
+
+static int
+s_readn(s, buf, n)
+int s, n;
+char *buf;
+{
+    int got, r;
+
+    for (got = 0; got < n; got += r) {
+        r = read(s, buf + got, n - got);
+        if (r <= 0) break;
+    }
+    return got;
+}
+
+static void
+s_fill(buf, n, seed)
+char *buf;
+int n, seed;
+{
+    int i;
+
+    for (i = 0; i < n; i++) buf[i] = (char)(i * 5 + seed);
+}
+
+/* pair: listen on a path; a child connects and sends 8 KB, the parent sends
+ * 8 KB back, and the child's close is the parent's end of file */
+static void
+s_pair()
+{
+    char sa[UNP_SA_SIZE];
+    int ls, a, c, i, st;
+
+    unlink(SPATH);
+    unp_mkaddr(sa, SPATH);
+    ls = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (ls < 0) { sfail("pair-socket", errno); return; }
+    if (bind(ls, sa, UNP_SA_SIZE) < 0) { sfail("pair-bind", errno); close(ls); return; }
+    if (listen(ls, 1) < 0) { sfail("pair-listen", errno); close(ls); return; }
+    if (fork() == 0) {
+        c = socket(AF_UNIX, SOCK_STREAM, 0);
+        if (c < 0 || connect(c, sa, UNP_SA_SIZE) < 0) exit(2);
+        for (i = 0; i < 8; i++) {
+            s_fill(sbuf, 1024, i);
+            if (write(c, sbuf, 1024) != 1024) exit(3);
+        }
+        for (i = 0; i < 8; i++) {
+            s_fill(sbuf, 1024, i + 40);
+            if (s_readn(c, sbuf2, 1024) != 1024 || memcmp(sbuf, sbuf2, 1024) != 0) exit(4);
+        }
+        close(c);
+        exit(0);
+    }
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a < 0) { sfail("pair-accept", errno); close(ls); wait(&st); return; }
+    for (i = 0; i < 8; i++) {
+        s_fill(sbuf, 1024, i);
+        if (s_readn(a, sbuf2, 1024) != 1024 || memcmp(sbuf, sbuf2, 1024) != 0) { sfail("pair-c2s", i); break; }
+    }
+    for (i = 0; i < 8; i++) {
+        s_fill(sbuf, 1024, i + 40);
+        if (write(a, sbuf, 1024) != 1024) { sfail("pair-s2c", errno); break; }
+    }
+    if (read(a, sbuf, 1) != 0) sfail("pair-eof", errno);
+    st = 1;
+    wait(&st);
+    if (st != 0) sfail("pair-child", st);
+    close(a);
+    close(ls);
+    unlink(SPATH);
+}
+
+/* refused: a bound stream socket that does not listen refuses a connect
+ * (unp_connect: SO_ACCEPTCONN unset), and a second bind of a bound name
+ * answers EADDRINUSE */
+static void
+s_refused()
+{
+    char sa[UNP_SA_SIZE];
+    int b, b2, c;
+
+    unlink(SPATH);
+    unp_mkaddr(sa, SPATH);
+    b = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (b < 0 || bind(b, sa, UNP_SA_SIZE) < 0) { sfail("refused-bind", errno); return; }
+    c = socket(AF_UNIX, SOCK_STREAM, 0);
+    errno = 0;
+    if (connect(c, sa, UNP_SA_SIZE) != -1 || errno != ECONNREFUSED) sfail("refused", errno);
+    close(c);
+    b2 = socket(AF_UNIX, SOCK_STREAM, 0);
+    errno = 0;
+    if (bind(b2, sa, UNP_SA_SIZE) != -1 || errno != EADDRINUSE) sfail("inuse", errno);
+    close(b2);
+    close(b);
+    unlink(SPATH);
+}
+
+/* stale: a name whose socket has closed answers ECONNREFUSED (unp_detach
+ * releases the name: unpdet) */
+static void
+s_stale()
+{
+    char sa[UNP_SA_SIZE];
+    int b, c;
+
+    unlink(SPATH);
+    unp_mkaddr(sa, SPATH);
+    b = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (b < 0 || bind(b, sa, UNP_SA_SIZE) < 0) { sfail("stale-bind", errno); return; }
+    close(b);
+    c = socket(AF_UNIX, SOCK_DGRAM, 0);
+    errno = 0;
+    if (sendto(c, "x", 1, 0, sa, UNP_SA_SIZE) != -1 || errno != ECONNREFUSED) sfail("stale", errno);
+    close(c);
+    unlink(SPATH);
+}
+
+/* many: 20 bound datagram sockets at once, past the twelve the descriptor
+ * table allowed, each reached by name */
+#define SMANY 20
+static void
+s_many()
+{
+    char sa[UNP_SA_SIZE], path[24];
+    int b[SMANY], c, i, n;
+
+    c = socket(AF_UNIX, SOCK_DGRAM, 0);
+    for (i = 0; i < SMANY; i++) {
+        sprintf(path, "/tmp/unixm%d", i);
+        unlink(path);
+        unp_mkaddr(sa, path);
+        b[i] = socket(AF_UNIX, SOCK_DGRAM, 0);
+        if (b[i] < 0 || bind(b[i], sa, UNP_SA_SIZE) < 0) {
+            sfail("many-bind", i);
+            while (--i >= 0) close(b[i]);
+            close(c);
+            return;
+        }
+        if (sendto(c, "m", 1, 0, sa, UNP_SA_SIZE) != 1) sfail("many-send", i);
+    }
+    for (i = 0; i < SMANY; i++) {
+        n = recv(b[i], sbuf, sizeof(sbuf), 0);
+        if (n != 1) sfail("many-recv", i);
+        close(b[i]);
+        sprintf(path, "/tmp/unixm%d", i);
+        unlink(path);
+    }
+    close(c);
+}
+
+static int
+stream_main()
+{
+    s_pair();
+    s_refused();
+    s_stale();
+    s_many();
+    if (sfails == 0)
+        printf("unixprobe: STREAM OK\n");
+    return (sfails != 0);
+}
+
 int
-main()
+main(argc, argv)
+int argc;
+char **argv;
 {
     int        fd[3];
     int        i;
     int        r;
     int        n;
 
-    /* POSITIVE CONTROL FIRST: SOCK_STREAM must be refused.  If this SUCCEEDS,
-     * the transport is answering requests it has no implementation for, and
-     * every later PASS in this file is worthless. */
-    r = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
+        return (stream_main());
+
+    /* POSITIVE CONTROL FIRST: a type the unix domain has no protocol for must
+     * be refused, EPROTONOSUPPORT from socreate (2.11BSD sys/uipc_socket.c,
+     * `if (prp == 0) return (EPROTONOSUPPORT)').  If this SUCCEEDS, the
+     * transport is answering requests it has no implementation for, and every
+     * later PASS in this file is worthless. */
+    r = socket(AF_UNIX, SOCK_RAW, 0);
     if (r >= 0) {
-        printf("unixprobe: FAIL stream-not-refused fd=%d\n", r);
+        printf("unixprobe: FAIL raw-not-refused fd=%d\n", r);
         return (1);
     }
-    if (errno != EPROTOTYPE) {
-        printf("unixprobe: FAIL stream-wrong-errno %d\n", errno);
+    if (errno != EPROTONOSUPPORT) {
+        printf("unixprobe: FAIL raw-wrong-errno %d\n", errno);
         return (1);
     }
 
@@ -778,17 +965,14 @@ main()
                 return (1);
             }
         }
-        /* sendto(2) NAMING A PATH IS REFUSED, which unix(4)'s BUGS states.
-         * Upstream's PRU_SEND connects an unconnected datagram socket for the
-         * one call and answers EISCONN on a connected one (2.11BSD
-         * uipc_usrreq.c, `if (nam) { if (unp->unp_conn) error = EISCONN; ...
-         * unp_connect(so, nam)'); here the address is not honoured at all.
-         * This pins the answer the page gives. */
+        /* sendto(2) NAMING A PATH ON A CONNECTED SOCKET answers EISCONN:
+         * 2.11BSD uipc_usrreq.c PRU_SEND, `if (nam) { if (unp->unp_conn)
+         * error = EISCONN; ... unp_connect(so, nam)'. */
         if (sendto(s0, txbuf, 1, 0, (struct sockaddr *)sa5, UNP_SA_SIZE) >= 0) {
             printf("unixprobe: FAIL sendto-accepted\n");
             return (1);
         }
-        if (errno != EINVAL) {
+        if (errno != EISCONN) {
             printf("unixprobe: FAIL sendto-errno %d\n", errno);
             return (1);
         }

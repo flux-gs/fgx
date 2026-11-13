@@ -1,0 +1,18 @@
+{
+ "name": "unixstream",
+ "description": "AF_UNIX on the kernel stack's uipc_usrreq.c (net-mux S4): unixprobe -s binds a path and listens, a child connects and moves 8 KB each way to end of file; a bound stream socket that does not listen refuses a connect (ECONNREFUSED) and a second bind of its name answers EADDRINUSE; a closed socket's name answers ECONNREFUSED; and 20 datagram sockets are bound at once, past the twelve the old descriptor table allowed.  STREAM OK only when none failed.",
+ "command": "/testbin/unixprobe -s",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": [
+   "unixprobe: STREAM OK",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "unixprobe: FAIL",
+   "PANIC",
+   "BRK",
+   "bsdnet: BROKEN"
+  ]
+ }
+}

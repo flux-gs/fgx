@@ -1060,19 +1060,15 @@ net_op_socket   MX      %00
 ; SOCK_HW_UNCLAIMED and takes one from the verb that first drives the chip
 ; (_Xport_Claim); an AF_UNIX one never does.
 ;
-; AF_UNIX is SOCK_DGRAM only.  SOCK_STREAM is refused rather than
-; accepted-and-unimplemented: upstream's SOCK_STREAM AF_UNIX is what pipe(2) is
-; built from, and this kernel has real pipes (DTYPE_PIPE, 2.11BSD's), so there is nothing for it to be.  EPROTOTYPE
-; is 2.11BSD's errno for exactly this: "protocol wrong type for socket".
-@ss_unix        TXA
-                AND     #$00FF
-                CMP     #SOCK_DGRAM
-                BNE     @ss_eprototype
-                LDA     #XPORT_UNIX
-                STA     _sockTmpTag
-                LDA     #SOCK_HW_NONE
-                STA     _sockTmpHw
-                BRA     @ss_scan
+; AF_UNIX IS THE KERNEL STACK'S, DATAGRAM AND STREAM (uipc_usrreq.c): socreate
+; answers EPROTOTYPE for any other type, and without the network modules there
+; is no AF_UNIX at all, EPROTONOSUPPORT.
+@ss_unix        LDA     #VT_BSDNET
+                LDX     #KSVC_FINDVTABLE
+                JSL     SYS_KCALL
+                BCS     @ss_unixKso
+                BRL     @ss_eprotonosup
+@ss_unixKso     BRL     _Kso_Socket
 @ss_proceed     LDA     #SOCK_HW_UNCLAIMED
                 STA     _sockTmpHw
 @ss_scan        LDY     #0
