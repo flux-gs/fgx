@@ -297,6 +297,51 @@ kc_sigraise     MX      %00
                 LEAVEK
                 RTL
 
+; kc_unpname(op, path, so) - an AF_UNIX name through the kernel's unp_nameop
+; (KSVC_UNPNAME, src/kernel/vfs/vfs_syscalls.c): UNP_OP_BIND names path for so,
+; UNP_OP_LOOKUP finds the socket path names, UNP_OP_UNBIND releases so's name.
+; path is a far pointer to a NUL-terminated name, so the socket's offset in this
+; bank.  Returns the errno, or 0 with a lookup's socket in bn_unpso.  The kernel
+; cells are written with DBR on the kernel bank, as w5_asm.s reads its own.
+; Arguments, after ENTERK and the PHB: op 7,S; path 9,S and its bank 11,S;
+; so 13,S.
+kc_unpname      MX      %00
+                ENTERK
+                PHB
+                SEP     #$20
+                MX      %10
+                LDAL    SYS_KCALL+3
+                PHA
+                PLB
+                REP     #$20
+                MX      %00
+                LDA     7,S
+                STA     |_unpNameOp
+                LDA     13,S
+                STA     |_unpSlot
+                PLB
+                LDA     10,S                    ; path's bank (8,S is its offset)
+                AND     #$00FF
+                TAY
+                LDA     8,S
+                LDX     #KSVC_UNPNAME
+                JSL     SYS_KCALL
+                BCC     @ku_out                 ; A = the errno
+                PHB
+                SEP     #$20
+                MX      %10
+                LDAL    SYS_KCALL+3
+                PHA
+                PLB
+                REP     #$20
+                MX      %00
+                LDA     |_unpSlot
+                PLB
+                STA     |bn_unpso
+                LDA     #0
+@ku_out         LEAVEK
+                RTL
+
 ; bn_sysent - net.mod's way in for a process's socket call (src/modules/net/
 ; net_kso.s).  Entered as by JSL, with A = the offset in bank 0 of the call block
 ; on the caller's kernel stack.  D becomes kernel C's register page and DBR the

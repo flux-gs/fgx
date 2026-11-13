@@ -265,6 +265,10 @@ MANIFESTS = {
         # The running task's kernel-slot base, which bn_sysent makes fcc's
         # stack floor for a socket call (machine/net_asm.s).
         ('_kCurKStkBase', '_kCurKStkBase', 0, 'lo16'),
+        # An AF_UNIX name's op and socket, for KSVC_UNPNAME (machine/net_asm.s
+        # kc_unpname).
+        ('_unpNameOp', '_unpNameOp', 0, 'lo16'),
+        ('_unpSlot', '_unpSlot', 0, 'lo16'),
         ('_u2Slot', '_u2Slot', 0, 'lo16'),
         ('_u2SltBit', '_u2SltBit', 0, 'lo16'),
         ('_u2Locked', '_u2Locked', 0, 'lo16'),

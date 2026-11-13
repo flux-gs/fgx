@@ -27,6 +27,7 @@
 #include "mbuf.h"
 #include "socket.h"
 #include "socketvar.h"
+#include "un.h"
 #include "protosw.h"
 #include "uio.h"
 #include "ioctl.h"
@@ -107,6 +108,70 @@ getf(fdes)
 	int fdes;
 {
 	return (&bn_file);
+}
+
+/*
+ * AF_UNIX names: 2.11BSD's supervisor-to-kernel calls (sys/sys_kern.c unpbind,
+ * unpconn, unpdet), which here are the kernel's unp_nameop through kc_unpname.
+ * The kernel keeps the vnode by socket, so what unp_inode holds is only "this
+ * socket is bound": the socket itself, never dereferenced as an inode.  A lookup
+ * leaves its vnode released, so iput has nothing to do.
+ */
+#define	UNP_OP_UNBIND	0	/* src/kernel/vfs/vnode.h */
+#define	UNP_OP_BIND	1
+#define	UNP_OP_LOOKUP	2
+extern	int kc_unpname();
+int	bn_unpso;
+
+int
+unpbind(path, len, ipp, unpsock)
+	char *path;
+	int len;
+	struct inode **ipp;
+	struct socket *unpsock;
+{
+	int error;
+
+	*ipp = 0;
+	error = kc_unpname(UNP_OP_BIND, path, (int)(long)unpsock);
+	if (error == 0)
+		*ipp = (struct inode *)unpsock;
+	return (error);
+}
+
+int
+unpconn(path, len, so2, ipp)
+	char *path;
+	int len;
+	struct socket **so2;
+	struct inode **ipp;
+{
+	int error;
+
+	*ipp = 0;
+	*so2 = 0;
+	if (len == 0)
+		return (EINVAL);
+	error = kc_unpname(UNP_OP_LOOKUP, path, 0);
+	if (error)
+		return (error);
+	*so2 = sockat((unsigned)bn_unpso);
+	*ipp = (struct inode *)*so2;
+	return (0);
+}
+
+int
+unpdet(ip)
+	struct inode *ip;
+{
+	return (kc_unpname(UNP_OP_UNBIND, (char *)0, (int)(long)ip));
+}
+
+int
+iput(ip)
+	struct inode *ip;
+{
+	return (0);
 }
 
 /* accept()'s descriptor.  net.mod has taken the FCB before BNOP_ACCEPT, as
@@ -241,6 +306,15 @@ deep(n)
 }
 #endif
 
+/* A sockaddr's whole size by its family: 2.11BSD's struct sockaddr_un for
+ * AF_UNIX (sys/un.h), a sockaddr_in otherwise. */
+static int
+bn_salen(fam)
+	short *fam;
+{
+	return (*fam == AF_UNIX ? sizeof(struct sockaddr_un) : sizeof(struct sockaddr_in));
+}
+
 static void
 bn_call(cp, so)
 	register struct bncall *cp;
@@ -264,8 +338,10 @@ bn_call(cp, so)
 
 	case BNOP_BIND:
 	case BNOP_CONNECT:
+		/* the length libc passes in Y; a binary from before it did, 0, gets
+		 * its family's whole sockaddr */
 		a_bind.name = far(cp->c_bank, cp->c_a);
-		a_bind.namelen = sizeof(struct sockaddr_in);
+		a_bind.namelen = cp->c_y ? cp->c_y : bn_salen((short *)a_bind.name);
 		u.u_ap = (int *)&a_bind;
 		if (cp->c_op == BNOP_BIND)
 			bind();
@@ -286,12 +362,18 @@ bn_call(cp, so)
 			send();
 			return;
 		}
-		bzero((caddr_t)&bn_to, sizeof(bn_to));
-		bn_to.sin_family = AF_INET;
-		bcopy((caddr_t)&blk[4], (caddr_t)&bn_to.sin_addr, 4);
-		bcopy((caddr_t)&blk[6], (caddr_t)&bn_to.sin_port, 2);
-		a_sendto.to = (caddr_t)&bn_to;
-		a_sendto.tolen = sizeof(bn_to);
+		if (blk[9]) {
+			/* the caller's sockaddr, whole (libc's words 7-9) */
+			a_sendto.to = far(blk[8], blk[7]);
+			a_sendto.tolen = blk[9];
+		} else {
+			bzero((caddr_t)&bn_to, sizeof(bn_to));
+			bn_to.sin_family = AF_INET;
+			bcopy((caddr_t)&blk[4], (caddr_t)&bn_to.sin_addr, 4);
+			bcopy((caddr_t)&blk[6], (caddr_t)&bn_to.sin_port, 2);
+			a_sendto.to = (caddr_t)&bn_to;
+			a_sendto.tolen = sizeof(bn_to);
+		}
 		sendto();
 		return;
 

@@ -148,11 +148,18 @@ uipc_usrreq(so, req, m, nam, rights)
 		break;
 
 	case PRU_SEND:
+#ifdef fgx
+		if (rights && rights->m_len) {
+			error = EOPNOTSUPP;
+			break;
+		}
+#else
 		if (rights) {
 			error = unp_internalize(rights);
 			if (error)
 				break;
 		}
+#endif
 		switch (so->so_type) {
 
 		case SOCK_DGRAM: {
@@ -493,6 +500,29 @@ unp_drain()
 }
 #endif
 
+#ifdef fgx
+/*
+ * Access rights -- descriptors passed in a message -- answer EOPNOTSUPP: what
+ * upstream passes is a struct file pointer, and an FGX descriptor is an FCB the
+ * network modules cannot name.  PRU_SEND refuses them, so no rights record is
+ * ever queued, and these two, which the domain names for one, have nothing to
+ * do (docs/PROVENANCE.md).
+ */
+unp_externalize(rights)
+	struct mbuf *rights;
+{
+	return (EOPNOTSUPP);
+}
+
+unp_dispose(m)
+	struct mbuf *m;
+{
+}
+
+unp_gc()
+{
+}
+#else
 unp_externalize(rights)
 	struct mbuf *rights;
 {
@@ -658,3 +688,4 @@ unp_discard(fp)
 	unp_rights--;
 	SKcall(unpdisc, sizeof(fp), fp);
 }
+#endif
