@@ -435,6 +435,23 @@ beside the stack.
   `u2s1`.  2.11BSD's `ifunit` reads a name's first digit as its unit, so a kernel
   name cannot carry the `2`.  S5's port of `ifconfig` against the real `ifnet` ends it.
 
+- **Before the campaign PR**, deferred from S3's final review:
+  - `gethostbyname`'s receive loop (`toolchain/lib/libc_c/netdb.c`) has no overall
+    deadline: a peer sending unparseable datagrams to its port at least every 1.5 s
+    keeps it waiting forever.  Bound each try by a deadline, as dhclient's
+    `wait_reply` does with `left`.
+  - `MSG_DONTWAIT` sets `SS_NBIO` on the shared `struct socket` for the whole call
+    (`bn_sys.c`); a third process sharing the socket can get EAGAIN while the call
+    sleeps in `sblock`.  2.11BSD has no per-call flag: make it per call, or state the
+    divergence in PROVENANCE.
+  - `bn_sysent` (`net_asm.s`) does not set `_fcc_stkfloor` as `netintr_enter` does, so
+    the stack guard on a process's socket call may be inert.  Unverified.
+  - The kernel's `printf` prints a format string without its arguments, so the
+    stack's console messages read `%s: %s`.
+  - `boot_netstart.json`'s description is out of date.
+  - ntpd never initializes a new peer's stratum (upstream); ntpdc's offset is 32-bit
+    milliseconds and wraps past 24.8 days (upstream).  Decide fix or BUGS entry.
+
 ## 8. Left to the builder
 
 The module split and bank placement; mbuf pool size; the driver's name and
