@@ -262,6 +262,9 @@ MANIFESTS = {
     # bsdnet: the kernel network stack's W5100 driver (machine/w5_asm.s), which
     # moves DBR to the live kernel bank for these.
     'bsdnet': [
+        # The running task's kernel-slot base, which bn_sysent makes fcc's
+        # stack floor for a socket call (machine/net_asm.s).
+        ('_kCurKStkBase', '_kCurKStkBase', 0, 'lo16'),
         ('_u2Slot', '_u2Slot', 0, 'lo16'),
         ('_u2SltBit', '_u2SltBit', 0, 'lo16'),
         ('_u2Locked', '_u2Locked', 0, 'lo16'),

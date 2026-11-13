@@ -467,7 +467,7 @@ mod_init        MX      %00
         for p in RT_CODE:
             s += f"                PUT     {rel(os.path.join(ROOT, p), workdir)}\n"
         for a in asm[m]:
-            if os.path.basename(a) == "w5_asm.s":
+            if os.path.basename(a) in ("w5_asm.s", "net_asm.s"):
                 s += "                PUT     ../kernel_exports.s\n"
             if os.path.basename(a) == "net_asm.s":
                 s += f"                PUT     {rel(os.path.join(ROOT, 'src/modules/common/kc_sys.s'), workdir)}\n"

@@ -215,6 +215,20 @@ static	struct { int s; int level; int name; caddr_t val; u_int valsize; } a_sopt
 static	struct { int fdes; caddr_t asa; int *alen; } a_name;
 static	struct { int s; int how; } a_shut;
 
+#if NETPROBE == 5
+/* kernel.netprobe = 5: the first socket call runs off its slot, and the floor
+ * bn_sysent set must stop it (tools/mame_test/tests/netkstkovf.json). */
+static int
+deep(n)
+	int n;
+{
+	char b[200];
+
+	b[0] = n;
+	return (deep(n + 1) + b[0]);
+}
+#endif
+
 static void
 bn_call(cp, so)
 	register struct bncall *cp;
@@ -228,6 +242,9 @@ bn_call(cp, so)
 	switch (cp->c_op) {
 
 	case BNOP_SOCKET:
+#if NETPROBE == 5
+		deep(0);
+#endif
 		u.u_error = socreate(cp->c_a, &nso, cp->c_x, cp->c_y);
 		if (u.u_error == 0)
 			u.u_r.r_val1 = (int)(long)nso;

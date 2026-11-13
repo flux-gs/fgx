@@ -302,13 +302,21 @@ kc_sigraise     MX      %00
 ; on the caller's kernel stack.  D becomes kernel C's register page and DBR the
 ; data bank, as for any kernel C, and bn_sys (machine/bn_sys.c) is called with a
 ; far pointer to the block.  Out: C=1 + A = u.u_r.r_val1 + X = r_val2, or C=0 +
-; A = u.u_error.
+; A = u.u_error.  fcc's stack floor is the caller's slot's for the call, so a
+; socket call that runs off the slot halts through _fcc_stkoflow; the page's
+; floor is put back at return, and swtch saves it per task across a sleep.
 bn_sysent       MX      %00
                 PHB
                 PHD
                 TAX
                 LDA     #FGX_DP_KERNELC
                 TCD
+                LDA     _fcc_stkfloor           ; the caller's floor, back at return
+                PHA
+                LDA     |_kCurKStkBase          ; DBR is still net.mod's, the
+                CLC                             ;   kernel bank: this task's slot
+                ADC     #FCC_STK_FLOOR_MARGIN
+                STA     _fcc_stkfloor
                 PHK
                 PLB
                 SEP     #$20
@@ -327,6 +335,8 @@ bn_sysent       MX      %00
                 RTL
 @bs_ret         PLX
                 PLX
+                PLA
+                STA     _fcc_stkfloor
                 LDA     |u                      ; u_error
                 BNE     @bs_err
                 LDA     |u+8                    ; u_r.r_val2
