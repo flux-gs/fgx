@@ -21,13 +21,10 @@ DESCRIPTION
      The status line reports the real interface flags read from the
      kernel: UP and RUNNING appear only when the card is present and
      the link is up (a card that is down no longer reads as up),
-     BROADCAST for the Ethernet medium.  The options line lists the
-     W5100's hardware offload -- IPv4, ARP, TCP, inbound ICMP, and
-     the IP and TCP checksums are computed by the card.  UDP is the
-     kernel's network stack's, not the card's:
+     BROADCAST for the Ethernet medium.  IP, TCP, UDP, ICMP and ARP
+     are all the kernel's network stack's; the card carries frames:
 
           u2s1: flags=67<UP,BROADCAST,RUNNING>
-                  options=<TCP4,ICMP4,ARP,CSUM_IP,CSUM_TCP>
                   ether 00:08:dc:00:00:01
                   inet 192.168.2.10 netmask 0xffffff00 broadcast 192.168.2.255
 

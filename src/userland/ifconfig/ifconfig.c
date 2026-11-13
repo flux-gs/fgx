@@ -97,18 +97,13 @@ static int render_flags(void)
     return f;
 }
 
-/* BSD ifconfig layout: name + flags, offload options, then ether / inet. */
+/* BSD ifconfig layout: name + flags, then ether / inet. */
 static void show(void)
 {
     int f;
     f = render_flags();
     fmt_mac();
     printf("%s: flags=%d<%s>\n", ifr, f, flagbuf);
-    /* The W5100's offload as FGX uses it -- a static property (there is no
-     * runtime cap mask).  The card does IPv4/ARP/TCP and their checksums, and
-     * inbound ICMP echo; UDP is the kernel stack's.  The options=<> framing
-     * already means "offloaded"; keep it under 80 cols. */
-    printf("        options=<TCP4,ICMP4,ARP,CSUM_IP,CSUM_TCP>\n");
     printf("        ether %s\n", macbuf);
     if (ifr[IFR_FLAGS] & IFF_IP_CONF) {
         fmt_mask();
