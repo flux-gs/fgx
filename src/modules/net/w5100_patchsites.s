@@ -11,418 +11,418 @@
 ;
 ; Counts: 0 MR, 46 ARH, 46 ARL, 115 DAT (207 total).
 _w5PatchTbl     ENT
-                DA  $221F
+                DA  $2232
                 DFB 1           ; ARH
-                DA  $2225
+                DA  $2238
                 DFB 2           ; ARL
-                DA  $222B
+                DA  $223E
                 DFB 3           ; DAT
-                DA  $223B
+                DA  $224E
                 DFB 3           ; DAT
-                DA  $2245
+                DA  $2258
                 DFB 3           ; DAT
-                DA  $2260
+                DA  $2273
                 DFB 1           ; ARH
-                DA  $2266
+                DA  $2279
                 DFB 2           ; ARL
-                DA  $226D
+                DA  $2280
                 DFB 3           ; DAT
-                DA  $22A5
+                DA  $22B8
                 DFB 1           ; ARH
-                DA  $22AB
+                DA  $22BE
                 DFB 2           ; ARL
-                DA  $22B1
+                DA  $22C4
                 DFB 3           ; DAT
-                DA  $22C1
+                DA  $22D4
                 DFB 3           ; DAT
-                DA  $22CB
+                DA  $22DE
                 DFB 3           ; DAT
-                DA  $22D5
+                DA  $22E8
                 DFB 3           ; DAT
-                DA  $22FA
+                DA  $230D
                 DFB 3           ; DAT
-                DA  $2301
+                DA  $2314
                 DFB 3           ; DAT
-                DA  $231B
+                DA  $232E
                 DFB 1           ; ARH
-                DA  $2321
+                DA  $2334
                 DFB 2           ; ARL
-                DA  $2328
+                DA  $233B
                 DFB 3           ; DAT
-                DA  $234E
+                DA  $2361
                 DFB 1           ; ARH
-                DA  $2354
+                DA  $2367
                 DFB 2           ; ARL
-                DA  $235A
+                DA  $236D
                 DFB 3           ; DAT
-                DA  $2368
+                DA  $237B
                 DFB 3           ; DAT
-                DA  $237C
+                DA  $238F
                 DFB 1           ; ARH
-                DA  $2382
+                DA  $2395
                 DFB 2           ; ARL
-                DA  $2389
+                DA  $239C
                 DFB 3           ; DAT
-                DA  $2482
+                DA  $2495
                 DFB 1           ; ARH
-                DA  $2488
+                DA  $249B
                 DFB 2           ; ARL
-                DA  $248E
+                DA  $24A1
                 DFB 3           ; DAT
-                DA  $249E
+                DA  $24B1
                 DFB 3           ; DAT
-                DA  $24AF
+                DA  $24C2
                 DFB 3           ; DAT
-                DA  $24B6
+                DA  $24C9
                 DFB 3           ; DAT
-                DA  $24CA
+                DA  $24DD
                 DFB 1           ; ARH
-                DA  $24D0
+                DA  $24E3
                 DFB 2           ; ARL
-                DA  $24D7
+                DA  $24EA
                 DFB 3           ; DAT
-                DA  $256A
+                DA  $257D
                 DFB 1           ; ARH
-                DA  $2570
+                DA  $2583
                 DFB 2           ; ARL
-                DA  $2576
+                DA  $2589
                 DFB 3           ; DAT
-                DA  $2586
+                DA  $2599
                 DFB 3           ; DAT
-                DA  $2591
+                DA  $25A4
                 DFB 3           ; DAT
-                DA  $259C
+                DA  $25AF
                 DFB 3           ; DAT
-                DA  $25A7
+                DA  $25BA
                 DFB 3           ; DAT
-                DA  $25BF
+                DA  $25D2
                 DFB 1           ; ARH
-                DA  $25C5
+                DA  $25D8
                 DFB 2           ; ARL
-                DA  $25CC
+                DA  $25DF
                 DFB 3           ; DAT
-                DA  $2602
+                DA  $2615
                 DFB 1           ; ARH
-                DA  $2608
+                DA  $261B
                 DFB 2           ; ARL
-                DA  $260E
+                DA  $2621
                 DFB 3           ; DAT
-                DA  $261F
+                DA  $2632
                 DFB 3           ; DAT
-                DA  $2626
+                DA  $2639
                 DFB 3           ; DAT
-                DA  $262D
+                DA  $2640
                 DFB 3           ; DAT
-                DA  $2634
+                DA  $2647
                 DFB 3           ; DAT
-                DA  $2646
+                DA  $2659
                 DFB 1           ; ARH
-                DA  $264C
+                DA  $265F
                 DFB 2           ; ARL
-                DA  $2653
+                DA  $2666
                 DFB 3           ; DAT
-                DA  $2675
+                DA  $2688
                 DFB 1           ; ARH
-                DA  $267B
+                DA  $268E
                 DFB 2           ; ARL
-                DA  $2681
+                DA  $2694
                 DFB 3           ; DAT
-                DA  $2698
+                DA  $26AB
                 DFB 1           ; ARH
-                DA  $269E
+                DA  $26B1
                 DFB 2           ; ARL
-                DA  $26A5
+                DA  $26B8
                 DFB 3           ; DAT
-                DA  $26B3
+                DA  $26C6
                 DFB 3           ; DAT
-                DA  $26BA
+                DA  $26CD
                 DFB 3           ; DAT
-                DA  $26C1
+                DA  $26D4
                 DFB 3           ; DAT
-                DA  $26C8
+                DA  $26DB
                 DFB 3           ; DAT
-                DA  $26CF
+                DA  $26E2
                 DFB 3           ; DAT
-                DA  $26D6
+                DA  $26E9
                 DFB 3           ; DAT
-                DA  $26F9
+                DA  $270C
                 DFB 1           ; ARH
-                DA  $26FF
+                DA  $2712
                 DFB 2           ; ARL
-                DA  $2706
+                DA  $2719
                 DFB 3           ; DAT
-                DA  $2752
+                DA  $2765
                 DFB 1           ; ARH
-                DA  $2758
+                DA  $276B
                 DFB 2           ; ARL
-                DA  $275E
-                DFB 3           ; DAT
-                DA  $276E
-                DFB 3           ; DAT
-                DA  $277A
+                DA  $2771
                 DFB 3           ; DAT
                 DA  $2781
                 DFB 3           ; DAT
-                DA  $278C
+                DA  $278D
                 DFB 3           ; DAT
-                DA  $2797
+                DA  $2794
                 DFB 3           ; DAT
-                DA  $27AF
+                DA  $279F
+                DFB 3           ; DAT
+                DA  $27AA
+                DFB 3           ; DAT
+                DA  $27C2
                 DFB 1           ; ARH
-                DA  $27B5
+                DA  $27C8
                 DFB 2           ; ARL
-                DA  $27BC
+                DA  $27CF
                 DFB 3           ; DAT
-                DA  $27D3
+                DA  $27E6
                 DFB 3           ; DAT
-                DA  $27DA
-                DFB 3           ; DAT
-                DA  $27E1
-                DFB 3           ; DAT
-                DA  $27E8
+                DA  $27ED
                 DFB 3           ; DAT
                 DA  $27F4
                 DFB 3           ; DAT
                 DA  $27FB
                 DFB 3           ; DAT
-                DA  $2806
+                DA  $2807
                 DFB 3           ; DAT
-                DA  $2817
+                DA  $280E
+                DFB 3           ; DAT
+                DA  $2819
+                DFB 3           ; DAT
+                DA  $282A
                 DFB 1           ; ARH
-                DA  $281D
+                DA  $2830
                 DFB 2           ; ARL
-                DA  $2824
+                DA  $2837
                 DFB 3           ; DAT
-                DA  $2841
+                DA  $2854
                 DFB 1           ; ARH
-                DA  $2847
+                DA  $285A
                 DFB 2           ; ARL
-                DA  $284D
+                DA  $2860
                 DFB 3           ; DAT
-                DA  $285B
+                DA  $286E
                 DFB 3           ; DAT
-                DA  $286F
+                DA  $2882
                 DFB 1           ; ARH
-                DA  $2875
+                DA  $2888
                 DFB 2           ; ARL
-                DA  $287C
+                DA  $288F
                 DFB 3           ; DAT
-                DA  $28BC
+                DA  $28CF
                 DFB 1           ; ARH
-                DA  $28C2
+                DA  $28D5
                 DFB 2           ; ARL
-                DA  $28C8
+                DA  $28DB
                 DFB 3           ; DAT
-                DA  $28D6
+                DA  $28E9
                 DFB 3           ; DAT
-                DA  $28EC
+                DA  $28FF
                 DFB 1           ; ARH
-                DA  $28F2
+                DA  $2905
                 DFB 2           ; ARL
-                DA  $28F9
+                DA  $290C
                 DFB 3           ; DAT
-                DA  $2952
+                DA  $2965
                 DFB 1           ; ARH
-                DA  $2958
+                DA  $296B
                 DFB 2           ; ARL
-                DA  $295E
+                DA  $2971
                 DFB 3           ; DAT
-                DA  $296E
+                DA  $2981
                 DFB 3           ; DAT
-                DA  $297F
+                DA  $2992
                 DFB 1           ; ARH
-                DA  $2985
+                DA  $2998
                 DFB 2           ; ARL
-                DA  $298C
+                DA  $299F
                 DFB 3           ; DAT
-                DA  $29AE
+                DA  $29C1
                 DFB 1           ; ARH
-                DA  $29B4
+                DA  $29C7
                 DFB 2           ; ARL
-                DA  $29BA
+                DA  $29CD
                 DFB 3           ; DAT
-                DA  $29CA
+                DA  $29DD
                 DFB 3           ; DAT
-                DA  $29D5
+                DA  $29E8
                 DFB 3           ; DAT
-                DA  $29E7
+                DA  $29FA
                 DFB 3           ; DAT
-                DA  $29F8
+                DA  $2A0B
                 DFB 1           ; ARH
-                DA  $29FE
+                DA  $2A11
                 DFB 2           ; ARL
-                DA  $2A05
+                DA  $2A18
                 DFB 3           ; DAT
-                DA  $2A34
+                DA  $2A47
                 DFB 1           ; ARH
-                DA  $2A3A
+                DA  $2A4D
                 DFB 2           ; ARL
-                DA  $2A40
+                DA  $2A53
                 DFB 3           ; DAT
-                DA  $2A50
+                DA  $2A63
                 DFB 3           ; DAT
-                DA  $2A61
+                DA  $2A74
                 DFB 1           ; ARH
-                DA  $2A67
+                DA  $2A7A
                 DFB 2           ; ARL
-                DA  $2A6E
+                DA  $2A81
                 DFB 3           ; DAT
-                DA  $2AD6
+                DA  $2AE9
                 DFB 1           ; ARH
-                DA  $2ADC
+                DA  $2AEF
                 DFB 2           ; ARL
-                DA  $2AE2
-                DFB 3           ; DAT
-                DA  $2AF2
-                DFB 3           ; DAT
-                DA  $2AFE
+                DA  $2AF5
                 DFB 3           ; DAT
                 DA  $2B05
                 DFB 3           ; DAT
-                DA  $2B10
+                DA  $2B11
                 DFB 3           ; DAT
-                DA  $2B1B
+                DA  $2B18
                 DFB 3           ; DAT
-                DA  $2B33
+                DA  $2B23
+                DFB 3           ; DAT
+                DA  $2B2E
+                DFB 3           ; DAT
+                DA  $2B46
                 DFB 1           ; ARH
-                DA  $2B39
+                DA  $2B4C
                 DFB 2           ; ARL
-                DA  $2B40
+                DA  $2B53
                 DFB 3           ; DAT
-                DA  $2B56
+                DA  $2B69
                 DFB 3           ; DAT
-                DA  $2B61
+                DA  $2B74
                 DFB 3           ; DAT
-                DA  $2B79
+                DA  $2B8C
                 DFB 1           ; ARH
-                DA  $2B7F
+                DA  $2B92
                 DFB 2           ; ARL
-                DA  $2B86
+                DA  $2B99
                 DFB 3           ; DAT
-                DA  $2BA2
+                DA  $2BB5
                 DFB 1           ; ARH
-                DA  $2BA8
+                DA  $2BBB
                 DFB 2           ; ARL
-                DA  $2BAF
+                DA  $2BC2
                 DFB 3           ; DAT
-                DA  $2BE2
+                DA  $2BF5
                 DFB 1           ; ARH
-                DA  $2BE8
+                DA  $2BFB
                 DFB 2           ; ARL
-                DA  $2BEE
+                DA  $2C01
                 DFB 3           ; DAT
-                DA  $2BFC
+                DA  $2C0F
                 DFB 3           ; DAT
-                DA  $2C10
+                DA  $2C23
                 DFB 1           ; ARH
-                DA  $2C16
+                DA  $2C29
                 DFB 2           ; ARL
-                DA  $2C1D
+                DA  $2C30
                 DFB 3           ; DAT
-                DA  $2C93
+                DA  $2CA6
                 DFB 1           ; ARH
-                DA  $2C99
+                DA  $2CAC
                 DFB 2           ; ARL
-                DA  $2C9F
+                DA  $2CB2
                 DFB 3           ; DAT
-                DA  $2CAD
+                DA  $2CC0
                 DFB 3           ; DAT
-                DA  $2CC2
+                DA  $2CD5
                 DFB 1           ; ARH
-                DA  $2CC8
+                DA  $2CDB
                 DFB 2           ; ARL
-                DA  $2CCF
+                DA  $2CE2
                 DFB 3           ; DAT
-                DA  $2CE0
+                DA  $2CF3
                 DFB 3           ; DAT
-                DA  $2CE7
+                DA  $2CFA
                 DFB 3           ; DAT
-                DA  $2D00
+                DA  $2D13
                 DFB 1           ; ARH
-                DA  $2D06
+                DA  $2D19
                 DFB 2           ; ARL
-                DA  $2D0D
+                DA  $2D20
                 DFB 3           ; DAT
-                DA  $2D5D
+                DA  $2D70
                 DFB 1           ; ARH
-                DA  $2D63
+                DA  $2D76
                 DFB 2           ; ARL
-                DA  $2D6A
+                DA  $2D7D
                 DFB 3           ; DAT
-                DA  $2DA8
+                DA  $2DBB
                 DFB 1           ; ARH
-                DA  $2DAE
+                DA  $2DC1
                 DFB 2           ; ARL
-                DA  $2DB4
-                DFB 3           ; DAT
                 DA  $2DC7
                 DFB 3           ; DAT
-                DA  $2DDB
+                DA  $2DDA
+                DFB 3           ; DAT
+                DA  $2DEE
                 DFB 1           ; ARH
-                DA  $2DE1
+                DA  $2DF4
                 DFB 2           ; ARL
-                DA  $2DE8
+                DA  $2DFB
                 DFB 3           ; DAT
-                DA  $2E56
+                DA  $2E69
                 DFB 1           ; ARH
-                DA  $2E5C
+                DA  $2E6F
                 DFB 2           ; ARL
-                DA  $2E63
+                DA  $2E76
                 DFB 3           ; DAT
-                DA  $2EB5
+                DA  $2EC8
                 DFB 1           ; ARH
-                DA  $2EBA
+                DA  $2ECD
                 DFB 2           ; ARL
-                DA  $2EC4
+                DA  $2ED7
                 DFB 3           ; DAT
-                DA  $2ECB
+                DA  $2EDE
                 DFB 3           ; DAT
-                DA  $2F14
+                DA  $2F27
                 DFB 1           ; ARH
-                DA  $2F1B
+                DA  $2F2E
                 DFB 2           ; ARL
-                DA  $2F2B
+                DA  $2F3E
                 DFB 3           ; DAT
-                DA  $2F3A
+                DA  $2F4D
                 DFB 1           ; ARH
-                DA  $2F41
+                DA  $2F54
                 DFB 2           ; ARL
-                DA  $2F4C
+                DA  $2F5F
                 DFB 3           ; DAT
-                DA  $2F69
+                DA  $2F7C
                 DFB 3           ; DAT
-                DA  $2F70
+                DA  $2F83
                 DFB 3           ; DAT
-                DA  $2F7B
+                DA  $2F8E
                 DFB 3           ; DAT
-                DA  $2F89
+                DA  $2F9C
                 DFB 3           ; DAT
-                DA  $2F9B
+                DA  $2FAE
                 DFB 3           ; DAT
-                DA  $2FA9
+                DA  $2FBC
                 DFB 3           ; DAT
-                DA  $2FB0
+                DA  $2FC3
                 DFB 3           ; DAT
-                DA  $2FC7
+                DA  $2FDA
                 DFB 3           ; DAT
-                DA  $2FCE
+                DA  $2FE1
                 DFB 3           ; DAT
-                DA  $2FFD
+                DA  $3010
                 DFB 1           ; ARH
-                DA  $3004
+                DA  $3017
                 DFB 2           ; ARL
-                DA  $3049
+                DA  $305C
                 DFB 3           ; DAT
-                DA  $305A
+                DA  $306D
                 DFB 1           ; ARH
-                DA  $3061
+                DA  $3074
                 DFB 2           ; ARL
-                DA  $306A
+                DA  $307D
                 DFB 3           ; DAT
-                DA  $308E
+                DA  $30A1
                 DFB 3           ; DAT
-                DA  $3095
+                DA  $30A8
                 DFB 3           ; DAT
-                DA  $30A0
+                DA  $30B3
                 DFB 3           ; DAT
                 DA  $FFFF        ; sentinel (no DFB)

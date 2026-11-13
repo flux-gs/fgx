@@ -117,25 +117,83 @@ _Kso_Socket     MX      %00
                 RTL
 
 ;------------------------------------------------------------------------------
-; _Kso_Refuse - listen(2) and accept(2) on a kernel socket.  In: A = fd, Y =
-; the errno: udp_usrreq answers PRU_LISTEN with EOPNOTSUPP, and accept on a
-; socket that is not listening is EINVAL (uipc_syscalls.c accept).  Returns from
-; the op with it, or RTSes for any other descriptor.
+; _Kso_TryA - _Kso_Try for an op whose fd is _Sys_SavedA (listen).  In: Y = the
+; BNOP_*.
 ;------------------------------------------------------------------------------
-_Kso_Refuse     MX      %00
+_Kso_TryA       MX      %00
                 PHY
+                LDA     _Sys_SavedA
                 AND     #$00FF
                 JSL     SYS_NETKC_SOCKFDTODESC
-                BCC     @kr_no
-                STY     _sockTmpOff
+                BCC     @kta_no
                 JSR     _Kso_Is
-                BCC     @kr_no
-                PLA                             ; the errno
-                PLX                             ; the JSR's return
+                BCC     @kta_no
+                PLY
+                PLX                             ; the JSR's return: the op is done
+                JSR     _Kso_Do
+                RTL
+@kta_no         PLY
+                RTS
+
+;------------------------------------------------------------------------------
+; _Kso_Accept - accept(2) on a kernel socket, the first thing net_op_accept
+; does; anything else RTSes.  The descriptor is taken FIRST, as 2.11BSD's
+; accept() takes it before soqremque: a process with none left gets EMFILE
+; and the connection stays queued for the next accept.  BNOP_ACCEPT may sleep,
+; so the FCB is found again by its fd afterwards, and on the stack's error
+; it is given back.  -> RTL, C=1 + A = the new fd, or C=0 + A = errno.
+;------------------------------------------------------------------------------
+_Kso_Accept     MX      %00
+                LDA     _Sys_SavedA
+                AND     #$00FF
+                JSL     SYS_NETKC_SOCKFDTODESC
+                BCC     @ka_no
+                JSR     _Kso_Is
+                BCS     @ka_kso
+@ka_no          RTS
+@ka_kso         PLX                             ; the JSR's return: the op is done
+                JSL     SYS_NETKC_FCBALLOC      ; C=1 + A = fd, or C=0 + errno
+                REP     #$30
+                MX      %00
+                BCS     @ka_fd
+                RTL
+@ka_fd          AND     #$00FF
+                PHA                             ; the new fd
+                LDY     #BNOP_ACCEPT
+                JSR     _Kso_Do
+                BCC     @ka_err
+                STA     _sockTmpSo              ; the new socket
+                LDA     1,S
+                LDX     #KSVC_FCBLOOKUPPTR      ; -> _fcbPtr
+                JSL     SYS_KCALL
+                REP     #$30
+                MX      %00
+                SEP     #$20
+                MX      %10
+                LDY     #FCB_Flags
+                LDA     #FCB_FL_SOCKET
+                STA     [_fcbPtr],Y
+                LDY     #FCB_FstIdx
+                LDA     #$00
+                STA     [_fcbPtr],Y
+                REP     #$20
+                MX      %00
+                LDY     #FCB_SockSo
+                LDA     _sockTmpSo
+                STA     [_fcbPtr],Y
+                PLA                             ; the fd
+                SEC
+                RTL
+@ka_err         PLX                             ; the fd
+                PHA                             ; the errno
+                TXA
+                LDX     #KSVC_FCBFREE
+                JSL     SYS_KCALL
+                REP     #$30
+                MX      %00
+                PLA
                 CLC
                 RTL
-@kr_no          PLY
-                RTS
 
 ;------------------------------------------------------------------------------
 ; _Kso_Do - call bn_sysent for the socket in _sockTmpSo.  In: Y = BNOP_*.

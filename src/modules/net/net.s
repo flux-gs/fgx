@@ -1027,7 +1027,12 @@ net_op_socket   MX      %00
                 BRL     _Kso_Socket
 @ss_tryStream   CMP     #SOCK_STREAM
                 BNE     @ss_tryRaw
-                LDA     #XPORT_TCP
+                LDA     #VT_BSDNET              ; TCP is the kernel stack's too
+                LDX     #KSVC_FINDVTABLE        ;   when the modules are loaded
+                JSL     SYS_KCALL
+                BCC     @ss_chipTcp
+                BRL     _Kso_Socket
+@ss_chipTcp     LDA     #XPORT_TCP
                 STA     _sockTmpTag
                 BRA     @ss_proceed
 @ss_tryRaw      CMP     #SOCK_RAW
@@ -1856,9 +1861,8 @@ _So_UioBounce   MX      %00
 ; net_op_listen - SYS_LISTEN (#84): listen(fd, backlog).  A = fd.
 ;------------------------------------------------------------------------------
 net_op_listen   MX      %00
-                LDA     _Sys_SavedA             ; a kernel socket: udp_usrreq's
-                LDY     #ENOTSUP                ;   PRU_LISTEN, EOPNOTSUPP
-                JSR     _Kso_Refuse
+                LDY     #BNOP_LISTEN            ; a kernel socket goes to net_kso.s
+                JSR     _Kso_TryA               ;   and returns from there
                 ; LOOPBACK FIRST.  This test used to live in the kernel's
                 ; _Sys_Listen thunk, which cost a core-bank stub per op plus
                 ; the _loopHandled dance.  net_loop.s lives HERE now, so the
@@ -1932,9 +1936,7 @@ net_op_listen   MX      %00
 ; net_op_accept - SYS_ACCEPT (#85): accept(fd).  A = listen fd.
 ;------------------------------------------------------------------------------
 net_op_accept   MX      %00
-                LDA     _Sys_SavedA             ; a kernel socket is not
-                LDY     #EINVAL                 ;   listening: accept's EINVAL
-                JSR     _Kso_Refuse
+                JSR     _Kso_Accept             ; a kernel socket returns from there
                 ; LOOPBACK FIRST.  This test used to live in the kernel's
                 ; _Sys_Accept thunk, which cost a core-bank stub per op plus
                 ; the _loopHandled dance.  net_loop.s lives HERE now, so the
@@ -2552,7 +2554,13 @@ net_op_sockstatus MX    %00
 net_op_shutdown MX      %00
                 LDY     #BNOP_SHUTDOWN
                 JSR     _Kso_TryOff
-                JSR     _Net_Xport_Shutdown
+                LDA     _Sys_SavedX             ; SHUT_RD: the chip cannot stop
+                AND     #$00FF                  ;   receiving, so it succeeds and
+                BNE     @nsh_x                  ;   does nothing
+                LDA     #0
+                SEC
+                RTL
+@nsh_x          JSR     _Net_Xport_Shutdown
                 RTL
 
 ;------------------------------------------------------------------------------

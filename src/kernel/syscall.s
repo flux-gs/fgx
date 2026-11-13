@@ -1351,17 +1351,12 @@ _Sys_Stub       MX      %00
 
 ;------------------------------------------------------------------------------
 ; _Sys_Shutdown (#100) - shutdown(fd, how).  _Sys_SavedA = fd, _Sys_SavedX = how.
-; TCP half-close: SHUT_WR/SHUT_RDWR (how != 0) send a FIN via net_op_shutdown
-; (CR_DISCON), leaving the socket in FIN_WAIT so recv() still drains queued data
-; and sees the peer FIN as EOF; the fd stays open (close() frees it).  SHUT_RD
-; (how == 0) is a successful no-op (the W5100 can't stop RX).  _Sock_FdToDesc
-; validates the fd + socket-ness and stages _sockTmpHw for the net op.
+; Every how goes to net_op_shutdown: a kernel-stack socket's soshutdown, or the
+; chip's half-close.  The fd stays open (close() frees it).  _Sock_FdToDesc
+; validates the fd + socket-ness and stages the socket for the net op.
 ; Out: C=1 ok / C=0 + A=EBADF (bad fd or not a socket).
 ;------------------------------------------------------------------------------
 _Sys_Shutdown   MX      %00
-                LDA     _Sys_SavedX             ; how
-                AND     #$00FF
-                BEQ     @shd_ok                 ; SHUT_RD -> no FIN, succeed
                 LDA     _Sys_SavedA             ; fd
                 AND     #$00FF
                 JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0 + A=EBADF
@@ -1369,9 +1364,6 @@ _Sys_Shutdown   MX      %00
                 STY     _sockTmpOff
                 LDY     #NETOP_Shutdown
                 JMP     _Net_Dispatch           ; -> net_op_shutdown -> _Net_Xport_Shutdown
-@shd_ok         LDA     #0
-                SEC
-                RTS
 @shd_err        RTS                             ; C=0, A=EBADF from _Sock_FdToDesc
 
 ;------------------------------------------------------------------------------

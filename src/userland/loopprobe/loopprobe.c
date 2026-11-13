@@ -57,6 +57,7 @@
 #include <unistd.h>           /* close */
 #include <fcntl.h>            /* open, O_RDONLY -- the `-x` fd-pressure mode */
 #include <signal.h>           /* SIGALRM -- the `-u' eintr case */
+#include <sys/wait.h>         /* WIFSIGNALED -- the `-t' reset case */
 
 #define LOOPPORT 7777
 
@@ -887,6 +888,354 @@ u_many()
     for (i = 0; i < UMANY; i++) close(s[i]);
 }
 
+/* ---- `-t': TCP ON THE KERNEL'S STACK, over lo0 (net-mux S4).
+ *
+ * Each case prints `TCP FAIL <case> <value>' and the run goes on; `TCP OK' only
+ * when none failed.  A case that blocks forever shows as the frame cap.
+ * ---- */
+#define TCPPORT  7820
+static int tfails, n_errsave;
+static char tbuf[1024], tbuf2[1024];
+
+static void
+tfail(what, v)
+char *what;
+int v;
+{
+    printf("TCP FAIL %s %d\n", what, v);
+    tfails++;
+}
+
+/* a listener on 127.0.0.1:port */
+static int
+tlisten(port, backlog)
+int port, backlog;
+{
+    struct sockaddr_in sin;
+    int s;
+
+    s = socket(AF_INET, SOCK_STREAM, 0);
+    if (s < 0) { tfail("socket", errno); return -1; }
+    uaddr(&sin, port);
+    if (bind(s, &sin, sizeof(sin)) < 0) { tfail("bind", errno); close(s); return -1; }
+    if (listen(s, backlog) < 0) { tfail("listen", errno); close(s); return -1; }
+    return s;
+}
+
+/* a blocking connect to 127.0.0.1:port; -1 with errno on failure */
+static int
+tconnect(port)
+int port;
+{
+    struct sockaddr_in sin;
+    int s;
+
+    s = socket(AF_INET, SOCK_STREAM, 0);
+    if (s < 0) return -1;
+    uaddr(&sin, port);
+    if (connect(s, &sin, sizeof(sin)) < 0) { n_errsave = errno; close(s); errno = n_errsave; return -1; }
+    return s;
+}
+
+/* read exactly n bytes, or fewer at EOF/error; returns what it read */
+static int
+treadn(s, buf, n)
+int s, n;
+char *buf;
+{
+    int got, r;
+
+    for (got = 0; got < n; got += r) {
+        r = read(s, buf + got, n - got);
+        if (r <= 0) break;
+    }
+    return got;
+}
+
+static void
+tfill(buf, n, seed)
+char *buf;
+int n, seed;
+{
+    int i;
+
+    for (i = 0; i < n; i++) buf[i] = (char)(i * 7 + seed);
+}
+
+/* echo: 10 KB each way in 1 KB rounds, byte-checked */
+static void
+t_echo()
+{
+    int ls, c, a, i;
+
+    ls = tlisten(TCPPORT, 1);
+    if (ls < 0) return;
+    c = tconnect(TCPPORT);
+    if (c < 0) { tfail("echo-connect", errno); close(ls); return; }
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a < 0) { tfail("echo-accept", errno); close(c); close(ls); return; }
+    for (i = 0; i < 10; i++) {
+        tfill(tbuf, 1024, i);
+        if (write(c, tbuf, 1024) != 1024) { tfail("echo-write", errno); break; }
+        if (treadn(a, tbuf2, 1024) != 1024 || memcmp(tbuf, tbuf2, 1024) != 0) { tfail("echo-c2s", i); break; }
+        tfill(tbuf, 1024, i + 100);
+        if (write(a, tbuf, 1024) != 1024) { tfail("echo-writeback", errno); break; }
+        if (treadn(c, tbuf2, 1024) != 1024 || memcmp(tbuf, tbuf2, 1024) != 0) { tfail("echo-s2c", i); break; }
+    }
+    close(a);
+    close(c);
+    close(ls);
+}
+
+/* nb: a non-blocking connect answers EINPROGRESS, is writable when done, and a
+ * second connect answers EISCONN (2.11BSD connect(): SS_ISCONNECTING) */
+static void
+t_nb()
+{
+    struct sockaddr_in sin;
+    fd_set wr;
+    int ls, c, a, on;
+
+    ls = tlisten(TCPPORT + 1, 1);
+    if (ls < 0) return;
+    c = socket(AF_INET, SOCK_STREAM, 0);
+    on = 1;
+    ioctl(c, FIONBIO, &on);
+    uaddr(&sin, TCPPORT + 1);
+    errno = 0;
+    if (connect(c, &sin, sizeof(sin)) != -1 || errno != EINPROGRESS) tfail("nb-inprogress", errno);
+    FD_ZERO(&wr);
+    FD_SET(c, &wr);
+    g_tv.tv_sec = 5;
+    g_tv.tv_usec = 0;
+    if (select(c + 1, (fd_set *)0, &wr, (fd_set *)0, &g_tv) != 1) tfail("nb-writable", errno);
+    errno = 0;
+    if (connect(c, &sin, sizeof(sin)) != -1 || errno != EISCONN) tfail("nb-isconn", errno);
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a < 0) tfail("nb-accept", errno);
+    else close(a);
+    close(c);
+    close(ls);
+}
+
+/* refused: nobody listens, tcp_input answers the SYN with a reset */
+static void
+t_refused()
+{
+    errno = 0;
+    if (tconnect(TCPPORT + 2) != -1 || errno != ECONNREFUSED) tfail("refused", errno);
+}
+
+/* drain: the client writes 6 KB and closes at once; the server reads all of it,
+ * then end of file (soclose -> sodisconnect -> tcp_usrclosed sends after the data) */
+static void
+t_drain()
+{
+    int ls, a, c, n, got;
+
+    ls = tlisten(TCPPORT + 3, 1);
+    if (ls < 0) return;
+    if (fork() == 0) {
+        c = tconnect(TCPPORT + 3);
+        if (c < 0) exit(2);
+        for (n = 0; n < 6; n++) {
+            tfill(tbuf, 1024, n);
+            if (write(c, tbuf, 1024) != 1024) exit(3);
+        }
+        close(c);
+        exit(0);
+    }
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a < 0) { tfail("drain-accept", errno); close(ls); wait((int *)0); return; }
+    for (got = 0; (n = read(a, tbuf, sizeof(tbuf))) > 0; got += n)
+        ;
+    if (got != 6144 || n != 0) tfail("drain", got);
+    close(a);
+    close(ls);
+    wait((int *)0);
+}
+
+/* reset: SO_LINGER with 0 makes close a reset (tcp_disconnect -> tcp_drop); the
+ * peer's read answers ECONNRESET, and a write after it EPIPE and SIGPIPE, which
+ * kills a child that does not catch it (sosend's NETPSIGNAL) */
+static void
+t_reset()
+{
+    struct linger lg;
+    int ls, c, a, st;
+
+    ls = tlisten(TCPPORT + 4, 1);
+    if (ls < 0) return;
+    c = tconnect(TCPPORT + 4);
+    if (c < 0) { tfail("reset-connect", errno); close(ls); return; }
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a < 0) { tfail("reset-accept", errno); close(c); close(ls); return; }
+    lg.l_onoff = 1;
+    lg.l_linger = 0;
+    if (setsockopt(a, SOL_SOCKET, SO_LINGER, (char *)&lg, sizeof(lg)) < 0) tfail("reset-linger", errno);
+    close(a);
+    errno = 0;
+    if (read(c, tbuf, 10) != -1 || errno != ECONNRESET) tfail("reset-read", errno);
+    if (fork() == 0) {
+        signal(SIGPIPE, SIG_DFL);
+        write(c, "x", 1);
+        exit(0);
+    }
+    st = 0;
+    wait(&st);
+    if (!WIFSIGNALED(st) || WTERMSIG(st) != SIGPIPE) tfail("reset-sigpipe", st);
+    close(c);
+    close(ls);
+}
+
+/* fork: a child takes a connection off a shared listener and exits; its peer
+ * sees end of file, and the parent's listener still accepts (soclose only at the
+ * last reference) */
+static void
+t_fork()
+{
+    int ls, c1, c2, a, a2;
+
+    ls = tlisten(TCPPORT + 5, 2);
+    if (ls < 0) return;
+    c1 = tconnect(TCPPORT + 5);
+    if (c1 < 0) { tfail("fork-connect", errno); close(ls); return; }
+    if (fork() == 0) {
+        a = accept(ls, (struct sockaddr *)0, (int *)0);
+        exit(a < 0);
+    }
+    wait((int *)0);
+    if (read(c1, tbuf, 10) != 0) tfail("fork-eof", errno);
+    c2 = tconnect(TCPPORT + 5);
+    if (c2 < 0) tfail("fork-connect2", errno);
+    a2 = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a2 < 0) tfail("fork-accept2", errno);
+    else close(a2);
+    if (c2 >= 0) close(c2);
+    close(c1);
+    close(ls);
+}
+
+/* oob: one urgent byte through send/recv MSG_OOB (tcp_output's URG, tcp_pulloutofband) */
+static void
+t_oob()
+{
+    int ls, c, a, i, n;
+
+    ls = tlisten(TCPPORT + 6, 1);
+    if (ls < 0) return;
+    c = tconnect(TCPPORT + 6);
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (c < 0 || a < 0) { tfail("oob-setup", errno); return; }
+    if (send(c, "!", 1, MSG_OOB) != 1) tfail("oob-send", errno);
+    n = -1;
+    for (i = 0; i < 20 && n != 1; i++) {
+        n = recv(a, tbuf, 1, MSG_OOB);
+        if (n != 1) {
+            g_tv.tv_sec = 0;
+            g_tv.tv_usec = 100000;
+            select(0, (fd_set *)0, (fd_set *)0, (fd_set *)0, &g_tv);
+        }
+    }
+    if (n != 1 || tbuf[0] != '!') tfail("oob-recv", errno);
+    close(a);
+    close(c);
+    close(ls);
+}
+
+/* name: both ends agree on who is who; accept names the peer */
+static void
+t_name()
+{
+    struct sockaddr_in cl, pe, ac;
+    int ls, c, a, len, alen;
+
+    ls = tlisten(TCPPORT + 7, 1);
+    if (ls < 0) return;
+    c = tconnect(TCPPORT + 7);
+    alen = sizeof(ac);
+    a = accept(ls, &ac, &alen);
+    if (c < 0 || a < 0) { tfail("name-setup", errno); return; }
+    len = sizeof(cl);
+    if (getsockname(c, &cl, &len) < 0) tfail("name-sock", errno);
+    len = sizeof(pe);
+    if (getpeername(a, &pe, &len) < 0) tfail("name-peer", errno);
+    if (cl.sin_port != pe.sin_port) tfail("name-ports", ntohs(pe.sin_port));
+    if (alen != sizeof(ac) || ac.sin_port != cl.sin_port) tfail("name-accept", ntohs(ac.sin_port));
+    len = sizeof(pe);
+    if (getpeername(c, &pe, &len) < 0 || ntohs(pe.sin_port) != TCPPORT + 7) tfail("name-server", ntohs(pe.sin_port));
+    close(a);
+    close(c);
+    close(ls);
+}
+
+static int
+tcp_main()
+{
+    signal(SIGPIPE, SIG_IGN);
+    t_echo();
+    t_nb();
+    t_refused();
+    t_drain();
+    t_reset();
+    t_fork();
+    t_oob();
+    t_name();
+    if (tfails == 0)
+        printf("TCP OK\n");
+    exit(tfails != 0);
+}
+
+/* ---- `-m': more connections at once than the chip has sockets (spec 6).  A
+ * parent listens; a child makes MANYCONN connections and keeps them all open;
+ * then each carries 1 KB both ways.  `MANY OK'. ---- */
+#define MANYPORT 7840
+#define MANYCONN 16
+
+static int
+many_main()
+{
+    int ls, c[MANYCONN], a[MANYCONN], i, st, bad;
+
+    signal(SIGPIPE, SIG_IGN);
+    ls = tlisten(MANYPORT, 5);
+    if (ls < 0) exit(1);
+    if (fork() == 0) {
+        close(ls);
+        for (i = 0; i < MANYCONN; i++) {
+            c[i] = tconnect(MANYPORT);
+            if (c[i] < 0) { printf("MANY FAIL connect %d %d\n", i, errno); exit(1); }
+        }
+        for (i = 0; i < MANYCONN; i++) {
+            tfill(tbuf, 1024, i);
+            if (write(c[i], tbuf, 1024) != 1024) { printf("MANY FAIL write %d %d\n", i, errno); exit(1); }
+        }
+        for (i = 0; i < MANYCONN; i++) {
+            tfill(tbuf, 1024, i + 50);
+            if (treadn(c[i], tbuf2, 1024) != 1024 || memcmp(tbuf, tbuf2, 1024) != 0) { printf("MANY FAIL back %d\n", i); exit(1); }
+        }
+        exit(0);
+    }
+    bad = 0;
+    for (i = 0; i < MANYCONN; i++) {
+        a[i] = accept(ls, (struct sockaddr *)0, (int *)0);
+        if (a[i] < 0) { printf("MANY FAIL accept %d %d\n", i, errno); bad = 1; break; }
+    }
+    for (i = 0; !bad && i < MANYCONN; i++) {
+        tfill(tbuf, 1024, i);
+        if (treadn(a[i], tbuf2, 1024) != 1024 || memcmp(tbuf, tbuf2, 1024) != 0) { printf("MANY FAIL recv %d\n", i); bad = 1; }
+    }
+    for (i = 0; !bad && i < MANYCONN; i++) {
+        tfill(tbuf, 1024, i + 50);
+        if (write(a[i], tbuf, 1024) != 1024) { printf("MANY FAIL send %d %d\n", i, errno); bad = 1; }
+    }
+    st = 1;
+    wait(&st);
+    if (!bad && st == 0)
+        printf("MANY OK\n");
+    exit(0);
+}
+
 /* `-s': one syslog line, user.err, to 127.0.0.1:514, for syslogd -u to log
  * (netudp's script).  The text is built so the screen can only show it if it
  * arrived: the needle is the joined halves. */
@@ -940,6 +1289,10 @@ char **argv;
         accept_pressure();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == '0')
         zero_port();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 't')
+        tcp_main();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'm')
+        many_main();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'u')
         udp_main();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
@@ -966,6 +1319,8 @@ char **argv;
     sin.sin_port   = htons(LOOPPORT);
     sin.sin_addr.s_addr = htonl(0x7F000001);        /* 127.0.0.1 */
 
+    arg = 1;                /* a run right after another: TIME_WAIT */
+    setsockopt(ls, SOL_SOCKET, SO_REUSEADDR, (char *)&arg, sizeof(arg));
     if (bind(ls, &sin, sizeof(sin)) < 0) fail("bind");
     if (listen(ls, 1) < 0)               fail("listen");
 
@@ -1114,30 +1469,6 @@ char **argv;
     if (n != strlen(S2C))    fail("recv-s2c-len");
     if (strcmp(g_buf, S2C))    fail("recv-s2c-data");
 
-    /* ---- apple/fgx#422 -- MSG_OOB IS REFUSED, NOT SILENTLY DEMOTED.
-     *      Loopback is pipe-backed and a pipe has no urgent mark, so neither
-     *      direction can carry out-of-band.  Before this, both calls returned
-     *      SUCCESS and moved ordinary bytes, so a caller believed it had sent
-     *      urgent data and the reader never learned any had arrived.
-     *
-     *      THE TWO ROUND TRIPS ABOVE ARE THIS BLOCK'S CONTROL.  They run the
-     *      same two rings with flags = 0 and must still pass: an arm that
-     *      refused every send, or that read the flags word from the wrong
-     *      offset, fails there rather than here.  The byte count is checked
-     *      as well as the errno, because a refusal that consumed the bytes
-     *      first would leave the ring desynchronised for everything below. ---- */
-    strcpy(g_out, C2S);
-    errno = 0;
-    n = send(cs, g_out, strlen(g_out), MSG_OOB);
-    if (n != -1)              fail("oob-send-accepted");
-    if (errno != EOPNOTSUPP)  fail("oob-send-errno");
-    errno = 0;
-    n = recv(as, g_buf, sizeof(g_buf) - 1, MSG_OOB);
-    if (n != -1)              fail("oob-recv-accepted");
-    if (errno != EOPNOTSUPP)  fail("oob-recv-errno");
-    /* The refused send must have moved nothing: the ring is still empty. */
-    if (ioctl(as, FIONREAD, (char *)&arg) < 0) fail("oob-fionread");
-    if (arg != 0) fail("oob-send-left-bytes");
 
     /* ---- read(2)/write(2) on the socket: the fd-style path telnet(1) uses,
      *      which is NOT the same kernel route as send()/recv().  A short read
@@ -1172,25 +1503,11 @@ char **argv;
     if (bind(ls, &sin, sizeof(sin)) != -1)    fail("rebind-allowed");
     if (errno != EINVAL)                      fail("rebind-errno");
 
-    /* ---- apple/fgx#139 -- AND THE HARDWARE PATH MUST REFUSE A DESCRIPTOR
-     *      ALREADY CLAIMED FOR LOOPBACK.  The pair to the two calls above,
-     *      asked from the other side: those are "a loopback claim must refuse
-     *      a live chip socket", this is "the chip path must refuse a loopback
-     *      descriptor".
-     *
-     * `ls' is claimed for loopback, so its SOCK_HwIdx is the sentinel
-     * SOCK_HW_LOOP ($FE).  connect() to a NON-127 address falls straight
-     * through the loopback pre-check -- _Loop_ConnectTry declines a
-     * destination that is not its own -- and into the wire arm, which had no
-     * bound check, so $FE was used as a W5100 socket NUMBER and _W5_SetSnAR
-     * computed a register address well past the four real socket blocks.
-     *
-     * The errno is asserted, not merely the failure: this call ALREADY failed
-     * before the fix, with ETIMEDOUT after spinning out a full 16-bit counter
-     * waiting for a chip state that open bus was never going to report.  A
-     * test that accepted any failure would have been green with the defect
-     * present, which is the exact shape of vacuous assertion this file's other
-     * negative blocks exist to avoid. ---- */
+    /* ---- apple/fgx#139 -- A CONNECT ON A LISTENER IS REFUSED, toward an
+     *      address off lo0 as well.  2.11BSD's soconnect (sys/uipc_socket.c):
+     *      `if (so->so_options & SO_ACCEPTCONN) return (EOPNOTSUPP);'.  The
+     *      errno is asserted, not merely the failure: the defect this guarded
+     *      failed too, with ETIMEDOUT, after spinning on the chip. ---- */
     {
         struct sockaddr_in wire;
         for (n = 0; n < sizeof(wire); n++) ((char *)&wire)[n] = 0;
@@ -1198,7 +1515,7 @@ char **argv;
         wire.sin_port   = htons(23);
         wire.sin_addr.s_addr = htonl(0x0A636363);      /* 10.99.99.99 */
         if (connect(ls, &wire, sizeof(wire)) != -1) fail("wire-on-loop-allowed");
-        if (errno != EINVAL)                        fail("wire-on-loop-errno");
+        if (errno != EOPNOTSUPP)                    fail("wire-on-loop-errno");
     }
 
     /* ---- apple/fgx#142 -- getpeername(2) / getsockname(2).  Both were
