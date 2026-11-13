@@ -11,29 +11,23 @@
  * it runs under MAME as an ordinary fixture.  Until this existed, every part of
  * the loopback backend was reviewed but nothing was executed.
  *
- * WHY IT PROVES SOMETHING.  The kernel services loopback only when a descriptor
- * carries SOCK_HW_LOOP, which is set exclusively by a connect() that matched a
- * LISTENING socket on a 127/8 address.  So reaching "accept returned an fd" at
- * all means connect's scan found the listener, allocated two pipe rings, and
- * paired the two descriptors.  The two transfers then exercise both rings
- * independently -- a single direction would pass even if both descriptors were
- * wired to the SAME ring, which is the mistake this shape is chosen to catch.
+ * WHY IT PROVES SOMETHING.  Reaching "accept returned an fd" at all means the
+ * kernel stack's connect found the listener on 127.0.0.1 and completed the
+ * handshake over lo0.  The two transfers then exercise both directions
+ * independently -- a single direction would pass even if both ends shared one
+ * buffer, which is the mistake this shape is chosen to catch.
  *
- * IT ALSO CARRIES THE NEGATIVE ASSERTIONS, and that is not incidental.  Every
- * check below was originally of the form "a socket with data in it reports
- * itself ready", and a kernel that answered "ready" to everything passed all
- * of them -- measured, in apple/fgx#98 and #99.  The empty-ring block after
- * accept() is the part that can go red.  Keep it before the first send: it is
- * the only window in which the state it samples exists.
+ * IT ALSO CARRIES THE NEGATIVE ASSERTIONS, and that is not incidental.  A
+ * kernel that answered "ready" to every select would pass every check of the
+ * form "a socket with data in it reports itself ready" (apple/fgx#98, #99).
+ * The empty-buffer block after accept() is the part that can go red.  Keep it
+ * before the first send: it is the only window in which the state it samples
+ * exists.  A second connect() and a rebind must be refused, and dup2 must
+ * tear a socket down the way close(2) does, so the peer sees EOF
+ * (apple/fgx#134).
  *
- * Two later blocks are negative in the same sense.  A second connect() and a
- * rebind must be REFUSED, because the loopback claim frees the descriptor's
- * W5100 slot and doing that to a live one aliases a hardware socket
- * (apple/fgx#133).  And dup2 must tear a socket down the way close(2) does:
- * dropping the last reference inside dup2 used to run no teardown at all, so
- * the peer never saw EOF (apple/fgx#134).  Neither could fail before the
- * assertions existed -- the first two-thirds of this file never touches a
- * descriptor twice.
+ * The modes below the default -- -t TCP, -m many connections, -u UDP, -s
+ * syslog, -b bulk -- are each described where they are defined.
  *
  * Prints "loopprobe: PASS" or "loopprobe: FAIL <step>"; exits 0/1.
  */
@@ -79,19 +73,10 @@ char *step;
 /* ---- `-2`: TWO listeners, which is the only shape that tests the port
  *      compare (apple/fgx#127).
  *
- * _Loop_FindListener matched a listener by port with `CMP _loopDstPort / PLY /
- * BEQ`, and PLY sets N/Z from the PULLED value -- so the branch tested "is the
- * record offset zero", not the port.  Both halves were wrong: descriptor 0
- * matched EVERY port, and a listener at any nonzero offset could never match.
- *
- * ONE listener cannot see either half, because the only listener a caller binds
- * lands at descriptor 0, where the buggy test and the correct one agree.  That
- * is why the main case above passed throughout.
- *
- * SO THE DECOY IS BOUND FIRST, AND ON THE LOWER PORT: first so it takes
- * descriptor 0, lower so a scan that happened to order by port would still not
- * pick the wanted one by luck.  The connect then targets the SECOND listener,
- * which is the one at a nonzero offset.
+ * A connect must reach the listener on ITS port, not merely the first
+ * listener there is.  One listener cannot tell the two apart, so a decoy is
+ * bound first, on the lower port, and the connect targets the second: a match
+ * that ignored the port, or one that happened to order by it, takes the decoy.
  *
  * ---- */
 #define DECOYPORT 7778
@@ -137,7 +122,7 @@ static int two_listener()
     if (ioctl(as, FIONBIO, (char *)&arg) < 0) fail("two-ioctl-clear");
 
     /* Reaching accept is not enough on its own -- prove the pair actually
-     * carries bytes, so a wiring that paired the wrong rings cannot pass. */
+     * carries bytes, so a connection to the wrong listener cannot pass. */
     strcpy(g_out, C2S);
     n = send(cs, g_out, strlen(g_out), 0);
     if (n != strlen(C2S)) fail("two-send");
@@ -163,8 +148,7 @@ static int two_listener()
  * server in a PORT command.  Both of this tree's bind arms recorded the 0, so
  * ftp sent `PORT a,b,c,d,0,0' and vsftpd answered `500 Illegal PORT command'.
  *
- * Two binds, one per arm: 0.0.0.0 goes to net_op_bind's hardware path and
- * 127.0.0.1 to _Loop_BindTry.  Each must report a port of at least
+ * Two binds, one to 0.0.0.0 and one to 127.0.0.1.  Each must report a port of at least
  * IPPORT_RESERVED, and they must differ.  THE CONNECT IS THE PART THAT CAN TELL
  * A REPORTED PORT FROM A BOUND ONE: a getsockname that invented a number would
  * pass the first checks, but connecting to it finds no listener.
@@ -216,13 +200,11 @@ static int zero_port()
 /* ---- `-x`: AN ACCEPT THAT FAILS ON RESOURCES MUST BE RETRYABLE
  *      (apple/fgx#145, second edge).
  *
- * _Loop_AcceptTry used to wire the accepted end, cross-link the pair and
- * CONSUME the listener's SLF_PENDING flag, and only then ask for an fd.  So an
- * fd shortage produced three kinds of stuck from one failure: a fully wired
- * descriptor with no fd that nothing would ever free (a SOCKD slot gone for the
- * boot), a connector left believing it was talking to a peer no process could
- * reach, and a listener that would never offer the connection again because the
- * flag was already spent.
+ * An accept that fails for want of an fd must leave the connection queued on
+ * the listener, so a later accept can take it.  Taking the connection first
+ * and the fd second loses it: a descriptor nothing will free, a connector
+ * talking to a peer no process can reach, and a listener that never offers the
+ * connection again.
  *
  * THE RETRY IS THE ASSERTION, and it is the only one that can see this.  A test
  * that checked accept() returns -1/EMFILE under pressure passes with the defect
@@ -233,9 +215,7 @@ static int zero_port()
  * finds nothing; the listener is non-blocking by then so it says EWOULDBLOCK
  * instead of sleeping for the rest of the fixture's timeout.
  *
- * Separate process from the main case for the reason two_listener is: socket()
- * takes one of only three usable W5100 slots and a loopback descriptor gives it
- * back only at teardown. ---- */
+ * Separate process from the main case, so the fds it fills are its own. ---- */
 #define XPORT 7780
 
 static int fd_exhaust()
@@ -315,15 +295,11 @@ static int accept_pressure()
  * `sendto' and `recvfrom' stopped short of it in libc, so MSG_OOB and
  * MSG_DONTWAIT were discarded before the kernel could honour or refuse them.
  * The word is read now, and MSG_OOB is refused for the same reason it is on
- * `send'/`recv': no transport here carries urgent data (apple/fgx#422).
+ * a datagram socket carries no urgent data.
  *
- * THIS RUNS ON A MACHINE WITH NO NETWORK CARD, which is what the loopprobe
- * fixtures boot.  socket() allocates out of a bitmap and touches no chip, and
- * both refusals are answered as soon as the descriptor resolves -- ahead of
- * _Sock_EnsureBound and ahead of any W5100 transaction.  A flags-0 datagram
- * call would reach the chip, so there is deliberately none here; the two
- * offsets are held to their kernel counterparts by tools/check_sock_argblk.py
- * instead, which is the only check that can see them disagree.
+ * Only the refusals are exercised; a flags-0 datagram call would be sent.
+ * The two offsets are held to the kernel's reads by tools/check_sock_argblk.py,
+ * the only check that can see them disagree.
  *
  * The bad-fd arm is the ordering assertion: upstream resolves the socket
  * before splitting on MSG_OOB (`getsock()' in `sendit()' ahead of `sosend()'),
@@ -1412,6 +1388,41 @@ udp_main()
     exit(ufails != 0);
 }
 
+#define BULKPORT 7830
+#define BULKKB   1024
+
+/* -b: 1 MB over lo0 from a child writer to this reader, counted, for timing
+ * with time(1).  Prints "BULK <bytes>" and exits 0 when all of it arrived. */
+static int
+bulk_main()
+{
+    int ls, a, c, r;
+    long got;
+    int pid, st;
+
+    ls = tlisten(BULKPORT, 1);
+    if (ls < 0) exit(1);
+    pid = fork();
+    if (pid == 0) {
+        close(ls);
+        c = tconnect(BULKPORT);
+        if (c < 0) _exit(1);
+        tfill(tbuf, sizeof(tbuf), 1);
+        for (r = 0; r < BULKKB; r++)
+            if (write(c, tbuf, sizeof(tbuf)) != sizeof(tbuf)) _exit(1);
+        close(c);
+        _exit(0);
+    }
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a < 0) { printf("BULK FAIL accept %d\n", errno); exit(1); }
+    got = 0;
+    while ((r = read(a, tbuf2, sizeof(tbuf2))) > 0)
+        got += r;
+    wait(&st);
+    printf("BULK %ld\n", got);
+    exit(got != (long)BULKKB * 1024L || st != 0);
+}
+
 main(argc, argv)
 int argc;
 char **argv;
@@ -1433,6 +1444,8 @@ char **argv;
         udp_main();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
         udp_syslog();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'b')
+        bulk_main();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'n') {
         /* -n: a UDP socket, which only the network modules provide */
         if (socket(AF_INET, SOCK_DGRAM, 0) < 0) {
@@ -1461,7 +1474,7 @@ char **argv;
     if (listen(ls, 1) < 0)               fail("listen");
 
     /* ---- connect to ourselves.  This is the step that has to find the
-     *      listener above and build the ring pair. ---- */
+     *      listener above. ---- */
     cs = socket(AF_INET, SOCK_STREAM, 0);
     if (cs < 0) fail("socket-connect");
     if (connect(cs, &sin, sizeof(sin)) < 0) fail("connect");
@@ -1480,7 +1493,7 @@ char **argv;
      * test was already running at the time and did not notice, because its
      * one select() call samples the ready direction only.
      *
-     * An EMPTY ring is the single state whose true answer differs from the
+     * An EMPTY receive buffer is the single state whose true answer differs from the
      * broken default, and it exists only before the first send.  Hence here.
      * ---- */
     {
@@ -1527,7 +1540,7 @@ char **argv;
         /* #98 -- FIONBIO must be ACCEPTED and must TAKE EFFECT.  The second
          * half is what makes this discriminating: an ioctl that returns 0 and
          * does nothing passes the first check on its own.  With SOCK_NB set,
-         * a read of the still-empty ring must come back EWOULDBLOCK; if the
+         * a read of the still-empty buffer must come back EWOULDBLOCK; if the
          * flag is ignored the read sleeps and the fixture times out. */
         arg = 1;
         if (ioctl(as, FIONBIO, (char *)&arg) < 0) fail("ioctl-fionbio-set");
@@ -1543,25 +1556,17 @@ char **argv;
          * SLEEP", and only SOCK_NB was honoured.  The descriptor is back in
          * BLOCKING mode above, which is the whole point: the flag has to carry
          * the decision on its own, for this one call, without the caller
-         * touching descriptor state.  The ring is still empty, so an ignored
+         * touching descriptor state.  The buffer is still empty, so an ignored
          * flag sleeps and the fixture times out -- the same failure shape as
          * the FIONBIO check it sits beside, and the reason both live in this
          * window rather than after the first send.
-         *
-         * This also covers the SEND direction: _Loop_SoIo reads the call's
-         * flags and folds them into the same non-blocking decision for both, so
-         * one call exercises the code both take.  The W5100 half of the fix
-         * (_Tcp_SendCore) needs a card and is not reachable from the suite. */
+ */
         errno = 0;
         n = recv(as, g_buf, sizeof(g_buf) - 1, MSG_DONTWAIT);
         if (n >= 0)               fail("dontwait-recv-got-data");
         if (errno != EWOULDBLOCK) fail("dontwait-recv-errno");
 
-        /* #98/#97 -- FIONREAD on an EMPTY loopback socket must say zero.
-         * The number has to come from the Rx ring: there is no W5100 socket
-         * behind a loopback descriptor, and reading socket $FE's RX_RSR on a
-         * machine with no card returns open bus, which is only accidentally
-         * ever zero. */
+        /* #98/#97 -- FIONREAD on an EMPTY socket must say zero. */
         arg = -1;
         if (ioctl(as, FIONREAD, (char *)&arg) < 0) fail("ioctl-fionread-empty");
         if (arg != 0) fail("fionread-empty-nonzero");
@@ -1573,7 +1578,7 @@ char **argv;
     if (n != strlen(C2S)) fail("send-c2s");
     for (n = 0; n < sizeof(g_buf); n++) g_buf[n] = 0;
     {   /* select() must see the loopback socket readable -- this is what the
-         * telnet client relies on, and the only consumer of _Loop_StatusTry. */
+         * telnet client relies on. */
         int rfds[2];
         rfds[0] = 0; rfds[1] = 0;
         rfds[0] = 1 << as;
@@ -1583,9 +1588,9 @@ char **argv;
             fail("select-bit");
     }
     {   /* FIONREAD, now that there IS something to count.  Paired with the
-         * empty-ring check above this is discriminating in both directions:
+         * empty-buffer check above this is discriminating in both directions:
          * a stuck zero fails here, a stuck constant fails there, and only a
-         * real count of the Rx ring satisfies both. */
+         * real count of the receive buffer satisfies both. */
         int avail;
         avail = -1;
         if (ioctl(as, FIONREAD, (char *)&avail) < 0) fail("ioctl-fionread");
@@ -1595,8 +1600,8 @@ char **argv;
     if (n != strlen(C2S))    fail("recv-c2s-len");
     if (strcmp(g_buf, C2S))    fail("recv-c2s-data");
 
-    /* ---- server -> client.  Uses the OTHER ring; a single direction would
-     *      pass even with both ends bound to one ring. ---- */
+    /* ---- server -> client.  The OTHER direction; a single direction would
+     *      pass even with both ends sharing one buffer. ---- */
     strcpy(g_out, S2C);
     n = send(as, g_out, strlen(g_out), 0);
     if (n != strlen(S2C)) fail("send-s2c");
@@ -1619,21 +1624,12 @@ char **argv;
     if (n != strlen(C2S)) fail("read-len");
     if (strcmp(g_buf, C2S)) fail("read-data");
 
-    /* ---- apple/fgx#133 -- THE CLAIM MUST REFUSE AN INELIGIBLE DESCRIPTOR,
-     *      and these are negative assertions for the same reason the empty-ring
-     *      block is: nothing else here can tell a kernel that checks from one
-     *      that says yes to everything.
-     *
-     * Claiming a descriptor for loopback RELEASES its W5100 slot, which is only
-     * sound while that slot has never been OPENed on the chip.  Neither
-     * pre-check asked, so a second connect() on a live connection -- or a rebind
-     * -- handed a LIVE hardware socket back to the allocator; the next socket()
-     * re-issued the index and two descriptors drove one chip socket.
-     *
-     * Both calls must fail, and the errno is checked too: a claim that succeeds
-     * is the defect, and one that fails with the wrong errno is a different
-     * bug wearing this one's clothes.  Neither call changes any state, so they
-     * sit here rather than costing a second pair. ---- */
+    /* ---- apple/fgx#133 -- A SECOND connect() AND A REBIND ARE REFUSED,
+     *      and these are negative assertions for the same reason the
+     *      empty-buffer block is: nothing else here can tell a kernel that
+     *      checks from one that says yes to everything.  The errno is checked
+     *      too: one that fails with the wrong errno is a different bug.
+     *      Neither call changes any state. ---- */
     if (connect(cs, &sin, sizeof(sin)) != -1) fail("reconnect-allowed");
     if (errno != EISCONN)                     fail("reconnect-errno");
     if (bind(ls, &sin, sizeof(sin)) != -1)    fail("rebind-allowed");
@@ -1720,13 +1716,13 @@ char **argv;
      * refcount and frees the FCB at zero while running no type teardown at all
      * -- the socket, pipe and chardev arms live only in Fs_Close.  So the
      * sequence below dropped the LAST reference to a connected socket inside
-     * dup2: rings leaked and the peer never saw EOF.
+     * dup2: the socket leaked and the peer never saw EOF.
      *
      * The observer is made NON-BLOCKING first, so the defect reports itself as
      * a failed assertion instead of hanging the fixture -- with the bug the
      * recv comes back EWOULDBLOCK, with the fix it comes back 0.  The listener
-     * is still bound, so this costs a second pair of rings but no third
-     * listener; the first pair was freed by the closes just above. ---- */
+     * is still bound, so this costs a second connection but no third
+     * listener. ---- */
     cs = socket(AF_INET, SOCK_STREAM, 0);
     if (cs < 0)                             fail("dup2-socket");
     if (connect(cs, &sin, sizeof(sin)) < 0) fail("dup2-connect");
