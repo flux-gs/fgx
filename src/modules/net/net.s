@@ -1016,7 +1016,7 @@ net_op_socket   MX      %00
                 CMP     #SOCK_DGRAM
                 BNE     @ss_tryStream
                 ; A DATAGRAM SOCKET IS THE KERNEL'S: a 2.11BSD struct socket,
-                ; made below once the descriptor is (net_kso.s), and it owns no
+                ; which the FCB names (net_kso.s), with no descriptor and no
                 ; chip socket.  Without the network modules there is no UDP,
                 ; and socreate's answer when no protosw matches is
                 ; EPROTONOSUPPORT.
@@ -1024,11 +1024,7 @@ net_op_socket   MX      %00
                 LDX     #KSVC_FINDVTABLE
                 JSL     SYS_KCALL
                 BCC     @ss_eprotonosup
-                LDA     #XPORT_KSO
-                STA     _sockTmpTag
-                LDA     #SOCK_HW_NONE
-                STA     _sockTmpHw
-                BRA     @ss_scan
+                BRL     _Kso_Socket
 @ss_tryStream   CMP     #SOCK_STREAM
                 BNE     @ss_tryRaw
                 LDA     #XPORT_TCP
@@ -1125,20 +1121,7 @@ net_op_socket   MX      %00
                 REP     #$30
                 MX      %00
                 JSR     _Sock_ClearXportState   ; bytes 8 onward are NOT set above
-                LDA     _sockTmpTag
-                CMP     #XPORT_KSO
-                BNE     @ss_fcb
-                LDY     #BNOP_SOCKET            ; socreate, with this call's
-                JSR     _Kso_Do                 ;   domain, type and protocol
-                BCC     @ss_ksoFail
-                PHA                             ; the socket, into the record
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_KsoSo
-                TAY
-                PLA
-                STA     [_sockTablePtr],Y
-@ss_fcb         JSL     SYS_NETKC_FCBALLOC
+                JSL     SYS_NETKC_FCBALLOC
                 BCC     @ss_fcbFail
                 PHA
                 LDY     #FCB_Flags
@@ -1156,18 +1139,10 @@ net_op_socket   MX      %00
                 AND     #$00FF
                 SEC
                 RTL
-@ss_ksoFail     PHA                             ; socreate's errno: the record
-                REP     #$30                    ;   goes back unused
-                MX      %00
-                BRA     @ss_free0
 @ss_fcbFail     PHA
                 REP     #$30
                 MX      %00
-                JSR     _Kso_Is                 ; a kernel socket made above
-                BCC     @ss_free0               ;   goes too
-                LDY     #BNOP_CLOSE
-                JSR     _Kso_Do
-@ss_free0       LDY     _sockTmpOff
+                LDY     _sockTmpOff
                 SEP     #$20
                 MX      %10
                 LDA     #$00
@@ -2289,7 +2264,7 @@ net_op_getsockname MX   %00
 ;------------------------------------------------------------------------------
 ; _Sock_ClearXportState - reset the per-transport fields of the descriptor at
 ; _sockTmpOff to "no transport state": the four SOCK_Loop* bytes, the two
-; SOCK_Unp* bytes and SOCK_FAddr/SOCK_FPort (an XPORT_KSO socket's SOCK_KsoSo).  MX %00 in/out.  Clobbers A, Y.
+; SOCK_Unp* bytes and SOCK_FAddr/SOCK_FPort.  MX %00 in/out.  Clobbers A, Y.
 ;
 ; Called from the two allocation sites whose initialisers STOP EARLY -- net_op_socket's
 ; @ss_free and _Sock_NewConnFd.  Both write their fields POSITIONALLY (INY through
@@ -2589,7 +2564,15 @@ net_op_sockteardown MX  %00
                 PHP
                 REP     #$30
                 MX      %00
-                LDY     #FCB_SockIdx
+                LDY     #FCB_SockSo             ; a kernel-stack socket: soclose,
+                LDA     [_fcbPtr],Y             ;   and the FCB is all there is
+                BEQ     @st_table
+                STA     _sockTmpSo
+                LDY     #BNOP_CLOSE
+                JSR     _Kso_Do
+                PLP
+                RTL
+@st_table       LDY     #FCB_SockIdx
                 SEP     #$20
                 MX      %10
                 LDA     [_fcbPtr],Y             ; descriptor offset
@@ -2606,12 +2589,7 @@ net_op_sockteardown MX  %00
                 MX      %00
                 AND     #$00FF
                 STA     _sockTmpHw
-                JSR     _Kso_Is                 ; a kernel socket: soclose, then
-                BCC     @st_notKso              ;   the descriptor goes as any does
-                LDY     #BNOP_CLOSE
-                JSR     _Kso_Do
-                BRA     @st_freeDesc
-@st_notKso      LDA     _sockTmpHw
+                LDA     _sockTmpHw
                 ; A SENTINEL OWNS NO HARDWARE.  This tested only
                 ; SOCK_HW_NONE ($FF), so a LOOPBACK descriptor -- SOCK_HW_LOOP,
                 ; $FE, written over SOCK_HwIdx by _Loop_BindTry and

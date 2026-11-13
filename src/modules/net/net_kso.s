@@ -2,10 +2,11 @@
 ; net_kso.s - UDP sockets on the kernel's network stack.  PUT by net.s.
 ;
 ; An AF_INET datagram socket is a 2.11BSD struct socket in the network modules
-; (bsdnetd and bsdnet0-3).  net.mod keeps what it has always kept for it -- the
-; system-call entry, the descriptor and the FCB -- and the descriptor carries
-; XPORT_KSO and, in SOCK_KsoSo, the socket's offset in bsdnetd's bank.  Every
-; op on such a descriptor comes here first and goes no further in this module:
+; (bsdnetd and bsdnet0-3).  net.mod keeps the system-call entry for it, and the
+; FCB is its file: FCB_SockSo holds the socket's offset in bsdnetd's bank, as
+; 2.11BSD's f_data does, with no descriptor in the socket table, so these are
+; as many as memory holds.  _Sock_FdToDesc leaves it in _sockTmpSo.  Every op
+; on such an fd comes here first and goes no further in this module:
 ; _Kso_Do hands the call to bsdnet's bn_sysent with a call block naming the
 ; syscall's registers, and src/kernel/bsdnet/machine/bn_sys.c turns that into
 ; the argument block uipc_syscalls.c's body reads.
@@ -15,7 +16,7 @@
 ; otherwise claim it for net_loop.s's rings.
 ;
 ; A forward may sleep, and another process may use this module's scratch
-; meanwhile.  _Kso_Do and _Kso_DoIoctl keep the caller's _sockTmpOff on its own
+; meanwhile.  _Kso_Do and _Kso_DoIoctl keep the caller's _sockTmpSo on its own
 ; stack and put it back before they return; nothing else in the scratch is read
 ; after a forward returns.
 ;==============================================================================
@@ -24,25 +25,15 @@ BN_SYS_OFF      EQU     22              ; bsdnetd: bn_sys, the cell after bn_tap
                                         ;   (tools/build_bsdnet.py)
 
 ;------------------------------------------------------------------------------
-; _Kso_Is - C=1 if the descriptor at _sockTmpOff is a kernel socket.  MX %00.
-; Clobbers A, Y.
+; _Kso_Is - C=1 if the fd _Sock_FdToDesc last resolved is a kernel socket, whose
+; struct socket is then in _sockTmpSo.  MX %00.  Clobbers A.
 ;------------------------------------------------------------------------------
 _Kso_Is         MX      %00
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_Proto
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     [_sockTablePtr],Y
-                REP     #$20
-                MX      %00
-                AND     #$00FF
-                CMP     #XPORT_KSO
-                BEQ     @ki_yes
-                CLC
+                LDA     _sockTmpSo
+                BEQ     @ki_no
+                SEC
                 RTS
-@ki_yes         SEC
+@ki_no          CLC
                 RTS
 
 ;------------------------------------------------------------------------------
@@ -68,8 +59,8 @@ _Kso_Try        MX      %00
                 RTS
 
 ;------------------------------------------------------------------------------
-; _Kso_TryOff - the same for an op whose descriptor the kernel already put in
-; _sockTmpOff (read, write, shutdown).  In: Y = the BNOP_*.
+; _Kso_TryOff - the same for an op whose fd the kernel already resolved with
+; _Sock_FdToDesc (read, write, shutdown).  In: Y = the BNOP_*.
 ;------------------------------------------------------------------------------
 _Kso_TryOff     MX      %00
                 PHY
@@ -81,6 +72,49 @@ _Kso_TryOff     MX      %00
                 RTL
 @kto_no         PLY
                 RTS
+
+;------------------------------------------------------------------------------
+; _Kso_Socket - socket(2)'s datagram arm, BRL'd from net_op_socket: socreate
+; with this call's domain, type and protocol, then the FCB that names it.  An
+; FCB the process cannot have closes the socket again.  -> RTL, C=1 + A = fd,
+; or C=0 + A = errno.
+;------------------------------------------------------------------------------
+_Kso_Socket     MX      %00
+                STZ     _sockTmpSo
+                LDY     #BNOP_SOCKET
+                JSR     _Kso_Do
+                BCS     @ks_have
+                RTL
+@ks_have        STA     _sockTmpSo
+                JSL     SYS_NETKC_FCBALLOC      ; C=1 + A = fd, or C=0 + errno; the
+                REP     #$30                    ;   M flag comes back as _Fcb_Alloc's
+                MX      %00                     ;   exit path leaves it, so set it
+                BCC     @ks_fcbFail
+                PHA                             ; the fd
+                SEP     #$20
+                MX      %10
+                LDY     #FCB_Flags
+                LDA     #FCB_FL_SOCKET
+                STA     [_fcbPtr],Y
+                LDY     #FCB_FstIdx
+                LDA     #$00
+                STA     [_fcbPtr],Y
+                REP     #$20
+                MX      %00
+                LDY     #FCB_SockSo
+                LDA     _sockTmpSo
+                STA     [_fcbPtr],Y
+                PLA
+                AND     #$00FF
+                SEC
+                RTL
+@ks_fcbFail     PHA                             ; the errno
+                LDY     #BNOP_CLOSE
+                JSR     _Kso_Do
+                PLA
+                AND     #$00FF
+                CLC
+                RTL
 
 ;------------------------------------------------------------------------------
 ; _Kso_Refuse - listen(2) and accept(2) on a kernel socket.  In: A = fd, Y =
@@ -104,7 +138,7 @@ _Kso_Refuse     MX      %00
                 RTS
 
 ;------------------------------------------------------------------------------
-; _Kso_Do - call bn_sysent for the descriptor at _sockTmpOff.  In: Y = BNOP_*.
+; _Kso_Do - call bn_sysent for the socket in _sockTmpSo.  In: Y = BNOP_*.
 ; Out: C=1 + A = the call's value + X = its second value, or C=0 + A = errno.
 ;
 ; The call block goes on this stack, which is the caller's kernel slot, and
@@ -113,21 +147,9 @@ _Kso_Refuse     MX      %00
 ; It is pushed last field first, so it reads upward.
 ;------------------------------------------------------------------------------
 _Kso_Do         MX      %00
-                LDA     _sockTmpOff             ; this caller's, across a sleep
+                LDA     _sockTmpSo              ; this caller's, across a sleep
                 PHA
-                PHY
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_Flags
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     [_sockTablePtr],Y
-                REP     #$20
-                MX      %00
-                AND     #SOCK_NB
-                PLY
-                PHA                             ; +16 nb
+                PEA     0                       ; +16 nb: FIONBIO is SS_NBIO
                 LDA     _sockUioBank            ; +14
                 PHA
                 LDA     _sockUio                ; +12
@@ -152,14 +174,14 @@ _Kso_Do         MX      %00
                 PLY
                 PLY
                 PLY
-                PLY                             ; _sockTmpOff; STY keeps C
-                STY     _sockTmpOff
+                PLY                             ; _sockTmpSo; STY keeps C
+                STY     _sockTmpSo
                 RTS
 
 ; _Kso_DoIoctl - the 'i' group: the command in X, the ifreq's far pointer in Y
-; and bank.  In: _sockTmpOff.  Out as _Kso_Do.
+; and bank.  In: _sockTmpSo.  Out as _Kso_Do.
 _Kso_DoIoctl    MX      %00
-                LDA     _sockTmpOff             ; this caller's, across a sleep
+                LDA     _sockTmpSo              ; this caller's, across a sleep
                 PHA
                 PEA     0                       ; +16 nb
                 PEA     0                       ; +14
@@ -185,7 +207,7 @@ _Kso_DoIoctl    MX      %00
                 PLY
                 PLY
                 PLY
-                STY     _sockTmpOff
+                STY     _sockTmpSo
                 RTS
 
 ; _Kso_IfChanged - tell the kernel's stack the interface's address changed
@@ -208,14 +230,7 @@ _Kso_IfChanged  MX      %00
 ; _Kso_SoOp - push +2 so and +0 op UNDER this routine's own return address,
 ; which it moves down, so the caller's block stays contiguous.  In: Y = op.
 _Kso_SoOp       MX      %00
-                PHY                             ; the op, while so is read
-                LDA     _sockTmpOff
-                CLC
-                ADC     #SOCK_KsoSo
-                TAY
-                LDA     [_sockTablePtr],Y
-                TAX                             ; so
-                PLY                             ; op
+                LDX     _sockTmpSo              ; so
                 PLA                             ; our return address
                 PHX                             ; +2 so
                 PHY                             ; +0 op

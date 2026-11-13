@@ -67,8 +67,9 @@ _panic_msg_socktbl ASC  'PANIC: cannot alloc sockTable',00
 
 ;==============================================================================
 ; _Sock_FdToDesc - resolve a socket fd to its descriptor + hw socket.
-; In: A = fd.  MX %00.  Out: C=1 + Y = descriptor offset + _sockTmpHw = hw idx,
-; or C=0 + A = EBADF.  STAYS kernel-side: used by BOTH net.mod's socket handlers
+; In: A = fd.  MX %00.  Out: C=1 + _sockTmpSo = the fd's kernel-stack socket,
+; or _sockTmpSo = 0 + Y = descriptor offset + _sockTmpHw = hw idx; or C=0 + A =
+; EBADF.  STAYS kernel-side: used by BOTH net.mod's socket handlers
 ; (via the _Net_KCall_SockFdToDesc wrapper) AND the kernel read/write seam
 ; (_RdOp_Socket/_WrOp_Socket in syscall.s).
 ;==============================================================================
@@ -81,6 +82,14 @@ _Sock_FdToDesc  MX      %00
                 LDA     [_fcbPtr],Y
                 BIT     #FCB_FL_SOCKET
                 BEQ     @s2d_notsock
+                REP     #$20
+                MX      %00
+                LDY     #FCB_SockSo             ; a kernel-stack socket: no
+                LDA     [_fcbPtr],Y             ;   descriptor, and Y means
+                STA     _sockTmpSo              ;   nothing
+                BNE     @s2d_kso
+                SEP     #$20
+                MX      %10
                 LDY     #FCB_SockIdx
                 LDA     [_fcbPtr],Y             ; descriptor offset (byte)
                 REP     #$20
@@ -97,7 +106,7 @@ _Sock_FdToDesc  MX      %00
                 AND     #$00FF
                 STA     _sockTmpHw
                 PLY                             ; Y = descriptor offset
-                SEC
+@s2d_kso        SEC
                 RTS
 @s2d_notsock    REP     #$20
                 MX      %00
@@ -158,6 +167,8 @@ _soHasDst       DS      2               ; 1 = sendto(): _sockDstIp/_sockDstPort 
                                         ;   the destination.  Read before any sleep.
 _soBounce       DS      4               ; the W5100 bounce buffer, a far pointer
                                         ;   (offset, bank, pad); 0 until first use
+_sockTmpSo      DS      2               ; _Sock_FdToDesc: the fd's FCB_SockSo, a
+                                        ;   kernel-stack socket, or 0
 ; net.mod derives its own copy of the length as _sockAcceptLOff-_sockSrcOff, so
 ; this cell must be the FIRST one past the block or the two disagree and
 ; _Sock_PollIntr saves the wrong byte count.  Separate assembly units, so each

@@ -859,6 +859,34 @@ u_closed()
     if (sendto(s, "x", 1, 0, &to, sizeof(to)) != -1 || errno != EBADF) ufail("closed", errno);
 }
 
+/* many: more UDP sockets than net.mod's old descriptor table held (12), each
+ * sending one datagram to the first, which reads them all. */
+#define UMANY 20
+static void
+u_many()
+{
+    struct sockaddr_in to;
+    int s[UMANY], i, n, got;
+
+    for (i = 0; i < UMANY; i++) {
+        s[i] = ubound(UDPPORT + 10 + i);
+        if (s[i] < 0) {
+            ufail("many-socket", i);
+            while (--i >= 0) close(s[i]);
+            return;
+        }
+    }
+    uaddr(&to, UDPPORT + 10);
+    for (i = 0; i < UMANY; i++)
+        if (sendto(s[i], "m", 1, 0, &to, sizeof(to)) != 1) ufail("many-send", i);
+    for (got = 0; got < UMANY; got++) {
+        n = recv(s[0], g_buf, sizeof(g_buf), 0);
+        if (n != 1) break;
+    }
+    if (got != UMANY) ufail("many-recv", got);
+    for (i = 0; i < UMANY; i++) close(s[i]);
+}
+
 /* `-s': one syslog line, user.err, to 127.0.0.1:514, for syslogd -u to log
  * (netudp's script).  The text is built so the screen can only show it if it
  * arrived: the needle is the joined halves. */
@@ -893,6 +921,7 @@ udp_main()
     u_inuse();
     datagram_argblk();          /* oob: MSG_OOB is EOPNOTSUPP */
     u_closed();
+    u_many();
     if (ufails == 0)
         printf("UDP OK\n");
     exit(ufails != 0);

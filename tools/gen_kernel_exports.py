@@ -306,6 +306,8 @@ MANIFESTS = {
         ('_sockTmpTag', '_sockTmpTag', 0, 'lo16'),
         ('_sockTmpHw', '_sockTmpHw', 0, 'lo16'),
         ('_sockTmpOff', '_sockTmpOff', 0, 'lo16'),
+        # The fd's kernel-stack socket, from _Sock_FdToDesc (net_kso.s).
+        ('_sockTmpSo', '_sockTmpSo', 0, 'lo16'),
         ('_sockTmp2', '_sockTmp2', 0, 'lo16'),
         ('_sockBufOff', '_sockBufOff', 0, 'lo16'),
         ('_sockLen', '_sockLen', 0, 'lo16'),

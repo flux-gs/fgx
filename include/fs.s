@@ -791,10 +791,12 @@ FCB_FwDirEntryOff   EQU FCB_FstPriv+17   ; saved _fwDirEntryOff per-FCB
 FCB_DirEntsLeft EQU     FCB_FstPriv+0   ; synthetic-/MNT/ one-shot counter (2 B)
 
 ; Socket-fd overlay of FCB_FstPriv (mutually exclusive with the ProDOS overlay —
-; a socket fd is never a file).  Holds the socket-descriptor BYTE OFFSET
-; (0/8/16/24) into the kernel socket table (src/kernel/socket.s), like a chardev
-; fd stores its chardev idx at FstPriv[0].
-FCB_SockIdx     EQU FCB_FstPriv+0
+; a socket fd is never a file).  FCB_SockSo is the socket a kernel-stack socket
+; fd names, its struct socket's offset in bsdnetd's bank, 2.11BSD's f_data; 0
+; for any other socket.  FCB_SockIdx is the BYTE OFFSET of a chip or loopback
+; socket's descriptor in the kernel socket table (src/kernel/socket.s).
+FCB_SockSo      EQU FCB_FstPriv+0
+FCB_SockIdx     EQU FCB_FstPriv+2
 
 ; Pipe-fd overlay of FCB_FstPriv (mutually exclusive with the ProDOS/socket
 ; overlays).  Holds the pipe-descriptor index (0..NPIPE-1) into _pipeTablePtr

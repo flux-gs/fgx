@@ -29,6 +29,7 @@
 #include "socketvar.h"
 #include "protosw.h"
 #include "uio.h"
+#include "ioctl.h"
 #include "errno.h"
 #include "../netinet/in.h"
 
@@ -345,9 +346,27 @@ bn_call(cp, so)
 		return;
 
 	case BNOP_IOCTL:
-		/* the 'i' group, which _IoOp_Socket sends here: soo_ioctl's
-		 * ifioctl arm.  FIONBIO and FIONREAD stay the kernel's. */
-		u.u_error = ifioctl(so, cp->c_x, far(cp->c_bank, cp->c_y));
+		/* Every ioctl on a kernel socket, which _IoOp_Socket sends here:
+		 * soo_ioctl's arms.  FIONREAD stores an int, FGX's width for it
+		 * (toolchain/include/sys/ioctl.h), where 2.11BSD's is a long.
+		 * FIOASYNC and SIOCSPGRP answer ENOTTY, as the kernel answered
+		 * them before: nothing here sends SIGIO or SIGURG. */
+		blk = (int *)far(cp->c_bank, cp->c_y);
+		switch (cp->c_x) {
+		case FIONBIO:
+		case SIOCATMARK:
+			u.u_error = soo_ioctl(so, cp->c_x, (caddr_t)blk);
+			return;
+		case FIONREAD:
+			*blk = so->so_rcv.sb_cc;
+			return;
+		case FIOASYNC:
+		case SIOCSPGRP:
+		case SIOCGPGRP:
+			u.u_error = ENOTTY;
+			return;
+		}
+		u.u_error = ifioctl(so, cp->c_x, (caddr_t)blk);
 		return;
 
 	case BNOP_SELECT:

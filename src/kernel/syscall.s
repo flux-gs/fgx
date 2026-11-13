@@ -1771,6 +1771,8 @@ _SelOp_Socket   REP     #$30
                 JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0
                 BCC     @cl_sockbad
                 STY     _sockTmpOff
+                LDA     _sockTmpSo              ; a kernel-stack socket: soo_select
+                BNE     @cl_sockhw
                 JSR     _Loop_StatusTry         ; loopback answers from its rings
                 LDA     _loopHandled
                 BEQ     @cl_sockhw
@@ -3926,11 +3928,13 @@ _IoOp_Socket        SEP     #$20
                 CLC
                 RTS
 @sis_desc       STY     _sockTmpOff
+                LDA     _sockTmpSo              ; a kernel-stack socket: all of
+                BNE     @sis_if                 ;   them to soo_ioctl, in net.mod
                 LDA     _Sys_IoctlCmd
                 AND     #$FF00
                 CMP     #SIOC_IF_GROUP          ; SIOCGIF*: net.mod's ifioctl
                 BNE     @sis_notif
-                LDY     #NETOP_IfIoctl
+@sis_if         LDY     #NETOP_IfIoctl
                 JMP     _NetThunkExec
 @sis_notif      LDA     _Sys_IoctlCmd
                 CMP     #FIONBIO
