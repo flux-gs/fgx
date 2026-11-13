@@ -113,7 +113,7 @@ Uthernet II in slot 1.
 | 2. NTP | a `*` peer, Reach 077, once the IIgs's clock was within 1000 s of true (ntpd's `WAYTOOBIG`); `ntpdc`'s offset is 32-bit milliseconds and wraps past 24.8 days |
 | 3. syslog -u | lines from the Mac arrived, 4-10 s after `nc` |
 | 4. Ping from another subnet | answered |
-| 5. ftp | 1048576 bytes at 9.9 KB/s; `sum` not compared |
+| 5. ftp | 1048576 bytes at 9.9 KB/s; `sum` matched |
 | 6. netdump | 95 `[saturated]` in 300 packets, on a LAN with mDNS, LLMNR and 802.1Q traffic |
 | 7. Transmit wait | not run |
 
