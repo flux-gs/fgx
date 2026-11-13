@@ -1,12 +1,12 @@
 /*
- * ping - ICMP echo client over a BSD raw socket (W5100 IPRAW offload).
+ * ping - ICMP echo client over a BSD raw socket (the kernel stack's raw_ip.c).
  *
  *   ping <host>            continuous, until ^C   (BSD default)
  *   ping <host> <count>    stop after <count> probes (gate-friendly)
  *
  * socket(AF_INET, SOCK_RAW, IPPROTO_ICMP); build an ICMP echo request with a
- * per-probe payload pattern, software-checksum it (the W5100 does IP+ARP+IP
- * checksum, not L4), send, poll recvfrom for the reply, and VERIFY the remote
+ * per-probe payload pattern, checksum it, send, wait in select for a reply
+ * for up to a second, and VERIFY the remote
  * echoed our exact id/seq AND payload back byte-for-byte.  The payload check is
  * the real end-to-end proof: a reply only counts if the remote copied our data
  * verbatim into its echo reply.  No bind() — the kernel implicit-binds on first
@@ -14,8 +14,11 @@
  *
  * Limits (honest): RTT uses the 60 Hz SYS_TICKS counter (16.67 ms resolution),
  * so sub-tick replies read 0 ms; under MAME, emulated time != real network RTT.
- * TTL is unavailable — the W5100 IPRAW recv delivers the IP payload (ICMP
- * message) only, having stripped the IP header where TTL lives.
+ * A raw socket hands up the whole IP datagram (raw_ip.c rip_input), so the
+ * ICMP message starts past the IP header, ip_hl words in, and its TTL is read
+ * from the header.  Every ICMP message the host receives arrives, our own
+ * echo REQUEST included when the target is 127.0.0.1, so only an echo reply
+ * with our id and seq counts.
  *
  * ^C arrives as SIGINT from the tty, the way BSD ping takes it.  It used to be
  * polled out of the kernel keyboard ring with pollkey(), which takes no fd --
@@ -32,6 +35,8 @@
 #include <setjmp.h>
 #include <signal.h>
 #include <netdb.h>
+#include <sys/types.h>
+#include <sys/time.h>
 #include "../lib/socket_h.h"
 
 int ticks(void);            /* ping_ticks.s */
@@ -106,6 +111,19 @@ int parse_ip(char *s, unsigned char *out)
     return (*s == 0);
 }
 
+/* 1 when s is readable within t ticks */
+int readable(int s, int t)
+{
+    fd_set rd;
+    struct timeval tv;
+
+    FD_ZERO(&rd);
+    FD_SET(s, &rd);
+    tv.tv_sec = t / 60;
+    tv.tv_usec = (long)(t % 60) * 16667;
+    return select(s + 1, &rd, (fd_set *)0, (fd_set *)0, &tv) == 1;
+}
+
 /* busy-wait ~`t` 60 Hz ticks.  ^C does not return through here -- the handler
    longjmps past it -- so there is nothing to report back. */
 int wait_ticks(int t)
@@ -120,7 +138,8 @@ int wait_ticks(int t)
 int main(int argc, char **argv)
 {
     int s, n, i, count, sent, recvd, id, seq, t0, t1, rtt, waited;
-    int cont, good, loss, rmin, rmax, rsum, fromlen;
+    int cont, good, loss, rmin, rmax, rsum, fromlen, hl, ttl;
+    unsigned char *icmp;
     unsigned int ck;
 
     stopped = 0;
@@ -200,20 +219,30 @@ int main(int argc, char **argv)
         t1 = t0;
         waited = 0;
         while (waited < 60) {                     /* up to ~1s for a reply */
+            if (!readable(s, 60 - waited))
+                break;
             fromlen = 16;
             n = recvfrom(s, rbuf, 256, 0, from, &fromlen);
-            if (n >= ICMPLEN && rbuf[0] == 0 &&    /* echo reply, right size */
-                rbuf[4] == ((id >> 8) & 0xff) && rbuf[5] == (id & 0xff) &&
-                rbuf[6] == ((seq >> 8) & 0xff) && rbuf[7] == (seq & 0xff)) {
+            hl = (rbuf[0] & 0x0f) << 2;            /* past the IP header */
+            ttl = rbuf[8];
+            icmp = rbuf + hl;
+            n = n - hl;
+            if (n >= ICMPLEN && icmp[0] == 0 &&    /* echo reply, right size */
+                icmp[4] == ((id >> 8) & 0xff) && icmp[5] == (id & 0xff) &&
+                icmp[6] == ((seq >> 8) & 0xff) && icmp[7] == (seq & 0xff)) {
                 good = 1;                          /* verify echoed payload */
                 for (i = 0; i < PAYLOAD; i = i + 1)
-                    if (rbuf[8 + i] != ((i + seq) & 0xff)) {
+                    if (icmp[8 + i] != ((i + seq) & 0xff)) {
                         good = 0;
                         break;
                     }
                 t1 = ticks();
                 break;
             }
+            t1 = ticks();
+            waited = t1 - t0;
+        }
+        if (!good) {
             t1 = ticks();
             waited = t1 - t0;
         }
@@ -224,9 +253,9 @@ int main(int argc, char **argv)
             rsum = rsum + rtt;
             if (rtt < rmin) rmin = rtt;
             if (rtt > rmax) rmax = rtt;
-            printf("%u bytes from %u.%u.%u.%u: icmp_seq=%u time=%u ms\n",
+            printf("%u bytes from %u.%u.%u.%u: icmp_seq=%u ttl=%u time=%u ms\n",
                    n, from[SIN_ADDR], from[SIN_ADDR + 1],
-                   from[SIN_ADDR + 2], from[SIN_ADDR + 3], seq, rtt);
+                   from[SIN_ADDR + 2], from[SIN_ADDR + 3], seq, ttl, rtt);
         } else if (waited >= 60) {
             printf("request timed out: icmp_seq=%u\n", seq);
         } else {

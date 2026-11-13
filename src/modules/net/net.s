@@ -1035,15 +1035,14 @@ net_op_socket   MX      %00
 @ss_chipTcp     LDA     #XPORT_TCP
                 STA     _sockTmpTag
                 BRA     @ss_proceed
-@ss_tryRaw      CMP     #SOCK_RAW
-                BNE     @ss_einval
-                LDA     _sockTmpProto
-                AND     #$00FF
-                CMP     #IPPROTO_ICMP
-                BNE     @ss_einval
-                LDA     #XPORT_ICMP
-                STA     _sockTmpTag
-                BRA     @ss_proceed
+@ss_tryRaw      CMP     #SOCK_RAW               ; raw IP is the kernel stack's
+                BNE     @ss_einval              ;   (raw_ip.c); without the
+                LDA     #VT_BSDNET              ;   modules there is none
+                LDX     #KSVC_FINDVTABLE
+                JSL     SYS_KCALL
+                BCS     @ss_rawKso
+                BRL     @ss_eprotonosup
+@ss_rawKso      BRL     _Kso_Socket
 @ss_einval      LDA     #EINVAL
                 CLC
                 RTL

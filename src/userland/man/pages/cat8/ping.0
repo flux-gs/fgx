@@ -26,15 +26,14 @@ DESCRIPTION
      data verbatim.  The summary reports packets sent and received,
      percent loss, and min/avg/max round-trip time.
 
-     Ping uses a raw socket with the W5100 IPRAW offload; the
-     Ethernet chip computes the IP and ICMP checksums.
+     Ping uses a raw ICMP socket, which only root may open, so
+     ping is installed setuid root.  Each reply line gives the
+     reply's TTL, read from its IP header.
 
 LIMITATIONS
      Round-trip time is measured with the 60 Hz system tick (16.67
      ms resolution), so a sub-tick reply reads 0 ms; under emulation
-     the timing reflects emulated, not physical, network delay.  TTL
-     is not reported: the IPRAW receive delivers the ICMP message
-     with the IP header (and its TTL) already stripped.
+     the timing reflects emulated, not physical, network delay.
 
 EXAMPLES
      ping www                  probe until ^C (search-domain applied)
