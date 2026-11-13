@@ -333,7 +333,6 @@ int	s;		/* socket number */
 netflush(fd)
 {
     int n;
-    int urgn;
 
     if ((n = nfrontp - nbackp) > 0) {
 	if (!neturg) {
@@ -351,19 +350,7 @@ netflush(fd)
 	    if (n > 1) {
 		n = send(fd, nbackp, n-1, 0);	/* send URGENT all by itself */
 	    } else {
-		urgn = n;
-			n = send(fd, nbackp, urgn, MSG_OOB);	/* URGENT data */
-			/*
-			 * No transport here carries urgent data, so the
-			 * kernel REFUSES MSG_OOB rather than delivering it
-			 * in band and reporting success (apple/fgx#422).
-			 * Send the byte in band deliberately: the receiver
-			 * still gets the DM, and what is lost is its flush
-			 * of the output queued ahead of it.  Recorded in
-			 * telnet(1)'s BUGS.
-			 */
-			if (n < 0 && errno == EOPNOTSUPP)
-			    n = send(fd, nbackp, urgn, 0);
+		n = send(fd, nbackp, n, MSG_OOB);	/* URGENT data */
 	    }
 	}
     }
@@ -889,16 +876,7 @@ telnet()
 			ioctl(net, SIOCATMARK, (char *)&atmark);
 			if (atmark) {
 			    c = recv(net, sibuf, canread, MSG_OOB);
-			    /*
-			     * EINVAL is upstream TCP's answer when there is
-			     * no mark to read (2.11BSD tcp_usrreq.c:253-262).
-			     * EOPNOTSUPP is this tree's, from a transport
-			     * that has no urgent capability at all
-			     * (apple/fgx#422) -- the same "nothing urgent
-			     * here", so it takes the same fallback.
-			     */
-			    if ((c == -1) &&
-				(errno == EINVAL || errno == EOPNOTSUPP)) {
+			    if ((c == -1) && (errno == EINVAL)) {
 				c = read(net, sibuf, canread);
 				if (clocks.didnetreceive < clocks.gotDM) {
 				    SYNCHing = stilloob(net);
