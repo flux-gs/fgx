@@ -19,15 +19,16 @@
  * bank.  Reused per call (the wrappers are not reentrant).
  *
  * ALL FOUR CALLS SHARE THE FIRST FOUR WORDS, and the kernel reads them at the
- * same offsets for all four (SOCKARG_BANK, include/socket.s):
+ * same offsets for all four (src/kernel/bsdnet/machine/bn_sys.c):
  *   [0..1] buf offset   [2..3] len   [4..5] MSG_* flags   [6..7] buf bank
  * The bank is what lets the buffer sit in any bank -- an fcc stack local is in
  * bank 0, not in this one.  Then, per call:
- *   sendto:   [8..11] dst IP, [12..13] dst port (net order)
+ *   sendto:   [8..11] dst IP, [12..13] dst port (net order), then the
+ *             sockaddr itself: [14..15] offset, [16..17] bank, [18..19] length
  *   recvfrom: [8..9] offset of the source-address staging, which is [10..25]:
  *             the kernel writes a whole 16-byte address there and libc copies
  *             what the caller asked for (socket_srv.c, recvfrom)
- * tools/check_sock_argblk.py holds this layout against net.mod's reads. */
+ * tools/check_sock_argblk.py holds this layout against bn_sys.c's reads. */
 int _sock_argblk[13];
 
 int socket(int domain, int type, int proto)

@@ -19,14 +19,6 @@
  * independently -- a single direction would pass even if both descriptors were
  * wired to the SAME ring, which is the mistake this shape is chosen to catch.
  *
- * This uses 3 descriptors (listener + connector + accepted) out of SOCKD_MAX.
- * IT DOES NOT USE ZERO W5100 HARDWARE SOCKETS, which this comment claimed for
- * months: socket() claims one before bind/connect can say the destination is
- * loopback, so the two socket() calls below took two of the three the machine
- * has.  They were never given back either, so a SECOND run in the same boot
- * failed at socket() -- apple/fgx#132, fixed by _Loop_ReleaseHw handing the
- * slot back once the descriptor is known to be loopback.
- *
  * IT ALSO CARRIES THE NEGATIVE ASSERTIONS, and that is not incidental.  Every
  * check below was originally of the form "a socket with data in it reports
  * itself ready", and a kernel that answered "ready" to everything passed all
@@ -101,13 +93,6 @@ char *step;
  * pick the wanted one by luck.  The connect then targets the SECOND listener,
  * which is the one at a nonzero offset.
  *
- * THIS CANNOT SHARE A PROCESS WITH THE MAIN CASE, and the reason is a real
- * limit rather than tidiness: socket() claims one of only three usable W5100
- * hardware sockets (0 is reserved for /dev/bpf0) and a descriptor that turns
- * out to be loopback never gives it back, so three socket() calls exhaust the
- * machine.  This mode makes exactly three, plus accept()'s descriptor, which
- * costs none.  Four descriptors against SOCKD_MAX 4, three hw sockets against
- * three: it fits exactly, with nothing to spare.
  * ---- */
 #define DECOYPORT 7778
 #define WANTPORT  7779

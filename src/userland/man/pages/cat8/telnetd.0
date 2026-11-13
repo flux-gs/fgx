@@ -35,13 +35,8 @@ DESCRIPTION
      bind any address.
 
      ONE SESSION, THEN EXIT.  Telnetd accepts a single connection
-     and exits when that session ends.  That is not a shortcut: on
-     the W5100 path accept(2) DETACHES the listener, handing its
-     hardware socket to the accepted connection, so a listener is
-     single-use and a server must re-create it for the next client.
-     The loopback transport mirrors that deliberately so the same
-     shape works on both.  Run telnetd again for each session, or
-     from a loop.
+     and exits when that session ends.  Run it again for each
+     session, or let inetd(8) start one per connection.
 
      Option negotiation follows the server side of the protocol:
      telnetd offers WILL ECHO and WILL SUPPRESS-GO-AHEAD, and asks

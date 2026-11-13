@@ -952,6 +952,12 @@ rule provcheck
   command = python3 tools/check_provenance.py --self-test > /dev/null && python3 tools/check_provenance.py && touch $out
   description = provenance
 
+# The transports the kernel network stack replaced stay deleted: no definition
+# of their names comes back (tools/check_net_retired.py).
+rule netretired
+  command = python3 tools/check_net_retired.py --self-test > /dev/null && python3 tools/check_net_retired.py && touch $out
+  description = retired network transports
+
 rule kchecks
   command = python3 tools/check_mx.py --self-test > /dev/null && python3 tools/check_baked_addrs.py --self-test > /dev/null && python3 tools/check_bsd_enforcement.py --self-test > /dev/null && python3 tools/check_chardev_ops.py --self-test > /dev/null && python3 tools/gen_syscall_table.py --self-test > /dev/null && python3 tools/gen_w5100_patchsites.py --self-test > /dev/null && python3 tools/gen_mod_bankpatch.py --self-test > /dev/null && python3 tools/gen_kernel_exports.py --self-test > /dev/null && python3 tools/check_kernel_ceiling.py --self-test > /dev/null && python3 tools/check_bank0_geometry.py --self-test > /dev/null && python3 tools/check_stage2_mirrors.py --self-test > /dev/null && python3 tools/mkfgxunix.py --self-test > /dev/null && python3 tools/check_stat_layout.py --self-test > /dev/null && python3 tools/check_statfs_layout.py --self-test > /dev/null && python3 tools/check_argv_caps.py --self-test > /dev/null && python3 tools/check_probe_offsets.py --self-test > /dev/null && python3 tools/check_far_calls.py --self-test > /dev/null && python3 tools/check_far_rtl_calls.py --self-test > /dev/null && python3 tools/check_selfbank_jsl.py --self-test > /dev/null && python3 tools/check_man_overstrike.py --self-test > /dev/null && python3 tools/check_path_copy.py --self-test > /dev/null && python3 tools/check_sock_argblk.py --self-test > /dev/null && python3 tools/gen_far_bankpatch.py --self-test > /dev/null && python3 tools/check_kc_dbr.py --self-test > /dev/null && python3 tools/check_kernelc_errno.py --self-test > /dev/null && python3 tools/gen_mod_imports.py --check-all > /dev/null && python3 tools/check_hb_scratch.py --self-test > /dev/null && python3 tools/check_spl_balance.py --self-test > /dev/null && python3 tools/check_ntty.py --self-test > /dev/null && python3 tools/check_canaries.py --self-test > /dev/null && python3 tools/check_vnodeops.py --self-test > /dev/null && python3 tools/gen_vfs_equ.py --selftest > /dev/null && python3 tools/check_kernel_bank_emission.py --selftest > /dev/null 2>&1 && python3 tools/check_kernel_bank_emission.py && python3 tools/check_kc_dbr.py && python3 tools/gen_mod_imports.py --check-all && python3 tools/check_kernelc_errno.py && python3 tools/check_hb_scratch.py && python3 tools/check_spl_balance.py && python3 tools/check_ntty.py && python3 tools/check_canaries.py && python3 tools/check_vnodeops.py && python3 tools/check_mx.py build/fgx_S01_KernelMain_Output.txt build/fgx_S02_BlockDriver_Output.txt build/fgxfar_Output.txt build/fgxtty_Output.txt && python3 tools/check_baked_addrs.py && python3 tools/check_bsd_enforcement.py && python3 tools/check_chardev_ops.py && python3 tools/gen_syscall_table.py --check && python3 tools/gen_w5100_patchsites.py build/fgx_S01_KernelMain_Output.txt src/kernel/w5100_patchsites.s --anchor _w5SiteBase --check && python3 tools/check_kernel_ceiling.py && python3 tools/check_bank0_geometry.py && python3 tools/check_stage2_mirrors.py build/fgx_S01_KernelMain_Output.txt && python3 tools/check_stat_layout.py && python3 tools/check_statfs_layout.py && python3 tools/check_argv_caps.py && python3 tools/check_probe_offsets.py && python3 tools/check_far_calls.py build/fgx_S01_KernelMain_Output.txt && python3 tools/check_far_rtl_calls.py && python3 tools/check_selfbank_jsl.py && python3 tools/check_man_overstrike.py && python3 tools/check_path_copy.py && python3 tools/check_sock_argblk.py && python3 tools/gen_far_bankpatch.py build/fgx_S01_KernelMain_Output.txt src/kernel/far_patchsites.s core --check && python3 tools/gen_far_bankpatch.py build/fgxfar_Output.txt src/kernel/far/core_patchsites.s far --check && python3 tools/gen_far_bankpatch.py build/fgx_S01_KernelMain_Output.txt src/kernel/tty_patchsites.s core-tty --check && python3 tools/gen_far_bankpatch.py build/fgxtty_Output.txt src/kernel/tty/core_patchsites.s tty --check && python3 tools/gen_mod_bankpatch.py build/fgxfar_Output.txt src/kernel/far/fnptr_patchsites.s --bank 08 --macro KFAR_FN_PTR --check && python3 tools/gen_mod_bankpatch.py build/fgxtty_Output.txt src/kernel/tty/fnptr_patchsites.s --bank 09 --macro KFAR_FN_PTR --check && python3 tools/gen_wavee_bankpatch.py build/fgx_S01_KernelMain_Output.txt --check && touch $out
   description = kernel checks
@@ -1982,7 +1988,7 @@ def emit(tools, out_path):
         "tools/check_path_copy.py "
         "tools/check_sock_argblk.py toolchain/lib/libc_c/socket.c "
         "toolchain/lib/libc_c/socket_srv.c toolchain/lib/libc_data.s "
-        "src/modules/net/net.s include/socket.s "
+        "src/kernel/bsdnet/machine/bn_sys.c "
         "tools/gen_far_bankpatch.py tools/gen_wavee_bankpatch.py tools/check_kc_dbr.py "
         "tools/check_hb_scratch.py src/modules/serial/serial.s "
         "tools/check_spl_balance.py "
@@ -2045,7 +2051,7 @@ def emit(tools, out_path):
                                 "prodosw", "cda", "sscon", "klog", "fpsim",
                                 "ld", "isofs")
                     if m != "ufsprobe" or probes)
-    MODCHECK = ("net", "bpf")
+    MODCHECK = ("bpf",)
     # Modules built from C IN PLACE: the .c compiles to <m>_c.s + <m>_c.data.s,
     # which the module root PUTs alongside the fcc runtime.  EMPTY since
     # 2026-09-07 -- hellokc.mod was the only one and it was a test fixture.
@@ -2206,9 +2212,8 @@ def emit(tools, out_path):
         # Y before its call, which is answered in the text.  Depending on the
         # built module would also work and would re-run less precisely.
         "build build/.thunk_y_checked: thunkyargs "
-        "src/modules/net/net.s src/modules/net/net_loop.s "
-        "src/modules/net/net_xport.s src/modules/net/pipe.s "
-        "src/modules/net/unp.s "
+        "src/modules/net/net.s src/modules/net/net_kso.s "
+        "src/modules/net/pipe.s "
         "| tools/check_thunk_y_args.py")
     mod_checked.append("build/.thunk_y_checked")
     lines.append(
@@ -2733,8 +2738,15 @@ def emit(tools, out_path):
     lines.append("build build/.provenance_checked: provcheck | "
                  "tools/check_provenance.py " +
                  " ".join(_prov.stdout.split()) + "\n")
+    _nr = sorted(os.path.relpath(os.path.join(d, f), ROOT)
+                 for top in ("src", "include")
+                 for d, _, fs in os.walk(os.path.join(ROOT, top))
+                 for f in fs if f.endswith((".s", ".c", ".h")))
+    lines.append("build build/.net_retired_checked: netretired | "
+                 "tools/check_net_retired.py " + " ".join(_nr) + "\n")
     lines.append("build all: phony kernel modules userland probes disk "
                  "build/.libc_checked build/.provenance_checked "
+                 "build/.net_retired_checked "
                  "build/static_libs/libtermlib.s\n")
     lines.append("# `ninja release` builds the CLEAN image + floppy\n")
     lines.append("default all\n")

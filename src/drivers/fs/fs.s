@@ -1202,22 +1202,8 @@ Fs_Close        MX      %00
                                                 ;   it; just drop this slot
                 REP     #$20
                 MX      %00
-                ; Loopback sockets are torn down kernel-side: their state is two
-                ; pipe.s rings, not a W5100 socket, and net.mod cannot reach
-                ; pipe.s.  _Loop_CloseTry leaves _loopHandled=0 for hw sockets.
-                LDY     #FCB_SockSo             ; a kernel-stack socket has no
-                LDA     [_fcbPtr],Y             ;   rings: straight to soclose
-                BNE     @fc_sockTear
-                LDY     #FCB_SockIdx
-                LDA     [_fcbPtr],Y
-                AND     #$00FF
-                TAY
-                JSR     _Loop_CloseTry
-                LDA     _loopHandled
-                BNE     @fc_sockdone
-@fc_sockTear    LDY     #NETOP_SockTeardown     ; _Sock_Teardown now in net.mod
+                LDY     #NETOP_SockTeardown     ; soclose, in net.mod
                 JSR     _Net_Dispatch           ; -> net_op_sockteardown (_fcbPtr live)
-@fc_sockdone
                 SEP     #$20
                 MX      %10
 @fc_sockShared  PLA                             ; restore fd from stack

@@ -50,7 +50,7 @@ THE TEST IS THE UPSTREAM TEXT A FILE CARRIES, NOT ITS LANGUAGE (apple/fgx#537).
 - **Original FGX code** implements a BSD design, names the source of the
   design, and quotes at most a short attributed passage.  It says
   `FGX-Provenance: none.  Original FGX code.` with the design's source, and has
-  no row.  `src/modules/net/unp.s`, `src/kernel/tty/text.s` and
+  no row.  `src/kernel/tty/text.s` and
   `src/kernel/bank.s` are written this way.
 
 A borderline file carries the notice: retaining an attribution that was not

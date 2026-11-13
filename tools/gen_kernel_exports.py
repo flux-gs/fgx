@@ -295,7 +295,6 @@ MANIFESTS = {
         ('_ifS1Off', '_ifS1Off', 0, 'lo16'),
         # RTL trampoline (net_dispatch.s) wrapping the JSR/RTS kernel routine
         # _W5_WriteIpFromRec, so the module can JSL it without a stack mismatch.
-        ('_Net_KCall_W5WriteIp', '_Net_KCall_W5WriteIp', 0, 'abs24'),
         # --- Phase 2 (socket.s move) ---
         # Syscall arg saved by the dispatcher (SavedA/X already above).
         ('_Sys_SavedY', '_Sys_SavedY', 0, 'lo16'),
@@ -306,37 +305,13 @@ MANIFESTS = {
         # The _sock* scratch statics the moved handlers/helpers read+write; they
         # STAY in socket.s (kernel), reached DBR-relative (DBR=$02 during
         # dispatch).  Also read by the kept kernel transport cores.
-        ('_sockTmpProto', '_sockTmpProto', 0, 'lo16'),
-        ('_sockTmpTag', '_sockTmpTag', 0, 'lo16'),
-        ('_sockTmpHw', '_sockTmpHw', 0, 'lo16'),
-        ('_sockTmpOff', '_sockTmpOff', 0, 'lo16'),
         # The fd's kernel-stack socket, from _Sock_FdToDesc (net_kso.s).
         ('_sockTmpSo', '_sockTmpSo', 0, 'lo16'),
-        ('_sockTmp2', '_sockTmp2', 0, 'lo16'),
-        ('_sockBufOff', '_sockBufOff', 0, 'lo16'),
-        ('_sockLen', '_sockLen', 0, 'lo16'),
-        ('_sockDstIp', '_sockDstIp', 0, 'lo16'),
-        ('_sockDstPort', '_sockDstPort', 0, 'lo16'),
-        ('_sockSrcOff', '_sockSrcOff', 0, 'lo16'),
-        ('_sockRecvFlags', '_sockRecvFlags', 0, 'lo16'),
-        ('_sockSendFlags', '_sockSendFlags', 0, 'lo16'),
-        ('_sockOptLevel', '_sockOptLevel', 0, 'lo16'),
-        ('_sockOptName', '_sockOptName', 0, 'lo16'),
-        ('_sockOptLen', '_sockOptLen', 0, 'lo16'),
-        ('_sockOptVal', '_sockOptVal', 0, 'lo16'),
-        ('_sockBindAddr', '_sockBindAddr', 0, 'lo16'),
-        ('_sockAcceptLOff', '_sockAcceptLOff', 0, 'lo16'),
         # RTL wrappers for the kernel routines net.mod still calls (Phase 3 moved
         # the transport in-module, so only the FCB layer remains kernel-side).
-        ('_Net_KCall_FcbAlloc', '_Net_KCall_FcbAlloc', 0, 'abs24'),
-        ('_Net_KCall_SockFdToDesc', '_Net_KCall_SockFdToDesc', 0, 'abs24'),
         # --- Phase 3 (transport + ring + _Sock_PollIntr move) ---
         # Con_PollKey + _sleep, for the now-in-module _Sock_PollIntr.
-        ('_Net_KCall_ConPollKey', '_Net_KCall_ConPollKey', 0, 'abs24'),
-        ('_Net_KCall_Sleep', '_Net_KCall_Sleep', 0, 'abs24'),
         # Inline statics that stayed in uthernet.s (the transport reads them).
-        ('_w5SockInUse', '_w5SockInUse', 0, 'lo16'),
-        ('_tcpNextPort', '_tcpNextPort', 0, 'lo16'),
         # W5100 bus shadows (the U2_LOCK/UNLOCK macros STAL/LDAL these).
         ('_u2Imr', '_u2Imr', 0, 'lo16'),
         ('_u2Locked', '_u2Locked', 0, 'lo16'),
@@ -345,32 +320,11 @@ MANIFESTS = {
         # at mod_init entry (DBR=kernel bank) to bind its own U2_* sites.
         ('_u2Slot',   '_u2Slot',   0, 'lo16'),
         # Additional _sock* statics the transport cores read+write.
-        ('_sockSrcIp', '_sockSrcIp', 0, 'lo16'),
-        ('_sockSrcPort', '_sockSrcPort', 0, 'lo16'),
         ('_sockRxLen', '_sockRxLen', 0, 'lo16'),
-        ('_sockCapLen', '_sockCapLen', 0, 'lo16'),
-        ('_sockRingRun', '_sockRingRun', 0, 'lo16'),
-        ('_sockTxWr', '_sockTxWr', 0, 'lo16'),
-        ('_sockTxBase', '_sockTxBase', 0, 'lo16'),
-        ('_sockPhys', '_sockPhys', 0, 'lo16'),
         # net_loop.s + pipe.s moved into net.mod 2026-08-11.  Their STATICS
         # stayed in the core bank (syscall.s / fs.s / net_dispatch.s write them
         # directly, and they are how arguments reach the moved bodies --
         # _Net_Dispatch clobbers A, so nothing travels in a register).
-        ('_ttyTable', '_ttyTable', 0, 'lo16'),
-        ('_nSelSleepers', '_nSelSleepers', 0, 'lo16'),
-        ('_loopHandled', '_loopHandled', 0, 'lo16'),
-        ('_loopDstPort', '_loopDstPort', 0, 'lo16'),
-        ('_loopConnOff', '_loopConnOff', 0, 'lo16'),
-        ('_loopLisOff', '_loopLisOff', 0, 'lo16'),
-        ('_loopAccOff', '_loopAccOff', 0, 'lo16'),
-        ('_loopIsRecv', '_loopIsRecv', 0, 'lo16'),
-        ('_loopMsgNb', '_loopMsgNb', 0, 'lo16'),
-        ('_loopRingA', '_loopRingA', 0, 'lo16'),
-        ('_loopRingB', '_loopRingB', 0, 'lo16'),
-        ('_loopScratch', '_loopScratch', 0, 'lo16'),
-        ('_loopBits', '_loopBits', 0, 'lo16'),
-        ('_loopRxLen', '_loopRxLen', 0, 'lo16'),
         # unp.s -- AF_UNIX SOCK_DGRAM.  Statics stay in the core bank for the
         # same reason the loopback ones do, and _unpHdr additionally MUST: it is
         # the source buffer _Pipe_WriteAt copies the record header from, so it
@@ -379,20 +333,7 @@ MANIFESTS = {
         # THE ORDER HERE IS IRRELEVANT but the order in src/kernel/unp.s is not:
         # they are one contiguous block that a blocking recv saves on the task's
         # stack, and _unpBlkEnd anchors its length.
-        ('_unpHandled', '_unpHandled', 0, 'lo16'),
-        ('_unpArgBlk', '_unpArgBlk', 0, 'lo16'),
-        ('_unpDescOff', '_unpDescOff', 0, 'lo16'),
-        ('_unpPeerOff', '_unpPeerOff', 0, 'lo16'),
-        ('_unpRingOff', '_unpRingOff', 0, 'lo16'),
-        ('_unpPayLen', '_unpPayLen', 0, 'lo16'),
-        ('_unpNeed', '_unpNeed', 0, 'lo16'),
-        ('_unpGot', '_unpGot', 0, 'lo16'),
-        ('_unpHdr', '_unpHdr', 0, 'lo16'),
-        ('_unpBlkEnd', '_unpBlkEnd', 0, 'lo16'),
-        ('_unpNameOp', '_unpNameOp', 0, 'lo16'),
-        ('_unpSlot', '_unpSlot', 0, 'lo16'),
         ('_pipeThunkFd', '_pipeThunkFd', 0, 'lo16'),
-        ('_loopThunkSock', '_loopThunkSock', 0, 'lo16'),
         ('_pipeRecOff', '_pipeRecOff', 0, 'lo16'),
         ('_pipeReqLen', '_pipeReqLen', 0, 'lo16'),
         ('_pipeDone', '_pipeDone', 0, 'lo16'),
@@ -403,11 +344,6 @@ MANIFESTS = {
         ('_pipeKUio', '_pipeKUio', 0, 'lo16'),
         ('_sockUio', '_sockUio', 0, 'lo16'),
         ('_sockUioBank', '_sockUioBank', 0, 'lo16'),
-        ('_soHasDst', '_soHasDst', 0, 'lo16'),
-        ('_soBounce', '_soBounce', 0, 'lo16'),
-        ('_unpUio', '_unpUio', 0, 'lo16'),
-        ('_unpUioBank', '_unpUioBank', 0, 'lo16'),
-        ('_unpFrom', '_unpFrom', 0, 'lo16'),
         ('_pipeUioBank', '_pipeUioBank', 0, 'lo16'),
         ('_pipeSeg', '_pipeSeg', 0, 'lo16'),
         ('_netVfsUiomove', '_netVfsUiomove', 0, 'lo16'),
@@ -427,7 +363,6 @@ MANIFESTS = {
         ('_pgNewSz', '_pgNewSz', 0, 'lo16'),
         ('_pgHead', '_pgHead', 0, 'lo16'),
         ('_pgCount', '_pgCount', 0, 'lo16'),
-        ('_w5RxHdrLen', '_w5RxHdrLen', 0, 'lo16'),
     ],
     # ramdisk: the /RAM5 driver, lifted out of the core bank 2026-08-11.  All
     # lo16: the module runs at DBR = kernel bank (Mod_Load JSLs mod_init

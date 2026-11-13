@@ -71,11 +71,9 @@ DPMAP = REPO / "include" / "dpmap.s"
 # apple/fgx#41, this bug class's other historical defect, actually lived.
 #
 # WHICH SELECTORS ARE FORM 2 IS DERIVED, NOT LISTED -- see sleeping_selectors()
-# below.  A hand-written pair (`KSVC_SLEEP|KSVC_SLEEPUN') was the whole list
-# until apple/fgx#458, and it cost a real defect: `_Unp_NameCall' selects
-# KSVC_UNPNAME, whose arm reaches `vrele' in far-bank C, so the sleep was
-# invisible and `net_op_sockteardown' cleared SOCK_InUse on another task's live
-# descriptor (`1d199238d').
+# below.  A hand-written pair (`KSVC_SLEEP|KSVC_SLEEPUN') would miss every KSVC
+# arm that reaches a sleep in far-bank C -- KSVC_UNPNAME reaching `vrele' is
+# the measured case (apple/fgx#458).
 # `kc_sleepi' and `kc_lbolt' -- the tty bank's interruptible sleep and its lbolt
 # wait -- are NOT named here and do not need to be.  Each reaches the scheduler
 # through a far shim it calls by name (`JSL _FarSh_Sleep', `JSL _FarSh_SleepUn'),
@@ -222,8 +220,8 @@ def analyse(path, names, alt):
 
 
 # JMP/JML/BRL are TAIL CALLS and propagate "can sleep" exactly as JSR/JSL do.
-# Omitting them under-reports, which is the dangerous direction: _Net_Xport_Recv
-# reaches the sleeping _Tcp_RecvCore by `JMP`, and was invisible without this.
+# Omitting them under-reports, which is the dangerous direction: a routine
+# that reaches a sleeping callee by `JMP' reads as sleep-free without this.
 #
 # `PEA target-1' IS A CALL -- apple/fgx#459.  It is how fcc calls C: push the
 # return address, push target-1, RTL.  Matching only the jump mnemonics left the
@@ -680,11 +678,11 @@ def block_ranges():
 
     A `<NAME>_LEN EQU *-<base>' line closes a run of `DS' declarations, which
     is how the assembler itself measures the block a save loop copies:
-    `_SOCK_SCRATCH_LEN EQU *-_sockSrcOff' (src/kernel/socket.s:150) covers
-    _sockSrcOff..the cell before it, _sockTmpOff among them.  Read from the
+    `_PIPE_SCRATCH_LEN EQU *-_pipeRecOff' (src/kernel/pipe.s) covers
+    _pipeRecOff..the cell before it, _pipeUio among them.  Read from the
     declarations rather than assumed, so adding a cell to the middle of a block
     extends the credit and moving one out of it withdraws it -- which is the
-    same fact the `ERR' on the next line asserts for _sockAcceptLOff.
+    same fact the `ERR' after it asserts for _pipeChunk.
     """
     global _BLOCKS
     if _BLOCKS is not None:
@@ -733,21 +731,16 @@ def saved_cells(names, alt, where, sleepy):
     with `PEI' either: PEI takes a direct-page operand and module scratch is
     absolute, so the LDA/PHA form below is the only one available to it.
 
-    A BLOCK SAVE IS A SAVE -- `_Sock_PollIntr' does not push its scratch cell
-    by cell, it pushes a declared RANGE with `LDA _sockSrcOff,X / PHA' counting
-    down and pops it back with `PLA / STA _sockSrcOff,X'.  Reading only the
-    cell-by-cell idiom, this pass saw no save at all and reported every caller
-    holding any cell in that block -- `net_op_accept' holding `_sockTmpOff'
-    across the accept being the measured case, where the cell is the fifth
-    member of the range and demonstrably safe (src/kernel/socket.s:120-157,
-    whose own `ERR' asserts _sockAcceptLOff sits OUTSIDE the block).
-    block_ranges() reads the ranges the way the assembler computes them.
+    A BLOCK SAVE IS A SAVE -- `_Pipe_PollIntr' does not push its scratch cell
+    by cell, it pushes a declared RANGE with `LDA _pipeRecOff,X / PHA' counting
+    down and pops it back with `PLA / STA _pipeRecOff,X'.  Reading only the
+    cell-by-cell idiom, this pass would see no save at all and report every
+    caller holding any cell in that block.  block_ranges() reads the ranges the
+    way the assembler computes them.
 
     A SAVE IN A DEEPER CALLEE IS A SAVE, propagated to a fixed point below.
-    This used to stop at the direct callee, which was the safe bias while
-    nothing relied on it; apple/fgx#458 made `_Unp_CloseTry' rely on it, since
-    the sleep is two levels down in `_Unp_NameCall' and that is where the park
-    belongs -- the discipline being that a cell is parked where the sleep is.
+    A cell is parked where the sleep is, so a caller whose sleep is two levels
+    down relies on its callee's park.
     The propagation demands that EVERY sleep point in the caller be protected:
     one unprotected direct sleep, or one sleeping callee that does not save the
     cell, and the caller is reported as before.  That is what keeps
@@ -812,13 +805,10 @@ def saved_cells(names, alt, where, sleepy):
         body = [strip_comment(l) for l in lines[lo:hi]]
         direct_sleep[rname] = any(sleep_re().search(l) for l in body)
         # CALL_RE, NOT RETURNING_CALL_RE: a TAIL call propagates protection just
-        # as it propagates "can sleep".  `_Net_Xport_Accept' reaches the
-        # sleeping `_Tcp_Accept' by `JMP', so its own body has nothing after the
-        # sleep -- but `net_op_accept' JSRs IT and reads afterwards, and the
-        # restore in the tail callee runs before control gets back there.
-        # Leaving tail calls out left _Net_Xport_Accept with no sleeping callee
-        # at all, so it inherited nothing and every caller holding a _sock*
-        # cell across an accept was reported.
+        # as it propagates "can sleep".  A routine that reaches a sleeping
+        # callee by `JMP' has nothing after the sleep in its own body, but its
+        # caller reads afterwards, and the restore in the tail callee runs
+        # before control gets back there.
         cs = set()
         for l in body:
             for t in call_targets(l):
@@ -965,19 +955,6 @@ CALLER_STAGED = ("_fcbPtr", "_libcTmp2")
 RESTAGERS = {
     "_fcbPtr": ("_Fcb_Alloc", "_Fcb_LookupPtr",
                 "_NlKC_FcbAlloc", "_NlKC_FcbLookupPtr"),
-    # `_Unp_LoadArgs' REBUILDS the whole 24-bit pointer -- `_unpArgBlk' into
-    # _libcTmp2 and `_Sys_CallerBank' into _libcTmp2+2 -- so nothing of the
-    # pre-sleep value survives it.  Both of its sources hold across a switch:
-    # _unpArgBlk is inside the block _Unp_SaveBlk parks on the task's kernel
-    # stack, and _Sys_CallerBank is saved per task by the scheduler
-    # (SE_CallerBank, src/kernel/sched.s).  bind and connect call it after a
-    # pipe.s call for exactly this reason: pipe.s builds its own uio pointer
-    # in _libcTmp2.
-    #
-    # THIS DOES NOT SILENCE THE CHECK, which is why it belongs here rather than
-    # in UNOWNED_OK: the window test is which comes FIRST, so moving a read
-    # above the re-stage call puts the site straight back in the report.
-    "_libcTmp2": ("_Unp_LoadArgs",),
 }
 
 

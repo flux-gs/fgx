@@ -252,9 +252,7 @@ _curTask        DS      2                   ; $9E  current PID (swtch: TCB_TaskI
                                             ;      it as a pid (seoff = (pid-1)<<5,
                                             ;      _fsCwdPtr = base + (pid<<7)).
                 DS      $A0-{*}
-_sockTablePtr   DS      3                   ; $A0  long ptr to heap socket-descriptor
-                                            ;      table (soft-global; socket.s)
-                DS      1                   ; $A3  pad
+                DS      4                   ; $A0  free
 
 ;------------------------------------------------------------------------------
 ; $A4-$B9: previously the in-kernel shell's persistent state (_shArgc,

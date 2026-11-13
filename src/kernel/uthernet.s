@@ -146,7 +146,6 @@ _w5SockInUse    DS      1               ; W5100 hw-socket allocator bitmap: bits
                                         ; /dev/bpf0 capture driver.  Zero from the
                                         ; loaded kernel image (inline DS), like
                                         ; _u2_mr / _ifS1Off.
-_tcpNextPort    DS      2               ; TCP: next ephemeral local port (host order)
 
 ;------------------------------------------------------------------------------
 ; _Net_RegPrimary - register the primary interface (u2sN, N = detected slot) in
@@ -509,8 +508,6 @@ _Net_BringUp    MX      %00
                 ; _Sim_InstallGeneric is NOT idempotent, so it must not live in
                 ; _Net_CaptureStart (repeated opens would bloat the SIM registry).
                 JSR     _ArmUthernet2
-                LDA     #49152              ; TCP ephemeral local-port base ($C000)
-                STA     _tcpNextPort
                 ; (The MACRAW capture self-test that used to live here under
                 ;  U2_DIAG=1 moved to bpf.mod with the capture driver in P0.4;
                 ;  exercise capture via the userland `netdump` tool instead.)
@@ -559,12 +556,15 @@ _W5_RunInit     MX      %11
                 BRA     @ri_lp
 @ri_done        RTS
 
-; W5100 fixed-register init: RX/TX mem 2KB/socket, retry 200ms x8.  SHAR (our
+; W5100 fixed-register init: socket 0 has the chip's whole 8 KB of RX and of TX
+; memory, the others none -- socket 0 in MACRAW is the only socket anything
+; opens (the network modules' driver, or bpf's capture without them) -- and
+; retry 200ms x8.  SHAR (our
 ; MAC) is written by _W5_WriteSharFromRec from the ifnet record (derived default
 ; 00:08:DC:F6:00:<slot> + /etc/hwaddr.conf override), so a per-card/per-machine
 ; MAC is possible.
-_w5InitTbl      HEX     001A55                  ; RMSR = 2KB/socket
-                HEX     001B55                  ; TMSR = 2KB/socket
+_w5InitTbl      HEX     001A03                  ; RMSR = 8KB to socket 0
+                HEX     001B03                  ; TMSR = 8KB to socket 0
                 HEX     001707                  ; RTR hi  (retry timeout 0x07D0)
                 HEX     0018D0                  ; RTR lo
                 HEX     001908                  ; RCR = 8 retries

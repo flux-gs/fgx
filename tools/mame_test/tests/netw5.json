@@ -18,6 +18,7 @@
  "expect": {
   "screen_contains": [
    "w5: attached",
+   "rx 8192",
    "bsdnet: ok",
    "bsdnet: w5 received",
    "bsdnet: w5 bad length reopened",

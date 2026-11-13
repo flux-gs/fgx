@@ -1,19 +1,15 @@
 ;==============================================================================
-; net_kso.s - UDP sockets on the kernel's network stack.  PUT by net.s.
+; net_kso.s - sockets on the kernel's network stack.  PUT by net.s.
 ;
-; An AF_INET datagram socket is a 2.11BSD struct socket in the network modules
+; A socket is a 2.11BSD struct socket in the network modules
 ; (bsdnetd and bsdnet0-3).  net.mod keeps the system-call entry for it, and the
 ; FCB is its file: FCB_SockSo holds the socket's offset in bsdnetd's bank, as
-; 2.11BSD's f_data does, with no descriptor in the socket table, so these are
+; 2.11BSD's f_data does, so they are
 ; as many as memory holds.  _Sock_FdToDesc leaves it in _sockTmpSo.  Every op
 ; on such an fd comes here first and goes no further in this module:
 ; _Kso_Do hands the call to bsdnet's bn_sysent with a call block naming the
 ; syscall's registers, and src/kernel/bsdnet/machine/bn_sys.c turns that into
 ; the argument block uipc_syscalls.c's body reads.
-;
-; THE TEST COMES FIRST IN EACH OP, ahead of the AF_UNIX and loopback arms: a
-; kernel socket bound to 127.0.0.1 is the kernel's, and _Loop_BindTry would
-; otherwise claim it for net_loop.s's rings.
 ;
 ; A forward may sleep, and another process may use this module's scratch
 ; meanwhile.  _Kso_Do and _Kso_DoIoctl keep the caller's _sockTmpSo on its own
@@ -39,7 +35,7 @@ _Kso_Is         MX      %00
 ;------------------------------------------------------------------------------
 ; _Kso_Try - the first thing an op does whose fd is _Sys_SavedX.  In: Y = the
 ; BNOP_*.  A kernel socket is forwarded and the OP returns from here (RTL);
-; anything else RTSes with A, X, Y clobbered and _sockTmpOff possibly set.
+; anything else RTSes with A, X, Y clobbered.
 ; JSR'd from the op's first instruction, before it pushes anything.
 ;------------------------------------------------------------------------------
 _Kso_Try        MX      %00
@@ -48,7 +44,6 @@ _Kso_Try        MX      %00
                 AND     #$00FF
                 JSL     SYS_NETKC_SOCKFDTODESC
                 BCC     @kt_no                  ; not a socket: the op says so
-                STY     _sockTmpOff
                 JSR     _Kso_Is
                 BCC     @kt_no
                 PLY

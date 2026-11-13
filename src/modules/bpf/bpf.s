@@ -87,8 +87,9 @@ W5_S0_CR        EQU     $0401           ; socket 0 command
 W5_S0_SR        EQU     $0403           ; socket 0 status
 W5_S0_RXRSR     EQU     $0426           ; socket 0 received-size
 W5_S0_RXRD      EQU     $0428           ; socket 0 RX read pointer (16-bit BE)
-W5_RXBASE       EQU     $6000           ; socket 0 RX buffer base (RMSR=$55)
-W5_RXMASK       EQU     $07FF           ; 2 KB RX ring mask (RMSR=$55)
+W5_RXBASE       EQU     $6000           ; socket 0 RX buffer base (RMSR=$03)
+W5_RXSIZE       EQU     $2000           ; socket 0 has all 8 KB (RMSR=$03)
+W5_RXMASK       EQU     W5_RXSIZE-1     ; its ring mask
 W5_MR_MACRAW    EQU     $44             ; Sn_MR MACRAW + MAC-filter (capture)
 W5_SR_MACRAW    EQU     $42             ; Sn_SR value for an open MACRAW socket
 W5_CR_RECV      EQU     $40             ; Sn_CR RECV (commit RX_RD advance)
@@ -1036,12 +1037,13 @@ _Net_DrainFrame MX      %00
                 LDY     #BPF_Rxrd
                 STA     [_bpfBase],Y
                 AND     #W5_RXMASK      ; phys = RXRD & ring-mask (A still = RXRD)
-                CMP     #$07FF
+                CMP     #W5_RXMASK
                 BEQ     @df_pfxWrap
                 ORA     #W5_RXBASE      ; normal: 2-byte prefix at RXBASE+phys
                 JSR     _W5_Rd16        ; A = framelen (AR now at payload start)
                 BRA     @df_pfxDone
-@df_pfxWrap     LDA     #$67FF          ; straddle: byte0 @ $67FF, byte1 @ $6000
+@df_pfxWrap     LDA     #W5_RXBASE+W5_RXMASK ; straddle: byte0 at the ring's
+                                        ;   last byte, byte1 at its first
                 JSR     _W5_SetAR16
                 SEP     #$20
                 MX      %10
@@ -1089,10 +1091,10 @@ _Net_DrainFrame MX      %00
                 MX      %00
                 INY
                 DEX
-                LDA     _bpfPhysTmp     ; advance ring pos; wrap at $0800
+                LDA     _bpfPhysTmp     ; advance ring pos; wrap at the ring's end
                 CLC
                 ADC     #$0001
-                CMP     #$0800
+                CMP     #W5_RXSIZE
                 BCC     @df_noWrap
                 LDA     #$0000
                 STA     _bpfPhysTmp

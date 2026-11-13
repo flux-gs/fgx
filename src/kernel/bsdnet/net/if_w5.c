@@ -29,6 +29,7 @@
 #define	W5_SHAR		0x0009
 #define	W5_SIPR		0x000F
 #define	W5_SUBR		0x0005
+#define	W5_RMSR		0x001A	/* socket 0's RX size in bits 1-0: 1 KB << n */
 #define	S0_MR		0x0400
 #define	S0_CR		0x0401
 #define	S0_SR		0x0403
@@ -44,7 +45,7 @@
 #define	CR_RECV		0x40
 #define	W5_TXBASE	0x4000
 #define	W5_RXBASE	0x6000
-#define	W5_RINGSIZE	0x0800	/* RMSR and TMSR at $55 */
+#define	W5_RINGSIZE	0x2000	/* all 8 KB each way: RMSR and TMSR at $03 */
 #define	W5_RINGMASK	(W5_RINGSIZE - 1)
 
 #define	W5_MINFRAME	60	/* an Ethernet minimum, without the FCS */
@@ -194,15 +195,21 @@ w5_ringout(off, cp, n)
 static void
 w5_logmac()
 {
-	static char msg[] = "w5: attached, 00:00:00:00:00:00";
+	static char msg[] = "w5: attached, 00:00:00:00:00:00, rx 0000";
 	static char hex[] = "0123456789abcdef";
 	register int i;
 	register char *p = msg + 14;
+	unsigned sz;
 
 	for (i = 0; i < 6; i++, p += 3) {
 		p[0] = hex[(w5_ac.ac_enaddr[i] >> 4) & 15];
 		p[1] = hex[w5_ac.ac_enaddr[i] & 15];
 	}
+	/* socket 0's receive buffer, as the chip has it */
+	sz = 1024 << (w5_rreg(W5_RMSR) & 3);
+	p = msg + sizeof(msg) - 2;
+	for (i = 0; i < 4; i++, sz /= 10)
+		*p-- = '0' + sz % 10;
 	kc_printstr(msg);
 }
 

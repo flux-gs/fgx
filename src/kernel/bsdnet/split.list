@@ -42,9 +42,9 @@ netinet/tcp_usrreq	3
 netinet/udp_usrreq	1
 sys/uipc_domain	0
 sys/uipc_mbuf	0
-sys/uipc_proto	0
+sys/uipc_proto	2
 sys/uipc_socket	0
 sys/uipc_socket2	0
 sys/uipc_syscalls	3
 sys/sys_socket	3
-sys/uipc_usrreq	0
+sys/uipc_usrreq	2

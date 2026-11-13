@@ -532,7 +532,6 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 FIN                             ; segment; cache shares the block too)
                 JSR     _AllocIfTable           ; _ifTablePtr = Kmalloc(128, M_KERN)
                                                 ; before _ProbeUthernet2 registers ifaces
-                JSR     _AllocSockTable         ; _sockTablePtr = Kmalloc(32, M_KERN)
                                                 ; before any socket() syscall
                 JSR     _AllocPipeTable         ; _pipeTablePtr = Kmalloc(NPIPE*16, M_KERN)
                                                 ; before any pipe() syscall
@@ -3682,8 +3681,6 @@ _kfp102         JSL     KFAR_CON_WRITE          ; via VT parser — honours ESC 
                 PUT     ifconfig_sys.s
                 PUT     socket.s
                 PUT     pipe.s
-                PUT     net_loop.s
-                PUT     unp.s
 
                 PUT     ../drivers/dev/dev.s
 

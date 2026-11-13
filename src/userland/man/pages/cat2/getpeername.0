@@ -27,12 +27,8 @@ DESCRIPTION
      because a caller that has to notice a truncated address is a
      caller that will not.
 
-     The peer lives in a different place on each transport, and
-     neither of them is the socket descriptor.  A connection on the
-     Uthernet II carries it in the W5100's Sn_DIPR and Sn_DPORT
-     registers; a 127.0.0.1 connection knows its peer by descriptor
-     and reports the loopback address with the peer's own local
-     port.
+     The peer is the one the kernel's network stack keeps for the
+     connection (in_setpeeraddr for TCP and UDP).
 
 RETURN VALUE
      0 on success.  On failure -1 is returned and errno is set.
@@ -41,9 +37,7 @@ ERRORS
      [EBADF]        s is not a valid descriptor.
      [ENOTSOCK]     s is a file, not a socket.
      [ENOTCONN]     the socket is not connected.  A listening
-                    socket has no peer, and neither does a spent
-                    listener whose hardware socket has moved to an
-                    accepted connection.
+                    socket has no peer.
      [EINVAL]       *namelen is smaller than a sockaddr_in, or
                     namelen is a null pointer.
 

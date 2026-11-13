@@ -1359,9 +1359,8 @@ _Sys_Stub       MX      %00
 _Sys_Shutdown   MX      %00
                 LDA     _Sys_SavedA             ; fd
                 AND     #$00FF
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0 + A=EBADF
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0 + A=EBADF
                 BCC     @shd_err
-                STY     _sockTmpOff
                 LDY     #NETOP_Shutdown
                 JMP     _Net_Dispatch           ; -> net_op_shutdown -> _Net_Xport_Shutdown
 @shd_err        RTS                             ; C=0, A=EBADF from _Sock_FdToDesc
@@ -1760,19 +1759,9 @@ _SelOp_Default  MX      %00
 _SelOp_Socket   REP     #$30
                 MX      %00
                 LDA     _selFd
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0
                 BCC     @cl_sockbad
-                STY     _sockTmpOff
-                LDA     _sockTmpSo              ; a kernel-stack socket: soo_select
-                BNE     @cl_sockhw
-                JSR     _Loop_StatusTry         ; loopback answers from its rings
-                LDA     _loopHandled
-                BEQ     @cl_sockhw
-                LDA     _loopBits
-                AND     #$0007
-                SEC
-                RTS
-@cl_sockhw      LDY     #NETOP_SockStatus
+                LDY     #NETOP_SockStatus       ; soo_select, in net.mod
                 JSR     _NetThunkExec           ; A = ready bits, C=1 / C=0 ENOSYS
                 BCC     @cl_sockbad
                 AND     #$0007
@@ -3584,12 +3573,10 @@ _WrOp_Socket      ; FCB_FL_SOCKET fd: write == sorw(fp, uio) == sosend(so, 0, ui
                 ; 2.11BSD sys_generic.c:529 -- no address, no flags, and the
                 ; transport is the socket's to choose, which net.mod does.
                 LDA     _Sys_WrFd
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0
                 BCC     @sw_sockErr
-                STY     _sockTmpOff
                 JSR     _Sys_UUio               ; _libcTmp2 = &u.u_ttyuio
                 JSR     _Sock_StageUio
-                STZ     _sockSendFlags
                 LDY     #NETOP_SoWrite
                 JMP     _Net_Dispatch
 @sw_sockErr     MX      %00
@@ -3606,8 +3593,6 @@ _Sock_StageUio  MX      %00
                 LDA     _libcTmp2+2
                 AND     #$00FF
                 STA     _sockUioBank
-                STZ     _sockSrcOff             ; read/write name no address
-                STZ     _soHasDst
                 RTS
 
 _WrOp_Pipe        ; FCB_FL_PIPE fd: write == pipe_rw(fp, uio) with UIO_WRITE.
@@ -3901,12 +3886,8 @@ _IoOp_Notty       LDA     #ENOTTY
                 RTS
 
 ;------------------------------------------------------------------------------
-; _IoOp_Socket - socket ioctls (FCB_FL_SOCKET fd).  Resolves the descriptor, then:
-;   FIONBIO    *arg != 0 -> set SOCK_NB (non-blocking), else clear
-;   FIONREAD   *arg <- RX bytes available (NETOP_SockStatus stashes -> _sockRxLen)
-;   SIOCATMARK *arg <- 0 (W5100 exposes no TCP urgent)
-;   SIOCGIF*   the 'i' group, net.mod's net_op_ifioctl (2.11BSD ifioctl)
-; All return C=1 + A=0, or C=0 + A=EBADF/ENOTTY.  MX %00 entry.
+; _IoOp_Socket - an ioctl on a socket fd: the socket's soo_ioctl, through
+; net.mod's net_op_ifioctl.  C=1 + A=0, or C=0 + A=errno.  MX %00 entry.
 ;------------------------------------------------------------------------------
 _IoOp_Socket        SEP     #$20
                 MX      %10
@@ -3914,112 +3895,11 @@ _IoOp_Socket        SEP     #$20
                 REP     #$30
                 MX      %00
                 AND     #$00FF
-                JSR     _Sock_FdToDesc          ; C=1 Y=desc + _sockTmpHw / C=0
-                BCS     @sis_desc
-                LDA     #EBADF
-                CLC
-                RTS
-@sis_desc       STY     _sockTmpOff
-                LDA     _sockTmpSo              ; a kernel-stack socket: all of
-                BNE     @sis_if                 ;   them to soo_ioctl, in net.mod
-                LDA     _Sys_IoctlCmd
-                AND     #$FF00
-                CMP     #SIOC_IF_GROUP          ; SIOCGIF*: net.mod's ifioctl
-                BNE     @sis_notif
-@sis_if         LDY     #NETOP_IfIoctl
-                JMP     _NetThunkExec
-@sis_notif      LDA     _Sys_IoctlCmd
-                CMP     #FIONBIO
-                BEQ     @sis_nbio
-                CMP     #FIONREAD
-                BEQ     @sis_nread
-                CMP     #SIOCATMARK
-                BEQ     @sis_atmark
-                LDA     #ENOTTY
-                CLC
-                RTS
-@sis_nbio       LDA     _Sys_IoctlArgLo         ; *arg on/off
-                STA     _libcTmp2
-                SEP     #$20
-                MX      %10
-                LDA     _Sys_IoctlArgBank
-                STA     _libcTmp2+2
-                REP     #$20
-                MX      %00
-                LDA     [_libcTmp2]
-                BEQ     @sis_nbclr
-                LDA     _sockTmpOff             ; set SOCK_NB
-                CLC
-                ADC     #SOCK_Flags
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     [_sockTablePtr],Y
-                ORA     #SOCK_NB
-                STA     [_sockTablePtr],Y
-                REP     #$30
-                MX      %00
-                LDA     #0
-                SEC
-                RTS
-@sis_nbclr      LDA     _sockTmpOff             ; clear SOCK_NB
-                CLC
-                ADC     #SOCK_Flags
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     [_sockTablePtr],Y
-                AND     #$FF-SOCK_NB
-                STA     [_sockTablePtr],Y
-                REP     #$30
-                MX      %00
-                LDA     #0
-                SEC
-                RTS
-@sis_nread      ; LOOPBACK FIRST, exactly as _Sel_Classify does -- and this
-                ; arm is why apple/fgx#97 was a live defect rather than a
-                ; latent one.  A loopback descriptor has NO W5100 socket
-                ; behind it (SOCK_HwIdx is the sentinel SOCK_HW_LOOP), so
-                ; asking the chip for socket $FE's RX_RSR reads open bus on a
-                ; machine with no card.  #97's own write-up reasoned that
-                ; loopback fds never reach SockStatus because _Sel_Classify
-                ; pre-checks; that is true of select(2) and was never true
-                ; here.  The bytes live in the Rx ring, and _Loop_StatusTry
-                ; already walks it for the readable bit, so it now leaves the
-                ; resident count in _loopRxLen on the way past.
-                JSR     _Loop_StatusTry
-                LDA     _loopHandled
-                BEQ     @sisn_hw
-                LDA     _loopRxLen              ; ONE tail below, one source of
-                STA     _sockRxLen              ;   the count: a second copy of
-                BRA     @sisn_arg               ;   the store is a second answer
-@sisn_hw        LDY     #NETOP_SockStatus       ; populates _sockRxLen (RX_RSR)
-                JSR     _NetThunkExec
-@sisn_arg       LDA     _Sys_IoctlArgLo
-                STA     _libcTmp2
-                SEP     #$20
-                MX      %10
-                LDA     _Sys_IoctlArgBank
-                STA     _libcTmp2+2
-                REP     #$20
-                MX      %00
-                LDA     _sockRxLen
-                STA     [_libcTmp2]             ; *arg = bytes available
-                LDA     #0
-                SEC
-                RTS
-@sis_atmark     LDA     _Sys_IoctlArgLo
-                STA     _libcTmp2
-                SEP     #$20
-                MX      %10
-                LDA     _Sys_IoctlArgBank
-                STA     _libcTmp2+2
-                REP     #$20
-                MX      %00
-                LDA     #0
-                STA     [_libcTmp2]             ; *arg = 0 (no OOB mark)
-                SEC
-                RTS
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0 + EBADF
+                BCC     @sis_bad
+                LDY     #NETOP_IfIoctl          ; every one is soo_ioctl's, in
+                JMP     _NetThunkExec           ;   net.mod
+@sis_bad        RTS
 
 _Io_CdThenTty   ENT
                 MX      %00
@@ -4857,12 +4737,10 @@ _RdOp_Pipe        ; FCB_FL_PIPE fd: read == pipe_rw(fp, uio) with UIO_READ.
                 JMP     _Pipe_Read              ; -> A=bytes(0=EOF)/C
 _RdOp_Socket      ; FCB_FL_SOCKET fd: read == sorw(fp, uio) == soreceive(so, 0, uio, 0).
                 LDA     _Sys_RdFd
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0
                 BCC     @rd_sockErr
-                STY     _sockTmpOff
                 JSR     _Sys_UUio               ; _libcTmp2 = &u.u_ttyuio
                 JSR     _Sock_StageUio
-                STZ     _sockRecvFlags          ; the transports honour SOCK_NB
                 LDY     #NETOP_SoRead
                 JMP     _Net_Dispatch
 @rd_sockErr     MX      %00

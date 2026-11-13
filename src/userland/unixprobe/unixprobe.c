@@ -9,20 +9,12 @@
  * second program, no host-side helper and no network, so it runs under MAME as
  * an ordinary fixture.
  *
- * WHY IT PROVES SOMETHING.  A descriptor is serviced by the AF_UNIX transport
- * only when SOCK_Proto carries XPORT_UNIX, and socket() sets that from the
- * DOMAIN argument alone.  So reaching a successful socket() at all means the
- * new arm ran.  And because the AF_UNIX arm never calls _W5_SockAlloc, three
- * consecutive AF_UNIX sockets must ALL succeed on a machine with three usable
- * hardware sockets -- which is what separates "AF_UNIX works" from "AF_UNIX
- * quietly borrowed the W5100".
+ * The sockets are 2.11BSD's uipc_usrreq.c on the kernel's network stack.
  *
  * IT CARRIES THE NEGATIVE ASSERTIONS, and that is the point rather than an
  * extra.  A kernel that answered every socket() with a descriptor would pass a
- * positive-only probe.  SOCK_STREAM must be REFUSED with EPROTOTYPE: upstream's
- * SOCK_STREAM AF_UNIX is what pipe(2) is built from, this kernel has real
- * pipes, and the design scopes it out -- so a silent success there would hand a
- * caller a descriptor with no transport behind it.
+ * positive-only probe, so a type the unix domain has no protocol for must be
+ * REFUSED, EPROTONOSUPPORT, before anything else is believed.
  *
  * THE BUFFERS ARE MOSTLY static AND ONE ARM'S ARE NOT.  A socket call's buffer
  * carries its own bank (apple/fgx#480), so a stack local works; the stack-bank
@@ -573,8 +565,8 @@ char **argv;
         /* NON-BLOCKING MUST BE HONOURED, or a select-driven reader -- which is
          * what syslogd is -- blocks in the kernel with no way out.  Both the
          * DESCRIPTOR's flag and the
-         * CALL's flag must work; net_loop.s honours both and its comment names
-         * apple/fgx#441 as the defect from honouring only one. */
+         * CALL's flag must work; apple/fgx#441 was the defect from honouring
+         * only one. */
         {
             int one = 1;
 
