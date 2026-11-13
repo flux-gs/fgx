@@ -101,3 +101,29 @@ are there too, if you want to compare them with S2's run.
 4. netdump's `[saturated]` count, roughly.
 5. If you ran step 7: N, and any `BROKEN`.
 6. Anything else odd.
+
+## Results (2026-11-10 to 2026-11-12)
+
+A ROM 03 IIgs with a TransWarp at 15.4 MHz, booting from a MicroDrive Turbo, with an
+Uthernet II in slot 1.
+
+| Step | Result |
+|---|---|
+| 1. Boot | lease 192.168.1.137 through the stack, from 0.0.0.0 |
+| 2. NTP | a `*` peer, Reach 077, once the IIgs's clock was within 1000 s of true (ntpd's `WAYTOOBIG`); `ntpdc`'s offset is 32-bit milliseconds and wraps past 24.8 days |
+| 3. syslog -u | lines from the Mac arrived, 4-10 s after `nc` |
+| 4. Ping from another subnet | answered |
+| 5. ftp | 1048576 bytes at 9.9 KB/s; `sum` not compared |
+| 6. netdump | 95 `[saturated]` in 300 packets, on a LAN with mDNS, LLMNR and 802.1Q traffic |
+| 7. Transmit wait | not run |
+
+Two hard freezes (no keys, no disk or CPU activity) came during the first sessions,
+each after the network steps and a long idle, and one reboot after a freeze then
+stalled in fsck before any network module loaded.  The card's file system checked
+consistent, not marked clean, last written about 30 s before the freeze.  None
+reproduced afterward: not under MAME (45 minutes of flood and idle, the card in slot
+4, unsolicited syslog datagrams), not on the hardware with an image that colored the
+border by kernel path, and not on the hardware with this image again, through the
+same steps and a night's idle.  The machine has had marginal-hardware hangs before,
+and the fsck stall happened with no network code running; the freezes are recorded
+here unexplained.
