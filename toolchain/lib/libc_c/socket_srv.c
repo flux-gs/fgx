@@ -24,11 +24,10 @@ extern int _sock_argblk[];
  * (the retired asm shims read absolute slots of the full frame, so they
  * tolerated it).  Every socket shim therefore declares the caller's FULL arity
  * and ignores what the kernel doesn't take. */
-int bind(int fd, char *addr, int addrlen)
+int bind(int fd, char *addr, int addrlen)       /* addrlen in Y, as connect */
 {
-    (void)addrlen;
     unsigned long lp = (unsigned long)addr;
-    int r = (int)__syscall_db(72, (unsigned)(lp >> 16), (unsigned)lp, fd, 0);
+    int r = (int)__syscall_db(72, (unsigned)(lp >> 16), (unsigned)lp, fd, addrlen);
     if (__syscall_c() == 0) { errno = r; return -1; }
     return 0;
 }
@@ -116,10 +115,12 @@ int getsockname(int fd, char *name, int *namelen)
 int sendto(int s, char *buf, int len, int flags, char *to, int tolen)
 {
     /* argblk words 4..5 = dst IP, 6 = port (net order) -- composed as word
-     * stores from the sockaddr_in's fields (SIN_PORT @2, SIN_ADDR @4) */
+     * stores from the sockaddr_in's fields (SIN_PORT @2, SIN_ADDR @4) -- and
+     * words 7..9 the sockaddr itself, its offset, bank and length, which the
+     * kernel stack's sendto copies whole, as an AF_UNIX name needs */
     int r;
     unsigned long lp = (unsigned long)buf;
-    (void)tolen;
+    unsigned long tp = (unsigned long)to;
     _sock_argblk[0] = (int)lp;
     _sock_argblk[1] = len;
     _sock_argblk[2] = flags;
@@ -127,6 +128,9 @@ int sendto(int s, char *buf, int len, int flags, char *to, int tolen)
     _sock_argblk[4] = ((to[4] & 0xFF) | ((to[5] & 0xFF) << 8));
     _sock_argblk[5] = ((to[6] & 0xFF) | ((to[7] & 0xFF) << 8));
     _sock_argblk[6] = ((to[2] & 0xFF) | ((to[3] & 0xFF) << 8));
+    _sock_argblk[7] = (int)tp;
+    _sock_argblk[8] = (int)(tp >> 16);
+    _sock_argblk[9] = tolen;
     r = (int)__syscall(73, (unsigned)(unsigned long)&_sock_argblk[0], s, 0);
     if (__syscall_c() == 0) { errno = r; return -1; }
     return r;

@@ -41,11 +41,11 @@ int socket(int domain, int type, int proto)
  * records: every socket shim declares the caller's FULL BSD arity, because fcc
  * anchors the callee's params such that extra trailing caller args shift the
  * binding. */
-int connect(int fd, char *addr, int addrlen)
+int connect(int fd, char *addr, int addrlen)   /* addrlen in Y: an AF_UNIX
+                                                 * name is longer than 16 */
 {
-    (void)addrlen;
     unsigned long lp = (unsigned long)addr;
-    int r = (int)__syscall_db(76, (unsigned)(lp >> 16), (unsigned)lp, fd, 0);
+    int r = (int)__syscall_db(76, (unsigned)(lp >> 16), (unsigned)lp, fd, addrlen);
     if (__syscall_c() == 0) { errno = r; return -1; }
     return 0;
 }
