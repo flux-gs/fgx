@@ -406,16 +406,13 @@ struct vattr {
 #define UNP_OP_BIND     1
 #define UNP_OP_LOOKUP   2
 
-/* HOW MANY BOUND SOCKETS CAN HOLD A VNODE AT ONCE -- SOCKD_MAX in
- * include/socket.s, and the two must agree for the same reason the opcodes
- * above do.  A mismatch cannot corrupt anything: unp_nameop range-checks the
- * slot and answers EINVAL, so a descriptor table grown past this refuses to
- * bind its high slots rather than writing off the end.
+/* HOW MANY BOUND SOCKETS CAN HOLD A VNODE AT ONCE.  A bound socket is an open
+ * file, so the file table bounds them first.
  *
- * It is a table HERE and not a field in net.mod's socket record because a
- * vnode pointer can only be named by the bank that holds vnodes.  This IS
- * Reno's per-unpcb `unp_vnode' (kern/uipc_usrreq.c): one vnode per bound
- * socket, held for the socket's life and released when it closes. */
-#define UNP_NVNODE      12
+ * It is a table HERE and not a field in the socket's unpcb because a vnode
+ * pointer can only be named by the bank that holds vnodes.  This IS Reno's
+ * per-unpcb `unp_vnode' (kern/uipc_usrreq.c): one vnode per bound socket, held
+ * for the socket's life and released when it closes. */
+#define UNP_NVNODE      NFILE
 
 #endif /* _VNODE_H_ */

@@ -1012,9 +1012,9 @@ _ktp105         JSL     KTTY_TOD_NOW
                 ; and read the table out of fcc's register file.
                 ; --- KSVC_UNPNAME: an AF_UNIX socket's NAME ---
                 ;
-                ; A = the sockaddr's offset in the CALLER's bank.  _unpNameOp says
-                ; bind or lookup; _unpSlot carries the descriptor slot, in for a
-                ; bind and out for a lookup.
+                ; A = the path's offset and Y its bank.  _unpNameOp says bind,
+                ; lookup or unbind; _unpSlot carries the socket, in for a bind or
+                ; an unbind and out for a lookup.
                 ;
                 ; THE PATH IS COPIED FIRST, and the carry off that copy must be
                 ; tested -- _Sys_CopyPathToBuf reports C=1 for a path over
@@ -1050,7 +1050,6 @@ _ktp105         JSL     KTTY_TOD_NOW
                 ; _Sys_PathBlkArg returns through.
                 SEP     #$30
                 MX      %11
-                LDY     _Sys_CallerBank
                 STY     _Sys_PathBank           ; the copy's source bank
                 REP     #$30
                 MX      %00

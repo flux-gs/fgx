@@ -607,12 +607,14 @@ KSVC_CONBACKEND         EQU     53  ; A = table offset, Y = table bank: the
                                     ;   module's console renderer, five 3-byte
                                     ;   entries (src/kernel/far/console/
                                     ;   console_backend.s).  C=1.
-KSVC_UNPNAME            EQU     54  ; an AF_UNIX socket's NAME, bound or looked
-                                    ; up.  A = the sockaddr's offset in the
-                                    ; caller's bank; _unpNameOp holds UNP_OP_BIND
-                                    ; or UNP_OP_LOOKUP and _unpSlot carries the
-                                    ; descriptor slot -- in for a bind, out for a
-                                    ; lookup.  -> C=1, or C=0 + A = errno.
+KSVC_UNPNAME            EQU     54  ; an AF_UNIX socket's NAME, bound, looked up
+                                    ; or released.  A = the path's offset, Y its
+                                    ; bank; _unpNameOp holds UNP_OP_BIND,
+                                    ; UNP_OP_LOOKUP or UNP_OP_UNBIND and _unpSlot
+                                    ; carries the socket, its offset in the
+                                    ; network modules' data bank -- in for a bind
+                                    ; or an unbind, out for a lookup.  -> C=1, or
+                                    ; C=0 + A = errno.
                                     ;
                                     ; IT IS ONE SERVICE AND NOT TWO because bind
                                     ; and lookup differ only in the walk they ask
