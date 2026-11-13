@@ -444,8 +444,8 @@ beside the stack.
     (`bn_sys.c`); a third process sharing the socket can get EAGAIN while the call
     sleeps in `sblock`.  2.11BSD has no per-call flag: make it per call, or state the
     divergence in PROVENANCE.
-  - `bn_sysent` (`net_asm.s`) does not set `_fcc_stkfloor` as `netintr_enter` does, so
-    the stack guard on a process's socket call may be inert.  Unverified.
+  - DONE in S4 (`f14ee1c`): `bn_sysent` sets `_fcc_stkfloor` to the running task's
+    slot base, as `netintr_enter` sets its own; `netkstkovf` proves the halt.
   - The kernel's `printf` prints a format string without its arguments, so the
     stack's console messages read `%s: %s`.
   - `boot_netstart.json`'s description is out of date.
