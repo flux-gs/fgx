@@ -273,8 +273,8 @@ static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_na
     qlen = off;
 
     for (n = 0; n < 16; n++) sa[n] = 0;
-    sa[1] = AF_INET;                                     /* family; sendto reads
-                                                          * only port@2 + addr@4 */
+    sa[0] = AF_INET;                                     /* sin_family, a short:
+                                                          * low byte first */
     sa[2] = 0; sa[3] = 53;                               /* :53 network order */
     sa[4]=ns[0]; sa[5]=ns[1]; sa[6]=ns[2]; sa[7]=ns[3];
 
