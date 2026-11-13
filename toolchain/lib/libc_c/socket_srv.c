@@ -16,6 +16,8 @@
  * buffer's bank rides beside its offset, as socket.c's header describes. */
 extern int _sock_argblk[];
 
+#define _SIN_SIZE 16                       /* SIN_SIZE, include/socket.s */
+
 /* T5-C arity regression class (dhclient "bind :68 failed"): callers use the
  * full BSD prototypes (socket_h.h) -- bind(s,addr,addrlen) etc.  fcc anchors
  * the callee's params such that EXTRA trailing caller args shift the binding
@@ -31,17 +33,34 @@ int bind(int fd, char *addr, int addrlen)
     return 0;
 }
 
-int listen(int fd)                            /* SYS_LISTEN=84: 0 / -1 */
+int listen(int fd, int backlog)               /* SYS_LISTEN=84: 0 / -1 */
 {
-    int r = (int)__syscall(84, fd, 0, 0);
+    int r = (int)__syscall(84, fd, backlog, 0);
     if (__syscall_c() == 0) { errno = r; return -1; }
     return 0;
 }
 
-int accept(int fd)                            /* SYS_ACCEPT=85: connfd / -1 */
+int getpeername(int fd, char *name, int *namelen);
+
+/* accept(2) -- SYS_ACCEPT=85: the new descriptor / -1.  The kernel takes the
+ * listener alone; the peer's name, when the caller asks for one, is the new
+ * socket's getpeername, cut to *addrlen as 2.11BSD's accept() cuts it. */
+int accept(int fd, char *addr, int *addrlen)
 {
-    int r = (int)__syscall(85, fd, 0, 0);
+    char peer[_SIN_SIZE];
+    int r, n, len;
+
+    r = (int)__syscall(85, fd, 0, 0);
     if (__syscall_c() == 0) { errno = r; return -1; }
+    if (addr != 0 && addrlen != 0) {
+        len = sizeof(peer);
+        if (getpeername(r, peer, &len) == 0) {
+            if (*addrlen > len)
+                *addrlen = len;
+            for (n = 0; n < *addrlen; n++)
+                addr[n] = peer[n];
+        }
+    }
     return r;
 }
 
@@ -69,7 +88,6 @@ int shutdown(int fd, int how)
  * "a declaration reads as shipped" shape.  telnetd(8) is the customer: upstream
  * is an inetd child whose first act is getpeername(0,...) to learn the peer for
  * login's -h. */
-#define _SIN_SIZE 16                       /* SIN_SIZE, include/socket.s */
 
 int getpeername(int fd, char *name, int *namelen)
 {
