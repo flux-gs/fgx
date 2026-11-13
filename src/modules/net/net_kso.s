@@ -14,8 +14,10 @@
 ; kernel socket bound to 127.0.0.1 is the kernel's, and _Loop_BindTry would
 ; otherwise claim it for net_loop.s's rings.
 ;
-; Nothing in this module's scratch is read after a forward returns, because the
-; forward may have slept and another process may have used the scratch.
+; A forward may sleep, and another process may use this module's scratch
+; meanwhile.  _Kso_Do and _Kso_DoIoctl keep the caller's _sockTmpOff on its own
+; stack and put it back before they return; nothing else in the scratch is read
+; after a forward returns.
 ;==============================================================================
 
 BN_SYS_OFF      EQU     22              ; bsdnetd: bn_sys, the cell after bn_tap
@@ -111,6 +113,8 @@ _Kso_Refuse     MX      %00
 ; It is pushed last field first, so it reads upward.
 ;------------------------------------------------------------------------------
 _Kso_Do         MX      %00
+                LDA     _sockTmpOff             ; this caller's, across a sleep
+                PHA
                 PHY
                 LDA     _sockTmpOff
                 CLC
@@ -148,11 +152,15 @@ _Kso_Do         MX      %00
                 PLY
                 PLY
                 PLY
+                PLY                             ; _sockTmpOff; STY keeps C
+                STY     _sockTmpOff
                 RTS
 
 ; _Kso_DoIoctl - the 'i' group: the command in X, the ifreq's far pointer in Y
 ; and bank.  In: _sockTmpOff.  Out as _Kso_Do.
 _Kso_DoIoctl    MX      %00
+                LDA     _sockTmpOff             ; this caller's, across a sleep
+                PHA
                 PEA     0                       ; +16 nb
                 PEA     0                       ; +14
                 PEA     0                       ; +12
@@ -176,6 +184,8 @@ _Kso_DoIoctl    MX      %00
                 PLY
                 PLY
                 PLY
+                PLY
+                STY     _sockTmpOff
                 RTS
 
 ; _Kso_IfChanged - tell the kernel's stack the interface's address changed
