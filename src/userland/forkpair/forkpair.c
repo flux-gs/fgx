@@ -9,7 +9,9 @@
  *   hwm     ps's heap high-water mark for a parked member is its own:
  *                                                            FP HWM ok
  *   lim     the break stops at the HEAP_LIM cell ($FFF8, include/kernel.s),
- *           and an exec'd program starts with the cell at its seed:
+ *           and an exec'd program starts with the cell at its seed: the
+ *           loader's $FFF8, lowered by the binder to the lowest library
+ *           core (ld_bind.c) and by libc_init to its blocks:
  *                                                            FP LIM ok
  *   irq     a fork child and a vfork child each resume in user mode with
  *           interrupts enabled, as any syscall returns:     FP IRQ ok
@@ -18,6 +20,7 @@
  * looks for it.  Every mode prints FP ... FAIL on a wrong answer. */
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <fgx.h>
 
@@ -106,14 +109,19 @@ main(int argc, char **argv)
     if (h == (char *)-1) { printf("FP FAIL sbrk\n"); return 1; }
 
     if (strcmp(m, "limcell") == 0)
-        return *limp(h) == 0xFFF8 ? 0 : 4;
+        return argc > 2 && *limp(h) == (unsigned)atol(argv[2]) ? 0 : 4;
     if (strcmp(m, "lim") == 0) {
-        unsigned *lp;
-        char *r;
+        unsigned *lp, seed;
+        char *r, sbuf[8];
         int i;
 
         lp = limp(h);
-        if (*lp != 0xFFF8) { printf("FP LIM FAIL seed %x\n", *lp); return 1; }
+        seed = *lp;
+        if (seed > 0xFFF8 || seed < (unsigned)(long)sbrk(0)) {
+            printf("FP LIM FAIL seed %x\n", seed);
+            return 1;
+        }
+        sprintf(sbuf, "%u", seed);
         *lp = 0xE000;
         if (brk(at(h, 0xDF00)) != 0) { printf("FP LIM FAIL park\n"); return 1; }
         if (brk(at(h, 0xE000)) != 0) { printf("FP LIM FAIL reach\n"); return 1; }
@@ -189,7 +197,7 @@ main(int argc, char **argv)
         if (brk(h + 64) != 0) { printf("FP LIM FAIL unpark2\n"); return 1; }
         pid = fork();
         if (pid == 0) {
-            execl("/testbin/forkpair", "forkpair", "limcell", (char *)0);
+            execl("/testbin/forkpair", "forkpair", "limcell", sbuf, (char *)0);
             _exit(6);
         }
         wait(&st);
