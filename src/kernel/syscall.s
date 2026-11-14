@@ -1077,7 +1077,7 @@ _Syscall_Table  DA      _Sys_Stub               ; 0:  unused
                 DA      _Sys_GetfsStat          ; 67: SYS_GETFSSTAT (df volume info)
                 DA      _Sys_MmAlloc            ; 68: SYS_MM_ALLOC (large MM alloc)
                 DA      _Sys_MmFree             ; 69: SYS_MM_FREE
-                DA      _Sys_Ifconfig           ; 70: SYS_IFCONFIG (net iface table)
+                DA      _Sys_Stub               ; 70: retired (SYS_IFCONFIG); ifconfig(8) uses ioctls
                 DA      _Sys_Socket             ; 71: SYS_SOCKET
                 DA      _Sys_Bind               ; 72: SYS_BIND
                 DA      _Sys_Sendto             ; 73: SYS_SENDTO

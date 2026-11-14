@@ -169,27 +169,6 @@ int listdir(char *path, char *buf, int size)   /* SYS_LISTDIR=49 */
     return r;                             /* bytes/records written */
 }
 
-/* ---- interface control (libc-breakup task 3) ------------------------------
- * ifctl is FGX's own device call (SYS_IFCONFIG=70) -- an FGX ifnet table
- * lookup/store, not a BSD libc entry point (2.11BSD's ifconfig(8) talks
- * straight to ioctl(2); there is no library-level wrapper to match).
- * Moved out of libc_c/sockopt.c, where it landed next to setsockopt during
- * the T5-C conversion.
- *
- * Param order MUST match the callers' prototype `ifctl(op, ifr)`
- * (dhclient, ifconfig).  The T5-C conversion transcribed the retired asm
- * shim's STACK slots (ifr shallow, op deep) as `(ifr, op)` -- reversed at
- * the C level -- and the live-DHCP gate (needs vmnet) wasn't run on that
- * train: every interface lookup got a garbage record pointer ("no network
- * interface", 2026-07-11 regression). */
-int ifctl(int op, char *ifr)
-{
-    unsigned long lp = (unsigned long)ifr;
-    int r = (int)__syscall_db(70, (unsigned)(lp >> 16), (unsigned)lp, op, 0);
-    if (__syscall_c() == 0) { errno = r; return -1; }
-    return 0;
-}
-
 /* ---- spawn family (C4 batch 8) -------------------------------------------
  * SYS_POSIX_SPAWN reads path/argv/envp through the SINGLE caller bank
  * (T6 wart), so the path is staged into the data-bank scratch buffer

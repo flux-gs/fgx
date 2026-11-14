@@ -124,7 +124,6 @@ prepends `[srcIP(4) len(2)]`, TCP is a raw byte stream with no header.
 
 | # | Syscall | Notes |
 |---|---------|-------|
-| 70 | `SYS_IFCONFIG` | interface get/set (see below) |
 | 71 | `SYS_SOCKET` | `A=domain X=type Y=proto → fd` |
 | 72 | `SYS_BIND` | `bind(fd, sockaddr_in*, len)` (UDP/ICMP; TCP server) |
 | 73 | `SYS_SENDTO` | `sendto(fd, argblk*)` |
@@ -215,36 +214,29 @@ blocked socket task.
 
 ## Interface configuration
 
-An interface is an **ifnet record** (`include/ifnet.s`, Kmalloc'd `_ifTablePtr`,
-`IF_MAX = 4`): name (`u2sN`), slot, MAC (→ the W5100 SHAR), flags
-(`IFF_LINK_UP`/`IFF_IP_CONF`/`IFF_DHCP`), IP, netmask, broadcast, gateway. The
-detected card is registered as **`u2sN`**, N = its slot, at probe
-(`_Net_RegPrimary`); on the usual slot-1 card that is `u2s1`. The MAC defaults to
-`00:08:DC:F6:00:<slot>`, overridable per slot via `/etc/hwaddr.conf`.
+The card is the interface **`wz0`**: 2.11BSD's `struct ifnet`, attached by the
+W5100 driver (`src/kernel/bsdnet/net/if_w5.c`). Its link-level address comes
+from the chip's SHAR, which the kernel writes at the card's probe
+(`src/kernel/hwaddr.s`): `00:08:DC:F6:00:<slot>` by default, overridable per
+slot via `/etc/hwaddr.conf`. The loopback interface is `lo0`.
 
-`SYS_IFCONFIG` (#70) takes an `ifreq` pointer + an op:
-
-| Op | Meaning |
-|----|---------|
-| `IFC_GETN` | look up by index → fill the record (or `ENOENT`) |
-| `IFC_GET`  | look up by name → fill the record |
-| `IFC_SET`  | set ip/netmask/broadcast/gateway + `IFF_IP_CONF` |
-| `IFC_SETMAC` | reserved (defined in `include/ifnet.s`, not used by the tools) |
-| `IFC_SETDHCP` | as `IFC_SET`, and also marks the address DHCP-leased (`IFF_DHCP`); plain `IFC_SET` clears that bit |
-
-Setting the address on the primary interface also pushes **GAR/SUBR/SIPR** to the W5100 (so the
-chip can ARP for and accept unicast at the configured IP). `/etc/netstart`,
-sourced by `/etc/rc` — which `init` runs to completion **before** the login
-shell appears — runs `dhclient` and sets `INET` for the network daemons; a
-static-address template (`ifconfig u2s1 inet ...`, `route add default ...`) is
+Interfaces and routes are configured as in 2.11BSD, through socket ioctls:
+`SIOCGIFCONF` lists the interfaces (each with an `AF_LINK` entry carrying the
+Ethernet address), `SIOCSIFADDR`/`SIOCSIFNETMASK`/`SIOCSIFBRDADDR`/`SIOCSIFFLAGS`
+set them (`ifioctl`), and `SIOCADDRT`/`SIOCDELRT` edit the routing table
+(`rtioctl`). `ifconfig(8)` and `route(8)` are 2.11BSD's. `/etc/netstart`,
+sourced by `/etc/rc` -- which `init` runs to completion **before** the login
+shell appears -- runs `dhclient` and sets `INET` for the network daemons; a
+static-address template (`ifconfig wz0 inet ...`, `route add default ... 1`) is
 commented out there.
 
 ## DHCP (userland)
 
-DHCP is a **userland** program (`src/userland/dhclient`), not kernel code. It reads the interface's MAC via
-`ifctl(IFC_GET)`, runs the lease protocol over a UDP socket (broadcast to
-`255.255.255.255:67` from `:68`), and writes the result back with
-`ifctl(IFC_SETDHCP)`, which is `IFC_SET` plus the `IFF_DHCP` flag:
+DHCP is a **userland** program (`src/userland/dhclient`), not kernel code. It finds the Ethernet interface and its
+MAC through `SIOCGIFCONF`, runs the lease protocol over a UDP socket (broadcast to
+`255.255.255.255:67` from `:68`), and installs the result with the same ioctls
+`ifconfig` and `route` use (`SIOCSIFADDR`, `SIOCSIFNETMASK`, `SIOCADDRT` for the
+default route):
 
 - **INIT-REBOOT** — if `/etc/dhcp.lease` exists, re-REQUEST that exact IP; on ACK,
   reuse it.
@@ -277,8 +269,8 @@ ICMP/UDP/TCP, and prints a tcpdump-style line per frame.
 |------|--------------|-----------|
 | `nc` | minimal netcat TCP client (`-g` sends `GET / HTTP/1.0`); a host name is resolved through `gethostbyname` | socket/connect/send/recv, read/write |
 | `ping` | ICMP echo; software-checksums, verifies id/seq + payload; min/avg/max | socket(RAW)/sendto/recvfrom |
-| `dhclient` | DHCP client (above) | socket/bind/sendto/recvfrom + ifctl |
-| `ifconfig` | show/configure interfaces, BSD-style | ifctl (GETN/GET/SET) |
+| `dhclient` | DHCP client (above) | socket/bind/sendto/recvfrom + SIOC ioctls |
+| `ifconfig` | 2.11BSD ifconfig(8) | SIOCGIFCONF, SIOCSIF* |
 | `netdump` | tcpdump-like observer over `/dev/bpf0` | open/read on the bpf chardev |
 | `echod` | TCP **echo server** (re-listens per connection) | socket/bind/listen/accept |
 | `telnet` | 2.11BSD telnet(1) client | connect, select |
@@ -286,7 +278,7 @@ ICMP/UDP/TCP, and prints a tcpdump-style line per frame.
 | `inetd` | 2.11BSD inetd(8); honours `stream tcp nowait` lines | listen/accept |
 | `ntpd`, `ntpdc`, `ntp` | 2.11BSD's UMD NTP 3.4 daemon, its query tool, and the one-shot client | UDP port 123 |
 | `host` | look up names and addresses through the libc resolver | gethostbyname/gethostbyaddr |
-| `route` | `route add default A.B.C.D`: stores the default gateway in the primary ifnet | ifctl |
+| `route` | 2.11BSD route(8); `-f` reads the table through `/dev/kmem` | SIOCADDRT/SIOCDELRT, nlist |
 | `syslogd`, `logger` | system log daemon (`-u` for UDP) and its client | AF_UNIX `/dev/log`, UDP |
 
 ## Limits and caveats
@@ -317,9 +309,9 @@ ICMP/UDP/TCP, and prints a tcpdump-style line per frame.
 | Resolver | `toolchain/lib/libc_c/netdb.c` |
 | W5100 driver, XPORT seam, transport cores | `src/modules/net/net_xport.s` |
 | W5100 probe, bring-up, ISR | `src/kernel/uthernet.s` |
-| Interface config (ifnet, SYS_IFCONFIG) | `src/kernel/ifconfig_sys.s` |
+| Interface config (ifnet, ioctls) | `src/kernel/bsdnet/net/if.c`, `src/kernel/bsdnet/net/if_w5.c` |
 | `/dev/bpf0` MACRAW capture module | `src/modules/bpf/bpf.s` (block alloc: `src/kernel/bpf.s`) |
-| Structs / constants | `include/socket.s`, `include/ifnet.s`, `include/errno.s` |
+| Structs / constants | `include/socket.s`, `include/errno.s` |
 | Syscall numbers | `include/loader.s` |
 | Socket sleep/wake channel | `src/kernel/sched.s` (`WCHAN_SOCK`) |
 | Userland | `src/userland/{nc,ping,dhclient,ifconfig,netdump,echod,telnet,telnetd,inetd,ntpd,ntpdc,ntp,host,route,syslogd,logger}/` |

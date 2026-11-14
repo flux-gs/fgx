@@ -12,7 +12,7 @@
 ;   _Sys_ConPutCharImpl  $00:0350 target — JSRs _BootCon_PutChar, RTLs
 ;   _Sys_KernLogImpl     $00:0374 target — JSRs Kern_LogStr, RTLs
 ;   _Sys_PanicImpl       $00:0378 target — emits "PANIC" then halts
-;   _Phase1_StubHalt     shared target for the 15 unwired slots; red border
+;   _Phase1_StubHalt     shared target for the unwired and retired slots; red border
 ;                        + busy-loop on any accidental call
 ;
 ; Architecture: runtime-built table.  See docs/superpowers/plans/2026-05-
@@ -185,7 +185,7 @@ _JT_Targets
                 ; they follow the kernel.  Targets are RTL wrappers in
                 ; net_dispatch.s; the DFB $00 is dead padding (_JT_Init fills the
                 ; cell bank from PHK).
-                DA      _Net_KCall_W5WriteIp    ; slot 27 SYS_NETKC_W5WRITEIP
+                DA      _Phase1_StubHalt        ; slot 27 SYS_NETKC_W5WRITEIP, retired
                 DFB     $00
                 DA      _Net_KCall_FcbAlloc     ; slot 28 SYS_NETKC_FCBALLOC
                 DFB     $00

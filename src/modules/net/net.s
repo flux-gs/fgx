@@ -6,18 +6,17 @@
 ; (src/kernel/net_dispatch.s) and a VT_NET net_op_table -- the prodos.mod
 ; FOP/_Fst_Dispatch pattern.  Every socket is a 2.11BSD struct socket in the
 ; network modules (bsdnetd, bsdnet0-3), and the socket ops hand their calls to
-; it (net_kso.s); SYS_IFCONFIG writes the chip's address through the kernel.
+; it (net_kso.s).
 ;
 ; Each op is reached by JSL (so it RTLs), runs in THIS module's bank (PB set
 ; by the JSL) with DBR=kernel-bank (the dispatcher's live bank; $02 = assembly
 ; ORG) + the kernel direct page active.  So:
-;   - DBR-relative reads of the kernel statics assembled at $02 (the ifconfig
-;     scratch statics that STAY in ifconfig_sys.s, the _Sys_Saved* /
-;     _Sys_CallerBank syscall args) are byte-identical to the in-kernel code;
-;   - [_ifTablePtr],Y / [_libcTmp2],Y use the kernel DP soft-globals;
-;   - same-bank JSRs into our moved helpers (FindByIndex/Name, _Ifc_*) work;
-;   - a cross-bank kernel routine (_W5_WriteIpFromRec) is reached by JSL to
-;     its build-resolved bank-$02 address (manifest).
+;   - DBR-relative reads of the kernel statics assembled at $02 (the
+;     _Sys_Saved* / _Sys_CallerBank syscall args) are byte-identical to the
+;     in-kernel code;
+;   - [_libcTmp2],Y uses the kernel DP soft-globals;
+;   - a cross-bank kernel routine is reached by JSL to its build-resolved
+;     bank-$02 address (manifest).
 ; Ops read their syscall args from _Sys_Saved* (NOT live A/X): _Net_Dispatch
 ; clobbers A on the way in.
 ;
@@ -63,7 +62,6 @@
 ; never appear in the bank-$02 listing the manifest scrapes.  Keep in sync
 ; with include/dpmap.s.
 ;------------------------------------------------------------------------------
-_ifTablePtr     EQU     $44             ; long ptr to heap ifnet table
 _libcTmp2       EQU     $54             ; long-ptr scratch (for [dp],Y)
 _fcbPtr         EQU     $94             ; long ptr to current FCB (set by _Fcb_Alloc/_LookupPtr)
 ; Added with net_loop.s + pipe.s (2026-08-11).  Values TAKEN FROM THE BUILD
@@ -97,19 +95,14 @@ M_KERN          EQU     6               ; keep in step with
                                         ;   src/kernel/libc/alloc_state.s:19
 
 ;------------------------------------------------------------------------------
-; Interface table layout + SYS_IFCONFIG sub-ops (pure EQUs — PUT-safe), and the
-; BSD socket constants (SOCK_*/XPORT_*/SIN_*/AF_*/SO_*/MSG_*/TCP_*/IPPROTO_*).
+; The BSD socket constants (SOCK_*/SIN_*/AF_*/SO_*/MSG_*/TCP_*/IPPROTO_*).
 ;------------------------------------------------------------------------------
-                PUT     ../../../include/ifnet.s
                 PUT     ../../../include/socket.s
 
 ;------------------------------------------------------------------------------
-; Kernel bank-$02 statics + the one kernel routine the ifconfig path calls,
-; resolved from the kernel build listing at build time (gen_kernel_exports.py):
+; Kernel bank-$02 statics, resolved from the kernel build listing at build time
+; (gen_kernel_exports.py):
 ;   _Sys_SavedA/_Sys_SavedX/_Sys_CallerBank - syscall args (lo16, DBR-rel)
-;   _ifn*/_ifc* - the ifconfig scratch statics (stay in ifconfig_sys.s; lo16)
-;   _ifS1Off - slot-1 record offset (uthernet.s; lo16)
-;   _W5_WriteIpFromRec - push IP config to the W5100 (uthernet.s; abs24 JSL)
 ;------------------------------------------------------------------------------
                 PUT     kernel_exports.s
 
@@ -159,7 +152,7 @@ net_vtdir       ASC     'VTDR'                          ; 4 B magic
 ; byte offset.  Bank bytes ($05 at assembly) patched to the load bank in
 ; mod_init.  Order MUST match include/modules.s NETOP_*.
 ;------------------------------------------------------------------------------
-net_op_table    DFB     <net_op_ifconfig,>net_op_ifconfig,^net_op_ifconfig      ; 0  Ifconfig
+net_op_table    DFB     <net_op_retired,>net_op_retired,^net_op_retired      ; 0  Ifconfig: RETIRED
                 DFB     <net_op_socket,>net_op_socket,^net_op_socket            ; 3  Socket
                 DFB     <net_op_bind,>net_op_bind,^net_op_bind                  ; 6  Bind
                 DFB     <net_op_sendto,>net_op_sendto,^net_op_sendto            ; 9  Sendto
@@ -220,188 +213,6 @@ mod_init        MX      %00
                 RTL
 
 ;==============================================================================
-; net_op_ifconfig - SYS_IFCONFIG (#70).  Lifted from ifconfig_sys.s _Sys_Ifconfig.
-; Reached by JSL from _Net_Dispatch -> RTL.  Args from _Sys_Saved* (A clobbered
-; by the dispatcher): _Sys_SavedA = ifreq offset, _Sys_SavedX = op (IFC_*),
-; _Sys_CallerBank = ifreq bank.  Returns A=0 + C=1 (ok) or A=errno + C=0.  MX %00.
-;==============================================================================
-net_op_ifconfig MX      %00
-                LDA     _Sys_SavedX             ; op (IFC_*)
-                AND     #$00FF
-                STA     _ifcOp
-                LDA     _Sys_SavedA             ; ifreq long-ptr lo16
-                STA     _libcTmp2
-                SEP     #$20
-                MX      %10
-                LDA     _Sys_CallerBank
-                STA     _libcTmp2+2             ; ifreq bank
-                REP     #$20
-                MX      %00
-                LDA     _ifcOp
-                CMP     #IFC_GETN
-                BEQ     @sic_getn
-                CMP     #IFC_GET
-                BEQ     @sic_get
-                CMP     #IFC_SET
-                BEQ     @sic_set
-                CMP     #IFC_SETDHCP            ; same path; _Ifc_SetIpFields
-                BEQ     @sic_set                ; re-reads _ifcOp for the bit
-                LDA     #EINVAL                 ; unknown op
-                CLC
-                RTL
-@sic_getn       MX      %00
-                LDY     #IF_Slot                ; index N in ifr.IF_Slot
-                SEP     #$20
-                MX      %10
-                LDA     [_libcTmp2],Y
-                REP     #$20
-                MX      %00
-                AND     #$00FF
-                JSR     _Ifnet_FindByIndex
-                BCC     @sic_enoent
-                JSR     _Ifc_CopyRecToIfr
-                LDA     #0
-                SEC
-                RTL
-@sic_get        MX      %00
-                JSR     _Ifc_LoadName
-                JSR     _Ifnet_FindByName
-                BCC     @sic_enoent
-                JSR     _Ifc_CopyRecToIfr
-                LDA     #0
-                SEC
-                RTL
-@sic_set        MX      %00
-                JSR     _Ifc_LoadName
-                JSR     _Ifnet_FindByName
-                BCC     @sic_enoent
-                JSR     _Ifc_SetIpFields        ; copy IP fields + set IFF_IP_CONF
-                ; If this is the slot-1 W5100 interface, push the IP config down
-                ; to the chip (SIPR/GAR/SUBR).  Cross-bank kernel call.
-                LDA     _ifcRecOff
-                CMP     _ifS1Off
-                BNE     @sic_setOk
-                JSL     SYS_NETKC_W5WRITEIP    ; RTL wrapper -> _W5_WriteIpFromRec
-                JSR     _Kso_IfChanged          ; and to the kernel's stack, which
-                                                ;   reads it back from the chip
-@sic_setOk      LDA     #0
-                SEC
-                RTL
-@sic_enoent     MX      %00
-                LDA     #ENOENT
-                CLC
-                RTL
-
-;------------------------------------------------------------------------------
-; _Ifnet_FindByIndex - find the Nth NON-EMPTY ifnet record.
-;   In: A.lo = index N.  MX %00.  Out: C=1 + X = record offset, or C=0.
-; (Same-bank helper, JSR'd by the ops -> RTS.)
-;------------------------------------------------------------------------------
-_Ifnet_FindByIndex MX   %00
-                AND     #$00FF
-                STA     _ifnIdx
-                STZ     _ifnCount
-                LDY     #0
-@fbx_l          LDA     [_ifTablePtr],Y         ; Name word; 0 = empty
-                BEQ     @fbx_skip
-                LDA     _ifnCount
-                CMP     _ifnIdx
-                BEQ     @fbx_hit
-                INC     _ifnCount
-@fbx_skip       TYA
-                CLC
-                ADC     #IF_REC_SIZE
-                TAY
-                CPY     #IFNET_BLK_SIZE
-                BCC     @fbx_l
-                CLC
-                RTS
-@fbx_hit        TYA
-                TAX
-                SEC
-                RTS
-
-;------------------------------------------------------------------------------
-; _Ifnet_FindByName - find the record whose IF_Name matches _ifnName[0..7].
-;   In: _ifnName = 8-byte target.  MX %00.  Out: C=1 + X = offset, or C=0.
-;   DBR=kernel-bank (for _ifnName abs,X).
-;------------------------------------------------------------------------------
-_Ifnet_FindByName MX    %00
-                LDY     #0
-@fbn_l          LDA     [_ifTablePtr],Y         ; Name word; 0 = empty
-                BEQ     @fbn_skip
-                PHY
-                SEP     #$20
-                MX      %10
-                LDX     #0
-@fbn_c          LDA     [_ifTablePtr],Y         ; record name byte (Y = base+i)
-                CMP:    _ifnName,X
-                BNE     @fbn_ne
-                INY
-                INX
-                CPX     #8
-                BCC     @fbn_c
-                REP     #$20                    ; all 8 matched
-                MX      %00
-                PLY
-                TYA
-                TAX
-                SEC
-                RTS
-@fbn_ne         REP     #$20
-                MX      %00
-                PLY
-@fbn_skip       MX      %00
-                TYA
-                CLC
-                ADC     #IF_REC_SIZE
-                TAY
-                CPY     #IFNET_BLK_SIZE
-                BCC     @fbn_l
-                CLC
-                RTS
-
-;------------------------------------------------------------------------------
-; _Ifc_CopyRecToIfr - copy the 32-byte ifnet record (offset X) to the caller's
-; ifreq (long-pointer _libcTmp2).  Word copy.  MX %00.
-;------------------------------------------------------------------------------
-_Ifc_CopyRecToIfr MX    %00
-                STX     _ifcRecOff
-                LDY     #0
-@cir            PHY
-                TYA
-                CLC
-                ADC     _ifcRecOff
-                TAY                             ; Y = recOff + i
-                LDA     [_ifTablePtr],Y         ; 2 record bytes
-                PLY
-                STA     [_libcTmp2],Y           ; -> 2 ifreq bytes
-                INY
-                INY
-                CPY     #IF_REC_SIZE
-                BCC     @cir
-                RTS
-
-;------------------------------------------------------------------------------
-; _Ifc_LoadName - copy the caller ifreq's IF_Name (8 B) into _ifnName.  MX %00.
-; _libcTmp2 = ifreq long-ptr.  DBR=kernel-bank (for _ifnName).
-;------------------------------------------------------------------------------
-_Ifc_LoadName   MX      %00
-                LDY     #IF_Name
-                SEP     #$20
-                MX      %10
-                LDX     #0
-@ln_l           LDA     [_libcTmp2],Y
-                STA:    _ifnName,X
-                INY
-                INX
-                CPX     #8
-                BCC     @ln_l
-                REP     #$20
-                MX      %00
-                RTS
-
-;==============================================================================
 ; net_op_ifioctl - every ioctl(2) on a socket, from the core's _IoOp_Socket: the
 ; socket's soo_ioctl, interface ioctls included (net_kso.s).  -> RTL.
 ;==============================================================================
@@ -413,50 +224,6 @@ net_op_ifioctl  MX      %00
                 RTL
 @nif_kso        JSR     _Kso_DoIoctl
                 RTL
-
-;------------------------------------------------------------------------------
-; _Ifc_SetIpFields - copy the caller ifreq's IP-layer fields (IF_Ip..IF_Gateway,
-; offsets 16..31) into the record (offset X) and set IFF_IP_CONF.  MX %00.
-;------------------------------------------------------------------------------
-_Ifc_SetIpFields MX     %00
-                STX     _ifcRecOff
-                LDY     #IF_Ip                  ; 16..30 step 2 (8 words)
-@sif_l          LDA     [_libcTmp2],Y           ; ifreq IP word
-                STA     _ifcTmpW
-                PHY
-                TYA
-                CLC
-                ADC     _ifcRecOff
-                TAY                             ; record index
-                LDA     _ifcTmpW
-                STA     [_ifTablePtr],Y         ; -> record
-                PLY
-                INY
-                INY
-                CPY     #IF_REC_SIZE
-                BCC     @sif_l
-                ; --- flags byte: IFF_IP_CONF always; IFF_DHCP tracks the OP.
-                ;     Cleared first so a manual IFC_SET after a lease stops
-                ;     claiming dhcp, then re-set only for IFC_SETDHCP.
-                LDA     _ifcRecOff
-                CLC
-                ADC     #IF_Flags
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     [_ifTablePtr],Y
-                ORA     #IFF_IP_CONF
-                AND     #{$FF-IFF_DHCP}
-                STA     [_ifTablePtr],Y
-                LDA     _ifcOp                  ; low byte; ops are all < 256
-                CMP     #IFC_SETDHCP
-                BNE     @sif_notDhcp
-                LDA     [_ifTablePtr],Y
-                ORA     #IFF_DHCP
-                STA     [_ifTablePtr],Y
-@sif_notDhcp    REP     #$20
-                MX      %00
-                RTS
 
 ;==============================================================================
 ; The socket calls.  Every socket is a 2.11BSD struct socket in the network

@@ -45,7 +45,6 @@
                                                 ; literal.  EQUs only, no bytes.
                 PUT     ../../include/chardev.s
                 PUT     ../../include/pty.s     ; shared with pty.mod
-                PUT     ../../include/ifnet.s
                 PUT     ../../include/socket.s
                 PUT     ../../include/fgxm.s
                 PUT     ../../include/ramdisk.s
@@ -530,9 +529,6 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 DO      BLKPROBE=1
                 JSR     _BlkCache_Probe         ; F2-a cache-core self-test (block
                 FIN                             ; segment; cache shares the block too)
-                JSR     _AllocIfTable           ; _ifTablePtr = Kmalloc(128, M_KERN)
-                                                ; before _ProbeUthernet2 registers ifaces
-                                                ; before any socket() syscall
                 JSR     _AllocPipeTable         ; _pipeTablePtr = Kmalloc(NPIPE*16, M_KERN)
                                                 ; before any pipe() syscall
                 JSR     _AllocSchedTbl          ; _schedTblPtr = Kmalloc(NPROC*ST_SIZE,
@@ -1665,44 +1661,6 @@ _BlkTab_Init    MX      %00
                 STA     [_kHeapCur],Y           ; row0.handle hi16
 @bt_noHnd       PLP
                 RTS
-
-;==============================================================================
-; _AllocIfTable - Kmalloc(IFNET_BLK_SIZE=128, M_KERN), populate _ifTablePtr (DP).
-; Holds the network interface table (soft-global; ifconfig_sys.s).  Must run
-; before _ProbeUthernet2 registers any interface (after Kmem_Init at boot).
-;==============================================================================
-_AllocIfTable
-                MX      %00
-                PHP
-                REP     #$30
-                LDA     #IFNET_BLK_SIZE
-                LDX     #M_KERN
-                JSR     Kmalloc
-                BCS     @ait_ok
-                LDA     #_panic_msg_iftbl
-                STA     _conStrPtr
-                JSR     Kern_LogStr
-                JMP     _Halt
-@ait_ok         LDA     _kmallocResult
-                STA     _ifTablePtr
-                SEP     #$20
-                LDA     _kmallocResult+2
-                STA     _ifTablePtr+2
-                REP     #$20
-                JSR     _SoftGlob_ValidatePtr   ; always-on: panic if not in heap
-                ; Zero the table so empty records read IF_Name[0] = 0.
-                LDY     #0
-                SEP     #$20
-                LDA     #0
-@ait_zL         STA     [_ifTablePtr],Y
-                INY
-                CPY     #IFNET_BLK_SIZE
-                BCC     @ait_zL
-                REP     #$20
-                PLP
-                RTS
-
-_panic_msg_iftbl ASC    'PANIC: cannot alloc ifTable',00
 
 ;==============================================================================
 ; _AllocLogBuf - Kmalloc(KMEM_LOGBUF_SIZE, M_KERN), populate _kLogBufPtr
@@ -3678,7 +3636,7 @@ _kfp102         JSL     KFAR_CON_WRITE          ; via VT parser — honours ESC 
                 PUT     sim.s
                 PUT     uthernet.s
                 PUT     bpf.s
-                PUT     ifconfig_sys.s
+                PUT     hwaddr.s
                 PUT     socket.s
                 PUT     pipe.s
 

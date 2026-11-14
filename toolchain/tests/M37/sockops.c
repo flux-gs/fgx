@@ -24,7 +24,7 @@ int main(void)
     if (setsockopt(99, 0, 0, buf, 4) == -1) r += 5;
     if (sendto(99, buf, 4, 0, sa, 16) == -1)   r += 4;
     if (recvfrom(99, buf, 8, 0, sa, 16) == -1) r += 4;
-    if (ifctl(0, sa) == -1)                 r += 4;
+    if (listen(99, 1) == -1)                r += 4;
     close(fd);
     return r;
 }

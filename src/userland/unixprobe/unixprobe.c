@@ -36,6 +36,8 @@
 #include <fgx.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <net/if.h>
+#include <net/if_dl.h>
 
 /* One byte past PIPE_MAX_BUFSZ (include/kernel.s), so the oversize case is
  * oversize even after the ring has grown to its ceiling. */
@@ -53,6 +55,34 @@
 #define REGNAME  "/tmp/unixprobe.reg"
 
 static char *msg[3] = { "a", "bbbb", "ccccccccc" };
+
+/* Is there a card: an interface with an Ethernet link-level address in
+ * SIOCGIFCONF (<net/if_dl.h>)?  Without one lo0 is the only interface. */
+static int
+has_card()
+{
+    static char cbuf[256];
+    struct ifconf ifc;
+    struct ifreq *r;
+    struct sockaddr_dl *sdl;
+    int s, n;
+
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+    ifc.ifc_len = sizeof cbuf;
+    ifc.ifc_buf = cbuf;
+    n = s < 0 ? -1 : ioctl(s, SIOCGIFCONF, (char *)&ifc);
+    if (s >= 0)
+        close(s);
+    if (n < 0)
+        return (0);
+    for (n = ifc.ifc_len / sizeof (struct ifreq), r = ifc.ifc_req; n > 0;
+        n--, r++) {
+        sdl = (struct sockaddr_dl *)&r->ifr_addr;
+        if (sdl->sdl_family == AF_LINK && sdl->sdl_alen == 6)
+            return (1);
+    }
+    return (0);
+}
 #define UIO_PAST_MAX 17         /* one past 2.11BSD's aiov[16] */
 static char  txbuf[64];
 static char  rxbuf[64];
@@ -318,13 +348,11 @@ char **argv;
      * EHOSTUNREACH; else error = ENETUNREACH;'). */
     {
         static char usin[16];
-        static char uifr[32];
         fd_set urd;
         struct timeval utv;
         int us, uk, un, unav, ucard;
 
-        uifr[8] = 0;                            /* IFC_GETN: interface 0 */
-        ucard = ifctl(0, uifr) == 0;
+        ucard = has_card();
         us = socket(AF_INET, SOCK_DGRAM, 0);
         memset(usin, 0, sizeof usin);
         usin[0] = AF_INET;

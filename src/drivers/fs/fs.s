@@ -1063,7 +1063,7 @@ Fs_SyncAll      MX      %00
 ; `_Ld_VnodeRead'.
 ;
 ; TWO CALLERS STILL COME HERE AND ARE BROKEN BY IT, each with an issue:
-; `_Ifnet_LoadHwaddr' (ifconfig_sys.s) reads /etc/hwaddr.conf and takes the
+; `_Net_LoadHwaddr' (hwaddr.s) reads /etc/hwaddr.conf and takes the
 ; EBADF for end-of-file, so the file is silently ignored -- apple/fgx#356;
 ; `Con_LoadFontFromFile' reports it to font(1), which cannot load any font on
 ; the image -- apple/fgx#357.  Both fixes move the read off this path, and

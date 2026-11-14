@@ -68,11 +68,6 @@ struct procinfo {
 int  procs(char *buf, int max);         /* fill an array of struct procinfo */
 int  listdir(char *path, char *buf, int size);
 
-/* Interface control (SYS_IFCONFIG).  ifr is a raw 32-byte kernel ifreq
- * record (see src/userland/ifconfig/ifconfig.c IFR_* offsets); op is
- * IFC_GETN/IFC_GET/IFC_SET/IFC_SETDHCP. */
-int  ifctl(int op, char *ifr);
-
 /* Process creation, FGX's spawn family beside fork(2) and execve(2).  argv and
  * envp are NULL-terminated char **, which is BSD's shape (4.3BSD-Reno has no
  * spawn; its execve takes char **argp).  The kernel takes them through an

@@ -434,7 +434,6 @@ it.
 | 67 | `SYS_GETFSSTAT` | FGX: copy struct statfs[] for all online mounts into a caller buffer (BSD getfsstat). A = buf offset (caller bank), X = bufsize bytes, Y = flags (ignored). Returns C=1 + A = mount count written. |
 | 68 | `SYS_MM_ALLOC` | FGX: large Memory-Manager allocation via _NewHandle (MAY span banks; for the resident NTP module). A = size lo16, X = size hi16. Returns C=1 + A.lo = handle bank, Y = handle offset (deref the handle for the 24-bit base); C=0 + A = ENOMEM. Block attr $C008 = locked\|fixed\|noSpec, NO attrNoCross so it can be >64 KB multi-bank. |
 | 69 | `SYS_MM_FREE` | FGX: release a SYS_MM_ALLOC block. A.lo = handle bank, X = handle offset (_DisposeHandle). Returns C=1. |
-| 70 | `SYS_IFCONFIG` | FGX net: get/set an interface record. A = ifreq offset, X = op (IFC_*), caller DBR = ifreq bank. See ifconfig_sys.s / include/ifnet.s. |
 | 71 | `SYS_SOCKET` | BSD socket(domain,type,proto): A=domain, X=type, Y=proto -> A=fd. See socket.s. |
 | 72 | `SYS_BIND` | bind(fd, sockaddr_in*, len) |
 | 73 | `SYS_SENDTO` | sendto(fd, argblk*) [argblk: see socket.s] |

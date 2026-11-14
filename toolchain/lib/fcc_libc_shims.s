@@ -168,10 +168,6 @@ SYSCALL_ERRSW   MAC
 ; c_getfsstat — CONVERTED TO C (T5-C, lib/libc_c/libc_c.c -> lib/libc_c.s).
 ;------------------------------------------------------------------------------
 
-;------------------------------------------------------------------------------
-; c_ifctl — CONVERTED TO C (T5-C, lib/libc_c/libc_c.c -> lib/libc_c.s).
-;------------------------------------------------------------------------------
-
 ;==============================================================================
 ; SP4 libc gaps (2026-05-31): read / write / fileno / getenv / fgets / strchr.
 ; Needed to link vi (fgx.c read(0)/write(1); fileio read/write/fileno;
@@ -239,8 +235,7 @@ SYSCALL_ERRSW   MAC
 ;
 ; All entered MX %00, JSR-called (2-byte return at 1,2), caller cleans args.
 ; Arg slots: ints are 2 bytes, pointers are 4 bytes (offset lo16 + bank +
-; pad), pushed left-to-right so the rightmost arg sits at the lowest offset
-; (same layout c_ifctl documents).
+; pad), pushed left-to-right so the rightmost arg sits at the lowest offset.
 ;
 ; Banks: bind/connect hand the kernel the sockaddr's bank as the call's DBR
 ; (one pointer, so the caller bank is exact).  send/recv/sendto/recvfrom carry

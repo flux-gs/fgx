@@ -302,23 +302,11 @@ _sockops_L6
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L7
+                LDA     #1
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #sa
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
+                LDA     #99
                 PHA
-                FGX2_FARCALL ifctl
-                PLY
+                FGX2_FARCALL listen
                 PLY
                 PLY
                 CMP     #$FFFF

@@ -134,8 +134,8 @@ _logSrcPtr        DS    3                   ; $38  long ptr for Kern_LogStrLong
 _sigHndPtr        DS    3                   ; $40  long ptr to heap signal-handler
                                             ;     tables (soft-global; signal.s)
                   DS    1                   ; $43  pad
-_ifTablePtr       DS    3                   ; $44  long ptr to heap ifnet table
-                                            ;     (soft-global; ifconfig_sys.s)
+                  DS    3                   ; $44  free (held so the cells after
+                                            ;     it keep their addresses)
                   DS    1                   ; $47  pad
 _fd_table_ptr     DS    3                   ; long ptr to fd_table[FS_MAX_FDS]
                   DS    1                   ; pad

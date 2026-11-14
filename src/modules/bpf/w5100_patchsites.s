@@ -11,72 +11,72 @@
 ;
 ; Counts: 0 MR, 7 ARH, 7 ARL, 20 DAT (34 total).
 _w5PatchTbl     ENT
-                DA  $1733
+                DA  $1533
                 DFB 1           ; ARH
-                DA  $1739
+                DA  $1539
                 DFB 2           ; ARL
-                DA  $173F
+                DA  $153F
                 DFB 3           ; DAT
-                DA  $1759
+                DA  $1559
                 DFB 1           ; ARH
-                DA  $175F
+                DA  $155F
                 DFB 2           ; ARL
-                DA  $1766
+                DA  $1566
                 DFB 3           ; DAT
-                DA  $177D
+                DA  $157D
                 DFB 1           ; ARH
-                DA  $1783
+                DA  $1583
                 DFB 2           ; ARL
-                DA  $178A
+                DA  $158A
                 DFB 3           ; DAT
-                DA  $18A9
+                DA  $16A9
                 DFB 1           ; ARH
+                DA  $16AE
+                DFB 2           ; ARL
+                DA  $16B9
+                DFB 3           ; DAT
+                DA  $16BE
+                DFB 3           ; DAT
+                DA  $16E4
+                DFB 3           ; DAT
+                DA  $16F4
+                DFB 3           ; DAT
+                DA  $1705
+                DFB 3           ; DAT
+                DA  $1723
+                DFB 3           ; DAT
+                DA  $1754
+                DFB 3           ; DAT
+                DA  $1764
+                DFB 3           ; DAT
+                DA  $178C
+                DFB 1           ; ARH
+                DA  $1792
+                DFB 2           ; ARL
+                DA  $1798
+                DFB 3           ; DAT
+                DA  $17B2
+                DFB 1           ; ARH
+                DA  $17B8
+                DFB 2           ; ARL
+                DA  $17BF
+                DFB 3           ; DAT
+                DA  $17F9
+                DFB 3           ; DAT
+                DA  $1808
+                DFB 3           ; DAT
+                DA  $184C
+                DFB 3           ; DAT
+                DA  $1888
+                DFB 3           ; DAT
+                DA  $188D
+                DFB 3           ; DAT
+                DA  $189D
+                DFB 3           ; DAT
                 DA  $18AE
-                DFB 2           ; ARL
-                DA  $18B9
-                DFB 3           ; DAT
-                DA  $18BE
-                DFB 3           ; DAT
-                DA  $18E4
-                DFB 3           ; DAT
-                DA  $18F4
-                DFB 3           ; DAT
-                DA  $1905
-                DFB 3           ; DAT
-                DA  $1923
-                DFB 3           ; DAT
-                DA  $1954
-                DFB 3           ; DAT
-                DA  $1964
-                DFB 3           ; DAT
-                DA  $198C
                 DFB 1           ; ARH
-                DA  $1992
+                DA  $18B4
                 DFB 2           ; ARL
-                DA  $1998
-                DFB 3           ; DAT
-                DA  $19B2
-                DFB 1           ; ARH
-                DA  $19B8
-                DFB 2           ; ARL
-                DA  $19BF
-                DFB 3           ; DAT
-                DA  $19F9
-                DFB 3           ; DAT
-                DA  $1A08
-                DFB 3           ; DAT
-                DA  $1A4C
-                DFB 3           ; DAT
-                DA  $1A88
-                DFB 3           ; DAT
-                DA  $1A8D
-                DFB 3           ; DAT
-                DA  $1A9D
-                DFB 3           ; DAT
-                DA  $1AAE
-                DFB 1           ; ARH
-                DA  $1AB4
-                DFB 2           ; ARL
-                DA  $1ABB
+                DA  $18BB
                 DFB 3           ; DAT
                 DA  $FFFF        ; sentinel (no DFB)

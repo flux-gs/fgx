@@ -689,7 +689,7 @@ SYS_SIM_REMOVE          EQU     MOD_JT_BASE+$6E ; slot 26: remove SCC IRQ handle
 ; --- slots 27-31: net.mod direct kernel-call wrappers.  Was baked-$02
 ; `JSL _Net_KCall_*` in net.s/net_xport.s; routed through bank-0 JT slots for
 ; the relocatable kernel.  Targets = RTL wrappers in net_dispatch.s. ---
-SYS_NETKC_W5WRITEIP     EQU     MOD_JT_BASE+$72 ; slot 27
+SYS_NETKC_W5WRITEIP     EQU     MOD_JT_BASE+$72 ; slot 27, retired
 SYS_NETKC_FCBALLOC      EQU     MOD_JT_BASE+$76 ; slot 28
 SYS_NETKC_SOCKFDTODESC  EQU     MOD_JT_BASE+$7A ; slot 29
 SYS_NETKC_CONPOLLKEY    EQU     MOD_JT_BASE+$7E ; slot 30
@@ -742,7 +742,7 @@ BNOP_WRITE              EQU     12
 BNOP_IOCTL              EQU     13
 BNOP_SELECT             EQU     14
 BNOP_CLOSE              EQU     15
-BNOP_IFCHANGED          EQU     16
+                                    ; 16: retired (SYS_IFCONFIG's address change)
 BNOP_LISTEN             EQU     17
 BNOP_ACCEPT             EQU     18
 VT_PDCORE               EQU     $000B       ; prodos.mod's C entry points, for
@@ -1190,7 +1190,8 @@ PDCORE_COUNT            EQU     8
 ; net.mod's net_op_table MUST list its ops in this order.  (Module side mirrors
 ; these — keep in sync, like the FOP_* set in include/fst.s.)
 ;------------------------------------------------------------------------------
-NETOP_Ifconfig          EQU     0           ; SYS_IFCONFIG (#70)
+NETOP_Ifconfig          EQU     0           ; RETIRED: SYS_IFCONFIG (#70) answers ENOSYS
+                                            ;   in the core; the slot keeps the numbers
 NETOP_Socket            EQU     3           ; SYS_SOCKET (#71)
 NETOP_Bind              EQU     6           ; SYS_BIND (#72)
 NETOP_Sendto            EQU     9           ; SYS_SENDTO (#73)

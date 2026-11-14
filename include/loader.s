@@ -480,10 +480,8 @@ SYS_MM_ALLOC    EQU     68                  ; FGX: large Memory-Manager allocati
 SYS_MM_FREE     EQU     69                  ; FGX: release a SYS_MM_ALLOC block.
                                             ; A.lo = handle bank, X = handle offset
                                             ; (_DisposeHandle).  Returns C=1.
-SYS_IFCONFIG    EQU     70                  ; FGX net: get/set an interface record.
-                                            ; A = ifreq offset, X = op (IFC_*),
-                                            ; caller DBR = ifreq bank.  See
-                                            ; ifconfig_sys.s / include/ifnet.s.
+; 70: retired (net.mod's interface table); answers ENOSYS.  An interface is
+; set through socket ioctls.
 SYS_SOCKET      EQU     71                  ; BSD socket(domain,type,proto): A=domain,
                                             ; X=type, Y=proto -> A=fd.  See socket.s.
 SYS_BIND        EQU     72                  ; bind(fd, sockaddr_in*, len)

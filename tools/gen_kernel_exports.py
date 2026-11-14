@@ -279,26 +279,12 @@ MANIFESTS = {
         ('_u2RxReady', '_u2RxReady', 0, 'lo16'),
         ('_w5SockInUse', '_w5SockInUse', 0, 'lo16'),
     ],
-    # net: the networking stack module (src/modules/net). Phase 1 = SYS_IFCONFIG.
-    # The ifconfig scratch statics (_ifn*/_ifc*) STAY kernel-side in
-    # ifconfig_sys.s and are reached DBR-relative (lo16, DBR=$02 during
-    # dispatch); the syscall args come from the dispatcher's _Sys_Saved* slots;
-    # _ifS1Off is the slot-1 record offset; _W5_WriteIpFromRec is the one kernel
-    # routine the IFC_SET path JSLs (abs24).
+    # net: the networking stack module (src/modules/net): the socket syscalls,
+    # whose args come from the dispatcher's _Sys_Saved* slots.
     'net': [
         ('_Sys_SavedA', '_Sys_SavedA', 0, 'lo16'),
         ('_Sys_SavedX', '_Sys_SavedX', 0, 'lo16'),
         ('_Sys_CallerBank', '_Sys_CallerBank', 0, 'lo16'),
-        ('_ifcOp', '_ifcOp', 0, 'lo16'),
-        ('_ifnIdx', '_ifnIdx', 0, 'lo16'),
-        ('_ifnCount', '_ifnCount', 0, 'lo16'),
-        ('_ifnName', '_ifnName', 0, 'lo16'),
-        ('_ifcRecOff', '_ifcRecOff', 0, 'lo16'),
-        ('_ifcTmpW', '_ifcTmpW', 0, 'lo16'),
-        ('_ifS1Off', '_ifS1Off', 0, 'lo16'),
-        # RTL trampoline (net_dispatch.s) wrapping the JSR/RTS kernel routine
-        # _W5_WriteIpFromRec, so the module can JSL it without a stack mismatch.
-        # --- Phase 2 (socket.s move) ---
         # Syscall arg saved by the dispatcher (SavedA/X already above).
         ('_Sys_SavedY', '_Sys_SavedY', 0, 'lo16'),
         # ioctl(2)'s staged command and argument, for the SIOCGIF* op.
