@@ -222,6 +222,8 @@ extern char _libc_lstrBufB[];
 #include "inet_network.c"
 #include "getnent.c"
 #include "getnbyname.c"
+#include "getnbyaddr.c"
+#include "inet_lnaof.c"
 #include "nsym.c"
 #include "nlist.c"
 #include "herror.c"

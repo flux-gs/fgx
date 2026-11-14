@@ -28,6 +28,7 @@ struct netent {
 
 struct hostent  *gethostbyname(char *name);
 struct netent   *getnetbyname(char *name);
+struct netent   *getnetbyaddr(long net, int type);
 struct netent   *getnetent(void);
 int             setnetent(int f);
 int             endnetent(void);

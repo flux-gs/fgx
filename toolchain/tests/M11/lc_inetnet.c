@@ -4,6 +4,7 @@
  * 127.0.0.1, net 128.10 (class B) host 2 is 128.10.0.2, net 192.168.4
  * (class C) host 9 is 192.168.4.9.  inet_network reads the dotted parts as a
  * network number: "10.1" is 0x0a01, "0x7f" is 127, and junk is -1.
+ * inet_lnaof (inet/inet_lnaof.c) takes the host part back off in each class.
  * Returns 42 iff every case holds; a small code names the first failure. */
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -22,5 +23,11 @@ int main()
     if (inet_network("10.1") != 0x0a01L) return 4;
     if (inet_network("0x7f") != 127L) return 5;
     if (inet_network("zz") != -1L) return 6;
+    a.s_addr = htonl(0x7f000001L);
+    if (inet_lnaof(a) != 1L) return 7;
+    a.s_addr = htonl(0x800a0002L);
+    if (inet_lnaof(a) != 2L) return 8;
+    a.s_addr = htonl(0xc0a80409L);
+    if (inet_lnaof(a) != 9L) return 9;
     return 42;
 }

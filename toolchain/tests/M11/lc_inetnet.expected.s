@@ -379,6 +379,276 @@ _lc_inetnet_L7
                 TYA
                 RTL
 _lc_inetnet_L8
+                LDA     #$7F00
+                STA     _fcc_long_hi
+                LDA     #$0001
+                LDX     #255
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_and
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                STA     _fcc_long_hi
+                LDA     #0
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                LDX     #127
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                STA     _fcc_tmp_b
+                STA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_long_hi
+                STA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_tmp_b
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #0
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_ptr+2
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                TSC
+                SEC
+                SBC     #4
+                TCS
+                TSC
+                INC
+                STA     _fcc_fpr1
+                STZ     _fcc_fpr1+2
+                LDY     #2
+_lc_inetnet_L10
+                LDA     [_fcc_fpr0],Y
+                STA     [_fcc_fpr1],Y
+                DEY
+                DEY
+                BPL     _lc_inetnet_L10
+                FGX2_FARCALL inet_lnaof
+                PLY
+                PLY
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_ne
+                CMP     #0
+                BEQ     _lc_inetnet_L9
+                LDA     #7
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_lc_inetnet_L9
+                LDA     #$800A
+                STA     _fcc_long_hi
+                LDA     #$0002
+                LDX     #255
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_and
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                STA     _fcc_long_hi
+                LDA     #0
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                LDX     #2560
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                LDX     #128
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                STA     _fcc_tmp_b
+                STA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_long_hi
+                STA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_tmp_b
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #0
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_ptr+2
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                TSC
+                SEC
+                SBC     #4
+                TCS
+                TSC
+                INC
+                STA     _fcc_fpr1
+                STZ     _fcc_fpr1+2
+                LDY     #2
+_lc_inetnet_L12
+                LDA     [_fcc_fpr0],Y
+                STA     [_fcc_fpr1],Y
+                DEY
+                DEY
+                BPL     _lc_inetnet_L12
+                FGX2_FARCALL inet_lnaof
+                PLY
+                PLY
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_ne
+                CMP     #0
+                BEQ     _lc_inetnet_L11
+                LDA     #8
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_lc_inetnet_L11
+                LDA     #$C0A8
+                STA     _fcc_long_hi
+                LDA     #$0409
+                LDX     #255
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_and
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                STA     _fcc_long_hi
+                LDA     #0
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #4
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                LDX     #43008
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                LDX     #192
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_or
+                STA     _fcc_tmp_b
+                STA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_long_hi
+                STA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_tmp_b
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #0
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_ptr+2
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                TSC
+                SEC
+                SBC     #4
+                TCS
+                TSC
+                INC
+                STA     _fcc_fpr1
+                STZ     _fcc_fpr1+2
+                LDY     #2
+_lc_inetnet_L14
+                LDA     [_fcc_fpr0],Y
+                STA     [_fcc_fpr1],Y
+                DEY
+                DEY
+                BPL     _lc_inetnet_L14
+                FGX2_FARCALL inet_lnaof
+                PLY
+                PLY
+                LDX     #9
+                STX     _fcc_long_b_lo
+                LDX     #0
+                STX     _fcc_long_b_hi
+                JSR     _fcc_long_ne
+                CMP     #0
+                BEQ     _lc_inetnet_L13
+                LDA     #9
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_lc_inetnet_L13
                 LDA     #42
                 TAY
                 TSC
@@ -391,4 +661,4 @@ _lc_inetnet_L8
                 RTL
 main_FRAMESIZE   EQU     16
 main_STKGUARD    EQU     0
-                FGX2_RELOC_COUNT 8
+                FGX2_RELOC_COUNT 11
