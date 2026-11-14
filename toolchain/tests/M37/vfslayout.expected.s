@@ -1988,7 +1988,7 @@ _vfslayout_L65
                 TYA
                 RTL
 _vfslayout_L66
-                LDA     #64
+                LDA     #128
                 TAX
                 LDA     #3
                 TAY
@@ -2026,7 +2026,7 @@ _vfslayout_L67
                 CLC
                 ADC     _fcc_tmp_b
                 ASL
-                LDX     #64
+                LDX     #128
                 STA     _fcc_tmp_b
                 TXA
                 SEC

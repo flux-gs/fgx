@@ -2331,8 +2331,8 @@ _Vfs_FileInit   ENT
                 ; `Kmalloc' answers on the kernel's real direct page
                 ; (`_kmallocResult', dpmap.s), which D still is until the TCD
                 ; below.  NFILE file structs and NPROC*FS_MAX_FDS descriptor
-                ; words are 5,376 bytes at thirty-two tasks, which no bank
-                ; has as a static; the vnode and namei pools are heap arenas
+                ; words (VFS_FILE_BYTES) are more than any bank has as a
+                ; static; the vnode and namei pools are heap arenas
                 ; already (vfs.mod, VFS_POOL_BYTES).  The pointer is kept in
                 ; this bank for the ofile hand-off below.
                 PLD                     ; the caller's page, for Kmalloc
@@ -2395,7 +2395,7 @@ _VfsFileInitRet TSC
                 MX      %00
                 LDA    |_kFileArenaPtr
                 CLC
-                ADC     #VFS_OFILE_OFF  ; ofile_pool = arena + NFILE*24
+                ADC     #VFS_OFILE_OFF  ; ofile_pool = arena + NFILE*FILE_SIZE
                 LDX    |_kFileArenaPtr+2 ; X.lo = the heap block's bank
                 PLD
                 PLB

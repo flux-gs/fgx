@@ -1276,7 +1276,8 @@ m_backlog()
  * socket and its error; the parent stops counting when every child is done or
  * none has moved for 5 seconds, then tells them all to close.  How: 1 ENOBUFS,
  * 4 a wait, 8 ENFILE, 2 anything else, which fails.  A second round must make
- * as many sockets as the first: a leak in any close would come back short. */
+ * as many sockets as the first: a leak in any close would come back short.
+ * NFILE is sized so the mbufs run out first: a round that meets ENFILE fails. */
 #define XKIDS 5
 #define XPER  25
 static int
@@ -1349,7 +1350,7 @@ m_exhaust()
         return 0;
     }
     printf("EXHAUST %d sockets, how %d; again %d, how %d\n", n1, e1, n2, e2);
-    if ((e1 & 2) || (e2 & 2) || e1 == 0 || n2 < n1) {
+    if ((e1 & 10) || (e2 & 10) || e1 == 0 || n2 < n1) {
         printf("MANY FAIL exhaust\n");
         return 0;
     }

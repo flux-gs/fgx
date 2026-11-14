@@ -46,7 +46,7 @@ FILE_SIZE       EQU     28          ; bytes per struct file
 ; what LOADS vfs.mod, so a table inside that module would not exist
 ; the first time anything opened a file.  Sized here so the far bank
 ; has no second copy of the arithmetic finit relies on.
-VFS_FILE_BYTES  EQU     6592        ; NFILE*28 + 32*30*(4+1)
+VFS_FILE_BYTES  EQU     8384        ; NFILE*28 + 32*30*(4+1)
 
 ; Where finit puts the descriptor arrays inside that static, and how
 ; wide one slot is -- UFS 1.7d I2c.  The CORE bank reads `struct file'
@@ -54,7 +54,7 @@ VFS_FILE_BYTES  EQU     6592        ; NFILE*28 + 32*30*(4+1)
 ; hottest path there is), so it needs to index ofile_pool itself.
 ; Emitted rather than multiplied in Merlin so the C's
 ; `&file_pool[NFILE]' and the assembly's arithmetic cannot drift.
-VFS_OFILE_OFF   EQU     1792        ; ofile_pool - arena = NFILE*28
+VFS_OFILE_OFF   EQU     3584        ; ofile_pool - arena = NFILE*28
 VFS_OFILE_PTR   EQU     4           ; bytes per descriptor slot
 ; pofile_pool, the descriptor flag bytes (Reno's u_pofile), follows
 ; the descriptor arrays: this far past ofile_pool, one byte a slot.
