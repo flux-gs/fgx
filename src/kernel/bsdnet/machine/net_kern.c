@@ -20,8 +20,9 @@ int	hz = 60;
 struct	timeval time;
 int	lbolt;		/* mfkd() answers for it; see there */
 
-/* ponytail: C byte loops, as tty_dev.c has.  Replace them when a profile of a
- * transfer says to; the fused receive copy is the driver's, not this. */
+/* bcopy is net_asm.s's, as 2.11BSD's is assembly (libc pdp/gen/bcopy.s).
+ * ponytail: bzero and bcmp stay C byte loops; a transfer's profile puts them
+ * under 1%. */
 void
 bzero(cp, n)
 	register char *cp;
@@ -29,15 +30,6 @@ bzero(cp, n)
 {
 	while (--n >= 0)
 		*cp++ = 0;
-}
-
-void
-bcopy(from, to, n)
-	register char *from, *to;
-	register int n;
-{
-	while (--n >= 0)
-		*to++ = *from++;
 }
 
 int

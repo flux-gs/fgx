@@ -1,8 +1,9 @@
 ;==============================================================================
 ; SPDX-License-Identifier: BSD-2-Clause
 ; SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
-; FGX-Provenance: 2.11BSD usr/sys/pdp/mch_xxx.s
-;   setjmp and longjmp written for FGX after usr/sys/pdp/mch_xxx.s, 2.11BSD.
+; FGX-Provenance: 2.11BSD usr/sys/pdp/mch_xxx.s, usr/lib/libc/pdp/gen/bcopy.s
+;   setjmp and longjmp written for FGX after usr/sys/pdp/mch_xxx.s, 2.11BSD, and
+;   bcopy after usr/lib/libc/pdp/gen/bcopy.s.
 ;   Original work: Copyright (c) 1987 Regents of the University of California.
 ;   All rights reserved.
 ;
@@ -186,6 +187,68 @@ netintr_enter   MX      %00
                 PLP
                 PLB
                 RTL
+
+;------------------------------------------------------------------------------
+; bcopy(src, dst, n) - 2.11BSD's (libc pdp/gen/bcopy.s): n unsigned, and an
+; overlapping move handled, backward when dst is above src.  Here that is MVN
+; forward and MVP backward, seven cycles a byte.  An overlap needs one bank, so
+; only then is the offset compare taken; across banks MVN is always right.  A
+; pointer does not carry into the next bank, as fcc's own `p++' does not.
+;
+;   4,S src offset   6,S src bank   8,S dst offset   10,S dst bank   12,S n
+;
+; THE BANK OPERANDS ARE PATCHED INTO THE CODE, as uio_copy does in the VFS bank
+; (src/modules/vfs/uio_copy.s): operand+1 the destination bank, +2 the source.
+; That is not re-entrant, and needs no guard: kernel code is not preempted, and
+; no interrupt handler reaches the stack (if_w5.c: only task level and netintr).
+; MVN and MVP leave DBR on the destination bank; PLB gives the caller's back.
+;------------------------------------------------------------------------------
+bcopy           MX      %00
+                LDA     12,S
+                BEQ     @bc_none        ; zero is not 65536: MVN moves A+1
+                PHB                     ; the frame is one byte further now
+                PHK
+                PLB                     ; DBR = this bank, for the patches
+                SEP     #$20
+                MX      %10
+                LDA     7,S             ; src bank
+                STA     |@bc_fwd+2
+                STA     |@bc_back+2
+                LDA     11,S            ; dst bank
+                STA     |@bc_fwd+1
+                STA     |@bc_back+1
+                CMP     7,S
+                REP     #$20
+                MX      %00
+                BNE     @bc_up          ; two banks: no overlap
+                LDA     9,S
+                CMP     5,S
+                BEQ     @bc_out         ; dst == src: nothing to move
+                BCS     @bc_down        ; dst above src: backward
+@bc_up          LDA     5,S
+                TAX
+                LDA     9,S
+                TAY
+                LDA     13,S
+                DEC
+@bc_fwd         MVN     $00,$00         ; banks patched above
+                PLB
+                RTL
+@bc_down        LDA     13,S            ; MVP starts at each block's last byte
+                DEC
+                PHA
+                CLC
+                ADC     7,S             ; src + n-1 (the frame is two further)
+                TAX
+                PLA
+                PHA
+                CLC
+                ADC     11,S            ; dst + n-1
+                TAY
+                PLA
+@bc_back        MVP     $00,$00         ; banks patched above
+@bc_out         PLB
+@bc_none        RTL
 
 ; setjmp(env) / longjmp(env, val) - the kernel's, after 2.11BSD pdp/mch_xxx.s:
 ; sleep() longjmps to u.u_qsave when a signal breaks an interruptible sleep, and

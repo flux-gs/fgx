@@ -29,6 +29,42 @@ same(a, b)
 	return (0);
 }
 
+static char np_buf[9];
+
+static int
+np_fill()
+{
+	register int i;
+
+	for (i = 0; i < 8; i++)
+		np_buf[i] = 'a' + i;
+	np_buf[8] = 0;
+	return (0);
+}
+
+static int
+np_bcopy()
+{
+	char st[9];
+
+	np_fill();
+	bcopy(np_buf, st, 9);			/* data bank to stack bank */
+	if (!same(st, "abcdefgh"))
+		return (1);
+	bcopy(np_buf, np_buf + 2, 6);		/* dst above src: backward */
+	if (!same(np_buf, "ababcdef"))
+		return (1);
+	np_fill();
+	bcopy(np_buf + 2, np_buf, 6);		/* dst below src: forward */
+	if (!same(np_buf, "cdefghgh"))
+		return (1);
+	np_fill();
+	bcopy(np_buf, np_buf + 1, 0);		/* nothing moves */
+	if (!same(np_buf, "abcdefgh"))
+		return (1);
+	return (0);
+}
+
 int
 netprobe()
 {
@@ -64,6 +100,9 @@ netprobe()
 	if (l * 3L != 210000L || np2_lmul(70000L, 3L) != 210000L ||
 	    l / 7L != 10000L || l != 70000L)
 		return (6);
+	/* 7: bcopy as 2.11BSD's: across banks, and an overlap either way */
+	if (np_bcopy() != 0)
+		return (7);
 	if ((local = netprobe3()) != 0)
 		return (local);
 	if ((local = netprobe4()) != 0)

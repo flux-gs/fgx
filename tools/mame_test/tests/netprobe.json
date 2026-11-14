@@ -1,7 +1,7 @@
 {
  "name": "netprobe",
  "description": "The network modules on the machine: code banks over one data bank, linked at load. Only means anything at kernel.netprobe = 1.  /etc/rc loads them at boot, and the command reads the log.",
- "command": "sleep 3; dmesg | tail -10",
+ "command": "sleep 3; dmesg | grep bsdnet",
  "timeout_s": 40,
  "expect": {
   "screen_contains": [
