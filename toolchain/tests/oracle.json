@@ -549,6 +549,7 @@
   "ptrdiff": 42,
   "ptrinit_const": 42,
   "ptrmemidx": 42,
+  "ptrptr_index_regptr": 42,
   "ptrstructassign": 42,
   "ptrsub": 42,
   "putcsize": 42,

@@ -3852,9 +3852,10 @@ emit_air_head(Local *lc)
 
 /* A pointer base's bank waits in _fcc_ptr+2 while its index is evaluated
  * (emit_load_base, emit_load_global).  A call in the index may reuse
- * _fcc_ptr -- `digs[f(x)]', 4.3BSD-Reno doprnt.c's quad digits -- so the
- * bank is staged again from the pointer itself, local or global.  A is
- * kept. */
+ * _fcc_ptr -- `digs[f(x)]', 4.3BSD-Reno doprnt.c's quad digits -- and so
+ * does a read through another pointer, `fdp[ap[1]]', so the bank is staged
+ * again from the pointer itself, local or global, whenever the index wrote it
+ * (ir_ptr_bank_clobbered_since).  A is kept. */
 void
 emit_restage_base_bank(Local *lc, Global *gv)
 {
@@ -3935,7 +3936,7 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         !ISPTR(DECREF(lc->type)) &&
         lc->type != LT_LONG_PTR && lc->type != LT_FLOAT_PTR) {
         int base_mut = ir_local_mutated_since(idx_snap, (void *)lc);
-        int called   = ir_call_since(idx_snap);
+        int called   = ir_ptr_bank_clobbered_since(idx_snap);
         g_s_delta -= 2;                                  /* matches the PLA in the lowering */
         g_expr_type     = is_byte ? LT_CHAR : LT_INT;
         g_expr_unsigned = lc->is_unsigned;   /* A-1: elem inherits decl */
@@ -3989,7 +3990,10 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
-        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
+        if (ir_ptr_bank_clobbered_since(idx_snap)) {
+            lc->raw_accessed = 1;           /* the restage reads its slot */
+            emit_restage_base_bank(lc, NULL);
+        }
         ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_long_b_lo"));
         /* Re-load with +2 offset for high word. */
@@ -4013,7 +4017,10 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
-        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
+        if (ir_ptr_bank_clobbered_since(idx_snap)) {
+            lc->raw_accessed = 1;           /* the restage reads its slot */
+            emit_restage_base_bank(lc, NULL);
+        }
         if (ISPTR(elem)) {                  /* element is itself a pointer → 4-byte load */
             int k = fpr_alloc();
             emit_fpr_load_ptr_at_fcc_ptr(k);

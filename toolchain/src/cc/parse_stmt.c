@@ -2108,8 +2108,10 @@ walk_stmt(int n)
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
         ir_record_raw(IR_TYA, 0, 0, NULL);   /* A = element address */
-        if ((lc ? ISPTR(lc->type) : is_ptr_target) && ir_call_since(cio_snap))
+        if ((lc ? ISPTR(lc->type) : is_ptr_target) && ir_ptr_bank_clobbered_since(cio_snap)) {
+            if (lc) lc->raw_accessed = 1;    /* the restage reads its slot */
             emit_restage_base_bank(lc, lc ? NULL : gv);
+        }
         if (g_ast[n].op != TOK_EOF) {
             TokKind op = g_ast[n].op;
             if (atype == LT_LONG_ARRAY || atype == LT_FLOAT_ARRAY) {
