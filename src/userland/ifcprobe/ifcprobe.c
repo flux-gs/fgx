@@ -14,6 +14,7 @@
 #include <net/if_dl.h>
 #include <net/route.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -104,6 +105,29 @@ lmode()
 	return 0;
 }
 
+/* -s addr: does a datagram to addr leave?  ip_output answers ENETUNREACH
+ * when no route covers it. */
+static int
+smode(a)
+	char *a;
+{
+	struct sockaddr_in to;
+	int s, r;
+
+	s = socket(AF_INET, SOCK_DGRAM, 0);
+	bzero((char *)&to, sizeof to);
+	to.sin_family = AF_INET;
+	to.sin_port = htons(7);
+	to.sin_addr.s_addr = inet_addr(a);
+	r = sendto(s, "x", 1, 0, (struct sockaddr *)&to, sizeof to) == 1 ? 0 : errno;
+	close(s);
+	if (r == 0)
+		printf("IFC S %s sent\n", a);
+	else
+		printf("IFC S %s errno %d\n", a, r);
+	return 0;
+}
+
 int
 main(argc, argv)
 	int argc;
@@ -117,6 +141,8 @@ main(argc, argv)
 
 	if (argc > 1 && strcmp(argv[1], "-l") == 0)
 		return lmode();
+	if (argc > 2 && strcmp(argv[1], "-s") == 0)
+		return smode(argv[2]);
 	s = socket(AF_INET, SOCK_DGRAM, 0);
 	if (s < 0) { fail("socket", (long)errno); return 1; }
 
