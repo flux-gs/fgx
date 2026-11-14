@@ -614,16 +614,15 @@ struct { int e, v1, v2; } bn_ret;
  * soreceive that disposed of the message -- is still running.  2.11BSD's
  * closef is the kernel's and nests nothing here.  So a nested call keeps the
  * outer one's u_error, u_r, u_ap, u_qsave and getf() file, and puts them back
- * after copying its own answer to bn_ret.  The saves are static, one per level,
- * because every socket call runs on a process's kernel stack slot and a
- * label_t there would be paid by all of them. */
-#define	BN_NEST	4
-static	int bn_depth;
-static	struct bnsave {
-	int	e, v1, v2, *ap;
-	label_t	q;
-	struct	file f;
-} bn_save[BN_NEST];
+ * after copying its own answer to bn_ret.
+ *
+ * NESTING IS PER PROCESS.  A process asleep inside a socket call (accept, recv,
+ * an mbuf wait) is still inside it while another process makes one, and that
+ * call is not nested in anything.  bn_in[pid] says whether this process is
+ * already here.  The save is a local of bn_nested, so only a nested call pays
+ * its stack; every socket call runs on a process's kernel stack slot. */
+static	char bn_in[NPROC + 1];
+static	int bn_body(), bn_nested();
 
 /* trap.c's syscall(): a body a signal interrupts comes back through the
  * setjmp with sleep()'s EINTR in u_error.  The bodies with a setjmp of their
@@ -632,22 +631,52 @@ int
 bn_sys(cp)
 	register struct bncall *cp;
 {
+	register int pid;
+
+	pid = kc_curpid();
+	if (pid < 0 || pid > NPROC)
+		panic("bn_sys: pid");
+	if (bn_in[pid])
+		return (bn_nested(cp));
+	bn_in[pid] = 1;
+	(void) bn_body(cp);
+	bn_in[pid] = 0;
+	return (bn_ret.v1);
+}
+
+static int
+bn_nested(cp)
+	register struct bncall *cp;
+{
+	int e, v1, v2, *ap;
+	label_t q;
+	struct socket *fso;
+
+	e = u.u_error;
+	v1 = u.u_r.r_val1;
+	v2 = u.u_r.r_val2;
+	ap = u.u_ap;
+	q = u.u_qsave;
+	fso = bn_file.f_socket;
+	(void) bn_body(cp);
+	u.u_error = e;
+	u.u_r.r_val1 = v1;
+	u.u_r.r_val2 = v2;
+	u.u_ap = ap;
+	u.u_qsave = q;
+	bn_file.f_type = DTYPE_SOCKET;
+	bn_file.f_socket = fso;
+	return (bn_ret.v1);
+}
+
+static int
+bn_body(cp)
+	register struct bncall *cp;
+{
 	register struct socket *so;
 	register int *blk;
 	int nb, nbset;
-	register struct bnsave *sp;
 
-	if (bn_depth++) {
-		if (bn_depth > BN_NEST)
-			panic("bn_sys: nested too deep");
-		sp = &bn_save[bn_depth - 2];
-		sp->e = u.u_error;
-		sp->v1 = u.u_r.r_val1;
-		sp->v2 = u.u_r.r_val2;
-		sp->ap = u.u_ap;
-		sp->q = u.u_qsave;
-		sp->f = bn_file;
-	}
 	u.u_error = 0;
 	u.u_r.r_val1 = 0;
 	u.u_r.r_val2 = 0;
@@ -675,14 +704,5 @@ bn_sys(cp)
 	bn_ret.e = u.u_error;
 	bn_ret.v1 = u.u_r.r_val1;
 	bn_ret.v2 = u.u_r.r_val2;
-	if (--bn_depth) {
-		sp = &bn_save[bn_depth - 1];
-		u.u_error = sp->e;
-		u.u_r.r_val1 = sp->v1;
-		u.u_r.r_val2 = sp->v2;
-		u.u_ap = sp->ap;
-		u.u_qsave = sp->q;
-		bn_file = sp->f;
-	}
 	return (bn_ret.v1);
 }
