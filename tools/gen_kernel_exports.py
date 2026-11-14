@@ -246,6 +246,9 @@ MANIFESTS = {
         ('_klogVfsUiomove', '_klogVfsUiomove', 0, 'lo16'),
         ('_klogVfsBank', '_klogVfsBank', 0, 'lo16'),
     ],
+    # mem: /dev/mem and /dev/kmem (src/modules/mem).  It keeps no state and
+    # finds vfs.mod's uiomove on each call, so the build id is all it needs.
+    'mem': [],
     'bpf': [
         ('_Sys_RdMax', '_Sys_RdMax', 0, 'lo16'),
         # The W5100 socket bitmap: open claims socket 0 for MACRAW through it.

@@ -1,0 +1,10 @@
+{
+ "name": "kmem",
+ "description": "/dev/mem and /dev/kmem, 2.11BSD pdp/mem.c mmrw minors 0 and 1 (here both the 24-bit physical address the offset names), nlist(3) on /netnix, the network stack's name list the build writes, and sysctl kern.netdata, where the stack's data bank is: route(8)'s flushroutes reads the routing hash through exactly these.  The probe reads the stack's rthashsize (8) at netdata plus its /netnix offset, is refused the I/O window with EFAULT, writes and reads back a byte of its own through /dev/mem, and as uid 1 is refused /dev/kmem (0640 root:kmem).",
+ "command": "/testbin/kmemprobe",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["KMEM ok", "fgx#"],
+  "screen_lacks": ["KMEM FAIL", "PANIC", "BRK"]
+ }
+}

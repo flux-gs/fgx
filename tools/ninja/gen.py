@@ -321,8 +321,11 @@ RAW_DISK_NODES = [(f"rsd{u}", 10 + u) for u in ROOT_BLKUNITS]
 # device', seen on the second machine and on none of the harness runs.
 # tty00 exists only on such a machine; its slot stays empty elsewhere, and
 # opening the node answers ENXIO (_Chardev_Open).
-MODULE_DEV_NODES = [("cda", 20), ("tty00", 21), ("klog", 22)]
-MODULE_DEV_MODES = {"cda": 600}      # the rest are 666, as tty01 is
+MODULE_DEV_NODES = [("cda", 20), ("tty00", 21), ("klog", 22), ("mem", 23),
+                    ("kmem", 24)]
+# The rest are 666, as tty01 is.  mem and kmem are 2.11BSD's 0640 root:kmem
+# (the `o' rows below give them the group).
+MODULE_DEV_MODES = {"cda": 600, "mem": 640, "kmem": 640}
 
 
 
@@ -760,6 +763,7 @@ def write_dev_nodes_list(path="build/dev_nodes.list"):
     out.append("d /home - -")
     out.append("d /home/fgx - -")
     out.append("o /home/fgx 100 10")
+    out += [f"o /dev/{n} 0 2" for n in ("mem", "kmem")]   # group kmem
     write_if_changed(os.path.join(ROOT, path), "\n".join(out) + "\n")
 
 def rel(p):
@@ -1121,6 +1125,10 @@ rule bsdnetc
 rule bsdnet
   command = python3 tools/build_bsdnet.py src/kernel/bsdnet/split.list build/bsdnet disk_src/lib/modules $stems
   description = network modules
+
+rule mknetnix
+  command = python3 tools/mknetnix.py --self-test && python3 tools/mknetnix.py build/bsdnet/bsdnetd/_Output.txt $out
+  description = /netnix, the network stack's name list
 
 rule modulec_bank
   command = ./toolchain/fcc -fno-safepoints --pile --module-bank -o $out $in -MD -MF $out.d && python3 tools/check_kernelc_calls.py $out
@@ -2043,12 +2051,12 @@ def emit(tools, out_path):
     # halves were outside the graph entirely, while disk_src/etc/modload.conf
     # (tracked) loads the results at boot.
     KEXPORTS = ("serial", "bpf", "net", "ramdisk", "pty", "cda", "sscon",
-                "klog")
+                "klog", "mem")
     cfg = _cfg_values()
     probes = any(cfg.get(g, "0") != "0" for g in _UFSPROBE_GATES)
     MODULES = tuple(m for m in ("serial", "bpf", "net", "ramdisk", "pty",
                                 "vfs", "ufs", "ufsprobe", "ufsdir", "prodos",
-                                "prodosw", "cda", "sscon", "klog", "fpsim",
+                                "prodosw", "cda", "sscon", "klog", "mem", "fpsim",
                                 "ld", "isofs")
                     if m != "ufsprobe" or probes)
     MODCHECK = ("bpf",)
@@ -2172,6 +2180,9 @@ def emit(tools, out_path):
                  "src/kernel/far/fcc_dp.s toolchain/lib/fcc_runtime_data.s\n"
                  f"  stems = {' '.join(bn_link)}")
     mod_outs += bn_outs
+    # /netnix: the name list route(8)'s flushroutes reads (tools/mknetnix.py).
+    lines.append("build disk_src/netnix: mknetnix disk_src/lib/modules/bsdnetd"
+                 " | tools/mknetnix.py")
     mod_checked = []
     # Modules whose C is compiled --module-bank carry a MOD_FN_PTR table.
     # ufsprobe carries NO &function cells at the shipping configuration -- its
@@ -2463,6 +2474,7 @@ def emit(tools, out_path):
         lines.append(f"build {dst_}: stagecp {src_}")
         if dst_ not in staged:
             staged.append(dst_)
+    staged.append("disk_src/netnix")           # mknetnix, beside bsdnetd
 
     # ---- the disk image ----------------------------------------------
     # STALE STAGED FILES.  Nothing removes a file from disk_src when its

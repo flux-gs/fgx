@@ -44,5 +44,7 @@ int *rdevp;
     if (i == 20) { *rdevp = 20; return ("cda"); }
     if (i == 21) { *rdevp = 21; return ("tty00"); }
     if (i == 22) { *rdevp = 22; return ("klog"); }
+    if (i == 23) { *rdevp = 23; return ("mem"); }
+    if (i == 24) { *rdevp = 24; return ("kmem"); }
     return ((char *)0);
 }

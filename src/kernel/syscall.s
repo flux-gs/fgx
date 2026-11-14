@@ -2310,8 +2310,54 @@ _Sys_Sysctl     MX      %00
                 BEQ     @sc_tod
                 CMP     #21                     ; KERN_BOOTTIME
                 BEQ     @sc_tod
+                CMP     #25                     ; KERN_NETDATA
+                BEQ     @sc_net
 @sc_notod       PLB
                 BRA     @sc_far
+                ; kern.netdata: the network stack's data bank as an address,
+                ; what 2.11BSD's route(8) reads `netdata' from /unix for.  A
+                ; read-only long, as sysctl_rdlong; 0 with no stack loaded.
+@sc_net         PLB                             ; DBR = this bank, for the walk
+                PHX
+                LDA     #VT_BSDNET
+                JSR     Mod_FindVtable          ; C=1: X = its bank
+                BCS     @sn_have
+                LDX     #0
+@sn_have        TXY                             ; Y = the bank
+                PLX                             ; X = the block again
+                PHB
+                SEP     #$20
+                MX      %10
+                LDA     _Sys_CallerBank
+                PHA
+                PLB                             ; DBR = the caller's bank
+                REP     #$20
+                MX      %00
+                LDA     |$0006,X                ; flags
+                BIT     #$0002                  ; SYSCTL_NEWP: read-only
+                BNE     @sn_perm
+                BIT     #$0001                  ; SYSCTL_OLDP
+                BEQ     @sn_size
+                LDA     |$0008,X                ; *oldlenp
+                CMP     #4
+                BCC     @sn_mem
+@sn_size        LDA     #4
+                STA     |$0008,X                ; sizeof (long)
+                STZ     |$000C,X                ; low word: offset 0
+                TYA
+                STA     |$000E,X                ; high word: the bank
+                PLB
+                LDA     #0
+                SEC
+                RTS
+@sn_perm        PLB
+                LDA     #EPERM
+                CLC
+                RTS
+@sn_mem         PLB
+                LDA     #ENOMEM
+                CLC
+                RTS
 @sc_vm          PLB
                 TXA
                 JMP     _Sys_VmSysctl

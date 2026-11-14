@@ -28,3 +28,5 @@ DEVNODE_RSD7         EQU     17
 DEVNODE_CDA          EQU     20
 DEVNODE_TTY00        EQU     21
 DEVNODE_KLOG         EQU     22
+DEVNODE_MEM          EQU     23
+DEVNODE_KMEM         EQU     24

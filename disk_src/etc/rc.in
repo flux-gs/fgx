@@ -73,7 +73,7 @@ cat /etc/motd >/dev/console 2>&1
 # modules after net: UDP is theirs, and dhclient's socket below is one.
 UFSPROBE=
 [ -f /lib/modules/ufsprobe ] && UFSPROBE=ufsprobe
-/sbin/modload net bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3 ramdisk pty klog fpsim $UFSPROBE >/dev/console 2>&1
+/sbin/modload net bsdnetd bsdnet0 bsdnet1 bsdnet2 bsdnet3 ramdisk pty klog mem fpsim $UFSPROBE >/dev/console 2>&1
 
 # the Control Panel's RAM disk, when there is one
 /sbin/mount_prodos -o write /dev/ram0 /ram5 >/dev/null 2>&1 &&

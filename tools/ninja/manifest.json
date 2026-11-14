@@ -610,6 +610,9 @@
    "name": "ifcprobe"
   },
   {
+   "name": "kmemprobe"
+  },
+  {
    "name": "clkprobe"
   },
   {
@@ -956,6 +959,10 @@
   {
    "src": "bin/ifcprobe.bin",
    "dst": "disk_src/testbin/ifcprobe"
+  },
+  {
+   "src": "bin/kmemprobe.bin",
+   "dst": "disk_src/testbin/kmemprobe"
   },
   {
    "src": "bin/ntp.bin",
