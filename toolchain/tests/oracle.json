@@ -602,7 +602,7 @@
   "sl_counter": 3,
   "sl_init": 42,
   "slocal_struct_init": 42,
-  "sockops": 42,
+  "sockops": 52,
   "softdouble": 42,
   "spawnops": 42,
   "spec_order": 42,

@@ -145,6 +145,7 @@ extern char _libc_lstrBufB[];
 #include "setenv.c"
 #include "socket.c"
 #include "socket_srv.c"
+#include "sendmsg.c"
 #include "select.c"
 #include "sysctl.c"
 #include "sockopt.c"

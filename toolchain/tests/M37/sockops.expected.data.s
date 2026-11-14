@@ -8,4 +8,5 @@
 ;-------------------------------
 sa              DS      16
 buf             DS      8
+mh              DS      18
                 FGX2_RELOC_COUNT 1

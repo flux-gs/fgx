@@ -45,6 +45,17 @@ struct sockaddr {           /* 2.11BSD sys/socket.h, verbatim */
     char    sa_data[14];    /* 2..15: up to 14 bytes of address */
 };
 
+/* sendmsg(2)/recvmsg(2)'s message: 2.11BSD sys/socket.h, verbatim.  An
+ * AF_UNIX message's access rights are an array of descriptors. */
+struct msghdr {
+    caddr_t msg_name;           /* optional address */
+    int     msg_namelen;        /* size of address */
+    struct  iovec *msg_iov;     /* scatter/gather array */
+    int     msg_iovlen;         /* # elements in msg_iov */
+    caddr_t msg_accrights;      /* access rights sent/received */
+    int     msg_accrightslen;
+};
+
 int socket(int domain, int type, int proto);
 int bind(int s, struct sockaddr *addr, int addrlen);
 int connect(int s, struct sockaddr *addr, int addrlen);
@@ -59,4 +70,6 @@ int getsockopt(int s, int level, int optname, char *optval, int *optlen);
 int shutdown(int s, int how);
 int getpeername(int s, struct sockaddr *name, int *namelen);
 int getsockname(int s, struct sockaddr *name, int *namelen);
+int sendmsg(int s, struct msghdr *msg, int flags);
+int recvmsg(int s, struct msghdr *msg, int flags);
 #endif
