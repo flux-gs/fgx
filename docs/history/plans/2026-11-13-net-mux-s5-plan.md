@@ -12,11 +12,16 @@
 
 ## Calls this plan makes that the spec does not
 
-For the maintainer's review.  Task 10 writes the accepted ones into the spec.
+For the maintainer's review.  Task 11 writes the accepted ones into the spec.
 
 1. **The one name is `wz0`.**  2.11BSD's `ifunit` (`net/if.c`) reads a name's first digit as its unit, so `u2s1` cannot be a kernel name; `wz0` is what `SIOCGIFCONF` already reports.  `u2s1` leaves every program, script, page and test.
 2. **The MAC comes from 4.3BSD-Reno's `AF_LINK` address.**  2.11BSD has no ioctl that answers an interface's hardware address, and dhclient needs one.  Reno's `if_attach` gives every interface a `sockaddr_dl` (`examples/4.3BSD-Reno/net/if.c`, `net/if_dl.h`) and `ifconf` returns it with the others; that is ported, and nothing else of Reno's routing changes.  `ifconfig` prints it as an `ether` line, which 2.11BSD's does not: an FGX addition, in PROVENANCE and the page.
-3. **`route -f` answers an error.**  2.11BSD's `flushroutes` reads the routing hash tables through `/dev/mem` and `nlist`, and FGX has no `/dev/kmem` and no name list of the stack's banks.  `route -f` prints `route: -f needs /dev/kmem` and exits 1; BUGS in `route(8)`; a ROADMAP item for `/dev/kmem`, which `netstat` also wants.  **The maintainer may instead want `/dev/kmem` in S5**: say so and Task 3 grows.
+3. **`/dev/mem`, `/dev/kmem` and a name list for the stack, so `route -f` is upstream's (the maintainer's call).**  2.11BSD's `flushroutes` (pdp11 arm) takes the network's data address, `netdata`, from `nlist("/unix")`, the hash tables' offsets from `nlist("/netnix")`, and reads them through `/dev/mem`.  FGX's pieces:
+   - `/dev/mem` and `/dev/kmem` are 2.11BSD `pdp/mem.c` `mmrw` minors 0 and 1, beside the `/dev/null` FGX already has as minor 2.  With no MMU both read and write the 24-bit physical address the file offset names.  The I/O window ($C000-$CFFF of banks $00, $01, $E0 and $E1) answers EFAULT, since a read there switches hardware: an FGX divergence, stated.  The nodes are mode 0640, owner root, group kmem, as upstream installs them.
+   - `nlist(3)` is 2.11BSD's `gen/nlist.c`, over FGX's `a.out.h`.
+   - `/netnix` is a name list only: an a.out header and symbol table the build writes from bsdnetd's data image, each value an offset in that bank.  It is not the stack's code, which stays in the modules.
+   - `netdata` has no fixed kernel address on FGX, because the kernel and the stack load into banks chosen at boot.  So it comes from a sysctl, `kern.netdata` (`KERN_NETDATA` 25, `KERN_MAXID` 26), whose value is bsdnetd's bank as a physical address, as 2.11BSD's `netdata` is one.  This is an FGX addition, stated; `route.c`'s pdp11 arm reads it instead of `nlist("/unix")`.
+   `netstat`, `ps` and `top` could then use the same pieces; porting them is not S5's.
 4. **The FCB is the `struct file` that rights carry.**  A rights record holds FCB offsets, two bytes each, as 2.11BSD's holds two-byte `struct file` pointers, so `m_len / sizeof (int)` counts them unchanged.  The FCB gains two common bytes, `FCB_MsgCount` and `FCB_GcFlags` (`FMARK`, `FDEFER`), which takes `FCB_SIZE` from 38 to its soft cap of 40 (`include/fs.s`).
 5. **`NFILE` goes from 64 to 128.**  1,536 bytes of the far kernel bank (5,598 free).  2.11BSD's formula (`conf/param.c`: `NINODE = NPROC + 16 + MAXUSERS + 22`, `NFILE = 8 * NINODE / 10 + 20`) gives about 79 for 32 processes, but upstream counts no socket-heavy load; 128 puts the mbuf pool, not the file table, first to run out.
 6. **`MSG_DONTWAIT` is per call.**  No BSD source in the tree has it (checked: 2.11BSD, 4.3BSD-Reno, netbsd-0-9); it is FGX's.  `sosend` and `soreceive` test `(so->so_state & SS_NBIO) || (flags & MSG_DONTWAIT)`, `sblock` under it returns EWOULDBLOCK rather than sleeping, and `bn_sys.c` stops setting `SS_NBIO` for the call.  PROVENANCE says where it comes from.
@@ -38,11 +43,11 @@ For the maintainer's review.  Task 10 writes the accepted ones into the spec.
 
 ## Review Focus
 
-1. **dhclient renewing a lease that changed address**: the old address's routes (the default route, the broadcast host route) are deleted and the new ones added, with no stale route left pointing at the old gateway.  Task 4 case: a second `SIOCSIFADDR` with a different address, then `route` shows one default.
+1. **dhclient renewing a lease that changed address**: the old address's routes (the default route, the broadcast host route) are deleted and the new ones added, with no stale route left pointing at the old gateway.  Task 5 case: a second `SIOCSIFADDR` with a different address, then `route` shows one default.
 2. **`ifconfig wz0 down` while connections are open**: output stops (`if_down` purges the queue), and `ifconfig wz0 up` brings traffic back without reattaching the card.  Task 2 case on `lo0`: down, a UDP send answers ENETDOWN or is dropped, up, the send arrives.
-3. **A passed descriptor whose socket is closed in flight**: the receiver never reads the message; `unp_gc` must close the in-flight FCB when its last reference is the message.  Task 6 case `-r gc`: FCB count back to its idle value.
-4. **A long AF_UNIX path passed to a buffer shorter than it**: `recvfrom` with `*fromlen` 16 on a 40-character sender gets 16 bytes and the length the kernel wrote, never an overrun.  Task 7 case.
-5. **The file table full with sockets**: socket 120 of 128 answers ENFILE cleanly, not a hang, and closing one lets the next succeed.  Task 8 case.
+3. **A passed descriptor whose socket is closed in flight**: the receiver never reads the message; `unp_gc` must close the in-flight FCB when its last reference is the message.  Task 7 case `-r gc`: 150 rounds, each of which must still open its file.
+4. **A long AF_UNIX path passed to a buffer shorter than it**: `recvfrom` with `*fromlen` 16 on a 40-character sender gets 16 bytes and the length the kernel wrote, never an overrun.  Task 8 case.
+5. **The file table full with sockets**: socket 120 of 128 answers ENFILE cleanly, not a hang, and closing one lets the next succeed.  Task 9 case.
 
 ---
 
@@ -76,29 +81,45 @@ For the maintainer's review.  Task 10 writes the accepted ones into the spec.
 - [ ] **Step 4: Run it.**  Expected: PASS.  Control: the manifest's `flags=48` line, mutated to `flags=49`, fails.
 - [ ] **Step 5: Gate, commit.**  Commit `ifconfig: 2.11BSD's, on the kernel stack's interfaces`.
 
-### Task 3: route is 2.11BSD's (call 3)
+### Task 3: /dev/mem, /dev/kmem, nlist and /netnix (call 3)
+
+**Files:**
+- Modify: the kernel's memory chardev (`src/kernel/chardev.s`, beside `_Null_*`), `include/devnodes.s` and the image's `/dev` (nodes `mem`, `kmem`), the sysctl table (`kern.netdata`), `toolchain/include/sys/sysctl.h`, `toolchain/include/a.out.h` (what `nlist` needs), `toolchain/include/nlist.h` (create)
+- Create: `toolchain/lib/libc_c/nlist.c` (from `examples/2.11BSD/usr/lib/libc/gen/nlist.c`, vendored), the build step that writes `/netnix` (in `tools/build_bsdnet.py`), `src/userland/kmemprobe/kmemprobe.c`, manifest `kmem`
+- Vendor: `examples/2.11BSD/usr/sys/pdp/mem.c`, `examples/2.11BSD/usr/lib/libc/gen/nlist.c` into `vendor/2.11BSD/`
+
+**Interfaces:**
+- Produces: `open("/dev/kmem")`, `lseek` to a 24-bit address, `read`/`write` the bytes there; EFAULT inside the I/O window; `nlist(char *file, struct nlist *nl)` filling `n_value` (0 when absent), returning the count not found or -1; `/netnix` naming at least `_rthost`, `_rtnet`, `_rthashsize`; `sysctl({CTL_KERN, KERN_NETDATA})` answering a long.
+
+- [ ] **Step 1: Write the failing probe.**  `kmemprobe`: `nlist("/netnix")` finds `_rthashsize`; `sysctl kern.netdata` answers a bank above 0; reading `_rthashsize` through `/dev/kmem` at `netdata + n_value` gives the stack's `RTHASHSIZ` (the executor reads the value from `net/route.h`); a read at $E0C000 answers EFAULT; a byte of the probe's own data written and read back through `/dev/mem` round-trips.  Prints `KMEM ok` or `KMEM FAIL <step>`.  As a non-root user, `open("/dev/kmem")` answers EACCES.
+- [ ] **Step 2: Run it.**  Expected: FAIL at link (no `nlist`), then `KMEM FAIL open`.
+- [ ] **Step 3: Implement**: libc first, with a fixture for `nlist` on a small name list; then the device minors after `mmrw`; then the sysctl; then the build's `/netnix`.  Record the core, far and tty bank bytes spent.
+- [ ] **Step 4: Run it.**  Expected: `KMEM ok`.  Control: `/netnix` written with every value off by 2 fails the `RTHASHSIZ` read.
+- [ ] **Step 5: Gate, commit.**  Commit `kernel: /dev/mem and /dev/kmem, after 2.11BSD's mmrw` and `libc: nlist, and the stack's name list in /netnix`.
+
+### Task 4: route is 2.11BSD's
 
 **Files:**
 - Replace: `src/userland/route/route.c` (from `vendor/2.11BSD/usr/sbin/route/route.c`); create `src/userland/man/pages/cat8/route.0`
-- Modify: `docs/PROVENANCE.md`, `docs/ROADMAP.md` (the `/dev/kmem` item), manifest `ifcroute`
+- Modify: `docs/PROVENANCE.md`, manifest `ifcroute`
 
 **Interfaces:**
-- Consumes: Task 1's `SIOCADDRT`/`SIOCDELRT`.
-- Produces: `route [-n] add|delete [host|net] destination gateway [metric]` as 2.11BSD's; `route -f` prints `route: -f needs /dev/kmem` and exits 1.
+- Consumes: Task 1's `SIOCADDRT`/`SIOCDELRT`; Task 3's `/dev/mem`, `nlist("/netnix")` and `kern.netdata`.
+- Produces: `route [-fn] add|delete [host|net] destination gateway [metric]` as 2.11BSD's, `-f` included.
 
-- [ ] **Step 1: Extend the manifest.**  `route add 10.9.9.9 127.0.0.1` prints `add host 10.9.9.9: gateway 127.0.0.1`, `ifcprobe -s 10.9.9.9` then reaches `lo0`, `route delete 10.9.9.9 127.0.0.1` prints `delete host 10.9.9.9: gateway 127.0.0.1`, and `route -f` prints its error.
+- [ ] **Step 1: Extend the manifest.**  `route add 10.9.9.9 127.0.0.1` prints `add host 10.9.9.9: gateway 127.0.0.1`, `ifcprobe -s 10.9.9.9` then reaches `lo0`, `route delete 10.9.9.9 127.0.0.1` prints `delete host 10.9.9.9: gateway 127.0.0.1`, and after `route add net 10.8.0.0 127.0.0.1`, `route -f` prints upstream's flush line for 10.8.0.0 and the net route is gone (`ifcprobe -s 10.8.0.1` answers ENETUNREACH).
 - [ ] **Step 2: Run it.**  Expected: FAIL (the old route only stores a gateway).
-- [ ] **Step 3: Port.**  Upstream's `route.c` with `flushroutes` replaced by the error and nothing else changed.
+- [ ] **Step 3: Port.**  Upstream's `route.c`, its pdp11 `flushroutes` arm taking `netdata` from `kern.netdata` instead of `nlist("/unix")`, and nothing else changed.
 - [ ] **Step 4: Run it.**  Expected: PASS.  Control: `route delete` with a wrong gateway prints upstream's `not in table` error.
-- [ ] **Step 5: Gate, commit.**  Commit `route: 2.11BSD's; -f waits for /dev/kmem`.
+- [ ] **Step 5: Gate, commit.**  Commit `route: 2.11BSD's, -f through /dev/mem`.
 
-### Task 4: dhclient configures through the ioctls
+### Task 5: dhclient configures through the ioctls
 
 **Files:**
 - Modify: `src/userland/dhclient/dhclient.c`, `src/kernel/bsdnet/net/if_w5.c` (`w5ioctl`, `w5setaddr`, `w5address`), `src/kernel/bsdnet/machine/bn_sys.c` (`BNOP_IFCHANGED` goes), `docs/PROVENANCE.md`
 
 **Interfaces:**
-- Consumes: Tasks 1-3.
+- Consumes: Tasks 1, 2 and 4.
 - Produces: dhclient finds the first `IFF_BROADCAST` interface through `SIOCGIFCONF`, takes its MAC from the `AF_LINK` entry, and on a lease sets netmask, address and broadcast (`SIOCSIFNETMASK`, `SIOCSIFADDR`, `SIOCSIFBRDADDR`) and the default route (`SIOCDELRT` the old gateway's, `SIOCADDRT` the new).  With no such interface it prints `dhclient: no network interface` as now.  `w5ioctl`'s `SIOCSIFADDR` keeps the `255.255.255.255` host route (call 8).
 
 - [ ] **Step 1: Write the failing check.**  `ifcprobe -r` (no card needed): sets `lo0`'s address twice through `SIOCSIFADDR` with a default route via each, as dhclient's renew does, then reads the route table through `SIOCADDRT` refusals (`EEXIST` for the new default, none for the old): one default, the new one (Review Focus 1).  On the Uthernet: `netw5`'s lease and echo still pass, with dhclient on the ioctls.
@@ -107,7 +128,7 @@ For the maintainer's review.  Task 10 writes the accepted ones into the spec.
 - [ ] **Step 4: Run them.**  Expected: PASS; `ufsmodules` still sees `dhclient: no network interface`; `netw5` (alone, `kernel.netprobe = 1`) passes.
 - [ ] **Step 5: Gate, commit.**  Commit `dhclient: the lease goes in through ifconfig's and route's ioctls`.
 
-### Task 5: SYS_IFCONFIG retires, and the card has one name
+### Task 6: SYS_IFCONFIG retires, and the card has one name
 
 **Files:**
 - Delete: `src/kernel/ifconfig_sys.s`, `include/ifnet.s`
@@ -122,7 +143,7 @@ For the maintainer's review.  Task 10 writes the accepted ones into the spec.
 - [ ] **Step 4: Run it.**  Expected: clean; the network tests of S4's Task 7 list pass fresh.
 - [ ] **Step 5: Gate, commit.**  Commit `net: SYS_IFCONFIG and its interface table retire; the card is wz0`.
 
-### Task 6: AF_UNIX passes descriptors (call 4)
+### Task 7: AF_UNIX passes descriptors (call 4)
 
 **Files:**
 - Modify: `src/kernel/bsdnet/sys/uipc_usrreq.c` (`unp_internalize`, `unp_externalize`, `unp_dispose`, `unp_gc`, `unp_scan`, `unp_mark`, `unp_discard` as 2.11BSD's), `src/kernel/bsdnet/machine/bn_sys.c` (`getf`, `GETF`, `ufavail`, the seams), `src/kernel/jumptable.s` and a kernel file for the `kc_*` seams, `include/fs.s` (`FCB_MsgCount`, `FCB_GcFlags`), net.mod's forwards for `sendmsg`/`recvmsg` if absent, `toolchain/lib/libc_c/` (`sendmsg`, `recvmsg`), `src/userland/unixprobe/unixprobe.c`, `src/userland/man/pages/cat4/unix.0`, `docs/PROVENANCE.md`
@@ -136,7 +157,7 @@ For the maintainer's review.  Task 10 writes the accepted ones into the spec.
 - [ ] **Step 4: Run it.**  Expected: `UNIX R ok`.  Control: `unp_externalize` installing nothing fails `-r` with `UNIX R FAIL read`.
 - [ ] **Step 5: Gate, commit.**  Commit `unix: descriptors pass over AF_UNIX, as 2.11BSD passes them`.
 
-### Task 7: A sender's AF_UNIX name arrives whole
+### Task 8: A sender's AF_UNIX name arrives whole
 
 **Files:**
 - Modify: `toolchain/lib/libc_c/socket.c`, `socket_srv.c` (the arg block's name area: `sizeof (struct sockaddr_un)`, 110 bytes, and a length word the kernel writes), `src/kernel/bsdnet/machine/bn_sys.c` (`netcopyout` into it), `src/userland/unixprobe/unixprobe.c`, `src/userland/man/pages/cat4/unix.0` (the 14-character BUGS line goes)
@@ -150,7 +171,7 @@ For the maintainer's review.  Task 10 writes the accepted ones into the spec.
 - [ ] **Step 4: Run it**, and `unixdgram`, `unixstream`, `netudp`, `nettcp` fresh.  Control: the length word ignored fails the 16-byte case.
 - [ ] **Step 5: Gate, commit.**  Commit `libc: a socket name is as long as AF_UNIX's`.
 
-### Task 8: The file table outlasts the mbuf pool (call 5)
+### Task 9: The file table outlasts the mbuf pool (call 5)
 
 **Files:**
 - Modify: `src/kernel/vfs/fsparam.h` (`NFILE` 128), regenerated `include/vfs_equ.s`, `tools/mame_test/tests/tcpmany.json` or a loopprobe mode
@@ -164,20 +185,20 @@ For the maintainer's review.  Task 10 writes the accepted ones into the spec.
 - [ ] **Step 4: Run it.**  Expected: 60 connect; the first failure is ENOBUFS, and after closing all, the pool is back to its idle count.  Review Focus 5: with the 60 sockets open, `open` files until ENFILE; closing one lets the next `open` succeed.
 - [ ] **Step 5: Gate, commit.**  Commit `vfs: NFILE 128, so sockets meet the mbuf pool first`.
 
-### Task 9: The campaign's remaining debts (spec 7, calls 6 and 7)
+### Task 10: The campaign's remaining debts (spec 7, calls 6 and 7)
 
 **Files:**
 - Modify: `toolchain/lib/libc_c/netdb.c` (a deadline), `src/kernel/bsdnet/sys/uipc_socket.c` and `uipc_socket2.c` (`MSG_DONTWAIT`), `src/kernel/bsdnet/machine/bn_sys.c`, `src/kernel/bsdnet/machine/net_kern.c` (`printf` after 2.11BSD `sys/subr_prf.c` `prf`/`printn`), `src/kernel/bsdnet/netprobe.c`, the ntpd source (stratum), ntpdc's page (BUGS), `docs/PROVENANCE.md`
 
 - [ ] **Step 1: Write the four failing checks.**  (a) `gethostbyname` against a `lo0` responder that answers junk every second returns failure within its deadline (`loopprobe -h`, reading `/etc/resolv.conf` staged to 127.0.0.1).  (b) Three processes on one UDP socket: B blocks in `recv`, A calls `recv(MSG_DONTWAIT)`, C calls a plain `recv` and must block, not answer EAGAIN (`loopprobe -w`).  (c) netprobe case 8: `printf("np %s %d %x", "pr", 42, 0x1f)` logs `np pr 42 1f`.  (d) ntpd's new-peer stratum, through `ntpdc` on `ntpnet`, or a unit check in the ntpd test.
 - [ ] **Step 2: Run them.**  Expected: each FAILS as spec 7 describes.
-- [ ] **Step 3: Implement each**, ported where upstream has it (`subr_prf.c`, dhclient's `wait_reply` deadline pattern for netdb), FGX's where it does not (`MSG_DONTWAIT`, PROVENANCE).  ntpdc's wrap: BUGS line.  `boot_netstart.json`'s description was Task 5's.
+- [ ] **Step 3: Implement each**, ported where upstream has it (`subr_prf.c`, dhclient's `wait_reply` deadline pattern for netdb), FGX's where it does not (`MSG_DONTWAIT`, PROVENANCE).  ntpdc's wrap: BUGS line.  `boot_netstart.json`'s description was Task 6's.
 - [ ] **Step 4: Run them.**  Expected: PASS each, with a control each.
 - [ ] **Step 5: Gate, commit** one commit per item.
 
-### Task 10: Measure, hand over, stop
+### Task 11: Measure, hand over, stop
 
 - [ ] **Step 1:** Core and far bank free, net.mod's size, the stack's footprint, and `loopprobe -b` once more.
-- [ ] **Step 2:** The S5 hardware-run page in S4's shape: `ifconfig wz0` (with `ether`), `route add`/`delete`, `dhclient` by hand, a static address from `netstart`'s commented lines, descriptor passing, and S4's steps once more.
+- [ ] **Step 2:** The S5 hardware-run page in S4's shape: `ifconfig wz0` (with `ether`), `route add`/`delete`/`-f`, `dhclient` by hand, a static address from `netstart`'s commented lines, descriptor passing, and S4's steps once more.
 - [ ] **Step 3:** The spec: the S5 row done, the accepted calls, every spec 7 item ticked, nothing left inheriting.
 - [ ] **Step 4:** `tools/gate.sh`; commit; stop for the maintainer's hardware run, then the final whole-branch review.
