@@ -1150,7 +1150,10 @@ tcp_main()
 
 /* ---- `-m': more connections at once than the chip has sockets (spec 6).  A
  * parent listens; a child makes MANYCONN connections and keeps them all open;
- * then each carries 1 KB both ways.  `MANY OK'. ---- */
+ * then each carries 1 KB both ways.  `MANY OK'.  Connection i's bytes are
+ * tfill's pattern for seed i, so the server knows a connection by its first
+ * byte: accept's order is the order handshakes complete, which a late ACK can
+ * change, not the order the child called connect. ---- */
 #define MANYPORT 7840
 #define MANYCONN 16
 
@@ -1159,7 +1162,7 @@ static int m_backlog(), m_exhaust();
 static int
 many_main()
 {
-    int ls, c[MANYCONN], a[MANYCONN], i, st, bad;
+    int ls, c[MANYCONN], a[MANYCONN], seed[MANYCONN], i, st, bad, seen;
     fd_set mrd;
 
     signal(SIGPIPE, SIG_IGN);
@@ -1198,12 +1201,16 @@ many_main()
         a[i] = accept(ls, (struct sockaddr *)0, (int *)0);
         if (a[i] < 0) { printf("MANY FAIL accept %d %d\n", i, errno); bad = 1; break; }
     }
+    seen = 0;
     for (i = 0; !bad && i < MANYCONN; i++) {
-        tfill(tbuf, 1024, i);
-        if (treadn(a[i], tbuf2, 1024) != 1024 || memcmp(tbuf, tbuf2, 1024) != 0) { printf("MANY FAIL recv %d\n", i); bad = 1; }
+        if (treadn(a[i], tbuf2, 1024) != 1024) { printf("MANY FAIL recv %d\n", i); bad = 1; break; }
+        seed[i] = tbuf2[0] & 0xFF;
+        tfill(tbuf, 1024, seed[i]);
+        if (seed[i] >= MANYCONN || (seen & (1 << seed[i])) || memcmp(tbuf, tbuf2, 1024) != 0) { printf("MANY FAIL recv %d seed %d\n", i, seed[i]); bad = 1; break; }
+        seen |= 1 << seed[i];
     }
     for (i = 0; !bad && i < MANYCONN; i++) {
-        tfill(tbuf, 1024, i + 50);
+        tfill(tbuf, 1024, seed[i] + 50);
         if (write(a[i], tbuf, 1024) != 1024) { printf("MANY FAIL send %d %d\n", i, errno); bad = 1; }
     }
     st = 1;
