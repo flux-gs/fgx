@@ -83,8 +83,8 @@ DPMAP = REPO / "include" / "dpmap.s"
 # leaf.  Naming them here instead would be the wrong fix -- a primitive list that
 # grows per bank is the hand list this file keeps replacing with a derivation.
 _SLEEP_NAMED = (
-    r"\b(JSR|JSL|JMP|JML)\s+_?(sleep|sleepUn|Sleep|swtch|_Sched_Yield|"
-    r"SYS_NETKC_SLEEP|_NlKC_Sleep|kc_sleep)\b"
+    r"\b(JSR|JSL|JMP|JML)\s+_?(sleep|sleepUn|sleepUnRel|Sleep|swtch|"
+    r"_Sched_Yield|SYS_NETKC_SLEEP|_NlKC_Sleep|kc_sleep|kc_sleepr)\b"
 )
 # A routine head: a label starting in column 0 that is not a local (@) label.
 LABEL_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\b")

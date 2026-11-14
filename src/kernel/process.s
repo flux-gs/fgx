@@ -2105,7 +2105,7 @@ _Img_Leave      MX      %00
 ; released, lets its parent run: SEF_FORKREL, and a wake on WCHAN_VFORK.
 ; Nothing is allocated: the parent's home was made at fork and the child's
 ; bytes take it over at the swap (Img_Swap).  Called from an interruptible
-; _sleep only.  Not from the quantum yield: the quantum is one free-running
+; _sleep, and from _sleepUnRel, the uninterruptible wait with no bound.  Not from the quantum yield: the quantum is one free-running
 ; countdown, so almost every child would reach a yield before its exec, and
 ; each released child costs two image copies more on the shell's
 ; fork-then-exec path.  A child that computes without sleeping keeps its

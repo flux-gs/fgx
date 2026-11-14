@@ -560,8 +560,12 @@ _Sys_KCallImpl      MX  %00
                 BRL     @kc_blkioctl
 @kc_s60        ANOP
                 CPX     #KSVC_UNPFILE
-                BNE     @kc_s59
+                BNE     @kc_s61
                 BRL     @kc_unpfile
+@kc_s61        ANOP
+                CPX     #KSVC_SLEEPUNR
+                BNE     @kc_s59
+                BRL     @kc_sleepunr
 @kc_s59        ANOP
                 ; Unknown service.  A module built against a NEWER kernel can
                 ; ask for one that does not exist here; say so instead of
@@ -690,6 +694,16 @@ _Sys_KCallImpl      MX  %00
                 ; than in the carry, for the reason given up there -- so this
                 ; arm is unchanged, and A here is still whatever _sleepUn left.
 @kc_sleepun     JSR     _sleepUn                ; A = chan; MAY SWITCH TASKS
+                PLB
+                SEC
+                RTL
+
+                ; --- KSVC_SLEEPUNR: A = chan.  Uninterruptible, releasing ---
+                ; The network stack's waits for a resource another process
+                ; frees (m_more's mbufs).  A snapshot fork child asleep there
+                ; must let its parent and siblings run, or none of them can
+                ; free what it waits for (sched.s _sleepUnRel).
+@kc_sleepunr    JSR     _sleepUnRel             ; A = chan; MAY SWITCH TASKS
                 PLB
                 SEC
                 RTL

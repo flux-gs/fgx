@@ -646,7 +646,11 @@ KSVC_UNPFILE            EQU     60  ; _unpfArgs staged: a descriptor passed over
                                     ;   AF_UNIX, the file-table op it names
                                     ;   (src/kernel/vfs/vfs_file.c unp_fileop).
                                     ;   -> C=1 + A = the op's answer.
-KSVC_COUNT              EQU     61
+KSVC_SLEEPUNR           EQU     61  ; A = wait channel: KSVC_SLEEPUN for a wait
+                                    ;   with no bound -- a snapshot fork child
+                                    ;   releases its parent first (sched.s
+                                    ;   _sleepUnRel).  C=1.
+KSVC_COUNT              EQU     62
 SYS_BLKREAD             EQU     MOD_JT_BASE+$16
 SYS_BLKWRITE            EQU     MOD_JT_BASE+$1A
 SYS_BLKSTATUS           EQU     MOD_JT_BASE+$1E

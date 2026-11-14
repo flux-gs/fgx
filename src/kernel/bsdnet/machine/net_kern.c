@@ -112,7 +112,7 @@ sleep(chan, pri)
 	if ((pri & PRIMASK) > PZERO)
 		intr = kc_sleepi(chan);
 	else {
-		(void) kc_sleep(chan);
+		(void) kc_sleepr(chan);
 		intr = 0;
 	}
 	bcopy(u_saved[pid], (char *)&u, USAVE);

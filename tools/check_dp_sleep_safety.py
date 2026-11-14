@@ -189,6 +189,12 @@ MODULE_SLEEP_ALLOWLIST = {
         "ttylclose -> ttywflush, which DRAINS unless FNDELAY is set.",
     "kc_sleep":
         "pass-through shim into the kernel service slot (vfs/kc_sys.s).",
+    "kc_sleepr":
+        "pass-through shim into KSVC_SLEEPUNR, kc_sleep's shape with the "
+        "releasing service (common/kc_sys.s): ENTERK, LDA, LDX, JSL, LEAVEK, "
+        "RTL, holding no scratch of its own.  Its one caller is the network "
+        "stack's sleep() (bsdnet machine/net_kern.c), the call site kc_sleep "
+        "had, for a sleep at or below PZERO.",
     "kc_sleepi":
         "pass-through shim into KSVC_SLEEP, kc_sleep's shape with the "
         "interruptible service (common/kc_sys.s): ENTERK, LDA, LDX, JSL, "

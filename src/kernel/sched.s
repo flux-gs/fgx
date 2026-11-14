@@ -626,6 +626,30 @@ _sleepUn        ENT
                 RTS
 
 ;=============================================================================
+; _sleepUnRel - _sleepUn for a wait with no bound, which releases a snapshot
+; fork child's parent first, as _sleep does.
+;
+; _sleepUn does not release because its waits end by themselves -- a disk read,
+; a buffer another task is about to give back -- and a release there costs the
+; parent two image copies for nothing.  A wait for a resource that only another
+; process can free is different: a snapshot child is pinned on its parent's
+; addresses until it releases (Uimg_Evictable), so its parent and siblings,
+; which share those addresses, cannot run to free it.  The network stack's
+; m_more waits for an mbuf at PZERO-1, which is exactly that.
+;
+; In:  A = chan (16-bit).  Caller MX %00.  Returns C=0 always.
+;=============================================================================
+_sleepUnRel     ENT
+                MX      %00
+                SEI                             ; spl -- close the lost-wakeup race
+                STA     _slpChan                ; A = chan
+                JSR     Img_Release             ; preserves A/X/Y
+                JSR     _Slp_Block
+                CLC                             ; never "give up": no error path
+                CLI                             ; (CLI does not touch carry)
+                RTS
+
+;=============================================================================
 ; _Slp_Block - mark the current task BLOCKED on _slpChan and switch away.
 ;
 ; The body both sleeps share.  Entered with IRQs already masked and _slpChan
