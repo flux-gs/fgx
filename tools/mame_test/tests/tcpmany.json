@@ -1,6 +1,6 @@
 {
  "name": "tcpmany",
- "description": "The anti-goal check of the net-mux design (section 6): more TCP connections open at once than the W5100 has sockets.  loopprobe -m listens on lo0 with a backlog of 5; a child opens 16 connections and holds them all, then each carries 1 KB both ways, byte-checked; MANY OK.  The chip's four sockets, net.mod's twelve descriptors or NPIPE's eight rings would each stop it.  The modules load at boot (/etc/rc).",
+ "description": "The anti-goal check of the net-mux design (section 6): more TCP connections open at once than the W5100 has sockets.  loopprobe -m listens on lo0 with a backlog of 5; a child opens 16 connections and holds them all, then each carries 1 KB both ways, byte-checked; MANY OK.  The chip's four sockets, net.mod's twelve descriptors or NPIPE's eight rings would each stop it.  The modules load at boot (/etc/rc).  Then six children open /etc/rc until the system file table is full: open(2) must answer ENFILE, never hang and never another errno (it answered ENXIO, measured, when _Fs_RootOpen dropped _Fcb_Alloc's errno), and one close must let the next open succeed (`FILES full 1, open -1 errno 23, after a close N').",
  "command": "/testbin/loopprobe -m",
  "timeout_s": 120,
  "expect": {

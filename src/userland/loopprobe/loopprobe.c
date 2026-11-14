@@ -1220,6 +1220,7 @@ many_main()
     close(ls);
     if (!m_backlog()) bad = 1;
     if (!m_exhaust()) bad = 1;
+    if (!m_files()) bad = 1;
     if (!bad && st == 0)
         printf("MANY OK\n");
     exit(0);
@@ -1350,6 +1351,64 @@ m_exhaust()
     printf("EXHAUST %d sockets, how %d; again %d, how %d\n", n1, e1, n2, e2);
     if ((e1 & 2) || (e2 & 2) || e1 == 0 || n2 < n1) {
         printf("MANY FAIL exhaust\n");
+        return 0;
+    }
+    return 1;
+}
+
+/* files: FKIDS children open /etc/rc until the system file table is full, and
+ * one must see ENFILE.  The parent's own open then answers ENFILE; one child
+ * closes one file, and the parent's next open succeeds: a full table is an
+ * error, never a hang, and a close frees its entry. */
+#define FKIDS 6
+#define FPER  25          /* NOFILE 30, less stdio and two pipe ends */
+static int
+m_files()
+{
+    int up[2], down[2], k, i, f[FPER], done, full, st, r1, e1, r2;
+    char ch;
+
+    if (pipe(up) < 0 || pipe(down) < 0) return 0;
+    for (k = 0; k < FKIDS; k++) {
+        if (fork() == 0) {
+            close(up[0]);
+            close(down[1]);
+            for (i = 0; i < FPER; i++)
+                if ((f[i] = open("/etc/rc", O_RDONLY)) < 0) {
+                    write(up[1], errno == ENFILE ? "F" : "X", 1);
+                    break;
+                }
+            write(up[1], "D", 1);
+            while (read(down[0], &ch, 1) == 1 && ch == 'c') {
+                if (i > 0)
+                    close(f[--i]);
+                write(up[1], "C", 1);
+            }
+            exit(0);
+        }
+    }
+    close(up[1]);
+    close(down[0]);
+    done = full = 0;
+    while (done < FKIDS && read(up[0], &ch, 1) == 1) {
+        if (ch == 'D') done++;
+        else if (ch == 'F') full = 1;
+        else full = -1;
+    }
+    r1 = open("/etc/rc", O_RDONLY);
+    e1 = errno;
+    write(down[1], "c", 1);
+    read(up[0], &ch, 1);
+    r2 = open("/etc/rc", O_RDONLY);
+    printf("FILES full %d, open %d errno %d, after a close %d\n", full, r1, e1, r2);
+    if (r1 >= 0) close(r1);
+    if (r2 >= 0) close(r2);
+    close(down[1]);
+    for (k = 0; k < FKIDS; k++)
+        wait(&st);
+    close(up[0]);
+    if (full != 1 || r1 >= 0 || e1 != ENFILE || r2 < 0) {
+        printf("MANY FAIL files\n");
         return 0;
     }
     return 1;

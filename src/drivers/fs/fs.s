@@ -799,9 +799,12 @@ _kfp906         JSL     KFAR_VFS_ROOTOPEN       ; bank byte patched by Far_Init
                 CLC
                 RTS
 
-@fro_no         ; Nothing was allocated and nothing was asked of the root, so
-                ; this is the "not mine" answer.
-                LDA     #0
+@fro_no         ; No descriptor: _Fcb_Alloc's errno is the answer -- EMFILE
+                ; for the process, ENFILE for the system file table (Reno's
+                ; falloc, kern/descrip.c), ENOMEM for the heap.  Never zero,
+                ; which a caller would read as "no root" and answer ENXIO.
+                ; @al_full sets only A's low byte.
+                AND     #$00FF
                 PLP
                 CLC
                 RTS
