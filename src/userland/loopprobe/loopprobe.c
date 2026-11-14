@@ -27,7 +27,8 @@
  * (apple/fgx#134).
  *
  * The modes below the default -- -t TCP, -m many connections, -u UDP, -s
- * syslog, -b bulk -- are each described where they are defined.
+ * syslog, -b bulk, -h resolver deadline -- are each described where they are
+ * defined.
  *
  * Prints "loopprobe: PASS" or "loopprobe: FAIL <step>"; exits 0/1.
  */
@@ -45,6 +46,7 @@
 #include <signal.h>           /* SIGALRM -- the `-u' eintr case */
 #include <sys/wait.h>         /* WIFSIGNALED -- the `-t' reset case */
 #include <time.h>             /* time -- the `-m' backlog case */
+#include <netdb.h>            /* gethostbyname -- the `-h' deadline case */
 
 #define LOOPPORT 7777
 
@@ -1455,6 +1457,55 @@ udp_main()
     exit(ufails != 0);
 }
 
+/* -h: a resolver query keeps its deadline (libc netdb.c _dns_resolve).  A
+ * child bound to 127.0.0.1:53 -- /etc/resolv.conf names it, netudp.sh writes
+ * that -- answers the first query with a one-byte datagram every second for
+ * JUNKS seconds, none of them a DNS reply.  gethostbyname must give up after
+ * its three 1.5 s tries; one that waited out every junk datagram returns only
+ * after the junk stops, later than DNSMAX.  Prints `DNS OK' or `DNS FAIL'. */
+#define JUNKS   12
+#define DNSMAX  7
+static int
+dns_main()
+{
+    struct sockaddr_in sin, from;
+    int s, n, fromlen, pid;
+    long t0, t1;
+
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+    uaddr(&sin, 53);
+    if (s < 0 || bind(s, &sin, sizeof(sin)) < 0) {
+        printf("DNS FAIL bind %d\n", errno);
+        exit(1);
+    }
+    pid = fork();
+    if (pid == 0) {
+        fromlen = sizeof(from);
+        if (recvfrom(s, g_buf, sizeof(g_buf), 0, &from, &fromlen) < 0)
+            _exit(1);
+        for (n = 0; n < JUNKS; n++) {
+            sendto(s, "x", 1, 0, &from, sizeof(from));
+            sleep(1);
+        }
+        _exit(0);
+    }
+    close(s);
+    t0 = time((long *)0);
+    if (gethostbyname("no.such.host") != (struct hostent *)0) {
+        printf("DNS FAIL resolved\n");
+        exit(1);
+    }
+    t1 = time((long *)0);
+    kill(pid, SIGKILL);
+    wait((int *)0);
+    if (t1 - t0 > DNSMAX) {
+        printf("DNS FAIL deadline %d\n", (int)(t1 - t0));
+        exit(1);
+    }
+    printf("DNS OK\n");
+    exit(0);
+}
+
 #define BULKPORT 7830
 #define BULKKB   1024
 
@@ -1513,6 +1564,8 @@ char **argv;
         udp_syslog();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'b')
         bulk_main();
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'h')
+        dns_main();
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'n') {
         /* -n: a UDP socket, which only the network modules provide */
         if (socket(AF_INET, SOCK_DGRAM, 0) < 0) {
