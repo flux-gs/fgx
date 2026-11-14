@@ -4056,6 +4056,16 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
          * ARRAY (`struct X a[1] = {{...}}`) keeps element mode. */
         if (g->type == LT_STRUCT) flat = 1;
         while (g_cur.kind != TOK_RBRACE) {
+            /* WHETHER THIS ELEMENT IS BRACED IS ITS OWN QUESTION.  K&R A.8.7:
+             * "If the initializer for a subaggregate does not begin with a
+             * left brace, then only enough elements from the list are taken
+             * into account for the members of the subaggregate; any remaining
+             * members are left to initialize the next member of the aggregate
+             * of which the subaggregate is a part."  So in a braced list an
+             * element with no '{' takes its leaves from the list, as the flat
+             * form does: 2.11BSD route(8)'s name list ends `{ "_rthashsize" },
+             * "", };'. */
+            int elem_braced = !flat;
             if (!flat) {
                 if (g_cur.kind == TOK_INT_LIT && g_cur.value == 0) {
                     /* bare `0` sentinel element in a braced struct-array
@@ -4081,9 +4091,9 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                     continue;
                 }
                 if (g_cur.kind != TOK_LBRACE)
-                    die(g_cur.line, g_cur.col,
-                        "expected '{' for struct-array element");
-                next_tok();   /* consume inner '{' */
+                    elem_braced = 0;
+                else
+                    next_tok();   /* consume inner '{' */
             }
             /* The open brace groups, innermost last: each one's last leaf
              * and the nest[] level it was opened at. */
@@ -4411,7 +4421,7 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                 }
             }
 #undef CLOSE_MEMBER_GROUP
-            if (!flat) {
+            if (elem_braced) {
                 if (g_cur.kind != TOK_RBRACE)
                     die(g_cur.line, g_cur.col,
                         "expected '}' after struct-array element");

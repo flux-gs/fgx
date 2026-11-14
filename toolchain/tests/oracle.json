@@ -663,6 +663,7 @@
   "struct_arg_olddecl": 42,
   "struct_arr": 42,
   "struct_arr_init": 42,
+  "struct_array_elide": 42,
   "struct_arrow": 42,
   "struct_chararray_init": 42,
   "struct_def": 42,
