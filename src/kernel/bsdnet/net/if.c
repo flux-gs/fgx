@@ -23,6 +23,7 @@
 #include "mbuf.h"
 #include "systm.h"
 #include "socket.h"
+#include "if_dl.h"
 #include "socketvar.h"
 #include "protosw.h"
 #include "user.h"
@@ -32,6 +33,8 @@
 
 #include "if.h"
 #include "af.h"
+#include "../netinet/in.h"
+#include "../netinet/if_ether.h"
 
 #include "ether.h"
 
@@ -342,7 +345,8 @@ ifconf(cmd, data)
 	register struct ifaddr *ifa;
 	register char *cp, *ep;
 	struct ifreq ifr, *ifrp;
-	int space = ifc->ifc_len, error = 0;
+	register struct sockaddr_dl *sdl;
+	int space = ifc->ifc_len, error = 0, index = 0;
 
 	ifrp = ifc->ifc_req;
 	ep = ifr.ifr_name + sizeof (ifr.ifr_name) - 2;
@@ -365,6 +369,27 @@ ifconf(cmd, data)
 				break;
 			space -= sizeof (ifr), ifrp++;
 		}
+		/* The link-level address, after 4.3BSD-Reno's if_attach and
+		 * ifconf: an ethernet's is its arpcom's ac_enaddr. */
+		index++;
+		if (error || space <= sizeof (ifr))
+			continue;
+		bzero((caddr_t)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+		sdl = (struct sockaddr_dl *)&ifr.ifr_addr;
+		sdl->sdl_family = AF_LINK;
+		sdl->sdl_index = index;
+		if (ifp->if_flags & IFF_LOOPBACK)
+			sdl->sdl_type = IFT_LOOP;
+		else if (ifp->if_flags & IFF_BROADCAST) {
+			sdl->sdl_type = IFT_ETHER;
+			sdl->sdl_alen = 6;
+			bcopy((caddr_t)((struct arpcom *)ifp)->ac_enaddr,
+			    LLADDR(sdl), 6);
+		}
+		error = copyout((caddr_t)&ifr, (caddr_t)ifrp, sizeof (ifr));
+		if (error)
+			break;
+		space -= sizeof (ifr), ifrp++;
 	}
 	ifc->ifc_len -= space;
 	return (error);

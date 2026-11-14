@@ -1,0 +1,10 @@
+{
+ "name": "ifcroute",
+ "description": "Interface and route configuration through socket ioctls, as 2.11BSD's ifconfig and route use them (net/if.c ifioctl, net/route.c rtioctl, through sys_socket.c soo_ioctl).  On lo0, the only interface without a card: a host route added with SIOCADDRT lets a UDP connect to 10.9.9.9 pick 127.0.0.1, and SIOCDELRT takes it away again (ENETUNREACH); SIOCGIFCONF lists lo0's link-level address (4.3BSD-Reno's AF_LINK sockaddr_dl).",
+ "command": "/testbin/ifcprobe -l",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["IFC L ok", "fgx#"],
+  "screen_lacks": ["IFC L FAIL", "PANIC", "BRK"]
+ }
+}

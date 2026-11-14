@@ -477,7 +477,7 @@ bn_call(cp, so)
 			u.u_error = ENOTTY;
 			return;
 		}
-		u.u_error = ifioctl(so, cp->c_x, (caddr_t)blk);
+		(void) soo_ioctl(so, cp->c_x, (caddr_t)blk);
 		return;
 
 	case BNOP_SELECT:

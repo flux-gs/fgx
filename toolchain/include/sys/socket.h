@@ -9,6 +9,7 @@
 #define AF_UNSPEC    0
 #define AF_UNIX      1
 #define AF_INET      2
+#define AF_LINK      18     /* link layer interface: 4.3BSD-Reno's, <net/if_dl.h> */
 #define PF_UNIX      AF_UNIX
 #define PF_INET      AF_INET
 

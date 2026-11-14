@@ -38,14 +38,24 @@ struct winsize {
 #ifndef SIOCATMARK
 #define SIOCATMARK 0x7307       /* at OOB mark? (BSD low 16) */
 #endif
-/* Interface ioctls on a socket, 2.11BSD h/ioctl.h's `_IOWR(i, n, ...)'
- * (low 16 bits): the getters that fill a struct ifreq / struct ifconf
- * (<net/if.h>).  The setters are not served. */
+/* Interface and route ioctls on a socket, 2.11BSD h/ioctl.h's `_IOW(r, n,
+ * ...)' and `_IOW(i, n, ...)' (low 16 bits), on a struct rtentry
+ * (<net/route.h>), struct ifreq or struct ifconf (<net/if.h>). */
+#define SIOCADDRT      0x720a   /* add route */
+#define SIOCDELRT      0x720b   /* delete route */
+#define SIOCSIFADDR    0x690c   /* set ifnet address */
 #define SIOCGIFADDR    0x690d   /* get ifnet address */
+#define SIOCSIFDSTADDR 0x690e   /* set p-p address */
+#define SIOCGIFDSTADDR 0x690f   /* get p-p address */
+#define SIOCSIFFLAGS   0x6910   /* set ifnet flags */
 #define SIOCGIFFLAGS   0x6911   /* get ifnet flags */
 #define SIOCGIFBRDADDR 0x6912   /* get broadcast addr */
+#define SIOCSIFBRDADDR 0x6913   /* set broadcast addr */
 #define SIOCGIFCONF    0x6914   /* get ifnet list */
 #define SIOCGIFNETMASK 0x6915   /* get net addr mask */
+#define SIOCSIFNETMASK 0x6916   /* set net addr mask */
+#define SIOCGIFMETRIC  0x6917   /* get IF metric */
+#define SIOCSIFMETRIC  0x6918   /* set IF metric */
 #ifndef FIOCLEX
 #define FIOCLEX    0x6601       /* set close-on-exec ('f'<<8|1, BSD low 16) */
 #endif
