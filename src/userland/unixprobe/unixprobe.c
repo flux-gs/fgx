@@ -284,6 +284,102 @@ stream_main()
     return (sfails != 0);
 }
 
+/* -r: a descriptor passed in a message's access rights (2.11BSD sendmsg(2),
+ * msg_accrights).  The sender opens RFILE, passes it, and closes its own; the
+ * receiver's new descriptor must read what RFILE holds.  `-r gc' does it 150
+ * times with the receiver closed unread: the message holds the only reference,
+ * and a close that does not dispose of it leaks a file-table entry a round, so
+ * an open fails long before the end. */
+#define RNAME "/tmp/unixprobe.rts"
+#define RFILE "/etc/rc"
+
+static int
+r_send(sa, f)
+char *sa;
+int f;
+{
+    struct msghdr m;
+    struct iovec iov;
+    int s, r;
+
+    s = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (s < 0) return (-1);
+    iov.iov_base = "x";
+    iov.iov_len = 1;
+    m.msg_name = sa;
+    m.msg_namelen = UNP_SA_SIZE;
+    m.msg_iov = &iov;
+    m.msg_iovlen = 1;
+    m.msg_accrights = (caddr_t)&f;
+    m.msg_accrightslen = sizeof (int);
+    r = sendmsg(s, &m, 0);
+    close(s);
+    return (r);
+}
+
+static int
+rights_main(gc, rounds)
+int gc, rounds;
+{
+    char sa[UNP_SA_SIZE];
+    char want[64], got[64], c;
+    struct msghdr m;
+    struct iovec iov;
+    int r, f, nf, i, n;
+
+    unp_mkaddr(sa, RNAME);
+    f = open(RFILE, O_RDONLY);
+    if (f < 0 || (n = read(f, want, sizeof want)) <= 0) {
+        printf("UNIX R FAIL ref %d\n", errno);
+        return (1);
+    }
+    close(f);
+    for (i = 0; i < (gc ? rounds : 1); i++) {
+        unlink(RNAME);
+        r = socket(AF_UNIX, SOCK_DGRAM, 0);
+        if (r < 0 || bind(r, sa, UNP_SA_SIZE) < 0) {
+            printf("UNIX R FAIL bind %d %d\n", i, errno);
+            return (1);
+        }
+        f = open(RFILE, O_RDONLY);
+        if (f < 0) {
+            printf("UNIX R FAIL open %d %d\n", i, errno);
+            return (1);
+        }
+        if (r_send(sa, f) != 1) {
+            printf("UNIX R FAIL send %d %d\n", i, errno);
+            return (1);
+        }
+        close(f);
+        if (gc) {
+            close(r);
+            continue;
+        }
+        iov.iov_base = &c;
+        iov.iov_len = 1;
+        m.msg_name = 0;
+        m.msg_namelen = 0;
+        m.msg_iov = &iov;
+        m.msg_iovlen = 1;
+        nf = -1;
+        m.msg_accrights = (caddr_t)&nf;
+        m.msg_accrightslen = sizeof (int);
+        if (recvmsg(r, &m, 0) != 1 || m.msg_accrightslen != sizeof (int)) {
+            printf("UNIX R FAIL recv %d %d\n", m.msg_accrightslen, errno);
+            return (1);
+        }
+        if (nf < 0 || read(nf, got, n) != n || memcmp(got, want, n) != 0) {
+            printf("UNIX R FAIL read %d %d\n", nf, errno);
+            return (1);
+        }
+        close(nf);
+        close(r);
+    }
+    unlink(RNAME);
+    printf(gc ? "UNIX R gc ok\n" : "UNIX R ok\n");
+    return (0);
+}
+
 int
 main(argc, argv)
 int argc;
@@ -296,6 +392,8 @@ char **argv;
 
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
         return (stream_main());
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'r')
+        return (rights_main(argc > 2, argc > 3 ? atoi(argv[3]) : 150));
 
     /* POSITIVE CONTROL FIRST: a type the unix domain has no protocol for must
      * be refused, EPROTONOSUPPORT from socreate (2.11BSD sys/uipc_socket.c,

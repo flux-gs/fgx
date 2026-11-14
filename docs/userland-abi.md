@@ -494,6 +494,8 @@ it.
 | 128 | `SYS_FLOCK` | flock(fd, how): A = fd, X = LOCK_SH/LOCK_EX/LOCK_UN, with LOCK_NB. C=1 + A = 0; C=0 + A = errno (EBADF, EOPNOTSUPP on a socket or pipe, EWOULDBLOCK, EINTR). The lock is the vnode's; 4.3BSD-Reno kern_descrip.c and vfs_vnops.c. 2.11BSD's number is 131. |
 | 129 | `SYS_FCHOWN` | fchown(fd, uid, gid): A = fd, X = uid, Y = gid; -1 leaves an id alone. C=1 + A = 0; C=0 + A = errno (EBADF, EINVAL on a socket or pipe, EROFS, EPERM). 4.3BSD-Reno vfs_syscalls.c. 2.11BSD's number is 123. |
 | 130 | `SYS_FCHMOD` | fchmod(fd, mode): A = fd, X = mode. C=1 + A = 0; C=0 + A = errno (EBADF, EINVAL on a socket or pipe, EROFS, EPERM). 4.3BSD-Reno vfs_syscalls.c. 2.11BSD's number is 124. |
+| 131 | `SYS_SENDMSG` | sendmsg(s, msg, flags): A = msg offset (caller bank), X = s, Y = flags. C=1 + A = bytes sent; C=0 + A = errno. 2.11BSD uipc_syscalls.c; its number is 28. |
+| 132 | `SYS_RECVMSG` | recvmsg(s, msg, flags), as sendmsg; msg_namelen and msg_accrightslen are written back. 2.11BSD's number is 27. |
 <!-- END GENERATED: syscall-table -->
 
 **Note on `SYS_TICKS`:** it returns the high word in **X** (it predates the

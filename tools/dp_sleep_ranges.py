@@ -300,6 +300,11 @@ RET_RE = re.compile(r"\b(RTS|RTL|RTI)\b")
 # arm reaches that is not listed, and a listed seam no arm reaches any more.
 KSVC_SEAMS = {
     # --- reaches C that sleeps ---
+    "KFAR_VFS_UNPFILE": (True,
+        "unp_fileop (far-bank C, src/kernel/vfs/vfs_file.c): UF_UNPDISC "
+        "closes an in-flight file through Fs_Close, whose vnode arm reaches "
+        "closef -> vn_close and block I/O.  The arm keeps _fcbPtr on the "
+        "stack across it, not in DP scratch."),
     "KFAR_VFS_UNPNAME": (True,
         "unp_nameop (far-bank C, src/kernel/vfs/vfs_syscalls.c) -> vrele -> "
         "VOP_INACTIVE -> block I/O.  UNP_OP_UNBIND is the arm that sleeps, and "

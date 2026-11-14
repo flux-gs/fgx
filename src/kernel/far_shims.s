@@ -142,6 +142,86 @@ _FarSh_Fs_Close PHB
                 PLB
                 RTL
 
+; The FCB side of a descriptor passed over AF_UNIX (far/kc_sys.s kc_fcbref,
+; kc_fcbsock and kc_fdinstall).  In: A = the FCB's offset, X = its bank, D =
+; the kernel's page (the far caller switched it).  Each points _fcbPtr at the
+; FCB; the KSVC_UNPFILE arm that led here keeps the caller's _fcbPtr across.
+_FarSh_FcbAt    STA     _fcbPtr
+                TXA
+                SEP     #$20
+                MX      %10
+                STA     _fcbPtr+2
+                REP     #$20
+                MX      %00
+                RTS
+
+; _FarSh_FcbRef - FCB_RefCount += Y (a small signed count).
+_FarSh_FcbRef   PHB
+                PHK
+                PLB                     ; DBR = CORE bank
+                JSR     _FarSh_FcbAt
+                STY     _shTmp0
+                SEP     #$20
+                MX      %10
+                LDY     #FCB_RefCount
+                LDA     [_fcbPtr],Y
+                CLC
+                ADC     _shTmp0
+                STA     [_fcbPtr],Y
+                REP     #$30
+                MX      %00
+                PLB
+                RTL
+
+; _FarSh_FcbSock -> A = FCB_SockSo for a socket's FCB, 0 for any other.
+_FarSh_FcbSock  PHB
+                PHK
+                PLB
+                JSR     _FarSh_FcbAt
+                LDY     #FCB_Flags
+                LDA     [_fcbPtr],Y
+                AND     #FCB_FL_SOCKET
+                BEQ     @fs_out                 ; A = 0
+                LDY     #FCB_SockSo
+                LDA     [_fcbPtr],Y
+@fs_out         PLB
+                RTL
+
+; _FarSh_FdInstall -> A = the lowest free descriptor of the table
+; _fd_table_ptr names, now holding the FCB, or $FFFF for none.  No count
+; changes: the reference it carries is the one the message held.  A slot is
+; free when all three bytes are 0, as _Fcb_Alloc tests it.
+_FarSh_FdInstall PHB
+                PHK
+                PLB
+                JSR     _FarSh_FcbAt
+                LDY     #0
+                LDX     #0                      ; X = the fd
+@fi_L           LDA     [_fd_table_ptr],Y       ; bytes 0-1
+                BNE     @fi_next
+                INY
+                LDA     [_fd_table_ptr],Y       ; bytes 1-2
+                DEY
+                AND     #$FF00
+                BEQ     @fi_free
+@fi_next        INY
+                INY
+                INY
+                INX
+                CPX     #FS_MAX_FDS
+                BCC     @fi_L
+                LDA     #$FFFF
+                PLB
+                RTL
+@fi_free        LDA     _fcbPtr
+                STA     [_fd_table_ptr],Y
+                INY
+                LDA     _fcbPtr+1               ; bytes 1-2: the bank lands in 2
+                STA     [_fd_table_ptr],Y
+                TXA
+                PLB
+                RTL
+
 ; _FarSh_LogStr is THE EXCEPTION: it must NOT set DBR.  Kern_LogStr reads the
 ; string with `LDA (_conStrPtr),Y`, which takes its bank from the CALLER's DBR,
 ; and far-bank callers pass far-bank strings.  Forcing the core bank here made it

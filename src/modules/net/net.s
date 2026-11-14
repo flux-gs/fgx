@@ -186,6 +186,8 @@ net_op_table    DFB     <net_op_retired,>net_op_retired,^net_op_retired      ; 0
                 DFB     <net_op_getpeername,>net_op_getpeername,^net_op_getpeername   ; 90
                 DFB     <net_op_getsockname,>net_op_getsockname,^net_op_getsockname   ; 93
                 DFB     <net_op_ifioctl,>net_op_ifioctl,^net_op_ifioctl               ; 96
+                DFB     <net_op_sendmsg,>net_op_sendmsg,^net_op_sendmsg               ; 99
+                DFB     <net_op_recvmsg,>net_op_recvmsg,^net_op_recvmsg               ; 102
 NET_OP_TBL_LEN  EQU     *-net_op_table
 
 ;------------------------------------------------------------------------------
@@ -279,6 +281,14 @@ net_op_getpeername MX   %00
                 BRA     _So_Ebadf
 net_op_getsockname MX   %00
                 LDY     #BNOP_GETSOCKNAME
+                JSR     _Kso_Try
+                BRA     _So_Ebadf
+net_op_sendmsg  MX      %00
+                LDY     #BNOP_SENDMSG
+                JSR     _Kso_Try
+                BRA     _So_Ebadf
+net_op_recvmsg  MX      %00
+                LDY     #BNOP_RECVMSG
                 JSR     _Kso_Try
                 BRA     _So_Ebadf
 net_op_listen   MX      %00

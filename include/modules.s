@@ -642,7 +642,11 @@ KSVC_BLKIOCTL           EQU     59  ; A = a block dev_t, _Sys_IoctlCmd staged:
                                     ;   a block device's ioctl.  CDIOCEJECT
                                     ;   ejects a CD-ROM.  -> C=1, or C=0 + A =
                                     ;   errno (ENOTTY for anything else).
-KSVC_COUNT              EQU     60
+KSVC_UNPFILE            EQU     60  ; _unpfArgs staged: a descriptor passed over
+                                    ;   AF_UNIX, the file-table op it names
+                                    ;   (src/kernel/vfs/vfs_file.c unp_fileop).
+                                    ;   -> C=1 + A = the op's answer.
+KSVC_COUNT              EQU     61
 SYS_BLKREAD             EQU     MOD_JT_BASE+$16
 SYS_BLKWRITE            EQU     MOD_JT_BASE+$1A
 SYS_BLKSTATUS           EQU     MOD_JT_BASE+$1E
@@ -745,6 +749,8 @@ BNOP_CLOSE              EQU     15
                                     ; 16: retired (SYS_IFCONFIG's address change)
 BNOP_LISTEN             EQU     17
 BNOP_ACCEPT             EQU     18
+BNOP_SENDMSG            EQU     19
+BNOP_RECVMSG            EQU     20
 VT_PDCORE               EQU     $000B       ; prodos.mod's C entry points, for
                                             ;   prodosw.mod, the write half
                                             ;   (ProDOS FST P6) -- PDCORE_* below
@@ -1230,6 +1236,8 @@ NETOP_SysPipe           EQU     87          ; the pipe(2) syscall-table entry
 NETOP_GetPeerName       EQU     90          ; SYS_GETPEERNAME (#108)
 NETOP_GetSockName       EQU     93          ; SYS_GETSOCKNAME (#109)
 NETOP_IfIoctl           EQU     96          ; ioctl(2) SIOCGIF* on a socket
+NETOP_Sendmsg           EQU     99          ; SYS_SENDMSG (#131)
+NETOP_Recvmsg           EQU     102         ; SYS_RECVMSG (#132)
 
 ;------------------------------------------------------------------------------
 ; Module vtable registry — per-entry layout.  Mod_Load appends one entry

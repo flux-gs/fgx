@@ -851,19 +851,28 @@ SYS_FCHMOD      EQU     130                 ; fchmod(fd, mode): A = fd, X =
                                             ; 4.3BSD-Reno vfs_syscalls.c.
                                             ; 2.11BSD's number is 124.
 
-SYS_NUM_MAX     EQU     SYS_FCHMOD          ; highest implemented (130)
+SYS_SENDMSG     EQU     131                 ; sendmsg(s, msg, flags): A = msg
+                                            ; offset (caller bank), X = s, Y =
+                                            ; flags.  C=1 + A = bytes sent; C=0
+                                            ; + A = errno.  2.11BSD
+                                            ; uipc_syscalls.c; its number is 28.
+SYS_RECVMSG     EQU     132                 ; recvmsg(s, msg, flags), as
+                                            ; sendmsg; msg_namelen and
+                                            ; msg_accrightslen are written back.
+                                            ; 2.11BSD's number is 27.
+
+SYS_NUM_MAX     EQU     SYS_RECVMSG         ; highest implemented (132)
 
 ; fcntl(2)'s commands (Reno sys/fcntl.h:26-40), the flags it touches -- FNDELAY
-; (Reno's O_NONBLOCK, src/kernel/vfs/file.h), FCNTLCANT (Reno sys/file.h:70
-; less the unix-domain gc marks FGX has no collector for: the access mode and
-; the flock(2) lock bits) and
+; (Reno's O_NONBLOCK, src/kernel/vfs/file.h), FCNTLCANT (Reno sys/file.h:70:
+; the access mode, the unix-domain gc marks and the flock(2) lock bits) and
 ; UF_EXCLOSE (Reno sys/user.h:83) -- and the two close-on-exec ioctls
 ; (FreeBSD's _IO('f', 1) and _IO('f', 2) low 16, as toolchain/include/
 ; sys/ioctl.h has them).
 F_SETFD         EQU     2
 F_SETFL         EQU     4
 FNDELAY         EQU     $0004
-FCNTLCANT       EQU     $0183               ; FREAD|FWRITE|FSHLOCK|FEXLOCK
+FCNTLCANT       EQU     $01B3               ; FREAD|FWRITE|FMARK|FDEFER|FSHLOCK|FEXLOCK
 UF_EXCLOSE      EQU     $01
 FIOCLEX         EQU     $6601
 FIONCLEX        EQU     $6602

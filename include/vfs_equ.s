@@ -38,7 +38,7 @@ NC_POOL_BYTES   EQU     4096       ; ncache 64*64
 ; runtime against the oracle and returns 77..84 if one moves.  sizeof
 ; alone would not do it -- a REORDER keeps the size and stays invisible
 ; to the C, because both sides still spell it `fp->f_data`.
-FILE_SIZE       EQU     24          ; bytes per struct file
+FILE_SIZE       EQU     28          ; bytes per struct file
 
 ; The FAR KERNEL BANK's static for the file table and the per-process
 ; descriptor arrays -- UFS 1.7d I2b.  They are no longer carved from
@@ -46,7 +46,7 @@ FILE_SIZE       EQU     24          ; bytes per struct file
 ; what LOADS vfs.mod, so a table inside that module would not exist
 ; the first time anything opened a file.  Sized here so the far bank
 ; has no second copy of the arithmetic finit relies on.
-VFS_FILE_BYTES  EQU     6336        ; NFILE*24 + 32*30*(4+1)
+VFS_FILE_BYTES  EQU     6592        ; NFILE*28 + 32*30*(4+1)
 
 ; Where finit puts the descriptor arrays inside that static, and how
 ; wide one slot is -- UFS 1.7d I2c.  The CORE bank reads `struct file'
@@ -54,7 +54,7 @@ VFS_FILE_BYTES  EQU     6336        ; NFILE*24 + 32*30*(4+1)
 ; hottest path there is), so it needs to index ofile_pool itself.
 ; Emitted rather than multiplied in Merlin so the C's
 ; `&file_pool[NFILE]' and the assembly's arithmetic cannot drift.
-VFS_OFILE_OFF   EQU     1536        ; ofile_pool - arena = NFILE*24
+VFS_OFILE_OFF   EQU     1792        ; ofile_pool - arena = NFILE*28
 VFS_OFILE_PTR   EQU     4           ; bytes per descriptor slot
 ; pofile_pool, the descriptor flag bytes (Reno's u_pofile), follows
 ; the descriptor arrays: this far past ofile_pool, one byte a slot.
@@ -67,6 +67,7 @@ F_CRED          EQU     8           ; struct ucred *; always 0 until 2.6
 F_OPS           EQU     12          ; struct fileops *, 24-bit: MAY NAME ANOTHER BANK
 F_DATA          EQU     16          ; the vnode, socket, pipe or FCB this names
 F_OFFSET        EQU     20          ; the seek pointer this open(2) carries
+F_FCB           EQU     24          ; the core bank's FCB, whatever f_data names
 
 ; struct fileops -- what a descriptor can be asked to do (file.h).
 ; The CORE bank builds legacy tables in this layout so that f_ops is

@@ -53,6 +53,8 @@
 #define	BNOP_CLOSE	15
 #define	BNOP_LISTEN	17
 #define	BNOP_ACCEPT	18
+#define	BNOP_SENDMSG	19
+#define	BNOP_RECVMSG	20
 
 /* The call block net.mod builds on the caller's kernel stack. */
 struct bncall {
@@ -72,7 +74,7 @@ struct bncall {
 extern	int kc_curuid(), kc_sigraise(), kc_wakeup();
 extern	int bind(), connect(), sendto(), send(), recvfrom(), recv();
 extern	int setsockopt(), getsockname(), getpeername(), shutdown();
-extern	int listen(), accept();
+extern	int listen(), accept(), sendmsg(), recvmsg();
 
 int	netoff;			/* uipc_syscalls.c tests it: the network is on */
 
@@ -171,6 +173,98 @@ iput(ip)
 	struct inode *ip;
 {
 	return (0);
+}
+
+/*
+ * Access rights: 2.11BSD sys/sys_kern.c's file calls (fadjust, fpfetch,
+ * fpflags, unpdisc, unpgc1) and the descriptor work beside them (GETF, ufavail,
+ * ufalloc), each an op of the kernel's unp_fileop through kc_unpfile
+ * (src/kernel/vfs/vfs_file.c).  The file table is the kernel's, so what this
+ * bank holds for a file is a HANDLE: its index in that table plus one, 0 for
+ * none.  A rights record carries handles, two bytes each, where 2.11BSD's
+ * carries two-byte struct file pointers.  The ops' numbers must agree with
+ * vfs_file.c's UF_*.
+ */
+#define	UF_GETF		0
+#define	UF_FADJUST	1
+#define	UF_FPFETCH	2
+#define	UF_FPFLAGS	3
+#define	UF_UFAVAIL	4
+#define	UF_UFINSTALL	5
+#define	UF_UNPDISC	6
+#define	UF_UNPGC1	7
+extern	int kc_unpfile();
+int	bn_unpfout[4];		/* fpfetch's struct file, written by the kernel */
+
+/* GETF: the handle of the caller's descriptor fd, 0 if it is not open */
+int
+getfh(fd)
+	int fd;
+{
+	return (kc_unpfile(UF_GETF, fd, 0, 0));
+}
+
+int
+fadjust(fp, msg, cnt)
+	int fp, msg, cnt;
+{
+	return (kc_unpfile(UF_FADJUST, fp, msg, cnt));
+}
+
+/* *fpp = the file, as far as the collector reads it; returns f_count */
+int
+fpfetch(fp, fpp)
+	int fp;
+	register struct file *fpp;
+{
+	int n;
+
+	n = kc_unpfile(UF_FPFETCH, fp, 0, 0);
+	fpp->f_count = bn_unpfout[0];
+	fpp->f_msgcount = bn_unpfout[1];
+	fpp->f_flag = bn_unpfout[2];
+	fpp->f_type = bn_unpfout[3] ? DTYPE_SOCKET : 0;
+	fpp->f_socket = bn_unpfout[3] ? sockat((unsigned)bn_unpfout[3]) :
+	    (struct socket *)0;
+	return (n);
+}
+
+void
+fpflags(fp, set, clear)
+	int fp, set, clear;
+{
+	(void) kc_unpfile(UF_FPFLAGS, fp, set, clear);
+}
+
+int
+ufavail()
+{
+	return (kc_unpfile(UF_UFAVAIL, 0, 0, 0));
+}
+
+/* ufalloc and `u.u_ofile[f] = fp' in one: the lowest free descriptor now
+ * names the file, or -1 */
+int
+ufinstall(fp)
+	int fp;
+{
+	return (kc_unpfile(UF_UFINSTALL, fp, 0, 0));
+}
+
+void
+unpdisc(fp)
+	int fp;
+{
+	(void) kc_unpfile(UF_UNPDISC, fp, 0, 0);
+}
+
+/* the table's bounds as handles, every FMARK and FDEFER cleared */
+void
+unpgc1(beginf, endf)
+	int *beginf, *endf;
+{
+	*beginf = 1;
+	*endf = kc_unpfile(UF_UNPGC1, 0, 0, 0) + 1;
 }
 
 /* accept()'s descriptor.  net.mod has taken the FCB before BNOP_ACCEPT, as
@@ -290,6 +384,7 @@ static	struct { int fdes; caddr_t asa; int *alen; } a_name;
 static	struct { int s; int how; } a_shut;
 static	struct { int s; int backlog; } a_listen;
 static	struct { int s; caddr_t name; int *anamelen; } a_accept;
+static	struct { int s; caddr_t msg; int flags; } a_msg;
 
 #if NETPROBE == 5
 /* kernel.netprobe = 5: the first socket call runs off its slot, and the floor
@@ -435,6 +530,18 @@ bn_call(cp, so)
 		bn_newfile.f_socket = 0;
 		return;
 
+	case BNOP_SENDMSG:
+	case BNOP_RECVMSG:
+		/* the msghdr is the caller's, read whole with its far pointers */
+		a_msg.msg = far(cp->c_bank, cp->c_a);
+		a_msg.flags = cp->c_y;
+		u.u_ap = (int *)&a_msg;
+		if (cp->c_op == BNOP_SENDMSG)
+			sendmsg();
+		else
+			recvmsg();
+		return;
+
 	case BNOP_SHUTDOWN:
 		a_shut.how = cp->c_x;
 		u.u_ap = (int *)&a_shut;
@@ -495,6 +602,26 @@ bn_call(cp, so)
 	u.u_error = EINVAL;
 }
 
+/* What bn_sysent hands back: u_error, r_val1 and r_val2, copied out of u. */
+struct { int e, v1, v2; } bn_ret;
+
+/* A CALL CAN NEST.  Closing a file a message held in flight is close(2)'s own
+ * close (unp_discard, through the kernel's Fs_Close), and when that file is a
+ * socket its teardown comes back here while the outer call -- the soclose or
+ * soreceive that disposed of the message -- is still running.  2.11BSD's
+ * closef is the kernel's and nests nothing here.  So a nested call keeps the
+ * outer one's u_error, u_r, u_ap, u_qsave and getf() file, and puts them back
+ * after copying its own answer to bn_ret.  The saves are static, one per level,
+ * because every socket call runs on a process's kernel stack slot and a
+ * label_t there would be paid by all of them. */
+#define	BN_NEST	4
+static	int bn_depth;
+static	struct bnsave {
+	int	e, v1, v2, *ap;
+	label_t	q;
+	struct	file f;
+} bn_save[BN_NEST];
+
 /* trap.c's syscall(): a body a signal interrupts comes back through the
  * setjmp with sleep()'s EINTR in u_error.  The bodies with a setjmp of their
  * own (sendit, recvit) set u_qsave again inside. */
@@ -505,7 +632,19 @@ bn_sys(cp)
 	register struct socket *so;
 	register int *blk;
 	int nb, nbset;
+	register struct bnsave *sp;
 
+	if (bn_depth++) {
+		if (bn_depth > BN_NEST)
+			panic("bn_sys: nested too deep");
+		sp = &bn_save[bn_depth - 2];
+		sp->e = u.u_error;
+		sp->v1 = u.u_r.r_val1;
+		sp->v2 = u.u_r.r_val2;
+		sp->ap = u.u_ap;
+		sp->q = u.u_qsave;
+		sp->f = bn_file;
+	}
 	u.u_error = 0;
 	u.u_r.r_val1 = 0;
 	u.u_r.r_val2 = 0;
@@ -530,5 +669,17 @@ bn_sys(cp)
 		bn_call(cp, so);
 	if (nbset)
 		so->so_state &= ~SS_NBIO;
-	return (u.u_r.r_val1);
+	bn_ret.e = u.u_error;
+	bn_ret.v1 = u.u_r.r_val1;
+	bn_ret.v2 = u.u_r.r_val2;
+	if (--bn_depth) {
+		sp = &bn_save[bn_depth - 1];
+		u.u_error = sp->e;
+		u.u_r.r_val1 = sp->v1;
+		u.u_r.r_val2 = sp->v2;
+		u.u_ap = sp->ap;
+		u.u_qsave = sp->q;
+		bn_file = sp->f;
+	}
+	return (bn_ret.v1);
 }

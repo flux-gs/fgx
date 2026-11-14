@@ -1144,6 +1144,8 @@ _Syscall_Table  DA      _Sys_Stub               ; 0:  unused
                 DA      _Sys_Flock              ; 128: SYS_FLOCK
                 DA      _Sys_Fchown             ; 129: SYS_FCHOWN
                 DA      _Sys_Fchmod             ; 130: SYS_FCHMOD
+                DA      _Sys_Sendmsg            ; 131: SYS_SENDMSG
+                DA      _Sys_Recvmsg            ; 132: SYS_RECVMSG
 
 ;------------------------------------------------------------------------------
 ; _Sys_ScreenCtl (SYS_SCREEN_CTL = 101) - console screen claim.  A = 1 claims

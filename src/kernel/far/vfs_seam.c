@@ -404,6 +404,7 @@ int    fd;
     /* fallocat has already wired ofile[fd] -> fp and set f_count to 1.  What
      * it cannot know is what this descriptor NAMES, which is the caller's. */
     fp->f_data = fcb;
+    fp->f_fcb = fcb;            /* the FCB, whatever f_data names later */
     fp->f_type = DTYPE_VNODE;   /* provisional -- I2c's f_ops dispatch is what
                                  * makes the type mean anything.  The f_type
                                  * ladder in the core bank still classifies

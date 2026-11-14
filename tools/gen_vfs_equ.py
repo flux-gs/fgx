@@ -44,7 +44,7 @@ WANTED = ("NBUF", "FS_BLKSIZE", "VNODE_POOL", "NSPECINFO", "NNAMECACHE",
 #   sizeof(struct specinfo)  == 14                   vfslayout.c rc 56
 #   sizeof(struct namecache) == 64                   vfslayout.c rc 65
 #   sizeof(struct nameidata) == 154                  vfslayout.c rc 70
-#   sizeof(struct file)      == 24                   vfslayout.c rc 72
+#   sizeof(struct file)      == 28                   vfslayout.c rc 73
 #
 # VN_MAXPRIVATE lives in vnode.h rather than fsparam.h, which is why this
 # generator reads two headers.
@@ -60,9 +60,9 @@ NAMECACHE_SIZE = 64
 # reason -- a directory entry has to be assembled somewhere contiguous, and the
 # name field cannot be shorter than a name.
 NAMEIDATA_SIZE = 158
-FILE_SIZE      = 24
+FILE_SIZE      = 28
 # struct file's FIELD OFFSETS, for the syscall layer's assembly (UFS 1.7d-I2).
-# Reno's layout: four shorts, then four 4-byte members.  These are NOT parsed
+# Reno's layout: four shorts, then four 4-byte members; then FGX's f_fcb.  These are NOT parsed
 # out of the header -- fcc decides them -- so they are pinned instead by
 # toolchain/tests/M37/vfslayout.c, which asserts every one at RUNTIME against
 # the oracle and returns 77..84 if any moves.  A reorder is invisible to the C
@@ -77,6 +77,7 @@ FILE_OFFSETS = (
     ("F_OPS",     12,  "struct fileops *, 24-bit: MAY NAME ANOTHER BANK"),
     ("F_DATA",    16,  "the vnode, socket, pipe or FCB this names"),
     ("F_OFFSET",  20,  "the seek pointer this open(2) carries"),
+    ("F_FCB",     24,  "the core bank's FCB, whatever f_data names"),
 )
 # A descriptor is a POINTER to a file struct, not a file struct: the whole
 # point of the split is that dup and fork copy this and share that.  4, because
@@ -458,9 +459,9 @@ def selftest():
         rc[0] = 1
 
     # The far bank's static, by the same literal-transcription rule: 32 file
-    # structs of 24 bytes, plus 11 processes' worth of 30 four-byte descriptors
+    # structs of 28 bytes, plus 11 processes' worth of 30 four-byte descriptors
     # and their 30 one-byte flags.
-    want_file = 32 * 24 + 11 * 30 * 4 + 11 * 30 * 1
+    want_file = 32 * 28 + 11 * 30 * 4 + 11 * 30 * 1
     if file_bytes(vals) != want_file:
         print(f"SELFTEST FAIL: file table {file_bytes(vals)}, "
               f"expected {want_file}", file=sys.stderr)

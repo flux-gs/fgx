@@ -116,6 +116,10 @@ MANIFESTS = {
         # core-side KSVC arm stages the IN value and reads the OUT one; this row
         # is what lets the far bank's shim name the word at all.
         ('_unpSlot', '_unpSlot', 0, 'abs24'),
+        # A descriptor passed over AF_UNIX: unp_fileop's FCB side (far/kc_sys.s).
+        ('_FarSh_FcbRef',    '_FarSh_FcbRef',    0, 'abs24'),
+        ('_FarSh_FcbSock',   '_FarSh_FcbSock',   0, 'abs24'),
+        ('_FarSh_FdInstall', '_FarSh_FdInstall', 0, 'abs24'),
     ],
     # tty: the TTY KERNEL BANK (src/kernel/tty, bin/fgxtty.bin).  A THIRD
     # statically linked kernel image, at live kernel bank + 2.  See
@@ -271,6 +275,7 @@ MANIFESTS = {
         # An AF_UNIX name's op and socket, for KSVC_UNPNAME (machine/net_asm.s
         # kc_unpname).
         ('_unpNameOp', '_unpNameOp', 0, 'lo16'),
+        ('_unpfArgs', '_unpfArgs', 0, 'lo16'),
         ('_unpSlot', '_unpSlot', 0, 'lo16'),
         ('_u2Slot', '_u2Slot', 0, 'lo16'),
         ('_u2SltBit', '_u2SltBit', 0, 'lo16'),

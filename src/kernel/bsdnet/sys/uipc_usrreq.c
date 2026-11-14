@@ -39,6 +39,13 @@ ino_t unp_ino;			/* prototype for fake inode numbers */
 
 extern void unpdisc(), unpgc1();
 extern int fadjust();
+extern int getfh(), ufavail(), ufinstall();
+
+/* GETF for a rights record: fp becomes the descriptor's handle (bn_sys.c) */
+#define	GETFH(fp, fd) { \
+	if (((fp) = getfh(fd)) == 0) \
+		return (EBADF); \
+}
 
 /*ARGSUSED*/
 uipc_usrreq(so, req, m, nam, rights)
@@ -148,18 +155,11 @@ uipc_usrreq(so, req, m, nam, rights)
 		break;
 
 	case PRU_SEND:
-#ifdef fgx
-		if (rights && rights->m_len) {
-			error = EOPNOTSUPP;
-			break;
-		}
-#else
 		if (rights) {
 			error = unp_internalize(rights);
 			if (error)
 				break;
 		}
-#endif
 		switch (so->so_type) {
 
 		case SOCK_DGRAM: {
@@ -500,39 +500,23 @@ unp_drain()
 }
 #endif
 
-#ifdef fgx
 /*
- * Access rights -- descriptors passed in a message -- answer EOPNOTSUPP: what
- * upstream passes is a struct file pointer, and an FGX descriptor is an FCB the
- * network modules cannot name.  PRU_SEND refuses them, so no rights record is
- * ever queued, and these two, which the domain names for one, have nothing to
- * do (docs/PROVENANCE.md).
+ * Access rights, 2.11BSD's with two changes for FGX.  A rights record holds
+ * file HANDLES, two bytes each (machine/bn_sys.c), where 2.11BSD's holds
+ * struct file pointers that are the size of an int there and twice it here,
+ * so the record is walked as an int array.  And the supervisor-to-kernel calls
+ * (SKcall) are plain calls into bn_sys.c, as net_mac.h makes FPFETCH and
+ * FPFLAGS.  Upstream's debugging printf of each record is left out.
  */
-unp_externalize(rights)
-	struct mbuf *rights;
-{
-	return (EOPNOTSUPP);
-}
-
-unp_dispose(m)
-	struct mbuf *m;
-{
-}
-
-unp_gc()
-{
-}
-#else
 unp_externalize(rights)
 	struct mbuf *rights;
 {
 	int newfds = rights->m_len / sizeof (int);
 	register int i;
-	register struct file **rp = mtod(rights, struct file **);
-	register struct file *fp;
+	register int *rp = mtod(rights, int *);
+	register int fp;
 	int f;
 
-	printf("unp_externalize(0%o)\n",rights);
 	if (newfds > ufavail()) {
 		for (i = 0; i < newfds; i++) {
 			fp = *rp;
@@ -542,16 +526,14 @@ unp_externalize(rights)
 		return (EMSGSIZE);
 	}
 	for (i = 0; i < newfds; i++) {
-		f = ufalloc(0);
+		fp = *rp;
+		f = ufinstall(fp);
 		if (f < 0)
 			panic("unp_externalize");
-		fp = *rp;
-		u.u_ofile[f] = fp;
 		/* -1 added to msgcount, 0 to count */
-		SKcall(fadjust, sizeof(fp) + sizeof(int) + sizeof(int),
-		    fp, -1, 0);
+		fadjust(fp, -1, 0);
 		unp_rights--;
-		*(int *)rp++ = f;
+		*rp++ = f;
 	}
 	return (0);
 }
@@ -559,22 +541,20 @@ unp_externalize(rights)
 unp_internalize(rights)
 	struct mbuf *rights;
 {
-	register struct file **rp;
+	register int *rp;
 	int oldfds = rights->m_len / sizeof (int);
 	register int i;
-	register struct file *fp;
+	register int fp;
 
-	printf("unp_internalize(0%o)\n",rights);
-	rp = mtod(rights, struct file **);
+	rp = mtod(rights, int *);
 	for (i = 0; i < oldfds; i++, rp++)
-		GETF(fp, *(int *)rp);
-	rp = mtod(rights, struct file **);
+		GETFH(fp, *rp);
+	rp = mtod(rights, int *);
 	for (i = 0; i < oldfds; i++) {
-		GETF(fp, *(int *)rp);
+		GETFH(fp, *rp);
 		*rp++ = fp;
 		/* bump both the message count and reference count of fp */
-		SKcall(fadjust, sizeof(fp) + sizeof(int) + sizeof(int),
-		    fp, 1, 1);
+		fadjust(fp, 1, 1);
 		unp_rights++;
 	}
 	return (0);
@@ -590,9 +570,10 @@ extern	struct domain unixdomain;
  */
 unp_gc()
 {
-	register struct file *fp;
+	register int fp;
 	register struct socket *so;
-	struct file *file, *fileNFILE, xf;
+	int file, fileNFILE;
+	struct file xf;
 
 	if (unp_gcing)
 		return;
@@ -600,7 +581,7 @@ unp_gc()
 restart:
 	unp_defer = 0;
 	/* get limits AND clear FMARK|FDEFER in all file table entries */
-	SKcall(unpgc1, sizeof(file) + sizeof(fileNFILE), &file, &fileNFILE);
+	unpgc1(&file, &fileNFILE);
 	do {
 		for (fp = file; fp < fileNFILE; fp++) {
 			/* get file table entry, the return value is f_count */
@@ -653,15 +634,15 @@ unp_scan(m0, op)
 	int (*op)();
 {
 	register struct mbuf *m;
-	register struct file **rp;
+	register int *rp;
 	register int i;
 	int qfds;
 
 	while (m0) {
 		for (m = m0; m; m = m->m_next)
 			if (m->m_type == MT_RIGHTS && m->m_len) {
-				qfds = m->m_len / sizeof (struct file *);
-				rp = mtod(m, struct file **);
+				qfds = m->m_len / sizeof (int);
+				rp = mtod(m, int *);
 				for (i = 0; i < qfds; i++)
 					(*op)(*rp++);
 				break;		/* XXX, but saves time */
@@ -671,7 +652,7 @@ unp_scan(m0, op)
 }
 
 unp_mark(fp)
-	struct file *fp;
+	int fp;
 {
 	struct file xf;
 
@@ -683,9 +664,8 @@ unp_mark(fp)
 }
 
 unp_discard(fp)
-	struct file *fp;
+	int fp;
 {
 	unp_rights--;
-	SKcall(unpdisc, sizeof(fp), fp);
+	unpdisc(fp);
 }
-#endif

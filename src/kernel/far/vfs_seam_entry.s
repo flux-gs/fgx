@@ -1360,6 +1360,46 @@ _VfsUnpNameRet  TAY                     ; park the errno; the drop needs A
                 PLB
                 RTL
 
+_Vfs_UnpFile    ENT
+                ; far slot 82 -- unp_fileop(pid, ap) -> its op's answer.  A
+                ; descriptor passed over AF_UNIX: 2.11BSD sys/sys_kern.c's
+                ; fadjust, fpfetch, fpflags, unpdisc and unpgc1, with GETF,
+                ; ufavail and the install ufalloc does (src/kernel/vfs/vfs_file.c).
+                ;
+                ; SIX ARGUMENT BYTES -- an int and an fcc pointer -- so THREE
+                ; words from 11,S once PHB and PHD have moved the frame down
+                ; three.  `ap' names the CORE bank's _unpfArgs, its bank supplied
+                ; by the KSVC arm.
+                MX      %00
+                PHB
+                PHD
+                PHK
+                PLB                     ; DBR = far bank
+                LDA     #FGX_DP_KERNELC
+                TCD
+
+                LDA     11,S
+                PHA
+                LDA     11,S
+                PHA
+                LDA     11,S
+                PHA
+
+                PHK
+                PEA     _VfsUnpFileRet-1
+                PHK
+                PEA     unp_fileop-1
+                RTL                     ; pile call into the C
+_VfsUnpFileRet  TAY                     ; park the answer; the drop needs A
+                TSC
+                CLC
+                ADC     #6              ; drop the copy -- the caller cleans
+                TCS
+                TYA
+                PLD
+                PLB
+                RTL
+
 _Vfs_Sysctl     ENT
                 ; far slot 72 -- root_sysctl(pid, uid, blk) -> 0 or errno.
                 ; sysctl(2), apple/fgx#410.

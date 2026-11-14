@@ -59,3 +59,7 @@ _sockUioBank    DS      2               ;   offset, then bank
 _unpNameOp      DS      2               ; UNP_OP_BIND / LOOKUP / UNBIND
 _unpSlot        DS      2               ; the socket: in for bind and unbind,
                                         ;   out for lookup
+
+; KSVC_UNPFILE's block (jumptable.s), written and read by the network modules'
+; kc_unpfile: op, three arguments, then four results (vfs_file.c unp_fileop).
+_unpfArgs       DS      16

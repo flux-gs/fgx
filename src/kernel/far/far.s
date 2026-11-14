@@ -369,8 +369,12 @@
                 JMP     _fw_Con_DrainPending    ; slot 81
                 DFB     0
 
-                ; --- slots 82.. unassigned, stride 4 (3-byte JMP + 1 pad) ---
-                LUP     KFAR_SLOT_COUNT-82
+                ; --- slot 82: a descriptor passed over AF_UNIX ---
+                JMP     _Vfs_UnpFile            ; slot 82
+                DFB     0
+
+                ; --- slots 83.. unassigned, stride 4 (3-byte JMP + 1 pad) ---
+                LUP     KFAR_SLOT_COUNT-83
                 JMP     _Far_StubHalt
                 DFB     0
                 --^

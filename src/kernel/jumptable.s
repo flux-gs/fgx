@@ -556,8 +556,12 @@ _Sys_KCallImpl      MX  %00
                 BRL     @kc_blkstale
 @kc_s58        ANOP
                 CPX     #KSVC_BLKIOCTL
-                BNE     @kc_s59
+                BNE     @kc_s60
                 BRL     @kc_blkioctl
+@kc_s60        ANOP
+                CPX     #KSVC_UNPFILE
+                BNE     @kc_s59
+                BRL     @kc_unpfile
 @kc_s59        ANOP
                 ; Unknown service.  A module built against a NEWER kernel can
                 ; ask for one that does not exist here; say so instead of
@@ -931,6 +935,46 @@ _ktp105         JSL     KTTY_TOD_NOW
                 RTL
 @kc_blkioctl    JSR     Dev_BlkIoctl            ; C=0 -> A = errno
                 PLB
+                RTL
+
+                ; --- KSVC_UNPFILE: a descriptor passed over AF_UNIX ---
+                ;
+                ; _unpfArgs holds the op and its arguments, written by the
+                ; network modules' kc_unpfile; one far call does the op
+                ; (unp_fileop, src/kernel/vfs/vfs_file.c) and A is its answer.
+                ;
+                ; THE FD TABLE IS RE-POINTED FIRST: the socket call that led here
+                ; may have slept, and another task's syscall entry moves
+                ; _fd_table_ptr (_Fd_TableOfCur says what that cost once).
+                ; _fcbPtr IS KEPT ACROSS, because the shims the op reaches point
+                ; it at the passed file's FCB, and a close(2) that led here
+                ; through a socket's teardown still has its own in it.
+@kc_unpfile     JSR     _Fd_TableOfCur
+                PEI     _fcbPtr+1               ; bytes 1-2
+                PEI     _fcbPtr                 ; bytes 0-1
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                PHA                             ; ap: pad
+                PHK                             ;     bank
+                REP     #$30
+                MX      %00
+                PEA     _unpfArgs               ;     offset
+                LDA    |_kCurPid
+                PHA                             ; pid
+_kfp1021        JSL     KFAR_VFS_UNPFILE        ; bank byte patched by Far_Init
+                TAY                             ; the answer, across the drop
+                TSC
+                CLC
+                ADC     #6
+                TCS
+                PLA
+                STA     _fcbPtr
+                PLA
+                STA     _fcbPtr+1
+                TYA
+                PLB
+                SEC
                 RTL
 
                 ; --- KSVC_TICKS: -> A = _kSystemTicks, LOW WORD ---

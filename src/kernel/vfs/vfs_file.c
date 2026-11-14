@@ -89,6 +89,7 @@ char *arena;
         file_pool[i].f_ops = (struct fileops *)0;
         file_pool[i].f_data = (char *)0;
         file_pool[i].f_offset = 0;
+        file_pool[i].f_fcb = (char *)0;
     }
     lastf = &file_pool[0];
 
@@ -309,6 +310,7 @@ slot:
     fp->f_offset = 0;
     fp->f_cred = (char *)0;
     fp->f_ops = (struct fileops *)0;
+    fp->f_fcb = (char *)0;
     lastf = &fp[1];
     if (resultfp)
         *resultfp = fp;
@@ -436,6 +438,7 @@ struct file *fp;
     fp->f_type = 0;
     fp->f_flag = 0;
     fp->f_offset = 0;
+    fp->f_fcb = (char *)0;
     return (error);
 }
 
@@ -657,4 +660,133 @@ int fd;
     fdp[fd] = (struct file *)0;
     pobase(pid)[fd] = 0;
     return (closef(fp));
+}
+
+
+/* unp_fileop -- the file-table half of descriptors passed over AF_UNIX.
+ *
+ * 2.11BSD keeps the network in supervisor space and the file table in the
+ * kernel, so its uipc_usrreq.c reaches a struct file only through the calls
+ * sys/sys_kern.c gives it: fadjust, fpfetch, fpflags, unpdisc and unpgc1, with
+ * GETF, ufavail and ufalloc beside them.  FGX's split is the same with the
+ * network modules in place of supervisor space, and this is all of those
+ * calls, one op each, reached through KSVC_UNPFILE (src/kernel/jumptable.s).
+ *
+ * A HANDLE IS A file_pool INDEX PLUS ONE, 0 for none.  A rights record holds
+ * one per descriptor, two bytes each, as 2.11BSD's holds two-byte struct file
+ * pointers -- a pointer here is four bytes and in another bank.
+ *
+ * f_count COUNTS THE MESSAGE'S REFERENCE, as upstream's does, and so does the
+ * FCB's FCB_RefCount (kc_fcbref; the FCB is f_fcb, since f_data names a
+ * vnode once one is open): close(2) decides teardown from the FCB's
+ * count, so a file whose descriptor is closed while it is in flight survives.
+ *
+ * `ap' is the core bank's _unpfArgs: op, three arguments, then the offset and
+ * bank of the caller's four-int result block, which fpfetch fills with its
+ * struct file: f_count, f_msgcount, f_flag and the socket's offset in the
+ * network modules' bank, 0 for a file that is not a socket.
+ */
+#define UF_GETF         0       /* (fd) -> handle, 0 for EBADF */
+#define UF_FADJUST      1       /* (h, msg, cnt) */
+#define UF_FPFETCH      2       /* (h) -> f_count; the result block filled */
+#define UF_FPFLAGS      3       /* (h, set, clear) */
+#define UF_UFAVAIL      4       /* () -> free descriptors */
+#define UF_UFINSTALL    5       /* (h) -> the new descriptor, or -1 */
+#define UF_UNPDISC      6       /* (h) -> closef's errno */
+#define UF_UNPGC1       7       /* () -> NFILE; FMARK|FDEFER cleared */
+
+extern int kc_fcbref();         /* far/kc_sys.s: the FCB's FCB_RefCount += n */
+extern int kc_fcbsock();        /* the FCB's socket offset, or 0 */
+extern int kc_fdinstall();      /* the FCB at the lowest free fd, or -1 */
+extern int kc_fsclose();        /* Fs_Close(fd): close(2)'s teardown */
+
+static int
+uf_install(pid, fp)
+int pid;
+register struct file *fp;
+{
+    int fd;
+
+    fd = kc_fdinstall(fp->f_fcb);
+    if (fd >= 0) {
+        fdbase(pid)[fd] = fp;
+        pobase(pid)[fd] = 0;
+    }
+    return (fd);
+}
+
+int
+unp_fileop(pid, ap)
+int pid;
+register int *ap;
+{
+    register struct file *fp;
+    struct file **fdp;
+    int *out;
+    int i, n;
+
+    fp = (ap[1] > 0 && ap[1] <= NFILE) ? &file_pool[ap[1] - 1]
+                                       : (struct file *)0;
+    switch (ap[0]) {
+
+    case UF_GETF:
+        fdp = fdbase(pid);
+        if (fdp == (struct file **)0 || ap[1] < 0 || ap[1] >= FS_MAX_FDS ||
+            fdp[ap[1]] == (struct file *)0)
+            return (0);
+        return ((int)(fdp[ap[1]] - file_pool) + 1);
+
+    case UF_UFAVAIL:
+        fdp = fdbase(pid);
+        n = 0;
+        for (i = 0; fdp != (struct file **)0 && i < FS_MAX_FDS; i++)
+            if (fdp[i] == (struct file *)0)
+                n++;
+        return (n);
+
+    case UF_UNPGC1:
+        for (i = 0; i < NFILE; i++)
+            file_pool[i].f_flag &= ~(FMARK|FDEFER);
+        return (NFILE);
+    }
+    if (fp == (struct file *)0)
+        return (0);
+    switch (ap[0]) {
+
+    case UF_FADJUST:
+        fp->f_msgcount += ap[2];
+        fp->f_count += ap[3];
+        if (ap[3])
+            kc_fcbref(fp->f_fcb, ap[3]);
+        return (0);
+
+    case UF_FPFETCH:
+        out = (int *)(((long)(ap[5] & 0xff) << 16) | (unsigned)ap[4]);
+        out[0] = fp->f_count;
+        out[1] = fp->f_msgcount;
+        out[2] = fp->f_flag;
+        out[3] = fp->f_count ? kc_fcbsock(fp->f_fcb) : 0;
+        return (fp->f_count);
+
+    case UF_FPFLAGS:
+        fp->f_flag |= ap[2];
+        fp->f_flag &= ~ap[3];
+        return (0);
+
+    case UF_UFINSTALL:
+        return (uf_install(pid, fp));
+
+    case UF_UNPDISC:
+        /* 2.11BSD sys_kern.c unpdisc: `--fp->f_msgcount; return
+         * (closef(fp))'.  The close is close(2)'s own, on a descriptor the
+         * file is installed at for the purpose, so a socket, a pipe and a
+         * vnode each get their teardown.  With no descriptor free the file
+         * stays in flight (unix(4) BUGS). */
+        i = uf_install(pid, fp);
+        if (i < 0)
+            return (EMFILE);
+        fp->f_msgcount--;
+        return (kc_fsclose(i));
+    }
+    return (0);
 }

@@ -52,6 +52,23 @@ ADDRESSING
      socket is the ordinary case after a restart.  Connecting to
      such a name answers ECONNREFUSED.
 
+PASSING DESCRIPTORS
+     A message may carry descriptors to the receiving process, as
+     access rights: sendmsg(2)'s msg_accrights points at an array
+     of descriptors and msg_accrightslen gives its length in bytes.
+     Each names an open file of the sender's, and the file stays
+     open while the message is in flight, whatever the sender then
+     closes.  recvmsg(2) gives the receiver a new descriptor for
+     each, at its lowest free numbers, writes them into its own
+     msg_accrights and sets msg_accrightslen.  A receiver without
+     enough free descriptors gets EMSGSIZE and the files are
+     closed.
+
+     A file whose only reference is a message nobody will read --
+     its receiving socket closed, or a cycle of sockets passed to
+     one another -- is closed by the garbage collector when a
+     UNIX-domain socket is closed.
+
 DIAGNOSTICS
      A socket(2) for a type the family has no protocol for, such
      as SOCK_RAW, answers EPROTONOSUPPORT.
@@ -68,12 +85,11 @@ DIAGNOSTICS
      datagram alone.
 
 BUGS
-     NO ACCESS RIGHTS.  Upstream passes descriptors between
-     processes over a UNIX-domain socket, as access rights in a
-     message.  Here a message carrying them answers EOPNOTSUPP: a
-     descriptor is a kernel file record the network modules cannot
-     name.  A port that expects to hand a descriptor to another
-     process cannot do it this way.
+     A FILE IS CLOSED THROUGH A DESCRIPTOR.  Closing a file a
+     message held is close(2) on a descriptor of the process that
+     closed the socket, taken for the purpose; a process with all
+     of its descriptors open cannot take one, and the file stays
+     in flight until another close finds it.
 
      A SENDER'S NAME IS CUT TO 14 CHARACTERS.  recvfrom(2) and
      accept(2) copy at most 16 bytes of the peer's address, the
@@ -83,7 +99,8 @@ BUGS
 
 SEE ALSO
      socket(2), bind(2), connect(2), listen(2), accept(2),
-     send(2), recv(2), unlink(2), syslog(3), pipe(2)
+     send(2), recv(2), sendmsg(2), recvmsg(2), unlink(2),
+     syslog(3), pipe(2)
 
 HISTORY
      A UNIX-domain protocol family appeared in 4.2BSD.  This one

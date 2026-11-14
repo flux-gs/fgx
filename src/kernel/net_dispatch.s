@@ -244,6 +244,16 @@ _Sys_GetSockName ENT
                 LDY     #NETOP_GetSockName
                 JSR     _NetThunkExec
                 RTS
+_Sys_Sendmsg    ENT
+                MX      %00
+                LDY     #NETOP_Sendmsg
+                JSR     _NetThunkExec
+                RTS
+_Sys_Recvmsg    ENT
+                MX      %00
+                LDY     #NETOP_Recvmsg
+                JSR     _NetThunkExec
+                RTS
 
 ;------------------------------------------------------------------------------
 ; _netReadOp - 5-byte self-modifying LDAL/RTS cell (see fst_dispatch.s).

@@ -405,6 +405,43 @@ kc_unpname      MX      %00
 @ku_out         LEAVEK
                 RTL
 
+; kc_unpfile(op, a, b, c) - a descriptor passed over AF_UNIX: the file-table op
+; (KSVC_UNPFILE, src/kernel/vfs/vfs_file.c unp_fileop) on the handles in a
+; rights record.  The block is the kernel's _unpfArgs, written with DBR on the
+; kernel bank as kc_unpname writes its cells; its last two words point at
+; bn_unpfout in this bank, where fpfetch leaves its struct file.  Returns the
+; op's answer.  Arguments, after ENTERK and the PHB: op 7,S, a 9,S, b 11,S,
+; c 13,S.
+kc_unpfile      MX      %00
+                ENTERK
+                PHB                             ; this bank, for the result block
+                LDA     1,S
+                AND     #$00FF
+                TAY
+                SEP     #$20
+                MX      %10
+                LDAL    SYS_KCALL+3
+                PHA
+                PLB                             ; DBR = the kernel bank
+                REP     #$20
+                MX      %00
+                STY     |_unpfArgs+10           ; bn_unpfout: bank
+                LDA     #bn_unpfout
+                STA     |_unpfArgs+8            ;   and offset
+                LDA     7,S
+                STA     |_unpfArgs
+                LDA     9,S
+                STA     |_unpfArgs+2
+                LDA     11,S
+                STA     |_unpfArgs+4
+                LDA     13,S
+                STA     |_unpfArgs+6
+                PLB
+                LDX     #KSVC_UNPFILE
+                JSL     SYS_KCALL               ; C=1 + A = the answer
+                LEAVEK
+                RTL
+
 ; bn_sysent - net.mod's way in for a process's socket call (src/modules/net/
 ; net_kso.s).  Entered as by JSL, with A = the offset in bank 0 of the call block
 ; on the caller's kernel stack.  D becomes kernel C's register page and DBR the
@@ -445,11 +482,11 @@ bn_sysent       MX      %00
                 PLX
                 PLA
                 STA     _fcc_stkfloor
-                LDA     |u                      ; u_error
+                LDA     |bn_ret                 ; u_error
                 BNE     @bs_err
-                LDA     |u+8                    ; u_r.r_val2
+                LDA     |bn_ret+4               ; u_r.r_val2
                 TAX
-                LDA     |u+6                    ; u_r.r_val1
+                LDA     |bn_ret+2               ; u_r.r_val1
                 PLD
                 PLB
                 SEC
