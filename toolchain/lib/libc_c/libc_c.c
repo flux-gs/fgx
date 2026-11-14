@@ -71,6 +71,9 @@
 #include <sys/un.h>                           /* SUN_LEN, SUN_PATH_MAX (syslog) */
 #include <arpa/nameser.h>                     /* DNS wire constants (resolver)  */
 #include <arpa/inet.h>                         /* inet_addr (resolver) */
+#include <sys/exec.h>                         /* struct xexec (nlist) */
+#define _AOUT_INCLUDE_
+#include <nlist.h>                            /* struct nlist (nlist) */
 
 /* ---- CROSS-MEMBER PROLOGUE (libc-breakup task 2) -------------------------
  * Declarations and macros MORE THAN ONE member needs.  They used to sit in
@@ -219,6 +222,8 @@ extern char _libc_lstrBufB[];
 #include "inet_network.c"
 #include "getnent.c"
 #include "getnbyname.c"
+#include "nsym.c"
+#include "nlist.c"
 #include "herror.c"
 #include "dir.c"
 #include "telldir.c"
