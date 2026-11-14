@@ -16,6 +16,22 @@
 #define IPPROTO_TCP    6
 #define IPPROTO_UDP    17
 
+/* Address classes, 2.11BSD netinet/in.h: a long in host order. */
+#define IN_CLASSA(i)            (((long)(i) & 0x80000000L) == 0)
+#define IN_CLASSA_NET           0xff000000L
+#define IN_CLASSA_NSHIFT        24
+#define IN_CLASSA_HOST          0x00ffffffL
+#define IN_CLASSA_MAX           128
+#define IN_CLASSB(i)            (((long)(i) & 0xc0000000L) == 0x80000000L)
+#define IN_CLASSB_NET           0xffff0000L
+#define IN_CLASSB_NSHIFT        16
+#define IN_CLASSB_HOST          0x0000ffffL
+#define IN_CLASSB_MAX           65536
+#define IN_CLASSC(i)            (((long)(i) & 0xe0000000L) == 0xc0000000L)
+#define IN_CLASSC_NET           0xffffff00L
+#define IN_CLASSC_NSHIFT        8
+#define IN_CLASSC_HOST          0x000000ffL
+
 #define INADDR_ANY        0x00000000
 #define INADDR_BROADCAST  0xFFFFFFFF
 #define INADDR_LOOPBACK   0x7F000001
