@@ -262,6 +262,9 @@ archived tracker; new work is tracked in GitHub Issues.
 
 ### Kernel / memory
 
+- **The HEAP_LIM cell is not seeded at exec** (flux-gs/fgx#48):
+  `forkpair_lim` reads `$F523` at `$FFF8` where the seed `$FFF8` belongs, on
+  `main` and on feat/net-mux alike.  Not in the gate.
 - **Multi-bank module container** (deferred 2026-09-20): one `.mod` carrying
   several bank images, so `prodos` + `prodosw` is one `modload`.  `bin/fgxunix`
   (`tools/mkfgxunix.py`) already carries six bank overlays; generalising its
