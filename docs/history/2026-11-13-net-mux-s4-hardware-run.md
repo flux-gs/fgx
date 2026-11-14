@@ -47,9 +47,7 @@ connect again: inetd keeps one listener for every connection, as BSD's does.
 
 Expect `sum` to match the host's.  **Note the rate** ftp reports.  S3 measured
 9.9 KB/s on the chip's TCP; this is the kernel's TCP.  Under MAME a loopback
-transfer of 1 MB runs at 25 KB/s, with a third of the time in the stack's
-byte-by-byte `bcopy`, so a slower rate than S3's is possible and is the number I
-need.
+transfer of 1 MB runs at 36 KB/s, both ends on the one machine.
 
 ## 4. Many connections at once
 

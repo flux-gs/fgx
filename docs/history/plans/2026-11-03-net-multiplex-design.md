@@ -248,7 +248,7 @@ Each phase ends with the system working and the gate green.
 | | Phase | Delivers |
 |---|---|---|
 | S0 | fcc prerequisites | the remaining items of the Track B S0 document: 3.2 `##`, 3.4 extern of an incomplete struct, 3.5 struct assignment into an array element, 3.6 address constants in static initializers, 3.7 `&` of any lvalue, 3.8 struct return by value.  3.1 landed in !399; 3.3 landed in #46 (`b2305ec`, the block-scope extern fix).  **Done** on feat/net-mux (`46dba3b`..`084ecce`), with three items the S0 audit found: a call through a function pointer at the end of a member chain, a typedef of a sized array, and `sizeof` of `*` applied to a member chain.  All 23 files of the port set then compile, under `-Dpdp11`, which S1 found to be the wrong arm (section 3); all of them, with the `net/` files added, compile under `fgx`.  Left for S1, all seams: `h/signal.h:129` lacks a `;`; `FMARK`/`FDEFER` and `FREAD`/`FWRITE` are defined nowhere in 2.11BSD's `h/` (4.3BSD-Reno `sys/file.h` has them); `uipc_domain.c`'s `ADDDOMAIN` pastes with the Reiser `x/**/domain`, which the port writes as `##`; and the PDP arms of `h/types.h` and `pdp/seg.h`. |
-| S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split.  **Done** on feat/net-mux (`f07f1da`..): `bsdnetd` and `bsdnet0`-`3` are built and staged, and no boot loads them; `modload` of all five on a `kernel.netprobe = 1` kernel runs the probe.  182 KB of code and a 41 KB data image, 35 KB of that the mbuf pool: five banks.  Callout and bpf stay in S2, as this table says; `in_cksum` landed here, since IP cannot link without it.  S2 inherits `machine/s2_stubs.c` (`timeout` does nothing, so no timer fires), one global `u`, which is not safe across a sleep and is S3's to fix, `printf` that logs only its format, C byte loops for `bcopy`, `sleep()` discarding `kc_sleepi`'s signal answer, which is S3's with `u`, and adding the modules to `/etc/rc.in`. |
+| S1 | machine seam + packaging | section 4.3 minus the driver: mbufs, spl/netisr, module split.  **Done** on feat/net-mux (`f07f1da`..): `bsdnetd` and `bsdnet0`-`3` are built and staged, and no boot loads them; `modload` of all five on a `kernel.netprobe = 1` kernel runs the probe.  182 KB of code and a 41 KB data image, 35 KB of that the mbuf pool: five banks.  Callout and bpf stay in S2, as this table says; `in_cksum` landed here, since IP cannot link without it.  S2 inherits `machine/s2_stubs.c` (`timeout` does nothing, so no timer fires), one global `u`, which is not safe across a sleep and is S3's to fix, `printf` that logs only its format, C byte loops for `bcopy` (assembly since S4), `sleep()` discarding `kc_sleepi`'s signal answer, which is S3's with `u`, and adding the modules to `/etc/rc.in`. |
 | S2 | substrate running | mbufs, domains/protosw, sockbufs, `in_pcb`, `lo0`, `ip_input`/`ip_output`, ARP, the callout facility, the MACRAW driver on socket 0 and bpf as its tap, proven by an in-kernel probe: ARP resolves the gateway, an ICMP echo goes out and the reply comes back; netdump still captures.  **Done** on feat/net-mux under MAME (`d8cad04`..), and the maintainer's run on real hardware decides S3 (section 7); the modules stay out of `/etc/rc.in` until S3 |
 | S3 | UDP | every AF_INET UDP socket is a BSD socket on the kernel stack, wire and loopback; ntpd, ntpdc 127.0.0.1, dhclient (4.7) and syslogd -u on it; the chip's UDP core retires.  **Done** on feat/net-mux under MAME (`6905dc6`..), the modules loading at boot from `/etc/rc.in`; the maintainer's run on real hardware is next (`docs/history/2026-11-10-net-mux-s3-hardware-run.md`).  A process's `u` is saved per pid across `sleep`, which longjmps with EINTR as 2.11BSD's does; net.mod hands a datagram socket's every call to the stack through `net_kso.s` and `bn_sys.c`; dhclient takes its lease through the stack from 0.0.0.0 and the address it sets reaches the stack (`BNOP_IFCHANGED`); a default route goes through the gateway.  Found on the way: fcc pushed one word for a struct argument `*p` and could not store through `a[i]->f`; a pointer's pad byte broke every UDP checksum over 255 bytes; `ifioctl` passed its command as an int where `pr_usrreq` reads a pointer; the interface's name `w5` has a digit, which `ifunit` reads as the unit.  Without the modules `socket(AF_INET, SOCK_DGRAM)` is EPROTONOSUPPORT. |
 | S4 | TCP + AF_UNIX | `tcp_*` on the wire and loopback; AF_UNIX on `uipc_usrreq.c`; telnet/telnetd, inetd, ftp, nc and the unixdgram users on it; `net_loop.s` rings, `unp.s`, the old descriptor table and the chip's TCP core retire; socket count limited by memory.  Raw sockets and ping moved in from S5 (the maintainer's call).  **Done** on feat/net-mux under MAME (`f14ee1c`..): a socket is its FCB's struct socket (`FCB_SockSo`); TCP, UDP, raw and AF_UNIX all run on the stack, and net.mod forwards; `NMBUFS` 280 carries sixteen connections; AF_UNIX names go through 2.11BSD's `UNPBIND`/`UNPCONN`/`UNPDET` seam onto the VFS; ping is setuid, as upstream installs it; socket 0 takes all 8 KB of the chip's buffer each way.  Found on the way: libc's listen dropped the backlog, accept never named the peer, bind and connect passed no length (an AF_UNIX path over 13 characters bound a different name), and the resolver set the address family in the wrong byte.  The maintainer's run on real hardware is next (`docs/history/2026-11-13-net-mux-s4-hardware-run.md`). |
@@ -380,13 +380,23 @@ S4, under MAME on the shipping configuration:
 | Module footprint | 278,799 bytes on disk: 275,961 in the stack's five banks (S3's 252,325 plus TCP, raw IP and AF_UNIX) and net.mod's 2,838 |
 | Memory at idle, modules loaded | 2,847 KB free of 8,320 (`vmstat -m`, the default test machine); the stack is still five banks, so the bank count S3 measured does not move |
 | Core bank | 525 bytes free, from none, once the descriptor table and the chip transports went |
-| 1 MB over `lo0` (`loopprobe -b`, a writer and a reader process) | 41.0 s, 25 KB/s |
-| Where that transfer's time goes (`pc_sample`, 53,138 samples) | the stack's `bcopy` 30.2%, `in_cksum` 5.7%, `tcp_output` 4.0%, `tcp_input` 3.1%, the rest of the stack under 2% each; the kernel bank, idle included, 38.6% |
+| 1 MB over `lo0` (`loopprobe -b`, a writer and a reader process) | 28.6 s, 36 KB/s, with `bcopy` in assembly; 41.0 s, 25 KB/s with the C byte loop it replaced |
+| Where that transfer's time goes (`pc_sample`, 42,434 samples) | the kernel's `_Img_Xchg` 41.5%; `in_cksum` 7.0%; the stack's `bcopy` 5.4%; `tcp_output` 4.7%, `tcp_input` 3.3%, the rest of the stack under 2% each; the rest of the kernel bank, idle included, 16.4% |
 
 THE CHECKSUM IS NOT FOLDED.  Section 3 left S4 to fold it into the copy only if
-`in_cksum` took over 15% of a `lo0` transfer; it takes 5.7% of all samples, and
-10% of the stack's own.  The cost is the copy: `bcopy` in `net_kern.c` is a
-byte loop in C, where 2.11BSD's is machine code.  S5 inherits it.
+`in_cksum` took over 15% of a `lo0` transfer; it takes 7.0% of all samples.  It
+is 65816 assembly already.  An unrolled word loop, as 4.3BSD-Reno's
+`vax/in_cksum.c` has, would save roughly a third of it.
+
+`bcopy` is 2.11BSD's in assembly (`net_asm.s`, after libc `pdp/gen/bcopy.s`):
+MVN forward and MVP backward, so an overlapping move is right either way, which
+the C loop was not.  It was 30.2% of the transfer as a byte loop.
+
+THE LARGEST COST IS THE TEST, NOT THE STACK.  `loopprobe -b`'s writer is the
+reader's forked child, with no exec, so the two share an image bank, and every
+switch between them exchanges the data image (`_Img_Xchg`, `process.s`).  Two
+different programs, such as ftp and a remote ftpd, do not pay it.  Without it
+the transfer would take about 17 s; that is an estimate, not a measure.
 
 ## 6. Testing
 
@@ -452,8 +462,7 @@ byte loop in C, where 2.11BSD's is machine code.  S5 inherits it.
   (above); the chip's TCP and IPRAW, its ARP and routing, retired with the
   loopback and AF_UNIX rings.  `tools/check_net_retired.py` fails the build if one
   of their names is defined again.
-- **S5 inherits:** the stack's byte-loop `bcopy` (section 5), which is a third of a
-  transfer's time; descriptor passing over AF_UNIX (access rights answer EOPNOTSUPP,
+- **S5 inherits:** descriptor passing over AF_UNIX (access rights answer EOPNOTSUPP,
   stated in unix(4)); a sender's AF_UNIX name cut to 14 characters by the 16-byte
   sockaddr libc copies (unix(4) BUGS); `NFILE` 64, which runs out before the mbuf
   pool; and the two names for the card, below.

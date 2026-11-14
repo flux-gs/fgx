@@ -126,6 +126,20 @@ PackBytes, or Toolbox-for-speed.  Profile:
 earlier dive:
 [`history/plans/2026-09-09-performance-dive-results.md`](history/plans/2026-09-09-performance-dive-results.md).
 
+**What 2.11BSD keeps in machine code, FGX should too.**  Upstream hand-codes the
+routines that are hot on every workload, and where FGX has C in their place the
+difference can be large: net-mux S4's `bcopy`, a C byte loop, was 30% of a TCP
+transfer, and 2.11BSD's `pdp/gen/bcopy.s` as MVN/MVP took the transfer from
+41.0 s to 28.6 s.  Review each against FGX's counterpart (C in `libc_c`, kernel
+C, or already assembly), profile the ones that are C, and port the ones that
+show.  The list, from `examples/2.11BSD/usr`: libc `pdp/gen` (`bcopy`, `bzero`,
+`bcmp`, `ffs`, `index`, `rindex`, `insque`, `remque`, the `str*` family),
+`pdp/stdio` (`fgetc`, `fputc`, `fgets`, `gets`, `puts`, `doprnt`), `pdp/net`
+(`htonl`, `htons`), `pdp/crt` (the long multiply, divide and remainder); and the
+kernel's `sys/pdp` (`mch_copy.s`'s `copyin`/`copyout`/`copyinstr`, `mch_xxx.s`'s
+`copystr`, `clrbuf`, `scanc`, `locc`).  4.3BSD-Reno's `vax/in_cksum.c` unrolls
+the checksum loop, where FGX's `in_cksum.s` does a word per pass.
+
 ### Shared libc -- landed
 
 `libc.so` and its siblings are shared libraries bound before `main` by a
