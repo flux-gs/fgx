@@ -471,8 +471,8 @@ it.
 | 105 | `SYS_GETRLIMIT` | getrlimit(res, *rlp): A=res, Y=rlp offset, DBR=rlp bank -> A=0 / errno |
 | 106 | `SYS_SETRLIMIT` | setrlimit(res, *rlp): same shape |
 | 107 | `SYS_SIGPAUSE` | sigpause(mask): A=lo16, X=hi16. Installs the mask, sleeps until a signal is actionable, and always returns C=0 + A=EINTR. |
-| 108 | `SYS_GETPEERNAME` | getpeername(fd, sockaddr_in*): X=fd, A=sockaddr offset (caller bank). Writes a full SIN_SIZE record -- the 3-arg BSD form's namelen is libc's business, not the kernel's, which keeps this to the two registers SYS_CONNECT already uses. C=0+A=ENOTCONN unless ESTABLISHED. |
-| 109 | `SYS_GETSOCKNAME` | getsockname(fd, sockaddr_in*): same shape. An UNBOUND socket answers 0.0.0.0:0 with C=1, as BSD does -- "no name yet" is not an error. |
+| 108 | `SYS_GETPEERNAME` | getpeername(fd, name*, len): X=fd, A=name offset (caller bank), Y=the buffer's length. Copies min(len, the name's length) bytes and returns that count in A, C=1. C=0+A=ENOTCONN when unconnected. |
+| 109 | `SYS_GETSOCKNAME` | getsockname(fd, name*, len): same shape. An UNBOUND socket is not an error, as in BSD. |
 | 110 | `SYS_MODLOAD` | FGX-specific: stream a module into |
 | 111 | `SYS_LSTAT` | lstat(path,buf): A=path X=stat_buf(own-bank) -> C=1 ok; C=0+A=errno. stat(2) that does not FOLLOW a final symlink -- the only difference, as 4.3BSD-Reno's own lstat is stat's six lines with NOFOLLOW. |
 | 112 | `SYS_READLINK` | readlink(path,buf,sz): A=path X=buf(own-bank) Y=size |

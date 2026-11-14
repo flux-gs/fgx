@@ -1695,11 +1695,15 @@ char **argv;
         if (getpeername(ls, &nm, &nl) != -1) fail("getpeername-listener-ok");
         if (errno != ENOTCONN)               fail("getpeername-listener-errno");
 
-        /* A buffer too small for a whole record is refused rather than
-         * short-written -- libc's half of the contract. */
+        /* A buffer too small for the whole record gets as much as it holds
+         * and that count, as 2.11BSD's getsockname copies min(len, m_len):
+         * the family and port, and the address bytes past it untouched. */
         nl = 4;
-        if (getsockname(as, &nm, &nl) != -1) fail("getsockname-short-ok");
-        if (errno != EINVAL)                 fail("getsockname-short-errno");
+        for (n = 0; n < sizeof(nm); n++) ((char *)&nm)[n] = 0x5A;
+        if (getsockname(as, &nm, &nl) < 0)   fail("getsockname-short");
+        if (nl != 4)                         fail("getsockname-short-len");
+        if (nm.sin_port != htons(LOOPPORT))  fail("getsockname-short-port");
+        if (((char *)&nm)[4] != 0x5A)        fail("getsockname-short-overrun");
     }
 
     /* ---- teardown: the peer's next read must see EOF, not hang ---- */

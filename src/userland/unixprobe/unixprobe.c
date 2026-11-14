@@ -380,6 +380,94 @@ int gc, rounds;
     return (0);
 }
 
+
+/* ---- `-n': a socket's name as long as AF_UNIX's.  2.11BSD's getsockname,
+ * getpeername and accept copy min(*len, the name's length) bytes and write that
+ * count back (uipc_syscalls.c), and PRU_SOCKADDR/PRU_PEERADDR carry the whole
+ * bound name, so a 40-character path comes back as its 42 bytes.  A datagram
+ * sender's name is one struct sockaddr, as 2.11BSD's sbappendaddr copies it:
+ * recvfrom gets 16.  Every short buffer is followed by a sentinel the call must
+ * leave alone.  Prints `UNIX N ok' or `UNIX N FAIL <step> <len>'. */
+#define NPATH1 "/tmp/unixprobe.names.0123456789abcdefghi"
+#define NPATH2 "/tmp/unixprobe.names.jklmnopqrstuvwxyz01"
+#define NLEN   42
+
+static int
+n_check(step, buf, len, want, wantlen, cap)
+char *step, *buf, *want;
+int len, wantlen, cap;
+{
+    if (len != wantlen || memcmp(buf, want, wantlen) != 0 ||
+        (cap < UNP_SA_SIZE && (buf[cap] & 0xFF) != 0x55)) {
+        printf("UNIX N FAIL %s %d\n", step, len);
+        return (1);
+    }
+    return (0);
+}
+
+static int
+names_main()
+{
+    char sa1[UNP_SA_SIZE], sa2[UNP_SA_SIZE], buf[UNP_SA_SIZE + 1], dat[2];
+    int l, c, a, d, r, len;
+
+    unp_mkaddr(sa1, NPATH1);
+    unp_mkaddr(sa2, NPATH2);
+    unlink(NPATH1);
+    unlink(NPATH2);
+    l = socket(AF_UNIX, SOCK_STREAM, 0);
+    c = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (l < 0 || c < 0 || bind(l, sa1, NLEN) < 0 || listen(l, 1) < 0 ||
+        bind(c, sa2, NLEN) < 0 || connect(c, sa1, NLEN) < 0) {
+        printf("UNIX N FAIL setup %d\n", errno);
+        return (1);
+    }
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    if (getsockname(l, buf, &len) < 0) len = -errno;
+    if (n_check("sockname", buf, len, sa1, NLEN, UNP_SA_SIZE)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = 16;
+    if (getsockname(l, buf, &len) < 0) len = -errno;
+    if (n_check("sockname16", buf, len, sa1, 16, 16)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    if (getpeername(c, buf, &len) < 0) len = -errno;
+    if (n_check("peername", buf, len, sa1, NLEN, UNP_SA_SIZE)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    a = accept(l, buf, &len);
+    if (a < 0) len = -errno;
+    if (n_check("accept", buf, len, sa2, NLEN, UNP_SA_SIZE)) return (1);
+    close(a);
+    close(c);
+    close(l);
+    unlink(NPATH1);
+    unlink(NPATH2);
+
+    r = socket(AF_UNIX, SOCK_DGRAM, 0);
+    d = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (r < 0 || d < 0 || bind(r, sa1, NLEN) < 0 || bind(d, sa2, NLEN) < 0 ||
+        sendto(d, "ab", 2, 0, sa1, NLEN) != 2 || sendto(d, "cd", 2, 0, sa1, NLEN) != 2) {
+        printf("UNIX N FAIL dgram-setup %d\n", errno);
+        return (1);
+    }
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    if (recvfrom(r, dat, 2, 0, buf, &len) != 2) len = -errno;
+    if (n_check("recvfrom", buf, len, sa2, 16, 16)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = 8;
+    if (recvfrom(r, dat, 2, 0, buf, &len) != 2) len = -errno;
+    if (n_check("recvfrom8", buf, len, sa2, 8, 8)) return (1);
+    close(r);
+    close(d);
+    unlink(NPATH1);
+    unlink(NPATH2);
+    printf("UNIX N ok\n");
+    return (0);
+}
+
 int
 main(argc, argv)
 int argc;
@@ -392,6 +480,8 @@ char **argv;
 
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
         return (stream_main());
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'n')
+        return (names_main());
     if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'r')
         return (rights_main(argc > 2, argc > 3 ? atoi(argv[3]) : 150));
 

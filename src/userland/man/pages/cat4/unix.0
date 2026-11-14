@@ -91,11 +91,13 @@ BUGS
      of its descriptors open cannot take one, and the file stays
      in flight until another close finds it.
 
-     A SENDER'S NAME IS CUT TO 14 CHARACTERS.  recvfrom(2) and
-     accept(2) copy at most 16 bytes of the peer's address, the
-     size of a sockaddr, so a bound sender's path arrives cut at
-     its fourteenth character.  An unbound sender's name is empty,
-     as upstream's is.
+     A DATAGRAM SENDER'S NAME IS CUT TO 14 CHARACTERS.  The
+     receive buffer holds a datagram's source as one struct
+     sockaddr, as 2.11BSD's sbappendaddr stores it, so recvfrom(2)
+     returns at most 16 bytes of a bound sender's path.
+     getsockname(2), getpeername(2) and accept(2) return a stream
+     socket's name whole.  An unbound sender's name is empty, as
+     upstream's is.
 
 SEE ALSO
      socket(2), bind(2), connect(2), listen(2), accept(2),

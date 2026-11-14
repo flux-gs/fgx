@@ -44,6 +44,8 @@ C_SLOT = re.compile(r"_sock_argblk\[(\d+)\]\s*=\s*(.+?);")
 C_BANK = re.compile(r"^\(int\)\s*\(\s*lp\s*>>\s*16\s*\)$")
 C_TO_OFF = re.compile(r"^\(int\)\s*tp$")
 C_TO_BANK = re.compile(r"^\(int\)\s*\(\s*tp\s*>>\s*16\s*\)$")
+C_FROM_OFF = re.compile(r"^\(int\)\s*fp$")
+C_FROM_BANK = re.compile(r"^\(int\)\s*\(\s*fp\s*>>\s*16\s*\)$")
 DS_SIZE = re.compile(r"^int\s+_sock_argblk\s*\[\s*(\d+)\s*\]\s*;", re.M)
 
 
@@ -70,6 +72,12 @@ def c_slots(text):
                 out[cur]["tobank"] = idx
             elif rhs == "tolen":
                 out[cur]["tolen"] = idx
+            elif C_FROM_OFF.match(rhs):
+                out[cur]["fromoff"] = idx
+            elif C_FROM_BANK.match(rhs):
+                out[cur]["frombank"] = idx
+            elif "*fromlen" in rhs:
+                out[cur]["fromlen"] = idx
     return out, widest
 
 
@@ -92,6 +100,15 @@ def k_reads(text):
     m = re.search(r"a_sendto\.tolen\s*=\s*blk\[(\d+)\]", text)
     if m:
         out["a_sendto"]["tolen"] = int(m.group(1))
+    m = re.search(r"a_recvfrom\.from\s*=\s*far\(blk\[(\d+)\],\s*blk\[(\d+)\]\)", text)
+    if m:
+        out["a_recvfrom"]["frombank"] = int(m.group(1))
+        out["a_recvfrom"]["fromoff"] = int(m.group(2))
+    # the length word is read in and written back: both must name one word
+    rd = re.search(r"bn_len\s*=\s*blk\[(\d+)\];", text)
+    wr = re.search(r"blk\[(\d+)\]\s*=\s*bn_len;", text)
+    if rd and wr and rd.group(1) == wr.group(1):
+        out["a_recvfrom"]["fromlen"] = int(rd.group(1))
     return out
 
 
@@ -101,8 +118,9 @@ def check(csrc, ksrc, data):
     errs, checked = [], 0
     for cname, kblk in sorted(PAIRS.items()):
         c, k = cs.get(cname, {}), ks.get(kblk, {})
-        fields = ["flags", "bank"] + (["tooff", "tobank", "tolen"]
-                                      if cname == "sendto" else [])
+        fields = ["flags", "bank"] + (
+            ["tooff", "tobank", "tolen"] if cname == "sendto" else
+            ["fromoff", "frombank", "fromlen"] if cname == "recvfrom" else [])
         for f in fields:
             if f not in c:
                 errs.append("libc %s() packs no %s word" % (cname, f))
@@ -145,6 +163,24 @@ def self_test():
         assert any("bank from word 5" in e for e in errs), errs
         errs, _ = check(good_c, good_k, "int _sock_argblk[2];\n")
         assert any("holds 2 words" in e for e in errs), errs
+        PAIRS.clear()
+        PAIRS["recvfrom"] = "a_recvfrom"
+        rc = ("int recvfrom(int s, char *buf, int maxlen, int flags)\n{\n"
+              "    _sock_argblk[2] = flags;\n"
+              "    _sock_argblk[3] = (int)(lp >> 16);\n"
+              "    _sock_argblk[4] = (int)fp;\n"
+              "    _sock_argblk[5] = (int)(fp >> 16);\n"
+              "    _sock_argblk[6] = from ? *fromlen : 0;\n}\n")
+        rk = ("a_recvfrom.buf = far(blk[3], blk[0]);\n"
+              "a_recvfrom.flags = blk[2] & ~MSG_DONTWAIT;\n"
+              "bn_len = blk[6];\na_recvfrom.from = far(blk[5], blk[4]);\n"
+              "blk[6] = bn_len;\n")
+        errs, n = check(rc, rk, data)
+        assert not errs and n == 1, ("agreeing recvfrom must pass", errs)
+        errs, _ = check(rc, rk.replace("far(blk[5], blk[4])", "far(blk[4], blk[5])"), data)
+        assert any("frombank from word 4" in e for e in errs), errs
+        errs, _ = check(rc, rk.replace("blk[6] = bn_len;", "blk[7] = bn_len;"), data)
+        assert any("reads no fromlen" in e for e in errs), errs
     finally:
         PAIRS.clear()
         PAIRS.update(saved)

@@ -254,6 +254,12 @@ uipc_usrreq(so, req, m, nam, rights)
 		break;
 
 	case PRU_SOCKADDR:
+		if (unp->unp_addr) {
+			nam->m_len = unp->unp_addr->m_len;
+			bcopy(mtod(unp->unp_addr, caddr_t),
+			    mtod(nam, caddr_t), (unsigned)nam->m_len);
+		} else
+			nam->m_len = 0;
 		break;
 
 	case PRU_PEERADDR:
@@ -368,7 +374,8 @@ unp_connect(so, nam)
 	register struct sockaddr_un *soun = mtod(nam, struct sockaddr_un *);
 	struct inode *ip;
 	int error;
-	struct socket *so2;
+	struct socket *so2, *so3;
+	struct unpcb *unp2, *unp3;
 
 	if (nam->m_len + (nam->m_off - MMINOFF) == MLEN)
 		return (EMSGSIZE);
@@ -381,11 +388,18 @@ unp_connect(so, nam)
 		error = EPROTOTYPE;
 		goto bad;
 	}
-	if (so->so_proto->pr_flags & PR_CONNREQUIRED &&
-	    ((so2->so_options&SO_ACCEPTCONN) == 0 ||
-	    (so2 = sonewconn(so2)) == 0)) {
-		error = ECONNREFUSED;
-		goto bad;
+	if (so->so_proto->pr_flags & PR_CONNREQUIRED) {
+		if ((so2->so_options & SO_ACCEPTCONN) == 0 ||
+		    (so3 = sonewconn(so2)) == 0) {
+			error = ECONNREFUSED;
+			goto bad;
+		}
+		unp2 = sotounpcb(so2);
+		unp3 = sotounpcb(so3);
+		if (unp2->unp_addr)
+			unp3->unp_addr =
+				  m_copy(unp2->unp_addr, 0, (int)M_COPYALL);
+		so2 = so3;
 	}
 	error = unp_connect2(so, so2);
 bad:

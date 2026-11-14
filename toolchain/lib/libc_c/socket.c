@@ -25,9 +25,8 @@
  * bank 0, not in this one.  Then, per call:
  *   sendto:   [8..11] dst IP, [12..13] dst port (net order), then the
  *             sockaddr itself: [14..15] offset, [16..17] bank, [18..19] length
- *   recvfrom: [8..9] offset of the source-address staging, which is [10..25]:
- *             the kernel writes a whole 16-byte address there and libc copies
- *             what the caller asked for (socket_srv.c, recvfrom)
+ *   recvfrom: [8..9] the caller's `from' offset, [10..11] its bank, [12..13]
+ *             its length, which the kernel cuts and writes back
  * tools/check_sock_argblk.py holds this layout against bn_sys.c's reads. */
 int _sock_argblk[13];
 

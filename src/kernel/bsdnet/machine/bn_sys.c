@@ -473,8 +473,8 @@ bn_call(cp, so)
 
 	case BNOP_RECVFROM:
 	case BNOP_RECV:
-		/* The source address goes where libc's block word 4 points, in the
-		 * block's bank, all 16 bytes; libc copies what its caller asked. */
+		/* The caller's from buffer is block words 4 (offset) and 5 (bank),
+		 * its length word 6, which recvit cuts and the call writes back. */
 		blk = (int *)far(cp->c_bank, cp->c_a);
 		a_recvfrom.buf = far(blk[3], blk[0]);
 		a_recvfrom.len = blk[1];
@@ -484,10 +484,11 @@ bn_call(cp, so)
 			recv();
 			return;
 		}
-		bn_len = sizeof(struct sockaddr_in);
-		a_recvfrom.from = far(cp->c_bank, blk[4]);
+		bn_len = blk[6];
+		a_recvfrom.from = far(blk[5], blk[4]);
 		a_recvfrom.fromlenaddr = &bn_len;
 		recvfrom();
+		blk[6] = bn_len;
 		return;
 
 	case BNOP_SETSOCKOPT:
@@ -502,7 +503,8 @@ bn_call(cp, so)
 
 	case BNOP_GETSOCKNAME:
 	case BNOP_GETPEERNAME:
-		bn_len = sizeof(struct sockaddr_in);
+		/* the caller's *namelen in Y; the length written is the result */
+		bn_len = cp->c_y;
 		a_name.asa = far(cp->c_bank, cp->c_a);
 		a_name.alen = &bn_len;
 		u.u_ap = (int *)&a_name;
@@ -510,6 +512,7 @@ bn_call(cp, so)
 			getsockname();
 		else
 			getpeername();
+		u.u_r.r_val1 = bn_len;
 		return;
 
 	case BNOP_LISTEN:
