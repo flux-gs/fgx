@@ -13,8 +13,8 @@
 #include "../netinet/if_ether.h"
 
 extern	struct arpcom w5_ac;
-extern	u_long w5_rtaddr, w5_rtmask, w5_rtgw;
-extern	int w5setaddr(), kc_printstr();
+extern	u_long w5_rtaddr;
+extern	int kc_printstr();
 
 /* 52: one would-block errno, userland's (include/errno.s, toolchain errno.h). */
 #if EWOULDBLOCK != EAGAIN
@@ -94,8 +94,9 @@ np7_route(dst, hostp)
 	return (gw);
 }
 
-/* How many default routes, and the gateway of the last one seen. */
-static int
+/* How many default routes, and the gateway of the last one seen.  netprobe6's
+ * wire start waits on it for the gateway the lease gave. */
+int
 np7_defaults(gwp)
 	u_long *gwp;
 {
@@ -116,37 +117,28 @@ np7_defaults(gwp)
 	return (n);
 }
 
-/* 54: an address off the local net goes through the gateway DHCP gave, and
- * the broadcast address to a host route on w5, not to the gateway.
- * 55: a new gateway replaces the default route rather than adding one.
- * They need the card and an address with a gateway: the netw5 run, where
- * netprobe6's wire start runs them again once dhclient has set one. */
+/* 54: an address off the local net goes through the gateway the lease gave,
+ * and the broadcast address to w5's host route, through its address, not to
+ * the gateway.  55: one default route, not two: dhclient deletes the last
+ * lease's before it adds its own.  They need the card and a lease with a
+ * gateway: the netw5 run, where netprobe6's wire start runs them once dhclient
+ * has set one. */
 int
 np7_routes()
 {
-	u_long ip, mask, gw, gw2, seen;
+	u_long gw;
 	int host;
 
-	if ((w5_ac.ac_if.if_flags & IFF_UP) == 0 || w5_rtgw == 0)
+	gw = 0;
+	if ((w5_ac.ac_if.if_flags & IFF_UP) == 0 || np7_defaults(&gw) == 0)
 		return (0);
-	ip = w5_rtaddr;
-	mask = w5_rtmask;
-	gw = w5_rtgw;
 	host = 0;
 	if (np7_route(htonl(0x08080808L), &host) != (long)gw)
 		return (54);
-	if (np7_route(INADDR_BROADCAST, &host) != 0L || !host)
+	if (np7_route(INADDR_BROADCAST, &host) != 0L || !host ||
+	    w5_rtaddr != w5_ac.ac_ipaddr.s_addr)
 		return (54);
-	gw2 = gw ^ htonl(1L);		/* another address on the same net */
-	if (w5setaddr(ip, mask, gw2) != 0)
-		return (55);
-	seen = 0;
-	if (np7_defaults(&seen) != 1 || seen != gw2)
-		return (55);
-	host = 0;
-	if (np7_route(INADDR_BROADCAST, &host) != 0L || !host)
-		return (55);
-	if (w5setaddr(ip, mask, gw) != 0 || np7_defaults(&seen) != 1 || seen != gw)
+	if (np7_defaults(&gw) != 1)
 		return (55);
 	kc_printstr("bsdnet: routes ok");
 	return (0);

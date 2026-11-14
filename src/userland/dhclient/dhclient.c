@@ -9,8 +9,13 @@
  *
  * A slim RFC 2131 state machine, more robust than the old kernel boot-time
  * DHCP: DISCOVER -> OFFER -> REQUEST -> ACK with retransmit/backoff, proper
- * TLV option parsing, then assigns ip/netmask/broadcast/gateway via
- * SYS_IFCONFIG (the c_ifctl shim) and writes /etc/resolv.conf.
+ * TLV option parsing, then sets the interface's netmask, address and
+ * broadcast and the default route through the socket ioctls ifconfig(8) and
+ * route(8) use (SIOCSIFNETMASK, SIOCSIFADDR, SIOCSIFBRDADDR, SIOCADDRT), and
+ * writes /etc/resolv.conf.  The interface and its MAC come from SIOCGIFCONF:
+ * the first one with an Ethernet link-level address, or the one named.  One
+ * with no address yet is given 0.0.0.0 first, as early BOOTP clients did, so
+ * the DISCOVER has an interface to leave by.
  *
  * Resolver config precedence (highest wins): -d/-n flags > /etc/dhclient.conf
  * (`domain`/`search`/`nameserver` lines) > DHCP (opt6 dns, opt15 domain).  So a
@@ -18,7 +23,9 @@
  * command line, and a bad DHCP nameserver can be superseded locally.
  *
  * Lease persistence (RFC 2131 INIT-REBOOT): on bind we write the IP to
- * /etc/dhcp.lease; on the next boot, if that file exists, we re-REQUEST the
+ * /etc/dhcp.lease, and the gateway on a second line, so the next lease can
+ * delete the default route it added (rtrequest deletes only a route whose
+ * gateway matches); on the next boot, if that file exists, we re-REQUEST the
  * same IP (opt50, no server-id, broadcast) before falling back to DISCOVER on
  * NAK/timeout — so a rebooting FGX keeps its address instead of drawing a fresh
  * one from the pool each time.  No background renew daemon yet (that needs
@@ -32,25 +39,26 @@
  * (dhclient_ticks.s) over SYS_TICKS — fcc has no inline asm.
  */
 #include <stdio.h>
+#include <string.h>
+#include <strings.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>             /* select */
-#include "../lib/socket_h.h"
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <net/if_dl.h>
+#include <net/route.h>
+#include <netinet/in.h>
+#include <errno.h>
 
-/* --- ifreq raw layout (mirrors include/ifnet.s IF_*; see ifconfig.c). --- */
-#define IFR_SIZE      32
-#define IFR_NAME       0      /* 8  NUL-padded                 */
-#define IFR_MAC        9      /* 6                             */
-#define IFR_IP        16      /* 4                             */
-#define IFR_NETMASK   20      /* 4                             */
-#define IFR_BROADCAST 24      /* 4                             */
-#define IFR_GATEWAY   28      /* 4                             */
-#define IFR_SLOT       8      /* index byte (also the IFC_GETN index) */
-#define IFC_GETN       0      /* by index -> fill the record   */
-#define IFC_GET        1      /* by name -> fill the record    */
-#define IFC_SET        2      /* by name -> set ip/nm/bc/gw    */
-#define IFC_SETDHCP    4      /* as IFC_SET + mark IFF_DHCP    */
+extern int errno;
 
-int ifctl(int op, unsigned char *ifr);
+/* --- a sockaddr_in as raw bytes, for the DHCP sockets. --- */
+#define SIN_FAMILY     0       /* 2: AF_INET (short, low byte first)   */
+#define SIN_PORT       2       /* 2: port, network order (hi,lo)       */
+#define SIN_ADDR       4       /* 4: IPv4 addr, network order          */
+
 int ticks(void);              /* dhclient_ticks.s: lo16 of the 60 Hz counter */
 
 /* --- DHCP constants. --- */
@@ -63,7 +71,10 @@ int ticks(void);              /* dhclient_ticks.s: lo16 of the 60 Hz counter */
 #define PKT_MAX      300
 #define RX_MAX       600
 
-static unsigned char ifr[IFR_SIZE];
+static char ifname[IFNAMSIZ];               /* the interface's name   */
+static unsigned char mac[6];                /* its link-level address */
+static unsigned char oldgw[4];              /* the gateway the last lease added */
+static int haveoldgw;
 static unsigned char pkt[PKT_MAX];          /* TX DHCP/BOOTP message */
 static unsigned char rx[RX_MAX];            /* RX datagram payload   */
 static unsigned char sa_srv[16];            /* 255.255.255.255:67    */
@@ -81,7 +92,7 @@ static char confline[96];                   /* /etc/dhclient.conf line buffer  *
 static unsigned long lease;                 /* opt51 lease seconds   */
 static char decbuf[12];                     /* u32 -> decimal        */
 static unsigned char saved[4];              /* lease read from /etc/dhcp.lease */
-static char lbuf[24];                       /* lease-file read buffer */
+static char lbuf[40];                       /* lease-file read buffer */
 
 /* unsigned-long -> decimal string in decbuf (fcc printf has no %lu, and no
  * long modulo — extract each digit as v - (v/10)*10). */
@@ -117,7 +128,7 @@ static int build_dhcp(int msgtype, int add_opt50, int add_opt54)
     pkt[4] = xid[0]; pkt[5] = xid[1]; pkt[6] = xid[2]; pkt[7] = xid[3];
     pkt[10] = 0x80;             /* flags = broadcast */
     for (i = 0; i < 6; i++)     /* chaddr = our MAC  */
-        pkt[28 + i] = ifr[IFR_MAC + i];
+        pkt[28 + i] = mac[i];
     pkt[236] = 0x63; pkt[237] = 0x82; pkt[238] = 0x53; pkt[239] = 0x63; /* cookie */
     p = 240;
     pkt[p++] = 53; pkt[p++] = 1; pkt[p++] = msgtype;                    /* opt53 */
@@ -184,13 +195,17 @@ static int parse_quad(char *s, unsigned char *out)
 static int read_lease(void)
 {
     FILE *f;
-    int n;
+    int n, i;
     f = fopen("/etc/dhcp.lease", "r");
     if (f == 0) return 0;
-    n = fread(lbuf, 1, 23, f);
+    n = fread(lbuf, 1, sizeof lbuf - 1, f);
     fclose(f);
     if (n <= 0) return 0;
     lbuf[n] = 0;
+    for (i = 0; lbuf[i] && lbuf[i] != '\n'; i++)
+        ;
+    if (lbuf[i] == '\n')
+        haveoldgw = parse_quad(&lbuf[i + 1], oldgw);
     return parse_quad(lbuf, saved);
 }
 
@@ -201,6 +216,8 @@ static void write_lease(void)
     f = fopen("/etc/dhcp.lease", "w");
     if (f == 0) return;
     fprintf(f, "%u.%u.%u.%u\n", yip[0], yip[1], yip[2], yip[3]);
+    if (gw[0] | gw[1] | gw[2] | gw[3])
+        fprintf(f, "%u.%u.%u.%u\n", gw[0], gw[1], gw[2], gw[3]);
     fclose(f);
 }
 
@@ -297,6 +314,108 @@ static void write_resolv(void)
     fclose(f);
 }
 
+/* The interface to use: the one named, or the first with an Ethernet
+ * link-level address, from SIOCGIFCONF's AF_LINK entries (<net/if_dl.h>).
+ * Fills ifname and mac.  0, or -1 when there is none. */
+static char ifcbuf[512];
+static int find_if(char *want)
+{
+    struct ifconf ifc;
+    struct ifreq *r;
+    struct sockaddr_dl *sdl;
+    int s, n, i;
+
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+    if (s < 0)
+        return -1;
+    ifc.ifc_len = sizeof ifcbuf;
+    ifc.ifc_buf = ifcbuf;
+    n = ioctl(s, SIOCGIFCONF, (char *)&ifc);
+    close(s);
+    if (n < 0)
+        return -1;
+    n = ifc.ifc_len / sizeof (struct ifreq);
+    for (r = ifc.ifc_req; n > 0; n--, r++) {
+        sdl = (struct sockaddr_dl *)&r->ifr_addr;
+        if (sdl->sdl_family != AF_LINK || sdl->sdl_type != IFT_ETHER ||
+            sdl->sdl_alen != 6)
+            continue;
+        if (want != 0 && strncmp(want, r->ifr_name, IFNAMSIZ) != 0)
+            continue;
+        strncpy(ifname, r->ifr_name, IFNAMSIZ);
+        for (i = 0; i < 6; i++)
+            mac[i] = LLADDR(sdl)[i];
+        return 0;
+    }
+    return -1;
+}
+
+/* One SIOCSIF* address ioctl on ifname: a sockaddr_in from four octets. */
+static int setifaddr(int s, int cmd, unsigned char *a)
+{
+    struct ifreq ifr;
+    struct sockaddr_in *sin;
+
+    bzero((char *)&ifr, sizeof ifr);
+    strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+    sin = (struct sockaddr_in *)&ifr.ifr_addr;
+    sin->sin_family = AF_INET;
+    bcopy((char *)a, (char *)&sin->sin_addr, 4);
+    return ioctl(s, cmd, (char *)&ifr);
+}
+
+/* The default route through gateway g: SIOCADDRT or SIOCDELRT, as route(8). */
+static int defroute(int s, int cmd, unsigned char *g)
+{
+    struct rtentry rt;
+    struct sockaddr_in *sin;
+
+    bzero((char *)&rt, sizeof rt);
+    sin = (struct sockaddr_in *)&rt.rt_dst;
+    sin->sin_family = AF_INET;
+    sin = (struct sockaddr_in *)&rt.rt_gateway;
+    sin->sin_family = AF_INET;
+    bcopy((char *)g, (char *)&sin->sin_addr, 4);
+    rt.rt_flags = RTF_UP | RTF_GATEWAY;
+    return ioctl(s, cmd, (char *)&rt);
+}
+
+/* An interface with no address yet gets 0.0.0.0, so a DISCOVER to
+ * 255.255.255.255 has one to leave by (the kernel routes the broadcast
+ * address to it).  One that has an address keeps it until the lease. */
+static void ensure_addr(int s)
+{
+    struct ifreq ifr;
+    static unsigned char zero[4];
+
+    bzero((char *)&ifr, sizeof ifr);
+    strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+    if (ioctl(s, SIOCGIFADDR, (char *)&ifr) < 0)
+        (void) setifaddr(s, SIOCSIFADDR, zero);
+}
+
+/* The lease, as ifconfig(8) and route(8) would set it: the mask before the
+ * address so the address is read with it (ifconfig.c's order), then the
+ * broadcast, then the default route, the last lease's deleted first. */
+static int assign(int s)
+{
+    unsigned char brd[4];
+    int i;
+
+    for (i = 0; i < 4; i++)
+        brd[i] = yip[i] | (mask[i] ^ 0xff);         /* ip | ~mask */
+    if (setifaddr(s, SIOCSIFNETMASK, mask) < 0 ||
+        setifaddr(s, SIOCSIFADDR, yip) < 0 ||
+        setifaddr(s, SIOCSIFBRDADDR, brd) < 0)
+        return -1;
+    if (haveoldgw)
+        (void) defroute(s, SIOCDELRT, oldgw);
+    if ((gw[0] | gw[1] | gw[2] | gw[3]) &&
+        defroute(s, SIOCADDRT, gw) < 0 && errno != EEXIST)
+        return -1;
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
     int s, i, tries, to, n, got, havesaved, on;
@@ -314,25 +433,15 @@ int main(int argc, char **argv)
             ifn = argv[i];
     }
 
-    /* load the interface record -> our MAC (chaddr). */
-    if (ifn != 0) {
-        /* explicit interface name */
-        for (i = 0; i < 7 && ifn[i]; i++)
-            ifr[IFR_NAME + i] = ifn[i];
-        ifr[IFR_NAME + i] = 0;
-        if (ifctl(IFC_GET, ifr) != 0) {
+    /* the interface and our MAC (chaddr): its AF_LINK entry. */
+    if (find_if(ifn) != 0) {
+        if (ifn != 0)
             printf("dhclient: %s: no such interface\n", ifn);
-            return 1;
-        }
-    } else {
-        /* no arg: use the primary (first registered) interface, whatever slot */
-        ifr[IFR_SLOT] = 0;
-        if (ifctl(IFC_GETN, ifr) != 0) {
+        else
             printf("dhclient: no network interface\n");
-            return 1;
-        }
-        ifn = (char *)ifr;     /* IFR_NAME == 0; record name (NUL-padded) for logs */
+        return 1;
     }
+    ifn = ifname;
 
     /* xid: fixed prefix + a ticks-derived suffix so retries reuse one xid. */
     t0 = ticks();
@@ -352,6 +461,7 @@ int main(int argc, char **argv)
         close(s);
         return 1;
     }
+    ensure_addr(s);
 
     for (i = 0; i < 16; i++) sa_loc[i] = 0;
     sa_loc[SIN_FAMILY] = AF_INET;
@@ -440,20 +550,9 @@ int main(int argc, char **argv)
                 ((unsigned long)optbuf[2] << 8) |
                  (unsigned long)optbuf[3];
 
-    /* assign: refresh the record, then set ip/netmask/broadcast/gateway. */
-    ifctl(IFC_GET, ifr);
-    for (i = 0; i < 4; i++) {
-        ifr[IFR_IP + i] = yip[i];
-        ifr[IFR_NETMASK + i] = mask[i];
-        ifr[IFR_BROADCAST + i] = yip[i] | (mask[i] ^ 0xff);   /* ip | ~mask */
-        ifr[IFR_GATEWAY + i] = gw[i];
-    }
-    /* IFC_SETDHCP, not IFC_SET: it applies the same IP fields but also marks
-     * IFF_DHCP, which is what lets `ifconfig` report the address as a lease
-     * rather than a hand-config.  Both ops went through IFC_SET before, so the
-     * kernel could not tell them apart and IFF_DHCP was never set by anything. */
-    if (ifctl(IFC_SETDHCP, ifr) != 0) {
-        printf("dhclient: assign failed\n");
+    /* assign: netmask, address, broadcast, then the default route. */
+    if (assign(s) != 0) {
+        printf("dhclient: assign failed: errno %d\n", errno);
         close(s);
         return 1;
     }

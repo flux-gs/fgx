@@ -25,10 +25,7 @@
 #include "../netinet/ip.h"
 #include "../netinet/if_ether.h"
 
-#define	W5_GAR		0x0001
 #define	W5_SHAR		0x0009
-#define	W5_SIPR		0x000F
-#define	W5_SUBR		0x0005
 #define	W5_RMSR		0x001A	/* socket 0's RX size in bits 1-0: 1 KB << n */
 #define	S0_MR		0x0400
 #define	S0_CR		0x0401
@@ -254,9 +251,9 @@ w5attach()
 	return (1);
 }
 
-/* The routes the address brings, kept so the next address can delete them:
+/* The broadcast address's host route, kept so the next address can delete it:
  * rtrequest deletes only a route whose gateway matches (net/route.c). */
-u_long	w5_rtaddr, w5_rtmask, w5_rtgw;	/* the probe reads them */
+u_long	w5_rtaddr;			/* the probe reads it */
 static	int w5_routed;
 
 static void
@@ -272,74 +269,6 @@ w5route(dst, gw, cmd, flags)
 	d.sin_addr.s_addr = dst;
 	g.sin_addr.s_addr = gw;
 	(void) rtinit((struct sockaddr *)&d, (struct sockaddr *)&g, cmd, flags);
-}
-
-/* Give w5 an address, a mask and a gateway, as ifconfig and route would.
- *
- * No address yet is 0.0.0.0, as early BOOTP clients configured: in_ifinit
- * (netinet/in.c) routes network 0 to the interface, and in_netof of
- * 255.255.255.255 is 0, so a DHCP DISCOVER to the broadcast address leaves
- * through w5 from 0.0.0.0.  A host route for 255.255.255.255 to the interface
- * itself keeps that true once there is an address and network 0's route has
- * gone, where it would otherwise follow the default route to the router.  The
- * default route goes through the gateway, or there is none. */
-int
-w5setaddr(ip, mask, gw)
-	u_long ip, mask, gw;
-{
-	struct ifreq ifr;
-	register struct sockaddr_in *sin;
-	int error;
-
-	if (w5_routed) {
-		w5route(INADDR_BROADCAST, w5_rtaddr, SIOCDELRT, RTF_HOST);
-		if (w5_rtgw)
-			w5route(INADDR_ANY, w5_rtgw, SIOCDELRT, RTF_GATEWAY);
-		w5_routed = 0;
-	}
-	bzero((caddr_t)&ifr, sizeof(ifr));
-	sin = (struct sockaddr_in *)&ifr.ifr_addr;
-	sin->sin_family = AF_INET;
-	if (ip != 0) {
-		sin->sin_addr.s_addr = mask;
-		error = in_control((struct socket *)0, SIOCSIFNETMASK,
-		    (caddr_t)&ifr, &w5_ac.ac_if);
-		if (error)
-			return (error);
-	}
-	sin->sin_addr.s_addr = ip;
-	error = in_control((struct socket *)0, SIOCSIFADDR, (caddr_t)&ifr,
-	    &w5_ac.ac_if);
-	if (error)
-		return (error);
-	w5route(INADDR_BROADCAST, ip, SIOCADDRT, RTF_HOST);
-	if (ip != 0 && gw != 0)
-		w5route(INADDR_ANY, gw, SIOCADDRT, RTF_GATEWAY);
-	w5_rtaddr = ip;
-	w5_rtmask = mask;
-	w5_rtgw = ip != 0 ? gw : 0;
-	w5_routed = 1;
-	return (0);
-}
-
-/* The address DHCP or ifconfig left in the chip becomes the interface's:
- * at attach, and again whenever SYS_IFCONFIG sets it (net.mod). */
-int
-w5address()
-{
-	static u_long ip, mask, gw;
-
-	if (!w5_up)
-		return (0);
-	w5_lock();
-	w5_setar(W5_SIPR);
-	w5_rxcopy((char *)&ip, 4);
-	w5_setar(W5_SUBR);
-	w5_rxcopy((char *)&mask, 4);
-	w5_setar(W5_GAR);
-	w5_rxcopy((char *)&gw, 4);
-	w5_unlock();
-	return (w5setaddr(ip, mask, gw));
 }
 
 /* As deioctl's SIOCSIFADDR. */
@@ -358,6 +287,21 @@ w5ioctl(ifp, cmd, data)
 		w5_ac.ac_ipaddr = IA_SIN(ifa)->sin_addr;
 		if (w5_ac.ac_ipaddr.s_addr != INADDR_ANY)	/* none for 0.0.0.0 */
 			arpwhohas(&w5_ac, &IA_SIN(ifa)->sin_addr);
+		/*
+		 * 255.255.255.255 to this interface, through its new address.
+		 * in_pcbconnect sends INADDR_BROADCAST to the PRIMARY interface's
+		 * broadcast address, and the primary is lo0, so without this host
+		 * route a DHCP DISCOVER from 0.0.0.0 would not leave by the card,
+		 * and once there is an address it would follow the default route
+		 * to the router.  No address yet is 0.0.0.0, as early BOOTP
+		 * clients configured: in_ifinit (netinet/in.c) routes network 0
+		 * to the interface, and in_netof of 255.255.255.255 is 0.
+		 */
+		if (w5_routed)
+			w5route(INADDR_BROADCAST, w5_rtaddr, SIOCDELRT, RTF_HOST);
+		w5_rtaddr = w5_ac.ac_ipaddr.s_addr;
+		w5route(INADDR_BROADCAST, w5_rtaddr, SIOCADDRT, RTF_HOST);
+		w5_routed = 1;
 	}
 	return (0);
 }

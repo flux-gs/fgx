@@ -167,9 +167,9 @@ bad_header()
 	return (0);
 }
 
-/* 48: ARP and echo on the wire, to the gateway the chip holds, then 44: a burst
+/* 48: ARP and echo on the wire, to the default route's gateway, then 44: a burst
  * of replies into a ring that is not being drained.  The modules load at boot,
- * before dhclient has put a gateway in the chip, so the start waits (state 13)
+ * before dhclient has added a default route, so the start waits (state 13)
  * until there is one.  At kernel.netprobe = 4 the
  * target is an unused LAN address instead, so ARP goes unanswered. */
 #define	BURST		45
@@ -228,16 +228,15 @@ logmac(at)
 	kc_printstr(msg);
 }
 
+extern	int np7_defaults();
+
 static int
 wire_start()
 {
 	static u_long gar;
 
-	w5_lock();
-	w5_setar(1);		/* GAR */
-	w5_rxcopy((char *)&gar, 4);
-	w5_unlock();
-	if (gar == 0)
+	gar = 0;
+	if (np7_defaults(&gar) == 0)	/* no lease with a gateway yet */
 		return (13);
 	switch (np7_routes()) {
 	case 54:

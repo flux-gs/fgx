@@ -51,7 +51,6 @@
 #define	BNOP_IOCTL	13
 #define	BNOP_SELECT	14
 #define	BNOP_CLOSE	15
-#define	BNOP_IFCHANGED	16
 #define	BNOP_LISTEN	17
 #define	BNOP_ACCEPT	18
 
@@ -70,7 +69,7 @@ struct bncall {
  * flag; it is SS_NBIO for the call (docs/PROVENANCE.md). */
 #define	MSG_DONTWAIT	0x80
 
-extern	int kc_curuid(), kc_sigraise(), kc_wakeup(), w5address();
+extern	int kc_curuid(), kc_sigraise(), kc_wakeup();
 extern	int bind(), connect(), sendto(), send(), recvfrom(), recv();
 extern	int setsockopt(), getsockname(), getpeername(), shutdown();
 extern	int listen(), accept();
@@ -492,13 +491,6 @@ bn_call(cp, so)
 		u.u_error = soclose(so);
 		return;
 
-	case BNOP_IFCHANGED:
-		/* The chip has the address already: SYS_IFCONFIG is where a
-		 * refusal belongs, so in_control's suser check is passed here
-		 * rather than leave the stack on the old address. */
-		u.u_uid = 0;
-		u.u_error = w5address();
-		return;
 	}
 	u.u_error = EINVAL;
 }
