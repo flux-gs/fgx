@@ -313,13 +313,14 @@ sosend(so, nam, uio, flags, rights)
 	struct mbuf *top = 0;
 	register struct mbuf *m, **mp;
 	register int space;
-	int len, rlen = 0, error = 0, s, dontroute, first = 1;
+	int len, rlen = 0, error = 0, s, dontroute, first = 1, nbio;
 
 	if (sosendallatonce(so) && uio->uio_resid > so->so_snd.sb_hiwat)
 		return (EMSGSIZE);
 	dontroute =
 	    (flags & MSG_DONTROUTE) && (so->so_options & SO_DONTROUTE) == 0 &&
 	    (so->so_proto->pr_flags & PR_ATOMIC);
+	nbio = (so->so_state & SS_NBIO) || (flags & MSG_DONTWAIT);
 	u.u_ru.ru_msgsnd++;
 	if (rights)
 		rlen = rights->m_len;
@@ -352,8 +353,8 @@ restart:
 				space < uio->uio_resid + rlen) ||
 			   (uio->uio_resid >= CLBYTES && space < CLBYTES &&
 			   so->so_snd.sb_cc >= CLBYTES &&
-			   (so->so_state & SS_NBIO) == 0)) {
-				if (so->so_state & SS_NBIO) {
+			   nbio == 0)) {
+				if (nbio) {
 					if (first)
 						error = EWOULDBLOCK;
 					splx(s);
@@ -484,7 +485,7 @@ restart:
 		}
 		if (uio->uio_resid == 0)
 			goto release;
-		if (so->so_state & SS_NBIO) {
+		if ((so->so_state & SS_NBIO) || (flags & MSG_DONTWAIT)) {
 			error = EWOULDBLOCK;
 			goto release;
 		}

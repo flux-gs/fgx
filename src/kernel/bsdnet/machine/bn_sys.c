@@ -67,10 +67,6 @@ struct bncall {
 	int	c_nb;		/* the descriptor's SOCK_NB (FIONBIO): SS_NBIO */
 };
 
-/* FGX's <sys/socket.h>: this call only, non-blocking.  2.11BSD has no such
- * flag; it is SS_NBIO for the call (docs/PROVENANCE.md). */
-#define	MSG_DONTWAIT	0x80
-
 extern	int kc_curuid(), kc_sigraise(), kc_wakeup();
 extern	int bind(), connect(), sendto(), send(), recvfrom(), recv();
 extern	int setsockopt(), getsockname(), getpeername(), shutdown();
@@ -450,7 +446,7 @@ bn_call(cp, so)
 		blk = (int *)far(cp->c_bank, cp->c_a);
 		a_sendto.buf = far(blk[3], blk[0]);
 		a_sendto.len = blk[1];
-		a_sendto.flags = blk[2] & ~MSG_DONTWAIT;
+		a_sendto.flags = blk[2];
 		u.u_ap = (int *)&a_sendto;
 		if (cp->c_op == BNOP_SEND) {
 			send();
@@ -478,7 +474,7 @@ bn_call(cp, so)
 		blk = (int *)far(cp->c_bank, cp->c_a);
 		a_recvfrom.buf = far(blk[3], blk[0]);
 		a_recvfrom.len = blk[1];
-		a_recvfrom.flags = blk[2] & ~MSG_DONTWAIT;
+		a_recvfrom.flags = blk[2];
 		u.u_ap = (int *)&a_recvfrom;
 		if (cp->c_op == BNOP_RECV) {
 			recv();
@@ -674,8 +670,7 @@ bn_body(cp)
 	register struct bncall *cp;
 {
 	register struct socket *so;
-	register int *blk;
-	int nb, nbset;
+	int nbset;
 
 	u.u_error = 0;
 	u.u_r.r_val1 = 0;
@@ -685,15 +680,8 @@ bn_body(cp)
 	so = cp->c_so ? sockat(cp->c_so) : (struct socket *)0;
 	bn_file.f_type = DTYPE_SOCKET;
 	bn_file.f_socket = so;
-	nb = cp->c_nb;
-	if (cp->c_op == BNOP_SEND || cp->c_op == BNOP_SENDTO ||
-	    cp->c_op == BNOP_RECV || cp->c_op == BNOP_RECVFROM) {
-		blk = (int *)far(cp->c_bank, cp->c_a);
-		if (blk[2] & MSG_DONTWAIT)
-			nb = 1;
-	}
 	nbset = 0;
-	if (so && nb && (so->so_state & SS_NBIO) == 0) {
+	if (so && cp->c_nb && (so->so_state & SS_NBIO) == 0) {
 		so->so_state |= SS_NBIO;
 		nbset = 1;
 	}
