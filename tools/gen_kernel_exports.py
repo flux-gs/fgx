@@ -315,6 +315,9 @@ MANIFESTS = {
         ('_u2Slot',   '_u2Slot',   0, 'lo16'),
         # Additional _sock* statics the transport cores read+write.
         ('_sockRxLen', '_sockRxLen', 0, 'lo16'),
+        # select(2)'s block-forever count: a pipe op wakes WCHAN_SELECT only
+        # when someone sleeps there (pipe.s _Pipe_Wake), as pty.mod does.
+        ('_nSelSleepers', '_nSelSleepers', 0, 'lo16'),
         # net_loop.s + pipe.s moved into net.mod 2026-08-11.  Their STATICS
         # stayed in the core bank (syscall.s / fs.s / net_dispatch.s write them
         # directly, and they are how arguments reach the moved bodies --

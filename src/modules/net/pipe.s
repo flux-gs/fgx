@@ -275,6 +275,21 @@ _Sys_Pipe       MX      %00
                 RTS
 
 ;==============================================================================
+; _Pipe_Wake - wake a reader or writer blocked on a pipe, and a select(2)
+; blocked on any fd when there is one: a pipe's readiness is its ring now
+; (syscall.s _SelOp_Pipe), so moving bytes or closing an end changes it.  The
+; pty's _Pty_Wake does the same.  Clobbers what KSVC_WAKEUP does.
+;==============================================================================
+_Pipe_Wake      MX      %00
+                LDA     #WCHAN_PIPE
+                JSR     _NlKC_Wakeup
+                LDA     _nSelSleepers
+                BEQ     @pwk_out
+                LDA     #WCHAN_SELECT
+                JSR     _NlKC_Wakeup
+@pwk_out        RTS
+
+;==============================================================================
 ; _Pipe_FdToIdx - resolve a pipe fd to its descriptor record offset.
 ; In: A = fd (MX %00).  Out: C=1 + Y = record offset (idx<<4) + _fcbPtr live,
 ; or C=0 + A = EBADF (not a valid pipe fd).  DBR=kernel-bank.
@@ -392,8 +407,7 @@ _Pipe_ReadCapped MX     %00
                 LDA     _pipeReqLen
 @pr_haveN       STA     _pipeChunk
                 JSR     _Pipe_CopyOut           ; ring[Head..] -> user; advance Head, Count -=
-                LDA     #WCHAN_PIPE             ; space freed -> wake a blocked writer
-                JSR     _NlKC_Wakeup
+                JSR     _Pipe_Wake              ; space freed -> a blocked writer
                 LDA     _pipeChunk
                 SEC
                 RTS
@@ -496,8 +510,7 @@ _Pipe_WriteUio  MX      %00
                 BCS     @pw_chunkSet            ; remaining >= free -> chunk = free
                 STA     _pipeChunk              ; chunk = remaining
 @pw_chunkSet    JSR     _Pipe_CopyIn            ; user[bufOff+done..] -> ring[Tail]; Tail+, Count+
-                LDA     #WCHAN_PIPE             ; data available -> wake a blocked reader
-                JSR     _NlKC_Wakeup
+                JSR     _Pipe_Wake              ; data available -> a blocked reader
                 LDA     _pipeDone               ; done += chunk
                 CLC
                 ADC     _pipeChunk
@@ -1112,8 +1125,7 @@ _Pipe_Teardown  MX      %00
                 STA     [_pipeTablePtr],Y
                 REP     #$20
                 MX      %00
-                LDA     #WCHAN_PIPE             ; wake any blocked peer to re-check
-                JSR     _NlKC_Wakeup
+                JSR     _Pipe_Wake              ; any blocked peer re-checks
                 ; both ends closed? -> free the ring + descriptor.
                 LDA     _pipeRecOff
                 CLC

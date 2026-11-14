@@ -1675,7 +1675,8 @@ _Sel_Scan       MX      %00
 ; bits (b0=read, b1=write, b2=except), C=1 / A=EBADF, C=0 (fd not open).
 ;   console : read = _kKbdRingCount!=0, write = always, except = never
 ;   socket  : NETOP_SockStatus (read/write per SN_SR/RSR/FSR; except never)
-;   pipe/chardev/file : read + write always ready (scope cut), except never
+;   pipe    : _SelOp_Pipe, from the ring
+;   chardev/file : read + write always ready, except never
 ; MX %00 in/out.
 ;------------------------------------------------------------------------------
 _Sel_Classify   MX      %00
@@ -1757,6 +1758,70 @@ _SelOp_Default  MX      %00
                 LDA     #%00000011
                 SEC
                 RTS
+
+; _SelOp_Pipe - a pipe's readiness from its ring, as 2.11BSD's soo_select
+; answers for the socket pair a pipe is there (sys_socket.c, uipc_socket2.c
+; soreadable/sowriteable).  Readable: bytes resident, or every writer gone (a
+; read answers EOF).  Writable: room in the ring -- which grows to
+; PIPE_MAX_BUFSZ before a writer waits -- or every reader gone (a write
+; answers EPIPE).  The pipe ops in net.mod wake WCHAN_SELECT when they move
+; bytes or close an end (net/pipe.s _Pipe_Wake).
+_SelOp_Pipe     REP     #$30
+                MX      %00
+                SEP     #$20
+                MX      %10
+                LDA     _selFd
+                JSR     _Fcb_LookupPtr          ; C=1 + _fcbPtr / C=0
+                REP     #$30
+                MX      %00
+                BCC     @sp_none
+                LDY     #FCB_PipeIdx
+                LDA     [_fcbPtr],Y
+                AND     #$00FF
+                ASL
+                ASL
+                ASL
+                ASL                             ; idx<<4 = record offset
+                STA     _selPipeRec
+                LDX     #0
+                ORA     #PIPE_Count
+                TAY
+                LDA     [_pipeTablePtr],Y
+                BNE     @sp_rd
+                LDA     _selPipeRec
+                ORA     #PIPE_WrClosed
+                TAY
+                LDA     [_pipeTablePtr],Y
+                AND     #$00FF
+                BEQ     @sp_wr
+@sp_rd          INX                             ; b0: readable
+@sp_wr          LDA     _selPipeRec
+                ORA     #PIPE_RdClosed
+                TAY
+                LDA     [_pipeTablePtr],Y
+                AND     #$00FF
+                BNE     @sp_w
+                LDA     _selPipeRec
+                ORA     #PIPE_BufSz
+                TAY
+                LDA     [_pipeTablePtr],Y
+                CMP     #PIPE_MAX_BUFSZ
+                BCC     @sp_w                   ; the ring can still grow
+                LDA     _selPipeRec
+                ORA     #PIPE_Count
+                TAY
+                LDA     [_pipeTablePtr],Y
+                CMP     #PIPE_MAX_BUFSZ
+                BCS     @sp_out
+@sp_w           INX                             ; b1: writable
+                INX
+@sp_out         TXA
+                SEC
+                RTS
+@sp_none        LDA     #0
+                SEC
+                RTS
+_selPipeRec     DS      2
 
 _SelOp_Socket   REP     #$30
                 MX      %00

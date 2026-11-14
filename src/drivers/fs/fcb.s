@@ -559,7 +559,7 @@ _kOpsPipe       DA      _RdOp_Pipe
                 DFB     0,0             ; FO_WRITE
                 DA      _IoOp_Notty
                 DFB     0,0             ; FO_IOCTL
-                DA      _SelOp_Default
+                DA      _SelOp_Pipe
                 DFB     0,0             ; FO_SELECT
                 DA      0
                 DFB     0,0             ; FO_CLOSE
