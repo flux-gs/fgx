@@ -163,6 +163,34 @@ Made in this design (the designer's calls, open to the maintainer):
   67 ms past a compute-bound C program, and until the next system call past an
   assembly or `goto` loop.
 
+S5's calls, accepted by the maintainer with its plan
+(`docs/history/plans/2026-11-13-net-mux-s5-plan.md`), as built:
+
+- **The one name is `wz0`.**  2.11BSD's `ifunit` reads a name's first digit as its
+  unit, so `u2s1` could not be a kernel name; it left every program, script, page
+  and test.
+- **The MAC is 4.3BSD-Reno's `AF_LINK` address,** a `sockaddr_dl` carried in 2.11BSD's
+  16-byte sockaddr and returned only by `SIOCGIFCONF`.  `ifconfig` prints it as an
+  `ether` line, which 2.11BSD's does not.
+- **`/dev/mem`, `/dev/kmem` and a name list, so `route -f` is upstream's** (the
+  maintainer's call).  The devices are 2.11BSD's `mmrw`, in `mem.mod`; `nlist(3)` is
+  2.11BSD's; `/netnix` is an a.out name list of bsdnetd's data; `kern.netdata` gives
+  that bank's address, since it is chosen at boot.
+- **A rights record holds handles to the VFS file table's `struct file`,** two bytes
+  each as 2.11BSD's pointers are, and `struct file` gains `f_fcb`.  This replaces the
+  plan's call, FCB offsets with two new FCB bytes: FCBs are allocated one by one, so
+  `unp_gc` has no table of them to walk, while the VFS file table is 2.11BSD's
+  `file[]` and already counts messages.  `FCB_SIZE` stays 38.
+- **`NFILE` is 128,** so a socket-heavy load meets the mbuf pool before the file
+  table.
+- **`MSG_DONTWAIT` is per call,** tested beside `SS_NBIO` in `sosend` and
+  `soreceive`.  No BSD source in the tree has it; it is FGX's.
+- **ntpd's new peer starts at stratum `UNSPECIFIED`; ntpdc's 32-bit milliseconds stay,**
+  with a BUGS line.
+- **The driver keeps its `255.255.255.255` host route,** set in `w5ioctl`'s
+  `SIOCSIFADDR` arm, because `in_pcbconnect` sends a broadcast through the primary
+  interface, which is `lo0`.  The default route is `route`'s and dhclient's.
+
 ## 4. Design
 
 ### 4.1 What the chip does in MACRAW mode
@@ -252,7 +280,7 @@ Each phase ends with the system working and the gate green.
 | S2 | substrate running | mbufs, domains/protosw, sockbufs, `in_pcb`, `lo0`, `ip_input`/`ip_output`, ARP, the callout facility, the MACRAW driver on socket 0 and bpf as its tap, proven by an in-kernel probe: ARP resolves the gateway, an ICMP echo goes out and the reply comes back; netdump still captures.  **Done** on feat/net-mux under MAME (`d8cad04`..), and the maintainer's run on real hardware decides S3 (section 7); the modules stay out of `/etc/rc.in` until S3 |
 | S3 | UDP | every AF_INET UDP socket is a BSD socket on the kernel stack, wire and loopback; ntpd, ntpdc 127.0.0.1, dhclient (4.7) and syslogd -u on it; the chip's UDP core retires.  **Done** on feat/net-mux under MAME (`6905dc6`..), the modules loading at boot from `/etc/rc.in`; the maintainer's run on real hardware is next (`docs/history/2026-11-10-net-mux-s3-hardware-run.md`).  A process's `u` is saved per pid across `sleep`, which longjmps with EINTR as 2.11BSD's does; net.mod hands a datagram socket's every call to the stack through `net_kso.s` and `bn_sys.c`; dhclient takes its lease through the stack from 0.0.0.0 and the address it sets reaches the stack (`BNOP_IFCHANGED`); a default route goes through the gateway.  Found on the way: fcc pushed one word for a struct argument `*p` and could not store through `a[i]->f`; a pointer's pad byte broke every UDP checksum over 255 bytes; `ifioctl` passed its command as an int where `pr_usrreq` reads a pointer; the interface's name `w5` has a digit, which `ifunit` reads as the unit.  Without the modules `socket(AF_INET, SOCK_DGRAM)` is EPROTONOSUPPORT. |
 | S4 | TCP + AF_UNIX | `tcp_*` on the wire and loopback; AF_UNIX on `uipc_usrreq.c`; telnet/telnetd, inetd, ftp, nc and the unixdgram users on it; `net_loop.s` rings, `unp.s`, the old descriptor table and the chip's TCP core retire; socket count limited by memory.  Raw sockets and ping moved in from S5 (the maintainer's call).  **Done** on feat/net-mux under MAME (`f14ee1c`..): a socket is its FCB's struct socket (`FCB_SockSo`); TCP, UDP, raw and AF_UNIX all run on the stack, and net.mod forwards; `NMBUFS` 280 carries sixteen connections; AF_UNIX names go through 2.11BSD's `UNPBIND`/`UNPCONN`/`UNPDET` seam onto the VFS; ping is setuid, as upstream installs it; socket 0 takes all 8 KB of the chip's buffer each way.  Found on the way: libc's listen dropped the backlog, accept never named the peer, bind and connect passed no length (an AF_UNIX path over 13 characters bound a different name), and the resolver set the address family in the wrong byte.  The maintainer's run on real hardware is next (`docs/history/2026-11-13-net-mux-s4-hardware-run.md`). |
-| S5 | the rest | `ifconfig`/`route` ported from 2.11BSD against the real `ifnet`, the bespoke `SYS_IFCONFIG` retired |
+| S5 | the rest | `ifconfig`/`route` ported from 2.11BSD against the real `ifnet`, the bespoke `SYS_IFCONFIG` retired.  **Done** on feat/net-mux under MAME (`915b705`..), on the calls at the end of section 3: interface and route ioctls reach the stack through `soo_ioctl`; `ifconfig` and `route` are 2.11BSD's, `route -f` reading the table through `/dev/mem` and `/netnix`; dhclient sets its lease with the same ioctls; `SYS_IFCONFIG` and its interface table are gone, and the card is `wz0` everywhere.  AF_UNIX passes descriptors (`sendmsg`/`recvmsg`, `unp_gc`); a socket name is as long as its family's; `NFILE` is 128; and every item S4 left and section 7 listed before the campaign PR is done.  Found on the way: fcc refused a one-element struct-array initializer that elides its braces, and read a subscript through a pointer in the wrong bank; open(2) on a full file table answered ENXIO; select(2) answered every pipe ready; a fork child asleep on a network resource kept its siblings from running; a socket call that slept made another process's call count as nested; and a socket call made while bsdnet1-3 were still loading jumped to `$00:0000` (`44c9cdc`).  The maintainer's run on real hardware is next (`docs/history/2026-11-15-net-mux-s5-hardware-run.md`). |
 
 ### 4.4.1 Coexistence during S3
 
@@ -398,6 +426,16 @@ switch between them exchanges the data image (`_Img_Xchg`, `process.s`).  Two
 different programs, such as ftp and a remote ftpd, do not pay it.  Without it
 the transfer would take about 17 s; that is an estimate, not a measure.
 
+S5, under MAME on the shipping configuration:
+
+| Measure | Result |
+|---|---|
+| Core bank | 630 bytes free (S4: 525) |
+| Far kernel bank | 2,963 bytes free, with `NFILE` 128 (the file arena is 8,384 bytes of heap) |
+| Module footprint | 281,305 bytes in the stack's five banks (S4: 275,961); net.mod 2,514 (S4: 2,838); `mem.mod` 428 |
+| What runs out first | the mbuf pool: 90 TCP sockets beside the test's own, then `socreate` waits for a free mbuf (M_WAIT), as 2.11BSD's does; S4's ENFILE at 39 is gone |
+| 1 MB over `lo0` (`loopprobe -b`) | 27.5 s, 37 KB/s (S4: 28.6 s) |
+
 ## 6. Testing
 
 - Every existing gate test keeps passing at every phase; the socket tests
@@ -462,30 +500,27 @@ the transfer would take about 17 s; that is an estimate, not a measure.
   (above); the chip's TCP and IPRAW, its ARP and routing, retired with the
   loopback and AF_UNIX rings.  `tools/check_net_retired.py` fails the build if one
   of their names is defined again.
-- **S5 inherits:** descriptor passing over AF_UNIX (access rights answer EOPNOTSUPP,
-  stated in unix(4)); a sender's AF_UNIX name cut to 14 characters by the 16-byte
-  sockaddr libc copies (unix(4) BUGS); `NFILE` 64, which runs out before the mbuf
-  pool; and the two names for the card, below.
-- **Two names for the card until S5:** the kernel stack calls it `wz0`, which is what
-  `SIOCGIFCONF` reports; net.mod's `SYS_IFCONFIG`, `ifconfig` and `dhclient` call it
-  `u2s1`.  2.11BSD's `ifunit` reads a name's first digit as its unit, so a kernel
-  name cannot carry the `2`.  S5's port of `ifconfig` against the real `ifnet` ends it.
+- **S5 settled** what S4 left it: descriptors pass over AF_UNIX as 2.11BSD passes
+  them; a socket name is as long as its family's, and a datagram sender's name is
+  cut to 16 bytes only where 2.11BSD's own `sbappendaddr` cuts it (unix(4) BUGS);
+  `NFILE` is 128 and the mbuf pool runs out first; and the card has one name, `wz0`.
+  Nothing is left for a later phase.
 
 - **Before the campaign PR**, deferred from S3's final review:
-  - `gethostbyname`'s receive loop (`toolchain/lib/libc_c/netdb.c`) has no overall
+  - DONE in S5 (`87388ee`): `gethostbyname`'s receive loop (`toolchain/lib/libc_c/netdb.c`) has no overall
     deadline: a peer sending unparseable datagrams to its port at least every 1.5 s
     keeps it waiting forever.  Bound each try by a deadline, as dhclient's
     `wait_reply` does with `left`.
-  - `MSG_DONTWAIT` sets `SS_NBIO` on the shared `struct socket` for the whole call
+  - DONE in S5 (`2a48c57`, per call): `MSG_DONTWAIT` sets `SS_NBIO` on the shared `struct socket` for the whole call
     (`bn_sys.c`); a third process sharing the socket can get EAGAIN while the call
     sleeps in `sblock`.  2.11BSD has no per-call flag: make it per call, or state the
     divergence in PROVENANCE.
   - DONE in S4 (`f14ee1c`): `bn_sysent` sets `_fcc_stkfloor` to the running task's
     slot base, as `netintr_enter` sets its own; `netkstkovf` proves the halt.
-  - The kernel's `printf` prints a format string without its arguments, so the
+  - DONE in S5 (`6c4ca4a`, 2.11BSD's `prf`): the kernel's `printf` prints a format string without its arguments, so the
     stack's console messages read `%s: %s`.
-  - `boot_netstart.json`'s description is out of date.
-  - ntpd never initializes a new peer's stratum (upstream); ntpdc's offset is 32-bit
+  - DONE in S5 (`53ff460`): `boot_netstart.json`'s description is out of date.
+  - DONE in S5 (`32f7275`; the wrap is a BUGS line): ntpd never initializes a new peer's stratum (upstream); ntpdc's offset is 32-bit
     milliseconds and wraps past 24.8 days (upstream).  Decide fix or BUGS entry.
 
 ## 8. Left to the builder

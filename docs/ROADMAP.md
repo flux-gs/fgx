@@ -250,8 +250,10 @@ archived tracker; new work is tracked in GitHub Issues.
   memory allows.  2.11BSD's networking (sockets, mbufs, TCP, UDP, IP, ARP,
   `lo0`, AF_UNIX) is ported into the kernel, the Uthernet II becomes one
   `ifnet` driver on socket 0, and nothing above the driver knows the card.
-  Phases S0 (fcc prerequisites) to S5, on `feat/net-mux`, tested and tuned
-  locally before any upstream PR.  Design:
+  Phases S0 (fcc prerequisites) to S5 are done on `feat/net-mux` under MAME;
+  the maintainer's run of S5 on real hardware
+  (`docs/history/2026-11-15-net-mux-s5-hardware-run.md`) and the branch's final
+  review come before the PR.  Design:
   `docs/history/plans/2026-11-03-net-multiplex-design.md`, which replaces
   Track B's S1-S3 (`2026-09-27-trackb-s0-fcc-design.md`) and the earlier
   Backend B / Track A/B plans.
