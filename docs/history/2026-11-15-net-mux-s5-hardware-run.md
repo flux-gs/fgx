@@ -7,6 +7,23 @@ has one name, `wz0`, and `ifconfig`, `route` and `dhclient` configure it the way
 and the file table holds 128.  A real IIgs, an Uthernet II, and a LAN with DHCP.
 One boot; about 40 minutes.
 
+## The script
+
+`/root/s5run.sh` on the image (`docs/history/2026-11-15-net-mux-s5-hardware-run.sh`)
+runs every IIgs-side step below and keeps what it prints in `/root/s5run.log`.
+After the boot, as root:
+
+    sh /root/s5run.sh <a free LAN address> <the Mac's address> [off-LAN address]
+
+The free address must be outside the DHCP server's range (step 5 sets it by
+hand); the off-LAN address must answer ping, 8.8.8.8 by default.  Where a step
+needs the Mac the script says what to type there and waits for Return; where
+only the screen can tell, it asks y/n.  At the end it offers to send the log:
+on the Mac run `nc -l 9999 > s5run.log`, press Return on the IIgs, and press
+Ctrl-C on the Mac once the file stops growing.  That log is what I need back,
+with a photo of the screen for anything the script did not catch.  The steps
+below say what each part expects.
+
 ## 1. The boot
 
 Expect, during boot:
