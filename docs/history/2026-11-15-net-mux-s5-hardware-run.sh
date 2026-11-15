@@ -139,8 +139,11 @@ echo "Did 'from the local socket' appear on the console (y/n)?"
 read A; echo "answer: $A"
 ) 2>&1 | tee $LOG
 
-# syslogd is restarted with -u outside any pipe: started inside one, it kept
-# tee from ever seeing the pipe's end.
+# syslogd is restarted with -u outside the pipe.  Inside `( ... ) 2>&1 | tee',
+# sh keeps its own output on fd 11 as a dup of fd 2, the pipe (2.11BSD sh
+# xec.c TPAR: rename(dup(2), output)), and a dup2'd descriptor is not
+# close-on-exec (kern_descrip.c dup2), so the daemon would inherit the pipe
+# and tee would never see its end.
 kill `cat /var/run/syslog.pid`
 /sbin/syslogd -u < /dev/null > /dev/null 2>&1
 sleep 2
