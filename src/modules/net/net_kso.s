@@ -276,16 +276,17 @@ _Kso_SoOp       MX      %00
 ;------------------------------------------------------------------------------
 ; _Kso_Call - JSL bn_sysent with A = the call block's offset in bank 0.  MX %00.
 ; The block starts above this routine's return address.  bn_sysent's address
-; is the far pointer bsdnetd keeps in its bn_sys cell; with no modules
-; registered there is no kernel socket to have reached here, and this answers
-; EPROTONOSUPPORT rather than jump nowhere.
+; is the far pointer bsdnetd keeps in its bn_sys cell.  With no modules
+; registered, or with the cell still 0 -- bsdnetd is found as soon as it loads,
+; and bsdnet_init fills the cell only once the other banks are linked and the
+; stack is up -- this answers EPROTONOSUPPORT rather than jump nowhere.
 ;------------------------------------------------------------------------------
 _Kso_Call       MX      %00
                 LDA     #VT_BSDNET
                 LDX     #KSVC_FINDVTABLE
                 JSL     SYS_KCALL
                 BCS     @kc_have
-                LDA     #EPROTONOSUPPORT
+@kc_none        LDA     #EPROTONOSUPPORT
                 CLC
                 RTS
 @kc_have        CLC
@@ -302,6 +303,8 @@ _Kso_Call       MX      %00
                 LDY     #2
                 LDA     [_libcTmp2],Y           ; bn_sysent's bank
                 TAX
+                ORA     [_libcTmp2]             ; 0:0, the stack is not up
+                BEQ     @kc_none
                 LDA     [_libcTmp2]             ; and its offset
                 DEC                             ; less one: RTL adds it back
                 STA     _libcTmp2

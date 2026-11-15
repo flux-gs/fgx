@@ -3,7 +3,7 @@
  * sys/sys_net.c: mbinit, the interfaces, ifinit, then domaininit, which "must
  * follow interfaces".  lo0 then takes its address, which upstream leaves to
  * ifconfig in /etc/rc.  Returns 0, or the number of the first failed probe case;
- * mod_init logs which. */
+ * mod_init logs which.  Only a 0 opens the stack to socket calls (bn_ready). */
 #include "param.h"
 #include "mbuf.h"
 #include "domain.h"
@@ -15,7 +15,7 @@
 
 extern int mbinit(), domaininit(), net_hookinit(), net_stack_paint();
 extern int loattach(), ifinit(), in_control(), w5attach();
-extern void net_calloutinit();
+extern void net_calloutinit(), bn_ready();
 extern struct ifnet loif;
 #ifdef NETPROBE
 extern int netprobe();
@@ -37,7 +37,7 @@ lo_up()
 int
 bsdnet_init()
 {
-	int s;
+	int s, e;
 
 	net_stack_paint();
 	net_hookinit();		/* first: the initializers below may schedule */
@@ -52,8 +52,11 @@ bsdnet_init()
 	if (lo_up() != 0)
 		panic("lo0: no address");
 #ifdef NETPROBE
-	return (netprobe());
+	e = netprobe();
 #else
-	return (0);
+	e = 0;
 #endif
+	if (e == 0)
+		bn_ready();
+	return (e);
 }

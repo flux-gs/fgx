@@ -75,9 +75,11 @@ extern	int listen(), accept(), sendmsg(), recvmsg();
 int	netoff;			/* uipc_syscalls.c tests it: the network is on */
 
 /* net.mod's way in, found through bsdnetd's bn_sys cell (tools/build_bsdnet.py):
- * a far pointer, so the load patches its bank. */
+ * a far pointer, 0 until bn_ready fills it.  bsdnetd is found as soon as it
+ * loads, and the network's other banks load after it, so net.mod calls
+ * through the cell only once it is filled and answers EPROTONOSUPPORT before. */
 extern	int bn_sysent();
-int	(*bn_syscell)() = bn_sysent;
+int	(*bn_syscell)() = 0;
 static	struct proc bn_proc;	/* u_procp: sbselqueue reads its p_wchan */
 static	struct file bn_file;	/* what getf() answers */
 static	struct sockaddr_in bn_to;
@@ -693,4 +695,11 @@ bn_body(cp)
 	bn_ret.v1 = u.u_r.r_val1;
 	bn_ret.v2 = u.u_r.r_val2;
 	return (bn_ret.v1);
+}
+
+/* The stack is up: bsdnet_init's last act, so a socket call reaches it. */
+void
+bn_ready()
+{
+	bn_syscell = bn_sysent;
 }
