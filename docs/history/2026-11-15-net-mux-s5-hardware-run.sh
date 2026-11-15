@@ -106,7 +106,12 @@ read FTPS
 if test -n "$FTPS"
 then
 	echo "log in, then:  binary,  get <a file of about 1 MB> /tmp/f,  quit"
-	ftp $FTPS
+	# ftp writes to the terminal, not the pipe: login() in ftp.c prints the
+	# Name prompt with printf and no fflush, so through a pipe it would sit in
+	# stdio's buffer, unseen, while ftp waits for the answer.
+	ftp $FTPS > /dev/tty 2>&1
+	echo "the line ftp printed after the get (bytes received in ... seconds)?"
+	read A; echo "ftp rate: $A"
 	sum /tmp/f
 	echo "the host's sum of that file?"
 	read A; echo "host sum: $A"
