@@ -1478,6 +1478,14 @@ function fgxdebug.startplugin()
                         -- "first" (default) preserves the behaviour every
                         -- existing fixture relies on; "last" opts into the ring.
                         keep = item:match('"keep"%s*:%s*"([^"]+)"') or "first",
+                        -- "w" (default) taps writes; "r" taps reads, which
+                        -- include opcode fetches: what ran at an address.
+                        kind = item:match('"kind"%s*:%s*"([^"]+)"') or "w",
+                        -- hits before this frame are ignored: arm a tap late.
+                        from_frame = tonumber(item:match('"from_frame"%s*:%s*(%d+)') or "0"),
+                        -- with pc_max, only a hit whose PB:PC is at most this
+                        -- counts: a read tap then sees opcode fetches, not data.
+                        pc_max = tonumber(item:match('"pc_max"%s*:%s*(%d+)') or "-1"),
                         ring = {}, ringpos = 1, wrapped = false,
                         hits = 0 })
                 end
@@ -1897,7 +1905,9 @@ function fgxdebug.startplugin()
             -- Install capture-write taps: instruction-precise state snapshots.
             if #capture_writes > 0 and mem and mem.install_write_tap then
                 for _, cw in ipairs(capture_writes) do
-                    capture_taps[#capture_taps + 1] = mem:install_write_tap(
+                    local install = (cw.kind == "r") and mem.install_read_tap
+                                        or mem.install_write_tap
+                    capture_taps[#capture_taps + 1] = install(mem,
                         cw.addr, cw.addr + cw.len - 1, cw.name,
                         function(offset, data, mask)
                             -- keep="first" (default): stop once max_hits are in
@@ -1909,6 +1919,13 @@ function fgxdebug.startplugin()
                             if cw.keep ~= "last" and cw.hits >= cw.max_hits then
                                 return
                             end
+                            if frame_count < cw.from_frame then
+                                return
+                            end
+                            if cw.pc_max >= 0 then
+                                local ok, pc = pcall(function() return cpu.state["PB"].value * 65536 + cpu.state["PC"].value end)
+                                if not ok or pc > cw.pc_max then return end
+                            end
                             cw.hits = cw.hits + 1
                             local function rs(k)
                                 local ok, e = pcall(function() return cpu.state[k].value end)
@@ -1917,9 +1934,12 @@ function fgxdebug.startplugin()
                             local S = rs("S"); local D = rs("D")
                             -- HW-stack return chain (bank 0): 128 bytes above S
                             -- (deep enough to reach a callee's caller's params).
+                            -- A read tap starts 32 bytes BELOW S: what an RTS/RTL
+                            -- just pulled is still there, under the new S.
                             local stk = {}
+                            local base = (cw.kind == "r") and (S - 32) or S
                             for i = 1, 128 do
-                                local ok, v = pcall(function() return mem:read_u8((S + i) % 0x10000) end)
+                                local ok, v = pcall(function() return mem:read_u8((base + i) % 0x10000) end)
                                 stk[i] = (ok and v) or 0
                             end
                             -- Full direct page (bank 0): D+0x00 .. D+0xFF, 256 B

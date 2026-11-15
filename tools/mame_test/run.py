@@ -1305,6 +1305,11 @@ def build_plugin_config(manifest, *, mode, paste_frame, primary=None):
     # run's timeline; without it, "stopped happening" and "never captured" are
     # indistinguishable.  NOTE: the address is RAW -- there is no kbank support
     # here, so a kernel-bank target needs the live bank in the address.
+    # "kind": "r" taps READS instead, opcode fetches included, and its "stk"
+    # starts 32 bytes below S, where an RTS/RTL's pulled address still sits.
+    # "from_frame" ignores hits before that frame; "pc_max" keeps only hits
+    # whose PB:PC is at most that value -- with "kind": "r" on address 0, the
+    # fetch of a jump through a null pointer, not every data read of it.
     if manifest.get("png_snapshot") and mode == "test":
         cfg["png_snapshot"] = manifest["png_snapshot"]
 
@@ -1319,7 +1324,9 @@ def build_plugin_config(manifest, *, mode, paste_frame, primary=None):
                      f"\"first\" or \"last\", got {keep!r}")
             out.append({"name": c.get("name", "cap"), "addr": addr,
                         "len": c.get("len", 1), "max_hits": c.get("max_hits", 32),
-                        "keep": keep})
+                        "keep": keep, "kind": c.get("kind", "w"),
+                        "from_frame": c.get("from_frame", 0),
+                        "pc_max": c.get("pc_max", -1)})
         cfg["capture_writes"] = out
 
     # watch_min: 16-bit write-value aggregator (min/max/hits per cell, no
