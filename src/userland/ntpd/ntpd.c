@@ -530,6 +530,7 @@ make_new_peer(peer)
 	peer->timer = 1 << NTP_MINPOLL;
 	peer->stopwatch = 0;
 	peer->hpoll = NTP_MINPOLL;
+	peer->stratum = UNSPECIFIED;
 	double_to_s_fixed(&peer->dispersion, PEER_MAXDISP);
 	peer->reach = 0;
 	peer->estoffset = 0.0;
