@@ -103,6 +103,8 @@ netprobe()
 	/* 7: bcopy as 2.11BSD's: across banks, and an overlap either way */
 	if (np_bcopy() != 0)
 		return (7);
+	/* the stack's printf, read back by netprobe.json */
+	printf("bsdnet: printf %s %d %x %X\n", "ok", 42, 0x1f, 0x12345678L);
 	if ((local = netprobe3()) != 0)
 		return (local);
 	if ((local = netprobe4()) != 0)

@@ -75,13 +75,144 @@ panic(s)
 	kc_panic(s);
 }
 
-/* ponytail: the format string, without its arguments.  Enough to name what
- * happened; widen it when a message's numbers are needed. */
-int
-printf(s)
-	char *s;
+/* 2.11BSD's printf, prf and printn (sys/subr_prf.c), to the log a line at a
+ * time through kc_printstr, which ends each line itself: a newline flushes
+ * the line, and so does the end of a message without one.  The arguments are
+ * walked as upstream walks them, from the first one's address; a pointer is
+ * two ints here, so %s steps over both.  %b and the tty argument are left
+ * out: nothing in the stack prints a bit field or to a terminal. */
+static	char prline[81];
+static	int prlen;
+
+static void
+prputc(c)
+	int c;
 {
-	kc_printstr(s);
+	if (c != '\n')
+		prline[prlen++] = c;
+	if (c == '\n' || prlen == sizeof(prline) - 1) {
+		prline[prlen] = '\0';
+		kc_printstr(prline);
+		prlen = 0;
+	}
+}
+
+static void
+printn(n, b)
+	long n;
+	u_int b;
+{
+	char prbuf[12];
+	register char *cp = prbuf;
+	register int offset = 0;
+
+	if (n<0)
+		switch(b) {
+		case 8:		/* unchecked, but should be like hex case */
+		case 16:
+			offset = b-1;
+			n++;
+			break;
+		case 10:
+			prputc('-');
+			n = -n;
+			break;
+		}
+	do {
+		*cp++ = "0123456789ABCDEF"[offset + n%b];
+	} while (n = n/b);	/* Avoid  n /= b, since that requires alrem */
+	do
+		prputc(*--cp);
+	while (cp > prbuf);
+}
+
+static void
+prf(fmt, adx)
+	register char *fmt;
+	register u_int *adx;
+{
+	register int c;
+	u_int b;
+	char *s;
+
+loop:
+	while ((c = *fmt++) != '%') {
+		if (c == '\0')
+			return;
+		prputc(c);
+	}
+	c = *fmt++;
+	switch (c) {
+
+	case 'l':
+		c = *fmt++;
+		switch(c) {
+			case 'x':
+				b = 16;
+				goto lnumber;
+			case 'd':
+				b = 10;
+				goto lnumber;
+			case 'o':
+				b = 8;
+				goto lnumber;
+			default:
+				prputc('%');
+				prputc('l');
+				prputc(c);
+		}
+		break;
+	case 'X':
+		b = 16;
+		goto lnumber;
+	case 'D':
+		b = 10;
+		goto lnumber;
+	case 'O':
+		b = 8;
+lnumber:	printn(*(long *)adx, b);
+		adx += (sizeof(long) / sizeof(int)) - 1;
+		break;
+	case 'x':
+		b = 16;	
+		goto number;
+	case 'd':
+	case 'u':		/* what a joke */
+		b = 10;
+		goto number;
+	case 'o':
+		b = 8;
+number:		printn((long)*adx, b);
+		break;
+	case 'c':
+		prputc(*adx);
+		break;
+	case 's':
+		s = *(char **)adx;
+		adx += (sizeof(char *) / sizeof(int)) - 1;
+		while (c = *s++)
+			prputc(c);
+		break;
+	case '%':
+		prputc(c);
+		break;
+	default:
+		prputc('%');
+		prputc(c);
+		break;
+	}
+	adx++;
+	goto loop;
+}
+
+int
+printf(fmt, x1)
+	char *fmt;
+	unsigned x1;
+{
+	prf(fmt, &x1);
+	if (prlen)
+		prputc('\n');
 	return (0);
 }
 

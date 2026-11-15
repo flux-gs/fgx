@@ -1,11 +1,12 @@
 {
  "name": "netprobe",
- "description": "The network modules on the machine: code banks over one data bank, linked at load. Only means anything at kernel.netprobe = 1.  /etc/rc loads them at boot, and the command reads the log.",
+ "description": "The network modules on the machine: code banks over one data bank, linked at load. Only means anything at kernel.netprobe = 1.  /etc/rc loads them at boot, and the command reads the log.  The stack's printf is 2.11BSD's prf: `bsdnet: printf ok 42 1F 12345678' is a string, an int, a hex int and a long hex filled in, in upstream's capital digits.",
  "command": "sleep 3; dmesg | grep bsdnet",
  "timeout_s": 40,
  "expect": {
   "screen_contains": [
    "bsdnet: ok",
+   "bsdnet: printf ok 42 1F 12345678",
    "w5: no card, lo0 only",
    "bsdnet: netintr on its stack",
    "bsdnet: netintr first pass",
