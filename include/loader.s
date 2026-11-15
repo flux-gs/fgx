@@ -486,9 +486,9 @@ SYS_SOCKET      EQU     71                  ; BSD socket(domain,type,proto): A=d
                                             ; X=type, Y=proto -> A=fd.  See socket.s.
 SYS_BIND        EQU     72                  ; bind(fd, sockaddr_in*, len)
 SYS_SENDTO      EQU     73                  ; sendto(fd, argblk*)  [argblk: see socket.s]
-SYS_RECVFROM    EQU     74                  ; recvfrom(fd, argblk*) (non-blocking)
+SYS_RECVFROM    EQU     74                  ; recvfrom(fd, argblk*)  (blocking; MSG_DONTWAIT)
 SYS_SETSOCKOPT  EQU     75                  ; setsockopt(fd, level, optname, val*, len)
-SYS_CONNECT     EQU     76                  ; connect(fd, sockaddr_in*, len)  [TCP]
+SYS_CONNECT     EQU     76                  ; connect(fd, sockaddr*, len)
 SYS_SEND        EQU     77                  ; send(fd, argblk*)  [buf,len,flags]
 SYS_RECV        EQU     78                  ; recv(fd, argblk*)  (blocking; MSG_DONTWAIT)
 SYS_YIELD       EQU     79                  ; yield() — cooperative reschedule (no args)
@@ -514,14 +514,12 @@ SYS_NANOSLEEP   EQU     83                  ; nanosleep(ticks) — block the cal
                                             ;   C=1 + A=0 when the deadline passes;
                                             ;   C=0 + A = EINTR if a signal woke it
                                             ;   first.  A=0 returns immediately.
-SYS_LISTEN      EQU     84                  ; listen(fd, backlog) — TCP server: OPEN the
-                                            ;   bound socket in TCP mode + LISTEN.  A=fd,
-                                            ;   X=backlog (ignored, W5100 single-socket).
+SYS_LISTEN      EQU     84                  ; listen(fd, backlog): A=fd, X=backlog.
                                             ;   C=1 + A=0 ok; C=0 + A=errno.
 SYS_ACCEPT      EQU     85                  ; accept(fd) — block until a peer connects;
-                                            ;   A=listen fd.  C=1 + A = new connection fd
-                                            ;   (the listener's hw socket; listenfd is
-                                            ;   detached); C=0 + A=errno (EINTR on ^C).
+                                            ;   A=listen fd.  C=1 + A = new connection fd,
+                                            ;   the listener still listening; C=0 + A=errno
+                                            ;   (EINTR on ^C).
 SYS_SOUND_CLAIM EQU     86                  ; sound_claim() — caller claims the DOC, so the
                                             ;   kernel runs Sound_StopDoc when the caller
                                             ;   TERMINATES (audio stops on kill, keeps
@@ -541,11 +539,10 @@ SYS_SYNC        EQU     98                  ; train-3 F4: sync() — commit ever
 SYS_SELECT      EQU     99                  ; select(nfds,rd,wr,ex,timeout) via a
                                             ; libc-marshalled argblk (A.lo=off).
                                             ; C=1+A=ready count / C=0+A=errno.
-SYS_SHUTDOWN    EQU     100                 ; shutdown(fd, how): A=fd, X=how.  TCP
-                                            ; half-close — SHUT_WR/RDWR send FIN
-                                            ; (CR_DISCON, socket stays FIN_WAIT so
-                                            ; recv still drains); SHUT_RD = no-op.
-                                            ; C=1 ok / C=0+A=EBADF/ENOTSOCK.
+SYS_SHUTDOWN    EQU     100                 ; shutdown(fd, how): A=fd, X=how, as
+                                            ; 2.11BSD's soshutdown: 0 stops receiving,
+                                            ; 1 sending (a FIN on TCP), 2 both.
+                                            ; C=1 ok / C=0+A=errno.
 SYS_SIGSETMASK  EQU     102                 ; sigsetmask(mask): A=lo16, X=hi16 of
                                             ; the 32-bit BSD signal mask (bit s-1
                                             ; blocks signal s -- the sigmask()

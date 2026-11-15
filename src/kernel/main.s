@@ -862,7 +862,7 @@ _ktp076         JSL     KTTY_KC_TTYCHARS        ; slot 13, on _KTty_Chars
 
                 JSR     _Net_LoadOpsPtr         ; resolve net.mod's VT_NET op table
                                                 ; (net.mod conf-loaded above); C=0
-                                                ; if absent -> ifconfig/socket
+                                                ; if absent -> the socket
                                                 ; syscalls return ENOSYS.
 
                 JSR     _Bpf_AllocBlk           ; Kmalloc the /dev/bpf0 capture block +

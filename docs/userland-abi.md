@@ -437,9 +437,9 @@ it.
 | 71 | `SYS_SOCKET` | BSD socket(domain,type,proto): A=domain, X=type, Y=proto -> A=fd. See socket.s. |
 | 72 | `SYS_BIND` | bind(fd, sockaddr_in*, len) |
 | 73 | `SYS_SENDTO` | sendto(fd, argblk*) [argblk: see socket.s] |
-| 74 | `SYS_RECVFROM` | recvfrom(fd, argblk*) (non-blocking) |
+| 74 | `SYS_RECVFROM` | recvfrom(fd, argblk*) (blocking; MSG_DONTWAIT) |
 | 75 | `SYS_SETSOCKOPT` | setsockopt(fd, level, optname, val*, len) |
-| 76 | `SYS_CONNECT` | connect(fd, sockaddr_in*, len) [TCP] |
+| 76 | `SYS_CONNECT` | connect(fd, sockaddr*, len) |
 | 77 | `SYS_SEND` | send(fd, argblk*) [buf,len,flags] |
 | 78 | `SYS_RECV` | recv(fd, argblk*) (blocking; MSG_DONTWAIT) |
 | 79 | `SYS_YIELD` | yield() — cooperative reschedule (no args) |
@@ -447,8 +447,8 @@ it.
 | 81 | `SYS_GETPGRP` | getpgrp(pid) — THAT process's group, as 2.11BSD's does. A = pid (0 = caller). C=1 + A = pgrp; C=0 + A = ESRCH (no such pid). |
 | 82 | `SYS_WAITPID` | waitpid(pid, *status, options). A = pid (-1 = any child, >0 = that pid), X = status-ptr offset (0 = none), Y = options. C=1 + A = pid (reaped/stopped) or 0 (WNOHANG, nothing waitable); C=0 + A = ECHILD. |
 | 83 | `SYS_NANOSLEEP` | nanosleep(ticks) — block the caller for A = duration in 60 Hz ticks (16-bit). Idle-blocks via _sleep(WCHAN_TIMER); C=1 + A=0 when the deadline passes; C=0 + A = EINTR if a signal woke it first. A=0 returns immediately. |
-| 84 | `SYS_LISTEN` | listen(fd, backlog) — TCP server: OPEN the bound socket in TCP mode + LISTEN. A=fd, X=backlog (ignored, W5100 single-socket). C=1 + A=0 ok; C=0 + A=errno. |
-| 85 | `SYS_ACCEPT` | accept(fd) — block until a peer connects; A=listen fd. C=1 + A = new connection fd (the listener's hw socket; listenfd is detached); C=0 + A=errno (EINTR on ^C). |
+| 84 | `SYS_LISTEN` | listen(fd, backlog): A=fd, X=backlog. C=1 + A=0 ok; C=0 + A=errno. |
+| 85 | `SYS_ACCEPT` | accept(fd) — block until a peer connects; A=listen fd. C=1 + A = new connection fd, the listener still listening; C=0 + A=errno (EINTR on ^C). |
 | 86 | `SYS_SOUND_CLAIM` | sound_claim() — caller claims the DOC, so the kernel runs Sound_StopDoc when the caller TERMINATES (audio stops on kill, keeps playing when backgrounded). C=1 + A=0. |
 | 87 | `SYS_PROCS` | procs(buf,max) — process enumeration for ps and w; fills buf with PROCINFO_SIZE records {pid,ppid,pgid,state,name[16], stksize,stkhwm,arena_used,arena_free, heaphwm,ttyname[8]} (include/kernel.s PI_*), returns count. C=1 + A=count. |
 | 88 | `SYS_PIPE` | pipe(fd[2]): X=&fd[2] -> fd[0]=read fd[1]=write; C=1 ok, C=0+A=errno (ENFILE/EMFILE/ENOMEM) |
@@ -463,7 +463,7 @@ it.
 | 97 | `SYS_FSYNC` | train-3 F4: fsync(fd) — force this file's data + metadata to disk NOW. A.lo = fd. C=0+A=EBADF/EIO. |
 | 98 | `SYS_SYNC` | train-3 F4: sync() — commit every open file's dirty state + bitmap. Always C=1 (errors latch per-FCB). |
 | 99 | `SYS_SELECT` | select(nfds,rd,wr,ex,timeout) via a libc-marshalled argblk (A.lo=off). C=1+A=ready count / C=0+A=errno. |
-| 100 | `SYS_SHUTDOWN` | shutdown(fd, how): A=fd, X=how. TCP half-close — SHUT_WR/RDWR send FIN (CR_DISCON, socket stays FIN_WAIT so recv still drains); SHUT_RD = no-op. C=1 ok / C=0+A=EBADF/ENOTSOCK. |
+| 100 | `SYS_SHUTDOWN` | shutdown(fd, how): A=fd, X=how, as 2.11BSD's soshutdown: 0 stops receiving, 1 sending (a FIN on TCP), 2 both. C=1 ok / C=0+A=errno. |
 | 101 | `SYS_SCREEN_CTL` | screen_ctl(A): 1=claim/suspend the console flush (userland owns SHR), 0=release+repaint. Auto-released on task death (process.s). |
 | 102 | `SYS_SIGSETMASK` | sigsetmask(mask): A=lo16, X=hi16 of the 32-bit BSD signal mask (bit s-1 blocks signal s -- the sigmask() convention, NOT the kernel's pending-bit layout). Masked signals stay PENDING and deliver when unmasked. Returns A=0. The old mask is tracked by the libc shadow (single-threaded per task). tcsh's pfork blocks SIGCHLD around fork+palloc -- without a real mask the sequential snapshot-fork delivers SIGCHLD at the fork syscall's own exit, BEFORE the parent records the pid (2026-07-27). |
 | 103 | `SYS_FTRUNCATE` | ftruncate(fd, length): A=fd, X=length bits 0..15, Y=bits 16..23 |

@@ -54,10 +54,9 @@ int accept(int fd, char *addr, int *addrlen)
     return r;
 }
 
-/* shutdown(fd, how) -- TCP half-close (SYS_SHUTDOWN=100).  SHUT_WR/SHUT_RDWR send
- * a FIN (the W5100 socket stays in FIN_WAIT, so recv still drains queued data +
- * sees the peer FIN as EOF); SHUT_RD is a no-op (can't stop RX).  The fd stays
- * open -- close(fd) does the full teardown.  0 / -1 (EBADF/ENOTSOCK). */
+/* shutdown(fd, how) -- SYS_SHUTDOWN=100, 2.11BSD's soshutdown: 0 stops
+ * receiving, 1 sending (a FIN on TCP), 2 both.  The fd stays open; close(fd)
+ * tears the socket down.  0 / -1. */
 int shutdown(int fd, int how)
 {
     int r = (int)__syscall(100, fd, how, 0);

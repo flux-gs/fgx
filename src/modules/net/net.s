@@ -1,6 +1,5 @@
 ;==============================================================================
-; net.s - FGXM module: the socket system calls' entry, SYS_IFCONFIG, and
-; pipes.
+; net.s - FGXM module: the socket system calls' entry, and pipes.
 ;
 ; The kernel's syscall thunks reach these ops through _Net_Dispatch
 ; (src/kernel/net_dispatch.s) and a VT_NET net_op_table -- the prodos.mod
