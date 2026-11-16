@@ -566,7 +566,18 @@ _Kill_Apply     MX      %00
                 TAY
                 LDA     [_schedTblPtr],Y
                 BEQ     @ka_done                    ; no channel
-                JSR     _wakeup                     ; clobbers A/X/Y (X restored below)
+                ; THE TARGET ALONE IS MADE RUNNABLE, as psignal's `run:' arm
+                ; does with `setrun(p)' (2.11BSD kern_sig.c:374-380).  A
+                ; `_wakeup' of its channel would release every process sleeping
+                ; there, and one released early takes that for its own signal:
+                ; every nanosleep shares WCHAN_TIMER and answers EINTR.
+                PHP
+                SEI
+                LDA     #0
+                STA     [_schedTblPtr],Y            ; SE_WaitChan: not waiting
+                LDA     #TASK_READY
+                STA:    TCB_Status,X
+                PLP
 @ka_done        PLX
                 RTS
 
