@@ -1828,8 +1828,7 @@ _Sys_AlarmTickAll ENT
                 ; It cannot post-and-wake here instead: WE ARE IN THE HEARTBEAT
                 ; INTERRUPT (toolbox.s), and _Kill_PostOne walks the scheduler
                 ; table that a syscall may be part-way through.  So record the
-                ; expiry and let swtch deliver it in scheduler context, exactly
-                ; as _kSockWakePending defers the W5100 ISR's wake.
+                ; expiry and let swtch deliver it in scheduler context.
                 ;
                 ; The live-slot test moved to _Sig_AlarmDeliver with the rest of
                 ; the decision; all this arm needs is the index.

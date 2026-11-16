@@ -132,7 +132,7 @@ _Net_Dispatch       ENT
 ;   _Net_KCall_FcbAlloc / FcbLookup-not-needed / SockFdToDesc - FCB + socket-fd
 ;     resolution (socket() / accept() / the read-write seam).
 ;   _Net_KCall_ConPollKey / _Net_KCall_Sleep - for the now-in-module
-;     _Sock_PollIntr (cooperative block: ^C poll + _sleep on WCHAN_SOCK).
+;     _Sock_PollIntr (cooperative block: ^C poll + _sleep).
 ;------------------------------------------------------------------------------
 _Net_KCall_FcbAlloc ENT
                 MX      %00

@@ -161,22 +161,8 @@ swtch           ENT
                 ; same lesson as the keyboard wakeup above.  Gated cheap on the
                 ; count so the common (no-sleeper) path is one LDA+BEQ.
                 LDA     _nTimerSleepers
-                BEQ     @sw_ckSock
+                BEQ     @sw_ckAlarm
                 JSR     _Timer_WakeExpired
-@sw_ckSock      ; Wake any blocked socket op (recv/connect/send) on every switch
-                ; if the W5100 ISR flagged a socket event since last time — same
-                ; busy-bg-task reasoning as above.  Gated on the flag so we don't
-                ; re-poll the slow W5100 indirect bus on every switch; the woken
-                ; op re-checks its own condition (data ready / TX space / SR).
-                LDA     _kSockWakePending
-                BEQ     @sw_ckAlarm
-                STZ     _kSockWakePending
-                LDA     #WCHAN_SOCK
-                JSR     _wakeup
-                LDA     _nSelSleepers           ; + a select blocked on a socket fd
-                BEQ     @sw_ckAlarm
-                LDA     #WCHAN_SELECT
-                JSR     _wakeup
 @sw_ckAlarm     ; Deliver any alarm the heartbeat flagged (apple/fgx#152).  The
                 ; heartbeat runs at interrupt time and must not walk the
                 ; scheduler table, so it only RECORDS expiries; posting the
@@ -471,15 +457,7 @@ swtch_nosave    ENT
                 ; syscall boundary to be honoured at: everything blocked.  See
                 ; _Lbolt_Wake below.
                 JSR     _Lbolt_Wake
-                ; Wake any blocked W5100 socket op (recv/connect/send) so it
-                ; re-checks its condition.  Unconditional: the W5100 RX/TX/conn
-                ; IRQ (acked by the existing ISR) is what woke this WAI, but we
-                ; can't read chip status cheaply here, so just wake + let the op
-                ; re-poll (a benign 60 Hz re-poll if nothing's ready).  No-op
-                ; scan when no socket sleeper exists.
-                LDA     #WCHAN_SOCK
-                JSR     _wakeup
-                LDA     _nSelSleepers           ; + a block-forever select: the 60 Hz
+                LDA     _nSelSleepers           ; a block-forever select: the 60 Hz  
                 BEQ     @sw_idle_ckTimer        ; re-scan safety net (idle => this is the
                 LDA     #WCHAN_SELECT           ; main task; catches any missed busy-path
                 JSR     _wakeup                 ; wake)

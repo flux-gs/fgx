@@ -660,11 +660,10 @@ TFLAG_SIGNALS   EQU     %00100000       ; Signals pending
 ; range that can't collide with a TCB byte-offset ([$0800..$0BFF]).
 ;==============================================================================
 WCHAN_KBD       EQU     $FF01           ; console keyboard ring (Con_GetKey blocks)
-WCHAN_SOCK      EQU     $FF02           ; any W5100 socket (recv/connect/send block)
 WCHAN_TIMER     EQU     $FF03           ; nanosleep deadline (SE_WakeTime; woken by
                                         ; _Timer_WakeExpired when _kSystemTicks passes)
 WCHAN_PIPE      EQU     $FF04           ; any pipe (read/write blocks); coarse
-                                        ; wake-all-recheck, mirrors WCHAN_SOCK
+                                        ; wake-all-recheck
 WCHAN_SELECT    EQU     $FF05           ; select(2) blocking on ANY of its fds;
                                         ; woken by the kbd/sock/idle wake sites
                                         ; (gated on _nSelSleepers) -> re-scan

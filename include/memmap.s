@@ -917,7 +917,7 @@ KMem_AlarmReload_canary DS      1
 ; INTERRUPT time (toolbox.s, the firmware heartbeat), and posting walks the
 ; scheduler table, which a syscall may be part-way through.  So the ISR only
 ; RECORDS the expiry here and swtch does the post-and-wake in scheduler
-; context -- the same shape _kSockWakePending already uses for the W5100 ISR.
+; context.
 ;
 ; _kAlarmFired[idx] = 1 when that slot's counter reached zero; consumed (and
 ; cleared) by _Sig_AlarmDeliver.  _kAlarmFiredAny is the cheap gate so the
@@ -1449,11 +1449,6 @@ _ssPage                 DS   2                  ; slot<<8 (ROM page index base) 
 _ssRecOff               DS   2                  ; _slotTab record offset for this slot (word)
 _ssTmp                  DS   2                  ; scratch: mul-by-7 / _SlotHasRom reference (word)
 _ssSigByte              DS   1                  ; sig read byte stash (byte)
-_kSockWakePending       DS   2                  ; W5100 ISR sets (1) on a claimed socket
-                                                ; IRQ; swtch @sw_save wakes WCHAN_SOCK +
-                                                ; clears it, so a blocked recv/connect/send
-                                                ; wakes even while a busy bg task spins (the
-                                                ; idle-loop socket wake never runs then).
                                                 ; Gated so it doesn't over-poll the slow
                                                 ; W5100 on every switch.  Boot-zeroed.
 _docOwner               DS   2                  ; pid of the task that claimed the DOC

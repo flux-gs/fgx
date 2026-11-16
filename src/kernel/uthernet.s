@@ -311,9 +311,6 @@ _Uthernet2_ISR  MX      %11
                 RTL
 @u2i_mine       STA    |_u2IrqLastIR            ; record the IRQR we saw
                 INC     _u2IrqCount             ; bump (8-bit; >0 means it fired)
-                LDA     #1                      ; flag a socket event so swtch @sw_save
-                STA     _kSockWakePending       ; wakes WCHAN_SOCK (M8: low byte; A
-                                                ; reloaded by the next instruction)
                 ; --- clear IRQR system bits (write-1-to-clear) ---
                 LDA     #$00
                 STAL    U2_ARH
