@@ -457,6 +457,7 @@ swtch_nosave    ENT
                 ; syscall boundary to be honoured at: everything blocked.  See
                 ; _Lbolt_Wake below.
                 JSR     _Lbolt_Wake
+                JSR     _Klog_Wake              ; /dev/klog's reader, likewise
                 LDA     _nSelSleepers           ; a block-forever select: the 60 Hz  
                 BEQ     @sw_idle_ckTimer        ; re-scan safety net (idle => this is the
                 LDA     #WCHAN_SELECT           ; main task; catches any missed busy-path
@@ -884,6 +885,32 @@ _Lbolt_Wake     ENT
                 RTS
 
 ;=============================================================================
+; _Klog_Wake - 2.11BSD's logwakeup (sys/subr_log.c): release /dev/klog's reader,
+; and any select, when the kernel has logged.
+;
+; Upstream calls logwakeup from printf (subr_prf.c).  The ring's writer here
+; also runs at interrupt time, where the scheduler table must not be walked, so
+; the wake is performed at the two soft sites that perform lbolt's -- syscall
+; return and the idle loop -- by comparing the ring's head with the one last
+; announced.  A reader therefore waits a tick at most.
+;
+; Clobbers A/X/Y.  MX %00.  Kernel DP.
+;=============================================================================
+_Klog_Wake      ENT
+                MX      %00
+                LDA     _kernLogHead
+                CMP     _klogWakeHead
+                BEQ     @klw_none               ; the common path: nothing logged
+                STA     _klogWakeHead
+                LDA     #WCHAN_KLOG
+                JSR     _wakeup
+                LDA     _nSelSleepers
+                BEQ     @klw_none
+                LDA     #WCHAN_SELECT
+                JSR     _wakeup
+@klw_none       RTS
+
+;=============================================================================
 ; _Vm_Loadav - 2.11BSD's load average, every five seconds: vmtotal()'s nrun
 ; and loadav() (sys/vm_sched.c:191, :346).  Upstream's arithmetic is
 ;
@@ -1280,6 +1307,7 @@ _twSeoff        DS      2                       ; _Timer_WakeExpired seoff scrat
 _nTimerSleepers DS      2                       ; count of tasks in nanosleep (gates the
                                                 ; per-swtch timer scan; init 0 in
                                                 ; _AllocSchedTbl, ++/-- in _Sys_Nanosleep)
+_klogWakeHead   DS      2                       ; the ring head _Klog_Wake last announced
 _nSelSleepers   DS      2                       ; count of tasks in a block-forever
                                                 ; select (gates the per-swtch WCHAN_SELECT
                                                 ; wakes; init 0 in _AllocSchedTbl, ++/-- in

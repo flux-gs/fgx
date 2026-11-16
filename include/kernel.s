@@ -667,6 +667,8 @@ WCHAN_PIPE      EQU     $FF04           ; any pipe (read/write blocks); coarse
 WCHAN_SELECT    EQU     $FF05           ; select(2) blocking on ANY of its fds;
                                         ; woken by the kbd/sock/idle wake sites
                                         ; (gated on _nSelSleepers) -> re-scan
+WCHAN_KLOG      EQU     $FF0B           ; /dev/klog's reader; _Klog_Wake (sched.s)
+                                        ; wakes it when the ring's head has moved
 WCHAN_VFORK     EQU     $FF06           ; fork train: parent of a vfork/snapshot-fork
                                         ; child; woken by the child's execve/_exit
                                         ; hand-back.  TCB_WaitingOn = child pid, so

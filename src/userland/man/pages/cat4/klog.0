@@ -44,26 +44,22 @@ SEE ALSO
      dmesg(1), syslog(3), unix(4)
 
 BUGS
-     A WOKEN READER CAN WAIT UP TO A SECOND.  Upstream releases a
-     blocked reader when the message is written; this one sleeps
-     on the channel the kernel wakes once a second, so a message
-     can sit in the ring that long before the reader sees it.  No
-     message is lost and the order is not disturbed, but a kernel
-     message and a user message written in the same instant can
-     reach the log a second apart, and a message written just
-     before the machine stops may not be read at all.  The reason
-     is a budget: the wakeup belongs in the ring writer, which is
-     core-bank code with five bytes free.  apple/fgx#461.
+     A READER IS RELEASED A CLOCK TICK LATE AT MOST, NOT AT THE
+     WRITE.  Upstream's logwakeup runs from printf.  The ring's
+     writer here also runs inside interrupts, where a wakeup is
+     not allowed, so the reader and any select are released at
+     the next system call return or idle pass after a message
+     is written.  No message is lost and the order is not
+     disturbed.
 
      A READER THAT FALLS A WHOLE RING BEHIND LOSES DATA
-     SILENTLY.  The writer does not consult readers -- it cannot
-     afford to, for the same reason as above -- and the ring
-     carries no generation count, only a write index and a
+     SILENTLY.  The writer does not consult readers, and the
+     ring carries no generation count, only a write index and a
      wrapped flag.  So a reader the writer laps sees the newest
      bytes, in order, with no indication that anything was
      skipped.  Upstream counts that in its overrun field because
      upstream's writer is the one that discards.  It takes four
-     kilobytes of kernel messages inside one wakeup period.
+     kilobytes of kernel messages between two releases.
 
      THE EINTR PATH WAS BROKEN, NOT MERELY UNCOVERED.  A read
      waiting on a caught-up ring returns EINTR when a signal

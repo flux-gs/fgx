@@ -55,7 +55,7 @@
                 PUT     ../../../include/errno.s
                 PUT     ../../../include/chardev.s      ; CDF_*, COPS_*, POLL*
                 PUT     ../../../include/modules.s      ; KSVC_SLEEP
-                PUT     ../../../include/kernel.s       ; WCHAN_LBOLT,
+                PUT     ../../../include/kernel.s       ; WCHAN_KLOG,
                                                         ;   KMEM_LOGBUF_SIZE
                 PUT     ../../../include/socket.s       ; FIONBIO
                 PUT     ../../../include/fs.s           ; FCB_CdFlags, FCB_CDF_NONBLK
@@ -259,8 +259,7 @@ _Klog_ResolveVfs MX     %00
 ; legal value and the reader silently gets the NEWEST avail bytes, in order,
 ; having lost the ones in between.  Upstream counts that in sc_overrun because
 ; upstream's writer is the one that discards.  A lap takes 4 KB of kernel log
-; inside one WCHAN_LBOLT tick.  klog(4)'s BUGS says this; apple/fgx#461 carries
-; the writer-side question.
+; between two of _Klog_Wake's passes.  klog(4)'s BUGS says this.
 ;==============================================================================
 _Klog_Avail     MX      %00
                 LDA     _kernLogHead
@@ -483,10 +482,7 @@ klog_dread      MX      %00
                 ; delivering the event between the test and the BLOCKED mark)"
                 ; -- src/kernel/sched.s, at _sleep.  The ISR in that sentence is
                 ; real here: the ring is filled by kernel log calls, the
-                ; heartbeat's included.  Today a lost wakeup costs a second and
-                ; not a hang, because lbolt fires whether or not anyone signalled
-                ; it; apple/fgx#461's writer-side wakeup is what would make it a
-                ; lost wakeup proper.  `_PtyM_DRead' masks at the same point.
+                ; heartbeat's included.  `_PtyM_DRead' masks at the same point.
                 ;
                 ; What the mask has to cover is only "nothing arrived between my
                 ; test and my sleep", and the writer's index answers that: it is
@@ -509,15 +505,10 @@ klog_dread      MX      %00
 @dr_still       LDA     13,S                    ; the op's own `flag'
                 AND     #VFS_IO_NDELAY
                 BNE     @dr_again
-                ; WCHAN_LBOLT AND NOT A CHANNEL OF OUR OWN.  include/kernel.s
-                ; names it "the channel a caller sleeps on to mean WAIT A BIT AND
-                ; TRY AGAIN", after 2.11BSD's ttwrite and ufs_alloc.c, and the
-                ; clock fires it once a second whether or not anything is
-                ; runnable.  Upstream is woken by the writer instead; that is a
-                ; flag test and a _wakeup in core-bank code with five bytes free,
-                ; so apple/fgx#461 carries the question.  The cost is up to a
-                ; second of latency, never a lost message.
-                LDA     #WCHAN_LBOLT
+                ; WCHAN_KLOG is woken by _Klog_Wake (sched.s), 2.11BSD's
+                ; logwakeup, at the next syscall return or idle pass after the
+                ; ring's head moves.
+                LDA     #WCHAN_KLOG
                 LDX     #KSVC_SLEEP
                 JSL     SYS_KCALL               ; carry always set; verdict in A
                 REP     #$30                    ; _sleep may return 8-bit

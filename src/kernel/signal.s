@@ -1111,6 +1111,7 @@ _we019          STAL    _Sys_DeliveredSig
                 ; (sched.s) is a load-and-branch when no second has elapsed,
                 ; which is 59 ticks in 60.
                 JSR     _Lbolt_Wake
+                JSR     _Klog_Wake              ; /dev/klog's reader, likewise
                 LDA     _curTask
                 AND     #$00FF
                 BNE     @scs_haveTask
