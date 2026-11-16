@@ -1109,8 +1109,8 @@ _lvCexp         DW      235,251,254             ; 256*exp(-1/12), -1/60, -1/180:
                                                 ;   upstream's 0353, 0373, 0376
 
 ;=============================================================================
-; _Timer_WakeExpired - mark every WCHAN_TIMER-blocked task whose SE_WakeTime
-; deadline has passed (32-bit _kSystemTicks >= SE_WakeTime) READY.  A timer-
+; _Timer_WakeExpired - mark every task blocked on WCHAN_TIMER or WCHAN_SELECT
+; whose SE_WakeTime deadline has passed (32-bit _kSystemTicks >= SE_WakeTime) READY.  A timer-
 ; specialized _wakeup: same scan, plus the deadline compare.  Called from swtch
 ; (@sw_save, gated on _nTimerSleepers, so a busy bg task can't starve a sleeper)
 ; and the idle loop (@sw_idle, lone-sleeper case).  Runs under SEI (callers mask
@@ -1134,8 +1134,10 @@ _Timer_WakeExpired MX   %00
                 TAY
                 LDA     [_schedTblPtr],Y
                 CMP     #WCHAN_TIMER
+                BEQ     @tw_timed
+                CMP     #WCHAN_SELECT           ; select1's tsleep(&selwait, , timo)
                 BNE     @tw_next
-                ; expired?  32-bit: now (_kSystemTicks) - SE_WakeTime, no borrow.
+@tw_timed       ; expired?  32-bit: now (_kSystemTicks) - SE_WakeTime, no borrow.
                 LDA     _twSeoff
                 CLC
                 ADC     #SE_WakeTime
@@ -1429,7 +1431,7 @@ _nTimerSleepers DS      2                       ; count of tasks in nanosleep (g
                                                 ; per-swtch timer scan; init 0 in
                                                 ; _AllocSchedTbl, ++/-- in _Sys_Nanosleep)
 _klogWakeHead   DS      2                       ; the ring head _Klog_Wake last announced
-_nSelSleepers   DS      2                       ; count of tasks in a block-forever
+_nSelSleepers   DS      2                       ; count of tasks asleep in
                                                 ; select (gates every WCHAN_SELECT
                                                 ; wake; init 0 in _AllocSchedTbl, ++/-- in
                                                 ; _Sys_Select)

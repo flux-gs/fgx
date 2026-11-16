@@ -786,8 +786,9 @@ SE_CallerBank   DS      2               ;   "                          was _Sys_
                                         ;  mid-syscall block; cheaper than the _u-area
                                         ;  dispatcher refactor and leaves the hot path
                                         ;  untouched — u-area stays for recv scratch.)
-SE_WakeTime     DS      4               ; nanosleep absolute deadline (32-bit _kSystemTicks
-                                        ; value); valid only while SE_WaitChan==WCHAN_TIMER.
+SE_WakeTime     DS      4               ; absolute deadline of the sleep (32-bit _kSystemTicks
+                                        ; value); valid while SE_WaitChan is WCHAN_TIMER or
+                                        ; WCHAN_SELECT (all ones: a select with no timeout).
                                         ; _Timer_WakeExpired wakes the task once now>=this.
 SE_SnapPtr      DS      3               ; long ptr to this task's BANK HOME: the
                                         ; descriptor listing a spare for each mutable

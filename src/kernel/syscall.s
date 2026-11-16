@@ -971,7 +971,7 @@ _Sys_BlkTmp     DS 2                    ; _Sys_PathBlkArg: the offset it returns
 ; MVN.  Ten bytes of KGlobals back with them.
 
 ; select(2) scan state.  _selArgOff.._selDeadline is a CONTIGUOUS persistent
-; block: Phase 2's yield loop save/restores it on the per-task kernel stack
+; block: the select loop save/restores it on the per-task kernel stack
 ; (_Sys_SavedA and these statics are NOT in swtch's per-task carryover, so a
 ; concurrent task's syscall/select would clobber the in-flight scan).  The
 ; output masks + loop-locals below it are rebuilt each scan (not saved).
@@ -982,7 +982,7 @@ _selPresent    DS  2                    ; present bits: b0=rd b1=wr b2=ex b3=tim
 _selRdIn       DS  4                    ; input readfds  (32-bit fd_set word)
 _selWrIn       DS  4                    ; input writefds
 _selExIn       DS  4                    ; input exceptfds
-_selDeadline   DS  4                    ; Phase 2: _kSystemTicks deadline
+_selDeadline   DS  4                    ; _kSystemTicks deadline
 _SEL_STATE_LEN EQU  *-_selArgOff
 _selRdOut      DS  4                    ; result readfds  (rebuilt each scan)
 _selWrOut      DS  4                    ; result writefds
@@ -1374,10 +1374,9 @@ _Sys_Shutdown   MX      %00
 ; wrapper marshals the fd_sets in/out and pre-converts timeval->ticks:
 ;   +0 nfds(2)  +2 present(2; b0=rd b1=wr b2=ex b3=timeout)  +4 readfds(4)
 ;   +8 writefds(4)  +12 exceptfds(4)  +16 timeout-ticks(4)
-; Phase 2: blocking poll + _Sys_Yield loop.  timeout==NULL blocks until ready
-; or a signal (EINTR); timeout=={0,0} is a non-blocking poll; else it blocks up
-; to the deadline.  Out: A = ready (fd,set) count, C=1 / A=errno (EBADF/EINTR),
-; C=0.  The loop keeps only _selArgOff/_selCallerBk live across the yield (saved
+; timeout==NULL sleeps until an object is ready or a signal comes (EINTR);
+; timeout=={0,0} is a non-blocking poll; else it sleeps up to the deadline.  Out: A = ready (fd,set) count, C=1 / A=errno (EBADF/EINTR),
+; C=0.  The loop keeps only _selArgOff/_selCallerBk live across the sleep (saved
 ; on the per-task kernel stack — these statics are NOT in swtch's carryover);
 ; every scan re-reads the argblk fresh (stable in the caller bank), and the
 ; absolute deadline lives in the argblk (+16) which each select call owns.
@@ -1424,9 +1423,6 @@ _Sys_Select     MX      %00
                 PHA
                 LDA     _selCallerBk
                 PHA
-                LDA     _selPresent             ; timed select -> yield (deadline poll);
-                AND     #8                      ; block-forever -> sleep on WCHAN_SELECT
-                BNE     @sel_yield
                 ; select1's test before it sleeps, 2.11BSD sys_generic.c:
                 ;     if ((p_flag & P_SELECT) == 0 || nselcoll != ncoll) {
                 ;             p_flag &= ~P_SELECT;
@@ -1436,21 +1432,27 @@ _Sys_Select     MX      %00
                 ;     error = tsleep(&selwait, PSOCK | PCATCH, timo);
                 ; A wake that came during the scan found no sleeper, and left
                 ; one of those two marks instead.  Masked from the test to the
-                ; sleep, which masks for itself.
+                ; sleep, which masks for itself.  `timo' is the deadline in
+                ; SE_WakeTime, which _Timer_WakeExpired ends the sleep at.
                 SEI
                 JSR     _Sel_Marked
                 BCC     @sel_again
                 LDA     _selColl
                 CMP     _selNcoll
                 BNE     @sel_again
-                INC     _nSelSleepers
+                JSR     _Sel_ArmTimo            ; A = 1 timed, 0 not
+                PHA
+                BEQ     @sel_slp
+                INC     _nTimerSleepers
+@sel_slp        INC     _nSelSleepers
                 LDA     #WCHAN_SELECT
                 JSR     _sleep
                 DEC     _nSelSleepers
+                PLA
+                BEQ     @sel_wake
+                DEC     _nTimerSleepers
                 BRA     @sel_wake
 @sel_again      CLI
-                BRA     @sel_wake
-@sel_yield      JSR     _Sys_Yield
 @sel_wake       PLA
                 STA     _selCallerBk
                 PLA
@@ -1554,6 +1556,46 @@ _Sel_Expired    MX      %00                     ; C=1 iff _kSystemTicks >= deadl
                 LDY     #18
                 LDA     _kSystemTicks+2
                 SBC     [_libcTmp2],Y           ; C=1 -> no borrow -> now >= deadline
+                RTS
+; _Sel_ArmTimo - set the caller's SE_WakeTime for a sleep on WCHAN_SELECT: the
+; deadline at argblk+16 for a timed select (A=1), else a time that never comes
+; (A=0).  _selPresent is current.  Clobbers Y, _selTmp, _libcTmp2.
+_Sel_ArmTimo    MX      %00
+                JSR     _Sel_SetPtr
+                LDA     _curTask
+                AND     #$00FF
+                DEC
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL                             ; (pid-1)*SE_SIZE
+                CLC
+                ADC     #SE_WakeTime
+                STA     _selTmp
+                LDA     _selPresent
+                AND     #8
+                BEQ     @sat_never
+                LDY     #18
+                LDA     [_libcTmp2],Y
+                PHA
+                LDY     #16
+                LDA     [_libcTmp2],Y
+                LDY     _selTmp
+                STA     [_schedTblPtr],Y
+                INY
+                INY
+                PLA
+                STA     [_schedTblPtr],Y
+                LDA     #1
+                RTS
+@sat_never      LDY     _selTmp
+                LDA     #$FFFF
+                STA     [_schedTblPtr],Y
+                INY
+                INY
+                STA     [_schedTblPtr],Y
+                LDA     #0
                 RTS
 _Sel_SigPending MX      %00                     ; C=1 iff a signal is pending (EINTR)
                 ; NO TTY-SIDE ARM, AND THERE MUST NOT BE ONE.  `ttyinput'
