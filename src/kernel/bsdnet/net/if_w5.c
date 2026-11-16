@@ -547,6 +547,25 @@ w5_rsr()
 	return (a);
 }
 
+/* A frame the stack has no use for: one to a group address other than broadcast,
+ * which the chip's filter passes and the DEUNA's does not, or one of a type
+ * w5input frees. */
+static int
+w5_unwanted(eh)
+	register struct ether_header *eh;
+{
+	if ((eh->ether_dhost[0] & 1) &&
+	    bcmp((caddr_t)eh->ether_dhost, (caddr_t)etherbroadcastaddr,
+	    sizeof(eh->ether_dhost)))
+		return (1);
+	switch (ntohs((u_short)eh->ether_type)) {
+	case ETHERTYPE_IP:
+	case ETHERTYPE_ARP:
+		return (0);
+	}
+	return (1);
+}
+
 /* Drain the receive ring, at most W5_MAXBURST frames a pass. */
 void
 w5rint()
@@ -599,6 +618,14 @@ w5rint()
 			return;
 		}
 		w5_ringin(rd + 2, (char *)&eh, sizeof(eh));
+		/* An unwanted frame is passed over in the ring, unread past its
+		 * header, unless bpf is open: netdump shows the wire. */
+		if (!w5_tapr.t_active && w5_unwanted(&eh)) {
+			w5_wreg16(S0_RX_RD, rd + len);
+			w5_cmd(CR_RECV);
+			w5_unlock();
+			continue;
+		}
 		m = w5get(rd + 2 + sizeof(eh), (int)len - 2 - (int)sizeof(eh));
 		w5_wreg16(S0_RX_RD, rd + len);
 		w5_cmd(CR_RECV);
