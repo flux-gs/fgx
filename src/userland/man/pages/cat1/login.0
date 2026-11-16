@@ -8,7 +8,7 @@ NAME
      login - authenticate and start a session
 
 SYNOPSIS
-     login [-T type] [ name ]
+     login [-p] [-h host] [ name ]
 
 DESCRIPTION
      Login authenticates a user against /etc/passwd and, on
@@ -16,6 +16,12 @@ DESCRIPTION
      the terminal line on file descriptors 0, 1 and 2, which is
      how getty(8) invokes it; the optional name argument is the
      login name getty has already read and echoed.
+
+     The -p option keeps the environment.  The -h option, which
+     only the super-user may give, names the remote host a network
+     login comes from; it is recorded in utmp(5) and shown by
+     who(1).  A host name in the local domain is recorded without
+     the domain.
 
      Without an argument (or on any retry) login prompts:
 
@@ -43,7 +49,9 @@ DESCRIPTION
      alarm(3) login timeout for that, which this port does not
      have.
 
-     On success login sets the group and user id from the passwd
+     On success login records the session in /etc/utmp and
+     /etc/wtmp, gives the terminal to the user (group tty if there
+     is one, mode 620), sets the group and user id from the passwd
      entry, chdir()s to the home directory (failure is not fatal),
      and execs the shell named there -- /bin/sh if the field is
      empty -- with argv[0] set to a hyphen followed by the last
@@ -51,22 +59,22 @@ DESCRIPTION
      hyphen is what makes it a login shell.
 
 ENVIRONMENT
-     The exec'd shell receives exactly five variables; nothing is
-     inherited from getty:
+     Unless -p is given the environment login was started with is
+     discarded.  Login then sets:
 
-          PATH=:/bin:/usr/bin:/sbin
           HOME       the passwd entry's directory field
           SHELL      the shell being exec'd
           USER       the login name
-          TERM       the type given by -T if there is one;
-                     otherwise the ty_type field for this line
-                     from /etc/ttys, or vt100 if the line is not
-                     listed there.  The pty slaves are listed as
-                     fgxpty, which is right for a session from the
-                     FGX console and wrong for anything else --
-                     hence -T, which telnetd(8) fills in from the
-                     client's own TERMINAL-TYPE negotiation and
-                     passes down through getty(8)
+          TERM       unless -p kept one: the ty_type field for
+                     this line from /etc/ttys, or vt100 if the
+                     line is not listed there
+          PATH       unless -p kept one:
+                     :/bin:/usr/bin:/sbin:/usr/fgx/bin
+
+     telnetd(8) puts the terminal type the client reported in
+     TERM and passes -p, so a remote session keeps the client's
+     type; the pty slaves are listed in /etc/ttys as fgxpty, which
+     is right only for a session from the FGX console.
 
 SECURITY
      Root may log in only on a line marked secure in /etc/ttys
@@ -111,17 +119,16 @@ DIAGNOSTICS
 FILES
      /etc/passwd           user database
      /etc/ttys             line database (TERM, secure flag)
+     /etc/utmp, /etc/wtmp  who is logged in, and the record of it
 
 SEE ALSO
      getty(8), telnetd(8), ttys(5), passwd(5), crypt(3)
 
 BUGS
-     There is no lastlog, wtmp or utmp, so nothing records who
-     logged in or when, and who(1) has nothing to read.  There is
-     no login timeout: a prompt left unanswered waits forever.
-     Quotas, login classes and supplementary groups do not exist
-     on FGX and the corresponding upstream code is deleted rather
-     than stubbed.
+     There is no lastlog and no login timeout: a prompt left
+     unanswered waits forever.  The -f option, the message of the
+     day, the mail notice, quotas, login classes and supplementary
+     groups of 2.11BSD's login are not here.
 
 
 

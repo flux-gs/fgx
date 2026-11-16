@@ -19,8 +19,9 @@ DESCRIPTION
 
      Telnetd allocates a pseudo-terminal, see pty(4), and creates
      a child with the slave side as its standard input, output
-     and error.  The child is getty(8), which greets, reads a
-     login name and runs login(1).  Telnetd holds the master side
+     and error.  The child is login(1), run as `login -h host -p'
+     with the client's host name, or its address when it has no
+     name.  Telnetd holds the master side
      and passes data between it and the connection, taking the
      TELNET commands out of the client's stream and doubling a
      data byte of 255 on the way back.
@@ -32,7 +33,8 @@ DESCRIPTION
      refuses every other option.
 
      The terminal type is asked for and waited for before the
-     child is created, and is given to getty(8) as -T type.
+     child is created, and is given to login(1) as TERM in its
+     environment.
      The window size, when the client sends one, is set on the
      pseudo-terminal, and a later change is signalled to the
      session as SIGWINCH.
@@ -51,22 +53,18 @@ DESCRIPTION
 
 FILES
      /testbin/telnetd    the server; see BUGS
-     /bin/getty          run on the slave side
+     /bin/login          run on the slave side
      /dev/pty[p-s]?      master sides, tried in order
      /dev/tty[p-s]?      slave sides
      /etc/utmp, /etc/wtmp
 
 SEE ALSO
-     telnet(1), inetd(8), getty(8), login(1), pty(4)
+     telnet(1), inetd(8), login(1), pty(4)
 
 BUGS
      These differ from 2.11BSD.
 
-     The child is getty(8) and not `login -h host -p': here
-     login(1) only authenticates.  The client's host name is not
-     looked up, and the terminal type is an argument and not TERM
-     in the environment.  The banner 2.11BSD's telnetd prints is
-     left to getty and /etc/issue.
+     The banner names FGX.
 
      The slave is not revoked with vhangup(2), which this system
      does not have, before the child is given it.

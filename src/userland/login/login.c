@@ -10,18 +10,22 @@
  *
  * login(1) - authenticate and exec the user's shell.
  *
- * Kept from upstream: getpwnam -> getpass -> crypt -> compare -> setgid/setuid
- * -> chdir -> build env -> exec the shell as "-sh", the three-attempt loop, and
- * the TTY_SECURE gate on root.  Deleted: quota, setpriority, initgroups,
- * setlogin, lastlog, syslog, tzfile, Kerberos, utmp/wtmp, the login timeout
- * alarm, and the -h hostname/netdb path (which returns if telnetd ever wants
- * it).  None of those subsystems exist on FGX.
+ * Kept from upstream: getpwnam -> getpass -> crypt -> compare -> utmp ->
+ * chown of the line -> setgid/setuid -> chdir -> the environment -> exec the
+ * shell as "-sh", the three-attempt loop, the TTY_SECURE gate on root, and
+ * the -h and -p options.  Left out: -f, quota, setpriority, initgroups,
+ * lastlog, syslog, the motd and mail notice, the login timeout alarm, and
+ * the clearing of the window size on a line that is not a network login.
  *
  * EXEC, not spawn: the shell replaces this image, so the getty -> login ->
  * shell chain holds exactly one task's bank-0 stack, not three.
  */
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <pwd.h>
+#include <grp.h>
 #include <ttyent.h>
 #include <utmp.h>
 #include <time.h>
@@ -39,11 +43,12 @@
  * exited.  Ten is far past any typo and far short of a wedge. */
 #define MAXDISCARD 10
 
+extern char **environ;
+
 char nbuf[64];
-char envhome[80];
-char envshell[80];
-char envuser[80];
-char envterm[64];
+char hbuf[64];
+char *hostname;
+char *envinit[1];
 char arg0[32];
 struct utmp utmp;               /* the session's /etc/utmp record */
 
@@ -97,39 +102,53 @@ main(argc, argv)
 {
 	struct passwd *pw;
 	struct ttyent *ty;
-	char *name, *tn, *shell, *given, *want, *ttype;
-	char *env[6], *av[2];
-	int t, r, discards, aname;
+	struct group *gr;
+	char *name, *tn, *shell, *given, *want, *domain, *p;
+	char *av[2];
+	int t, r, discards, ch, pflag;
 
 	tn = ttyname(0);
 	ty = tn != (char *)0 ? getttynam(lastpart(tn)) : (struct ttyent *)0;
 
-	/* -T <type>: the terminal type the caller negotiated, which OUTRANKS
-	 * the /etc/ttys entry.  This is upstream's `login -p' in a different
-	 * costume: 4.xBSD telnetd sets TERM in the child's environment and
-	 * passes -p to have login preserve it, but FGX's spawnx carries file
-	 * actions with an EMPTY environment, so the type reaches us as an
-	 * argument instead -- telnetd -> getty -> here (apple/fgx#147).
-	 *
-	 * /etc/ttys types a pty line `fgxpty', which is right for a session
-	 * from the FGX console and wrong for an xterm; without this every
-	 * remote session was driven with the console's capabilities whatever
-	 * the client said it was.
-	 *
-	 * aname is the argv slot the login NAME sits in, which moves when the
-	 * flag is present. */
-	ttype = (char *)0;
-	aname = 1;
-	if (argc >= 3 && argv[1][0] == '-' && argv[1][1] == 'T') {
-		ttype = argv[2];
-		aname = 3;
-	}
+	/*
+	 * -p is used by getty to tell login not to destroy the environment
+	 * -h is used by other servers to pass the name of the remote
+	 *    host to login so that it may be placed in utmp and wtmp
+	 */
+	(void)gethostname(hbuf, sizeof(hbuf));
+	domain = strchr(hbuf, '.');
+
+	pflag = 0;
+	while ((ch = getopt(argc, argv, "h:p")) != EOF)
+		switch (ch) {
+		case 'h':
+			if (getuid()) {
+				(void)fprintf(stderr,
+				    "login: -h for super-user only.\n");
+				exit(1);
+			}
+			if (domain && (p = strchr(optarg, '.')) &&
+			    strcasecmp(p, domain) == 0)
+				*p = 0;
+			hostname = optarg;
+			break;
+		case 'p':
+			pflag = 1;
+			break;
+		case '?':
+		default:
+			(void)fprintf(stderr,
+			    "usage: login [-p] [username]\n");
+			exit(1);
+		}
+	argc -= optind;
+	argv += optind;
 
 	pw = (struct passwd *)0;
 	discards = 0;
 	for (t = 0; t < TRIES; t++) {
-		if (t == 0 && argc > aname)
-			name = argv[aname];     /* handed over by getty */
+		if (t == 0 && *argv)
+			name = *argv;           /* handed over by getty */
 		else {
 			printf("login: ");
 			fflush(stdout);
@@ -223,8 +242,14 @@ main(argc, argv)
 		memset((char *)&utmp, 0, sizeof(struct utmp));
 		utmp.ut_time = time((long *)0);
 		strncpy(utmp.ut_name, pw->pw_name, UT_NAMESIZE);
+		if (hostname)
+			strncpy(utmp.ut_host, hostname, sizeof(utmp.ut_host));
 		strncpy(utmp.ut_line, lastpart(tn), UT_LINESIZE);
 		login(&utmp);
+
+		(void)chown(tn, pw->pw_uid,
+		    (gr = getgrnam("tty")) ? gr->gr_gid : pw->pw_gid);
+		(void)chmod(tn, 0620);
 	}
 
 	/* THE SESSION'S LOGIN NAME, and it must go in BEFORE the privilege drop:
@@ -249,19 +274,15 @@ main(argc, argv)
 	shell = (pw->pw_shell != (char *)0 && pw->pw_shell[0] != '\0')
 	      ? pw->pw_shell : "/bin/sh";
 
-	sprintf(envhome,  "HOME=%s", pw->pw_dir);
-	sprintf(envshell, "SHELL=%s", shell);
-	sprintf(envuser,  "USER=%s", pw->pw_name);
-	sprintf(envterm,  "TERM=%s",
-	        ttype != (char *)0 && ttype[0] != '\0' ? ttype
-	        : (ty != (struct ttyent *)0 && ty->ty_type[0] != '\0'
-	           ? ty->ty_type : "vt100"));
-	env[0] = "PATH=:/bin:/usr/bin:/sbin:/usr/fgx/bin";
-	env[1] = envhome;
-	env[2] = envshell;
-	env[3] = envuser;
-	env[4] = envterm;
-	env[5] = (char *)0;
+	/* destroy environment unless user has requested preservation */
+	if (!pflag)
+		environ = envinit;
+	(void)setenv("HOME", pw->pw_dir, 1);
+	(void)setenv("SHELL", shell, 1);
+	(void)setenv("TERM", ty != (struct ttyent *)0 && ty->ty_type[0] != '\0'
+	    ? ty->ty_type : "vt100", 0);
+	(void)setenv("USER", pw->pw_name, 1);
+	(void)setenv("PATH", ":/bin:/usr/bin:/sbin:/usr/fgx/bin", 0);
 
 	/* argv[0] = "-sh": the leading dash is what makes it a login shell.
 	 * Plain char *[] locals are correct here -- execve() stages both the
@@ -272,7 +293,7 @@ main(argc, argv)
 	av[0] = arg0;
 	av[1] = (char *)0;
 
-	execve(shell, av, env);
+	execve(shell, av, environ);
 
 	/* ENOMEM here means the bank-0 stack arena cannot fund this shell.
 	 * Falling back to /bin/sh (12 pages against tcsh's 55) keeps the
@@ -284,7 +305,7 @@ main(argc, argv)
 		printf("login: %s: out of memory, falling back to /bin/sh\n",
 		       shell);
 		av[0] = "-sh";
-		execve("/bin/sh", av, env);
+		execve("/bin/sh", av, environ);
 	}
 	perror("login: exec");
 	return 1;

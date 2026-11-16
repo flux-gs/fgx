@@ -55,21 +55,8 @@ main(argc, argv)
 	char **argv;
 {
 	struct sgttyb t;
-	char *av[5];
-	char *ttype;
+	char *av[3];
 	int i;
-
-	/* -T <type>: the terminal type the caller negotiated, passed straight
-	 * through to login.  telnetd(8) learns it from the client's
-	 * TERMINAL-TYPE subnegotiation and has nowhere else to put it -- spawnx
-	 * carries file actions and an empty environment, so upstream's
-	 * setenv("TERM") + `login -p' is not available and the type travels as
-	 * an argument, the way upstream threads `-h host'.  Absent, login falls
-	 * back to the /etc/ttys entry, which is what every line got before
-	 * (apple/fgx#147). */
-	ttype = (char *)0;
-	if (argc >= 3 && argv[1][0] == '-' && argv[1][1] == 'T')
-		ttype = argv[2];
 
 	/* Cooked line discipline with echo: the login name IS echoed (only the
 	 * password is not).  Explicit rather than inherited, because init may
@@ -141,10 +128,6 @@ main(argc, argv)
 		 * applies to init, not to us. */
 		i = 0;
 		av[i++] = "login";
-		if (ttype != (char *)0) {
-			av[i++] = "-T";
-			av[i++] = ttype;
-		}
 		av[i++] = name;
 		av[i] = (char *)0;
 		execve("/bin/login", av, environ);

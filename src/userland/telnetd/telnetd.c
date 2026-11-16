@@ -15,12 +15,7 @@
  * under DEBUG and is otherwise only inetd's child.  Here `telnetd port' runs
  * that block and plain `telnetd' is the inetd child, so one binary does both.
  *
- * THE CHILD IS getty, AND THE TERMINAL TYPE IS ITS ARGUMENT.  Upstream execs
- * `login -h host -p' with TERM in the environment, and its login(1) prints the
- * prompt itself.  FGX's login only authenticates; getty(8) greets and reads
- * the name, and hands `-T type' on.  The peer's name is not looked up, since
- * nothing here takes `-h host'.  The banner upstream prints "that getty never
- * gave" is left out for the same reason: this getty gives /etc/issue.
+ * THE BANNER NAMES FGX, where upstream's names 2.11 BSD UNIX.
  *
  * THE SLAVE IS NOT vhangup()'d.  FGX has no vhangup(2).  Upstream opens the
  * slave, revokes it, and opens it again; here it is opened once.
@@ -101,6 +96,10 @@ char	netobuf[BUFSIZ], *nfrontp = netobuf, *nbackp = netobuf;
 char	*neturg = 0;		/* one past last bye of urgent data */
 	/* the remote system seems to NOT be an old 4.2 */
 int	not42 = 1;
+
+
+char BANNER1[] = "\r\n\r\nFGX (",	/* FGX: upstream's "2.11 BSD UNIX (" */
+    BANNER2[] = ")\r\n\r\0\r\n\r\0";
 
 
 		/* buffer for sub-options */
@@ -201,6 +200,7 @@ main(argc, argv)
 }
 
 char	*terminaltype = 0;
+char	*envinit[2];
 int	cleanup();
 
 /*
@@ -271,8 +271,10 @@ doit(f, who)
 	int f;
 	struct sockaddr_in *who;
 {
+	char *host, *inet_ntoa();
 	int i, p, t;
 	struct sgttyb b;
+	struct hostent *hp;
 	int c;
 
 	for (c = 'p'; c <= 's'; c++) {
@@ -312,6 +314,13 @@ gotpty:
 	ioctl(p, TIOCGETP, &b);
 	b.sg_flags &= ~ECHO;
 	ioctl(p, TIOCSETP, &b);
+	hp = gethostbyaddr(&who->sin_addr, sizeof (struct in_addr),
+		who->sin_family);
+	if (hp)
+		host = hp->h_name;
+	else
+		host = inet_ntoa(who->sin_addr);
+
 	net = f;
 	pty = p;
 
@@ -330,16 +339,18 @@ gotpty:
 	dup2(t, 1);
 	dup2(t, 2);
 	close(t);
+	envinit[0] = terminaltype;
+	envinit[1] = 0;
+	environ = envinit;
 	/*
-	 * FGX: getty greets and execs login; the type is "TERM=name" and
-	 * goes on as `-T name'.
+	 * -h : pass on name of host.
+	 *		WARNING:  -h is accepted by login if and only if
+	 *			getuid() == 0.
+	 * -p : don't clobber the environment (so terminal type stays set).
 	 */
-	if (terminaltype)
-		execl("/bin/getty", "getty", "-T",
-		    terminaltype + sizeof("TERM=") - 1, (char *)0);
-	else
-		execl("/bin/getty", "getty", (char *)0);
-	fatalperror(f, "/bin/getty");
+	execl("/bin/login", "login", "-h", host,
+					terminaltype ? "-p" : 0, 0);
+	fatalperror(f, "/bin/login");
 	/*NOTREACHED*/
 }
 
@@ -400,6 +411,7 @@ int	s;		/* socket number */
 telnet(f, p)
 {
 	int on = 1;
+	char hostname[MAXHOSTNAMELEN];
 
 	ioctl(f, FIONBIO, &on);
 	ioctl(p, FIONBIO, &on);
@@ -442,11 +454,27 @@ telnet(f, p)
 	hisopts[TELOPT_ECHO] = OPT_YES_BUT_ALWAYS_LOOK;
 
 	/*
-	 * FGX: ask for the window size.  No banner: getty gives one.
+	 * FGX: ask for the window size.
 	 */
 	sprintf(nfrontp, doopt, TELOPT_NAWS);
 	nfrontp += sizeof doopt-2;
 	hisopts[TELOPT_NAWS] = OPT_YES_BUT_ALWAYS_LOOK;
+
+	/*
+	 * Show banner that getty never gave.
+	 *
+	 * The banner includes some null's (for TELNET CR disambiguation),
+	 * so we have to be somewhat complicated.
+	 */
+
+	gethostname(hostname, sizeof (hostname));
+
+	bcopy(BANNER1, nfrontp, sizeof BANNER1 -1);
+	nfrontp += sizeof BANNER1 - 1;
+	bcopy(hostname, nfrontp, strlen(hostname));
+	nfrontp += strlen(hostname);
+	bcopy(BANNER2, nfrontp, sizeof BANNER2 -1);
+	nfrontp += sizeof BANNER2 - 1;
 
 	/*
 	 * Call telrcv() once to pick up anything received during

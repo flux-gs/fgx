@@ -1,6 +1,6 @@
 {
  "name": "telnet_loopback",
- "description": "telnetd started by hand on port 2323 with telnet(1) connecting to it in the same emulator -- no hardware, no host, no second machine.  It proves the standalone listener (bind, listen, accept), the pty pair, the fork and exec of /bin/getty on the slave, and the relay in both directions: `login:' is getty's, written to the slave, read from the master by telnetd and sent to the client.  The connect needle is telnet's `Escape character is' line, which follows connect().",
+ "description": "telnetd started by hand on port 2323 with telnet(1) connecting to it in the same emulator -- no hardware, no host, no second machine.  It proves the standalone listener (bind, listen, accept), the pty pair, the fork and exec of /bin/login on the slave, and the relay in both directions: `login:' is login's, written to the slave, read from the master by telnetd and sent to the client.  The connect needle is telnet's `Escape character is' line, which follows connect().",
  "command": "/testbin/telnetd 2323 & telnet 127.0.0.1 2323",
  "timeout_s": 40,
  "stage_files": [
