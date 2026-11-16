@@ -487,6 +487,8 @@ KTTY_KC_TTSELECT    EQU     KTTY_SLOT0+4*32 ; slot 32: kc_ttselect (C) -- A=idx,
 ; not fail -- it would quietly name offset 1 as an export.  That is the same
 ; trap the TTYC_ offsets are named around, one screen down.
 TTYIO_FREAD         EQU     1
+TTYIO_PTC           EQU     $0100   ; with kc_ttioctl's tty index: the
+                                    ;   pty's controller is asking
 TTYIO_FWRITE        EQU     2
 
 ;------------------------------------------------------------------------------

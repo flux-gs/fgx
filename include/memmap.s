@@ -58,6 +58,9 @@ _ioCdIdx        DS      2                       ; _Io_CdThenTty holds the
                                         ;   chardev index across the device's
                                         ;   own ioctl op, so that an ENOTTY can
                                         ;   be retried against the tty
+_ioPtc          DS      2                       ; TTYIO_PTC while the ioctl in
+                                        ;   _Io_CdThenTty came in on a pty
+                                        ;   master, else 0
                                         ;   discipline.  The op is arbitrary
                                         ;   device code and preserves nothing,
                                         ;   and A carries the result back, so

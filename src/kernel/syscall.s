@@ -3894,7 +3894,8 @@ _IoOp_Notty       LDA     #ENOTTY
                 MX      %00         ; argp returns REP\'d (assembler state, not code)
                 TXA                             ; X is the tty BYTE offset per
                 JSR     _Se_TtyOffToIdx         ;   @si_ttyX; the slot takes an
-                JSR     _Tty_Ioctl              ;   INDEX
+                ORA    |_ioPtc                  ;   INDEX, and TTYIO_PTC with it
+                JSR     _Tty_Ioctl
                 CMP     #0
                 BEQ     @si_kcOk
                 CMP     #$FFFF
@@ -4019,6 +4020,8 @@ _Io_CdThenTty   ENT
                 JSR     _SyTty_Resolve          ; /dev/tty -> the caller's line
                 STA    |_ioCdIdx                ; the op preserves nothing, and
                                                 ;   A carries its result back
+                STZ    |_ioPtc                  ; not the controller, until
+                                                ;   @ct_noTty finds a master
                 JSR     _Chardev_Ioctl
                 BCS     @ct_ret                 ; C=1: the device answered
                 CMP     #ENOTTY
@@ -4028,42 +4031,29 @@ _Io_CdThenTty   ENT
                 BCC     @ct_noTty               ; no -- a master, or not a tty
                 TAX                             ; X = its tty byte offset, which
                 JMP     _IoOp_TtyAtX            ;   is that block's contract
-@ct_noTty       ; A PTY MASTER IS NOT A TTY LINE, AND THE WINDOW SIZE STILL
-                ; HAS TO REACH ITS SLAVE (apple/fgx#150, on the vnode road).
+@ct_noTty       ; A PTY MASTER'S IOCTL IS ITS SLAVE'S LINE'S.  In BSD both ends
+                ; share one `struct tty', and `ptyioctl' takes the commands
+                ; that are the controller's own -- TIOCPKT, TIOCUCNTL,
+                ; TIOCREMOTE -- and gives every other one to `error =
+                ; ttioctl(tp, cmd, data, flag)', where `tp' is the slave's line
+                ; (vendor/2.11BSD/usr/sys/sys/tty_pty.c:480-526).  So a login
+                ; daemon reads and sets the session's modes, special characters
+                ; and window size through the master it holds.
+                ;
                 ; `_Chardev_TtyOff' is right to refuse a master -- it has no
-                ; line of its own -- but in BSD both ends share one `struct
-                ; tty', so `ioctl(master, TIOCSWINSZ)' IS a set on the line the
-                ; child reads.  telnetd needs it for NAWS; winsz(8) measures
-                ; it.
-                ;
-                ; AND A MASTER'S TIOCFLUSH IS THE SLAVE'S FLUSH (apple/fgx
-                ; #241), for the same reason and from the same paragraph of
-                ; upstream: `ptyioctl' has NO TIOCFLUSH arm -- its master
-                ; switch is TIOCPKT, TIOCUCNTL, TIOCREMOTE and
-                ; TIOCSETP/SETN/SETD and nothing else
-                ; (vendor/2.11BSD/usr/sys/sys/tty_pty.c:483-511) -- so the
-                ; command falls through to `error = ttioctl(tp, cmd, data,
-                ; flag)' at tty_pty.c:526, where `tp' IS the slave's line.
-                ;
-                ; ONLY THESE THREE COMMANDS, for the reason the sibling arm
-                ; gives: widening a master's whole ioctl surface would give it
-                ; a second, competing view of state the slave owns.
-                LDA     _Sys_IoctlCmd
-                CMP     #TIOCGWINSZ
-                BEQ     @ct_mwin
-                CMP     #TIOCSWINSZ
-                BEQ     @ct_mwin
-                CMP     #TIOCFLUSH
-                BNE     @ct_mrefuse
-@ct_mwin        LDA    |_ioCdIdx
+                ; line of its own -- so the slave's line is named here, and
+                ; `_ioPtc' tells `kc_ttioctl' the controller is asking, which
+                ; is what `ptyioctl's `d_open == ptcopen' test decides.
+                LDA    |_ioCdIdx
                 CMP     _ptyMasterIdx0
                 BEQ     @ct_m0
                 CMP     _ptyMasterIdx1
-                BEQ     @ct_m1
-                BRA     @ct_mrefuse
+                BNE     @ct_mrefuse
+                LDX     #TTY_SIZE*2             ; master of pair 1 -> tty[2]
+                BRA     @ct_mgo
 @ct_m0          LDX     #TTY_SIZE               ; master of pair 0 -> tty[1]
-                JMP     _IoOp_TtyAtX
-@ct_m1          LDX     #TTY_SIZE*2             ; master of pair 1 -> tty[2]
+@ct_mgo         LDA     #TTYIO_PTC
+                STA    |_ioPtc
                 JMP     _IoOp_TtyAtX
 @ct_mrefuse     ; _Chardev_TtyOff clobbered A, so the refusal is rebuilt rather
                 ; than carried.  It is the same ENOTTY the device gave.

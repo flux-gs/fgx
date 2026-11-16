@@ -1582,7 +1582,23 @@ tty_devbind()
  * against `return (0)' two lines later for the handled case.  Keeping it
  * distinct from an errno is what lets a command the discipline does not know
  * fall back to the core's answer instead of being reported as a failure.
+ *
+ * TTYIO_PTC IN THE INDEX IS THE PTY'S CONTROLLER ASKING, and it gets what
+ * `ptyioctl' gives a controller before `ttioctl' (tty_pty.c:476-515):
+ *
+ *      IF CONTROLLER STTY THEN MUST FLUSH TO PREVENT A HANG.
+ *      ttywflush(tp) will hang if there are characters in the outq.
+ *
+ *      case TIOCSETP: case TIOCSETN: case TIOCSETD:
+ *              while (getc(&tp->t_outq) >= 0)
+ *                      ;
+ *              break;
+ *
+ * The controller is the only reader of that queue, so the `ttywait' those
+ * commands reach would wait on the caller itself.
  */
+#define TTYIO_PTC 0x0100        /* include/ktty.s */
+
 int
 kc_ttioctl(idx, com, data, flag)
     int idx;
@@ -1590,11 +1606,24 @@ kc_ttioctl(idx, com, data, flag)
     char *data;
     int flag;
 {
+    int ptc;
+
+    ptc = idx & TTYIO_PTC;
+    idx &= ~TTYIO_PTC;
     if (idx < 0 || idx >= NTTY)
         return (ENOTTY);
     if (tty_bound[idx] == 0)
         return (ENOTTY);
-    return (ttioctl(&ttys[idx], com, data, flag));
+    if (ptc)
+        switch (com) {
+
+        case TIOCSETP:
+        case TIOCSETN:
+        case TIOCSETD:
+            while (getc(&ttys[idx].t_outq) >= 0)
+                ;
+            break;
+        }
     return (ttioctl(&ttys[idx], com, data, flag));
 }
 
