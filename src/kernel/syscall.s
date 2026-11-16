@@ -1423,7 +1423,7 @@ _Sys_Select     MX      %00
                 LDA     _selPresent             ; timed select -> yield (deadline poll);
                 AND     #8                      ; block-forever -> sleep on WCHAN_SELECT
                 BNE     @sel_yield
-                INC     _nSelSleepers           ; (the kbd/sock/idle wake sites re-scan us)
+                INC     _nSelSleepers           ; (each source wakes it; we re-scan)
                 LDA     #WCHAN_SELECT
                 JSR     _sleep
                 DEC     _nSelSleepers

@@ -665,8 +665,8 @@ WCHAN_TIMER     EQU     $FF03           ; nanosleep deadline (SE_WakeTime; woken
 WCHAN_PIPE      EQU     $FF04           ; any pipe (read/write blocks); coarse
                                         ; wake-all-recheck
 WCHAN_SELECT    EQU     $FF05           ; select(2) blocking on ANY of its fds;
-                                        ; woken by the kbd/sock/idle wake sites
-                                        ; (gated on _nSelSleepers) -> re-scan
+                                        ; woken by each source when its state
+                                        ; changes (gated on _nSelSleepers) -> re-scan
 WCHAN_KLOG      EQU     $FF0B           ; /dev/klog's reader; _Klog_Wake (sched.s)
                                         ; wakes it when the ring's head has moved
 WCHAN_VFORK     EQU     $FF06           ; fork train: parent of a vfork/snapshot-fork

@@ -560,10 +560,8 @@ u_sel()
 
 /* selwake: a select with no timeout, blocked on an empty socket, returns when
  * a child sends to it, within a second or so of the send.  sbselqueue arms
- * sb_sel and sowakeup's selwakeup wakes the select channel; the kernel's idle
- * loop rescans every blocked select at 60 Hz as well (sched.s), so this case
- * shows the wakeup arrives, and cannot show which of the two delivered it.
- * BLOCKS if neither does. */
+ * sb_sel and sowakeup's selwakeup wakes the select channel.  BLOCKS if it does
+ * not. */
 extern long time();
 
 static void

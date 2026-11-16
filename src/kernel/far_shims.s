@@ -611,8 +611,8 @@ _FarSh_CdIoctl  PHB
 ; selwakeup(p, coll) takes the proc that registered itself in tp->t_rsel and
 ; wakes it (or, on a collision, everything).  FGX's select(2) records itself on
 ; nothing: _Sys_Select is a poll-and-yield loop whose block-forever arm sleeps
-; on the single WCHAN_SELECT (syscall.s:1349), and the kbd, socket and idle
-; sites in sched.s already wake it exactly this way.  So there is one channel
+; on the single WCHAN_SELECT, and the keyboard, socket, pipe, pty and klog
+; sites wake it exactly this way.  So there is one channel
 ; and no per-tty registration to consult.
 ;
 ; THE GUARD IS THE SAME ONE THOSE SITES USE and is not an optimisation: _wakeup

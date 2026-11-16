@@ -458,10 +458,6 @@ swtch_nosave    ENT
                 ; _Lbolt_Wake below.
                 JSR     _Lbolt_Wake
                 JSR     _Klog_Wake              ; /dev/klog's reader, likewise
-                LDA     _nSelSleepers           ; a block-forever select: the 60 Hz  
-                BEQ     @sw_idle_ckTimer        ; re-scan safety net (idle => this is the
-                LDA     #WCHAN_SELECT           ; main task; catches any missed busy-path
-                JSR     _wakeup                 ; wake)
 @sw_idle_ckTimer ; Wake any expired nanosleep timer (lone-sleeper case: a `sleep`
                 ; that is the only task idles here on the 60 Hz heartbeat until
                 ; its deadline passes, then wakes itself).
@@ -1309,8 +1305,8 @@ _nTimerSleepers DS      2                       ; count of tasks in nanosleep (g
                                                 ; _AllocSchedTbl, ++/-- in _Sys_Nanosleep)
 _klogWakeHead   DS      2                       ; the ring head _Klog_Wake last announced
 _nSelSleepers   DS      2                       ; count of tasks in a block-forever
-                                                ; select (gates the per-swtch WCHAN_SELECT
-                                                ; wakes; init 0 in _AllocSchedTbl, ++/-- in
+                                                ; select (gates every WCHAN_SELECT
+                                                ; wake; init 0 in _AllocSchedTbl, ++/-- in
                                                 ; _Sys_Select)
 _nsDur          DS      2                       ; _Sys_Nanosleep duration (pre-_sleep only)
 
