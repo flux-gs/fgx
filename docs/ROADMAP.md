@@ -226,8 +226,7 @@ archived tracker; new work is tracked in GitHub Issues.
   refused with EOPNOTSUPP; `select(2)` has an exceptional set).  Remaining:
   apple/fgx#424 (socket urgent state, `so_oobmark`/`SS_RCVATMARK`/`SIOCATMARK`),
   #425 (socket owner process group for SIGURG), #426 (loopback
-  `PRU_SENDOOB`/`PRU_RCVOOB`), with telnetd's `interrupt()`/`sendbrk()`
-  arriving in the apple/fgx#540 re-port; also #445 (a character device never reports an exceptional condition).  The W5100
+  `PRU_SENDOOB`/`PRU_RCVOOB`); also #445 (a character device never reports an exceptional condition).  The W5100
   cannot pass the flag, so loopback gets full semantics and W5100 TCP answers
   EOPNOTSUPP.  Design:
   `docs/history/plans/2026-09-13-tcp-urgent-mechanism-design.md`.
@@ -238,8 +237,8 @@ archived tracker; new work is tracked in GitHub Issues.
 - **Socket defects:** apple/fgx#156 (loopback connector has no local port),
   #157 (`bind(2)` leaves TCP and loopback unchecked), #546 (getpeername on
   AF_UNIX answers ENOTCONN).
-- **telnetd(8) from 2.11BSD** for real, replacing the reimplementation:
-  apple/fgx#540.
+- **telnetd(8): what the 2.11BSD port still owes** -- `vhangup(2)` on the
+  slave, and `login -h host -p` in place of `getty -T type`: apple/fgx#540.
 - **Multi-NIC (2nd Uthernet II)** -- the ifnet table holds 4 (`IF_MAX`), but
   the W5100 driver is self-mod-bound to one detected slot (`_w5PatchTbl`), so a
   2nd card is detected but undriven.  Needs per-card indexed base addressing +
@@ -384,8 +383,7 @@ archived tracker; new work is tracked in GitHub Issues.
 - **Wave-4 bsdgames** -- worm and robots are ported; hangman, canfield,
   cribbage, mille, boggle, battlestar remain (atc needs the yacc/lex pregen and
   an async loop rework).
-- **Ports owing upstream behaviour:** apple/fgx#540 (telnetd is a
-  reimplementation; re-port it), #539 (stty, ed, man, worm and
+- **Ports owing upstream behaviour:** apple/fgx#539 (stty, ed, man, worm and
   robots cut code for features FGX has since gained), #501 (twelve BSD-named
   tools call libfgx where upstream uses a BSD mechanism).
 - **Reduce demand** -- vendored ports are rarely tuned for a 64 KB data space;

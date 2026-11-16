@@ -1,6 +1,6 @@
 {
  "name": "telnet_loopback",
- "description": "telnetd P2: /testbin/telnetd backgrounded on 127.0.0.1:2323 with telnet(1) connecting to it in the same emulator -- no hardware, no host, no second machine.  PROVEN: bind+listen on a loopback address, connect() matching the listener, accept() pairing the descriptors, the pty opening, spawnx() of /bin/getty, and a clean client session.  NOT asserted: the 'login:' prompt.  It DOES render -- the full chain was observed reaching 'FGX/gs / login:' -- but ONLY when the client carries an extra stdout write (a debug printf) between telrcv() and ttyflush().  Without it the 15 bytes reach the tty buffer (TTYBYTES()=15, SYNCHing=0, flushout=0) and ttyflush() is entered, yet nothing appears, and a 90s timeout does not help -- so it is not timing.  Asserting 'login:' here would make the gate depend on a heisenbug, so it asserts the three facts that hold unconditionally. THE CONNECT NEEDLE IS telnet's `Escape character is' line, not `Connected to 127.0.0.1.': both come from status() after connect() succeeds, but the backgrounded telnetd prints `listening' after its listen(), which can land in the middle of the client's first line and split it.",
+ "description": "telnetd started by hand on port 2323 with telnet(1) connecting to it in the same emulator -- no hardware, no host, no second machine.  It proves the standalone listener (bind, listen, accept), the pty pair, the fork and exec of /bin/getty on the slave, and the relay in both directions: `login:' is getty's, written to the slave, read from the master by telnetd and sent to the client.  The connect needle is telnet's `Escape character is' line, which follows connect().",
  "command": "/testbin/telnetd 2323 & telnet 127.0.0.1 2323",
  "timeout_s": 40,
  "stage_files": [
@@ -13,9 +13,8 @@
  ],
  "expect": {
   "screen_contains": [
-   "telnetd: listening",
    "Escape character is '^]'.",
-   "telnetd: session on /dev/ttyp0"
+   "login:"
   ],
   "screen_lacks": [
    "telnet: connect",

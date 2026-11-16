@@ -1,674 +1,1314 @@
 /* SPDX-License-Identifier: BSD-2-Clause
- * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * SPDX-FileCopyrightText: Copyright (c) 1983,1986
+ *   Regents of the University of California.  All rights reserved.
  *
  * FGX-Provenance: 2.11BSD telnetd(8)
- *   Reimplemented following telnetd(8), 2.11BSD (telnetd.c 5.20.3 (2.11BSD)
- *   1996/11/16), vendored at vendor/2.11BSD/usr/libexec/telnetd/telnetd.c.
- *   NOT a code port: upstream's protocol answers, its pty-slave-plus-getty
- *   structure, its TIOCNOTTY-before-open ordering and telrcv's state machine
- *   are followed; none of its code is used.
+ *   Ported from telnetd.c 5.20.3 (2.11BSD) 1996/11/16, vendored at
+ *   vendor/2.11BSD/usr/libexec/telnetd/telnetd.c.  UCB notice retained per the
+ *   BSD license; FGX changes are BSD-2-Clause (see LICENSE /
+ *   docs/PROVENANCE.md).
  *
- *   Absent here, present upstream: netflush, ptyflush, ttloop, willoption,
- *   dooption, wontoption, dontoption, suboption, interrupt, sendbrk,
- *   stilloob, netclear, nextitem, rmut, mode, cleanup, fatal, doit.
+ * telnetd - the TELNET server.  UPSTREAM'S TEXT, with these changes, each
+ * marked `FGX:' where it is made.
  *
- *   Copyright (c) 1983,1986 Regents of the University of California.
- *   All rights reserved.
- *   UCB notice retained per the BSD license; FGX changes are BSD-2-Clause
- *   (see LICENSE / docs/PROVENANCE.md).
+ * THE STANDALONE LISTENER IS CHOSEN BY AN ARGUMENT.  Upstream compiles it in
+ * under DEBUG and is otherwise only inetd's child.  Here `telnetd port' runs
+ * that block and plain `telnetd' is the inetd child, so one binary does both.
  *
- * telnetd(8) - relay a TCP connection to a login session on a pty.
+ * THE CHILD IS getty, AND THE TERMINAL TYPE IS ITS ARGUMENT.  Upstream execs
+ * `login -h host -p' with TERM in the environment, and its login(1) prints the
+ * prompt itself.  FGX's login only authenticates; getty(8) greets and reads
+ * the name, and hands `-T type' on.  The peer's name is not looked up, since
+ * nothing here takes `-h host'.  The banner upstream prints "that getty never
+ * gave" is left out for the same reason: this getty gives /etc/issue.
  *
- * STRUCTURE KEPT FROM UPSTREAM: the standalone socket/bind/listen/accept block
- * (upstream's `#if defined(DEBUG)` arm of main), the pty-pair scan, the
- * TIOCNOTTY-then-open detach ordering, and exec'ing /bin/login on the slave --
- * upstream already does `execl("/bin/login", "login", "-h", host, ...)`, so an
- * authenticated session is the ORIGINAL behaviour, not an FGX addition.
+ * THE SLAVE IS NOT vhangup()'d.  FGX has no vhangup(2).  Upstream opens the
+ * slave, revokes it, and opens it again; here it is opened once.
  *
- * WHAT IS RESHAPED, and why:
- *  - Upstream is normally an inetd child: main() does getpeername(0,...) on a
- *    connected socket handed in as fd 0.  BOTH SHAPES EXIST HERE NOW: `-i` is
- *    the inetd child (the connection arrives as fd 0/1/2 and nothing is bound),
- *    and the standalone block is what runs without it.  Neither path learns
- *    the peer: getpeername(2) exists (SYS_GETPEERNAME) but is not called, and
- *    accept() is passed a null address.  That is why getty is started
- *    without the -h argument upstream passes it.
- *  - fork()+execl() on the slave becomes spawnx() with file_actions
- *    {DETACH, open slave->3, dup2 3->0/1/2, close 3}: the verified FGX
- *    spawn-on-slave recipe (src/userland/ptyshell/ptyshell.c).  DETACH comes
- *    FIRST for the same reason upstream calls TIOCNOTTY before opening the
- *    slave -- otherwise the child arrives already in this daemon's process
- *    group and the pty line never gets a foreground group of its own.
- *  - Its syslog lines reach syslogd(8) through /dev/log as AF_UNIX datagrams
- *    (see syslog.h), which does not depend on where stderr points -- so
- *    detaching costs nothing here that running from a shell does not.
+ * THE WINDOW SIZE IS NEGOTIATED (RFC 1073), which this telnetd predates.  The
+ * client is asked for NAWS and its answer is set on the pty with TIOCSWINSZ.
+ * A zero dimension is ignored.
  *
- * IAC HANDLING (this increment).  Upstream's telrcv is a full state machine
- * over TS_DATA/TS_IAC/TS_WILL/TS_WONT/TS_DO/TS_DONT/TS_SB with per-option
- * bookkeeping; the version here keeps its SHAPE and its answers but not its
- * option table, because FGX negotiates exactly the three the client already
- * understands.  Refusing everything else is upstream's own default for an
- * option it does not implement, so a client asking for LINEMODE or NAWS gets
- * a well-formed DONT/WONT rather than silence.
- *
- * THE OPTION TABLE IS NOT OPTIONAL.  Dropping it (as this port's first attempt
- * did) makes the two ends ping-pong forever: we announce WILL ECHO, the client
- * answers DO ECHO, we re-affirm WILL ECHO, and the session fills with
- * negotiation instead of data.  RFC 854's rule is that a party may only
- * respond to a request that CHANGES the option's state -- re-confirming an
- * already-agreed option is what creates the loop.  g_myopt/g_hisopt below are
- * upstream's options[] in miniature, and they exist for exactly this.
- *
- * Two more rules that are easy to get wrong:
- *  - IAC bytes must NEVER reach the pty.  Passing them through as text is what
- *    the previous increment did, and getty read the negotiation as a login
- *    name.
- *  - a literal 255 in the data stream arrives as IAC IAC and must be delivered
- *    to the pty as ONE 255.
- *
- * Still deferred: the
- * interrupt()/sendbrk() urgent path.
+ * fatal()'s buffer is static: a task's stack comes out of one bank-0 arena.
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <syslog.h>
-#include <sys/types.h>
+
+#if	defined(DOSCCS) && !defined(lint)
+char copyright[] =
+"@(#) Copyright (c) 1983 Regents of the University of California.\n\
+ All rights reserved.\n";
+
+static char sccsid[] = "@(#)telnetd.c	5.20.3 (2.11BSD) 1996/11/16";
+#endif
+
+/*
+ * Telnet server.
+ */
+#include <sys/param.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
+#include <sys/file.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+
 #include <netinet/in.h>
+
 #include <arpa/telnet.h>
-#include <sys/ioctl.h>              /* struct winsize, TIOCSWINSZ, FIONBIO */
-#include <utmp.h>                   /* logout(3): the session's utmp record */
 
-#define TELNETD_PORT 23
-#define PTY_NPAIR    2              /* kernel: src/kernel/pty.s PTY_NPAIR */
-#define BUFSZ        512
+#include <stdio.h>
+#include <stdlib.h>		/* FGX: these three declare what */
+#include <string.h>		/* upstream leaves implicit; a pointer */
+#include <unistd.h>		/* return needs its declaration here */
+#include <signal.h>
+#include <errno.h>
+#include <sgtty.h>
+#include <netdb.h>
+#include <syslog.h>
+#include <ctype.h>
 
-int  spawnx(char *path, char **argv, unsigned char *acts);
-int  ioctl(int fd, int cmd, char *arg);
-int  select(int nfds, char *rd, char *wr, char *ex, char *tv);
-int  nanosleep(int ticks);
+#define	OPT_NO			0		/* won't do this option */
+#define	OPT_YES			1		/* will do this option */
+#define	OPT_YES_BUT_ALWAYS_LOOK	2
+#define	OPT_NO_BUT_ALWAYS_LOOK	3
+char	hisopts[256];
+char	myopts[256];
 
-#define TIOCPKT  0x7470             /* not in <sys/ioctl.h> */
+char	doopt[] = { IAC, DO, '%', 'c', 0 };
+char	dont[] = { IAC, DONT, '%', 'c', 0 };
+char	will[] = { IAC, WILL, '%', 'c', 0 };
+char	wont[] = { IAC, WONT, '%', 'c', 0 };
 
-/* telrcv states, upstream's names */
-#define TS_DATA  0
-#define TS_IAC   1
-#define TS_WILL  2
-#define TS_WONT  3
-#define TS_DO    4
-#define TS_DONT  5
-#define TS_SB    6
+/*
+ * I/O data buffers, pointers, and counters.
+ */
+char	ptyibuf[BUFSIZ], *ptyip = ptyibuf;
 
-/* 60 Hz ticks to wait for the client's TERMINAL-TYPE before giving up and
- * keeping the /etc/ttys entry.  Two seconds: long enough for a LAN client's
- * round trip, short enough that a client which will not answer does not hold
- * the login prompt hostage. */
-#define TTYPE_WAIT  120
-#define TS_SE    7
-#define TS_CR    8   /* just passed a CR: strip a following NUL or LF */
+char	ptyobuf[BUFSIZ], *pfrontp = ptyobuf, *pbackp = ptyobuf;
 
-/* The relay's state and buffers, at file scope because they persist across
- * reads. */
-int  g_state;                       /* telrcv state, persists across reads */
-/* Per-option agreement state -- see the header: without these the negotiation
- * never terminates.  g_myopt[x] = this end has said WILL x; g_hisopt[x] = the
- * peer has said WILL x.  Indexed by option code, so 256 entries each. */
-char g_myopt[256];
-char g_hisopt[256];
-char g_reply[8];                    /* an IAC triple, or the TTYPE SEND */
-char g_pty[BUFSZ];                  /* de-IAC'd data destined for the pty */
-char g_mbuf[BUFSZ];                 /* pty master -> socket */
-char g_nbuf[2 * BUFSZ];             /* g_mbuf escaped for the net: worst case
-                                     * every byte doubled */
-char g_sbuf[BUFSZ];                 /* socket -> pty master */
-/* Subnegotiation body: g_sb[0] is the option code, the rest is its payload.
- * 8 is enough for the only one this end reads -- NAWS is opt + 4 bytes. */
-char g_sb[48];
-int  g_sbn;
+char	netibuf[BUFSIZ], *netip = netibuf;
+#define	NIACCUM(c)	{   *netip++ = c; \
+			    ncc++; \
+			}
 
-/* The client's answer to TERMINAL-TYPE, lowercased, empty until negotiated.
- * Sized for the long ones ("xterm-256color") with room to spare; a name that
- * overruns it is truncated rather than dropped, because a truncated name still
- * selects a better entry than the /etc/ttys default in every case that matters
- * ("xterm-..." -> "xterm"). */
-char g_ttype[24];
-static char g_tflag[] = "-T";
-char g_master[]  = "/dev/ptyp0";
-char g_slave[]   = "/dev/ttyp0";
-char g_gettyp[]  = "/bin/getty";
-unsigned char g_fa[48];
-char  *g_argv[6];
+char	netobuf[BUFSIZ], *nfrontp = netobuf, *nbackp = netobuf;
+char	*neturg = 0;		/* one past last bye of urgent data */
+	/* the remote system seems to NOT be an old 4.2 */
+int	not42 = 1;
 
-/* Open the first free pty pair; leaves the master fd, and patches the unit
- * digit into both path buffers so the slave path matches.  -1 if none free. */
-static int
-openpty()
-{
-    int i, m;
 
-    for (i = 0; i < PTY_NPAIR; i++) {
-        g_master[sizeof("/dev/ptyp") - 1] = '0' + i;
-        m = open(g_master, 2);
-        if (m >= 0) {
-            g_slave[sizeof("/dev/ttyp") - 1] = '0' + i;
-            return m;
-        }
-    }
-    return -1;
-}
+		/* buffer for sub-options */
+char	subbuffer[100], *subpointer= subbuffer, *subend= subbuffer;
+#define	SB_CLEAR()	subpointer = subbuffer;
+#define	SB_TERM()	{ subend = subpointer; SB_CLEAR(); }
+#define	SB_ACCUM(c)	if (subpointer < (subbuffer+sizeof subbuffer)) { \
+				*subpointer++ = (c); \
+			}
+#define	SB_GET()	((*subpointer++)&0xff)
+#define	SB_EOF()	(subpointer >= subend)
 
-/* Spawn the login chain on the slave.
- *
- * PORT DELTA, and the reason the first attempt failed: upstream execs
- * /bin/login directly, because 4.xBSD's login(1) does its own greeting -- it
- * prints "login:", reads the name, then authenticates.  FGX split those jobs
- * the way /etc/ttys describes: getty(8) opens the line, greets, reads the
- * name, and EXECS login, which only authenticates.  So exec'ing login here
- * produced a session that opened the slave and then sat with nothing to say.
- * /bin/getty is FGX's equivalent of what upstream means by "/bin/login", and
- * it is what logintest(8) -- the verified getty->login->shell fixture --
- * spawns.  Note /etc/ttys marks ttyp0 `off secure`: off so init leaves the
- * pair for us, secure so root may log in over it.
- *
- * Mirrors upstream's TIOCNOTTY-then-open ordering via the DETACH action. */
-static int
-spawn_login()
-{
-    int poff, k;
+int	pcc, ncc;
 
-    poff = (int)g_slave;
-    k = 0;
-    g_fa[k++] = 4; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0;
-    g_fa[k++] = 1; g_fa[k++] = 3; g_fa[k++] = poff & 0xff; g_fa[k++] = (poff >> 8) & 0xff;
-    g_fa[k++] = 2; g_fa[k++] = 0;
-    g_fa[k++] = 3; g_fa[k++] = 0; g_fa[k++] = 3; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0;
-    g_fa[k++] = 3; g_fa[k++] = 1; g_fa[k++] = 3; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0;
-    g_fa[k++] = 3; g_fa[k++] = 2; g_fa[k++] = 3; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0;
-    g_fa[k++] = 2; g_fa[k++] = 3; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0; g_fa[k++] = 0;
-    g_fa[k++] = 0;
+int	pty, net;
+int	inter;
+extern	char **environ;
+extern	int errno;
+char	*line;
+int	SYNCHing = 0;		/* we are in TELNET SYNCH mode */
+/*
+ * The following are some clocks used to decide how to interpret
+ * the relationship between various variables.
+ */
 
-    /* Hand the negotiated terminal type down the chain.  Upstream sets TERM
-     * in the child's environment and execs `login -p' to have it preserved;
-     * spawnx carries file actions and an EMPTY environment (the split
-     * apple/fgx#121 also ran into), so the type travels as an argument
-     * instead -- the same way upstream threads `-h host' through.  getty
-     * passes it on to login, which prefers it over the /etc/ttys entry.
-     *
-     * Nothing negotiated means nothing passed, and the session keeps the
-     * /etc/ttys type: a client that will not say what it is has not earned an
-     * assumption. */
-    g_argv[0] = g_gettyp;
-    if (g_ttype[0] != '\0') {
-        g_argv[1] = g_tflag;
-        g_argv[2] = g_ttype;
-        g_argv[3] = (char *)0;
-    } else
-        g_argv[1] = (char *)0;
-    return spawnx(g_gettyp, g_argv, g_fa);
-}
+struct {
+    int
+	system,			/* what the current time is */
+	echotoggle,		/* last time user entered echo character */
+	modenegotiated,		/* last time operating mode negotiated */
+	didnetreceive,		/* last time we read data from network */
+	ttypeopt,		/* ttype will/won't received */
+	ttypesubopt,		/* ttype subopt is received */
+	getterminal,		/* time started to get terminal information */
+	gotDM;			/* when did we last see a data mark */
+} clocks;
 
-/* Send one IAC triple.  Errors are ignored: a peer that has gone away will be
- * noticed by the next read, and a half-written negotiation is not worth
- * failing a session over. */
-static void
-sendopt(cmd, opt, c)
-int cmd, opt, c;
-{
-    g_reply[0] = (char)IAC;
-    g_reply[1] = (char)cmd;
-    g_reply[2] = (char)opt;
-    send(c, g_reply, 3, 0);
-}
-
-/* Answer an option request.  We WILL ECHO and WILL SGA (this end echoes and
- * suppresses go-ahead, which is what a pty-backed login session wants), and we
- * DO want TTYPE.  Everything else is refused -- upstream's default for an
- * unimplemented option, and a refusal is what keeps a client from waiting. */
-static void
-answer(cmd, opt, c)
-int cmd, opt, c;
-{
-    int want;
-
-    switch (cmd) {
-    case DO:                        /* peer asks us to enable opt */
-        want = (opt == TELOPT_ECHO || opt == TELOPT_SGA);
-        if (want) {
-            if (g_myopt[opt])       /* already agreed -- SILENCE, or we loop */
-                return;
-            g_myopt[opt] = 1;
-            sendopt(WILL, opt, c);
-        } else {
-            if (!g_myopt[opt])      /* already refused/off */
-                return;
-            g_myopt[opt] = 0;
-            sendopt(WONT, opt, c);
-        }
-        break;
-    case DONT:
-        if (!g_myopt[opt])
-            return;
-        g_myopt[opt] = 0;
-        sendopt(WONT, opt, c);
-        break;
-    case WILL:                      /* peer offers to enable opt */
-        want = (opt == TELOPT_TTYPE || opt == TELOPT_NAWS);
-        if (want) {
-            if (g_hisopt[opt])
-                return;
-            g_hisopt[opt] = 1;
-            sendopt(DO, opt, c);
-        } else {
-            if (!g_hisopt[opt])
-                return;
-            g_hisopt[opt] = 0;
-            sendopt(DONT, opt, c);
-        }
-        break;
-    case WONT:
-        if (!g_hisopt[opt])
-            return;
-        g_hisopt[opt] = 0;
-        sendopt(DONT, opt, c);
-        break;
-    }
-}
-
-/* Apply a completed subnegotiation.  NAWS (RFC 1073) is the only one this end
- * reads: IAC SB NAWS <col-hi> <col-lo> <row-hi> <row-lo> IAC SE -- WIDTH FIRST,
- * which is the easy thing to get backwards.
- *
- * The size goes to the pty MASTER, because that is the fd this process holds;
- * the kernel routes the window-size pair from a master to its slave's tty
- * (apple/fgx#150), which is what BSD gets for free by having both ends share
- * one struct tty.  Setting a size that differs from the current one also sends
- * SIGWINCH to the session's foreground group, so a full-screen program redraws
- * at the new geometry.
- *
- * A zero dimension is REFUSED rather than stored: RFC 1073 lets a client send 0
- * to mean "you choose", and storing it would tell the child it has a zero-row
- * terminal. Keeping the previous value is the useful reading of "you choose". */
-static void
-subneg(m)
-int m;
-{
-    struct winsize ws;
-    int row, col;
-
-    /* TERMINAL-TYPE first: IAC SB TERMINAL-TYPE IS <name> IAC SE.  Upstream
-     * lowercases the name before using it, because termcap names are lower
-     * case and clients are not required to be (apple/fgx#147). */
-    if (g_sbn >= 2 && (unsigned char)g_sb[0] == TELOPT_TTYPE
-                   && (unsigned char)g_sb[1] == TELQUAL_IS) {
-        int i, n;
-
-        n = g_sbn - 2;
-        if (n > (int)sizeof(g_ttype) - 1)
-            n = (int)sizeof(g_ttype) - 1;
-        for (i = 0; i < n; i++) {
-            int ch = (unsigned char)g_sb[2 + i];
-            if (ch >= 'A' && ch <= 'Z')
-                ch = ch - 'A' + 'a';
-            g_ttype[i] = (char)ch;
-        }
-        g_ttype[n] = '\0';
-        return;
-    }
-
-    if (g_sbn < 5)                          /* opt + 4 payload bytes */
-        return;
-    if ((unsigned char)g_sb[0] != TELOPT_NAWS)
-        return;                             /* not one we act on */
-
-    col = (((unsigned char)g_sb[1]) << 8) | (unsigned char)g_sb[2];
-    row = (((unsigned char)g_sb[3]) << 8) | (unsigned char)g_sb[4];
-    if (row <= 0 || col <= 0)
-        return;
-
-    ws.ws_row = (short)row;
-    ws.ws_col = (short)col;
-    ws.ws_xpixel = 0;
-    ws.ws_ypixel = 0;
-    ioctl(m, TIOCSWINSZ, (char *)&ws);
-}
-
-/* Upstream's telrcv, reduced: consume the socket buffer, answer negotiation
- * inline, and return the number of DATA bytes left in g_pty for the child.
- * State persists in g_state so an IAC split across two reads still works. */
-static int
-telrcv(n, c, m)
-int n, c, m;
-{
-    int i, out;
-    unsigned char ch;
-
-    out = 0;
-    for (i = 0; i < n; i++) {
-        ch = (unsigned char)g_sbuf[i];
-        /* RFC 854: a bare CR travels as CR NUL, and CR LF is the line
-         * terminator -- so the byte AFTER a CR is stripped when it is NUL or
-         * LF.  Upstream does this with a TS_CR state that falls through into
-         * TS_DATA (telnetd.c:630-637); the test is hoisted above the switch
-         * here so the port does not depend on switch fall-through.
-         *
-         * WITHOUT IT THE NUL IS DELIVERED TO THE PTY as an ordinary data byte,
-         * where it becomes the FIRST character of the next line the child
-         * reads.  Measured: logging in over telnet, the pty slave's canonical
-         * buffer held `00 66 67 78` -- a NUL ahead of `fgx` -- so login(1)
-         * compared a four-character password and answered "Login incorrect".
-         * The FIRST line of a session is always clean, because there is no
-         * preceding CR; every line after it carries the previous line's NUL,
-         * which is why the login name is accepted and the password never is.
-         *
-         * Upstream gates the CR state on `hisopts[TELOPT_BINARY] == OPT_NO`.
-         * This port never offers BINARY, so his side cannot be in it and the
-         * gate is constant-true -- omitted rather than faked. */
-        if (g_state == TS_CR) {
-            g_state = TS_DATA;
-            if (ch == 0 || ch == '\n')
-                continue;
-        }
-        switch (g_state) {
-        case TS_DATA:
-            if (ch == IAC)
-                g_state = TS_IAC;
-            else {
-                g_pty[out++] = (char)ch;
-                if (ch == '\r')
-                    g_state = TS_CR;
-            }
-            break;
-        case TS_IAC:
-            switch (ch) {
-            case IAC:  g_pty[out++] = (char)IAC; g_state = TS_DATA; break;
-            case WILL: g_state = TS_WILL; break;
-            case WONT: g_state = TS_WONT; break;
-            case DO:   g_state = TS_DO;   break;
-            case DONT: g_state = TS_DONT; break;
-            case SB:   g_state = TS_SB; g_sbn = 0; break;
-            default:   g_state = TS_DATA; break;   /* NOP/DM/GA: swallow */
-            }
-            break;
-        case TS_WILL: answer(WILL, ch, c); g_state = TS_DATA; break;
-        case TS_WONT: answer(WONT, ch, c); g_state = TS_DATA; break;
-        case TS_DO:   answer(DO,   ch, c); g_state = TS_DATA; break;
-        case TS_DONT: answer(DONT, ch, c); g_state = TS_DATA; break;
-        case TS_SB:                     /* collect the subnegotiation body */
-            if (ch == IAC)
-                g_state = TS_SE;
-            else if (g_sbn < (int)sizeof(g_sb))
-                g_sb[g_sbn++] = (char)ch;
-            break;
-        case TS_SE:
-            if (ch == SE) {
-                subneg(m);              /* act on it, then back to data */
-                g_state = TS_DATA;
-            } else if (ch == IAC) {
-                /* IAC IAC inside a body is a literal 255 -- a width or height
-                 * of 255 is perfectly legal, so it must be UNescaped rather
-                 * than dropped. */
-                if (g_sbn < (int)sizeof(g_sb))
-                    g_sb[g_sbn++] = (char)IAC;
-                g_state = TS_SB;
-            } else {
-                g_state = TS_SB;        /* IAC <other> inside SB: keep eating */
-            }
-            break;
-        }
-    }
-    return out;
-}
-
-/* Upstream's getterminaltype(), reduced: ASK for the terminal type and wait
- * for the answer, because DO TERMINAL-TYPE only wins the client's agreement to
- * be asked -- the name itself arrives only in reply to a subnegotiation.
- *
- * THIS RUNS BEFORE THE SLAVE IS STARTED, which is upstream's ordering and is
- * forced: the type has to be known while there is still an argument list to
- * put it in.  Until now telnetd asked, threw the answer away, and every remote
- * session ran as the /etc/ttys type whatever the client actually was.
- *
- * BOUNDED, because a client is free not to answer.  When the budget runs out
- * the type stays empty and the session keeps the /etc/ttys entry, which is
- * exactly the behaviour every session had before this existed.
- *
- * Data arriving in this window is discarded: there is no child to give it to
- * yet, and a client cannot type ahead of a prompt it has not been shown. */
-static void
-getterminaltype(c, m)
-int c, m;
-{
-    int on, tries, n;
-
-    on = 1;
-    ioctl(c, FIONBIO, (char *)&on);
-    g_state = TS_DATA;
-
-    g_reply[0] = (char)IAC;
-    g_reply[1] = (char)SB;
-    g_reply[2] = (char)TELOPT_TTYPE;
-    g_reply[3] = (char)TELQUAL_SEND;
-    g_reply[4] = (char)IAC;
-    g_reply[5] = (char)SE;
-    if (send(c, g_reply, 6, 0) < 0)
-        return;
-
-    for (tries = 0; tries < TTYPE_WAIT && g_ttype[0] == '\0'; tries++) {
-        n = recv(c, g_sbuf, BUFSZ, 0);
-        if (n == 0)
-            return;                         /* peer closed */
-        if (n > 0)
-            (void) telrcv(n, c, m);
-        else
-            nanosleep(1);
-    }
-}
-
-/* Send n bytes of pty output to the net, as upstream's pty-to-net loop does
- * (telnet(), telnetd.c:580-595).  A data byte of 255 is IAC to the client, so
- * it goes out as IAC IAC (RFC 854); undoubled, the client takes it and the byte
- * after it for a command and loses both.  And unless this end has agreed to
- * BINARY, a CR not followed by LF goes out as CR NUL, the NVT's bare carriage
- * return.  A cooked pty never produces a 255 -- ttyoutput clears bit 7 unless
- * the line is RAW or LITOUT -- so the doubling matters to 8-bit output from a
- * program that set one of those. */
-static int
-netout(c, p, n)
-int c;
-char *p;
-int n;
-{
-    int i, o;
-    unsigned char ch;
-
-    o = 0;
-    for (i = 0; i < n; i++) {
-        ch = (unsigned char)p[i];
-        if (ch == IAC)
-            g_nbuf[o++] = (char)IAC;
-        g_nbuf[o++] = (char)ch;
-        if (ch == '\r' && !g_myopt[TELOPT_BINARY]) {
-            if (i + 1 < n && p[i + 1] == '\n')
-                g_nbuf[o++] = p[++i];
-            else
-                g_nbuf[o++] = '\0';
-        }
-    }
-    return send(c, g_nbuf, o, 0);
-}
-
-/* Relay until either side closes.  Returns 0 on a clean session end. */
-static int
-relay(c, m)
-int c, m;
-{
-    int n, on, started, idle;
-
-    started = 0;                /* has the slave ever been open? */
-    idle = 0;
-    g_state = TS_DATA;
-    on = 1;
-    ioctl(m, FIONBIO, (char *)&on);
-    ioctl(c, FIONBIO, (char *)&on);
-
-    for (;;) {
-        /* pty master -> socket.  Master reads are RECORD mode and every one
-         * is prefixed with a TIOCPKT status byte, which must be dropped; an
-         * empty read with no slave open is EOF and means the shell exited. */
-        n = read(m, g_mbuf, BUFSZ);
-        if (n == 0) {
-            /* Master reads report EOF for "ring empty AND no slave open".
-             * Immediately after spawn that is NOT teardown -- login has not
-             * reached its open() yet -- so EOF only means the session is over
-             * once we have seen the slave open at least once.  Without this the
-             * relay exited before login could write its first prompt. */
-            if (!started) {
-                if (++idle > 2000)
-                    return 0;               /* the greeter never came up */
-                nanosleep(1);
-                continue;
-            }
-            return 0;                       /* slave gone: session over */
-        }
-        if (n > 0) {
-            started = 1;
-            idle = 0;
-        }
-        if (n > 1) {
-            if (netout(c, g_mbuf + 1, n - 1) < 0)
-                return 0;                   /* peer gone */
-        }
-
-        /* socket -> pty master, through the IAC filter: negotiation is
-         * answered here and never reaches the child. */
-        n = recv(c, g_sbuf, BUFSZ, 0);
-        if (n == 0)
-            return 0;                       /* peer closed */
-        if (n > 0) {
-            n = telrcv(n, c, m);        /* strips IAC, answers options */
-            if (n > 0)
-                write(m, g_pty, n);
-            continue;                   /* did work: go round again at once */
-        }
-
-        /* Both directions returned EWOULDBLOCK.  YIELD -- without this the
-         * relay busy-spins and starves every other task, including the peer
-         * that is supposed to produce the next byte, so the session hangs
-         * with the connection up and no data moving. */
-        nanosleep(1);
-    }
-}
-
+#define	settimer(x)	(clocks.x = ++clocks.system)
+#define	sequenceIs(x,y)	(clocks.x < clocks.y)
+
 main(argc, argv)
-int argc;
-char **argv;
+	char *argv[];
 {
-    int ls, c, m, port, inetd;
-    struct sockaddr_in sin;
+	struct sockaddr_in from;
+	int on = 1, fromlen;
 
-    openlog("telnetd", LOG_PID, LOG_DAEMON);
+	if (argc > 1)		/* FGX: upstream's `#if defined(DEBUG)' */
+	{
+	    int s, ns, foo;
+	    struct servent *sp;
+	    static struct sockaddr_in sin = { AF_INET };
 
-    /* -i: WE ARE AN INETD CHILD, which is upstream's normal shape rather than
-     * an FGX addition -- inetd(8) accepts the connection and hands it over as
-     * fd 0/1/2, so there is nothing here to bind, listen on or accept.
-     *
-     * NOTHING MAY BE PRINTED TO STDOUT IN THIS MODE.  fd 1 IS the connection,
-     * so the progress lines the standalone path prints would be injected into
-     * the TELNET stream ahead of the login prompt.  Upstream has no printfs at
-     * all for exactly this reason; syslog(3) still works, because FGX routes it
-     * to stderr -- which is also the connection here, so it is quiet too until
-     * there is a real syslogd.
-     *
-     * The listener fd is -1 throughout, and the teardown at the end skips it. */
-    inetd = 0;
-    port = TELNETD_PORT;
-    if (argc > 1 && strcmp(argv[1], "-i") == 0)
-        inetd = 1;
-    else if (argc > 1)
-        port = atoi(argv[1]);
+	    sp = getservbyname("telnet", "tcp");
+	    if (sp == 0) {
+		    fprintf(stderr, "telnetd: tcp/telnet: unknown service\n");
+		    exit(1);
+	    }
+	    sin.sin_port = sp->s_port;
+	    argc--, argv++;
+	    if (argc > 0) {
+		    sin.sin_port = atoi(*argv);
+		    sin.sin_port = htons((u_short)sin.sin_port);
+	    }
 
-    if (inetd) {
-        ls = -1;
-        c = 0;                          /* the connection, per inetd(8) */
-        m = openpty();
-        if (m < 0) { syslog(LOG_ERR, "no free pty"); exit(1); }
-        goto haveconn;
+	    s = socket(AF_INET, SOCK_STREAM, 0);
+	    if (s < 0) {
+		    perror("telnetd: socket");;
+		    exit(1);
+	    }
+	    if (bind(s, &sin, sizeof sin) < 0) {
+		perror("bind");
+		exit(1);
+	    }
+	    if (listen(s, 1) < 0) {
+		perror("listen");
+		exit(1);
+	    }
+	    foo = sizeof sin;
+	    ns = accept(s, &sin, &foo);
+	    if (ns < 0) {
+		perror("accept");
+		exit(1);
+	    }
+	    dup2(ns, 0);
+	    close(s);
+	}
+	openlog("telnetd", LOG_PID | LOG_ODELAY, LOG_DAEMON);
+	fromlen = sizeof (from);
+	if (getpeername(0, &from, &fromlen) < 0) {
+		fprintf(stderr, "%s: ", argv[0]);
+		perror("getpeername");
+		_exit(1);
+	}
+	if (setsockopt(0, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof (on)) < 0) {
+		syslog(LOG_WARNING, "setsockopt (SO_KEEPALIVE): %m");
+	}
+	doit(0, &from);
+}
+
+char	*terminaltype = 0;
+int	cleanup();
+
+/*
+ * ttloop
+ *
+ *	A small subroutine to flush the network output buffer, get some data
+ * from the network, and pass it through the telnet state machine.  We
+ * also flush the pty input buffer (by dropping its data) if it becomes
+ * too full.
+ */
+
+void
+ttloop()
+{
+    if (nfrontp-nbackp) {
+	netflush();
+    }
+    ncc = read(net, netibuf, sizeof netibuf);
+    if (ncc < 0) {
+	syslog(LOG_INFO, "ttloop:  read: %m\n");
+	exit(1);
+    } else if (ncc == 0) {
+	syslog(LOG_INFO, "ttloop:  peer died: %m\n");
+	exit(1);
+    }
+    netip = netibuf;
+    telrcv();			/* state machine */
+    if (ncc > 0) {
+	pfrontp = pbackp = ptyobuf;
+	telrcv();
+    }
+}
+
+/*
+ * getterminaltype
+ *
+ *	Ask the other end to send along its terminal type.
+ * Output is the variable terminaltype filled in.
+ */
+
+void
+getterminaltype()
+{
+    static char sbuf[] = { IAC, DO, TELOPT_TTYPE };
+
+    settimer(getterminal);
+    bcopy(sbuf, nfrontp, sizeof sbuf);
+    nfrontp += sizeof sbuf;
+    hisopts[TELOPT_TTYPE] = OPT_YES_BUT_ALWAYS_LOOK;
+    while (sequenceIs(ttypeopt, getterminal)) {
+	ttloop();
+    }
+    if (hisopts[TELOPT_TTYPE] == OPT_YES) {
+	static char sbbuf[] = { IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE };
+
+	bcopy(sbbuf, nfrontp, sizeof sbbuf);
+	nfrontp += sizeof sbbuf;
+	while (sequenceIs(ttypesubopt, getterminal)) {
+	    ttloop();
+	}
+    }
+}
+
+/*
+ * Get a pty, scan input lines.
+ */
+doit(f, who)
+	int f;
+	struct sockaddr_in *who;
+{
+	int i, p, t;
+	struct sgttyb b;
+	int c;
+
+	for (c = 'p'; c <= 's'; c++) {
+		struct stat stb;
+
+		line = "/dev/ptyXX";
+		line[sizeof("/dev/pty") - 1] = c;
+		line[sizeof("/dev/ptyp") - 1] = '0';
+		if (stat(line, &stb) < 0)
+			break;
+		for (i = 0; i < 16; i++) {
+			line[sizeof("/dev/ptyp") - 1] = "0123456789abcdef"[i];
+			p = open(line, O_RDWR);
+			if (p > 0)
+				goto gotpty;
+		}
+	}
+	fatal(f, "All network ports in use");
+	/*NOTREACHED*/
+gotpty:
+	dup2(f, 0);
+	line[strlen("/dev/")] = 't';
+	t = open("/dev/tty", O_RDWR);
+	if (t >= 0) {
+		ioctl(t, TIOCNOTTY, 0);
+		close(t);
+	}
+	t = open(line, O_RDWR);
+	if (t < 0)
+		fatalperror(f, line);
+	if (fchmod(t, 0))
+		fatalperror(f, line);
+	/* FGX: no vhangup(), so no second open */
+	ioctl(t, TIOCGETP, &b);
+	b.sg_flags = CRMOD|XTABS|ANYP;
+	ioctl(t, TIOCSETP, &b);
+	ioctl(p, TIOCGETP, &b);
+	b.sg_flags &= ~ECHO;
+	ioctl(p, TIOCSETP, &b);
+	net = f;
+	pty = p;
+
+	/*
+	 * get terminal type.
+	 */
+	getterminaltype();
+
+	if ((i = fork()) < 0)
+		fatalperror(f, "fork");
+	if (i)
+		telnet(f, p);
+	close(f);
+	close(p);
+	dup2(t, 0);
+	dup2(t, 1);
+	dup2(t, 2);
+	close(t);
+	/*
+	 * FGX: getty greets and execs login; the type is "TERM=name" and
+	 * goes on as `-T name'.
+	 */
+	if (terminaltype)
+		execl("/bin/getty", "getty", "-T",
+		    terminaltype + sizeof("TERM=") - 1, (char *)0);
+	else
+		execl("/bin/getty", "getty", (char *)0);
+	fatalperror(f, "/bin/getty");
+	/*NOTREACHED*/
+}
+
+fatal(f, msg)
+	int f;
+	char *msg;
+{
+	static char buf[BUFSIZ];	/* FGX: static */
+
+	(void) sprintf(buf, "telnetd: %s.\r\n", msg);
+	(void) write(f, buf, strlen(buf));
+	exit(1);
+}
+
+fatalperror(f, msg)
+	int f;
+	char *msg;
+{
+	static char buf[BUFSIZ];	/* FGX: static */
+
+	(void) sprintf(buf, "%s: %s\r\n", msg, strerror(errno));
+	fatal(f, buf);
+}
+
+
+/*
+ * Check a descriptor to see if out of band data exists on it.
+ */
+
+
+stilloob(s)
+int	s;		/* socket number */
+{
+    static struct timeval timeout = { 0 };
+    fd_set	excepts;
+    int value;
+
+    do {
+	FD_ZERO(&excepts);
+	FD_SET(s, &excepts);
+	value = select(s+1, (fd_set *)0, (fd_set *)0, &excepts, &timeout);
+    } while ((value == -1) && (errno == EINTR));
+
+    if (value < 0) {
+	fatalperror(pty, "select");
+    }
+    if (FD_ISSET(s, &excepts)) {
+	return 1;
+    } else {
+	return 0;
+    }
+}
+
+/*
+ * Main loop.  Select from pty and network, and
+ * hand data to telnet receiver finite state machine.
+ */
+telnet(f, p)
+{
+	int on = 1;
+
+	ioctl(f, FIONBIO, &on);
+	ioctl(p, FIONBIO, &on);
+	ioctl(p, TIOCPKT, &on);
+#if	defined(SO_OOBINLINE)
+	setsockopt(net, SOL_SOCKET, SO_OOBINLINE, &on, sizeof on);
+#endif	/* defined(SO_OOBINLINE) */
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGCHLD, cleanup);
+	setpgrp(0, 0);
+
+	/*
+	 * Request to do remote echo and to suppress go ahead.
+	 */
+	if (!myopts[TELOPT_ECHO]) {
+	    dooption(TELOPT_ECHO);
+	}
+	if (!myopts[TELOPT_SGA]) {
+	    dooption(TELOPT_SGA);
+	}
+	/*
+	 * Is the client side a 4.2 (NOT 4.3) system?  We need to know this
+	 * because 4.2 clients are unable to deal with TCP urgent data.
+	 *
+	 * To find out, we send out a "DO ECHO".  If the remote system
+	 * answers "WILL ECHO" it is probably a 4.2 client, and we note
+	 * that fact ("WILL ECHO" ==> that the client will echo what
+	 * WE, the server, sends it; it does NOT mean that the client will
+	 * echo the terminal input).
+	 */
+	sprintf(nfrontp, doopt, TELOPT_ECHO);
+	nfrontp += sizeof doopt-2;
+	hisopts[TELOPT_ECHO] = OPT_YES_BUT_ALWAYS_LOOK;
+
+	/*
+	 * FGX: ask for the window size.  No banner: getty gives one.
+	 */
+	sprintf(nfrontp, doopt, TELOPT_NAWS);
+	nfrontp += sizeof doopt-2;
+	hisopts[TELOPT_NAWS] = OPT_YES_BUT_ALWAYS_LOOK;
+
+	/*
+	 * Call telrcv() once to pick up anything received during
+	 * terminal type negotiation.
+	 */
+	telrcv();
+
+	for (;;) {
+		fd_set ibits, obits, xbits;
+		register int c;
+
+		if (ncc < 0 && pcc < 0)
+			break;
+
+		FD_ZERO(&ibits);
+		FD_ZERO(&obits);
+		FD_ZERO(&xbits);
+		/*
+		 * Never look for input if there's still
+		 * stuff in the corresponding output buffer
+		 */
+		if (nfrontp - nbackp || pcc > 0) {
+			FD_SET(f, &obits);
+		} else {
+			FD_SET(p, &ibits);
+		}
+		if (pfrontp - pbackp || ncc > 0) {
+			FD_SET(p, &obits);
+		} else {
+			FD_SET(f, &ibits);
+		}
+		if (!SYNCHing) {
+			FD_SET(f, &xbits);
+		}
+		if ((c = select(16, &ibits, &obits, &xbits,
+						(struct timeval *)0)) < 1) {
+			if (c == -1) {
+				if (errno == EINTR) {
+					continue;
+				}
+			}
+			sleep(5);
+			continue;
+		}
+
+		/*
+		 * Any urgent data?
+		 */
+		if (FD_ISSET(net, &xbits)) {
+		    SYNCHing = 1;
+		}
+
+		/*
+		 * Something to read from the network...
+		 */
+		if (FD_ISSET(net, &ibits)) {
+#if	!defined(SO_OOBINLINE)
+			/*
+			 * In 4.2 (and 4.3 beta) systems, the
+			 * OOB indication and data handling in the kernel
+			 * is such that if two separate TCP Urgent requests
+			 * come in, one byte of TCP data will be overlaid.
+			 * This is fatal for Telnet, but we try to live
+			 * with it.
+			 *
+			 * In addition, in 4.2 (and...), a special protocol
+			 * is needed to pick up the TCP Urgent data in
+			 * the correct sequence.
+			 *
+			 * What we do is:  if we think we are in urgent
+			 * mode, we look to see if we are "at the mark".
+			 * If we are, we do an OOB receive.  If we run
+			 * this twice, we will do the OOB receive twice,
+			 * but the second will fail, since the second
+			 * time we were "at the mark", but there wasn't
+			 * any data there (the kernel doesn't reset
+			 * "at the mark" until we do a normal read).
+			 * Once we've read the OOB data, we go ahead
+			 * and do normal reads.
+			 *
+			 * There is also another problem, which is that
+			 * since the OOB byte we read doesn't put us
+			 * out of OOB state, and since that byte is most
+			 * likely the TELNET DM (data mark), we would
+			 * stay in the TELNET SYNCH (SYNCHing) state.
+			 * So, clocks to the rescue.  If we've "just"
+			 * received a DM, then we test for the
+			 * presence of OOB data when the receive OOB
+			 * fails (and AFTER we did the normal mode read
+			 * to clear "at the mark").
+			 */
+		    if (SYNCHing) {
+			int atmark;
+
+			ioctl(net, SIOCATMARK, (char *)&atmark);
+			if (atmark) {
+			    ncc = recv(net, netibuf, sizeof (netibuf), MSG_OOB);
+			    if ((ncc == -1) && (errno == EINVAL)) {
+				ncc = read(net, netibuf, sizeof (netibuf));
+				if (sequenceIs(didnetreceive, gotDM)) {
+				    SYNCHing = stilloob(net);
+				}
+			    }
+			} else {
+			    ncc = read(net, netibuf, sizeof (netibuf));
+			}
+		    } else {
+			ncc = read(net, netibuf, sizeof (netibuf));
+		    }
+		    settimer(didnetreceive);
+#else	/* !defined(SO_OOBINLINE)) */
+		    ncc = read(net, netibuf, sizeof (netibuf));
+#endif	/* !defined(SO_OOBINLINE)) */
+		    if (ncc < 0 && errno == EWOULDBLOCK)
+			ncc = 0;
+		    else {
+			if (ncc <= 0) {
+			    break;
+			}
+			netip = netibuf;
+		    }
+		}
+
+		/*
+		 * Something to read from the pty...
+		 */
+		if (FD_ISSET(p, &ibits) || FD_ISSET(p, &xbits)) {
+			pcc = read(p, ptyibuf, BUFSIZ);
+			if (pcc < 0 && errno == EWOULDBLOCK)
+				pcc = 0;
+			else {
+				if (pcc <= 0)
+					break;
+				if (ptyibuf[0] & TIOCPKT_FLUSHWRITE) {
+
+					netclear();	/* clear buffer back */
+					*nfrontp++ = IAC;
+					*nfrontp++ = DM;
+					neturg = nfrontp-1; /* off by one XXX */
+			        }
+				pcc--;
+				ptyip = ptyibuf+1;
+			}
+		}
+
+		while (pcc > 0) {
+			if ((&netobuf[BUFSIZ] - nfrontp) < 2)
+				break;
+			c = *ptyip++ & 0377, pcc--;
+			if (c == IAC)
+				*nfrontp++ = c;
+			*nfrontp++ = c;
+			/* Don't do CR-NUL if we are in binary mode */
+			if ((c == '\r') && (myopts[TELOPT_BINARY] == OPT_NO)) {
+				if (pcc > 0 && ((*ptyip & 0377) == '\n')) {
+					*nfrontp++ = *ptyip++ & 0377;
+					pcc--;
+				} else
+					*nfrontp++ = '\0';
+			}
+		}
+		if (FD_ISSET(f, &obits) && (nfrontp - nbackp) > 0)
+			netflush();
+		if (ncc > 0)
+			telrcv();
+		if (FD_ISSET(p, &obits) && (pfrontp - pbackp) > 0)
+			ptyflush();
+	}
+	cleanup();
+}
+	
+/*
+ * State for recv fsm
+ */
+#define	TS_DATA		0	/* base state */
+#define	TS_IAC		1	/* look for double IAC's */
+#define	TS_CR		2	/* CR-LF ->'s CR */
+#define	TS_SB		3	/* throw away begin's... */
+#define	TS_SE		4	/* ...end's (suboption negotiation) */
+#define	TS_WILL		5	/* will option negotiation */
+#define	TS_WONT		6	/* wont " */
+#define	TS_DO		7	/* do " */
+#define	TS_DONT		8	/* dont " */
+
+telrcv()
+{
+	register int c;
+	static int state = TS_DATA;
+
+	while (ncc > 0) {
+		if ((&ptyobuf[BUFSIZ] - pfrontp) < 2)
+			return;
+		c = *netip++ & 0377, ncc--;
+		switch (state) {
+
+		case TS_CR:
+			state = TS_DATA;
+			/* Strip off \n or \0 after a \r */
+			if ((c == 0) || (c == '\n')) {
+				break;
+			}
+			/* FALL THROUGH */
+
+		case TS_DATA:
+			if (c == IAC) {
+				state = TS_IAC;
+				break;
+			}
+			if (inter > 0)
+				break;
+			/*
+			 * We now map \r\n ==> \r for pragmatic reasons.
+			 * Many client implementations send \r\n when
+			 * the user hits the CarriageReturn key.
+			 *
+			 * We USED to map \r\n ==> \n, since \r\n says
+			 * that we want to be in column 1 of the next
+			 * printable line, and \n is the standard
+			 * unix way of saying that (\r is only good
+			 * if CRMOD is set, which it normally is).
+			 */
+			if ((c == '\r') && (hisopts[TELOPT_BINARY] == OPT_NO)) {
+				state = TS_CR;
+			}
+			*pfrontp++ = c;
+			break;
+
+		case TS_IAC:
+			switch (c) {
+
+			/*
+			 * Send the process on the pty side an
+			 * interrupt.  Do this with a NULL or
+			 * interrupt char; depending on the tty mode.
+			 */
+			case IP:
+				interrupt();
+				break;
+
+			case BREAK:
+				sendbrk();
+				break;
+
+			/*
+			 * Are You There?
+			 */
+			case AYT:
+				strcpy(nfrontp, "\r\n[Yes]\r\n");
+				nfrontp += 9;
+				break;
+
+			/*
+			 * Abort Output
+			 */
+			case AO: {
+					struct ltchars tmpltc;
+
+					ptyflush();	/* half-hearted */
+					ioctl(pty, TIOCGLTC, &tmpltc);
+					if (tmpltc.t_flushc != '\377') {
+						*pfrontp++ = tmpltc.t_flushc;
+					}
+					netclear();	/* clear buffer back */
+					*nfrontp++ = IAC;
+					*nfrontp++ = DM;
+					neturg = nfrontp-1; /* off by one XXX */
+					break;
+				}
+
+			/*
+			 * Erase Character and
+			 * Erase Line
+			 */
+			case EC:
+			case EL: {
+					struct sgttyb b;
+					char ch;
+
+					ptyflush();	/* half-hearted */
+					ioctl(pty, TIOCGETP, &b);
+					ch = (c == EC) ?
+						b.sg_erase : b.sg_kill;
+					if (ch != '\377') {
+						*pfrontp++ = ch;
+					}
+					break;
+				}
+
+			/*
+			 * Check for urgent data...
+			 */
+			case DM:
+				SYNCHing = stilloob(net);
+				settimer(gotDM);
+				break;
+
+
+			/*
+			 * Begin option subnegotiation...
+			 */
+			case SB:
+				state = TS_SB;
+				continue;
+
+			case WILL:
+				state = TS_WILL;
+				continue;
+
+			case WONT:
+				state = TS_WONT;
+				continue;
+
+			case DO:
+				state = TS_DO;
+				continue;
+
+			case DONT:
+				state = TS_DONT;
+				continue;
+
+			case IAC:
+				*pfrontp++ = c;
+				break;
+			}
+			state = TS_DATA;
+			break;
+
+		case TS_SB:
+			if (c == IAC) {
+				state = TS_SE;
+			} else {
+				SB_ACCUM(c);
+			}
+			break;
+
+		case TS_SE:
+			if (c != SE) {
+				if (c != IAC) {
+					SB_ACCUM(IAC);
+				}
+				SB_ACCUM(c);
+				state = TS_SB;
+			} else {
+				SB_TERM();
+				suboption();	/* handle sub-option */
+				state = TS_DATA;
+			}
+			break;
+
+		case TS_WILL:
+			if (hisopts[c] != OPT_YES)
+				willoption(c);
+			state = TS_DATA;
+			continue;
+
+		case TS_WONT:
+			if (hisopts[c] != OPT_NO)
+				wontoption(c);
+			state = TS_DATA;
+			continue;
+
+		case TS_DO:
+			if (myopts[c] != OPT_YES)
+				dooption(c);
+			state = TS_DATA;
+			continue;
+
+		case TS_DONT:
+			if (myopts[c] != OPT_NO) {
+				dontoption(c);
+			}
+			state = TS_DATA;
+			continue;
+
+		default:
+			syslog(LOG_ERR, "telnetd: panic state=%d\n", state);
+			printf("telnetd: panic state=%d\n", state);
+			exit(1);
+		}
+	}
+}
+
+willoption(option)
+	int option;
+{
+	char *fmt;
+
+	switch (option) {
+
+	case TELOPT_BINARY:
+		mode(RAW, 0);
+		fmt = doopt;
+		break;
+
+	case TELOPT_ECHO:
+		not42 = 0;		/* looks like a 4.2 system */
+		/*
+		 * Now, in a 4.2 system, to break them out of ECHOing
+		 * (to the terminal) mode, we need to send a "WILL ECHO".
+		 * Kludge upon kludge!
+		 */
+		if (myopts[TELOPT_ECHO] == OPT_YES) {
+		    dooption(TELOPT_ECHO);
+		}
+		fmt = dont;
+		break;
+
+	case TELOPT_TTYPE:
+		settimer(ttypeopt);
+		if (hisopts[TELOPT_TTYPE] == OPT_YES_BUT_ALWAYS_LOOK) {
+		    hisopts[TELOPT_TTYPE] = OPT_YES;
+		    return;
+		}
+		fmt = doopt;
+		break;
+
+	case TELOPT_NAWS:		/* FGX: asked for in telnet() */
+		if (hisopts[TELOPT_NAWS] == OPT_YES_BUT_ALWAYS_LOOK) {
+		    hisopts[TELOPT_NAWS] = OPT_YES;
+		    return;
+		}
+		fmt = doopt;
+		break;
+
+	case TELOPT_SGA:
+		fmt = doopt;
+		break;
+
+	case TELOPT_TM:
+		fmt = dont;
+		break;
+
+	default:
+		fmt = dont;
+		break;
+	}
+	if (fmt == doopt) {
+		hisopts[option] = OPT_YES;
+	} else {
+		hisopts[option] = OPT_NO;
+	}
+	sprintf(nfrontp, fmt, option);
+	nfrontp += sizeof (dont) - 2;
+}
+
+wontoption(option)
+	int option;
+{
+	char *fmt;
+
+	switch (option) {
+	case TELOPT_ECHO:
+		not42 = 1;		/* doesn't seem to be a 4.2 system */
+		break;
+
+	case TELOPT_BINARY:
+		mode(0, RAW);
+		break;
+
+	case TELOPT_TTYPE:
+	    settimer(ttypeopt);
+	    break;
+	}
+
+	fmt = dont;
+	hisopts[option] = OPT_NO;
+	sprintf(nfrontp, fmt, option);
+	nfrontp += sizeof (doopt) - 2;
+}
+
+dooption(option)
+	int option;
+{
+	char *fmt;
+
+	switch (option) {
+
+	case TELOPT_TM:
+		fmt = wont;
+		break;
+
+	case TELOPT_ECHO:
+		mode(ECHO|CRMOD, 0);
+		fmt = will;
+		break;
+
+	case TELOPT_BINARY:
+		mode(RAW, 0);
+		fmt = will;
+		break;
+
+	case TELOPT_SGA:
+		fmt = will;
+		break;
+
+	default:
+		fmt = wont;
+		break;
+	}
+	if (fmt == will) {
+	    myopts[option] = OPT_YES;
+	} else {
+	    myopts[option] = OPT_NO;
+	}
+	sprintf(nfrontp, fmt, option);
+	nfrontp += sizeof (doopt) - 2;
+}
+
+
+dontoption(option)
+int option;
+{
+    char *fmt;
+
+    switch (option) {
+    case TELOPT_ECHO:		/* we should stop echoing */
+	mode(0, ECHO|CRMOD);
+	fmt = wont;
+	break;
+
+    default:
+	fmt = wont;
+	break;
     }
 
-    ls = socket(AF_INET, SOCK_STREAM, 0);
-    if (ls < 0) { syslog(LOG_ERR, "socket: %m"); exit(1); }
+    if (fmt = wont) {
+	myopts[option] = OPT_NO;
+    } else {
+	myopts[option] = OPT_YES;
+    }
+    sprintf(nfrontp, fmt, option);
+    nfrontp += sizeof (wont) - 2;
+}
 
-    for (c = 0; c < sizeof(sin); c++) ((char *)&sin)[c] = 0;
-    sin.sin_family = AF_INET;
-    sin.sin_port   = htons(port);
-    sin.sin_addr.s_addr = htonl(0x7F000001);    /* 127.0.0.1 for now */
+/*
+ * suboption()
+ *
+ *	Look at the sub-option buffer, and try to be helpful to the other
+ * side.
+ *
+ *	Currently we recognize:
+ *
+ *	Terminal type is
+ */
 
-    if (bind(ls, &sin, sizeof(sin)) < 0)  { syslog(LOG_ERR, "bind: %m");   exit(1); }
-    if (listen(ls, 1) < 0)                { syslog(LOG_ERR, "listen: %m"); exit(1); }
+suboption()
+{
+    switch (SB_GET()) {
+    case TELOPT_TTYPE: {		/* Yaaaay! */
+	static char terminalname[5+41] = "TERM=";
 
-    printf("telnetd: listening on 127.0.0.1:%d\n", port);
+	settimer(ttypesubopt);
 
-    /* One session at a time.  accept() DETACHES the listener on the W5100
-     * path, so a real server re-creates it per session (echod does); the
-     * loopback path mirrors that deliberately, so the same shape works here. */
-    m = openpty();
-    if (m < 0) { syslog(LOG_ERR, "no free pty"); exit(1); }
+	if (SB_GET() != TELQUAL_IS) {
+	    return;		/* ??? XXX but, this is the most robust */
+	}
 
-    c = accept(ls, (struct sockaddr *)0, (int *)0);
-    if (c < 0) { syslog(LOG_ERR, "accept: %m"); exit(1); }
+	terminaltype = terminalname+strlen(terminalname);
 
-haveconn:
-    { int on = 1; ioctl(m, TIOCPKT, (char *)&on); }
+	while ((terminaltype < (terminalname + sizeof terminalname-1)) &&
+								    !SB_EOF()) {
+	    register int c;
 
-    /* Opening negotiation, upstream's set: we echo, we suppress go-ahead, and
-     * we would like the terminal type.  Sent BEFORE the relay so the client
-     * has our answers in hand as soon as it starts. */
-    g_myopt[TELOPT_ECHO] = 1;   sendopt(WILL, TELOPT_ECHO, c);
-    g_myopt[TELOPT_SGA]  = 1;   sendopt(WILL, TELOPT_SGA,  c);
-    g_hisopt[TELOPT_TTYPE] = 1; sendopt(DO,   TELOPT_TTYPE, c);
-    /* Ask for the client's window size.  Without this the child runs at the
-     * pty's default 80x24 whatever the client actually is, and a full-screen
-     * program draws the wrong number of lines -- measured as a lost top row on
-     * a 24-row client being told it had 25 (apple/fgx#150). */
-    g_hisopt[TELOPT_NAWS] = 1;  sendopt(DO,   TELOPT_NAWS,  c);
-
-    /* Ask for the type and wait for it, THEN start the session -- the order
-     * is upstream's and it is what makes the answer usable (apple/fgx#147). */
-    getterminaltype(c, m);
-
-    if (spawn_login() < 0) { syslog(LOG_ERR, "/bin/getty: %m"); exit(1); }
-
-    /* Naming the negotiated type is upstream's habit and it earns its line:
-     * "the client is being driven as the wrong terminal" is otherwise only
-     * visible as a corrupted screen, and the two are hard to tell apart from
-     * a bug report.  An empty pair of brackets says the client never answered
-     * and the /etc/ttys type stands. */
-    if (!inetd)
-        printf("telnetd: session on %s [%s]\n", g_slave, g_ttype);
-    relay(c, m);
-
-    /* THE SESSION IS OVER: blank its /etc/utmp record.  login(1) wrote it, and
-     * on a pty line the daemon holding the master is the only process that
-     * outlives the shell -- there is no init watching this line -- so clearing
-     * it is this daemon's job, as upstream telnetd's cleanup() does through
-     * logout().  ut_line holds the bare name, so the record is looked up by the
-     * basename of the slave path rather than the path.  The wtmp end record
-     * follows only a record found, as 2.11BSD rlogind's `if (logout(p))
-     * logwtmp(p, "", "");' (libexec/rlogind/rlogind.c:483-484). */
-    {
-        char *ln = strrchr(g_slave, '/');
-        ln = ln != (char *)0 ? ln + 1 : g_slave;
-        if (logout(ln))
-            logwtmp(ln, "", "");
+	    c = SB_GET();
+	    if (isupper(c)) {
+		c = tolower(c);
+	    }
+	    *terminaltype++ = c;    /* accumulate name */
+	}
+	*terminaltype = 0;
+	terminaltype = terminalname;
+	break;
     }
 
-    close(c);
-    close(m);
-    if (ls >= 0)
-        close(ls);
-    if (!inetd)
-        printf("telnetd: session ended\n");
-    exit(0);
+    case TELOPT_NAWS: {		/* FGX: RFC 1073, width then height */
+	struct winsize ws;
+	register int col, row;
+
+	if (subend - subpointer < 4) {
+	    return;
+	}
+	col = SB_GET() << 8;
+	col |= SB_GET();
+	row = SB_GET() << 8;
+	row |= SB_GET();
+	if (row <= 0 || col <= 0) {
+	    return;
+	}
+	ws.ws_row = row;
+	ws.ws_col = col;
+	ws.ws_xpixel = 0;
+	ws.ws_ypixel = 0;
+	ioctl(pty, TIOCSWINSZ, &ws);
+	break;
+    }
+
+    default:
+	;
+    }
+}
+
+mode(on, off)
+	int on, off;
+{
+	struct sgttyb b;
+
+	ptyflush();
+	ioctl(pty, TIOCGETP, &b);
+	b.sg_flags |= on;
+	b.sg_flags &= ~off;
+	ioctl(pty, TIOCSETP, &b);
+}
+
+/*
+ * Send interrupt to process on other side of pty.
+ * If it is in raw mode, just write NULL;
+ * otherwise, write intr char.
+ */
+interrupt()
+{
+	struct sgttyb b;
+	struct tchars tchars;
+
+	ptyflush();	/* half-hearted */
+	ioctl(pty, TIOCGETP, &b);
+	if (b.sg_flags & RAW) {
+		*pfrontp++ = '\0';
+		return;
+	}
+	*pfrontp++ = ioctl(pty, TIOCGETC, &tchars) < 0 ?
+		'\177' : tchars.t_intrc;
+}
+
+/*
+ * Send quit to process on other side of pty.
+ * If it is in raw mode, just write NULL;
+ * otherwise, write quit char.
+ */
+sendbrk()
+{
+	struct sgttyb b;
+	struct tchars tchars;
+
+	ptyflush();	/* half-hearted */
+	ioctl(pty, TIOCGETP, &b);
+	if (b.sg_flags & RAW) {
+		*pfrontp++ = '\0';
+		return;
+	}
+	*pfrontp++ = ioctl(pty, TIOCGETC, &tchars) < 0 ?
+		'\034' : tchars.t_quitc;
+}
+
+ptyflush()
+{
+	int n;
+
+	if ((n = pfrontp - pbackp) > 0)
+		n = write(pty, pbackp, n);
+	if (n < 0)
+		return;
+	pbackp += n;
+	if (pbackp == pfrontp)
+		pbackp = pfrontp = ptyobuf;
+}
+
+/*
+ * nextitem()
+ *
+ *	Return the address of the next "item" in the TELNET data
+ * stream.  This will be the address of the next character if
+ * the current address is a user data character, or it will
+ * be the address of the character following the TELNET command
+ * if the current address is a TELNET IAC ("I Am a Command")
+ * character.
+ */
+
+char *
+nextitem(current)
+char	*current;
+{
+    if ((*current&0xff) != IAC) {
+	return current+1;
+    }
+    switch (*(current+1)&0xff) {
+    case DO:
+    case DONT:
+    case WILL:
+    case WONT:
+	return current+3;
+    case SB:		/* loop forever looking for the SE */
+	{
+	    register char *look = current+2;
+
+	    for (;;) {
+		if ((*look++&0xff) == IAC) {
+		    if ((*look++&0xff) == SE) {
+			return look;
+		    }
+		}
+	    }
+	}
+    default:
+	return current+2;
+    }
+}
+
+
+/*
+ * netclear()
+ *
+ *	We are about to do a TELNET SYNCH operation.  Clear
+ * the path to the network.
+ *
+ *	Things are a bit tricky since we may have sent the first
+ * byte or so of a previous TELNET command into the network.
+ * So, we have to scan the network buffer from the beginning
+ * until we are up to where we want to be.
+ *
+ *	A side effect of what we do, just to keep things
+ * simple, is to clear the urgent data pointer.  The principal
+ * caller should be setting the urgent data pointer AFTER calling
+ * us in any case.
+ */
+
+netclear()
+{
+    register char *thisitem, *next;
+    char *good;
+#define	wewant(p)	((nfrontp > p) && ((*p&0xff) == IAC) && \
+				((*(p+1)&0xff) != EC) && ((*(p+1)&0xff) != EL))
+
+    thisitem = netobuf;
+
+    while ((next = nextitem(thisitem)) <= nbackp) {
+	thisitem = next;
+    }
+
+    /* Now, thisitem is first before/at boundary. */
+
+    good = netobuf;	/* where the good bytes go */
+
+    while (nfrontp > thisitem) {
+	if (wewant(thisitem)) {
+	    int length;
+
+	    next = thisitem;
+	    do {
+		next = nextitem(next);
+	    } while (wewant(next) && (nfrontp > next));
+	    length = next-thisitem;
+	    bcopy(thisitem, good, length);
+	    good += length;
+	    thisitem = next;
+	} else {
+	    thisitem = nextitem(thisitem);
+	}
+    }
+
+    nbackp = netobuf;
+    nfrontp = good;		/* next byte to be sent */
+    neturg = 0;
+}
+
+/*
+ *  netflush
+ *		Send as much data as possible to the network,
+ *	handling requests for urgent data.
+ */
+
+
+netflush()
+{
+    int n;
+
+    if ((n = nfrontp - nbackp) > 0) {
+	/*
+	 * if no urgent data, or if the other side appears to be an
+	 * old 4.2 client (and thus unable to survive TCP urgent data),
+	 * write the entire buffer in non-OOB mode.
+	 */
+	if ((neturg == 0) || (not42 == 0)) {
+	    n = write(net, nbackp, n);	/* normal write */
+	} else {
+	    n = neturg - nbackp;
+	    /*
+	     * In 4.2 (and 4.3) systems, there is some question about
+	     * what byte in a sendOOB operation is the "OOB" data.
+	     * To make ourselves compatible, we only send ONE byte
+	     * out of band, the one WE THINK should be OOB (though
+	     * we really have more the TCP philosophy of urgent data
+	     * rather than the Unix philosophy of OOB data).
+	     */
+	    if (n > 1) {
+		n = send(net, nbackp, n-1, 0);	/* send URGENT all by itself */
+	    } else {
+		n = send(net, nbackp, n, MSG_OOB);	/* URGENT data */
+	    }
+	}
+    }
+    if (n < 0) {
+	if (errno == EWOULDBLOCK)
+	    return;
+	/* should blow this guy away... */
+	return;
+    }
+    nbackp += n;
+    if (nbackp >= neturg) {
+	neturg = 0;
+    }
+    if (nbackp == nfrontp) {
+	nbackp = nfrontp = netobuf;
+    }
+}
+
+cleanup()
+{
+
+	rmut();
+	shutdown(net, 2);
+	exit(1);
+}
+
+#include <utmp.h>
+
+struct	utmp wtmp;
+char	wtmpf[]	= _PATH_WTMP;
+char	utmpf[] = _PATH_UTMP;
+#define SCPYN(a, b)	strncpy(a, b, sizeof(a))
+#define SCMPN(a, b)	strncmp(a, b, sizeof(a))
+
+rmut()
+{
+	register f;
+	int found = 0;
+	struct utmp *u, *utmp;
+	int nutmp;
+	struct stat statbf;
+
+	f = open(utmpf, O_RDWR);
+	if (f >= 0) {
+		fstat(f, &statbf);
+		utmp = (struct utmp *)malloc((u_int)statbf.st_size);
+		if (!utmp)
+			syslog(LOG_ERR, "utmp malloc failed");
+		if (statbf.st_size && utmp) {
+			nutmp = read(f, utmp, (int)statbf.st_size);
+			nutmp /= sizeof(struct utmp);
+		
+			for (u = utmp ; u < &utmp[nutmp] ; u++) {
+				if (SCMPN(u->ut_line, line+5) ||
+				    u->ut_name[0]==0)
+					continue;
+				lseek(f, ((long)u)-((long)utmp), L_SET);
+				SCPYN(u->ut_name, "");
+				SCPYN(u->ut_host, "");
+				time(&u->ut_time);
+				write(f, (char *)u, sizeof(wtmp));
+				found++;
+			}
+		}
+		close(f);
+	}
+	if (found) {
+		f = open(wtmpf, O_WRONLY|O_APPEND);
+		if (f >= 0) {
+			SCPYN(wtmp.ut_line, line+5);
+			SCPYN(wtmp.ut_name, "");
+			SCPYN(wtmp.ut_host, "");
+			time(&wtmp.ut_time);
+			write(f, (char *)&wtmp, sizeof(wtmp));
+			close(f);
+		}
+	}
+	chmod(line, 0666);
+	chown(line, 0, 0);
+	line[strlen("/dev/")] = 'p';
+	chmod(line, 0666);
+	chown(line, 0, 0);
 }
