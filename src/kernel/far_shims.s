@@ -544,6 +544,20 @@ _FarSh_CdTtyIdx PHB
                 RTL                     ;   return survives it
 
 ;------------------------------------------------------------------------------
+; _FarSh_Forceclose - A = chardev idx.  vhangup(2), from the tty bank to the
+; file table in the far bank (far slot 83, forceclose).  D = the kernel's REAL
+; direct page.
+;------------------------------------------------------------------------------
+_FarSh_Forceclose PHB
+                PHK
+                PLB                     ; DBR = CORE bank
+                PHA
+_kfp1022        JSL     KFAR_VFS_FORCECLOSE     ; bank byte patched by Far_Init
+                PLA
+                PLB
+                RTL
+
+;------------------------------------------------------------------------------
 ; _FarSh_CdIoctl - cdevsw[].d_ioctl for a bank that is not the core one.
 ;
 ; In:  MX %00.  Frame (above this shim's own 3-byte return address):

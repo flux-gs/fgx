@@ -134,6 +134,7 @@ extern char _libc_lstrBufB[];
 #include "flock.c"
 #include "fchown.c"
 #include "fchmod.c"
+#include "vhangup.c"
 #include "wait.c"
 #include "stdlib.c"
 #include "strtol.c"

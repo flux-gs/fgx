@@ -59,15 +59,12 @@ FILES
      /etc/utmp, /etc/wtmp
 
 SEE ALSO
-     telnet(1), inetd(8), login(1), pty(4)
+     telnet(1), vhangup(2), inetd(8), login(1), pty(4)
 
 BUGS
      These differ from 2.11BSD.
 
      The banner names FGX.
-
-     The slave is not revoked with vhangup(2), which this system
-     does not have, before the child is given it.
 
      The window size option is an addition; 2.11BSD's telnetd
      does not know it.  With it come two things that telnetd does

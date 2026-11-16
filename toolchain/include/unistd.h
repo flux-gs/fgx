@@ -178,6 +178,9 @@ int   chown(char *path, int uid, int gid);
 int   fchown(int fd, int uid, int gid);
 int   fchmod(int fd, int mode);
 
+/* vhangup(2) -- revoke the controlling terminal from every open file on it. */
+int   vhangup();
+
 /* getgroups(2).  FGX has ONE group per process (sys/param.h: NGROUPS 1), so
  * this answers 1 and the effective gid; a zero length asks HOW MANY, which is
  * 2.11BSD's convention.  setgroups(2) is still absent: installing a LIST needs

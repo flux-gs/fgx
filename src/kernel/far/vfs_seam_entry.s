@@ -1360,6 +1360,34 @@ _VfsUnpNameRet  TAY                     ; park the errno; the drop needs A
                 PLB
                 RTL
 
+_Vfs_Forceclose ENT
+                ; far slot 83 -- forceclose(dev) -> 0.  vhangup(2)'s walk of
+                ; the file table (src/kernel/vfs/vfs_syscalls.c).  TWO ARGUMENT
+                ; BYTES, one word at 7,S once PHB and PHD have moved the frame
+                ; down three.
+                MX      %00
+                PHB
+                PHD
+                PHK
+                PLB                     ; DBR = far bank
+                LDA     #FGX_DP_KERNELC
+                TCD
+
+                LDA     7,S
+                PHA
+
+                PHK
+                PEA     _VfsForcecloseRet-1
+                PHK
+                PEA     forceclose-1
+                RTL                     ; pile call into the C
+_VfsForcecloseRet TAY
+                PLA                     ; drop the copy -- the caller cleans
+                TYA
+                PLD
+                PLB
+                RTL
+
 _Vfs_UnpFile    ENT
                 ; far slot 82 -- unp_fileop(pid, ap) -> its op's answer.  A
                 ; descriptor passed over AF_UNIX: 2.11BSD sys/sys_kern.c's

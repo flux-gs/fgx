@@ -17,9 +17,6 @@
  *
  * THE BANNER NAMES FGX, where upstream's names 2.11 BSD UNIX.
  *
- * THE SLAVE IS NOT vhangup()'d.  FGX has no vhangup(2).  Upstream opens the
- * slave, revokes it, and opens it again; here it is opened once.
- *
  * THE WINDOW SIZE IS NEGOTIATED (RFC 1073), which this telnetd predates.  The
  * client is asked for NAWS and its answer is set on the pty with TIOCSWINSZ.
  * A zero dimension is ignored.  SIGTTOU is ignored as 2.11BSD's rlogind
@@ -307,7 +304,12 @@ gotpty:
 		fatalperror(f, line);
 	if (fchmod(t, 0))
 		fatalperror(f, line);
-	/* FGX: no vhangup(), so no second open */
+	(void)signal(SIGHUP, SIG_IGN);
+	vhangup();
+	(void)signal(SIGHUP, SIG_DFL);
+	t = open(line, O_RDWR);
+	if (t < 0)
+		fatalperror(f, line);
 	ioctl(t, TIOCGETP, &b);
 	b.sg_flags = CRMOD|XTABS|ANYP;
 	ioctl(t, TIOCSETP, &b);
@@ -1295,6 +1297,7 @@ cleanup()
 {
 
 	rmut();
+	vhangup();	/* XXX */
 	shutdown(net, 2);
 	exit(1);
 }

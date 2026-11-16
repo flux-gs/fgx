@@ -48,6 +48,7 @@
 #include "fsparam.h"
 #include "vnode.h"
 #include "mount.h"
+#include "specdev.h"
 #include "namei.h"
 #include "file.h"
 #include "uio.h"
@@ -1474,6 +1475,37 @@ fp_isvn(fp)
 struct file *fp;
 {
     return (fp != (struct file *)0 && fp->f_ops == &vnops);
+}
+
+/* forceclose -- 2.11BSD sys_inode.c:718, vhangup(2)'s half that is the file
+ * table's: every open file on character device `dev' loses FREAD and FWRITE,
+ * so a descriptor some earlier session left open answers EBADF from then on
+ * (fdcheck, above).  Upstream's loop, with its `f_type != DTYPE_INODE' and
+ * `(ip->i_mode & IFMT) != IFCHR' spelled for vnodes.  Far slot 83. */
+extern struct file *file_pool;
+
+int
+forceclose(dev)
+int dev;
+{
+    register struct file *fp;
+    register struct vnode *vp;
+
+    for (fp = file_pool; fp < &file_pool[NFILE]; fp++) {
+        if (fp->f_count == 0)
+            continue;
+        if (!fp_isvn(fp))
+            continue;
+        vp = (struct vnode *)fp->f_data;
+        if (vp == (struct vnode *)0)
+            continue;
+        if (vp->v_type != VCHR)
+            continue;
+        if ((int)vp->v_rdev != dev)
+            continue;
+        fp->f_flag &= ~(FREAD|FWRITE);
+    }
+    return (0);
 }
 
 int

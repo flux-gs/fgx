@@ -758,6 +758,42 @@ kc_ttselect(idx, rw)
     return (ttyselect(tp, rw));
 }
 
+/* kc_vhangup -- vhangup(2), 2.11BSD sys_inode.c:706.  KTTY slot 66.
+ *
+ *      if (!suser())
+ *              return;
+ *      if (u.u_ttyp == NULL)
+ *              return;
+ *      forceclose(u.u_ttyd);
+ *      if ((u.u_ttyp->t_state) & TS_ISOPEN)
+ *              gsignal(u.u_ttyp->t_pgrp, SIGHUP);
+ *
+ * suser() is asked in the core, before the call.  The controlling terminal is
+ * kept as a line index and not a device number, so forceclose is given every
+ * character device that is that line. */
+extern int kc_forceclose();
+
+int
+kc_vhangup()
+{
+    register struct tty *tp;
+    register int dev;
+    int idx;
+
+    idx = kc_curctty();
+    if (idx < 0)
+        return (0);
+    tp = tty_byidx(idx);
+    if (tp == (struct tty *)0)
+        return (0);
+    for (dev = 0; dev < 32; dev++)      /* CHARDEV_MAX, include/chardev.s */
+        if (kc_cdttyidx(dev) == idx)
+            (void) kc_forceclose(dev);
+    if (tp->t_state & TS_ISOPEN)
+        kc_gsignal(tp->t_pgrp, SIGHUP);
+    return (0);
+}
+
 /* kc_ttstopped -- is this line's output stopped?  KTTY slot 31.
  *
  * `(tp->t_state & TS_TTSTOP) != 0', which `ptcread' reads directly off the

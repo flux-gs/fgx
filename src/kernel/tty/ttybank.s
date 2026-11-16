@@ -397,11 +397,15 @@
                 JMP     _Net_Hook               ; 65
                 DFB     0
 
-                ; --- slots 66.. unassigned, stride 4 (3-byte JMP + 1 pad).
+                ; --- slot 66: vhangup(2). ---
+                JMP     _KTty_Vhangup           ; 66
+                DFB     0
+
+                ; --- slots 67.. unassigned, stride 4 (3-byte JMP + 1 pad).
                 ; Growing KTTY_SLOT_COUNT is on the terms include/ktty.s states:
                 ; it moves where the bank's code starts and renumbers nothing --
                 ; slot n is KTTY_SLOT0 + 4n and KTTY_SLOT0 is fixed. ---
-                LUP     KTTY_SLOT_COUNT-66
+                LUP     KTTY_SLOT_COUNT-67
                 JMP     _Ktty_StubHalt
                 DFB     0
                 --^
@@ -468,6 +472,28 @@ _KTty_Carrier   MX      %00
                 PLY
                 RTL
 
+
+;==============================================================================
+; _KTty_Vhangup - slot 66: vhangup(2).  No arguments -> C=1, A=0.  The C is
+; kc_vhangup (tty_dev.c), reached by a pile call as _KTty_Carrier's is.
+;==============================================================================
+_KTty_Vhangup   MX      %00
+                PHB
+                PHD
+                PHK
+                PLB                             ; DBR = the LIVE tty bank
+                LDA     #FGX_DP_KERNELC
+                TCD
+                PHK
+                PEA     @kvh_ret-1
+                PHK
+                PEA     kc_vhangup-1
+                RTL                             ; pile call into the C
+@kvh_ret        PLD
+                PLB
+                LDA     #0
+                SEC
+                RTL
 
 ;==============================================================================
 ; _KTty_Gtod / _KTty_Stod / _KTty_Adj / _KTty_Sysctl - slots 44, 46, 45 and

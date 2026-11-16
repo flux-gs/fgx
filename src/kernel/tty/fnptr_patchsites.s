@@ -8,16 +8,6 @@
 ; single-bank image already is.
 
 _modFnPtrTab    ANOP
-                DA      $384A
-                DA      $384E
-                DA      $3852
-                DA      $3856
-                DA      $385A
-                DA      $385E
-                DA      $3862
-                DA      $3866
-                DA      $386A
-                DA      $386E
                 DA      $3872
                 DA      $3876
                 DA      $387A
@@ -58,6 +48,16 @@ _modFnPtrTab    ANOP
                 DA      $3906
                 DA      $390A
                 DA      $390E
-                DA      $557B
-                DA      $557F
+                DA      $3912
+                DA      $3916
+                DA      $391A
+                DA      $391E
+                DA      $3922
+                DA      $3926
+                DA      $392A
+                DA      $392E
+                DA      $3932
+                DA      $3936
+                DA      $56AA
+                DA      $56AE
 _modFnPtrBytes  EQU     104      ; 52 cell(s), 2 bytes of table each

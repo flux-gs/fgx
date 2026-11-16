@@ -756,6 +756,21 @@ _ctp082         JSL     _FarSh_SelWaiting
                 RTL
 
 ;------------------------------------------------------------------------------
+; kc_forceclose(dev) - vhangup's `forceclose(u.u_ttyd)': the far bank's walk
+; of the file table.
+;------------------------------------------------------------------------------
+kc_forceclose   MX      %00
+                LDA     4,S                     ; dev
+                PHD
+                PHA
+_ctp085         JSL     _FarSh_KernDP
+                TCD
+                PLA
+_ctp086         JSL     _FarSh_Forceclose
+                PLD
+                RTL
+
+;------------------------------------------------------------------------------
 ; kc_curpid() -> the running pid: ttyselect's `u.u_procp'.
 ;------------------------------------------------------------------------------
 kc_curpid       MX      %00

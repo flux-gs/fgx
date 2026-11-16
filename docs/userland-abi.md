@@ -496,6 +496,7 @@ it.
 | 130 | `SYS_FCHMOD` | fchmod(fd, mode): A = fd, X = mode. C=1 + A = 0; C=0 + A = errno (EBADF, EINVAL on a socket or pipe, EROFS, EPERM). 4.3BSD-Reno vfs_syscalls.c. 2.11BSD's number is 124. |
 | 131 | `SYS_SENDMSG` | sendmsg(s, msg, flags): A = msg offset (caller bank), X = s, Y = flags. C=1 + A = bytes sent; C=0 + A = errno. 2.11BSD uipc_syscalls.c; its number is 28. |
 | 132 | `SYS_RECVMSG` | recvmsg(s, msg, flags), as sendmsg; msg_namelen and msg_accrightslen are written back. 2.11BSD's number is 27. |
+| 133 | `SYS_VHANGUP` | vhangup(): revoke the caller's controlling terminal from every open file on it and hang up its process group. Super-user only. C=1 + A = 0; C=0 + A = EPERM. 2.11BSD sys_inode.c; number 76. |
 <!-- END GENERATED: syscall-table -->
 
 **Note on `SYS_TICKS`:** it returns the high word in **X** (it predates the

@@ -421,6 +421,10 @@ KFAR_CON_WRARM      EQU     KFAR_SLOT0+4*79 ; slot 79: Con_WriteArm
 KFAR_CON_WRDONE     EQU     KFAR_SLOT0+4*80 ; slot 80: Con_WriteDone
 KFAR_CON_DRAINPEND  EQU     KFAR_SLOT0+4*81 ; slot 81: Con_DrainPending
 
+; slot 83: forceclose(dev) -> 0.  vhangup(2): every open file on that
+; character device loses FREAD and FWRITE (src/kernel/vfs/vfs_syscalls.c).
+KFAR_VFS_FORCECLOSE EQU    KFAR_SLOT0+4*83
+
 ; slot 82: unp_fileop(pid, ap) -> its op's answer.  The file-table half of a
 ; descriptor passed over AF_UNIX (src/kernel/vfs/vfs_file.c), from SYS_KCALL's
 ; KSVC_UNPFILE; `ap' is the core bank's _unpfArgs.

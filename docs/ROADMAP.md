@@ -237,8 +237,6 @@ archived tracker; new work is tracked in GitHub Issues.
 - **Socket defects:** apple/fgx#156 (loopback connector has no local port),
   #157 (`bind(2)` leaves TCP and loopback unchecked), #546 (getpeername on
   AF_UNIX answers ENOTCONN).
-- **telnetd(8): what the 2.11BSD port still owes** -- `vhangup(2)` on the
-  slave: apple/fgx#540.
 - **Multi-NIC (2nd Uthernet II)** -- the ifnet table holds 4 (`IF_MAX`), but
   the W5100 driver is self-mod-bound to one detected slot (`_w5PatchTbl`), so a
   2nd card is detected but undriven.  Needs per-card indexed base addressing +

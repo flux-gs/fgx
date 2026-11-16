@@ -855,7 +855,14 @@ SYS_RECVMSG     EQU     132                 ; recvmsg(s, msg, flags), as
                                             ; msg_accrightslen are written back.
                                             ; 2.11BSD's number is 27.
 
-SYS_NUM_MAX     EQU     SYS_RECVMSG         ; highest implemented (132)
+SYS_VHANGUP     EQU     133                 ; vhangup(): revoke the caller's
+                                            ; controlling terminal from every
+                                            ; open file on it and hang up its
+                                            ; process group.  Super-user only.
+                                            ; C=1 + A = 0; C=0 + A = EPERM.
+                                            ; 2.11BSD sys_inode.c; number 76.
+
+SYS_NUM_MAX     EQU     SYS_VHANGUP         ; highest implemented (133)
 
 ; fcntl(2)'s commands (Reno sys/fcntl.h:26-40), the flags it touches -- FNDELAY
 ; (Reno's O_NONBLOCK, src/kernel/vfs/file.h), FCNTLCANT (Reno sys/file.h:70:

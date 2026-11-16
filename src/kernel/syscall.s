@@ -1147,6 +1147,7 @@ _Syscall_Table  DA      _Sys_Stub               ; 0:  unused
                 DA      _Sys_Fchmod             ; 130: SYS_FCHMOD
                 DA      _Sys_Sendmsg            ; 131: SYS_SENDMSG
                 DA      _Sys_Recvmsg            ; 132: SYS_RECVMSG
+                DA      _thunk_Vhangup          ; 133: SYS_VHANGUP (tty slot 66)
 
 ;------------------------------------------------------------------------------
 ; _Sys_ScreenCtl (SYS_SCREEN_CTL = 101) - console screen claim.  A = 1 claims
@@ -6689,6 +6690,18 @@ _thunk_Stod     MX      %00
                 RTS
 @stod_priv      LDX     _Sys_CallerBank
 _ktp102         JSL     KTTY_TOD_STOD
+                RTS
+
+; vhangup(2), 2.11BSD sys_inode.c:706, opens `if (!suser()) return;'.  The
+; rest is kc_vhangup's, in the tty bank.
+_thunk_Vhangup  MX      %00
+                JSR     _Suser
+                BCS     @vh_priv
+                LDA     #EPERM
+                CLC
+                RTS
+@vh_priv
+_ktp128         JSL     KTTY_VHANGUP
                 RTS
 
 ; adjtime(2) is super user only too: 2.11BSD kern_time.c:123, `if

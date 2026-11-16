@@ -145,6 +145,7 @@ MANIFESTS = {
         # PZERO and therefore PCATCH.
         ('_FarSh_Sleep',    '_FarSh_Sleep',    0, 'abs24'),
         ('_FarSh_CdTtyIdx', '_FarSh_CdTtyIdx', 0, 'abs24'),
+        ('_FarSh_Forceclose', '_FarSh_Forceclose', 0, 'abs24'),
         # The pump's two doors onto the core's byte source, and the INTR flush
         # the heartbeat latched because it consumed the ^C, RETIRED AT T6
         # INCREMENT 4b -- which is what the row here always said would happen:
