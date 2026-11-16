@@ -23,6 +23,15 @@ LOG=/root/s5run.log
 GW=`sed -n 2p /etc/dhcp.lease`
 BCAST=`echo $FREE | sed 's/\.[0-9]*$/.255/'`
 
+
+# inetd starts here, outside the pipe, for the reason syslogd restarts outside
+# it below.
+if ps ax | grep -v grep | grep inetd > /dev/null
+then
+	:
+else
+	/sbin/inetd < /dev/null > /dev/null 2>&1
+fi
 (
 echo "== 0. this run"
 uname -a
@@ -89,12 +98,6 @@ echo "== 6. descriptor passing over AF_UNIX"
 echo
 echo "== 7. S4's steps"
 echo "-- 7.2 telnet in from the Mac"
-if ps ax | grep -v grep | grep inetd > /dev/null
-then
-	echo "inetd already running"
-else
-	/sbin/inetd < /dev/null > /dev/null 2>&1
-fi
 echo "On the Mac:   nc $ADDR 23   (or telnet).  Log in, log out, connect"
 echo "again, log in and out again.  Then press Return here."
 read A
