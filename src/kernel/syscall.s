@@ -987,6 +987,7 @@ _SEL_STATE_LEN EQU  *-_selArgOff
 _selRdOut      DS  4                    ; result readfds  (rebuilt each scan)
 _selWrOut      DS  4                    ; result writefds
 _selExOut      DS  4                    ; result exceptfds
+_selNcoll      DS  2                    ; select1's `ncoll'
 _selCount      DS  2                    ; ready (fd,set) membership count
 _selFd         DS  2                    ; scan cursor
 _selBit        DS  4                    ; 32-bit rotating bit (1<<fd)
@@ -1405,6 +1406,9 @@ _Sys_Select     MX      %00
                 LDY     #16
                 STA     [_libcTmp2],Y           ; deadline.lo -> +16
 @sel_loop       JSR     _Sel_ReadArgblk
+                LDA     _selColl                ; `ncoll = nselcoll;
+                STA     _selNcoll               ;  p_flag |= P_SELECT;'
+                JSR     _Sel_Mark
                 JSR     _Sel_Scan
                 BCC     @sel_err
                 LDA     _selCount
@@ -1423,10 +1427,28 @@ _Sys_Select     MX      %00
                 LDA     _selPresent             ; timed select -> yield (deadline poll);
                 AND     #8                      ; block-forever -> sleep on WCHAN_SELECT
                 BNE     @sel_yield
-                INC     _nSelSleepers           ; (each source wakes it; we re-scan)
+                ; select1's test before it sleeps, 2.11BSD sys_generic.c:
+                ;     if ((p_flag & P_SELECT) == 0 || nselcoll != ncoll) {
+                ;             p_flag &= ~P_SELECT;
+                ;             goto retry;
+                ;     }
+                ;     p_flag &= ~P_SELECT;
+                ;     error = tsleep(&selwait, PSOCK | PCATCH, timo);
+                ; A wake that came during the scan found no sleeper, and left
+                ; one of those two marks instead.  Masked from the test to the
+                ; sleep, which masks for itself.
+                SEI
+                JSR     _Sel_Marked
+                BCC     @sel_again
+                LDA     _selColl
+                CMP     _selNcoll
+                BNE     @sel_again
+                INC     _nSelSleepers
                 LDA     #WCHAN_SELECT
                 JSR     _sleep
                 DEC     _nSelSleepers
+                BRA     @sel_wake
+@sel_again      CLI
                 BRA     @sel_wake
 @sel_yield      JSR     _Sys_Yield
 @sel_wake       PLA
@@ -1673,8 +1695,7 @@ _Sel_Scan       MX      %00
 ;------------------------------------------------------------------------------
 ; _Sel_Classify - readiness of the fd in _selFd for select.  Out: A = ready
 ; bits (b0=read, b1=write, b2=except), C=1 / A=EBADF, C=0 (fd not open).
-;   console : read = _kKbdRingCount!=0, write = always, except = never
-;   socket  : NETOP_SockStatus (read/write per SN_SR/RSR/FSR; except never)
+;   socket  : soo_select, through NETOP_SockStatus
 ;   pipe    : _SelOp_Pipe, from the ring
 ;   chardev/file : read + write always ready, except never
 ; MX %00 in/out.

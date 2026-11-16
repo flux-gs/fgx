@@ -73,6 +73,7 @@ int wakeup();
 #define	NETSTART()	netstart()
 #define	PUTC(c, p)	putc(c, p)
 #define	SELWAKEUP(p, coll)	selwakeup(p, coll)
+#define	SELWAITING(p)		selwaiting(p)
 #define	SLEEP(chan, pri)	sleep(chan, pri)
 #define	SOACC1(so)	soacc1(so)
 #define	SOACCEPT(so, nam)	soaccept(so, nam)

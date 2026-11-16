@@ -42,31 +42,25 @@ _ctp003         JSL     _FarSh_Wakeup           ; shim sets DBR = core bank
                 RTL
 
 ;------------------------------------------------------------------------------
-; kc_ptywake() - wake WCHAN_PTY, the channel every pty waiter sleeps on.
-; apple/fgx#108 T4 increment 4.
+; kc_ptcwakeup(idx, flag) - 2.11BSD's ptcwakeup(tp, flag) (tty_pty.c:177).
 ;
-; `ptsstart's whole body, and the reason it is a shim of its own rather than
-; `kc_wakeup(some pointer)': kc_wakeup takes a POINTER and passes its offset,
-; because every channel it has served is an object's address.  WCHAN_PTY is not
-; an object -- it is a name in the fixed range include/kernel.s reserves for
-; kernel-global wait sources -- and spelling it as a cast pointer at the call
-; site would put a magic address in the C.  kc_lbolt is the same argument for
-; the same reason, one screen down.
+; `idx' is the slave line's tty index and `flag' is FREAD and/or FWRITE.  The
+; selector slots it reads are the driver's, in the core bank's pair record, so
+; the routine is the core's _Ptc_Wakeup: the select recorded on the master for
+; that direction, then WCHAN_PTY, the channel every pty waiter sleeps on.
 ;
-; COARSE ON PURPOSE: one channel serves every pty waiter, so this wakes them
-; all and each re-tests.  That is WCHAN_PIPE's arrangement and the pty plan
-; adopted it deliberately.  It is NOT the lbolt channel any more -- the two were
-; the same value until apple/fgx#238, which would have made a ptsstart that
-; never fired indistinguishable from one that did.
-;
-; No arguments, no return.
+; No return.
 ;------------------------------------------------------------------------------
-kc_ptywake      MX      %00
+kc_ptcwakeup    MX      %00
+                LDA     6,S                     ; flag
+                TAY
+                LDA     4,S                     ; idx
                 PHD                             ; save the kernel-C page
+                PHA
 _ctp047         JSL     _FarSh_KernDP           ; A = the kernel's REAL DP
                 TCD
-                LDA     #WCHAN_PTY
-_ctp048         JSL     _FarSh_Wakeup           ; shim sets DBR = core bank
+                PLA
+_ctp048         JSL     _FarSh_PtcWakeup        ; shim sets DBR = core bank
                 PLD                             ; kernel-C page back
                 RTL
 
@@ -724,25 +718,53 @@ _ctp034         JSL     _FarSh_SigPending       ; A = bytes 0,1  X = bytes 2,3
                 RTL
 
 ;------------------------------------------------------------------------------
-; kc_selwakeup() - BSD's selwakeup.  No arguments, no return.
+; kc_selwakeup(pid, coll) - BSD's selwakeup(p, coll).  No return.
 ;
-; UPSTREAM'S TWO ARGUMENTS ARE DROPPED, AND THAT IS THE PORT, NOT A SHORTCUT.
-; selwakeup(p, coll) names the proc that registered in tp->t_rsel and whether
-; two selectors collided on this tty.  FGX's select(2) registers on nothing --
-; _Sys_Select polls and yields, and its block-forever arm sleeps on the single
-; WCHAN_SELECT -- so there is no recorded proc to name and no per-tty collision
-; to distinguish.  Passing a t_rsel that is always 0 and a collision bit nothing
-; sets would be two arguments that look meaningful and are not.
+; `pid' is the selector a line recorded in t_rsel or t_wsel, 0 for none, and
+; `coll' is non-zero when a second select found the slot taken.  The core's
+; _Sel_Wakeup is the routine.
 ;
-; D IS SWAPPED because _wakeup walks the scheduler table through _schedTblPtr on
+; D IS SWAPPED because it walks the scheduler table through _schedTblPtr on
 ; the kernel's own page, the same reason kc_wakeup swaps.
 ;------------------------------------------------------------------------------
 kc_selwakeup    MX      %00
+                LDA     6,S                     ; coll
+                TAY
+                LDA     4,S                     ; pid
                 PHD                             ; save the kernel-C page
+                PHA
 _ctp012         JSL     _FarSh_KernDP           ; A = the kernel's REAL DP
                 TCD
+                PLA
 _ctp013         JSL     _FarSh_SelWakeup        ; shim sets DBR = core bank
                 PLD                             ; kernel-C page back
+                RTL
+
+;------------------------------------------------------------------------------
+; kc_selwaiting(pid) -> 1 when that process sleeps in select, else 0.
+; ttyselect's `tp->t_rsel && tp->t_rsel->p_wchan == (caddr_t)&selwait'.
+;------------------------------------------------------------------------------
+kc_selwaiting   MX      %00
+                LDA     4,S                     ; pid
+                PHD
+                PHA
+_ctp081         JSL     _FarSh_KernDP
+                TCD
+                PLA
+_ctp082         JSL     _FarSh_SelWaiting
+                PLD
+                RTL
+
+;------------------------------------------------------------------------------
+; kc_curpid() -> the running pid: ttyselect's `u.u_procp'.
+;------------------------------------------------------------------------------
+kc_curpid       MX      %00
+                PHD
+_ctp083         JSL     _FarSh_KernDP
+                TCD
+_ctp084         JSL     _FarSh_CurPid
+                PLD
+                AND     #$00FF
                 RTL
 
 ;------------------------------------------------------------------------------

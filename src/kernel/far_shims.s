@@ -605,28 +605,41 @@ _FarSh_CdIoctl  PHB
                 RTL
 
 ;------------------------------------------------------------------------------
-; _FarSh_SelWakeup - BSD's selwakeup, as FGX spells it.  No arguments.
-;
-; UPSTREAM WAKES ONE RECORDED SELECTOR; FGX WAKES THE CHANNEL.  BSD's
-; selwakeup(p, coll) takes the proc that registered itself in tp->t_rsel and
-; wakes it (or, on a collision, everything).  FGX's select(2) records itself on
-; nothing: _Sys_Select is a poll-and-yield loop whose block-forever arm sleeps
-; on the single WCHAN_SELECT, and the keyboard, socket, pipe, pty and klog
-; sites wake it exactly this way.  So there is one channel
-; and no per-tty registration to consult.
-;
-; THE GUARD IS THE SAME ONE THOSE SITES USE and is not an optimisation: _wakeup
-; walks the scheduler table, and this is reached from the discipline's inner
-; loops.  sched.s:172 and :194 are the pattern.
+; _FarSh_SelWakeup - selwakeup(p, coll) for a bank that is not the core one.
+; In:  A = the recorded pid, 0 for none; Y = non-zero for a collision.
+;      D = the kernel's REAL direct page.  sched.s _Sel_Wakeup.
 ;------------------------------------------------------------------------------
 _FarSh_SelWakeup PHB
                 PHK
                 PLB                     ; DBR = CORE bank
-                LDA     _nSelSleepers
-                BEQ     @fsw_done
-                LDA     #WCHAN_SELECT
-                JSR     _wakeup
-@fsw_done       PLB
+                JSR     _Sel_Wakeup
+                PLB
+                RTL
+
+;------------------------------------------------------------------------------
+; _FarSh_PtcWakeup - ptcwakeup(tp, flag) for the tty bank.  In: A = the slave's
+; tty index, Y = the flag.  D = the kernel's REAL direct page.  pty.s
+; _Ptc_Wakeup.
+;------------------------------------------------------------------------------
+_FarSh_PtcWakeup PHB
+                PHK
+                PLB                     ; DBR = CORE bank
+                JSR     _Ptc_Wakeup
+                PLB
+                RTL
+
+;------------------------------------------------------------------------------
+; _FarSh_SelWaiting - `p && p->p_wchan == (caddr_t)&selwait'.
+; In:  A = a pid, 0 for none.  Out: A = 1 when it sleeps in select, else 0.
+;      D = the kernel's REAL direct page.  sched.s _Sel_Waiting.
+;------------------------------------------------------------------------------
+_FarSh_SelWaiting PHB
+                PHK
+                PLB                     ; DBR = CORE bank
+                JSR     _Sel_Waiting
+                LDA     #0
+                ROL
+                PLB
                 RTL
 
 ;------------------------------------------------------------------------------

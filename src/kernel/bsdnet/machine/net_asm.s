@@ -189,6 +189,33 @@ netintr_enter   MX      %00
                 RTL
 
 ;------------------------------------------------------------------------------
+; kc_selwakeup(pid, coll) - selwakeup(p, coll), the kernel's.  kc_selwaiting(pid)
+; -> 1 when that process sleeps in select.  The bracket is common/kc_sys.s's
+; ENTERK: the kernel's routines want the task's own page in D.
+;------------------------------------------------------------------------------
+kc_selwakeup    MX      %00
+                PHD
+                LDAL    KFGX_CUR_KDP
+                TCD
+                LDA     8,S                     ; coll
+                TAY
+                LDA     6,S                     ; pid
+                LDX     #KSVC_SELWAKEUP
+                JSL     SYS_KCALL
+                PLD
+                RTL
+
+kc_selwaiting   MX      %00
+                PHD
+                LDAL    KFGX_CUR_KDP
+                TCD
+                LDA     6,S                     ; pid
+                LDX     #KSVC_SELWAITING
+                JSL     SYS_KCALL
+                PLD
+                RTL
+
+;------------------------------------------------------------------------------
 ; bcopy(src, dst, n) - 2.11BSD's (libc pdp/gen/bcopy.s): n unsigned, and an
 ; overlapping move handled, backward when dst is above src.  Here that is MVN
 ; forward and MVP backward, seven cycles a byte.  An overlap needs one bank, so

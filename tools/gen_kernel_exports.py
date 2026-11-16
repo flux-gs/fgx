@@ -153,10 +153,14 @@ MANIFESTS = {
         # ttyblock/ttyunblock's RTSCTS arm.  FGX has no cdevsw array, so
         # d_ioctl is the registry's _Chardev_Ioctl reached through here.
         ('_FarSh_CdIoctl',  '_FarSh_CdIoctl',  0, 'abs24'),
-        # ttwakeup/ttyowake.  selwakeup is one CHANNEL in FGX, not a recorded
-        # proc; gsignal is _Kill_GroupFanout, which the tty bank feeds from its
-        # own t_pgrp rather than through _ttyTable.
+        # ttwakeup/ttyowake's selwakeup(p, coll), and ttyselect's test of the
+        # selector a line already holds and the pid it records.  gsignal is
+        # _Kill_GroupFanout, which the tty bank feeds from its own t_pgrp
+        # rather than through _ttyTable.
         ('_FarSh_SelWakeup','_FarSh_SelWakeup',0, 'abs24'),
+        ('_FarSh_SelWaiting','_FarSh_SelWaiting',0, 'abs24'),
+        ('_FarSh_PtcWakeup','_FarSh_PtcWakeup',0, 'abs24'),
+        ('_FarSh_CurPid',   '_FarSh_CurPid',   0, 'abs24'),
         ('_FarSh_Gsignal',  '_FarSh_Gsignal',  0, 'abs24'),
         # ttyflush and, at T6, ttyinput's ^S path.
         ('_FarSh_CdStop',   '_FarSh_CdStop',   0, 'abs24'),

@@ -664,9 +664,10 @@ WCHAN_TIMER     EQU     $FF03           ; nanosleep deadline (SE_WakeTime; woken
                                         ; _Timer_WakeExpired when _kSystemTicks passes)
 WCHAN_PIPE      EQU     $FF04           ; any pipe (read/write blocks); coarse
                                         ; wake-all-recheck
-WCHAN_SELECT    EQU     $FF05           ; select(2) blocking on ANY of its fds;
-                                        ; woken by each source when its state
-                                        ; changes (gated on _nSelSleepers) -> re-scan
+WCHAN_SELECT    EQU     $FF05           ; select(2) with nothing ready: BSD's
+                                        ; `selwait'.  An object wakes the one
+                                        ; select it recorded, or on a collision
+                                        ; all of them (sched.s _Sel_Wakeup)
 WCHAN_KLOG      EQU     $FF0B           ; /dev/klog's reader; _Klog_Wake (sched.s)
                                         ; wakes it when the ring's head has moved
 WCHAN_VFORK     EQU     $FF06           ; fork train: parent of a vfork/snapshot-fork
@@ -1028,6 +1029,11 @@ SEF_STKBORROW_CLR EQU   %1111111110111111   ; ~SEF_STKBORROW
 SEF_SNAPCHILD   EQU     %00010000       ; fork train: a snapshot fork child, a member
                                         ; of its parent's image group (the bank home,
                                         ; process.s) until it execs or exits.
+SEF_SELECT      EQU     $0800           ; `P_SELECT' (2.11BSD sys/proc.h): this
+                                        ; task is between select's scan and its
+                                        ; sleep.  selwakeup clears it, and the
+                                        ; select scans again instead of sleeping
+SEF_SELECT_CLR  EQU     $F7FF           ; ~SEF_SELECT
 SEF_FORKREL     EQU     %10000000       ; a snapshot child that has RELEASED its
                                         ; parent: set by Img_Release at its first
                                         ; interruptible sleep or quantum yield, and

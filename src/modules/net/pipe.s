@@ -283,11 +283,11 @@ _Sys_Pipe       MX      %00
 _Pipe_Wake      MX      %00
                 LDA     #WCHAN_PIPE
                 JSR     _NlKC_Wakeup
-                LDA     _nSelSleepers
-                BEQ     @pwk_out
-                LDA     #WCHAN_SELECT
-                JSR     _NlKC_Wakeup
-@pwk_out        RTS
+                LDA     #0                      ; a pipe records no selector:
+                LDY     #1                      ;   selwakeup's collision arm
+                LDX     #KSVC_SELWAKEUP
+                JSL     SYS_KCALL
+                RTS
 
 ;==============================================================================
 ; _Pipe_FdToIdx - resolve a pipe fd to its descriptor record offset.

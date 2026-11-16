@@ -151,10 +151,6 @@ swtch           ENT
                 BEQ     @sw_ckTimer
                 LDA     #WCHAN_KBD
                 JSR     _wakeup
-                LDA     _nSelSleepers           ; + a select blocked on a console fd
-                BEQ     @sw_ckTimer
-                LDA     #WCHAN_SELECT
-                JSR     _wakeup
 @sw_ckTimer     ; Wake any EXPIRED nanosleep timer on every switch too (not only
                 ; when idle): a busy background task is always READY, so @sw_idle
                 ; never runs and a lone @sw_idle scan would starve the sleeper —
@@ -900,11 +896,140 @@ _Klog_Wake      ENT
                 STA     _klogWakeHead
                 LDA     #WCHAN_KLOG
                 JSR     _wakeup
+                LDA     #0                      ; no selector is recorded for
+                LDY     #1                      ;   the log: every one looks
+                JSR     _Sel_Wakeup
+@klw_none       RTS
+
+;=============================================================================
+; select(2)'s wake, 2.11BSD's (usr/sys/sys/sys_generic.c).  An object a select
+; found not ready holds that select's pid -- sb_sel in a socket buffer, t_rsel
+; and t_wsel in a tty, PTYR_SelR and PTYR_SelW in a pty pair -- and wakes that
+; one process when it becomes ready.  A second selector on the same object is a
+; collision: the object notes it, and its wake releases every select.
+;
+; _Sel_Wakeup - selwakeup(p, coll).
+;
+;       if (coll) {
+;               nselcoll++;
+;               wakeup((caddr_t)&selwait);
+;       }
+;       if (p) {
+;               if (p->p_wchan == (caddr_t)&selwait)
+;                       setrun(p);
+;               else if (p->p_flag & P_SELECT)
+;                       p->p_flag &= ~P_SELECT;
+;       }
+;
+; In:  A = the recorded pid, 0 for none.  Y = non-zero for a collision.
+; MX %00, the kernel's direct page, DBR the core bank.  Clobbers A/X/Y.  Masked
+; for its length and restores the caller's mask: a tty reaches it from its
+; receive interrupt.
+;=============================================================================
+_Sel_Wakeup     ENT
+                MX      %00
+                PHP
+                SEI
+                PHA
+                TYA
+                BEQ     @swk_one
+                INC     _selColl
                 LDA     _nSelSleepers
-                BEQ     @klw_none
+                BEQ     @swk_one
                 LDA     #WCHAN_SELECT
                 JSR     _wakeup
-@klw_none       RTS
+@swk_one        PLA
+                BEQ     @swk_out
+                JSR     _Sel_Waiting            ; X, Y for that pid
+                BCC     @swk_flag
+                LDA     #0
+                STA     [_schedTblPtr],Y        ; SE_WaitChan: not waiting
+                LDA     #TASK_READY
+                STA:    TCB_Status,X
+                BRA     @swk_out
+@swk_flag       TYA
+                SEC
+                SBC     #SE_WaitChan
+                CLC
+                ADC     #SE_Flags
+                TAY
+                LDA     [_schedTblPtr],Y
+                AND     #SEF_SELECT_CLR
+                STA     [_schedTblPtr],Y
+@swk_out        PLP
+                RTS
+
+; _Sel_Waiting - `p && p->p_wchan == (caddr_t)&selwait', the test an object
+; makes of its recorded selector before another select takes its place.
+; In:  A = a pid, 0 for none.  Out: C=1 when that process sleeps in select.
+;      X = its task entry, Y = its SE_WaitChan, when A was not 0.
+_Sel_Waiting    ENT
+                MX      %00
+                AND     #$00FF
+                BEQ     @swt_no
+                DEC
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL                             ; (pid-1) * SE_SIZE
+                PHA
+                CLC
+                ADC     #SE_WaitChan
+                TAY
+                PLA
+                ASL                             ; (pid-1) * TCB_SIZE
+                CLC
+                ADC     #FGX_TASK_TBL_OFF
+                TAX
+                LDA:    TCB_Status,X
+                AND     #$00FF
+                CMP     #TASK_BLOCKED
+                BNE     @swt_no
+                LDA     [_schedTblPtr],Y
+                CMP     #WCHAN_SELECT
+                BNE     @swt_no
+                SEC
+                RTS
+@swt_no         CLC
+                RTS
+
+; _Sel_Mark - `u.u_procp->p_flag |= P_SELECT', before select's scan.
+_Sel_Mark       ENT
+                MX      %00
+                JSR     @sm_y
+                LDA     [_schedTblPtr],Y
+                ORA     #SEF_SELECT
+                STA     [_schedTblPtr],Y
+                RTS
+@sm_y           LDA     _curTask
+                AND     #$00FF
+                DEC
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #SE_Flags
+                TAY
+                RTS
+
+; _Sel_Marked - clear P_SELECT and answer whether it was still set: C=0 when a
+; selwakeup cleared it during the scan.
+_Sel_Marked     ENT
+                MX      %00
+                JSR     @sm_y
+                LDA     [_schedTblPtr],Y
+                PHA
+                AND     #SEF_SELECT_CLR
+                STA     [_schedTblPtr],Y
+                PLA
+                AND     #SEF_SELECT
+                CMP     #1
+                RTS
+
+_selColl        DS      2                       ; `nselcoll'
 
 ;=============================================================================
 ; _Vm_Loadav - 2.11BSD's load average, every five seconds: vmtotal()'s nrun

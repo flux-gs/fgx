@@ -650,7 +650,15 @@ KSVC_SLEEPUNR           EQU     61  ; A = wait channel: KSVC_SLEEPUN for a wait
                                     ;   with no bound -- a snapshot fork child
                                     ;   releases its parent first (sched.s
                                     ;   _sleepUnRel).  C=1.
-KSVC_COUNT              EQU     62
+KSVC_SELWAKEUP          EQU     62  ; A = a recorded selector's pid or 0,
+                                    ;   Y = non-zero for a collision: BSD's
+                                    ;   selwakeup(p, coll) (sched.s
+                                    ;   _Sel_Wakeup).  C=1.
+KSVC_SELWAITING         EQU     63  ; A = a pid or 0 -> C=1 + A = 1 when that
+                                    ;   process sleeps in select, else 0: the
+                                    ;   test an object makes of its recorded
+                                    ;   selector (sched.s _Sel_Waiting).
+KSVC_COUNT              EQU     64
 SYS_BLKREAD             EQU     MOD_JT_BASE+$16
 SYS_BLKWRITE            EQU     MOD_JT_BASE+$1A
 SYS_BLKSTATUS           EQU     MOD_JT_BASE+$1E

@@ -65,7 +65,7 @@ extern void kc_cdwrite();       /* kc_sys.s -- a RUN of bytes to a chardev */
 /* The pump's two doors onto the core's byte source (T3 stage 4).  Both answer
  * 0..255 for a character and -1 for none -- the carry the core routines really
  * return, folded into a value C can see. */
-extern void kc_ptywake();       /* kc_sys.s -- wake WCHAN_PTY (T4 inc 4)      */
+extern void kc_ptcwakeup();     /* kc_sys.s -- ptcwakeup(tp, flag)            */
 extern void ttyowake();         /* tty.c -- dzstart's low-water wake */
 extern void ttrstrt();          /* tty.c -- the output rail's PERFORM half */
 extern void kc_cdstop_now();    /* kc_sys.s -- d_stop, WITHOUT the rail */
@@ -562,10 +562,10 @@ kc_ttread(idx, uio, flag)
      * with the wake missing.
      *
      * AFTER the read, not before: the point is that the queue has just been
-     * drained.  Coarse on purpose, which is WCHAN_PTY's whole arrangement --
-     * one channel serves every pty waiter and each re-tests on waking. */
+     * drained.  It is upstream's `ptcwakeup(tp, FWRITE)' at the end of ptsread
+     * (tty_pty.c:137), and a line that is no pty slave has no master to wake. */
     c = (*linesw[tp->t_line].l_read)(tp, uio, flag);
-    kc_ptywake();
+    kc_ptcwakeup((int)(tp - ttys), FWRITE);
     return (c);
 }
 
@@ -621,9 +621,7 @@ tty_oproc(tp)
     /* ttyowake IS dzstart's low-water block, already ported (tty.c:738) -- the
      * TS_ASLEEP wake and the selector wake, behind the same
      * `c_cc <= TTLOWAT' test.  Calling it rather than open-coding the same
-     * five lines is not only shorter: it keeps ONE copy of the divergence
-     * ttwakeup records about FGX's selwakeup being a channel rather than a
-     * recorded proc. */
+     * five lines is shorter and keeps one copy of them. */
     ttyowake(tp);
     tp->t_state |= TS_BUSY;
     while (tp->t_outq.c_cc) {
@@ -722,7 +720,7 @@ ptsstart(tp)
 
     if (tp->t_state & TS_TTSTOP)
         return;
-    kc_ptywake();
+    kc_ptcwakeup((int)(tp - ttys), FREAD);
 }
 
 /* kc_ttselect -- the discipline's own readiness answer.  KTTY slot 32.

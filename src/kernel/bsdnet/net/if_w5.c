@@ -124,7 +124,7 @@ w5_tap(hdr, m, skip, datalen)
 		skip = 0;
 	}
 	w5_tapr.t_head = next;
-	selwakeup((struct proc *)0, (long)0);	/* a select on bpf */
+	selwakeup((struct proc *)0, (long)1);	/* a select on bpf: none recorded */
 }
 
 static void

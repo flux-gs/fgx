@@ -564,8 +564,16 @@ _Sys_KCallImpl      MX  %00
                 BRL     @kc_unpfile
 @kc_s61        ANOP
                 CPX     #KSVC_SLEEPUNR
-                BNE     @kc_s59
+                BNE     @kc_s62
                 BRL     @kc_sleepunr
+@kc_s62        ANOP
+                CPX     #KSVC_SELWAKEUP
+                BNE     @kc_s63
+                BRL     @kc_selwakeup
+@kc_s63        ANOP
+                CPX     #KSVC_SELWAITING
+                BNE     @kc_s59
+                BRL     @kc_selwaiting
 @kc_s59        ANOP
                 ; Unknown service.  A module built against a NEWER kernel can
                 ; ask for one that does not exist here; say so instead of
@@ -825,6 +833,16 @@ _kfp993         JSL     KFAR_CON_RENDERALL
                 SEC
                 RTL
 @kc_wakeup      JSR     _wakeup                 ; A = chan
+                PLB
+                SEC
+                RTL
+@kc_selwakeup   JSR     _Sel_Wakeup             ; A = pid, Y = coll
+                PLB
+                SEC
+                RTL
+@kc_selwaiting  JSR     _Sel_Waiting            ; A = pid -> C
+                LDA     #0
+                ROL
                 PLB
                 SEC
                 RTL

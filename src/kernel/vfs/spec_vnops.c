@@ -70,11 +70,10 @@
  *   There is no second decision to make; there is one already made upstream of
  *   both roads.  See include/modules.s at KSVC_CDIOCTL.
  *
- *   select has no per-process wait record to marshal.  Reno's ttselect parks
- *   u.u_procp in tp->t_rsel and selwakeup() wakes that one selector; FGX's
- *   select(2) registers on nothing -- _Sys_Select is a poll-and-yield loop on
- *   the single WCHAN_SELECT, which far_shims.s's _FarSh_SelWakeup records at
- *   length.  There is one channel and no registration.
+ *   select has no per-process wait record to marshal here.  ttselect parks
+ *   the selecting process in tp->t_rsel and selwakeup() wakes that one
+ *   selector, and both are the device's side of the door (sched.s
+ *   _Sel_Wakeup).
  *
  * So what was owed was not a decision but a DOOR: a module could not reach
  * _Chardev_Ioctl/_Chardev_Poll at all (a scraped kernel address dispatches on

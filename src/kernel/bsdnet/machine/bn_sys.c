@@ -80,7 +80,7 @@ int	netoff;			/* uipc_syscalls.c tests it: the network is on */
  * through the cell only once it is filled and answers EPROTONOSUPPORT before. */
 extern	int bn_sysent();
 int	(*bn_syscell)() = 0;
-static	struct proc bn_proc;	/* u_procp: sbselqueue reads its p_wchan */
+static	struct proc bn_proc[NPROC + 1];	/* u_procp, by pid: sbselqueue records it */
 static	struct file bn_file;	/* what getf() answers */
 static	struct sockaddr_in bn_to;
 static	int bn_len;
@@ -353,15 +353,23 @@ uiomove(cp, n, uio)
 	return (0);
 }
 
-/* FGX's select records no selector, so a wakeup is the channel's (the kernel's
- * _FarSh_SelWakeup says why). */
-#define	WCHAN_SELECT	0xFF05		/* include/kernel.s */
+/* 2.11BSD's selwakeup (sys/sys_generic.c) is the kernel's _Sel_Wakeup.  A
+ * selector is u.u_procp, which is its process's entry in bn_proc, so the entry's
+ * index is the pid the kernel knows it by. */
 void
 selwakeup(p, coll)
 	struct proc *p;
 	long coll;
 {
-	kc_wakeup((caddr_t)WCHAN_SELECT);
+	kc_selwakeup(p ? (int)(p - bn_proc) : 0, coll != 0);
+}
+
+/* sbselqueue's `p->p_wchan == (caddr_t)&selwait': p sleeps in select. */
+int
+selwaiting(p)
+	struct proc *p;
+{
+	return (kc_selwaiting((int)(p - bn_proc)));
 }
 
 /* sosend's SIGPIPE: always the calling process here. */
@@ -678,7 +686,7 @@ bn_body(cp)
 	u.u_r.r_val1 = 0;
 	u.u_r.r_val2 = 0;
 	u.u_uid = kc_curuid();
-	u.u_procp = &bn_proc;
+	u.u_procp = &bn_proc[kc_curpid()];
 	so = cp->c_so ? sockat(cp->c_so) : (struct socket *)0;
 	bn_file.f_type = DTYPE_SOCKET;
 	bn_file.f_socket = so;

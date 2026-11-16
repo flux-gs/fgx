@@ -87,6 +87,7 @@ extern int kc_sleepi();
 
 /* selwakeup and gsignal, as this bank reaches them.  kc_sys.s. */
 extern void kc_selwakeup();
+extern int kc_selwaiting(), kc_curpid();
 extern void kc_gsignal();
 
 /* kc_wakeup and ttyoutput are used before their definition/declaration would
@@ -701,47 +702,19 @@ ttyunblock(tp)
  * no FGX ioctl route sets -- and is carried so the increment that adds it finds
  * the wiring here.
  *
- * FGX DIVERGENCE: THE SELECTOR WAKE IS UNCONDITIONAL.  Upstream guards it with
- * `if (tp->t_rsel)' (tty.c:1687) and passes the registered proc to selwakeup,
- * which wakes THAT ONE task.  FGX's select(2) registers on nothing, so t_rsel
- * is never set and the guard would make this call dead code -- a tty could
- * never wake its own selector, and a select blocked on a pty or serial line
- * would move only on the 60 Hz idle re-scan in sched.s.
- *
- * DROPPING THE GUARD IS UPSTREAM'S OWN FALLBACK, NOT AN INVENTION.  BSD's
- * selwakeup takes `(p, coll)' and, when it cannot target one proc, does exactly
- * what FGX does always (sys_generic.c:511-514):
- *
- *     if (coll) {
- *             nselcoll++;
- *             wakeup((caddr_t)&selwait);
- *     }
- *
- * `coll' is set by `ttyselect' (tty.c:606), at its collision test on
- * tty.c:619-620, when a SECOND task selects on a tty that already has one
- * recorded -- one slot, two selectors, so it marks
- * TS_RCOLL and falls back to a broadcast plus a full rescan.  FGX has one
- * channel and no slot at all, which is that collision case permanently; and
- * select rescans after every wake either way, because BSD's select is itself a
- * poll-and-retry loop (`goto retry' after tsleep, sys_generic.c:431) and the
- * registration never carried readiness.
- *
- * IT IS NOT A WAKEUP STORM: _FarSh_SelWakeup tests `_nSelSleepers' first and
- * returns, so with nobody selecting this costs an LDA and a BEQ -- the same
- * guard sched.s:172 and :194 use at their own wake sites.
- *
- * ttyflush already spelled it this way, because upstream does too there: its
- * selwakeup call carries no `if' (tty.c:201), the NULL test living inside
- * selwakeup.  This makes the three call sites agree.
+ * t_rsel AND t_wsel HOLD A PID where upstream holds a `struct proc *': the
+ * selector ttyselect recorded, which kc_selwakeup names to the core.
  */
 void
 ttwakeup(tp)
     register struct tty *tp;
 {
 
-    kc_selwakeup();                     /* FGX DIVERGENCE -- see the note above */
-    tp->t_state &= ~TS_RCOLL;
-    tp->t_rsel = 0;
+    if (tp->t_rsel) {
+        kc_selwakeup((int)tp->t_rsel, (tp->t_state & TS_RCOLL) != 0);
+        tp->t_state &= ~TS_RCOLL;
+        tp->t_rsel = 0;
+    }
     if (tp->t_state & TS_ASYNC)
         kc_gsignal(tp->t_pgrp, SIGIO);
     kc_wakeup(&tp->t_rawq);
@@ -775,9 +748,11 @@ ttyowake(tp)
             tp->t_state &= ~TS_ASLEEP;
             kc_wakeup(&tp->t_outq);
         }
-        kc_selwakeup();                 /* FGX DIVERGENCE -- see ttwakeup */
-        tp->t_wsel = 0;
-        tp->t_state &= ~TS_WCOLL;
+        if (tp->t_wsel) {
+            kc_selwakeup((int)tp->t_wsel, (tp->t_state & TS_WCOLL) != 0);
+            tp->t_wsel = 0;
+            tp->t_state &= ~TS_WCOLL;
+        }
     }
 }
 
@@ -849,7 +824,7 @@ ttyflush(tp, rw)
         kc_wakeup(&tp->t_outq);
         while (getc(&tp->t_outq) >= 0)
             ;
-        kc_selwakeup();
+        kc_selwakeup((int)tp->t_wsel, (tp->t_state & TS_WCOLL) != 0);
         tp->t_state &= ~TS_WCOLL;
         tp->t_wsel = 0;
     }
@@ -1310,11 +1285,19 @@ ttyselect(tp, rw)
         nread = ttnread(tp);
         if ((nread > 0) || ((tp->t_state & TS_CARR_ON) == 0))
             goto win;
+        if (kc_selwaiting((int)tp->t_rsel))
+            tp->t_state |= TS_RCOLL;
+        else
+            tp->t_rsel = (struct proc *)kc_curpid();
         break;
 
     case FWRITE:
         if (tp->t_outq.c_cc <= TTLOWAT(tp))
             goto win;
+        if (kc_selwaiting((int)tp->t_wsel))
+            tp->t_state |= TS_WCOLL;
+        else
+            tp->t_wsel = (struct proc *)kc_curpid();
         break;
     }
     splx(s);
