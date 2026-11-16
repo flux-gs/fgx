@@ -125,7 +125,8 @@ echo "On the Mac:"
 echo "  for i in \$(seq 16); do (sleep 60 | nc $ADDR 23 > /dev/null &); done"
 echo "then press Return here within a few seconds."
 read A
-echo "telnetd count (expect 16 or 17):"
+echo "telnetd count (2 log in: FGX has 2 pty pairs, include/pty.s PTY_NPAIR;"
+echo "the rest are accepted and find no pty):"
 ps ax | grep -c telnetd
 echo "waiting 75 s for them to close..."
 sleep 75

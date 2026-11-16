@@ -135,3 +135,36 @@ that page expects.  Under MAME the 1 MB `lo0` transfer now takes 27.5 s, 37 KB/s
 6. Both `UNIX R` lines.
 7. S4's list, items 2 to 7.
 8. Anything else odd.
+
+## The run, 2026-11-15
+
+Chris's IIgs with a TransWarp and an Uthernet II, `disk/fgxroot-s5.fs`; the log is
+kept in the plan's ledger directory as `s5run-hw-2026-11-15.log`.
+
+| Step | Result |
+|---|---|
+| 1 | All modules loaded, `w5: attached ... rx 8192`, `bsdnet: ok`; the lease file was written.  The `bound to` line scrolled past. |
+| 2 | `wz0` with the lease's address, `ether` matched the attach line; `u2s1` is no such interface. |
+| 3 | 8.8.8.8 answered, `route -nf` flushed the default, the gateway still answered, 8.8.8.8 did not, and did again after `route add`. |
+| 4 | dhclient bound again, and 8.8.8.8 answered. |
+| 5 | The static address answered the Mac and 8.8.8.8; dhclient put the lease back. |
+| 6 | `UNIX R ok`, `UNIX R gc ok`. |
+| 7.2 | Telnet from the Mac reached a shell twice. |
+| 7.3 | Skipped (ftp's prompt was buffered in the script's pipe; fixed, see below). |
+| 7.4 | 8 telnetd with 16 connections, and a console message that no pty was free: FGX has 2 pty pairs, where 2.11BSD has 16.  The stack held all 16; afterwards none were left and a new connection answered.  The limit stays at 2 (Chris). |
+| 7.5 | Ping answered both ways, no `DUP!`. |
+| 7.6 | Both syslog lines reached the console. |
+| 7.7 | 20 packets, 6 `[saturated]` lines (S3: 95 in 300). |
+
+The clock read 2027: the IIgs's own clock was set to it.
+
+Found by the run:
+
+- The script started inetd and ran ftp inside `( ... ) 2>&1 | tee`.  inetd
+  inherited the pipe at sh's fd 11 and tee never ended; ftp's Name prompt sat in
+  stdio's buffer.  Both fixed in the script.
+- `^Z` in ftp, under tcsh, over telnet, hangs the whole machine.  Not yet
+  reproduced or characterized.
+- Interactive response and console drawing are much slower on this branch than
+  on `main`, by Chris's use.  Not yet measured.
+
