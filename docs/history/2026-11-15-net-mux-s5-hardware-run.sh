@@ -40,7 +40,7 @@ echo "free $FREE  mac $MAC  far $FAR  gateway $GW  broadcast $BCAST"
 
 echo
 echo "== 1. the boot"
-/usr/fgx/bin/dmesg | sed -n -e '/w5:/p' -e '/bsdnet/p' -e '/module:/p'
+/usr/fgx/bin/dmesg | sed -n -e '/w5:/p' -e '/bsdnet: /p' -e '/module:/p'
 echo "lease file:"
 cat /etc/dhcp.lease
 echo "Did the boot print 'wz0: bound to ...' (y/n)?"
