@@ -27,7 +27,15 @@
  *
  * THE WINDOW SIZE IS NEGOTIATED (RFC 1073), which this telnetd predates.  The
  * client is asked for NAWS and its answer is set on the pty with TIOCSWINSZ.
- * A zero dimension is ignored.
+ * A zero dimension is ignored.  SIGTTOU is ignored as 2.11BSD's rlogind
+ * ignores it (libexec/rlogind/rlogind.c, protocol()), since the session's
+ * shell holds the foreground by the time a client resizes.
+ *
+ * A SUBOPTION STARTS AN EMPTY BUFFER, as 4.3BSD-Reno's telnetd has it
+ * (libexec/telnetd/state.c, `case SB: state = TS_SB; SB_CLEAR();').  Upstream
+ * leaves the pointer where the last suboption's reader stopped, which costs
+ * it nothing with one suboption in a session; a window size after a terminal
+ * type, or a second window size, would be read as the bytes before it.
  *
  * fatal()'s buffer is static: a task's stack comes out of one bank-0 arena.
  */
@@ -400,6 +408,13 @@ telnet(f, p)
 	setsockopt(net, SOL_SOCKET, SO_OOBINLINE, &on, sizeof on);
 #endif	/* defined(SO_OOBINLINE) */
 	signal(SIGTSTP, SIG_IGN);
+	/*
+	 * FGX: rlogind's, for the window size:
+	 * Must ignore SIGTTOU, otherwise we'll stop
+	 * when we try and set slave pty's window shape
+	 * (our controlling tty is the master pty).
+	 */
+	signal(SIGTTOU, SIG_IGN);
 	signal(SIGCHLD, cleanup);
 	setpgrp(0, 0);
 
@@ -733,6 +748,7 @@ telrcv()
 			 * Begin option subnegotiation...
 			 */
 			case SB:
+				SB_CLEAR();	/* FGX: 4.3BSD-Reno state.c */
 				state = TS_SB;
 				continue;
 

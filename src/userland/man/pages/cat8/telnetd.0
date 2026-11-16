@@ -72,7 +72,9 @@ BUGS
      does not have, before the child is given it.
 
      The window size option is an addition; 2.11BSD's telnetd
-     does not know it.
+     does not know it.  With it come two things that telnetd does
+     not have: each suboption is read from an empty buffer, as in
+     4.3BSD-Reno's telnetd, and SIGTTOU is ignored, as in rlogind.
 
      The listener that 2.11BSD compiles in under DEBUG is chosen
      here by giving a port.
