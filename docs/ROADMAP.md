@@ -254,6 +254,10 @@ archived tracker; new work is tracked in GitHub Issues.
   `docs/history/plans/2026-11-03-net-multiplex-design.md`, which replaces
   Track B's S1-S3 (`2026-09-27-trackb-s0-fcc-design.md`) and the earlier
   Backend B / Track A/B plans.
+- **An exec holds the machine for its whole load** (flux-gs/fgx#49).  `execve`
+  reads the image inside one system call and the kernel is not preempted, so
+  no other process and no network input runs until it returns: about 5 s for
+  the first `tcsh` after boot under MAME.  Packets are answered late, not lost.
 - **IPv6** -- needs the software stack (the W5100 is IPv4-only).
 - **AppleTalk driver** -- LocalTalk over the SCC; would own the printer port
   and set `_apTalkPort`, which `serial.mod` already honours.  Big effort
