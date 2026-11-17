@@ -205,7 +205,9 @@ static void _dec_name(unsigned char *p, int off, int len, char *out)
     out[o] = 0;
 }
 
-/* Parse a response for the first IN/qtype answer.  1=found, 0=none, -1=bad. */
+/* Parse a response for the first IN/qtype answer.  1=found, 0=the server's
+ * reply to this query holds none (an error code or no such record), -1=not a
+ * reply to this query, or malformed. */
 static int _parse_resp(unsigned char *p, int len, int qtype, int id,
                        unsigned char *ip4, char *out_name)
 {
@@ -213,7 +215,7 @@ static int _parse_resp(unsigned char *p, int len, int qtype, int id,
 
     if (len < HFIXEDSZ) return -1;
     if (((p[0] << 8) | p[1]) != id) return -1;          /* id mismatch */
-    if (p[3] & 0x0F) return -1;                          /* RCODE != 0 */
+    if (p[3] & 0x0F) return 0;                           /* RCODE != 0 */
     qd = (p[4] << 8) | p[5];
     an = (p[6] << 8) | p[7];
     if (an <= 0) return 0;
@@ -251,7 +253,9 @@ static int _parse_resp(unsigned char *p, int len, int qtype, int id,
  * wait is select's, and recvfrom runs only when there is a datagram.  Each try
  * ends 1.5 s after its send however many datagrams arrive that are not the
  * answer, as dhclient's wait_reply bounds its wait by what is left; 2.11BSD's
- * res_send restarts its full timeout on each one (`goto wait'). */
+ * res_send restarts its full timeout on each one (`goto wait').  A reply with
+ * the query's id ends the lookup whatever it says, as res_send returns it and
+ * leaves the response code to its caller. */
 static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_name)
 {
     static int seq = 0x4321;
@@ -306,8 +310,9 @@ static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_na
             if (n >= HFIXEDSZ) {
                 if (resp[2] & DNS_TC) { close(s); return 0; }   /* truncated: no TCP */
                 rc = _parse_resp(resp, n, qtype, id, ip4, out_name);
-                if (rc == 1) { close(s); return 1; }
-                /* rc 0/-1: not our answer / malformed -> wait on, then retry */
+                if (rc >= 0) { close(s); return rc; }    /* the server's answer,
+                                                          * a negative one included */
+                /* rc -1: not our answer / malformed -> wait on, then retry */
             }
         }
     }
