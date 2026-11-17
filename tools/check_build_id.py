@@ -130,7 +130,9 @@ def main():
         if not os.path.isfile(path):
             continue
         name = os.path.basename(path).lower()
-        locked = os.path.isfile(f'src/modules/{name}/kernel_exports.s')
+        # The network modules share one list, in the build directory.
+        locked = (os.path.isfile(f'src/modules/{name}/kernel_exports.s')
+                  or name.startswith('bsdnet'))
         hid = module_header_id(path)
         want = kid if locked else 0
         if hid != want:

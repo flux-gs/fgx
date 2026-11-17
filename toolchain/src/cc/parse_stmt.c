@@ -311,6 +311,12 @@ parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
     s->total_size = ((is_union ? union_max : cur) + 1) & ~1;
     s->is_forward = 0;
     s->is_union   = is_union;
+    /* An object declared extern while this struct was incomplete gets its
+     * size now that the type is complete (K&R A.8.3). */
+    for (int gi = 0; gi < g_n_globals; gi++)
+        if (g_globals[gi].type == LT_STRUCT && g_globals[gi].struct_id == sid &&
+            g_globals[gi].n_bytes == 0)
+            g_globals[gi].n_bytes = s->total_size;
     return sid;
 }
 
@@ -485,6 +491,8 @@ parse_type_spec(void)
                     (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "volatile", 8) == 0))) {
             if (g_cur.id_len == 6)
                 t.is_extern = 1;
+            else if (g_cur.id_len == 8 && g_cur.id_ptr[0] == 'r')
+                t.is_register = g_decl_is_register = 1;
         } else {
             return t;
         }
@@ -501,6 +509,9 @@ parse_type_spec_base(void)
     t.is_static = 0;
     t.is_extern = 0;
     t.is_unsigned = 0;
+    t.is_register = 0;
+    t.ary_n = 0;
+    g_decl_is_register = 0;
     int had_modifier = 0;
     /* multi-TU: 'static' (TOK_STATIC_KW) and 'extern' (TOK_IDENT) may
      * appear interleaved with other type-modifiers.  Consume them all. */
@@ -517,6 +528,8 @@ parse_type_spec_base(void)
                 t.is_extern = 1;
             else if (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "unsigned", 8) == 0)
                 t.is_unsigned = 1;
+            else if (g_cur.id_len == 8 && memcmp(g_cur.id_ptr, "register", 8) == 0)
+                t.is_register = g_decl_is_register = 1;
             else if (g_cur.id_len == 6 && memcmp(g_cur.id_ptr, "signed", 6) == 0)
                 t.is_unsigned = 0;
             had_modifier = 1;
@@ -629,6 +642,7 @@ parse_type_spec_base(void)
         t.base = td->base_type;
         t.struct_id = td->struct_id;
         t.is_unsigned = td->is_unsigned;
+        if (ISARY(td->base_type)) t.ary_n = td->n_elems;
         next_tok();
     } else if (g_cur.kind == TOK_ENUM_KW) {
         /* enum as a TYPE: `typedef enum {..} T;` (tcsh tw.h COMMAND), plus
@@ -797,10 +811,15 @@ parse_declarator(TypeSpec base, int allow_abstract)
      * so the caller's existing init-sizing path (A.8.7) completes it.  sh's
      * array typedefs are all sizeless; a use-site `[`/`*` is not part of the
      * Bourne source and falls through to the normal merge below. */
+    /* A pointer to, or an array of, an array typedef has no type here
+     * (Declarator carries one array derivation); refused, not mis-sized. */
+    if ((is_array || stars) && ISARY(base.base))
+        die(d.name_line, d.name_col,
+            "a pointer to or an array of an array typedef is not supported");
     if (!is_array && stars == 0 && ISARY(base.base)) {
         d.n_dims   = 1;
-        d.dims[0]  = 0;
-        d.sizeless = 1;
+        d.dims[0]  = base.ary_n;
+        d.sizeless = (base.ary_n == 0);
         d.type     = base.base;             /* already the array tword */
         return d;
     }
@@ -1017,7 +1036,19 @@ walk_stmt(int n)
         }
         {
         LocalType ret_t = (LocalType)g_ast[n].val;
-        if (ISPTR(ret_t)) {
+        if (g_ast[n].sym_lc) {
+            /* A struct by value: copy it through the caller's `__sret'
+             * pointer and return that pointer (parse_func_decl_with_spec). */
+            int sid = g_ast[n].struct_id;
+            int nb  = (g_structs[sid].total_size + 1) & ~1;
+            int ks  = walk_fpr(g_ast[n].a);
+            if (ks < 0) { ks = fpr_alloc(); emit_fpr_from_carrier(ks); }
+            int kd  = fpr_load_sym(g_ast[n].sym_lc, NULL);
+            emit_fpr_struct_copy(kd, ks, nb);
+            emit_fpr_ret(kd);
+            fpr_drop(kd);
+            fpr_drop(ks);
+        } else if (ISPTR(ret_t)) {
             /* Pointer return: the value rides an FPR; an int RHS (NULL)
              * materializes with a ZERO bank inside walk_fpr — the c35
              * normalization in ONE place.  P3-2.4 ABI: the return home
@@ -1441,6 +1472,12 @@ walk_stmt(int n)
         Field *leaf = g_ast[n].sym_f;
         int kd = fpr_load_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
         emit_fpr_add_const(kd, (int)g_ast[n].val);   /* kd = &leaf */
+        if (leaf->is_bit_field) {              /* within the containing word */
+            walk_val(g_ast[n].b);
+            emit_lv_bitfield_store(kd, leaf, 0);
+            fpr_drop(kd);
+            break;
+        }
         if (ISPTR(leaf->type)) {               /* pointer leaf: 4-byte ptr store */
             int ks = walk_fpr(g_ast[n].b);     /* RHS pointer into an fpr */
             emit_fpr_deref_store_ptr(kd, ks, 0);
@@ -1539,8 +1576,11 @@ walk_stmt(int n)
              * pointer instead of into it; the offset word keeps kd intact and
              * the word store leaves the bank alone.  And the operand has to be
              * scaled by the pointee, or `p->q->next += 1' moves one byte. */
-            emit_fpr_deref_field(kd, ISPTR(f->type) ? LT_INT : f->type,
-                                 f->byte_offset);               /* current */
+            if (f->is_bit_field)
+                emit_fpr_deref_member(kd, f);                   /* current */
+            else
+                emit_fpr_deref_field(kd, ISPTR(f->type) ? LT_INT : f->type,
+                                     f->byte_offset);           /* current */
             emit_push_a();
             walk_val(g_ast[n].b);
             emit_scale_compound_ptr(f->type, f->struct_id, g_ast[n].op);
@@ -1552,7 +1592,7 @@ walk_stmt(int n)
             else if (f->type == LT_LONG || f->type == LT_FLOAT)
                 emit_fpr_deref_store_long(kd, f->byte_offset);
             else
-                emit_fpr_deref_store_word(kd, f->byte_offset);
+                emit_fpr_deref_store_wordmember(kd, f);
             fpr_drop(kd);
             break;
         }
@@ -1575,7 +1615,7 @@ walk_stmt(int n)
             emit_fpr_deref_store_byte(kd, f->byte_offset);
         } else {
             walk_val(g_ast[n].b);
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
         }
         fpr_drop(kd);
         break;
@@ -1689,15 +1729,18 @@ walk_stmt(int n)
         /* read the member's OFFSET WORD (a ptr member's ++ rewrites only
          * the offset; the stored bank byte is untouched in memory — and a
          * ptr-typed deref_field would consume kd, losing the base). */
-        emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                             f->byte_offset);
+        if (f->is_bit_field)
+            emit_fpr_deref_member(kd, f);
+        else
+            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                 f->byte_offset);
         if (g_ast[n].flags & AF_IS_INC) {
             ir_record_raw(IR_ADD_CONST, (unsigned)(st), 0, NULL);
         } else {
             ir_record_raw(IR_SUB_CONST, (unsigned)(st), 0, NULL);
         }
         if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-        else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+        else                    emit_fpr_deref_store_wordmember(kd, f);
         fpr_drop(kd);
         break;
     }
@@ -1732,8 +1775,11 @@ walk_stmt(int n)
             emit_compound_op(g_ast[n].op, f->is_unsigned, et);
             emit_fpr_deref_store_long(kd, f->byte_offset);
         } else {
-            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                                 f->byte_offset);       /* A = current (offset word) */
+            if (f->is_bit_field)
+                emit_fpr_deref_member(kd, f);
+            else
+                emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                     f->byte_offset);       /* A = current (offset word) */
             emit_push_a();                              /* current @ 1,S */
             walk_val(g_ast[n].a);
             /* A POINTER member scales its operand like any other pointer
@@ -1745,7 +1791,7 @@ walk_stmt(int n)
             emit_pop_a();                                /* A = current */
             emit_compound_op(g_ast[n].op, f->is_unsigned, LT_INT);
             if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-            else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+            else                    emit_fpr_deref_store_wordmember(kd, f);
         }
         fpr_drop(kd);
         break;
@@ -1759,6 +1805,16 @@ walk_stmt(int n)
         int is_byte = (leaf == LT_CHAR);
         int is_long = (leaf == LT_LONG || leaf == LT_FLOAT);
         int is_ptr  = ISPTR(leaf);
+        if (g_ast[head].sym_f) {                     /* a bit-field leaf */
+            if (g_ast[n].op != TOK_EQ)
+                die(g_ast[n].line, g_ast[n].col,
+                    "op= on a bit-field reached through a member chain");
+            int kd = emit_lvalue_addr(head);
+            walk_val(g_ast[n].c);
+            emit_lv_bitfield_store(kd, g_ast[head].sym_f, 0);
+            fpr_drop(kd);
+            break;
+        }
         if (g_ast[n].op == TOK_EQ) {                 /* plain store */
             int kd = emit_lvalue_addr(head);
             if (is_ptr) {
@@ -1844,6 +1900,9 @@ walk_stmt(int n)
         /* Uniform lvalue ++/-- (statement, value discarded). */
         int head = g_ast[n].a;
         LocalType leaf = g_ast[head].type;
+        if (g_ast[head].sym_f)
+            die(g_ast[n].line, g_ast[n].col,
+                "++/-- on a bit-field reached through a member chain");
         int is_inc = (g_ast[n].flags & AF_IS_INC) != 0;
         int kd = emit_lvalue_addr(head);
         if (leaf == LT_LONG || leaf == LT_FLOAT) {
@@ -1980,7 +2039,7 @@ walk_stmt(int n)
             emit_fpr_deref_store_byte(kd, f->byte_offset);
         } else {
             walk_val(g_ast[n].b);
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
         }
         fpr_drop(kd);
         break;
@@ -1989,30 +2048,36 @@ walk_stmt(int n)
         Field *f = g_ast[n].sym_f;
         int st = (int)g_ast[n].val;
         int kd = walk_fpr(g_ast[n].a);              /* &elem */
-        emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                             f->byte_offset);       /* A = current (offset word) */
+        if (f->is_bit_field)
+            emit_fpr_deref_member(kd, f);
+        else
+            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                 f->byte_offset);       /* A = current (offset word) */
         if (g_ast[n].flags & AF_IS_INC) {
             ir_record_raw(IR_ADD_CONST, (unsigned)(st), 0, NULL);
         } else {
             ir_record_raw(IR_SUB_CONST, (unsigned)(st), 0, NULL);
         }
         if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-        else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+        else                    emit_fpr_deref_store_wordmember(kd, f);
         fpr_drop(kd);
         break;
     }
     case S_FIELD_COMPOUND_AT: {
         Field *f = g_ast[n].sym_f;
         int kd = walk_fpr(g_ast[n].a);              /* &elem */
-        emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
-                             f->byte_offset);       /* A = current (offset word) */
+        if (f->is_bit_field)
+            emit_fpr_deref_member(kd, f);
+        else
+            emit_fpr_deref_field(kd, (f->type == LT_CHAR) ? LT_CHAR : LT_INT,
+                                 f->byte_offset);       /* A = current (offset word) */
         emit_push_a();                              /* current @ 1,S */
         walk_val(g_ast[n].b);
         emit_stash_rhs();
         emit_pop_a();                               /* A = current */
         emit_compound_op(g_ast[n].op, f->is_unsigned, LT_INT);
         if (f->type == LT_CHAR) emit_fpr_deref_store_byte(kd, f->byte_offset);
-        else                    emit_fpr_deref_store_word(kd, f->byte_offset);
+        else                    emit_fpr_deref_store_wordmember(kd, f);
         fpr_drop(kd);
         break;
     }
@@ -2043,8 +2108,10 @@ walk_stmt(int n)
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
         ir_record_raw(IR_TYA, 0, 0, NULL);   /* A = element address */
-        if ((lc ? ISPTR(lc->type) : is_ptr_target) && ir_call_since(cio_snap))
+        if ((lc ? ISPTR(lc->type) : is_ptr_target) && ir_ptr_bank_clobbered_since(cio_snap)) {
+            if (lc) lc->raw_accessed = 1;    /* the restage reads its slot */
             emit_restage_base_bank(lc, lc ? NULL : gv);
+        }
         if (g_ast[n].op != TOK_EOF) {
             TokKind op = g_ast[n].op;
             if (atype == LT_LONG_ARRAY || atype == LT_FLOAT_ARRAY) {
@@ -2666,6 +2733,20 @@ walk_stmt(int n)
     }
 }
 
+/* A function declaration's return type into its Func.  A struct returned
+ * by value is carried as Func.sret, as parse_func_decl_with_spec records
+ * a definition, so a call before the definition passes the hidden pointer. */
+static void
+func_decl_return(int fi, LocalType ret, int sid)
+{
+    if (BTYPE(ret) == BT_STRUCT && !ISPTR(ret)) {
+        g_funcs[fi].sret = 1;
+        g_funcs[fi].return_struct_id = sid;
+        ret = INCREF(ret, DERIV_PTR);
+    }
+    g_funcs[fi].return_type = ret;
+}
+
 /* The parameter list of a function-pointer declarator, `( params )' with
  * g_cur at its '(', interned as a signature whose return type is `base_t'
  * with `ret_stars' pointer groups.  Consumes through the closing ')'. */
@@ -2714,6 +2795,21 @@ parse_fnptr_sig(TypeSpec base_t, int ret_stars)
         die(g_cur.line, g_cur.col, "expected ')' after fn-ptr param list");
     next_tok();                            /* past closing ')' */
 
+    /* A struct by value: the hidden pointer is parameter 0 of a listed
+     * parameter set, as in the definition (Func.sret). */
+    int sret_sid = (!ret_stars && base_t.base == LT_STRUCT) ? base_t.struct_id
+                                                            : -1;
+    if (sret_sid >= 0 && n_params > 0) {
+        if (n_params >= MAX_LOCALS)
+            die(g_cur.line, g_cur.col, "too many fn-ptr params");
+        memmove(params + 1, params, n_params * sizeof params[0]);
+        memmove(param_struct_ids + 1, param_struct_ids,
+                n_params * sizeof param_struct_ids[0]);
+        params[0] = LT_STRUCT_PTR;
+        param_struct_ids[0] = sret_sid;
+        n_params++;
+    }
+
     /* Return type: base + ret_stars PTR groups.  type_for_decl only for
      * the starred case — a bare `void (*fp)()` return stays TW_VOID (the
      * historical sig encoding; type_for_decl would reject bare void). */
@@ -2721,7 +2817,7 @@ parse_fnptr_sig(TypeSpec base_t, int ret_stars)
                                   : base_t.base,
                          n_params, params,
                          param_struct_ids, is_variadic,
-                         ret_stars ? 0 : base_t.is_unsigned);
+                         ret_stars ? 0 : base_t.is_unsigned, sret_sid);
 }
 
 int
@@ -2972,7 +3068,7 @@ build_decl(TypeSpec t)
             }
             if (funcs_lookup(name_ptr, name_len) < 0) {
                 int fi = funcs_declare(name_ptr, name_len, 0, line, col);
-                g_funcs[fi].return_type = ret;
+                func_decl_return(fi, ret, d.struct_id);
                 g_funcs[fi].ret_unsigned = ISPTR(d.type) ? 0 : t.is_unsigned; /* A-1 */
                 g_funcs[fi].is_variadic = 1;   /* K&R () = unspecified args */
                 g_funcs[fi].is_variadic_expl = 1;
@@ -3962,6 +4058,16 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
          * ARRAY (`struct X a[1] = {{...}}`) keeps element mode. */
         if (g->type == LT_STRUCT) flat = 1;
         while (g_cur.kind != TOK_RBRACE) {
+            /* WHETHER THIS ELEMENT IS BRACED IS ITS OWN QUESTION.  K&R A.8.7:
+             * "If the initializer for a subaggregate does not begin with a
+             * left brace, then only enough elements from the list are taken
+             * into account for the members of the subaggregate; any remaining
+             * members are left to initialize the next member of the aggregate
+             * of which the subaggregate is a part."  So in a braced list an
+             * element with no '{' takes its leaves from the list, as the flat
+             * form does: 2.11BSD route(8)'s name list ends `{ "_rthashsize" },
+             * "", };'. */
+            int elem_braced = !flat;
             if (!flat) {
                 if (g_cur.kind == TOK_INT_LIT && g_cur.value == 0) {
                     /* bare `0` sentinel element in a braced struct-array
@@ -3987,9 +4093,9 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                     continue;
                 }
                 if (g_cur.kind != TOK_LBRACE)
-                    die(g_cur.line, g_cur.col,
-                        "expected '{' for struct-array element");
-                next_tok();   /* consume inner '{' */
+                    elem_braced = 0;
+                else
+                    next_tok();   /* consume inner '{' */
             }
             /* The open brace groups, innermost last: each one's last leaf
              * and the nest[] level it was opened at. */
@@ -4317,7 +4423,7 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                 }
             }
 #undef CLOSE_MEMBER_GROUP
-            if (!flat) {
+            if (elem_braced) {
                 if (g_cur.kind != TOK_RBRACE)
                     die(g_cur.line, g_cur.col,
                         "expected '}' after struct-array element");
@@ -4366,6 +4472,8 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
 static void
 parse_char_ptr_arr_item(Global *g, int n)
 {
+    LexPeek item_pk;
+    lex_peek_save(&item_pk);
     if (g_cur.kind == TOK_AMP) {
         next_tok();
         if (g_cur.kind != TOK_IDENT)
@@ -4374,9 +4482,8 @@ parse_char_ptr_arr_item(Global *g, int n)
         if (tg == NULL)
             die(g_cur.line, g_cur.col,
                 "unknown global in char*[] init (must be a prior global)");
-        tg->is_reloc_target  = 1;
-        g->init_values[n]    = (unsigned)(tg - g_globals);
-        g->init_values_hi[n] = 3;
+        lex_peek_restore(&item_pk);
+        sfld_ptr_addr_init(g, n);      /* `&g', `&g[k]', `&g.m', with any +- k */
         next_tok();
     } else if ((g_cur.kind == TOK_INT_LIT && g_cur.value == 0) ||
                field_init_is_null()) {
@@ -4404,9 +4511,7 @@ parse_char_ptr_arr_item(Global *g, int n)
             die(g_cur.line, g_cur.col,
                 "char*[] init item must be a string literal, a global "
                 "array name, '&global', or 0");
-        tg->is_reloc_target  = 1;
-        g->init_values[n]    = (unsigned)(tg - g_globals);
-        g->init_values_hi[n] = 3;
+        sfld_ptr_addr_init(g, n);      /* `a', `a + k', `a - k' */
         next_tok();
     } else {
         if (g_cur.kind != TOK_STR_LIT)
@@ -5140,6 +5245,10 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
      * pointed at this scratch -- the loop below is then unchanged, and a field
      * row steps exactly as a named base's row does. */
     int fdv[2];
+    /* The member the chain ends on, kept so a BIT-FIELD leaf is known: its
+     * byte offset addresses the containing word, and the chain's load and
+     * store must shift and mask within it (emit_lv_bitfield_*). */
+    Field *leaf_f = NULL;
     while (g_cur.kind == TOK_DOT || g_cur.kind == TOK_ARROW ||
            g_cur.kind == TOK_LBRACKET) {
         int line = g_cur.line, col = g_cur.col, stepn;
@@ -5161,6 +5270,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
             next_tok();                              /* consume '[' */
             int idx = ast_build_assign();
             expect(TOK_RBRACKET, "']'");
+            leaf_f = NULL;
             stepn = ast_new(N_LV_STEP_INDEX, line, col);
             g_ast[stepn].b = idx;
             g_ast[stepn].val = (unsigned)es;
@@ -5207,6 +5317,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
                 deref = (mtok == TOK_ARROW);
             }
             next_tok();
+            leaf_f = f;
             stepn = ast_new(deref ? N_LV_STEP_ARROW : N_LV_STEP_DOT, line, col);
             g_ast[stepn].val = (unsigned)f->byte_offset;
             g_ast[stepn].type = f->type;
@@ -5246,6 +5357,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
     g_ast[head].b = first;
     g_ast[head].type = cur;
     g_ast[head].struct_id = cur_sid;
+    g_ast[head].sym_f = (leaf_f && leaf_f->is_bit_field) ? leaf_f : NULL;
     g_ast[head].fn_sig = fnptr_based(cur) ? sig : -1;
     /* Carry the LEAF's unsignedness out with the type.  Without this a read
      * routed through the walker silently lost it -- an `unsigned int` member
@@ -5505,8 +5617,28 @@ peek_mixed_lvalue_store(void)
         if (lastf != NULL && lastf->n_dims == 2 && g_toks[t].kind == TOK_LBRACKET)
             member_dbl_index = 1;
     }
+    /* (g) an ELEMENT of an array of struct pointers, then an arrow --
+     * `ms[k]->m_len = x'.  K&R A.7.3.1: "A postfix expression followed by an
+     * expression in square brackets is a postfix expression", and A.7.3.3 makes
+     * that followed by `->' and an identifier a postfix expression too, so this
+     * is a modifiable lvalue of the member's type.  The expression layer reads
+     * the same shape; the store had no arm and died "expected '='".  Type-gated
+     * on the base being such an array, so no shape with an arm today moves. */
+    int index_then_arrow = 0;
+    if (n_arrow >= 1 && g_toks[base_tok + 1].kind == TOK_LBRACKET) {
+        Local  *blc = locals_lookup(g_toks[base_tok].id_ptr,
+                                    g_toks[base_tok].id_len);
+        Global *bgv = (blc == NULL) ? globals_lookup(g_toks[base_tok].id_ptr,
+                                                     g_toks[base_tok].id_len)
+                                    : NULL;
+        LocalType bt   = blc ? blc->type      : (bgv ? bgv->type      : LT_INT);
+        int       bsid = blc ? blc->struct_id : (bgv ? bgv->struct_id : -1);
+        if (is_ptr_array(bt) && bsid >= 0)
+            index_then_arrow = 1;
+    }
     int routed = arrow_after_dot || (n_arrow >= 2 && has_index) || dot_then_index
-                 || arrow_then_dot || arrow_then_index || member_dbl_index;
+                 || arrow_then_dot || arrow_then_index || member_dbl_index
+                 || index_then_arrow;
     /* (d) a PLAIN dot chain ending in ++/-- (`B.n++;`, `B.s++;` -- tcsh
      * sh.lex's fseekp macro over B.Bfseekp, an off_t).  The statement dot path
      * has '=' and 'op=' arms but NO incdec arm, while the arrow twin `p->f++`
@@ -5698,6 +5830,14 @@ parse_struct_src(void)
     if (!struct_src_is_named_run()) {
         int ln = g_cur.line, cl = g_cur.col;
         int e = ast_build_assign();
+        /* `(*p)' arrives here and `*p' above, and A.7.2 has a parenthesized
+         * expression "type and value ... identical to those of the unadorned
+         * expression": va_arg(ap, struct s) expands to the former.  The source
+         * is the pointer, as it is above. */
+        if (g_ast[e].kind == N_DEREF_GENERAL &&
+            DECREF(g_ast[g_ast[e].a].type) == LT_STRUCT &&
+            g_ast[g_ast[e].a].struct_id >= 0)
+            return g_ast[e].a;
         if (g_ast[e].type != LT_STRUCT || g_ast[e].struct_id < 0)
             die(ln, cl, "struct assignment RHS is not a struct");
         return e;
@@ -6398,6 +6538,29 @@ build_stmt(void)
         int n = ast_new(S_RETURN, rline, rcol);
         g_ast[n].a = rv;
         g_ast[n].val = (unsigned)ret_t;
+        if (g_funcs[g_cur_fn_idx].sret) {        /* copy through `__sret' */
+            g_ast[n].sym_lc = locals_lookup("__sret", 6);
+            g_ast[n].struct_id = g_funcs[g_cur_fn_idx].return_struct_id;
+            /* `*p', p a pointer to the struct: the value is the struct p
+             * points to, and a struct value is its address -- p itself, as
+             * parse_struct_src reads the source of an assignment. */
+            LocalType vt = g_ast[rv].type;
+            if (g_ast[rv].kind == N_DEREF_GENERAL &&
+                g_ast[g_ast[rv].a].type == LT_STRUCT_PTR) {
+                rv = g_ast[rv].a;
+                vt = LT_STRUCT;
+            } else if (g_ast[rv].kind == N_DEREF_FAST &&
+                       g_ast[rv].sym_lc->type == LT_STRUCT_PTR) {
+                g_ast[rv].kind = N_VAR_LOAD;
+                g_ast[rv].type = LT_STRUCT_PTR;
+                vt = LT_STRUCT;
+            }
+            g_ast[n].a = rv;
+            if (vt != LT_STRUCT ||
+                g_ast[rv].struct_id != g_ast[n].struct_id)
+                die(rline, rcol, "return of a struct function needs a value "
+                    "of the same struct type");
+        }
         return n;
     }
     g_last_stmt_returned = 0;
@@ -6700,9 +6863,13 @@ build_stmt(void)
                 expect(TOK_RBRACKET, "']'");
                 Field *f2 = NULL;
                 if (leaf->type == LT_STRUCT_ARRAY) {
-                    if (g_cur.kind != TOK_DOT)
-                        die(g_cur.line, g_cur.col,
-                            "struct-array element LHS requires '.field'");
+                    /* The whole element: a struct assignment (K&R A.7.17,
+                     * "both operands are structures or unions of the same
+                     * type"), which the expression layer copies. */
+                    if (g_cur.kind != TOK_DOT) {
+                        lex_peek_restore(&m8_pk);
+                        return build_comma_expr_stmt(m8_line, m8_col);
+                    }
                     next_tok();
                     if (g_cur.kind != TOK_IDENT)
                         die(g_cur.line, g_cur.col, "field name");
@@ -6744,9 +6911,9 @@ build_stmt(void)
                      * N_LV_STORE_E and the chain read); the fixture is
                      * tests/M37/arrelemstructstore.c.  If those arms are ever
                      * removed this routing has to narrow with them. */
-                    if (f2->type != LT_CHAR && f2->type != LT_INT &&
-                        f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
-                        f2->type != LT_VOID_PTR) {
+                    if ((f2->type != LT_CHAR && f2->type != LT_INT &&
+                         f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
+                         f2->type != LT_VOID_PTR) || f2->is_bit_field) {
                         lex_peek_restore(&m8_pk);
                         return build_comma_expr_stmt(m8_line, m8_col);
                     }
@@ -7132,9 +7299,13 @@ build_stmt(void)
                 expect(TOK_RBRACKET, "']'");
                 Field *f2 = NULL;
                 if (f->type == LT_STRUCT_ARRAY) {
-                    if (g_cur.kind != TOK_DOT)
-                        die(g_cur.line, g_cur.col,
-                            "struct-array element LHS requires '.field'");
+                    /* The whole element: a struct assignment (K&R A.7.17,
+                     * "both operands are structures or unions of the same
+                     * type"), which the expression layer copies. */
+                    if (g_cur.kind != TOK_DOT) {
+                        lex_peek_restore(&m8_pk);
+                        return build_comma_expr_stmt(m8_line, m8_col);
+                    }
                     next_tok();
                     if (g_cur.kind != TOK_IDENT)
                         die(g_cur.line, g_cur.col, "field name");
@@ -7176,9 +7347,9 @@ build_stmt(void)
                      * N_LV_STORE_E and the chain read); the fixture is
                      * tests/M37/arrelemstructstore.c.  If those arms are ever
                      * removed this routing has to narrow with them. */
-                    if (f2->type != LT_CHAR && f2->type != LT_INT &&
-                        f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
-                        f2->type != LT_VOID_PTR) {
+                    if ((f2->type != LT_CHAR && f2->type != LT_INT &&
+                         f2->type != LT_INT_PTR && f2->type != LT_CHAR_PTR &&
+                         f2->type != LT_VOID_PTR) || f2->is_bit_field) {
                         lex_peek_restore(&m8_pk);
                         return build_comma_expr_stmt(m8_line, m8_col);
                     }
@@ -7562,7 +7733,7 @@ build_stmt(void)
                         break;
                     }
                     f = elem_synth_leaf(f2->type, cum, f2->struct_id,
-                                        f2->is_unsigned);
+                                        f2->is_unsigned, f2);
                 }
                 /* THE TWIN of the ptr-array routing above, and the fixture
                  * found it: fixing `s.pa[i] = p;' left `arr[k].pa[i] = p;'
@@ -7970,6 +8141,9 @@ build_stmt(void)
                     ast_build_call_args(&kid0, &n_kids);
                     expect(TOK_RPAREN, "')'");
                     expect(TOK_SEMI, "';'");
+                    if (g_fn_sigs[fp_sig].sret_sid >= 0)
+                        call_add_sret(&kid0, &n_kids, g_fn_sigs[fp_sig].sret_sid,
+                                      line, col);
                     int n = ast_new(N_CALL_FPVAR, line, col);
                     g_ast[n].sym_lc = fp_lc; g_ast[n].sym_gv = fp_gv;
                     g_ast[n].val = (unsigned)fp_sig;
@@ -7988,6 +8162,7 @@ build_stmt(void)
                 g_funcs[fn_idx].return_type = LT_INT;
                 g_funcs[fn_idx].is_variadic = 1;
                 g_funcs[fn_idx].is_extern   = 1;
+                g_funcs[fn_idx].is_implicit = 1;
             }
             int expected_argc = g_funcs[fn_idx].n_params;
             next_tok();  /* consume '(' */
@@ -7998,6 +8173,10 @@ build_stmt(void)
             int kid0, n_kids;
             ast_build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            /* A struct by value: the caller's temporary goes first (Func.sret). */
+            if (g_funcs[fn_idx].sret)
+                call_add_sret(&kid0, &n_kids, g_funcs[fn_idx].return_struct_id,
+                              line, col);
             if (g_funcs[fn_idx].is_variadic) {
                 if (n_kids < expected_argc) {
                     char buf[96];
@@ -8049,7 +8228,8 @@ build_stmt(void)
             g_ast[n].val = (unsigned)fn_idx;
             g_ast[n].name = name_ptr; g_ast[n].name_len = name_len;
             g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
-            g_ast[n].type = g_funcs[fn_idx].return_type;
+            g_ast[n].type = g_funcs[fn_idx].sret ? LT_STRUCT
+                                                 : g_funcs[fn_idx].return_type;
             g_ast[n].struct_id = g_funcs[fn_idx].return_struct_id;
             g_ast[n].is_unsigned = g_funcs[fn_idx].ret_unsigned;
             /* A postfix chain on the call RESULT: `f(x)->m = v;' / `f(x)[i]++;'.
@@ -8406,9 +8586,24 @@ parse_func_decl_with_spec(TypeSpec ret_t)
     if (!rd.is_func_proto)
         die(rd.name_line, rd.name_col, "expected '(' after function name");
     LocalType ret_type = rd.type;
-    if (BTYPE(ret_type) == BT_STRUCT && !ISPTR(ret_type))
-        die(rd.name_line, rd.name_col,
-            "return-by-value struct not supported (M8); use a pointer parameter");
+    /* A struct returned BY VALUE (K&R A.10.1: "A function may return an
+     * arithmetic type, a structure, a union, a pointer, or void").  The caller
+     * passes a hidden pointer to a temporary of its own as parameter 0
+     * (`__sret'), the callee copies the value through it and returns that
+     * pointer, so the ABI return type is the struct POINTER; Func.sret
+     * remembers it is a struct value at the source level.  Not 2.11BSD ccom's
+     * static return block (c04.c doret()), which a signal handler or a
+     * preempted task calling the same function would overwrite. */
+    int sret = 0;
+    if (BTYPE(ret_type) == BT_STRUCT && !ISPTR(ret_type)) {
+        int pf = funcs_lookup(rd.name, rd.name_len);
+        if (pf >= 0 && g_funcs[pf].is_implicit)
+            die(rd.name_line, rd.name_col,
+                "a function returning a struct must be declared before it is "
+                "called");
+        sret = 1;
+        ret_type = INCREF(ret_type, DERIV_PTR);
+    }
     const char *name_ptr = rd.name;
     int         name_len = rd.name_len;
     int         line     = rd.name_line, col = rd.name_col;
@@ -8435,8 +8630,10 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         int       n_dims;       /* M19: effective dim count for indexing */
         int       dims[MAX_DIMS]; /* M19: dims[1..] for stride descent */
         int       is_unsigned;  /* A-1: unsigned scalar param */
+        int       is_register;  /* declared `register' */
     } params[MAX_LOCALS];
     int n_params      = 0;
+    memset(params, 0, sizeof params);
     int saw_ellipsis  = 0;
     /* The type each parameter arrives as.  A float named in an old-style
      * declaration list arrives promoted (K&R A.7.3.2: "each float argument
@@ -8665,6 +8862,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         params[n_params].fn_sig_id = fnptr_based(ptype) ? pt.struct_id : -1;
         params[n_params].row_stride = 0;
         params[n_params].is_unsigned = pt.is_unsigned;   /* A-1 */
+        params[n_params].is_register = pt.is_register;
         n_params++;
         if (g_cur.kind == TOK_IDENT) next_tok();
         /* C array-parameter decay: `T p[]` / `T p[N]` / `T *p[]` and the
@@ -8789,6 +8987,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                     if (fnptr_based(kdt))              /* a typedef'd `int (**)()' */
                         params[pi].fn_sig_id = kt.struct_id;
                     params[pi].is_unsigned = kt.is_unsigned;
+                    params[pi].is_register = kt.is_register;
                     matched = 1;
                     break;
                 }
@@ -8801,6 +9000,21 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         }
     }
 
+    if (sret) {                                  /* the hidden parameter 0 */
+        if (n_params >= MAX_LOCALS)
+            die(line, col, "too many parameters");
+        memmove(&params[1], &params[0], (size_t)n_params * sizeof params[0]);
+        memmove(&kr_float[1], &kr_float[0], (size_t)n_params * sizeof kr_float[0]);
+        memset(&params[0], 0, sizeof params[0]);
+        params[0].ptr = lex_intern_ident("__sret", 6);
+        params[0].len = 6;
+        params[0].line = line; params[0].col = col;
+        params[0].type = ret_type;
+        params[0].struct_id = ret_t.struct_id;
+        params[0].fn_sig_id = -1;
+        kr_float[0] = 0;
+        n_params++;
+    }
     for (int i = 0; i < n_params; i++)
         pabi[i] = kr_float[i] ? LT_DBL : params[i].type;
 
@@ -8841,6 +9055,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
     g_funcs[fidx].is_variadic_expl |= (saw_ellipsis || empty_parens);
     g_funcs[fidx].is_static   = ret_t.is_static;
     g_funcs[fidx].is_extern   = ret_t.is_extern;
+    g_funcs[fidx].sret        = sret;
     }   /* !redecl_defined */
     else if (g_fn_kept_proto) {
         /* A bare `T f();' over a richer entry keeps the PARAMETERS and nothing
@@ -8925,6 +9140,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         g_locals[g_n_locals - 1].struct_id = params[i].struct_id;
         g_locals[g_n_locals - 1].fn_sig_id = params[i].fn_sig_id;
         g_locals[g_n_locals - 1].is_unsigned = params[i].is_unsigned;   /* A-1 */
+        g_locals[g_n_locals - 1].is_register = params[i].is_register;
         if (params[i].row_stride > 0) {
             /* M19: multi-dim array param — row_stride drives chained indexing.
              * Storage stays 4 bytes (long-pointer shape from is_ptr_type).
@@ -8958,8 +9174,9 @@ parse_func_decl_with_spec(TypeSpec ret_t)
             psids[i] = params[i].struct_id;
         }
         g_funcs[fidx].fn_sig_id =
-            fn_sig_intern(ret_type, n_params, pts, psids, saw_ellipsis,
-                          g_funcs[fidx].ret_unsigned);
+            fn_sig_intern(sret ? LT_STRUCT : ret_type, n_params, pts, psids,
+                          saw_ellipsis, g_funcs[fidx].ret_unsigned,
+                          sret ? g_funcs[fidx].return_struct_id : -1);
     }
 
     /* main(int argc, char **argv) binding.  When the function being
@@ -9077,8 +9294,9 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                 psids[i] = params[i].struct_id;
             }
             g_funcs[fidx].fn_sig_id =
-                fn_sig_intern(ret_type, n_params, pts, psids, saw_ellipsis,
-                              g_funcs[fidx].ret_unsigned);
+                fn_sig_intern(sret ? LT_STRUCT : ret_type, n_params, pts,
+                              psids, saw_ellipsis, g_funcs[fidx].ret_unsigned,
+                              sret ? g_funcs[fidx].return_struct_id : -1);
         }
         redecl_defined = 0;
     }
@@ -9698,7 +9916,7 @@ parse_global_decl(TypeSpec t)
             }
             if (funcs_lookup(name_ptr, name_len) < 0) {
                 int fi = funcs_declare(name_ptr, name_len, 0, line, col);
-                g_funcs[fi].return_type = ret;
+                func_decl_return(fi, ret, d.struct_id);
                 g_funcs[fi].ret_unsigned = ISPTR(d.type) ? 0 : t.is_unsigned;
                 g_funcs[fi].is_variadic = 1;   /* K&R () = unspecified args */
                 g_funcs[fi].is_variadic_expl = 1;
@@ -9746,7 +9964,11 @@ parse_global_decl(TypeSpec t)
          * the right size. */
         int gn = n_elems;
         if (decl_type == LT_STRUCT) {
-            if (g_structs[t.struct_id].is_forward)
+            /* K&R A.8.3: an incomplete struct may be "mentioned in contexts
+             * where their size is not needed, for example in declarations
+             * (not definitions)" -- so an extern declaration is allowed, and
+             * the size is checked where it is needed. */
+            if (g_structs[t.struct_id].is_forward && !t.is_extern)
                 die(line, col, "by-value struct global requires complete type");
             /* Use a single "element" of n_bytes = total_size — we override
              * n_bytes after globals_declare. */
@@ -9905,6 +10127,8 @@ parse_global_decl(TypeSpec t)
                          * bank — the char*-field &global pattern). */
                         if (is_ptr_array(decl_type)) {
                             Global *tg;
+                            LexPeek item_pk;
+                            lex_peek_save(&item_pk);
                             if (g_cur.kind == TOK_AMP) {
                                 next_tok();
                                 if (g_cur.kind != TOK_IDENT)
@@ -9938,8 +10162,14 @@ parse_global_decl(TypeSpec t)
                                 die(g_cur.line, g_cur.col,
                                     "T*[] init item must be '&global' or an array name");
                             }
-                            tg->is_reloc_target = 1;
-                            g->init_values[n] = (unsigned)(tg - g_globals);
+                            /* The item proper -- `&g', `g', `&g[k]', `&g.m',
+                             * `g + k' -- packs the global and a byte offset
+                             * (K&R A.7.19: "the address of a previously
+                             * declared external or static object plus or
+                             * minus a constant"). */
+                            (void)tg;
+                            lex_peek_restore(&item_pk);
+                            sfld_ptr_addr_init(g, n);
                             n++;
                             next_tok();
                             if (g_cur.kind == TOK_COMMA) {
@@ -10296,16 +10526,19 @@ parse_typedef_def(void)
      * ISARY-base seam re-materializes the sizeless array at the use site. */
     if (g_cur.kind == TOK_LBRACKET) {
         next_tok();                         /* past '[' */
-        if (g_cur.kind != TOK_RBRACKET)
-            die(g_cur.line, g_cur.col,
-                "sized array typedef not yet supported "
-                "(only `T name[]`; declarator-refactor follow-up)");
-        next_tok();                         /* past ']' */
+        long asz = 0;                       /* 0 == sizeless */
+        if (g_cur.kind != TOK_RBRACKET) {
+            asz = parse_const_bin(0);
+            if (asz <= 0)
+                die(g_cur.line, g_cur.col,
+                    "array size must be a positive integer constant");
+        }
+        expect(TOK_RBRACKET, "']'");
         if (g_cur.kind == TOK_LBRACKET)
             die(g_cur.line, g_cur.col,
                 "multidimensional array typedef not yet supported");
         td->base_type = INCREF(td->base_type, DERIV_ARY);
-        td->n_elems   = 0;                  /* sizeless */
+        td->n_elems   = (int)asz;
     }
     expect(TOK_SEMI, "';'");
 }
@@ -10449,6 +10682,7 @@ parse_program(void)
                 TypeSpec it;
                 it.base = LT_INT; it.struct_id = -1;
                 it.is_static = 0; it.is_extern = 0; it.is_unsigned = 0;
+                it.is_register = 0; it.ary_n = 0;
                 parse_func_decl_with_spec(it);
                 continue;
             }

@@ -64,7 +64,8 @@ import sys
 # were ahead of them and did not shift.
 ORDER = ('net', 'serial', 'bpf', 'ramdisk', 'pty',
          'vfs', 'ufs', 'ufsprobe', 'ufsdir', 'prodos', 'prodosw', 'cda',
-         'sscon', 'klog', 'fpsim', 'ld', 'isofs')
+         'sscon', 'klog', 'fpsim', 'ld', 'isofs', 'mem')
+# mem (/dev/mem and /dev/kmem) appended last, so nothing placed moves.
 # fpsim (the soft double, apple/fgx#447) packs after klog, appended.
 # klog packs after sscon.  APPENDED, never inserted: net's and bpf's
 # placement-absolute w5100_patchsites.s tables sit at indices 0 and 2, and an

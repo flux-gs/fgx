@@ -411,6 +411,15 @@ FGX_STK_SWITCH_SIZE EQU 512
 FGX_STK_SWITCH  EQU     CFG_STK_SWITCH  ; DERIVED: LC_BANK_TOP - SWITCH_SIZE
 FGX_STK_SWITCH_TOP EQU  CFG_STK_SWITCH+FGX_STK_SWITCH_SIZE-1
 
+; netintr's stack, directly below the scheduler's, entered from the deferred-work
+; drain by the network modules.  netintr never sleeps and the drain does not
+; re-enter, so one stack serves both drain sites.  The modules paint it when they
+; load; a kernel without them never touches it.  DERIVED; genconfig.py mirrors
+; the size.
+FGX_STK_NET_SIZE EQU    1024
+FGX_STK_NET     EQU     CFG_STK_NET     ; DERIVED: FGX_STK_SWITCH - NET_SIZE
+FGX_STK_NET_TOP EQU     CFG_STK_NET+FGX_STK_NET_SIZE-1
+
 ; P3-3 3.2b: the fcc prologue overflow guard reads a per-task hardware-stack
 ; floor from a fixed byte in the task's DP page; posix_spawn seeds it after
 ; Task_AllocStack (process.s).  These MUST match the fcc runtime:
@@ -651,14 +660,16 @@ TFLAG_SIGNALS   EQU     %00100000       ; Signals pending
 ; range that can't collide with a TCB byte-offset ([$0800..$0BFF]).
 ;==============================================================================
 WCHAN_KBD       EQU     $FF01           ; console keyboard ring (Con_GetKey blocks)
-WCHAN_SOCK      EQU     $FF02           ; any W5100 socket (recv/connect/send block)
 WCHAN_TIMER     EQU     $FF03           ; nanosleep deadline (SE_WakeTime; woken by
                                         ; _Timer_WakeExpired when _kSystemTicks passes)
 WCHAN_PIPE      EQU     $FF04           ; any pipe (read/write blocks); coarse
-                                        ; wake-all-recheck, mirrors WCHAN_SOCK
-WCHAN_SELECT    EQU     $FF05           ; select(2) blocking on ANY of its fds;
-                                        ; woken by the kbd/sock/idle wake sites
-                                        ; (gated on _nSelSleepers) -> re-scan
+                                        ; wake-all-recheck
+WCHAN_SELECT    EQU     $FF05           ; select(2) with nothing ready: BSD's
+                                        ; `selwait'.  An object wakes the one
+                                        ; select it recorded, or on a collision
+                                        ; all of them (sched.s _Sel_Wakeup)
+WCHAN_KLOG      EQU     $FF0B           ; /dev/klog's reader; _Klog_Wake (sched.s)
+                                        ; wakes it when the ring's head has moved
 WCHAN_VFORK     EQU     $FF06           ; fork train: parent of a vfork/snapshot-fork
                                         ; child; woken by the child's execve/_exit
                                         ; hand-back.  TCB_WaitingOn = child pid, so
@@ -775,8 +786,9 @@ SE_CallerBank   DS      2               ;   "                          was _Sys_
                                         ;  mid-syscall block; cheaper than the _u-area
                                         ;  dispatcher refactor and leaves the hot path
                                         ;  untouched — u-area stays for recv scratch.)
-SE_WakeTime     DS      4               ; nanosleep absolute deadline (32-bit _kSystemTicks
-                                        ; value); valid only while SE_WaitChan==WCHAN_TIMER.
+SE_WakeTime     DS      4               ; absolute deadline of the sleep (32-bit _kSystemTicks
+                                        ; value); valid while SE_WaitChan is WCHAN_TIMER or
+                                        ; WCHAN_SELECT (all ones: a select with no timeout).
                                         ; _Timer_WakeExpired wakes the task once now>=this.
 SE_SnapPtr      DS      3               ; long ptr to this task's BANK HOME: the
                                         ; descriptor listing a spare for each mutable
@@ -1018,6 +1030,11 @@ SEF_STKBORROW_CLR EQU   %1111111110111111   ; ~SEF_STKBORROW
 SEF_SNAPCHILD   EQU     %00010000       ; fork train: a snapshot fork child, a member
                                         ; of its parent's image group (the bank home,
                                         ; process.s) until it execs or exits.
+SEF_SELECT      EQU     $0800           ; `P_SELECT' (2.11BSD sys/proc.h): this
+                                        ; task is between select's scan and its
+                                        ; sleep.  selwakeup clears it, and the
+                                        ; select scans again instead of sleeping
+SEF_SELECT_CLR  EQU     $F7FF           ; ~SEF_SELECT
 SEF_FORKREL     EQU     %10000000       ; a snapshot child that has RELEASED its
                                         ; parent: set by Img_Release at its first
                                         ; interruptible sleep or quantum yield, and

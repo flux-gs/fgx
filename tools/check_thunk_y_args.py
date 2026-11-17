@@ -49,9 +49,7 @@ import sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_SOURCES = [
     'src/modules/net/net.s',
-    'src/modules/net/net_loop.s',
-    'src/modules/net/net_xport.s',
-    'src/modules/net/unp.s',
+    'src/modules/net/net_kso.s',
     'src/modules/net/pipe.s',
 ]
 

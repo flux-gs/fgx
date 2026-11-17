@@ -105,6 +105,8 @@ typedef enum {
     TOK_LSHIFTEQ,      /* <<=     */
     TOK_RSHIFTEQ,      /* >>=     */
     TOK_ELLIPSIS,      /* ...     */
+    TOK_PP_HASH,       /* #  in a macro body: stringize (K&R A.12.3) */
+    TOK_PP_PASTE,      /* ## in a macro body: token concatenation    */
     TOK_SKIP           /* Increment 1: dead vector slot — next_tok/peek_tok
                         * skip it transparently.  Written by the G21/G41
                         * paren-lvalue re-dispatch to splice out a ')'. */
@@ -300,6 +302,10 @@ typedef struct {
      * its index into g_param_byte_offsets, the slot the caller pushed.
      * -1 for everything else.  kind is LK_LOCAL once it is homed. */
     int        homed_from;
+    /* Declared `register': K&R A.7.4.2 forbids its address ("The operand
+     * must be an lvalue referring neither to a bit-field nor to an object
+     * declared as register"). */
+    int        is_register;
 } Local;
 #define MAX_SOFT_SLOTS  6144        /* per-frame slot cap (~12KB of 2-byte slots).  The 16KB
                                        soft-stack region it derived from is gone (P3-3 3.3); the
@@ -434,6 +440,9 @@ typedef struct {
     int       ret_unsigned;   /* A-1 closure: part of the dedup KEY, so
                                * signed/unsigned-returning ptr types don't
                                * alias; call-through results carry it. */
+    int       sret_sid;       /* the struct a by-value return is (return_type
+                               * LT_STRUCT), else -1.  Part of the key; the
+                               * hidden pointer is param 0, as in Func.sret. */
 } FnSig;
 typedef struct TypeSpec_s TypeSpec;
 #define MAX_ENUM_CONSTS 512        /* C89 floor 127; sized well past it */
@@ -486,6 +495,15 @@ typedef struct {
     int        fn_sig_id;         /* M18: interned signature for fn-ptr rvalue */
     int        return_struct_id;  /* -1 unless return_type is LT_STRUCT*; lets
                                     * `f()->field` / `f()[i]` chain on the result */
+    int        sret;              /* returns a struct BY VALUE: the caller
+                                    * passes a hidden pointer to its own
+                                    * temporary as parameter 0 (`__sret'), the
+                                    * callee copies the value through it and
+                                    * returns it, so return_type is the struct
+                                    * POINTER the ABI carries (K&R A.10.1). */
+    int        is_implicit;       /* declared only by an undeclared call (int
+                                    * assumed); a struct-returning definition
+                                    * after it is refused */
     int        ret_unsigned;      /* A-1: `unsigned ...` return type — call
                                     * results carry it into g_expr_unsigned so
                                     * compares/div pick the unsigned helpers.
@@ -519,6 +537,8 @@ struct TypeSpec_s {
     int       is_static;  /* multi-TU: 'static' qualifier seen */
     int       is_extern;  /* multi-TU: 'extern' qualifier seen */
     int       is_unsigned;/* A-1: 'unsigned' qualifier seen (int/char/long) */
+    int       is_register;/* 'register' storage class seen */
+    int       ary_n;      /* an array typedef's element count; 0 = sizeless */
 };
 
 /* Declarator — the result of the ONE recursive declarator parser
@@ -601,6 +621,8 @@ extern int         g_fltused;   /* this TU generated floating point code */
  * pointer.  Kernel C has no such caller. */
 extern int         g_kernel_bank;
 extern int         g_module_bank;
+extern int         g_shared_data; /* --shared-data: code banks over one data
+                                    * bank; DBR is that bank in all of them */
 extern int         g_emit_safepoints; /* preemption P2': loop-top yield safepoints */
 void emit_safepoint(void);   /* apple/fgx#371: inline fast path + slow-path call */
 extern int         g_libso;          /* --libso: libc.so library mode */
@@ -707,11 +729,8 @@ extern int   g_loop_depth;
 typedef struct {
     int active;
     int varargs;
-    int has_struct;
 } RtlArgs;
 void rtl_begin(RtlArgs *r, int active, int varargs);
-void rtl_note_struct(RtlArgs *r);
-void rtl_finish(RtlArgs *r, int line, int col);
 
 /* --- Increment 3a (IN PROGRESS, additive): per-function expression AST ---
  * build_* consume tokens into g_ast[] WITHOUT emitting; walk_expr replays the
@@ -915,6 +934,14 @@ const char *cellpf(const char *fmt, ...);  /* T2-3: composed interned cell name 
 extern int  g_ast_kids[MAX_AST_KIDS];
 extern int  g_n_ast_kids;
 extern Field *g_ast_fields[MAX_AST_KIDS];   /* arrow-chain hop lists */
+extern int g_decl_is_register;   /* the last type specifier said `register' */
+void emit_lv_bitfield_extract(Field *f);
+void emit_bitfield_incdec_at_fpr(int kd, Field *f, int off, int is_inc,
+                                 int return_old);
+void emit_lv_bitfield_store(int kd, Field *f, int off);
+void emit_fpr_deref_store_wordmember(int kd, Field *f);
+void emit_fpr_deref_member(int k, Field *f);
+void call_add_sret(int *kid0, int *n_kids, int sid, int line, int col);
 extern int    g_n_ast_fields;
 tword deref_result_expr_type(tword result);
 void ast_reset(void);
@@ -1064,7 +1091,8 @@ int
 enum_consts_lookup(const char *name, int name_len);
 int
 fn_sig_intern(LocalType ret, int n_params, LocalType *params,
-              int *param_struct_ids, int is_variadic, int ret_unsigned);
+              int *param_struct_ids, int is_variadic, int ret_unsigned,
+              int sret_sid);
 Global *
 globals_declare(const char *name, int name_len, LocalType type,
                 int n_elems, int line, int col, int is_extern_decl);
@@ -1229,7 +1257,7 @@ field_lookup_dot(int sid, const char *name, int name_len);
  * sees a single member at the cumulative offset and needs no depth of its own.
  * Its pool is per-function and bounded; see the definition. */
 Field *
-elem_synth_leaf(LocalType type, int off, int sid, int uns);
+elem_synth_leaf(LocalType type, int off, int sid, int uns, const Field *bits);
 /* K&R global member-namespace lookup (A.7.3): resolve a member by its offset in
  * whichever struct defines it.  out_container_sid (nullable) gets that struct's
  * id, for coercing a non-struct base pointer to the punned struct type. */

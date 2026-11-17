@@ -3053,7 +3053,11 @@ Uimg_Evictable  ENT
 ;   UI_RANK    C=0 the moment one cannot be a victim of a NEW range: RUNNING,
 ;              locked, borrowed, or READY under _ui_strict
 ;   UI_COMMIT  give each a home (C=0 if the pool is out), mark it shared, and
-;              park it if resident
+;              park it if resident.  The placer (_ui_pid) is passed over: a
+;              range it is given can lie on its own old one only at pass 3,
+;              in exec, and that range is freed when exec finishes.  A pid
+;              has one home, so homing the old range would take the new
+;              range's away.
 ; A vfork child is skipped: its bytes are its parent's, and the parent is in
 ; the walk, pinned by SEF_STKBORROW.  A snapshot child is walked like any
 ; claimant, and pinned by SEF_SNAPCHILD until SEF_FORKREL.
@@ -3141,7 +3145,11 @@ _Uimg_Walk      MX      %00
                 CMP     #TASK_READY
                 BEQ     @uw_fail
                 JMP     @uw_skip
-@uw_commit      LDA:    TCB_StackBase,X
+@uw_commit      LDA    |_ui_vpid
+                CMP    |_ui_pid
+                BNE     @uw_commitV
+                JMP     @uw_skip                ; the placer's own old range
+@uw_commitV     LDA:    TCB_StackBase,X
                 SEC
                 SBC     #256                    ; the range: page and stack
                 STA    |_ui_hbase

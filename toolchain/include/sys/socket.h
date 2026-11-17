@@ -9,6 +9,7 @@
 #define AF_UNSPEC    0
 #define AF_UNIX      1
 #define AF_INET      2
+#define AF_LINK      18     /* link layer interface: 4.3BSD-Reno's, <net/if_dl.h> */
 #define PF_UNIX      AF_UNIX
 #define PF_INET      AF_INET
 
@@ -23,6 +24,7 @@
 #define SO_DONTROUTE 0x0010
 #define SO_BROADCAST 0x0020
 #define SO_USELOOPBACK 0x0040
+#define SO_LINGER    0x0080  /* linger on close if data present */
 #define SO_OOBINLINE 0x0100
 
 #define MSG_OOB      0x0001
@@ -33,9 +35,25 @@
 #define SHUT_WR      1       /* stop sending: send FIN (half-close)         */
 #define SHUT_RDWR    2       /* both: send FIN                              */
 
+struct linger {             /* 2.11BSD sys/socket.h, verbatim */
+    int     l_onoff;        /* option on/off */
+    int     l_linger;       /* linger time */
+};
+
 struct sockaddr {           /* 2.11BSD sys/socket.h, verbatim */
     u_short sa_family;      /* 0: address family */
     char    sa_data[14];    /* 2..15: up to 14 bytes of address */
+};
+
+/* sendmsg(2)/recvmsg(2)'s message: 2.11BSD sys/socket.h, verbatim.  An
+ * AF_UNIX message's access rights are an array of descriptors. */
+struct msghdr {
+    caddr_t msg_name;           /* optional address */
+    int     msg_namelen;        /* size of address */
+    struct  iovec *msg_iov;     /* scatter/gather array */
+    int     msg_iovlen;         /* # elements in msg_iov */
+    caddr_t msg_accrights;      /* access rights sent/received */
+    int     msg_accrightslen;
 };
 
 int socket(int domain, int type, int proto);
@@ -52,4 +70,6 @@ int getsockopt(int s, int level, int optname, char *optval, int *optlen);
 int shutdown(int s, int how);
 int getpeername(int s, struct sockaddr *name, int *namelen);
 int getsockname(int s, struct sockaddr *name, int *namelen);
+int sendmsg(int s, struct msghdr *msg, int flags);
+int recvmsg(int s, struct msghdr *msg, int flags);
 #endif

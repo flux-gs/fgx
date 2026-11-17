@@ -1,0 +1,18 @@
+{
+ "name": "unixnames",
+ "description": "A SOCKET'S NAME IS AS LONG AS AF_UNIX'S.  unixprobe -n binds two stream sockets to 40-character paths and asks for names with a 110-byte buffer: getsockname, getpeername and accept must each return the whole 42-byte name and write 42 back, as 2.11BSD's uipc_syscalls.c copies min(*len, m_len).  A 16-byte buffer gets 16 bytes and 16, with the byte after it untouched (Review Focus 4: never an overrun).  A datagram sender's name is one struct sockaddr, as 2.11BSD's sbappendaddr copies it, so recvfrom gets 16 bytes from a 110-byte buffer and 8 from an 8-byte one.  CONTROL, measured: the kernel ignoring the caller's length writes the whole name into the 16-byte buffer and fails `sockname16'.",
+ "command": "/testbin/unixprobe -n",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "UNIX N ok",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "UNIX N FAIL",
+   "PANIC",
+   "BRK",
+   "bsdnet: BROKEN"
+  ]
+ }
+}

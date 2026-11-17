@@ -548,30 +548,15 @@ fpr_addr_sym(Local *lc, Global *gv)
  * stack depth, retiring the record-and-reverse machinery
  * (ir_reverse_call_args) and its unreachable-by-reversal die()s (long/float
  * param reads, &param, struct-local fields — the abiprobe sb.st_mode find).
- * Only the by-value-struct guard remains: a struct VALUE as a vararg is
- * unproven against va_arg's slot walk, so it still fails loud.
+ * A struct value goes in its own window at its true position, which the
+ * callee's parameter offsets and va_arg's walk by sizeof both agree on
+ * (M46 struct_arg_olddecl).
  * ------------------------------------------------------------------------ */
 void
 rtl_begin(RtlArgs *r, int active, int varargs)
 {
     r->active = active;
     r->varargs = varargs;
-    r->has_struct = 0;
-}
-
-void
-rtl_note_struct(RtlArgs *r) { if (r->varargs) r->has_struct = 1; }
-
-/* After the arg loop, before the call is emitted.  Only a by-value struct
- * passed to a genuine varargs/`()` callee is rejected — the uniform R-to-L
- * ordering (active) is otherwise universal and unguarded. */
-void
-rtl_finish(RtlArgs *r, int line, int col)
-{
-    if (r->varargs && r->has_struct)
-        die(line, col,
-            "right-to-left varargs ABI: a by-value struct argument is not "
-            "yet supported in a variadic call");
 }
 
 
@@ -819,6 +804,13 @@ sizeof_node_size(int e)
 {
     LocalType t = g_ast[e].type;
 
+    /* `*E' has the type E points to (K&R A.7.4.3); the node's own type is
+     * what a load leaves in A, which narrows a struct or a short. */
+    if (g_ast[e].kind == N_DEREF_GENERAL && t != LT_FN_PTR)
+        t = DECREF(g_ast[g_ast[e].a].type);
+    else if (g_ast[e].kind == N_DEREF_FAST)
+        t = DECREF(g_ast[e].sym_lc->type);
+
     if (ISPTR(t))
         return 4;
     if (t == LT_STRUCT)
@@ -856,6 +848,35 @@ sizeof_subscripted(Local *lc, Global *gv)
     return type_size_bytes(t, 1);
 }
 
+/* sizeof applied to a global object.  A struct object declared extern while
+ * its type was incomplete has no size until the type completes (K&R A.8.3);
+ * sizeof needs one, so it is refused until then. */
+static int
+sizeof_global(const Global *gv)
+{
+    if (gv->type == LT_STRUCT && gv->struct_id >= 0 &&
+        g_structs[gv->struct_id].is_forward)
+        die(g_cur.line, g_cur.col, "sizeof an object of incomplete struct type");
+    return (int)gv->n_bytes;
+}
+
+/* At the first `*': do the stars apply to a bare name, `*p' or `**p'?
+ * Anything else -- `*p->m', `*(p)' -- is an expression for the builder. */
+static int
+sizeof_star_is_bare_name(void)
+{
+    int i = g_tok_idx - 1;
+    while (g_toks[i].kind == TOK_STAR) i++;
+    if (g_toks[i].kind != TOK_IDENT) return 0;
+    switch (g_toks[i + 1].kind) {
+    case TOK_ARROW: case TOK_DOT: case TOK_LBRACKET: case TOK_LPAREN:
+    case TOK_PLUSPLUS: case TOK_MINUSMINUS:
+        return 0;
+    default:
+        return 1;
+    }
+}
+
 static int
 sizeof_operand_size(void)
 {
@@ -887,7 +908,7 @@ sizeof_operand_size(void)
                     else
                         sz = type_size_bytes(lc->type, 1);
                 } else {
-                    sz = gv->n_bytes;
+                    sz = sizeof_global(gv);
                 }
                 next_tok();
                 /* sizeof(arr[i]) -> ONE element size (the array-count idiom
@@ -926,6 +947,8 @@ sizeof_operand_size(void)
                     }
                     sz = sizeof_member_subscripts(ff, ff->byte_size);
                 }
+            } else if (g_cur.kind == TOK_STAR && !sizeof_star_is_bare_name()) {
+                sz = sizeof_node_size(build_comma_entry());
             } else if (g_cur.kind == TOK_STAR) {
                 /* Parenthesized deref: sizeof(*ptr), sizeof(**ptr).  Same
                  * type-of-deref logic as the unparenthesized `sizeof *ptr`
@@ -1016,6 +1039,8 @@ sizeof_operand_size(void)
                     "sizeof(expr) not supported — use sizeof IDENT or sizeof(type)");
             }
             expect(TOK_RPAREN, "')'");
+        } else if (g_cur.kind == TOK_STAR && !sizeof_star_is_bare_name()) {
+            sz = sizeof_node_size(build_unary());
         } else if (g_cur.kind == TOK_STAR) {
             int derefs = 0;
             while (g_cur.kind == TOK_STAR) { derefs++; next_tok(); }
@@ -1051,7 +1076,7 @@ sizeof_operand_size(void)
                     sz = type_size_bytes(lc->type, 1);
                 }
             } else {
-                sz = gv->n_bytes;
+                sz = sizeof_global(gv);
             }
             next_tok();
             /* sizeof arr[i] -> ONE element size (the array-count idiom
@@ -1186,6 +1211,130 @@ addr_of_run(Local *lc, Global *gv, LocalType bt, int sid, int line, int col)
                    : INCREF(g_ast[head].type, DERIV_PTR);
     g_ast[an].struct_id = g_ast[head].struct_id;
     return an;
+}
+
+/* A call to a function that returns a struct by value (Func.sret): a hidden
+ * temporary of the struct in this function's frame, its address prepended to
+ * the call's arguments as the callee's `__sret' (parse_func_decl_with_spec).
+ * Each call has its own, so two calls in one expression keep two values.
+ * kid0 and n_kids name the argument span, rebuilt with the address first. */
+void
+call_add_sret(int *kid0, int *n_kids, int sid, int line, int col)
+{
+    static int seq;
+    char nm[24];
+    if (g_structs[sid].is_forward)
+        die(line, col, "call of a function returning an incomplete struct");
+    int nl = snprintf(nm, sizeof nm, "__srt%d", seq++);
+    int saved_reg = g_decl_is_register;
+    g_decl_is_register = 0;
+    locals_declare(nm, nl, LK_LOCAL, LT_STRUCT,
+                   (g_structs[sid].total_size + 1) / 2, line, col);
+    g_decl_is_register = saved_reg;
+    Local *lc = &g_locals[g_n_locals - 1];
+    lc->struct_id = sid;
+    int a = ast_new(N_ADDR_VAR, line, col);
+    g_ast[a].sym_lc = lc;
+    g_ast[a].type = INCREF(LT_STRUCT, DERIV_PTR);
+    g_ast[a].struct_id = sid;
+    if (g_n_ast_kids + *n_kids + 1 > MAX_AST_KIDS)
+        die(line, col, "call-arg kid pool overflow (struct return)");
+    int k0 = g_n_ast_kids;
+    g_ast_kids[g_n_ast_kids++] = a;
+    for (int i = 0; i < *n_kids; i++)
+        g_ast_kids[g_n_ast_kids++] = g_ast_kids[*kid0 + i];
+    *kid0 = k0;
+    (*n_kids)++;
+}
+
+int build_postfix_value_chain(int base);
+
+/* The token kind just after the ')' that closes the '(' at g_cur.  g_cur is
+ * unchanged. */
+static TokKind
+amp_after_group(void)
+{
+    LexPeek pk;
+    int depth = 1;
+    TokKind k;
+
+    lex_peek_save(&pk);
+    next_tok();                            /* past '(' */
+    while (depth > 0 && g_cur.kind != TOK_EOF) {
+        if (g_cur.kind == TOK_LPAREN) depth++;
+        else if (g_cur.kind == TOK_RPAREN) depth--;
+        next_tok();
+    }
+    k = g_cur.kind;
+    lex_peek_restore(&pk);
+    return k;
+}
+
+/* Whether the group whose '(' is at g_cur is one the older `&' arms below
+ * already compile -- a bare name `(p)', a dereference `(*p)', or, straight
+ * after the `&', a cast `((T)e)' -- so this path leaves them their code.
+ * g_cur is unchanged. */
+static int
+amp_group_has_arm(int wraps)
+{
+    LexPeek pk;
+    int r = 0;
+
+    lex_peek_save(&pk);
+    next_tok();                            /* past '(' */
+    if (g_cur.kind == TOK_STAR) {
+        r = 1;
+    } else if (g_cur.kind == TOK_IDENT) {
+        next_tok();
+        r = (g_cur.kind == TOK_RPAREN);
+    } else if (g_cur.kind == TOK_LPAREN && wraps == 0) {
+        next_tok();
+        r = cur_begins_type();
+    }
+    lex_peek_restore(&pk);
+    return r;
+}
+
+/* `&' of a parenthesized group followed by a member or subscript chain, inside
+ * any number of wrapping parentheses: `&(&so->so_snd)->sb_flags',
+ * `&(inp->inp_socket)->so_rcv', `&((so)->so_rcv)',
+ * `&(((struct in_ifaddr *)ia)->ia_addr)' (2.11BSD's sblock, sorwakeup and
+ * IA_SIN).  K&R A.7.4.2: "The operand must be an lvalue referring neither to a
+ * bit-field nor to an object declared as register"; A.7.3.3 makes `E1->MOS'
+ * an lvalue "if the type is not an array type", whatever expression E1 is.
+ * So the group is read as a VALUE and the chain after it as an ADDRESS, the
+ * mechanism the computed-base arms use.  g_cur is just after '&'.  Returns
+ * -1, with g_cur unchanged, for any other operand. */
+static int
+build_addr_of_group(int line, int col)
+{
+    LexPeek start;
+    int wraps = 0;
+    TokKind after;
+
+    lex_peek_save(&start);
+    for (;;) {
+        if (g_cur.kind != TOK_LPAREN) { lex_peek_restore(&start); return -1; }
+        after = amp_after_group();
+        if (after == TOK_ARROW || after == TOK_LBRACKET)
+            break;                          /* this group is the base value */
+        next_tok();                         /* a wrapping '(' */
+        wraps++;
+    }
+    if (amp_group_has_arm(wraps)) { lex_peek_restore(&start); return -1; }
+    next_tok();                             /* past the base group's '(' */
+    int base = build_comma_entry();
+    expect(TOK_RPAREN, "')'");
+    if (!ISPTR(g_ast[base].type))
+        die(line, col, "'&' operand: '->' or '[' on a value that is not a pointer");
+    int saved_aoc = g_addr_of_chain;
+    g_addr_of_chain = 1;
+    int v = build_postfix_value_chain(base);
+    g_addr_of_chain = saved_aoc;
+    if (g_ast[v].kind != N_ADDR_LV_E && g_ast[v].kind != N_ADD_PPLUSI)
+        die(line, col, "'&' operand is not an lvalue");
+    while (wraps-- > 0) expect(TOK_RPAREN, "')'");
+    return v;
 }
 
 /* Transcribed decision structure of parse_unary (3a-D).  Result-descriptor
@@ -1645,6 +1794,10 @@ build_unary(void)
         next_tok();
         LexPeek amp_pk;
         lex_peek_save(&amp_pk);            /* checkpoint just after '&' */
+        {
+            int r = build_addr_of_group(op_line, op_col);
+            if (r >= 0) return r;
+        }
         int amp_paren = 0;
         while (g_cur.kind == TOK_LPAREN) { amp_paren++; next_tok(); }
         /* `&(*p)[i]` — address of an element of the pointee: semantically
@@ -1661,15 +1814,24 @@ build_unary(void)
                 die(g_cur.line, g_cur.col, "undeclared pointer in '&(*p)[i]'");
             {
                 LocalType pt = plc ? plc->type : pgv->type;
-                if (!ISPTR(pt) || !ISPTR(DECREF(pt)))
-                    die(g_cur.line, g_cur.col,
-                        "'&(*p)[i]' requires a pointer-to-pointer p");
+                int pline = g_cur.line, pcol = g_cur.col;
                 next_tok();
                 if (amp_paren > 0) { expect(TOK_RPAREN, "')'"); amp_paren--; }
                 int v = ast_new(N_VAR_LOAD, op_line, op_col);
                 g_ast[v].sym_lc = plc; g_ast[v].sym_gv = pgv;
                 g_ast[v].type = pt;
                 g_ast[v].struct_id = plc ? plc->struct_id : pgv->struct_id;
+                /* `&*p' is p: A.7.4.3 makes `*p' an lvalue, the object p
+                 * points to, and A.7.4.2 takes its address. */
+                if (ISPTR(pt) && g_cur.kind != TOK_LBRACKET &&
+                    g_cur.kind != TOK_ARROW) {
+                    g_ast[v].is_unsigned = plc ? plc->is_unsigned : pgv->is_unsigned;
+                    while (amp_paren-- > 0) expect(TOK_RPAREN, "')'");
+                    return v;
+                }
+                if (!ISPTR(pt) || !ISPTR(DECREF(pt)))
+                    die(pline, pcol,
+                        "'&(*p)[i]' requires a pointer-to-pointer p");
                 int d = ast_new(N_DEREF_GENERAL, op_line, op_col);
                 g_ast[d].a = v;
                 g_ast[d].type = deref_result_expr_type(DECREF(pt));
@@ -1782,6 +1944,23 @@ build_unary(void)
         int         id_len = g_cur.id_len;
         Local  *lc = locals_lookup(id_ptr, id_len);
         Global *gv = (lc == NULL) ? globals_lookup(id_ptr, id_len) : NULL;
+        /* K&R A.7.4.2: "The operand must be an lvalue referring neither to a
+         * bit-field nor to an object declared as register".  Only the
+         * variable's OWN storage is refused: `&r', and `&r.m' or `&r[i]' on a
+         * struct or array r.  Through a register POINTER, `&p->m' and `&p[i]'
+         * name the object it points to (2.11BSD's `&uio->uio_iov[1]'). */
+        if (lc && lc->is_register) {
+            LexPeek rpk;
+            int ln = g_cur.line, cl = g_cur.col;
+            lex_peek_save(&rpk);
+            next_tok();
+            while (g_cur.kind == TOK_RPAREN) next_tok();   /* `&((p)[1])' */
+            int through_ptr = (g_cur.kind == TOK_ARROW) ||
+                              (g_cur.kind == TOK_LBRACKET && ISPTR(lc->type));
+            lex_peek_restore(&rpk);
+            if (!through_ptr)
+                die(ln, cl, "'&' of a variable declared register");
+        }
         if (lc == NULL && gv == NULL) {
             int fn_idx_amp = funcs_lookup(id_ptr, id_len);
             if (fn_idx_amp >= 0) {
@@ -1899,6 +2078,8 @@ build_unary(void)
                 int after_lbr = (g_cur.kind == TOK_LBRACKET);
                 int is_bare = (f0 != NULL && !after_lbr &&
                                g_cur.kind != TOK_ARROW);
+                if (is_bare && f0->is_bit_field)
+                    die(op_line, op_col, "'&' of a bit-field");
                 LocalType ftype = f0 ? f0->type       : LT_INT;
                 int       fsid  = f0 ? f0->struct_id  : -1;
                 /* Any array member, whatever its element type (K&R A.7.3.1:
@@ -1956,6 +2137,7 @@ build_unary(void)
                     die(g_cur.line, g_cur.col, "expected field name after '->'");
                 Field *f = struct_field_lookup(cur_sid, g_cur.id_ptr, g_cur.id_len);
                 if (f == NULL) die(g_cur.line, g_cur.col, "no such field");
+                if (f->is_bit_field) die(op_line, op_col, "'&' of a bit-field");
                 next_tok();
                 if (g_n_ast_fields >= MAX_AST_KIDS)
                     die(g_cur.line, g_cur.col, "arrow-chain hop pool overflow");
@@ -2151,6 +2333,7 @@ build_unary(void)
                     die(g_cur.line, g_cur.col, "'.' on a non-struct operand");
                 f = field_lookup_dot(dsid, g_cur.id_ptr, g_cur.id_len);
                 if (f == NULL) die(g_cur.line, g_cur.col, "no such field");
+                if (f->is_bit_field) die(op_line, op_col, "'&' of a bit-field");
                 next_tok();                   /* consume field name */
                 /* Another embedded-struct hop (`a.b.c` with b a struct value):
                  * fold b's offset in and keep walking.  Only value members —
@@ -2913,12 +3096,16 @@ build_postfix_value_chain(int base)
             int kid0, n_kids;
             build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            if (g_fn_sigs[sig].sret_sid >= 0)
+                call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                              op_line, op_col);
             int cn = ast_new(N_CALL_STASHED, op_line, op_col);
             g_ast[cn].a = base;
             g_ast[cn].kid0 = kid0; g_ast[cn].n_kids = n_kids;
             g_ast[cn].val = (unsigned)sig;
             g_ast[cn].type = g_fn_sigs[sig].return_type;
             g_ast[cn].is_unsigned = g_fn_sigs[sig].ret_unsigned;
+            g_ast[cn].struct_id = g_fn_sigs[sig].sret_sid;
             g_ast[cn].fn_sig = -1;
             base = cn;
             continue;
@@ -3354,7 +3541,7 @@ build_postfix_value_chain(int base)
             g_ast[n].kid0 = hop0; g_ast[n].n_kids = n_hops;
             g_ast[n].type = leaf_ty;
             g_ast[n].struct_id = leaf_sid;
-            g_ast[n].is_unsigned = 0;      /* leaf load resets via helpers */
+            g_ast[n].is_unsigned = g_ast_fields[hop0 + n_hops - 1]->is_unsigned;
             /* A chain ENDING IN A FUNCTION POINTER carries that field's
              * signature, which is what makes the value callable.  Inheriting
              * the base's fn_sig instead (as this did) left it at -1, and the
@@ -3440,6 +3627,23 @@ build_call_args(int *kid0, int *n_kids)
  * push glue, with the weight decisions from the arg NODES' types (the same
  * values runtime g_expr_type held after each parse_expr).  Returns
  * total_arg_bytes. */
+/* The struct id when arg is `*p' and p points to a struct (not to a pointer
+ * or an array of them), else -1. */
+static int
+struct_deref_arg(int arg)
+{
+    tword pt;
+    if (g_ast[arg].kind == N_DEREF_FAST)
+        pt = g_ast[arg].sym_lc->type;
+    else if (g_ast[arg].kind == N_DEREF_GENERAL)
+        pt = g_ast[g_ast[arg].a].type;
+    else
+        return -1;
+    if (!ISPTR(pt) || BTYPE(DECREF(pt)) != BT_STRUCT || DERIV(DECREF(pt)) != 0)
+        return -1;
+    return g_ast[arg].struct_id;
+}
+
 static int
 walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
                const int *pstruct_ids, int n_declared, int n_fixed,
@@ -3453,10 +3657,24 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
          * (drives the declared-param type coercion either way). */
         int idx = rtl->active ? (n_kids - 1 - i) : i;
         int arg = g_ast_kids[kid0 + idx];
-        walk_expr(arg);
+        /* `*p' with p a struct pointer is the whole struct: K&R A.7.4.3, "If
+         * the type of the expression is ``pointer to T,'' the type of the
+         * result is T".  The deref node is typed for a scalar read of its
+         * first word, so the argument is walked as the POINTER and copied
+         * below like any struct value (2.11BSD arpresolve's
+         * in_broadcast(*destip)). */
+        int dsid = struct_deref_arg(arg);
+        if (dsid >= 0) {
+            if (g_ast[arg].kind == N_DEREF_FAST)
+                fpr_load_sym(g_ast[arg].sym_lc, NULL);
+            else
+                (void) walk_fpr(g_ast[arg].a);
+        } else
+            walk_expr(arg);
         int ks = g_fpr_res;               /* FPR result (new walker), or -1 */
         g_fpr_res = -1;
-        LocalType at = g_ast[arg].type;   /* walker purity: decisions from the
+        LocalType at = dsid >= 0 ? LT_STRUCT : g_ast[arg].type;
+                                          /* walker purity: decisions from the
                                            * node, not runtime g_expr_* (proven
                                            * equal by the FCC_AST_CHECK sweep) */
         /* Whether this argument goes out as its parameter's type.  Past the
@@ -3478,9 +3696,18 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
          * printf, so this program needs libc's float printer (main.c). */
         if (!decl && (at == LT_FLOAT || at == LT_DOUBLE))
             g_fltused = 1;
-        if (decl && pstruct_ids != NULL &&
-            ptypes[idx] == LT_STRUCT) {
-            int psid = pstruct_ids[idx];
+        /* A.7.3.2: "a copy is made of each argument; all argument-passing is
+         * strictly by value".  With no parameter type in scope, the argument's
+         * own struct type says how much to copy. */
+        int psid = -1, byval = 0;
+        if (decl && pstruct_ids != NULL && ptypes[idx] == LT_STRUCT) {
+            psid = pstruct_ids[idx];
+            byval = 1;
+        } else if (!decl && at == LT_STRUCT) {
+            psid = dsid >= 0 ? dsid : g_ast[arg].struct_id;
+            byval = 1;
+        }
+        if (byval) {
             int nb = (g_structs[psid].total_size + 1) & ~1;
             /* By-value copy on FPRs (P3-2.4, retires the arg copy's
              * _fcc_ptr2 staging): src = the walked &struct (struct
@@ -3496,7 +3723,6 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
             ks = -1;
             g_s_delta += nb;
             total_arg_bytes += nb;
-            rtl_note_struct(rtl);
         } else if ((decl &&
                     is_ptr_type(ptypes[idx])) ||
                    (!decl && is_ptr_type(at))) {
@@ -3887,6 +4113,8 @@ build_primary_ast(void)
                 fspec.struct_id   = cast_sid;
                 fspec.is_static   = 0;
                 fspec.is_extern   = 0;
+                fspec.is_register = 0;
+                fspec.ary_n       = 0;
                 fspec.is_unsigned = saw_unsigned;
                 int fsig = parse_fnptr_sig(fspec, 0);
                 expect(TOK_RPAREN, "')' closing fn-ptr cast");
@@ -3911,6 +4139,8 @@ build_primary_ast(void)
             cspec.is_static  = 0;
             cspec.is_extern  = 0;
             cspec.is_unsigned = saw_unsigned;
+            cspec.ary_n      = 0;
+            cspec.is_register = 0;
             Declarator cd = parse_declarator(cspec, /*allow_abstract=*/1);
             expect(TOK_RPAREN, "')'");
             LocalType target = cd.type;
@@ -4020,14 +4250,20 @@ build_primary_ast(void)
             int kid0, n_kids;
             build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            if (g_fn_sigs[sig].sret_sid >= 0)
+                call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                              op_line2, op_col2);
             int n = ast_new(N_CALL_STASHED, op_line2, op_col2);
             g_ast[n].a = chained;
             g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
             g_ast[n].val = (unsigned)sig;
             g_ast[n].type = g_fn_sigs[sig].return_type;
             g_ast[n].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
+            g_ast[n].struct_id = g_fn_sigs[sig].sret_sid;
             g_ast[n].fn_sig = -1;
-            return n;
+            /* a struct value takes `.m' (K&R A.7.3) */
+            return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(n)
+                                                 : n;
         }
         /* Every lvalue a group can hold was taken above (the rotation, the
          * deref arm), so a '++'/'--' still here follows a non-lvalue such as
@@ -4156,13 +4392,17 @@ build_primary_ast(void)
                     int kid0, n_kids;
                     build_call_args(&kid0, &n_kids);
                     expect(TOK_RPAREN, "')'");
+                    if (g_fn_sigs[fp_sig].sret_sid >= 0)
+                        call_add_sret(&kid0, &n_kids, g_fn_sigs[fp_sig].sret_sid,
+                                      line, col);
                     int n = ast_new(N_CALL_FPVAR, line, col);
                     g_ast[n].sym_lc = fp_lc; g_ast[n].sym_gv = fp_gv;
                     g_ast[n].val = (unsigned)fp_sig;
                     g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
                     g_ast[n].type = g_fn_sigs[fp_sig].return_type;
                     g_ast[n].is_unsigned = g_fn_sigs[fp_sig].ret_unsigned;   /* A-1 */
-                    return n;
+                    g_ast[n].struct_id = g_fn_sigs[fp_sig].sret_sid;
+                    return g_fn_sigs[fp_sig].sret_sid >= 0 ? build_postfix_value_chain(n) : n;
                 }
             }
             /* Named function call. */
@@ -4173,6 +4413,7 @@ build_primary_ast(void)
                 g_funcs[fn_idx].return_type = LT_INT;
                 g_funcs[fn_idx].is_variadic = 1;
                 g_funcs[fn_idx].is_extern   = 1;
+                g_funcs[fn_idx].is_implicit = 1;
             }
             int expected_argc = g_funcs[fn_idx].n_params;
             next_tok();                           /* consume '(' */
@@ -4183,6 +4424,10 @@ build_primary_ast(void)
             int kid0, n_kids;
             build_call_args(&kid0, &n_kids);
             expect(TOK_RPAREN, "')'");
+            /* A struct by value: the caller's temporary goes first (Func.sret). */
+            if (g_funcs[fn_idx].sret)
+                call_add_sret(&kid0, &n_kids, g_funcs[fn_idx].return_struct_id,
+                              line, col);
             if (g_funcs[fn_idx].is_variadic) {
                 if (n_kids < expected_argc) {
                     char buf[96];
@@ -4238,7 +4483,8 @@ build_primary_ast(void)
             g_ast[n].val = (unsigned)fn_idx;
             g_ast[n].name = name_ptr; g_ast[n].name_len = name_len;
             g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
-            g_ast[n].type = g_funcs[fn_idx].return_type;
+            g_ast[n].type = g_funcs[fn_idx].sret ? LT_STRUCT
+                                                 : g_funcs[fn_idx].return_type;
             g_ast[n].struct_id = g_funcs[fn_idx].return_struct_id;
             g_ast[n].is_unsigned = g_funcs[fn_idx].ret_unsigned;
             /* postfix chain on the call RESULT: f()->field / f()[i] */
@@ -4405,14 +4651,20 @@ build_primary_ast(void)
                     int akid0, an_kids;
                     build_call_args(&akid0, &an_kids);
                     expect(TOK_RPAREN, "')'");
+                    if (g_fn_sigs[sig].sret_sid >= 0)
+                        call_add_sret(&akid0, &an_kids, g_fn_sigs[sig].sret_sid,
+                                      op_line2, op_col2);
                     int cn = ast_new(N_CALL_STASHED, op_line2, op_col2);
                     g_ast[cn].a = chained;
                     g_ast[cn].kid0 = akid0; g_ast[cn].n_kids = an_kids;
                     g_ast[cn].val = (unsigned)sig;
                     g_ast[cn].type = g_fn_sigs[sig].return_type;
                     g_ast[cn].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
+                    g_ast[cn].struct_id = g_fn_sigs[sig].sret_sid;
                     g_ast[cn].fn_sig = -1;
-                    return cn;
+                    /* a struct value takes `.m' (K&R A.7.3) */
+                    return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(cn)
+                                                         : cn;
                 }
                 return chained;
             }
@@ -4638,9 +4890,14 @@ build_struct_elem_access(Local *lc, Global *gv, LocalType atype, int asid,
     g_ast[base].flags = (atype == LT_STRUCT_PTR) ? AF_BASE_LOAD : 0;
     g_ast[base].type = LT_STRUCT_PTR;
     g_ast[base].struct_id = asid;
-    if (g_cur.kind != TOK_DOT)
-        die(g_cur.line, g_cur.col,
-            "struct-array indexed access requires '.field'");
+    if (g_cur.kind != TOK_DOT) {
+        /* The whole element, a struct value -- which this compiler carries
+         * as its address (apple/fgx#259), so the element's address node IS
+         * the value, typed as the struct.  K&R A.7.17 lets it be the right
+         * side of a struct assignment. */
+        g_ast[base].type = LT_STRUCT;
+        return base;
+    }
     next_tok();
     if (g_cur.kind != TOK_IDENT)
         die(g_cur.line, g_cur.col, "field name");
@@ -4681,7 +4938,7 @@ build_struct_elem_access(Local *lc, Global *gv, LocalType atype, int asid,
             if (f2->type == LT_STRUCT && g_cur.kind == TOK_DOT) continue;
             break;
         }
-        f = elem_synth_leaf(f2->type, cum, f2->struct_id, f2->is_unsigned);
+        f = elem_synth_leaf(f2->type, cum, f2->struct_id, f2->is_unsigned, f2);
         f->n_dims = f2->n_dims;            /* the rank rides the fold too */
         f->row_stride = f2->row_stride;
     }
@@ -4821,14 +5078,20 @@ build_struct_elem_access(Local *lc, Global *gv, LocalType atype, int asid,
         int kid0, n_kids;
         build_call_args(&kid0, &n_kids);
         expect(TOK_RPAREN, "')'");
+        if (g_fn_sigs[sig].sret_sid >= 0)
+            call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                          op_line, op_col);
         int cn = ast_new(N_CALL_STASHED, op_line, op_col);
         g_ast[cn].a = n;
         g_ast[cn].kid0 = kid0; g_ast[cn].n_kids = n_kids;
         g_ast[cn].val = (unsigned)sig;
         g_ast[cn].type = g_fn_sigs[sig].return_type;
         g_ast[cn].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
+        g_ast[cn].struct_id = g_fn_sigs[sig].sret_sid;
         g_ast[cn].fn_sig = -1;
-        return cn;
+        /* a struct value takes `.m' (K&R A.7.3) */
+        return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(cn)
+                                             : cn;
     }
     /* G49: chained subscript on a pointer-valued field */
     return build_postfix_value_chain(n);
@@ -4921,6 +5184,9 @@ build_dot_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         int kid0, n_kids;
         build_call_args(&kid0, &n_kids);
         expect(TOK_RPAREN, "')'");
+        if (g_fn_sigs[sig].sret_sid >= 0)
+            call_add_sret(&kid0, &n_kids, g_fn_sigs[sig].sret_sid,
+                          op_line, op_col);
         int n = ast_new(N_CALL_FPFIELD, op_line, op_col);
         g_ast[n].sym_lc = lc; g_ast[n].sym_gv = gv;
         g_ast[n].sym_f = leaf;
@@ -4929,7 +5195,8 @@ build_dot_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         g_ast[n].kid0 = kid0; g_ast[n].n_kids = n_kids;
         g_ast[n].type = g_fn_sigs[sig].return_type;
         g_ast[n].is_unsigned = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
-        return n;
+        g_ast[n].struct_id = g_fn_sigs[sig].sret_sid;
+        return g_fn_sigs[sig].sret_sid >= 0 ? build_postfix_value_chain(n) : n;
     }
     /* Bare array-member decay, for EVERY element type.  K&R A.7.1, p.161:
      * "the value of the expression is a pointer to the first object in the
@@ -5009,7 +5276,7 @@ build_dot_access(Local *lc, Global *gv, int cur_sid, int line, int col)
 static Field g_elem_synth[256];
 static int   g_n_elem_synth = 0;
 Field *
-elem_synth_leaf(LocalType type, int off, int sid, int uns)
+elem_synth_leaf(LocalType type, int off, int sid, int uns, const Field *bits)
 {
     if (g_n_elem_synth >= 256)
         die(g_cur.line, g_cur.col,
@@ -5017,8 +5284,12 @@ elem_synth_leaf(LocalType type, int off, int sid, int uns)
     Field *f = &g_elem_synth[g_n_elem_synth++];
     f->name = "(elem)"; f->type = type; f->struct_id = sid;
     f->fn_sig_id = -1; f->n_elems = 1; f->byte_offset = off;
-    f->byte_size = 0; f->is_bit_field = 0; f->bit_offset = 0;
-    f->bit_width = 0; f->is_unsigned = uns;
+    f->byte_size = 0; f->is_unsigned = uns;
+    /* A bit-field leaf keeps its place in the containing word, which the
+     * cumulative byte offset addresses (`p->arr[i].hl'). */
+    f->is_bit_field = bits ? bits->is_bit_field : 0;
+    f->bit_offset   = bits ? bits->bit_offset : 0;
+    f->bit_width    = bits ? bits->bit_width : 0;
     f->n_dims = 1; f->row_stride = 0;      /* callers carry a rank-2 leaf's */
     return f;
 }
@@ -5269,6 +5540,12 @@ build_arrow_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         g_ast[n].sym_f = leaf;
         g_ast[n].type = lt;
         g_ast[n].struct_id = leaf->struct_id;
+        g_ast[n].is_unsigned = leaf->is_unsigned;
+        /* A function-pointer leaf carries its signature, and a call may
+         * follow it directly: `p->s.fn(x)' (K&R A.7.3.2). */
+        g_ast[n].fn_sig = fnptr_based(lt) ? leaf->fn_sig_id : -1;
+        if (lt == LT_FN_PTR && g_cur.kind == TOK_LPAREN)
+            return build_postfix_value_chain(n);
         return n;
     }
 
@@ -5361,7 +5638,7 @@ build_arrow_access(Local *lc, Global *gv, int cur_sid, int line, int col)
         int n = ast_new(N_ELEM_FIELD, line, col);
         g_ast[n].a = base;
         g_ast[n].sym_f2 = elem_synth_leaf(f2->type, cum2, f2->struct_id,
-                                          f2->is_unsigned);
+                                          f2->is_unsigned, f2);
         g_ast[n].type = f2->type;
         g_ast[n].struct_id = f2->struct_id;
         g_ast[n].is_unsigned = f2->is_unsigned;
@@ -7944,7 +8221,7 @@ walk_expr_body(int n)
                 g_expr_struct_id = f->struct_id;
                 continue;
             }
-            emit_fpr_deref_field(k, f->type, f->byte_offset);
+            emit_fpr_deref_member(k, f);
             g_expr_type      = f->type;
             g_expr_struct_id = f->struct_id;
         }
@@ -8393,10 +8670,10 @@ walk_expr_body(int n)
                 g_expr_unsigned  = 0;
                 continue;
             }
-            emit_fpr_deref_field(ka, f->type, f->byte_offset);
+            emit_fpr_deref_member(ka, f);
             g_expr_type      = f->type;
             g_expr_struct_id = f->struct_id;
-            g_expr_unsigned  = 0;
+            g_expr_unsigned  = f->is_unsigned;
         }
         if (ISPTR(g_ast[n].type)) g_fpr_res = ka;
         else                      fpr_drop(ka);
@@ -8416,13 +8693,13 @@ walk_expr_body(int n)
                                          g_fn_sigs[sig].param_types, NULL,
                                          g_fn_sigs[sig].n_params, -1, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         call_stashed_fnptr(total_arg_bytes, g_ast[n].line, g_ast[n].col);
         g_expr_type      = g_fn_sigs[sig].return_type;
-        g_expr_struct_id = -1;
+        g_expr_struct_id = g_fn_sigs[sig].sret_sid;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
         g_expr_fn_sig    = -1;
-        if (ISPTR(g_expr_type) && !(g_ast[n].flags & AF_STMT_DISCARD))
+        if ((ISPTR(g_expr_type) || g_expr_type == LT_STRUCT)
+            && !(g_ast[n].flags & AF_STMT_DISCARD))
             fpr_capture_ret(nspill);
         else
             emit_fpr_restore_live(nspill);
@@ -8526,7 +8803,6 @@ walk_expr_body(int n)
                                          g_fn_sigs[sig].param_types, NULL,
                                          g_fn_sigs[sig].n_params, -1, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         {   /* P3-2.5b: the fn-ptr value rides an FPR into the dispatch
              * (locals via the 2.5a native IR op, globals native). */
             int kc = fpr_load_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
@@ -8536,9 +8812,10 @@ walk_expr_body(int n)
         emit_drop_arg_bytes(total_arg_bytes,
                             (g_ast[n].flags & AF_STMT_DISCARD) != 0);
         g_expr_type      = g_fn_sigs[sig].return_type;
-        g_expr_struct_id = -1;
+        g_expr_struct_id = g_fn_sigs[sig].sret_sid;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
-        if (ISPTR(g_expr_type) && !(g_ast[n].flags & AF_STMT_DISCARD))
+        if ((ISPTR(g_expr_type) || g_expr_type == LT_STRUCT)
+            && !(g_ast[n].flags & AF_STMT_DISCARD))
             fpr_capture_ret(nspill);
         else
             emit_fpr_restore_live(nspill);
@@ -8558,7 +8835,6 @@ walk_expr_body(int n)
                                          g_funcs[fn_idx].n_params,
                                          g_funcs[fn_idx].n_fixed, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         emit_call(g_ast[n].name, g_ast[n].name_len, !g_pile);
         emit_drop_arg_bytes(total_arg_bytes,
                             (g_ast[n].flags & AF_STMT_DISCARD) != 0);
@@ -8572,6 +8848,8 @@ walk_expr_body(int n)
         } else {
             emit_fpr_restore_live(nspill);
         }
+        /* A struct by value is its address, the pointer the callee returned. */
+        if (g_funcs[fn_idx].sret) g_expr_type = LT_STRUCT;
         break;
     }
     case N_ENUM_CONST:
@@ -8717,7 +8995,6 @@ walk_expr_body(int n)
                                          g_fn_sigs[sig].param_types, NULL,
                                          g_fn_sigs[sig].n_params, -1, &rtl,
                                          &actual_argc);
-        rtl_finish(&rtl, g_ast[n].line, g_ast[n].col);
         {   /* P3-2.5b: the stored (offset,bank) field pair rides an FPR
              * into the dispatch.  The stored bank is real under
              * --far-calls (FGX2_LONG_PTR reloc); single-bank dispatch
@@ -8732,9 +9009,10 @@ walk_expr_body(int n)
         }
         emit_drop_arg_bytes(total_arg_bytes, 0);
         g_expr_type      = g_fn_sigs[sig].return_type;
-        g_expr_struct_id = -1;
+        g_expr_struct_id = g_fn_sigs[sig].sret_sid;
         g_expr_unsigned  = g_fn_sigs[sig].ret_unsigned;   /* A-1 */
-        if (ISPTR(g_expr_type) && !(g_ast[n].flags & AF_STMT_DISCARD))
+        if ((ISPTR(g_expr_type) || g_expr_type == LT_STRUCT)
+            && !(g_ast[n].flags & AF_STMT_DISCARD))
             fpr_capture_ret(nspill);
         else
             emit_fpr_restore_live(nspill);
@@ -8790,7 +9068,7 @@ walk_expr_body(int n)
     case N_ELEM_FIELD: {
         Field *f2 = g_ast[n].sym_f2;
         int ka = walk_fpr(g_ast[n].a);
-        emit_fpr_deref_field(ka, f2->type, f2->byte_offset);
+        emit_fpr_deref_member(ka, f2);
         if (ISPTR(f2->type)) g_fpr_res = ka;
         else                 fpr_drop(ka);
         g_expr_type = f2->type;
@@ -8853,7 +9131,7 @@ walk_expr_body(int n)
     case N_FIELD_DEREF: {
         Field *f = g_ast[n].sym_f;
         int ka = walk_fpr(g_ast[n].a);
-        emit_fpr_deref_field(ka, f->type, f->byte_offset);
+        emit_fpr_deref_member(ka, f);
         if (ISPTR(f->type)) g_fpr_res = ka;
         else                fpr_drop(ka);
         g_expr_type = f->type;
@@ -8914,12 +9192,20 @@ walk_expr_body(int n)
         Field *leaf = g_ast[n].sym_f;
         int k = fpr_load_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
         emit_fpr_add_const(k, (int)g_ast[n].val);
+        if (leaf->is_bit_field) {              /* within the containing word */
+            emit_fpr_deref_field(k, LT_INT, 0);
+            emit_lv_bitfield_extract(leaf);
+            fpr_drop(k);
+            g_fpr_res = -1; g_expr_type = LT_INT;
+            g_expr_struct_id = -1; g_expr_unsigned = 1;
+            break;
+        }
         emit_fpr_deref_field(k, leaf->type, 0);
         if (ISPTR(leaf->type)) g_fpr_res = k;
         else                   fpr_drop(k);
         g_expr_type      = leaf->type;
         g_expr_struct_id = leaf->struct_id;
-        g_expr_unsigned  = 0;
+        g_expr_unsigned  = leaf->is_unsigned;
         break;
     }
     case N_ARROW_LOAD_CHAIN: {
@@ -8929,7 +9215,7 @@ walk_expr_body(int n)
             Field *hop = g_ast_fields[g_ast[n].kid0 + h];
             emit_fpr_deref_field(k, LT_STRUCT_PTR, hop->byte_offset);
         }
-        emit_fpr_deref_field(k, f->type, f->byte_offset);
+        emit_fpr_deref_member(k, f);
         if (ISPTR(f->type)) g_fpr_res = k;
         else                fpr_drop(k);
         g_expr_type      = f->type;
@@ -9132,6 +9418,18 @@ walk_expr_body(int n)
         int is_byte = (leaf == LT_CHAR);
         int is_long = (leaf == LT_LONG || leaf == LT_FLOAT);
         int is_ptr  = ISPTR(leaf);
+        if (g_ast[head].sym_f) {                     /* a bit-field leaf */
+            if (g_ast[n].op != TOK_EQ)
+                die(g_ast[n].line, g_ast[n].col,
+                    "op= on a bit-field reached through a member chain");
+            int kd = emit_lvalue_addr(head);
+            walk_val(g_ast[n].c);
+            emit_lv_bitfield_store(kd, g_ast[head].sym_f, 0);
+            fpr_drop(kd);
+            g_fpr_res = -1; g_expr_type = LT_INT;
+            g_expr_struct_id = -1; g_expr_unsigned = 1;
+            break;
+        }
         if (IS_QUAD(leaf) ||
             (g_ast[n].op != TOK_EQ &&
              llong_opassign_applies(leaf, g_ast[n].op, g_ast[n].c))) {
@@ -9296,6 +9594,8 @@ walk_expr_body(int n)
         /* &chain: the walker's ADDRESS fpr IS the value -- a far pointer whose
          * bank rides through every deref/scaled-add (K&R A.7.4.2). */
         int kd;
+        if (g_ast[g_ast[n].a].kind == N_LV_CHAIN && g_ast[g_ast[n].a].sym_f)
+            die(g_ast[n].line, g_ast[n].col, "'&' of a bit-field");
         refuse_homed_addr(n);
         kd = emit_lvalue_addr(g_ast[n].a);
         g_fpr_res        = kd;
@@ -9310,6 +9610,14 @@ walk_expr_body(int n)
          * kd (rides the fpr), a LONG into A:_fcc_long_hi, a scalar into A. */
         LocalType leaf = g_ast[n].type;
         int kd = emit_lvalue_addr(g_ast[n].a);
+        if (g_ast[g_ast[n].a].sym_f) {               /* a bit-field leaf */
+            emit_fpr_deref_field(kd, LT_INT, 0);
+            emit_lv_bitfield_extract(g_ast[g_ast[n].a].sym_f);
+            fpr_drop(kd);
+            g_fpr_res = -1; g_expr_type = LT_INT;
+            g_expr_struct_id = -1; g_expr_unsigned = 1;
+            break;
+        }
         emit_fpr_deref_field(kd, leaf, 0);
         if (ISPTR(leaf)) {
             g_fpr_res        = kd;               /* far pointer in kd */
@@ -9332,6 +9640,14 @@ walk_expr_body(int n)
         int op        = g_ast[n].a;
         int is_inc    = (g_ast[n].flags & AF_IS_INC) ? 1 : 0;
         int is_prefix = (g_ast[n].flags & AF_RET_OLD) ? 0 : 1;
+        if (g_ast[op].kind == N_LV_CHAIN && g_ast[op].sym_f) {   /* bit-field */
+            int kb = emit_lvalue_addr(op);
+            emit_bitfield_incdec_at_fpr(kb, g_ast[op].sym_f, 0, is_inc,
+                                        !is_prefix);
+            fpr_drop(kb);
+            g_fpr_res = -1;
+            break;
+        }
         LocalType lt  = g_ast[n].type;
         int is_ptr    = ISPTR(lt);
         int kd, off = 0;
@@ -9583,7 +9899,7 @@ walk_expr_body(int n)
         } else {
             fpr_collapse();
             emit_assign_conv(LT_INT);   /* A.7.17: a float truncates */
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
             fpr_drop(kd);
         }
         g_expr_type      = f->type;
@@ -9629,7 +9945,7 @@ walk_expr_body(int n)
         } else {
             fpr_collapse();
             emit_assign_conv(LT_INT);   /* A.7.17: a float truncates */
-            emit_fpr_deref_store_word(kd, f->byte_offset);
+            emit_fpr_deref_store_wordmember(kd, f);
             fpr_drop(kd);
         }
         g_expr_type      = f->type;
@@ -9858,6 +10174,15 @@ sizeof_type_value(void)
         return 0;   /* unreachable */
     }
     if (is_ptr) return 4;                       /* 24-bit long ptr = 4 B */
+    /* An array typedef: its element count times the element's size. */
+    if (ISARY(t.base)) {
+        LocalType et = DECREF(t.base);
+        if (t.ary_n == 0)
+            die(g_cur.line, g_cur.col, "sizeof of an array of unknown size");
+        if (et == LT_STRUCT)
+            return (long)((g_structs[t.struct_id].total_size + 1) & ~1) * t.ary_n;
+        return (long)type_size_bytes(et, 1) * t.ary_n;
+    }
     if (t.base == LT_STRUCT) {
         if (g_structs[t.struct_id].is_forward)
             die(g_cur.line, g_cur.col, "sizeof of incomplete struct");

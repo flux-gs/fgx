@@ -1,0 +1,51 @@
+{
+ "name": "netw5",
+ "description": "The MACRAW driver on the host's real network (NOT in the gate: a real DHCP server and LAN traffic). The release /etc/rc is staged back, so the network modules load at boot and /etc/netstart's dhclient takes a lease through the kernel stack; the probe's wire cases wait for the gateway that lease puts in the chip. Only means anything at kernel.netprobe = 1.  ntpd starts at boot and asks for each interface's flags by the name SIOCGIFCONF gave it: 2.11BSD's ifunit takes the first digit as the unit, so an interface name must be letters.  dhclient sets the lease through SIOCSIFNETMASK, SIOCSIFADDR, SIOCSIFBRDADDR and SIOCADDRT; the probe's routes case checks one default route through its gateway and the broadcast host route through the address, and a second dhclient at the end renews the lease, deleting the first's default route before adding its own.",
+ "command": "/testbin/ifcprobe; sleep 70; dmesg | tail -19; dhclient",
+ "timeout_s": 300,
+ "mame_slots": [
+  "-sl1",
+  "uthernet2"
+ ],
+ "stage_files": [
+  {
+   "host": "disk_src/etc/rc.in",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "w5: attached",
+   "rx 8192",
+   "bsdnet: ok",
+   "bsdnet: w5 received",
+   "bsdnet: w5 bad length reopened",
+   "bsdnet: w5 pool empty dropped",
+   "bsdnet: w5 torn read survived",
+   "bsdnet: arp resolved ",
+   "bsdnet: echo reply from gateway",
+   "bsdnet: echo rtt ",
+   "bsdnet: five full frames sent in ticks ",
+   "bsdnet: burst of 45 got ",
+   "bsdnet: alive after burst",
+   "bsdnet: routes ok",
+   "bound to"
+  ],
+  "screen_lacks": [
+   "bsdnet: BROKEN",
+   "PANIC",
+   "BRK",
+   "Device not configured",
+   "assign failed",
+   "no network interface"
+  ]
+ },
+ "requires": {
+  "config": {
+   "kernel.netprobe": "1"
+  },
+  "reason": "the probe C is compiled into the network modules only at kernel.netprobe = 1"
+ }
+}

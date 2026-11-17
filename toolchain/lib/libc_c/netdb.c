@@ -6,11 +6,11 @@
  */
 
 /* libc primitives the resolver calls that <stdio.h> does not declare. */
-extern int   nanosleep(int ticks);
 extern int   close(int fd);
 extern int   socket(int domain, int type, int proto);
 extern int   sendto(int s, char *buf, int len, int flags, char *to, int tolen);
-extern int   recvfrom(int s, char *buf, int maxlen, int flags, char *from, int fromlen);
+extern int   recvfrom(int s, char *buf, int maxlen, int flags, char *from, int *fromlen);
+extern int   gettimeofday(struct timeval *tv, struct timezone *tz);
 
 /* ---- resolver: gethostbyname/gethostbyaddr -------------------------------
  * Slim, FGX-shaped: /etc/hosts first, then a single DNS A (or PTR) query over
@@ -205,7 +205,9 @@ static void _dec_name(unsigned char *p, int off, int len, char *out)
     out[o] = 0;
 }
 
-/* Parse a response for the first IN/qtype answer.  1=found, 0=none, -1=bad. */
+/* Parse a response for the first IN/qtype answer.  1=found, 0=the server's
+ * reply to this query holds none (an error code or no such record), -1=not a
+ * reply to this query, or malformed. */
 static int _parse_resp(unsigned char *p, int len, int qtype, int id,
                        unsigned char *ip4, char *out_name)
 {
@@ -213,7 +215,7 @@ static int _parse_resp(unsigned char *p, int len, int qtype, int id,
 
     if (len < HFIXEDSZ) return -1;
     if (((p[0] << 8) | p[1]) != id) return -1;          /* id mismatch */
-    if (p[3] & 0x0F) return -1;                          /* RCODE != 0 */
+    if (p[3] & 0x0F) return 0;                           /* RCODE != 0 */
     qd = (p[4] << 8) | p[5];
     an = (p[6] << 8) | p[7];
     if (an <= 0) return 0;
@@ -246,13 +248,23 @@ static int _parse_resp(unsigned char *p, int len, int qtype, int id,
     return 0;
 }
 
-/* Send a DNS query (qtype A or PTR) for qname, poll for the reply.  1 on hit. */
+/* Send a DNS query (qtype A or PTR) for qname and wait for the reply.  1 on
+ * hit.  A datagram socket's receive blocks until something arrives, so each
+ * wait is select's, and recvfrom runs only when there is a datagram.  Each try
+ * ends 1.5 s after its send however many datagrams arrive that are not the
+ * answer, as dhclient's wait_reply bounds its wait by what is left; 2.11BSD's
+ * res_send restarts its full timeout on each one (`goto wait').  A reply with
+ * the query's id ends the lookup whatever it says, as res_send returns it and
+ * leaves the response code to its caller. */
 static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_name)
 {
     static int seq = 0x4321;
     static unsigned char query[300], resp[PACKETSZ];   /* off the small bank-0 stack */
     unsigned char ns[4], sa[16], from[16];
-    int off, n, qlen, id, s, tries, poll, rc;
+    int off, n, qlen, id, s, tries, rc, fromlen;
+    long left;
+    fd_set rd;
+    struct timeval tv, t0;
 
     if (!_nameserver(ns)) return 0;
 
@@ -270,8 +282,8 @@ static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_na
     qlen = off;
 
     for (n = 0; n < 16; n++) sa[n] = 0;
-    sa[1] = AF_INET;                                     /* family; sendto reads
-                                                          * only port@2 + addr@4 */
+    sa[0] = AF_INET;                                     /* sin_family, a short:
+                                                          * low byte first */
     sa[2] = 0; sa[3] = 53;                               /* :53 network order */
     sa[4]=ns[0]; sa[5]=ns[1]; sa[6]=ns[2]; sa[7]=ns[3];
 
@@ -280,15 +292,28 @@ static int _dns_resolve(int qtype, char *qname, unsigned char *ip4, char *out_na
 
     for (tries = 0; tries < 3; tries++) {                /* 3 sends, ~1.5s each */
         sendto(s, (char *)query, qlen, 0, (char *)sa, 16);
-        for (poll = 0; poll < 90; poll++) {
-            n = recvfrom(s, (char *)resp, PACKETSZ, 0, (char *)from, 16);
+        gettimeofday(&t0, (struct timezone *)0);
+        for (;;) {
+            gettimeofday(&tv, (struct timezone *)0);
+            left = 1500L - ((tv.tv_sec - t0.tv_sec) * 1000L +
+                            (tv.tv_usec - t0.tv_usec) / 1000L);
+            if (left <= 0)
+                break;                                   /* this try is over */
+            FD_ZERO(&rd);
+            FD_SET(s, &rd);
+            tv.tv_sec = left / 1000L;
+            tv.tv_usec = (left % 1000L) * 1000L;
+            if (select(s + 1, &rd, (fd_set *)0, (fd_set *)0, &tv) <= 0)
+                break;                                   /* nothing: send again */
+            fromlen = sizeof from;
+            n = recvfrom(s, (char *)resp, PACKETSZ, 0, (char *)from, &fromlen);
             if (n >= HFIXEDSZ) {
                 if (resp[2] & DNS_TC) { close(s); return 0; }   /* truncated: no TCP */
                 rc = _parse_resp(resp, n, qtype, id, ip4, out_name);
-                if (rc == 1) { close(s); return 1; }
-                /* rc 0/-1: not our answer / malformed -> keep polling, then retry */
+                if (rc >= 0) { close(s); return rc; }    /* the server's answer,
+                                                          * a negative one included */
+                /* rc -1: not our answer / malformed -> wait on, then retry */
             }
-            nanosleep(1);                                /* ~1 tick between polls */
         }
     }
     close(s);

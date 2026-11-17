@@ -755,6 +755,33 @@ ir_call_since(int snap)
     return 0;
 }
 
+/* 1 iff the ops since `snap' may have changed _fcc_ptr+2: a call, as above, or
+ * a store to it.  A pointer base's bank waits there while its subscript is
+ * evaluated, and a subscript that reads through another pointer -- `fdp[ap[1]]'
+ * -- stages THAT pointer's bank in the same cell.  K&R A.7.3.1: "E1[E2] is
+ * identical (by definition) to *((E1)+(E2))", so the element is E1's, in E1's
+ * bank, whatever bank E2 was read from. */
+int
+ir_ptr_bank_clobbered_since(int snap)
+{
+    int j;
+    if (ir_call_since(snap)) return 1;
+    for (j = snap; j < g_ir_n; j++) {
+        if (g_ir[j].op == IR_LOAD_PTR_LOCAL ||
+            g_ir[j].op == IR_LOAD_PTR_LOCAL_IMG)    /* bank -> _fcc_ptr+2 */
+            return 1;
+        if (g_ir[j].op == IR_STA_CELL && g_ir[j].ptr &&
+            strcmp((const char *)g_ir[j].ptr, "_fcc_ptr+2") == 0)
+            return 1;
+        if (g_ir[j].op == IR_TEXT && g_ir[j].text &&
+            strstr(g_ir[j].text, "_fcc_ptr+2") &&
+            (strstr(g_ir[j].text, "STA") || strstr(g_ir[j].text, "STZ") ||
+             strstr(g_ir[j].text, "STX") || strstr(g_ir[j].text, "STY")))
+            return 1;
+    }
+    return 0;
+}
+
 /* P1.4 loop-scoped (region) promotion plan: (local, DP-IMG slot) pairs to seed at
  * IR_LOOP_BEGIN and write back at IR_LOOP_END, keyed by loop id.  Filled by
  * ir_promote_loops, consumed by ir_emit_loop_seeds/writeback. */

@@ -1,0 +1,53 @@
+{
+ "name": "netftp",
+ "description": "TCP on the kernel stack over the wire: a passive ftp get from a real server, its control and data connections both the kernel's, checked with sum(1) against the host's copy.  The shipping rc.local is staged back.  NOT in the gate: a real server.  The network modules load at boot (/etc/rc), and the server's name is looked up through them.",
+ "command": "sh /etc/netftp.sh",
+ "timeout_s": 500,
+ "mame_slots": [
+  "-sl1",
+  "uthernet2"
+ ],
+ "stage_files": [
+  {
+   "host": "disk_src/etc/rc.in",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  },
+  {
+   "host": "disk_src/etc/rc.local",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc.local",
+   "replace": true
+  },
+  {
+   "host": "tools/mame_test/fixtures/netftp.sh",
+   "prodos_dir": "/FGX/etc",
+   "name": "netftp.sh",
+   "replace": true
+  },
+  {
+   "host": "tools/mame_test/local/netftp.host",
+   "prodos_dir": "/FGX/etc",
+   "name": "netftp.host",
+   "replace": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "1110016 /tmp/netftp.tar",
+   "59370"
+  ],
+  "screen_lacks": [
+   "bsdnet: BROKEN",
+   "PANIC",
+   "BRK"
+  ]
+ },
+ "requires": {
+  "files": [
+   "tools/mame_test/local/netftp.host"
+  ],
+  "reason": "the ftp server's name, one line; the tree does not name a server"
+ }
+}

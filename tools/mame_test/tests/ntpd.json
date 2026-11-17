@@ -1,12 +1,14 @@
 {
  "name": "ntpd",
- "description": "ntpd(8) detaches, reads /etc/ntp.conf and stays up: ps lists a process named ntpd (the marker is built only then, since its log lines also carry the name), and its log shows it resolving each configured server.  /etc/rc starts it only when /etc/netstart brought the network up, and the harness has no network card, so the command starts it; the servers are unknown here.  ntpdc(8) cannot reach it over lo0: the loopback transport carries TCP only.",
- "command": "/sbin/ntpd; sleep 5; ps ax | grep 'ntp[d]$' > /tmp/p; test -s /tmp/p && echo NTPD''UP",
+ "description": "ntpd(8) detaches, reads /etc/ntp.conf and stays up: ps lists a process named ntpd (the marker is built only then, since its log lines also carry the name), and its log shows it failing to resolve a named server.  /etc/rc starts it only when /etc/netstart brought the network up, and the harness has no network card, so the command starts it.  /etc/resolv.conf names a nameserver no route reaches, so each lookup really queries and the resolver's wait has to end on its own.  The staged ntp.conf also names 127.0.0.2, a peer that needs no lookup, and ntpdc(8) asks ntpd over lo0 for its peer table and prints that peer: ntpd answers nothing when it has no peers.  127.0.0.2 never answers, so its stratum is the one a new peer starts with: 0, NTP's unspecified (`wildcard          0'), not whatever malloc left there.",
+ "command": "/sbin/ntpd; sleep 5; ps ax | grep 'ntp[d]$' > /tmp/p; test -s /tmp/p && echo NTPD''UP; sleep 10; ntpdc -n 127.0.0.1",
  "timeout_s": 120,
  "expect": {
   "screen_contains": [
    "NTPDUP",
-   "time.apple.com: unknown host"
+   "time.apple.com: unknown host",
+   "Strat Poll Reach",
+   "wildcard          0   64  000"
   ],
   "screen_lacks": [
    "PANIC",
@@ -14,5 +16,19 @@
    "can't open",
    "bind() fails"
   ]
- }
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/resolv.conf.unreach",
+   "prodos_dir": "/FGX/etc",
+   "name": "resolv.conf",
+   "replace": true
+  },
+  {
+   "host": "tools/mame_test/fixtures/ntp.conf.loop",
+   "prodos_dir": "/FGX/etc",
+   "name": "ntp.conf",
+   "replace": true
+  }
+ ]
 }

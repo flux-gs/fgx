@@ -1,0 +1,19 @@
+{
+ "name": "unixrights",
+ "description": "A DESCRIPTOR PASSES OVER AF_UNIX, as 2.11BSD passes one: sendmsg(2)'s msg_accrights carries a descriptor, unp_internalize turns it into a reference to its struct file held by the message, and recvmsg(2)'s unp_externalize installs it as a new descriptor of the receiver.  unixprobe -r opens /etc/rc, sends the descriptor to a bound datagram socket, CLOSES ITS OWN, and the receiver's new descriptor must read the same bytes -- so the file outlived the sender's close in flight.  -r gc does it 150 times with the receiver closed unread: the queued message then holds the file's only reference, and soclose's unp_dispose must close it, or every round leaks a file-table entry and an open fails long before the 150th (NFILE is far below 150).  CONTROLS, measured: unp_externalize installing nothing fails -r with `UNIX R FAIL read'; unp_discard closing nothing fails -r gc, which never prints `UNIX R gc ok' (unp_gc's discard loop cannot finish).  unp_dispose disposing of nothing stays GREEN, and rightly: the next socket's unp_detach runs unp_gc, which finds the unreferenced file and closes it a round later -- upstream's collector is the net under the dispose.",
+ "command": "/testbin/unixprobe -r; /testbin/unixprobe -r gc",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "UNIX R ok",
+   "UNIX R gc ok",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "UNIX R FAIL",
+   "PANIC",
+   "BRK",
+   "bsdnet: BROKEN"
+  ]
+ }
+}

@@ -92,7 +92,8 @@ ISVTX = 0o1000
 # programs named one by one -- `SETUID= mail rcp su' (usr/bin/Makefile:34),
 # installed `-o root -m 4751' (:70), with login and passwd spelling the same
 # thing 4755 in their own Makefiles (usr/bin/login/Makefile:40,
-# usr/bin/passwd/Makefile:44).  There is no install(1) on this volume and no
+# usr/bin/passwd/Makefile:44), and ping `-o root -g bin -m 4751'
+# (usr/bin/ping/Makefile:30), since a raw socket is root's (raw_usrreq.c).  There is no install(1) on this volume and no
 # mode on the host copy either -- every staged binary is 0644 in disk_src --
 # so `put' is where the rule has to live, and putting it here rather than in
 # make_ufsboot.sh covers the test harness's own staging too.
@@ -106,7 +107,8 @@ ISVTX = 0o1000
 # ---------------------------------------------------------------------------
 EXEC_DIRS = ("/bin/", "/sbin/", "/usr/libexec/", "/testbin/", "/tests/fcc/",
              "/usr/fgx/bin/")
-SETUID_FILES = ("/bin/su", "/bin/passwd", "/bin/login", "/bin/crontab")
+SETUID_FILES = ("/bin/su", "/bin/passwd", "/bin/login", "/bin/crontab",
+                "/bin/ping")
 
 
 def install_mode(path):

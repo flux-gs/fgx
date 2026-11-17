@@ -50,6 +50,12 @@ _CorePatchTbl
                 DA      _ctp034+3
                 DA      _ctp012+3
                 DA      _ctp013+3
+                DA      _ctp081+3
+                DA      _ctp082+3
+                DA      _ctp085+3
+                DA      _ctp086+3
+                DA      _ctp083+3
+                DA      _ctp084+3
                 DA      _ctp014+3
                 DA      _ctp015+3
                 DA      _ctp016+3
@@ -73,6 +79,7 @@ _CorePatchTbl
                 DA      _ctp073+3
                 DA      _ctp074+3
                 DA      _ctp075+3
+                DA      _ctp080+3
                 DA      _ctp079+3
-_CorePatchEntries EQU 60
-_CorePatchBytes   EQU 120
+_CorePatchEntries EQU 67
+_CorePatchBytes   EQU 134

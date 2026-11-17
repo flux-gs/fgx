@@ -279,7 +279,14 @@ _HBTickCount    DW      1                       ; tickCount (fire every VBL)
                 INC     _kSystemTicks           ; 16-bit INC of low word
                 BNE     @hb_noHi
                 INC     _kSystemTicks+2         ; 16-bit INC of high word
-@hb_noHi
+@hb_noHi        ; Every 8th tick, ask for a drain, so that netintr's timers and
+                ; the driver's backstop poll run on a quiet machine.  With no
+                ; network modules, it is one kc_ttdrain scan that finds nothing.
+                LDA     _kSystemTicks
+                AND     #7
+                BNE     @hb_noDrain
+                INC     _kTtyOutAny
+@hb_noDrain
                 LDA    |_kCpState               ; cp_time[cpstate]++
                 ASL                             ;   (kern_clock.c:198)
                 ASL

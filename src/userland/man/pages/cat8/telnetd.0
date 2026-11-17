@@ -1,108 +1,85 @@
 TELNETD(8)          UNIX Programmer's Manual          TELNETD(8)
 
 
-
 NAME
      telnetd - DARPA TELNET protocol server
 
 SYNOPSIS
-     telnetd [-i | port]
+     telnetd [port]
 
 DESCRIPTION
-     Telnetd serves one TELNET session: it listens on a TCP port,
-     accepts a connection, allocates a pseudo-terminal pair, starts
-     getty(8) on the slave side, and relays bytes between the
-     connection and the pty until either end closes.  The login
-     prompt, authentication and shell all come from getty(8) and
-     login(1); telnetd itself carries bytes and negotiates options.
+     Telnetd is a server which supports the DARPA standard TELNET
+     virtual terminal protocol.  It is 2.11BSD's telnetd(8).
+     Inetd(8) starts it for each connection to the telnet port,
+     with the connection as its standard input, output and error;
+     see /etc/inetd.conf.
 
-     Port is the TCP port to listen on, 23 by default.
+     Given a port, telnetd instead listens on that port itself,
+     on every address, serves the first connection and exits.
 
-     -i      Run as an inetd(8) child: the connection has already
-             been accepted and handed over as standard input,
-             output and error, so telnetd binds nothing and serves
-             that connection directly.  This is the way telnetd is
-             normally started on other systems, and it is how
-             /etc/inetd.conf starts it here.  Nothing is written to
-             standard output in this mode, because standard output
-             IS the connection.
+     Telnetd allocates a pseudo-terminal, see pty(4), and creates
+     a child with the slave side as its standard input, output
+     and error.  The child is login(1), run as `login -h host -p'
+     with the client's host name, or its address when it has no
+     name.  Telnetd holds the master side
+     and passes data between it and the connection, taking the
+     TELNET commands out of the client's stream and doubling a
+     data byte of 255 on the way back.
 
-     Started by hand, telnetd binds 127.0.0.1, so it serves this
-     machine only -- useful for reaching a second session from
-     another virtual console: start telnetd on one console and run
-     `telnet localhost' from another.  For logins from the network,
-     run it under inetd(8), which owns the listening socket and can
-     bind any address.
+     When a session starts telnetd sends WILL ECHO and WILL
+     SUPPRESS GO AHEAD, and asks the client for DO ECHO (to
+     recognize a 4.2BSD client), DO TERMINAL TYPE and DO NAWS.
+     It answers a request for BINARY and for TIMING MARK, and
+     refuses every other option.
 
-     ONE SESSION, THEN EXIT.  Telnetd accepts a single connection
-     and exits when that session ends.  That is not a shortcut: on
-     the W5100 path accept(2) DETACHES the listener, handing its
-     hardware socket to the accepted connection, so a listener is
-     single-use and a server must re-create it for the next client.
-     The loopback transport mirrors that deliberately so the same
-     shape works on both.  Run telnetd again for each session, or
-     from a loop.
+     The terminal type is asked for and waited for before the
+     child is created, and is given to login(1) as TERM in its
+     environment.
+     The window size, when the client sends one, is set on the
+     pseudo-terminal, and a later change is signalled to the
+     session as SIGWINCH.
 
-     Option negotiation follows the server side of the protocol:
-     telnetd offers WILL ECHO and WILL SUPPRESS-GO-AHEAD, and asks
-     the client DO TERMINAL-TYPE and DO NAWS.  Every other option
-     is refused with a well-formed DONT or WONT rather than with
-     silence, so a client asking for LINEMODE gets an answer.
+     The TELNET commands are acted on as follows.  Interrupt
+     Process and Break put the terminal's interrupt and quit
+     characters into the session's input.  Abort Output puts in
+     its flush character, discards output not yet sent and sends
+     a Data Mark as urgent data.  Erase Character and Erase Line
+     put in the erase and kill characters.  Are You There is
+     answered with [Yes].
 
-     The terminal type is asked for and WAITED FOR before the
-     session is started, because the name has to be known while
-     there is still an argument list to put it in: telnetd passes
-     it to getty(8) as -T type, getty passes it on to login(1),
-     and login prefers it over the type in ttys(5).  So a session
-     runs as the terminal the client says it is rather than as the
-     pty line's entry.  A client that does not answer within two
-     seconds keeps the ttys(5) type, which is what every session
-     got before this existed.
-
-     Diagnostics go to syslog(3), which on FGX writes to standard
-     error rather than to a logging daemon.  Telnetd also prints
-     `telnetd: listening', `telnetd: session on /dev/ttypN [type]'
-     and `telnetd: session ended' to standard output as it goes.
-     Empty brackets mean the client never named its terminal.
+     When the child exits telnetd clears the session's utmp(5)
+     entry, adds the logout to wtmp, restores the modes and owner
+     of the pseudo-terminal and closes the connection.
 
 FILES
-     /testbin/telnetd    the server itself; see BUGS
-     /bin/getty          started on the pty slave
-     /dev/ptypN          pty master claimed for the session
-     /dev/ttypN          pty slave the session runs on
+     /testbin/telnetd    the server; see BUGS
+     /bin/login          run on the slave side
+     /dev/pty[p-s]?      master sides, tried in order
+     /dev/tty[p-s]?      slave sides
+     /etc/utmp, /etc/wtmp
 
 SEE ALSO
-     telnet(1), inetd(8), getty(8), login(1), pty(4)
+     telnet(1), vhangup(2), inetd(8), login(1), pty(4)
 
 BUGS
-     Started by hand, the listen address is 127.0.0.1 and cannot be
-     changed, so telnetd itself does not accept logins from the
-     network.  Under inetd(8) it does: inetd owns the listening
-     socket, and the wildcard telnet line in /etc/inetd.conf serves
-     the LAN and this machine alike.
+     These differ from 2.11BSD.
 
-     The peer host name is not recorded: telnetd does not call
-     getpeername(2), so getty(8) is started without the -h
-     argument BSD passes it.
+     The banner names FGX.
 
-     Telnetd is a reimplementation following 2.11BSD rather than a
-     port of it, so much of what upstream does is simply absent --
-     output buffering and urgent-data handling among it.  See
-     apple/fgx#143.
+     The window size option is an addition; 2.11BSD's telnetd
+     does not know it.  With it come two things that telnetd does
+     not have: each suboption is read from an empty buffer, as in
+     4.3BSD-Reno's telnetd, and SIGTTOU is ignored, as in rlogind.
 
-     The terminal type reaches login(1) as an argument rather than
-     in the environment.  Upstream sets TERM in the child and execs
-     `login -p' to have it preserved; FGX's spawnx(2) carries file
-     actions with an empty environment, so there is no environment
-     to set.
+     The listener that 2.11BSD compiles in under DEBUG is chosen
+     here by giving a port.
 
-     A session at a time.  A second client cannot connect while one
-     is running, and telnetd exits rather than looping.
+     Some TELNET commands are only partially implemented, and the
+     terminal type name is truncated to 40 characters, as in
+     2.11BSD.
 
-     Telnetd ships as /testbin/telnetd rather than in /usr/sbin,
-     and /testbin is not on the default path, so it must be invoked
-     by its full name.  It moves when it stops being staged as a
-     test binary.
+     Telnetd is staged as /testbin/telnetd, which is not on the
+     default path.
 
 
 

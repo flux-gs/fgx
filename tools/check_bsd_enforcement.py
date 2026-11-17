@@ -128,7 +128,8 @@ SUSER_REGISTRY = {
     ("quota_sys.c", 375): ("dowarn", "n/a", "no quotas"),
     ("quota_sys.c", 403): ("qsync", "n/a", "no quotas"),
     ("quota_sys.c", 433): ("qsetuid", "n/a", "no quotas"),
-    ("sys_inode.c", 709): ("vhangup", "n/a", "no vhangup syscall"),
+    ("sys_inode.c", 709): ("vhangup", "carried",
+        "src/kernel/syscall.s::_thunk_Vhangup"),
     ("tty_conf.c", 95): ("nullioctl/TIOCSETD", "n/a",
         "no line-discipline switch; NTTY lines are all the one discipline"),
     ("ufs_fio.c", 131): ("ufs_setattr va_flags", "stricter",
@@ -164,11 +165,8 @@ ACCESS_REGISTRY = {
     ("kern_sig.c", 635): ("core, IREAD on the text", "n/a", "no core dumps"),
     ("kern_sig.c", 655): ("core, IWRITE on the core file", "n/a",
         "no core dumps"),
-    ("sys_kern.c", 145): ("unpconn, IWRITE on the socket", "n/a",
-        "AF_UNIX SOCK_DGRAM exists (XPORT_UNIX, src/modules/net/unp.s) but "
-        "bind(2) does not name it yet, so no socket of this system's has a "
-        "name in the filesystem to carry a mode.  This becomes `carried' with "
-        "unp_bind/unp_connect, whose VOP_ACCESS(vp, VWRITE) IS this check"),
+    ("sys_kern.c", 145): ("unpconn, IWRITE on the socket", "carried",
+        "src/kernel/vfs/vfs_syscalls.c::unp_nameop"),
     ("ufs_fio.c", 172): ("ufs_setattr utimes, IWRITE", "owed",
         "apple/fgx#418 -- the timestamps are honoured for any caller"),
     ("ufs_namei.c", 196): ("namei, IEXEC on each directory searched", "carried",

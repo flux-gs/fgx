@@ -10,6 +10,7 @@
 static const char *intern_bytes(const char *p, int len);
 static Tok *pp_tokenize_text(const char *text, int len, int *out_n);
 static void pp_macro_set_body(PpMacro *m, const char *text, int len);
+static void pp_check_body(PpMacro *m, int line);
 static long pp_eval_expr_text(const char *s);
 static void pp_tokenize_buffer(void);
 
@@ -831,6 +832,7 @@ scan_tok(void)
                               body[bl-1] == '\r')) {
                 body[--bl] = '\0';
             }
+            int def_line = g_line;
             if (peek_ch() == '\n') adv_ch();
             int idx = pp_macro_lookup(mn, ml);
             if (idx < 0) {
@@ -845,6 +847,7 @@ scan_tok(void)
             for (int p = 0; p < n_params; p++)
                 g_pp_macros[idx].params[p] = params[p];
             pp_macro_set_body(&g_pp_macros[idx], body, bl);
+            pp_check_body(&g_pp_macros[idx], def_line);
             scan_tok();
             return;
         }
@@ -1066,6 +1069,15 @@ scan_tok(void)
             die(g_cur.line, g_cur.col, "unexpected '..' (need '...' or '.')");
         }
         g_cur.kind = TOK_DOT;
+        return;
+    }
+    /* `#' and `##' are tokens only inside a macro body, which is tokenized
+     * in raw mode; K&R A.12.3 gives them their meaning at substitution
+     * (pp_subst_body).  Anywhere else `#' is not a token. */
+    if (c == '#' && g_pp_raw_mode) {
+        adv_ch();
+        if (peek_ch() == '#') { adv_ch(); g_cur.kind = TOK_PP_PASTE; return; }
+        g_cur.kind = TOK_PP_HASH;
         return;
     }
     if (c == ':') { adv_ch(); g_cur.kind = TOK_COLON;  return; }
@@ -1856,6 +1868,185 @@ arg_spelling(const ArgSpan *a, char *buf, int cap)
     return -1;
 }
 
+/* The source spelling of one token, for `#' and `##' (K&R A.12.3).  A string
+ * or character literal is re-quoted with its specials escaped, so it reads
+ * back as the same literal.  Returns the length, or -1 for a token with no
+ * spelling here. */
+static int
+pp_tok_spelling(const Tok *t, char *buf, int cap)
+{
+    const char *s = NULL;
+    int n = 0;
+
+    switch (t->kind) {
+    case TOK_IDENT:
+        if (t->id_len >= cap) return -1;
+        memcpy(buf, t->id_ptr, (size_t)t->id_len);
+        return t->id_len;
+    case TOK_INT_LIT: {
+        unsigned long v = ((unsigned long)t->value_hi << 16) | t->value;
+        n = snprintf(buf, (size_t)cap, "%lu%s%s", v,
+                     t->is_unsigned ? "U" : "", t->is_long ? "L" : "");
+        return (n > 0 && n < cap) ? n : -1;
+    }
+    case TOK_STR_LIT:
+    case TOK_CHAR_LIT: {
+        int q = t->kind == TOK_STR_LIT ? '"' : '\'';
+        unsigned char cb;
+        const unsigned char *p;
+        int len;
+        if (t->kind == TOK_STR_LIT) {
+            p = (const unsigned char *)t->str_ptr; len = t->str_len;
+        } else {
+            cb = (unsigned char)(t->value & 0xff); p = &cb; len = 1;
+        }
+        if (n + 1 >= cap) return -1;
+        buf[n++] = (char)q;
+        for (int i = 0; i < len; i++) {
+            int c = p[i];
+            if (n + 5 >= cap) return -1;
+            if (c == q || c == '\\') { buf[n++] = '\\'; buf[n++] = (char)c; }
+            else if (c == '\n') { buf[n++] = '\\'; buf[n++] = 'n'; }
+            else if (c == '\t') { buf[n++] = '\\'; buf[n++] = 't'; }
+            else if (c < 0x20 || c >= 0x7f) n += snprintf(buf + n, 5, "\\%03o", c);
+            else buf[n++] = (char)c;
+        }
+        if (n + 1 >= cap) return -1;
+        buf[n++] = (char)q;
+        return n;
+    }
+    case TOK_INT_KW: s = "int"; break;       case TOK_RETURN_KW: s = "return"; break;
+    case TOK_IF_KW: s = "if"; break;         case TOK_ELSE_KW: s = "else"; break;
+    case TOK_WHILE_KW: s = "while"; break;   case TOK_DO_KW: s = "do"; break;
+    case TOK_CHAR_KW: s = "char"; break;     case TOK_VOID_KW: s = "void"; break;
+    case TOK_SIZEOF_KW: s = "sizeof"; break; case TOK_STATIC_KW: s = "static"; break;
+    case TOK_STRUCT_KW: s = "struct"; break; case TOK_UNION_KW: s = "union"; break;
+    case TOK_ENUM_KW: s = "enum"; break;     case TOK_TYPEDEF_KW: s = "typedef"; break;
+    case TOK_SWITCH_KW: s = "switch"; break; case TOK_CASE_KW: s = "case"; break;
+    case TOK_DEFAULT_KW: s = "default"; break; case TOK_BREAK_KW: s = "break"; break;
+    case TOK_CONTINUE_KW: s = "continue"; break; case TOK_FOR_KW: s = "for"; break;
+    case TOK_GOTO_KW: s = "goto"; break;     case TOK_LONG_KW: s = "long"; break;
+    case TOK_FLOAT_KW: s = "double"; break;
+    case TOK_LE: s = "<="; break;      case TOK_GE: s = ">="; break;
+    case TOK_EQEQ: s = "=="; break;    case TOK_NE: s = "!="; break;
+    case TOK_PLUSPLUS: s = "++"; break; case TOK_MINUSMINUS: s = "--"; break;
+    case TOK_ARROW: s = "->"; break;   case TOK_LSHIFT: s = "<<"; break;
+    case TOK_RSHIFT: s = ">>"; break;  case TOK_AMPAMP: s = "&&"; break;
+    case TOK_PIPEPIPE: s = "||"; break; case TOK_PLUSEQ: s = "+="; break;
+    case TOK_MINUSEQ: s = "-="; break; case TOK_STAREQ: s = "*="; break;
+    case TOK_SLASHEQ: s = "/="; break; case TOK_PERCENTEQ: s = "%="; break;
+    case TOK_AMPEQ: s = "&="; break;   case TOK_PIPEEQ: s = "|="; break;
+    case TOK_CARETEQ: s = "^="; break; case TOK_LSHIFTEQ: s = "<<="; break;
+    case TOK_RSHIFTEQ: s = ">>="; break; case TOK_ELLIPSIS: s = "..."; break;
+    default: {
+        int c = punct_char(t->kind);
+        if (c <= 0 || cap < 2) return -1;
+        buf[0] = (char)c;
+        return 1;
+    }
+    }
+    n = (int)strlen(s);
+    if (n >= cap) return -1;
+    memcpy(buf, s, (size_t)n);
+    return n;
+}
+
+/* `#param': a string literal spelling the argument's tokens, one space where
+ * the source had white space between them (K&R A.12.3).  The token's bytes
+ * are the decoded string, so the spelling goes in as it stands. */
+static Tok
+pp_stringize(const Tok *at, const ArgSpan *a)
+{
+    char out[PP_MAX_MACRO_BODY];
+    int on = 0;
+    Tok r = *at;
+
+    for (int j = 0; j < a->n; j++) {
+        const Tok *t = &a->t[j];
+        if (j > 0) {
+            const Tok *p = &a->t[j - 1];
+            char pb[PP_MAX_MACRO_BODY];
+            int pl = pp_tok_spelling(p, pb, (int)sizeof pb);
+            if (t->line != p->line || t->col != p->col + pl) {
+                if (on + 1 >= (int)sizeof out) die(at->line, at->col, "# argument too long");
+                out[on++] = ' ';
+            }
+        }
+        int sl = pp_tok_spelling(t, out + on, (int)sizeof out - on);
+        if (sl < 0) die(at->line, at->col, "# argument too long or has no spelling");
+        on += sl;
+    }
+    r.kind = TOK_STR_LIT;
+    r.str_ptr = intern_bytes(out, on);
+    r.str_len = on;
+    return r;
+}
+
+/* Apply every `##' in a substituted body: each is deleted and the tokens on
+ * either side are joined into one, by re-scanning their joined spelling
+ * (K&R A.12.3).  A side with nothing on it -- an empty argument -- leaves the
+ * other side as it is.  Returns a new vector; frees v. */
+static Tok *
+pp_paste_run(Tok *v, int n, int *out_n)
+{
+    int k = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (v[i].kind != TOK_PP_PASTE) { v[k++] = v[i]; continue; }
+        if (k == 0 || i + 1 >= n || v[i + 1].kind == TOK_PP_PASTE)
+            continue;                       /* nothing on one side */
+        {
+            char lb[PP_MAX_MACRO_BODY];
+            Tok *l = &v[k - 1], *r = &v[i + 1];
+            int ll = pp_tok_spelling(l, lb, (int)sizeof lb);
+            int rl = ll < 0 ? -1 : pp_tok_spelling(r, lb + ll, (int)sizeof lb - ll);
+            int nt = 0;
+            Tok *jt;
+            if (rl < 0) die(v[i].line, v[i].col, "## operand has no spelling");
+            jt = pp_tokenize_text(lb, ll + rl, &nt);
+            if (nt != 1) {
+                char msg[96];
+                snprintf(msg, sizeof msg, "## of \"%.*s\" and \"%.*s\" is not one token",
+                         ll, lb, rl, lb + ll);
+                die(v[i].line, v[i].col, msg);
+            }
+            jt[0].line = l->line; jt[0].col = l->col; jt[0].file = l->file;
+            *l = jt[0];
+            free(jt);
+            i++;                            /* the right side is consumed */
+        }
+    }
+    *out_n = k;
+    return v;
+}
+
+/* #define-time checks of a body's `#' and `##' (K&R A.12.3): `##' may not
+ * begin or end the replacement, and in a function-like macro `#' must be
+ * followed by a parameter.  An object-like body's `##' is applied here, once,
+ * since nothing in it is substituted later. */
+static void
+pp_check_body(PpMacro *m, int line)
+{
+    Tok *b = m->body_toks;
+    int n = m->n_body_toks, has_paste = 0;
+
+    if (n > 0 && (b[0].kind == TOK_PP_PASTE || b[n - 1].kind == TOK_PP_PASTE))
+        die(line, 1, "## may not begin or end a macro replacement");
+    for (int i = 0; i < n; i++) {
+        if (b[i].kind == TOK_PP_PASTE) has_paste = 1;
+        if (b[i].kind == TOK_PP_HASH && m->is_funclike) {
+            int ok = 0;
+            if (i + 1 < n && b[i + 1].kind == TOK_IDENT)
+                for (int p = 0; p < m->n_params; p++)
+                    if (m->params[p] == b[i + 1].id_ptr) ok = 1;
+            if (!ok)
+                die(line, 1, "# in a macro replacement must be followed by a parameter");
+        }
+    }
+    if (has_paste && !m->is_funclike)
+        m->body_toks = pp_paste_run(b, n, &m->n_body_toks);
+}
+
 static int
 pp_is_ident_ch(int c, int first)
 {
@@ -1867,10 +2058,11 @@ pp_is_ident_ch(int c, int first)
  * by their arg spans and __VA_ARGS__ by the extras joined with commas.
  * Whole-ident matching only, exactly like the old text substituter. */
 static Tok *
-pp_subst_body(const PpMacro *m, const ArgSpan *args, int n_args, int *out_n)
+pp_subst_body(const PpMacro *m, const ArgSpan *args, const ArgSpan *raw,
+              int n_args, int *out_n)
 {
     Tok *v = NULL;
-    int n = 0, cap = 0;
+    int n = 0, cap = 0, has_paste = 0;
 #define SUB_PUT(tok) do { \
         if (n >= cap) { \
             cap = cap ? cap * 2 : 32; \
@@ -1884,6 +2076,18 @@ pp_subst_body(const PpMacro *m, const ArgSpan *args, int n_args, int *out_n)
     if (!va_ident) va_ident = lex_intern_ident("__VA_ARGS__", 11);
     for (int i = 0; i < m->n_body_toks; i++) {
         const Tok *bt = &m->body_toks[i];
+        /* K&R A.12.3: `#param' is the quoted argument, and a parameter next
+         * to `##' takes the argument as written -- neither is expanded. */
+        if (bt->kind == TOK_PP_HASH && i + 1 < m->n_body_toks) {
+            for (int p = 0; p < m->n_params; p++)
+                if (m->params[p] == m->body_toks[i + 1].id_ptr) {
+                    SUB_PUT(pp_stringize(bt, &raw[p]));
+                    break;
+                }
+            i++;
+            continue;
+        }
+        if (bt->kind == TOK_PP_PASTE) has_paste = 1;
         if (bt->kind == TOK_IDENT) {
             /* __VA_ARGS__: join args[n_params..n_args-1] with commas. */
             if (m->is_variadic && bt->id_ptr == va_ident) {
@@ -1909,8 +2113,13 @@ pp_subst_body(const PpMacro *m, const ArgSpan *args, int n_args, int *out_n)
                     }
                 }
                 if (pidx >= 0) {
-                    for (int j = 0; j < args[pidx].n; j++)
-                        SUB_PUT(args[pidx].t[j]);
+                    const ArgSpan *a = &args[pidx];
+                    if ((i > 0 && m->body_toks[i - 1].kind == TOK_PP_PASTE) ||
+                        (i + 1 < m->n_body_toks &&
+                         m->body_toks[i + 1].kind == TOK_PP_PASTE))
+                        a = &raw[pidx];
+                    for (int j = 0; j < a->n; j++)
+                        SUB_PUT(a->t[j]);
                     continue;
                 }
             }
@@ -1977,6 +2186,8 @@ pp_subst_body(const PpMacro *m, const ArgSpan *args, int n_args, int *out_n)
         SUB_PUT(*bt);
     }
 #undef SUB_PUT
+    if (has_paste)
+        v = pp_paste_run(v, n, &n);
     *out_n = n;
     g_pp_body_tok_bytes += n * (int)sizeof(Tok);
     return v;
@@ -2084,6 +2295,14 @@ pp_next_tok_above(int base, int raw_ok, Tok *out)
                  * before substitution (fixes the pinned arg-position gap:
                  * G(G(1)), tword.h INCREF(INCREF(..)) now expand).  Done
                  * AFTER the guard so a blocked call drops raw args. */
+                ArgSpan raw[PP_MAX_CALL_ARGS];
+                for (int i = 0; i < n_args; i++) {
+                    raw[i].n = args[i].n;
+                    raw[i].owned = (Tok *)malloc((size_t)(args[i].n + 1) * sizeof(Tok));
+                    if (!raw[i].owned) die(g_line, g_col, "out of memory expanding macro");
+                    memcpy(raw[i].owned, args[i].t, (size_t)args[i].n * sizeof(Tok));
+                    raw[i].t = raw[i].owned;
+                }
                 for (int i = 0; i < n_args; i++) {
                     int en = 0;
                     Tok *ev = pp_expand_span(args[i].t, args[i].n, &en);
@@ -2094,8 +2313,9 @@ pp_next_tok_above(int base, int raw_ok, Tok *out)
                 }
                 {
                     int sn = 0;
-                    Tok *sv = pp_subst_body(m, args, n_args, &sn);
+                    Tok *sv = pp_subst_body(m, args, raw, n_args, &sn);
                     pp_free_args(args, n_args);
+                    pp_free_args(raw, n_args);
                     mx_push(midx, sv, sn, sv, t.line, t.col);
                 }
                 continue;

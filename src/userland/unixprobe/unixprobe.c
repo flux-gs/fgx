@@ -9,20 +9,12 @@
  * second program, no host-side helper and no network, so it runs under MAME as
  * an ordinary fixture.
  *
- * WHY IT PROVES SOMETHING.  A descriptor is serviced by the AF_UNIX transport
- * only when SOCK_Proto carries XPORT_UNIX, and socket() sets that from the
- * DOMAIN argument alone.  So reaching a successful socket() at all means the
- * new arm ran.  And because the AF_UNIX arm never calls _W5_SockAlloc, three
- * consecutive AF_UNIX sockets must ALL succeed on a machine with three usable
- * hardware sockets -- which is what separates "AF_UNIX works" from "AF_UNIX
- * quietly borrowed the W5100".
+ * The sockets are 2.11BSD's uipc_usrreq.c on the kernel's network stack.
  *
  * IT CARRIES THE NEGATIVE ASSERTIONS, and that is the point rather than an
  * extra.  A kernel that answered every socket() with a descriptor would pass a
- * positive-only probe.  SOCK_STREAM must be REFUSED with EPROTOTYPE: upstream's
- * SOCK_STREAM AF_UNIX is what pipe(2) is built from, this kernel has real
- * pipes, and the design scopes it out -- so a silent success there would hand a
- * caller a descriptor with no transport behind it.
+ * positive-only probe, so a type the unix domain has no protocol for must be
+ * REFUSED, EPROTONOSUPPORT, before anything else is believed.
  *
  * THE BUFFERS ARE MOSTLY static AND ONE ARM'S ARE NOT.  A socket call's buffer
  * carries its own bank (apple/fgx#480), so a stack local works; the stack-bank
@@ -42,6 +34,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <fgx.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <net/if.h>
+#include <net/if_dl.h>
 
 /* One byte past PIPE_MAX_BUFSZ (include/kernel.s), so the oversize case is
  * oversize even after the ring has grown to its ceiling. */
@@ -59,6 +55,34 @@
 #define REGNAME  "/tmp/unixprobe.reg"
 
 static char *msg[3] = { "a", "bbbb", "ccccccccc" };
+
+/* Is there a card: an interface with an Ethernet link-level address in
+ * SIOCGIFCONF (<net/if_dl.h>)?  Without one lo0 is the only interface. */
+static int
+has_card()
+{
+    static char cbuf[256];
+    struct ifconf ifc;
+    struct ifreq *r;
+    struct sockaddr_dl *sdl;
+    int s, n;
+
+    s = socket(AF_INET, SOCK_DGRAM, 0);
+    ifc.ifc_len = sizeof cbuf;
+    ifc.ifc_buf = cbuf;
+    n = s < 0 ? -1 : ioctl(s, SIOCGIFCONF, (char *)&ifc);
+    if (s >= 0)
+        close(s);
+    if (n < 0)
+        return (0);
+    for (n = ifc.ifc_len / sizeof (struct ifreq), r = ifc.ifc_req; n > 0;
+        n--, r++) {
+        sdl = (struct sockaddr_dl *)&r->ifr_addr;
+        if (sdl->sdl_family == AF_LINK && sdl->sdl_alen == 6)
+            return (1);
+    }
+    return (0);
+}
 #define UIO_PAST_MAX 17         /* one past 2.11BSD's aiov[16] */
 static char  txbuf[64];
 static char  rxbuf[64];
@@ -82,32 +106,401 @@ char *path;
         sa[2 + i] = path[i];
 }
 
+/* ---- `-s': AF_UNIX on the kernel stack's uipc_usrreq.c (net-mux S4): the
+ * stream type, and names past the old twelve.  Each case prints
+ * `unixprobe: FAIL <case> <value>' and the run goes on; `unixprobe: STREAM OK'
+ * when none failed. ---- */
+#define SPATH  "/tmp/unixs.sock"
+static int sfails;
+static char sbuf[1024], sbuf2[1024];
+
+static void
+sfail(what, v)
+char *what;
+int v;
+{
+    printf("unixprobe: FAIL %s %d\n", what, v);
+    sfails++;
+}
+
+static int
+s_readn(s, buf, n)
+int s, n;
+char *buf;
+{
+    int got, r;
+
+    for (got = 0; got < n; got += r) {
+        r = read(s, buf + got, n - got);
+        if (r <= 0) break;
+    }
+    return got;
+}
+
+static void
+s_fill(buf, n, seed)
+char *buf;
+int n, seed;
+{
+    int i;
+
+    for (i = 0; i < n; i++) buf[i] = (char)(i * 5 + seed);
+}
+
+/* pair: listen on a path; a child connects and sends 8 KB, the parent sends
+ * 8 KB back, and the child's close is the parent's end of file */
+static void
+s_pair()
+{
+    char sa[UNP_SA_SIZE];
+    int ls, a, c, i, st;
+
+    unlink(SPATH);
+    unp_mkaddr(sa, SPATH);
+    ls = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (ls < 0) { sfail("pair-socket", errno); return; }
+    if (bind(ls, sa, UNP_SA_SIZE) < 0) { sfail("pair-bind", errno); close(ls); return; }
+    if (listen(ls, 1) < 0) { sfail("pair-listen", errno); close(ls); return; }
+    if (fork() == 0) {
+        c = socket(AF_UNIX, SOCK_STREAM, 0);
+        if (c < 0 || connect(c, sa, UNP_SA_SIZE) < 0) exit(2);
+        for (i = 0; i < 8; i++) {
+            s_fill(sbuf, 1024, i);
+            if (write(c, sbuf, 1024) != 1024) exit(3);
+        }
+        for (i = 0; i < 8; i++) {
+            s_fill(sbuf, 1024, i + 40);
+            if (s_readn(c, sbuf2, 1024) != 1024 || memcmp(sbuf, sbuf2, 1024) != 0) exit(4);
+        }
+        close(c);
+        exit(0);
+    }
+    a = accept(ls, (struct sockaddr *)0, (int *)0);
+    if (a < 0) { sfail("pair-accept", errno); close(ls); wait(&st); return; }
+    for (i = 0; i < 8; i++) {
+        s_fill(sbuf, 1024, i);
+        if (s_readn(a, sbuf2, 1024) != 1024 || memcmp(sbuf, sbuf2, 1024) != 0) { sfail("pair-c2s", i); break; }
+    }
+    for (i = 0; i < 8; i++) {
+        s_fill(sbuf, 1024, i + 40);
+        if (write(a, sbuf, 1024) != 1024) { sfail("pair-s2c", errno); break; }
+    }
+    if (read(a, sbuf, 1) != 0) sfail("pair-eof", errno);
+    st = 1;
+    wait(&st);
+    if (st != 0) sfail("pair-child", st);
+    close(a);
+    close(ls);
+    unlink(SPATH);
+}
+
+/* refused: a bound stream socket that does not listen refuses a connect
+ * (unp_connect: SO_ACCEPTCONN unset), and a second bind of a bound name
+ * answers EADDRINUSE */
+static void
+s_refused()
+{
+    char sa[UNP_SA_SIZE];
+    int b, b2, c;
+
+    unlink(SPATH);
+    unp_mkaddr(sa, SPATH);
+    b = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (b < 0 || bind(b, sa, UNP_SA_SIZE) < 0) { sfail("refused-bind", errno); return; }
+    c = socket(AF_UNIX, SOCK_STREAM, 0);
+    errno = 0;
+    if (connect(c, sa, UNP_SA_SIZE) != -1 || errno != ECONNREFUSED) sfail("refused", errno);
+    close(c);
+    b2 = socket(AF_UNIX, SOCK_STREAM, 0);
+    errno = 0;
+    if (bind(b2, sa, UNP_SA_SIZE) != -1 || errno != EADDRINUSE) sfail("inuse", errno);
+    close(b2);
+    close(b);
+    unlink(SPATH);
+}
+
+/* stale: a name whose socket has closed answers ECONNREFUSED (unp_detach
+ * releases the name: unpdet) */
+static void
+s_stale()
+{
+    char sa[UNP_SA_SIZE];
+    int b, c;
+
+    unlink(SPATH);
+    unp_mkaddr(sa, SPATH);
+    b = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (b < 0 || bind(b, sa, UNP_SA_SIZE) < 0) { sfail("stale-bind", errno); return; }
+    close(b);
+    c = socket(AF_UNIX, SOCK_DGRAM, 0);
+    errno = 0;
+    if (sendto(c, "x", 1, 0, sa, UNP_SA_SIZE) != -1 || errno != ECONNREFUSED) sfail("stale", errno);
+    close(c);
+    unlink(SPATH);
+}
+
+/* many: 20 bound datagram sockets at once, past the twelve the descriptor
+ * table allowed, each reached by name */
+#define SMANY 20
+static void
+s_many()
+{
+    char sa[UNP_SA_SIZE], path[24];
+    int b[SMANY], c, i, n;
+
+    c = socket(AF_UNIX, SOCK_DGRAM, 0);
+    for (i = 0; i < SMANY; i++) {
+        sprintf(path, "/tmp/unixm%d", i);
+        unlink(path);
+        unp_mkaddr(sa, path);
+        b[i] = socket(AF_UNIX, SOCK_DGRAM, 0);
+        if (b[i] < 0 || bind(b[i], sa, UNP_SA_SIZE) < 0) {
+            sfail("many-bind", i);
+            while (--i >= 0) close(b[i]);
+            close(c);
+            return;
+        }
+        if (sendto(c, "m", 1, 0, sa, UNP_SA_SIZE) != 1) sfail("many-send", i);
+    }
+    for (i = 0; i < SMANY; i++) {
+        n = recv(b[i], sbuf, sizeof(sbuf), 0);
+        if (n != 1) sfail("many-recv", i);
+        close(b[i]);
+        sprintf(path, "/tmp/unixm%d", i);
+        unlink(path);
+    }
+    close(c);
+}
+
+static int
+stream_main()
+{
+    s_pair();
+    s_refused();
+    s_stale();
+    s_many();
+    if (sfails == 0)
+        printf("unixprobe: STREAM OK\n");
+    return (sfails != 0);
+}
+
+/* -r: a descriptor passed in a message's access rights (2.11BSD sendmsg(2),
+ * msg_accrights).  The sender opens RFILE, passes it, and closes its own; the
+ * receiver's new descriptor must read what RFILE holds.  `-r gc' does it 150
+ * times with the receiver closed unread: the message holds the only reference,
+ * and a close that does not dispose of it leaks a file-table entry a round, so
+ * an open fails long before the end. */
+#define RNAME "/tmp/unixprobe.rts"
+#define RFILE "/etc/rc"
+
+static int
+r_send(sa, f)
+char *sa;
+int f;
+{
+    struct msghdr m;
+    struct iovec iov;
+    int s, r;
+
+    s = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (s < 0) return (-1);
+    iov.iov_base = "x";
+    iov.iov_len = 1;
+    m.msg_name = sa;
+    m.msg_namelen = UNP_SA_SIZE;
+    m.msg_iov = &iov;
+    m.msg_iovlen = 1;
+    m.msg_accrights = (caddr_t)&f;
+    m.msg_accrightslen = sizeof (int);
+    r = sendmsg(s, &m, 0);
+    close(s);
+    return (r);
+}
+
+static int
+rights_main(gc, rounds)
+int gc, rounds;
+{
+    char sa[UNP_SA_SIZE];
+    char want[64], got[64], c;
+    struct msghdr m;
+    struct iovec iov;
+    int r, f, nf, i, n;
+
+    unp_mkaddr(sa, RNAME);
+    f = open(RFILE, O_RDONLY);
+    if (f < 0 || (n = read(f, want, sizeof want)) <= 0) {
+        printf("UNIX R FAIL ref %d\n", errno);
+        return (1);
+    }
+    close(f);
+    for (i = 0; i < (gc ? rounds : 1); i++) {
+        unlink(RNAME);
+        r = socket(AF_UNIX, SOCK_DGRAM, 0);
+        if (r < 0 || bind(r, sa, UNP_SA_SIZE) < 0) {
+            printf("UNIX R FAIL bind %d %d\n", i, errno);
+            return (1);
+        }
+        f = open(RFILE, O_RDONLY);
+        if (f < 0) {
+            printf("UNIX R FAIL open %d %d\n", i, errno);
+            return (1);
+        }
+        if (r_send(sa, f) != 1) {
+            printf("UNIX R FAIL send %d %d\n", i, errno);
+            return (1);
+        }
+        close(f);
+        if (gc) {
+            close(r);
+            continue;
+        }
+        iov.iov_base = &c;
+        iov.iov_len = 1;
+        m.msg_name = 0;
+        m.msg_namelen = 0;
+        m.msg_iov = &iov;
+        m.msg_iovlen = 1;
+        nf = -1;
+        m.msg_accrights = (caddr_t)&nf;
+        m.msg_accrightslen = sizeof (int);
+        if (recvmsg(r, &m, 0) != 1 || m.msg_accrightslen != sizeof (int)) {
+            printf("UNIX R FAIL recv %d %d\n", m.msg_accrightslen, errno);
+            return (1);
+        }
+        if (nf < 0 || read(nf, got, n) != n || memcmp(got, want, n) != 0) {
+            printf("UNIX R FAIL read %d %d\n", nf, errno);
+            return (1);
+        }
+        close(nf);
+        close(r);
+    }
+    unlink(RNAME);
+    printf(gc ? "UNIX R gc ok\n" : "UNIX R ok\n");
+    return (0);
+}
+
+
+/* ---- `-n': a socket's name as long as AF_UNIX's.  2.11BSD's getsockname,
+ * getpeername and accept copy min(*len, the name's length) bytes and write that
+ * count back (uipc_syscalls.c), and PRU_SOCKADDR/PRU_PEERADDR carry the whole
+ * bound name, so a 40-character path comes back as its 42 bytes.  A datagram
+ * sender's name is one struct sockaddr, as 2.11BSD's sbappendaddr copies it:
+ * recvfrom gets 16.  Every short buffer is followed by a sentinel the call must
+ * leave alone.  Prints `UNIX N ok' or `UNIX N FAIL <step> <len>'. */
+#define NPATH1 "/tmp/unixprobe.names.0123456789abcdefghi"
+#define NPATH2 "/tmp/unixprobe.names.jklmnopqrstuvwxyz01"
+#define NLEN   42
+
+static int
+n_check(step, buf, len, want, wantlen, cap)
+char *step, *buf, *want;
+int len, wantlen, cap;
+{
+    if (len != wantlen || memcmp(buf, want, wantlen) != 0 ||
+        (cap < UNP_SA_SIZE && (buf[cap] & 0xFF) != 0x55)) {
+        printf("UNIX N FAIL %s %d\n", step, len);
+        return (1);
+    }
+    return (0);
+}
+
+static int
+names_main()
+{
+    char sa1[UNP_SA_SIZE], sa2[UNP_SA_SIZE], buf[UNP_SA_SIZE + 1], dat[2];
+    int l, c, a, d, r, len;
+
+    unp_mkaddr(sa1, NPATH1);
+    unp_mkaddr(sa2, NPATH2);
+    unlink(NPATH1);
+    unlink(NPATH2);
+    l = socket(AF_UNIX, SOCK_STREAM, 0);
+    c = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (l < 0 || c < 0 || bind(l, sa1, NLEN) < 0 || listen(l, 1) < 0 ||
+        bind(c, sa2, NLEN) < 0 || connect(c, sa1, NLEN) < 0) {
+        printf("UNIX N FAIL setup %d\n", errno);
+        return (1);
+    }
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    if (getsockname(l, buf, &len) < 0) len = -errno;
+    if (n_check("sockname", buf, len, sa1, NLEN, UNP_SA_SIZE)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = 16;
+    if (getsockname(l, buf, &len) < 0) len = -errno;
+    if (n_check("sockname16", buf, len, sa1, 16, 16)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    if (getpeername(c, buf, &len) < 0) len = -errno;
+    if (n_check("peername", buf, len, sa1, NLEN, UNP_SA_SIZE)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    a = accept(l, buf, &len);
+    if (a < 0) len = -errno;
+    if (n_check("accept", buf, len, sa2, NLEN, UNP_SA_SIZE)) return (1);
+    close(a);
+    close(c);
+    close(l);
+    unlink(NPATH1);
+    unlink(NPATH2);
+
+    r = socket(AF_UNIX, SOCK_DGRAM, 0);
+    d = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (r < 0 || d < 0 || bind(r, sa1, NLEN) < 0 || bind(d, sa2, NLEN) < 0 ||
+        sendto(d, "ab", 2, 0, sa1, NLEN) != 2 || sendto(d, "cd", 2, 0, sa1, NLEN) != 2) {
+        printf("UNIX N FAIL dgram-setup %d\n", errno);
+        return (1);
+    }
+    memset(buf, 0x55, sizeof buf);
+    len = UNP_SA_SIZE;
+    if (recvfrom(r, dat, 2, 0, buf, &len) != 2) len = -errno;
+    if (n_check("recvfrom", buf, len, sa2, 16, 16)) return (1);
+    memset(buf, 0x55, sizeof buf);
+    len = 8;
+    if (recvfrom(r, dat, 2, 0, buf, &len) != 2) len = -errno;
+    if (n_check("recvfrom8", buf, len, sa2, 8, 8)) return (1);
+    close(r);
+    close(d);
+    unlink(NPATH1);
+    unlink(NPATH2);
+    printf("UNIX N ok\n");
+    return (0);
+}
+
 int
-main()
+main(argc, argv)
+int argc;
+char **argv;
 {
     int        fd[3];
     int        i;
     int        r;
     int        n;
 
-    /* POSITIVE CONTROL FIRST: SOCK_STREAM must be refused.  If this SUCCEEDS,
-     * the transport is answering requests it has no implementation for, and
-     * every later PASS in this file is worthless. */
-    r = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 's')
+        return (stream_main());
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'n')
+        return (names_main());
+    if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'r')
+        return (rights_main(argc > 2, argc > 3 ? atoi(argv[3]) : 150));
+
+    /* POSITIVE CONTROL FIRST: a type the unix domain has no protocol for must
+     * be refused, EPROTONOSUPPORT from socreate (2.11BSD sys/uipc_socket.c,
+     * `if (prp == 0) return (EPROTONOSUPPORT)').  If this SUCCEEDS, the
+     * transport is answering requests it has no implementation for, and every
+     * later PASS in this file is worthless. */
+    r = socket(AF_UNIX, SOCK_RAW, 0);
     if (r >= 0) {
-        printf("unixprobe: FAIL stream-not-refused fd=%d\n", r);
+        printf("unixprobe: FAIL raw-not-refused fd=%d\n", r);
         return (1);
     }
-    if (errno != EPROTOTYPE) {
-        printf("unixprobe: FAIL stream-wrong-errno %d\n", errno);
+    if (errno != EPROTONOSUPPORT) {
+        printf("unixprobe: FAIL raw-wrong-errno %d\n", errno);
         return (1);
     }
 
-    /* Three descriptors, none of which may consume a W5100 socket.  The
-     * machine has three usable -- socket 0 is reserved for /dev/bpf0 MACRAW,
-     * so _W5_SockAlloc hands out 1..3.  Three AF_UNIX sockets that each took
-     * one would exhaust the chip exactly, so this passing is necessary but not
-     * sufficient; the interleaved AF_INET check below is what makes it sharp. */
+    /* Three AF_UNIX descriptors, open together. */
     for (i = 0; i < 3; i++) {
         fd[i] = socket(AF_UNIX, SOCK_DGRAM, 0);
         if (fd[i] < 0) {
@@ -116,11 +509,9 @@ main()
         }
     }
 
-    /* THE SHARP ASSERTION: with three AF_UNIX sockets open, all three W5100
-     * slots must still be free.  A UDP socket needs a real one, so if the
-     * AF_UNIX arm had borrowed even one this fails -- and it fails HERE, where
-     * the cause is unambiguous, rather than in some later test whose socket()
-     * mysteriously ran out. */
+    /* An AF_INET datagram socket beside them.  It is the network stack's and
+     * claims no chip socket, so this shows only that the AF_UNIX three left a
+     * descriptor for it. */
     r = socket(AF_INET, SOCK_DGRAM, 0);
     if (r < 0) {
         printf("unixprobe: FAIL unix-stole-hw errno=%d\n", errno);
@@ -137,18 +528,19 @@ main()
      * daemon spun, logging `recvfrom inet' to the console several times a
      * second.  FOUR ROUNDS, because one clean answer from noise proves nothing.
      *
-     * With a card and no traffic the same three answers hold.  Without one, a
-     * send has no interface to leave by, and 2.11BSD's in_pcbconnect, which
-     * udp_output calls for a sendto, answers EADDRNOTAVAIL. */
+     * With a card and no traffic the same three answers hold.  The receive is
+     * non-blocking (FIONBIO), since a datagram socket's recvfrom waits for a
+     * datagram, as 2.11BSD's soreceive does.  Without a card a send has no
+     * route: lo0 is the only interface, so in_pcbconnect picks it and
+     * ip_output answers ENETUNREACH (`if (in_localaddr(ip->ip_dst)) error =
+     * EHOSTUNREACH; else error = ENETUNREACH;'). */
     {
         static char usin[16];
-        static char uifr[32];
         fd_set urd;
         struct timeval utv;
         int us, uk, un, unav, ucard;
 
-        uifr[8] = 0;                            /* IFC_GETN: interface 0 */
-        ucard = ifctl(0, uifr) == 0;
+        ucard = has_card();
         us = socket(AF_INET, SOCK_DGRAM, 0);
         memset(usin, 0, sizeof usin);
         usin[0] = AF_INET;
@@ -156,6 +548,11 @@ main()
         usin[3] = 0x02;
         if (us < 0 || bind(us, (struct sockaddr *)usin, sizeof usin) < 0) {
             printf("unixprobe: FAIL udp-bind errno=%d\n", errno);
+            return (1);
+        }
+        uk = 1;
+        if (ioctl(us, FIONBIO, &uk) != 0) {
+            printf("unixprobe: FAIL udp-fionbio errno=%d\n", errno);
             return (1);
         }
         for (uk = 0; uk < 4; uk++) {
@@ -181,15 +578,10 @@ main()
                 return (1);
             }
         }
-        /* AND THROUGH read(2) UNDER FIONBIO, which is how apple/fgx#296 first
-         * showed it: the ioctl succeeding and the read then returning 8 bytes
-         * off the floating bus as though a datagram had arrived.  read(2) is
-         * its own road into the transport, not recvfrom's. */
-        uk = 1;
-        if (ioctl(us, FIONBIO, &uk) != 0) {
-            printf("unixprobe: FAIL udp-fionbio errno=%d\n", errno);
-            return (1);
-        }
+        /* AND THROUGH read(2), which is how apple/fgx#296 first showed it: the
+         * ioctl succeeding and the read then returning 8 bytes off the floating
+         * bus as though a datagram had arrived.  read(2) is its own road into
+         * the transport, not recvfrom's. */
         errno = 0;
         un = read(us, rxbuf, 8);
         if (un >= 0 || errno != EAGAIN) {
@@ -202,7 +594,7 @@ main()
             usin[4] = 10;                       /* 10.0.0.1 */
             usin[7] = 1;
             if (sendto(us, txbuf, 1, 0, (struct sockaddr *)usin, sizeof usin) >= 0 ||
-                errno != EADDRNOTAVAIL) {
+                errno != ENETUNREACH) {
                 printf("unixprobe: FAIL udp-nocard-send errno=%d\n", errno);
                 return (1);
             }
@@ -389,8 +781,8 @@ main()
         /* NON-BLOCKING MUST BE HONOURED, or a select-driven reader -- which is
          * what syslogd is -- blocks in the kernel with no way out.  Both the
          * DESCRIPTOR's flag and the
-         * CALL's flag must work; net_loop.s honours both and its comment names
-         * apple/fgx#441 as the defect from honouring only one. */
+         * CALL's flag must work; apple/fgx#441 was the defect from honouring
+         * only one. */
         {
             int one = 1;
 
@@ -781,17 +1173,14 @@ main()
                 return (1);
             }
         }
-        /* sendto(2) NAMING A PATH IS REFUSED, which unix(4)'s BUGS states.
-         * Upstream's PRU_SEND connects an unconnected datagram socket for the
-         * one call and answers EISCONN on a connected one (2.11BSD
-         * uipc_usrreq.c, `if (nam) { if (unp->unp_conn) error = EISCONN; ...
-         * unp_connect(so, nam)'); here the address is not honoured at all.
-         * This pins the answer the page gives. */
+        /* sendto(2) NAMING A PATH ON A CONNECTED SOCKET answers EISCONN:
+         * 2.11BSD uipc_usrreq.c PRU_SEND, `if (nam) { if (unp->unp_conn)
+         * error = EISCONN; ... unp_connect(so, nam)'. */
         if (sendto(s0, txbuf, 1, 0, (struct sockaddr *)sa5, UNP_SA_SIZE) >= 0) {
             printf("unixprobe: FAIL sendto-accepted\n");
             return (1);
         }
-        if (errno != EINVAL) {
+        if (errno != EISCONN) {
             printf("unixprobe: FAIL sendto-errno %d\n", errno);
             return (1);
         }

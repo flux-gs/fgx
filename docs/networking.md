@@ -1,34 +1,40 @@
 # FGX Networking
 
-> Source of truth: `src/modules/net/{net,net_xport,net_loop,unp}.s` (the
-> socket layer and transports, in net.mod), `src/kernel/{net_dispatch,uthernet,
-> socket,ifconfig_sys}.s` (the kernel dispatch seam, the W5100 boot/ISR residue
-> and interface config), `src/modules/bpf/bpf.s`,
-> `include/{socket,ifnet,loader,errno}.s`, `toolchain/lib/libc_c/{socket,
-> socket_srv,netdb}.c`, and the userland tools under `src/userland/`.  Where
-> this doc and the code disagree, the code wins.
-
-The socket layer, the transports and the W5100 driver are the loadable
-**`net.mod`** ([modules.md](modules.md)); the kernel keeps the W5100 boot
-bring-up and ISR (`uthernet.s`) and the `_Net_Dispatch` NETOP seam.
+> Source of truth: `src/kernel/bsdnet/` (the network stack, 2.11BSD's, in the
+> modules `bsdnetd` and `bsdnet0`-`bsdnet3`), `src/modules/net/{net,net_kso}.s`
+> (the socket calls' entry, in net.mod), `src/kernel/{net_dispatch,uthernet,
+> socket}.s` (the kernel's dispatch seam, the W5100 probe and ISR, and the
+> socket fd lookup), `src/modules/bpf/bpf.s`, `include/{socket,loader,errno}.s`,
+> `toolchain/lib/libc_c/{socket,socket_srv,netdb}.c`, and the userland tools
+> under `src/userland/`.  Where this doc and the code disagree, the code wins.
+> The design and its history are in
+> `docs/history/plans/2026-11-03-net-multiplex-design.md`.
 
 FGX talks to the network through an **Uthernet II** card (a WIZnet **W5100**
-Ethernet controller). The W5100 does **TCP/UDP/IP/ARP offload in hardware**; FGX
-does not run a software IP stack for the wire. The kernel exposes a **BSD socket layer** (sockets
-are first-class Unix fds) over a transport-agnostic seam, with BSD-shaped
-semantics so ported clients need few edits. What's shipped:
+Ethernet controller).  The chip carries frames and nothing else: its socket 0
+runs in **MACRAW** mode with all 8 KB of its buffer memory each way, and
+**2.11BSD's TCP/IP runs in the kernel** above it -- ARP, IP, ICMP, UDP, TCP, raw
+sockets, routing and AF_UNIX, in the network modules (`bsdnetd`,
+`bsdnet0`-`bsdnet3`), which `/etc/rc` loads at boot.  Sockets are Unix fds with
+2.11BSD's semantics, and their number is limited by memory, not by the chip.
+What's shipped:
 
-- **UDP** datagrams (`socket(AF_INET, SOCK_DGRAM, 0)`)
-- **TCP** client *and* server (`SOCK_STREAM`; `connect` / `listen` / `accept`)
-- **ICMP / raw IP** (`socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)`) — used by `ping`
+- **TCP** client and server (`SOCK_STREAM`), on the wire and over `lo0`
+- **UDP** (`SOCK_DGRAM`), including broadcast
+- **raw IP** (`SOCK_RAW`), which `ping` uses
+- **AF_UNIX** stream and datagram sockets, named in the file system, passing
+  descriptors with `sendmsg(2)` and `recvmsg(2)`
+- **interfaces and routes** configured by 2.11BSD's `ifconfig(8)` and `route(8)`,
+  through socket ioctls
 - **DHCP** (userland `dhclient`)
-- **raw frame capture** via `/dev/bpf0` (W5100 MACRAW) — used by `netdump`
-- **127.0.0.1 loopback** TCP (`net_loop.s`): a `SOCK_STREAM` socket to
-  127/8 is serviced in software and never touches the chip
-- **AF_UNIX** datagram sockets (`unp.s`, `SOCK_DGRAM` only)
+- **raw frame capture** via `/dev/bpf0` -- used by `netdump`
 - **name lookup** in libc: `gethostbyname` / `gethostbyaddr` read `/etc/hosts`,
-  then send one DNS query over UDP to the nameserver in `/etc/resolv.conf`
-  (`toolchain/lib/libc_c/netdb.c`)
+  then ask the nameserver in `/etc/resolv.conf` over UDP, each try bounded by a
+  1.5 s deadline (`toolchain/lib/libc_c/netdb.c`)
+
+Without the network modules, `socket(AF_INET, ...)` answers `EPROTONOSUPPORT`, as
+2.11BSD's `socreate` does when no protocol matches; so does a socket call made
+while the modules are still loading.
 
 ## The hardware (W5100 over the indirect bus)
 
@@ -44,117 +50,91 @@ never `$00`).  For slot 1:
 | `U2_MR`  | `$E0C094` | Mode Register (`$03` = indirect + address auto-increment) |
 | `U2_ARH` | `$E0C095` | indirect address, high byte |
 | `U2_ARL` | `$E0C096` | indirect address, low byte |
-| `U2_DAT` | `$E0C097` | data port — **auto-increments the address** after each access |
+| `U2_DAT` | `$E0C097` | data port -- **auto-increments the address** after each access |
 | `SLTROMSEL` | `$E0C02D` | slot routing; bit *n* must be set to reach the card in slot *n* |
 
 Every register or ring byte is a 3-write address-set plus a data cycle over a
-~1 MHz cardbus — there is no DMA, so the driver is written for small packets and
+~1 MHz cardbus -- there is no DMA, so the driver is written for small packets and
 masks IRQs around each multi-step sequence (see *U2_LOCK* below). Detection
-(`_ProbeUthernet2`) writes `MR=$80` (reset → chip auto-clears to `$00`) then
-`MR=$03` (reads back `$03`), logging `uthernet2: W5100 @ slot 1` or `… absent`.
+(`_ProbeUthernet2`) writes `MR=$80` (reset -> chip auto-clears to `$00`) then
+`MR=$03` (reads back `$03`), logging `uthernet2: W5100 @ slot 1` or `... absent`.
 
-The W5100 has **four hardware sockets**, each with a 2 KB TX and 2 KB RX ring.
-**Socket 0 is permanently reserved** for `/dev/bpf0` MACRAW capture (the W5100
-only does MACRAW on socket 0); `_W5_SockAlloc` hands out sockets **1–3** to UDP /
-TCP / ICMP (`W5_NSOCK EQU 4`). So there are at most **3 concurrent** sockets on
-the wire; loopback and AF_UNIX sockets do not count against them.
+The W5100 has four hardware sockets; MACRAW exists only on socket 0, and the
+stack's driver (`src/kernel/bsdnet/net/if_w5.c`, after 2.11BSD's `if_de.c`)
+takes it, with the chip's whole receive and transmit buffer.  Sockets 1-3 are
+unused.
 
 ## Sockets are fds
 
-`socket()` allocates an FCB tagged `FCB_FL_SOCKET` whose `FCB_SockIdx` holds a
-byte offset into the kernel **socket descriptor table** — a Kmalloc'd soft-global
-(`_sockTablePtr`, `SOCKD_MAX = 12` records of `SOCK_REC_SIZE` = 20 bytes;
-`include/socket.s`). A descriptor records `SOCK_HwIdx` (the W5100 socket, or the
-sentinels `SOCK_HW_UNCLAIMED` / `SOCK_HW_LOOP`), `SOCK_Proto` (a transport tag),
-`SOCK_Bound`, `SOCK_LPort`, `SOCK_Flags` (`SO_BROADCAST`, `SO_REUSEADDR`,
-`SOCK_NB`), and `SOCK_State` (TCP state). Because a socket is an FCB, `read`/`write`, `close`, and
-fd inheritance all work on it; `Fs_Close` routes `FCB_FL_SOCKET` through
-`NETOP_SockTeardown` to net.mod's `net_op_sockteardown` (chip CLOSE + free hw
-socket + free descriptor).
+A socket is a 2.11BSD `struct socket` in the stack's data bank.  `socket()`
+allocates an FCB tagged `FCB_FL_SOCKET`, and the FCB names its socket
+(`FCB_SockSo`, the socket's offset in that bank).  Because a socket is an FCB,
+`read`/`write`, `close`, `select`, `dup` and fd inheritance all work on it.  The
+system file table holds `NFILE` = 128 entries, so a socket-heavy load meets the
+mbuf pool before it: `socreate` then waits for a free mbuf, as 2.11BSD's does.
 
-`socket()` flow: validate the family → map `(type, proto)` to a transport tag
-(`SOCK_DGRAM`→UDP, `SOCK_STREAM`→TCP, `SOCK_RAW`+`IPPROTO_ICMP`→ICMP, AF_UNIX
-→`XPORT_UNIX`, else `EINVAL`) → grab a descriptor → `_Fcb_Alloc` a real fd. Any
-failure rolls the whole thing back.  The W5100 socket is claimed later, when
-the descriptor first needs the wire -- a UDP/ICMP `bind`, a TCP `connect` or
-`listen` (`_Xport_Claim`, `net_xport.s`) -- and exhaustion is `ENOBUFS` from
-that call.  (2.11BSD's `socket()` likewise allocates no interface resource: UDP's
-`PRU_ATTACH` only calls `in_pcballoc`, `vendor/2.11BSD/usr/sys/netinet/udp_usrreq.c`.)
+Every socket call goes the same way: the kernel's syscall thunk
+(`net_dispatch.s`) reaches net.mod, which resolves the fd and hands the call to
+the stack (`net_kso.s`); the stack's `bn_sys.c` fetches the arguments and runs
+2.11BSD's `uipc_syscalls.c` body -- `bind`, `connect`, `sendto` and the rest turning
+into `sobind`, `soconnect`, `sosend`.  The call runs on the calling process's
+kernel stack slot and may sleep there.  The FGX-written part is the argument
+fetch.
 
-## The transport seam (XPORT)
+## The stack
 
-The socket core (`net.s`) **never touches a W5100 register**. It dispatches
-through a transport seam (`net_xport.s`) keyed on `SOCK_Proto`; loopback is
-selected first by `SOCK_HwIdx == SOCK_HW_LOOP` and AF_UNIX by `XPORT_UNIX`:
+The stack is 2.11BSD's `sys/uipc_*.c`, `net/` and `netinet/`, built with fcc
+into five banks of module code over one data bank, with a machine seam written
+for FGX in `src/kernel/bsdnet/machine/`: mbufs, `spl`, the callout list, the
+kernel `printf` (2.11BSD's `prf`), `bcopy` in assembly, and the drain.
+`docs/PROVENANCE.md` names the upstream file of each, and every divergence.
 
-```
-net.s     ──_Net_Xport_{Open,Send,Recv,Connect,Close,Listen,Accept}──▶  _Xport_LoadTag
-                                                                         │ branch on tag
-                  ┌──────────────────────┬───────────────────┬──────────┘
-              XPORT_UDP              XPORT_ICMP           XPORT_TCP
-            _Udp_*Core             _Icmp_*Core          _Tcp_*Core
-```
-
-| Verb | UDP | ICMP/IPRAW | TCP |
-|------|-----|------------|-----|
-| Open | `_Udp_OpenAt` | `_Icmp_OpenAt` | `_Tcp_BindAt` (bind only) |
-| Connect | — | — | `_Tcp_Connect` (auto ephemeral local port) |
-| Send | `_Udp_SendCore` | `_Icmp_SendCore` | `_Tcp_SendCore` |
-| Recv | `_Udp_RecvCore` | `_Icmp_RecvCore` | `_Tcp_RecvCore` |
-| Listen / Accept | — | — | `_Tcp_Listen` / `_Tcp_Accept` |
-| Close | nop | nop | `_Tcp_Close` (graceful FIN) |
-
-All three wire transports are **shipped and wired**; TCP client *and* server are
-live. Adding a second NIC driver later would turn the
-tag branch into an indirect call through the ifnet's driver ops; today there is
-one driver, so it's a branch.
-
-Shared W5100 plumbing lives in `net_xport.s`: `_W5_SetSnAR` (point the indirect
-address at a socket register), `_W5_TxStream` (stream the TX ring, issue SEND,
-wait SEND_OK), and `_W5_RxSetup`/`_W5_RxCopy`/`_W5_RxAdvance` (RX ring, ring-wrap
-aware). The W5100's per-packet receive headers differ by transport: UDP prepends
-`[srcIP(4) srcPort(2) len(2)]`, IPRAW prepends `[srcIP(4) len(2)]`, TCP is a raw
-byte stream with no header.
+Received frames are drained by `netintr`, which runs at the kernel's
+deferred-work point, never from an interrupt, on a 1024-byte stack of its own.
+The heartbeat marks the drain every 8th tick, so a lost interrupt costs at most
+133 ms.  The interfaces are `wz0`, the card, and `lo0`.
 
 ## Syscalls and wire formats
 
 | # | Syscall | Notes |
 |---|---------|-------|
-| 70 | `SYS_IFCONFIG` | interface get/set (see below) |
-| 71 | `SYS_SOCKET` | `A=domain X=type Y=proto → fd` |
-| 72 | `SYS_BIND` | `bind(fd, sockaddr_in*, len)` (UDP/ICMP; TCP server) |
+| 71 | `SYS_SOCKET` | `A=domain X=type Y=proto -> fd` |
+| 72 | `SYS_BIND` | `bind(fd, name, len)` |
 | 73 | `SYS_SENDTO` | `sendto(fd, argblk*)` |
-| 74 | `SYS_RECVFROM` | `recvfrom(fd, argblk*)` (non-blocking) |
-| 75 | `SYS_SETSOCKOPT` | `SOL_SOCKET`: `SO_BROADCAST` and `SO_REUSEADDR` honoured; 2.11BSD's other boolean options accepted, not stored; `SO_LINGER` refused |
-| 76 | `SYS_CONNECT` | `connect(fd, sockaddr_in*, len)` (TCP) |
+| 74 | `SYS_RECVFROM` | `recvfrom(fd, argblk*)` |
+| 75 | `SYS_SETSOCKOPT` | 2.11BSD's `sosetopt` |
+| 76 | `SYS_CONNECT` | `connect(fd, name, len)` |
 | 77 | `SYS_SEND` | `send(fd, argblk*)` |
-| 78 | `SYS_RECV` | `recv(fd, argblk*)` (TCP: blocking) |
-| 84 | `SYS_LISTEN` | `listen(fd, backlog)` (backlog ignored) |
-| 85 | `SYS_ACCEPT` | `accept(fd)` (blocks for a peer) |
-| 99 | `SYS_SELECT` | works on socket fds (`NETOP_SockStatus`) |
-| 100 | `SYS_SHUTDOWN` | `shutdown(fd, how)` |
-| 108 | `SYS_GETPEERNAME` | |
-| 109 | `SYS_GETSOCKNAME` | an unbound socket answers `0.0.0.0:0` |
+| 78 | `SYS_RECV` | `recv(fd, argblk*)` |
+| 84 | `SYS_LISTEN` | `listen(fd, backlog)` |
+| 85 | `SYS_ACCEPT` | `accept(fd)`; libc names the peer through `getpeername` |
+| 99 | `SYS_SELECT` | works on socket fds |
+| 100 | `SYS_SHUTDOWN` | `shutdown(fd, how)`, 2.11BSD's `soshutdown` |
+| 108 | `SYS_GETPEERNAME` | copies `min(len, the name's length)` bytes |
+| 109 | `SYS_GETSOCKNAME` | likewise; an unbound socket is not an error |
+| 131 | `SYS_SENDMSG` | `sendmsg(fd, msg, flags)`; `msg_accrights` passes descriptors over AF_UNIX |
+| 132 | `SYS_RECVMSG` | `recvmsg(fd, msg, flags)` |
 
-The libc wrappers pack the multi-argument calls into an **argblk**
-(`_sock_argblk`) in the program's data bank (offsets in bytes).  All four
-share the first four words; the buffer's bank rides in the block, so the
-buffer may be in any bank:
+Interface and route changes are `ioctl(2)`s on a socket, as in 2.11BSD.
+
+The libc wrappers pack send, recv, sendto and recvfrom into an **argblk**
+(`_sock_argblk`) in the program's data bank (offsets in bytes).  All four share
+the first four words; the buffer's bank rides in the block, so the buffer may be
+in any bank:
 
 ```
 all four : +0 buf offset  +2 len  +4 MSG_* flags  +6 buf bank
-sendto   : +8 dstIP(4, net order)  +12 dstPort(2, net order)
-recvfrom : +8 offset of the 16-byte source-address staging
+sendto   : +8 dstIP(4)  +12 dstPort(2), then the name: +14 offset  +16 bank  +18 length
+recvfrom : +8 the source name's offset  +10 bank  +12 length, written back
 ```
 
-`tools/check_sock_argblk.py` holds this layout against net.mod's reads.
+`tools/check_sock_argblk.py` holds this layout against `bn_sys.c`'s reads.
 
 `sockaddr_in` is the 16-byte 2.11BSD layout: `SIN_FAMILY` at +0 (a 2-byte short), `SIN_PORT` at +2
 (2 bytes, **big-endian / network order**), `SIN_ADDR` at +4 (4 bytes, network
-order). The flags are `MSG_DONTWAIT = $80` and `MSG_OOB`, which the socket
-layer refuses (no transport carries urgent data). Errnos use 4.3BSD values
-(`include/errno.s`): `EINTR=4`, `EBADF=9`, `EAGAIN=11`, `EINVAL=22`, `EMFILE=24`,
-`EPIPE=32`, `ENOTSUP=45`, `ENOTCONN=57`, `ETIMEDOUT=60`, `ECONNREFUSED=61`.
+order).  An AF_UNIX name is as long as its path.  The flags are 2.11BSD's
+`MSG_OOB` and `MSG_PEEK`, and FGX's `MSG_DONTWAIT` = `$80`.  Errnos use 4.3BSD
+values (`include/errno.s`).
 
 The full generated syscall catalog is in
 [userland-abi.md](userland-abi.md); the libc wrappers (`socket`, `connect`,
@@ -162,109 +142,90 @@ The full generated syscall catalog is in
 
 ## Blocking and concurrency
 
-BSD semantics: **`connect` / `accept` / TCP `recv` block by default**, and are
-**`^C`-interruptible → `EINTR`**. Non-blocking I/O is per call
-(**`MSG_DONTWAIT`**) or per descriptor (**`ioctl(FIONBIO)`**, or
-`fcntl(F_SETFL)`, which issues `FIONBIO` as 4.3BSD-Reno's does); either gives
-`EAGAIN`. UDP/ICMP `recvfrom` does **not** block — it polls
-and returns `EAGAIN` when the ring is empty, so `ping`/`dhclient` poll in a
-userland timeout loop. **`read`/`write` work on a socket fd** (`read`≡`recv`,
-`write`≡`send`), which is what the shell's redirection and most portable code use.
+BSD semantics: `connect`, `accept`, `recv` and a `send` into a full buffer block,
+and a signal interrupts them with `EINTR`.  Non-blocking I/O is per descriptor
+(`ioctl(FIONBIO)`, or `fcntl(F_SETFL)`, which issues `FIONBIO` as 4.3BSD-Reno's
+does) or per call (`MSG_DONTWAIT`, which affects only that call); either answers
+`EWOULDBLOCK`.  `read`/`write` on a socket fd are `recv`/`send`.
 
-Blocking goes through `_Sock_PollIntr`: if no `^C` is pending it `_sleep`s on
-`WCHAN_SOCK` (the CPU idles) and re-checks its own condition on wake — see
-[scheduler.md](scheduler.md). Because several tasks can
-hold socket state across a sleep, `_Sock_PollIntr` saves/restores the contiguous
-`_sock*` scratch block on the task's kernel stack.
+A blocked call sleeps in the stack (`sbwait`) on its own kernel stack slot.  The
+stack saves a process's `u` across the sleep, so any number of processes can
+block in socket calls at once.
 
 **`U2_LOCK` / `U2_UNLOCK`** bracket every foreground indirect-bus sequence
 (`include/macros.s`, copied into `bpf.s`). They `SEI`, set a `_u2Locked` flag, and
-**mask the W5100 IRQ (chip IMR ← 0)**; UNLOCK restores the IMR shadow. This is
+**mask the W5100 IRQ (chip IMR <- 0)**; UNLOCK restores the IMR shadow. This is
 mandatory: the indirect **address register is a single shared resource**, so an
 ISR firing mid-sequence would move the AR and corrupt the in-flight transfer. The
 ISR also checks `_u2Locked` and bails if foreground owns the bus.
 
 ## The W5100 interrupt handler
 
-Receive and connection events are **IRQ-driven**. `_Net_BringUp` calls
-`_ArmUthernet2` once at boot to register `_Uthernet2_ISR` as a SIM generic
-(non-SCC) IRQ source and arm the chip IMR. The handler is **armed at boot even
-with no socket open**, but socket 0 stays CLOSED so nothing fires until a capture
-or connection opens a socket. (netdump's capture *depends* on the ISR being
-registered: without it a RECV interrupt goes unhandled and storms.)
+`_Net_BringUp` calls `_ArmUthernet2` once at boot to register `_Uthernet2_ISR` as
+a SIM generic (non-SCC) IRQ source and arm the chip IMR.  The handler does no
+heavy work in interrupt context: it records the event, write-1-clears the
+W5100's interrupt bits, and returns; the drain does the rest.
 
 Two IIgs-specific hazards shaped the ISR:
 
 - **SLTROMSEL reset on IRQ entry.** IIgs IRQ entry can flip slot 1 back to the
   internal port, so the ISR's `$E0C09x` reads would hit internal ROM (garbage)
-  and falsely claim *every* interrupt → a storm. The ISR **saves SLTROMSEL,
+  and falsely claim *every* interrupt -> a storm. The ISR **saves SLTROMSEL,
   routes the card's slot to the card for its reads, and restores it at every exit** before
   chaining the firmware.
 - **Lazy ISR.** On a RECV the handler sets a per-socket ready bit and **disarms
   IMR** so the level-triggered RECV can't re-fire before foreground drains the
   ring (the capture "firehose" guard).
 
-The handler does no heavy work in interrupt context: it sets `_kSockWakePending`,
-write-1-clears the W5100 interrupt bits, and returns. The scheduler's `swtch`
-checks `_kSockWakePending` and turns it into `_wakeup(WCHAN_SOCK)`, waking the
-blocked socket task.
-
 ## Interface configuration
 
-An interface is an **ifnet record** (`include/ifnet.s`, Kmalloc'd `_ifTablePtr`,
-`IF_MAX = 4`): name (`u2sN`), slot, MAC (→ the W5100 SHAR), flags
-(`IFF_LINK_UP`/`IFF_IP_CONF`/`IFF_DHCP`), IP, netmask, broadcast, gateway. The
-detected card is registered as **`u2sN`**, N = its slot, at probe
-(`_Net_RegPrimary`); on the usual slot-1 card that is `u2s1`. The MAC defaults to
-`00:08:DC:F6:00:<slot>`, overridable per slot via `/etc/hwaddr.conf`.
+The card is the interface **`wz0`**: 2.11BSD's `struct ifnet`, attached by the
+W5100 driver (`src/kernel/bsdnet/net/if_w5.c`). Its link-level address comes
+from the chip's SHAR, which the kernel writes at the card's probe
+(`src/kernel/hwaddr.s`): `00:08:DC:F6:00:<slot>` by default, overridable per
+slot via `/etc/hwaddr.conf`. The loopback interface is `lo0`.
 
-`SYS_IFCONFIG` (#70) takes an `ifreq` pointer + an op:
-
-| Op | Meaning |
-|----|---------|
-| `IFC_GETN` | look up by index → fill the record (or `ENOENT`) |
-| `IFC_GET`  | look up by name → fill the record |
-| `IFC_SET`  | set ip/netmask/broadcast/gateway + `IFF_IP_CONF` |
-| `IFC_SETMAC` | reserved (defined in `include/ifnet.s`, not used by the tools) |
-| `IFC_SETDHCP` | as `IFC_SET`, and also marks the address DHCP-leased (`IFF_DHCP`); plain `IFC_SET` clears that bit |
-
-Setting the address on the primary interface also pushes **GAR/SUBR/SIPR** to the W5100 (so the
-chip can ARP for and accept unicast at the configured IP). `/etc/netstart`,
-sourced by `/etc/rc` — which `init` runs to completion **before** the login
-shell appears — runs `dhclient` and sets `INET` for the network daemons; a
-static-address template (`ifconfig u2s1 inet ...`, `route add default ...`) is
+Interfaces and routes are configured as in 2.11BSD, through socket ioctls:
+`SIOCGIFCONF` lists the interfaces (each with an `AF_LINK` entry carrying the
+Ethernet address), `SIOCSIFADDR`/`SIOCSIFNETMASK`/`SIOCSIFBRDADDR`/`SIOCSIFFLAGS`
+set them (`ifioctl`), and `SIOCADDRT`/`SIOCDELRT` edit the routing table
+(`rtioctl`). `ifconfig(8)` and `route(8)` are 2.11BSD's. `/etc/netstart`,
+sourced by `/etc/rc` -- which `init` runs to completion **before** the login
+shell appears -- runs `dhclient` and sets `INET` for the network daemons; a
+static-address template (`ifconfig wz0 inet ...`, `route add default ... 1`) is
 commented out there.
 
 ## DHCP (userland)
 
-DHCP is a **userland** program (`src/userland/dhclient`), not kernel code. It reads the interface's MAC via
-`ifctl(IFC_GET)`, runs the lease protocol over a UDP socket (broadcast to
-`255.255.255.255:67` from `:68`), and writes the result back with
-`ifctl(IFC_SETDHCP)`, which is `IFC_SET` plus the `IFF_DHCP` flag:
+DHCP is a **userland** program (`src/userland/dhclient`), not kernel code. It finds the Ethernet interface and its
+MAC through `SIOCGIFCONF`, runs the lease protocol over a UDP socket (broadcast to
+`255.255.255.255:67` from `:68`), and installs the result with the same ioctls
+`ifconfig` and `route` use (`SIOCSIFADDR`, `SIOCSIFNETMASK`, `SIOCADDRT` for the
+default route):
 
-- **INIT-REBOOT** — if `/etc/dhcp.lease` exists, re-REQUEST that exact IP; on ACK,
+- **INIT-REBOOT** -- if `/etc/dhcp.lease` exists, re-REQUEST that exact IP; on ACK,
   reuse it.
-- **DISCOVER** — otherwise DISCOVER → OFFER → REQUEST → ACK with 2/4/8/16 s
+- **DISCOVER** -- otherwise DISCOVER -> OFFER -> REQUEST -> ACK with 2/4/8/16 s
   backoff.
 
 On bind it writes `/etc/dhcp.lease` and `/etc/resolv.conf` (from the DHCP DNS
 option). There is **no background renew daemon**; to renew, run `dhclient` again.
 
-## Packet capture — `/dev/bpf0`
+## Packet capture -- `/dev/bpf0`
 
-`/dev/bpf0` is a character device backed by the loadable **`bpf.mod`** module
-(loaded at boot by the `modload` line in `/etc/rc`). It puts the reserved **socket 0 into MACRAW
-promiscuous mode** (`Sn_MR = $44` = MACRAW + MAC filter) and captures raw Ethernet
-frames. It is **single-opener** (a second `open` returns `EBUSY`). The capture
-block is allocated kernel-side (`_Bpf_AllocBlk`, `src/kernel/bpf.s`) and handed
-to the module via DP soft-globals.
+`/dev/bpf0` is a character device backed by the loadable **`bpf.mod`** module.
+While the stack holds socket 0, bpf is a tap on the interface, as in 2.11BSD:
+the driver copies each frame into a ring in the network modules' data, and bpf
+reads it from there.  Without the network modules, bpf puts socket 0 into MACRAW
+itself.  It is **single-opener** (a second `open` returns `EBUSY`), and a capture
+that holds socket 0 before the modules load makes the driver log `w5: socket 0
+busy` and leave the stack with `lo0` alone.
 
-Capture is IRQ-driven with a lazy ISR + foreground drain (`_Net_DrainFrame`):
-each `read()` returns **one record** —
-`[caplen.w LE][datalen.w LE][frame bytes…]` — snaplen 60 (Ethernet + IP + L4
-headers). A saturation sentinel (`caplen = 0`) is surfaced in-band when the RX
-ring nears full, so a dropped-packet burst is visible rather than silent.
-`netdump` is the consumer: it reads records, dissects Ethernet → ARP / IPv4 →
+Each `read()` returns **one record** --
+`[caplen.w LE][datalen.w LE][frame bytes...]` -- snaplen 60 (Ethernet + IP + L4
+headers). A saturation sentinel (`caplen = 0`) is surfaced in-band when the ring
+nears full, so a dropped-packet burst is visible rather than silent.
+`netdump` is the consumer: it reads records, dissects Ethernet -> ARP / IPv4 ->
 ICMP/UDP/TCP, and prints a tcpdump-style line per frame.
 
 ## Userland tools
@@ -273,8 +234,8 @@ ICMP/UDP/TCP, and prints a tcpdump-style line per frame.
 |------|--------------|-----------|
 | `nc` | minimal netcat TCP client (`-g` sends `GET / HTTP/1.0`); a host name is resolved through `gethostbyname` | socket/connect/send/recv, read/write |
 | `ping` | ICMP echo; software-checksums, verifies id/seq + payload; min/avg/max | socket(RAW)/sendto/recvfrom |
-| `dhclient` | DHCP client (above) | socket/bind/sendto/recvfrom + ifctl |
-| `ifconfig` | show/configure interfaces, BSD-style | ifctl (GETN/GET/SET) |
+| `dhclient` | DHCP client (above) | socket/bind/sendto/recvfrom + SIOC ioctls |
+| `ifconfig` | 2.11BSD ifconfig(8) | SIOCGIFCONF, SIOCSIF* |
 | `netdump` | tcpdump-like observer over `/dev/bpf0` | open/read on the bpf chardev |
 | `echod` | TCP **echo server** (re-listens per connection) | socket/bind/listen/accept |
 | `telnet` | 2.11BSD telnet(1) client | connect, select |
@@ -282,38 +243,34 @@ ICMP/UDP/TCP, and prints a tcpdump-style line per frame.
 | `inetd` | 2.11BSD inetd(8); honours `stream tcp nowait` lines | listen/accept |
 | `ntpd`, `ntpdc`, `ntp` | 2.11BSD's UMD NTP 3.4 daemon, its query tool, and the one-shot client | UDP port 123 |
 | `host` | look up names and addresses through the libc resolver | gethostbyname/gethostbyaddr |
-| `route` | `route add default A.B.C.D`: stores the default gateway in the primary ifnet | ifctl |
+| `route` | 2.11BSD route(8); `-f` reads the table through `/dev/kmem` | SIOCADDRT/SIOCDELRT, nlist |
 | `syslogd`, `logger` | system log daemon (`-u` for UDP) and its client | AF_UNIX `/dev/log`, UDP |
 
 ## Limits and caveats
 
-- **One W5100, three usable sockets.** Socket 0 is reserved for capture, so at
-  most three concurrent UDP/TCP/ICMP sockets.
-- **Single-socket TCP server.** `listen` ignores its backlog; `accept` hands the
-  one hardware socket to the new connection fd and detaches the listener, so a
-  server (e.g. `echod`) must re-`socket`/`bind`/`listen` for each connection. This
-  is a W5100 constraint, not a software limit.
-- **No software IP stack for the wire, no routing.** The W5100 offloads
-  TCP/UDP/IP/ARP; FGX does MACRAW (capture), the ICMP checksum in `ping`, and
-  the software loopback and AF_UNIX transports.  The gateway is stored in the
-  ifnet and pushed to the chip (`GAR`); routing is the chip's job.
-- **~1 MHz indirect cardbus, no DMA.** Throughput is modest and the paths are
-  small-packet oriented (ring-wrap-aware on the TCP/RX paths).
-- **BSD subset.** `select(2)` works on socket fds; there is no `poll(2)`, no
-  `getsockopt`, and no out-of-band data.
+- **Memory, not the chip, bounds the sockets.**  The mbuf pool (`NMBUFS` 280 and
+  12 clusters) holds about ninety TCP sockets that are not connected, or some
+  thirty connections (an idle one holds eight mbufs, four at each end); past that
+  `socket(2)` waits for a free mbuf.
+- **~1 MHz indirect cardbus, no DMA.**  Every frame byte crosses the card's
+  register window.  The stack itself moves 1 MB over `lo0` in about 28 s under
+  MAME, about 37 KB/s.
+- **BSD subset.**  There is no `getsockopt(2)`, no `socketpair(2)` and no
+  `poll(2)`.  A datagram sender's AF_UNIX name is cut to 16 bytes, as 2.11BSD's
+  `sbappendaddr` cuts it (unix(4) BUGS).  `ifconfig wz0 down` does not stop
+  output, as 2.11BSD's `ip_output` does not test `IFF_UP` (ifconfig(8) BUGS).
 
 ## Source map
 
 | Area | File |
 |------|------|
-| BSD socket layer (fds, descriptors, syscalls) | `src/modules/net/net.s` (kernel thunks: `src/kernel/net_dispatch.s`; descriptor table alloc: `src/kernel/socket.s`) |
-| Loopback / AF_UNIX transports | `src/modules/net/net_loop.s`, `src/modules/net/unp.s` |
-| Resolver | `toolchain/lib/libc_c/netdb.c` |
-| W5100 driver, XPORT seam, transport cores | `src/modules/net/net_xport.s` |
+| The socket calls' entry | `src/modules/net/net.s`, `src/modules/net/net_kso.s` (kernel thunks: `src/kernel/net_dispatch.s`; fd lookup: `src/kernel/socket.s`) |
+| The network stack | `src/kernel/bsdnet/{sys,net,netinet}/`; the machine seam `src/kernel/bsdnet/machine/` (`bn_sys.c` takes the calls) |
+| W5100 driver (`wz0`) | `src/kernel/bsdnet/net/if_w5.c`, `src/kernel/bsdnet/machine/w5_asm.s` |
 | W5100 probe, bring-up, ISR | `src/kernel/uthernet.s` |
-| Interface config (ifnet, SYS_IFCONFIG) | `src/kernel/ifconfig_sys.s` |
-| `/dev/bpf0` MACRAW capture module | `src/modules/bpf/bpf.s` (block alloc: `src/kernel/bpf.s`) |
-| Structs / constants | `include/socket.s`, `include/ifnet.s`, `include/errno.s` |
+| `/dev/mem`, `/dev/kmem` (for `route -f`) | `mem.mod`; the stack's name list `/netnix` |
+| `/dev/bpf0` capture module | `src/modules/bpf/bpf.s` (block alloc: `src/kernel/bpf.s`) |
+| Resolver | `toolchain/lib/libc_c/netdb.c` |
+| Structs / constants | `include/socket.s`, `include/errno.s` |
 | Syscall numbers | `include/loader.s` |
-| Socket sleep/wake channel | `src/kernel/sched.s` (`WCHAN_SOCK`) |
 | Userland | `src/userland/{nc,ping,dhclient,ifconfig,netdump,echod,telnet,telnetd,inetd,ntpd,ntpdc,ntp,host,route,syslogd,logger}/` |

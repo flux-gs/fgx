@@ -1,0 +1,19 @@
+{
+ "name": "pingloop",
+ "description": "ping(8) over the kernel stack's raw socket (net-mux S4): three echo requests to 127.0.0.1 go out through raw_ip.c and lo0, icmp_input answers them, and ping reads each reply past its IP header.  No card is needed.",
+ "command": "/bin/ping 127.0.0.1 3",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "3 packets transmitted, 3 received",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "corrupt reply",
+   "timed out",
+   "PANIC",
+   "BRK",
+   "bsdnet: BROKEN"
+  ]
+ }
+}

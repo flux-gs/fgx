@@ -151,32 +151,14 @@ swtch           ENT
                 BEQ     @sw_ckTimer
                 LDA     #WCHAN_KBD
                 JSR     _wakeup
-                LDA     _nSelSleepers           ; + a select blocked on a console fd
-                BEQ     @sw_ckTimer
-                LDA     #WCHAN_SELECT
-                JSR     _wakeup
 @sw_ckTimer     ; Wake any EXPIRED nanosleep timer on every switch too (not only
                 ; when idle): a busy background task is always READY, so @sw_idle
                 ; never runs and a lone @sw_idle scan would starve the sleeper —
                 ; same lesson as the keyboard wakeup above.  Gated cheap on the
                 ; count so the common (no-sleeper) path is one LDA+BEQ.
                 LDA     _nTimerSleepers
-                BEQ     @sw_ckSock
+                BEQ     @sw_ckAlarm
                 JSR     _Timer_WakeExpired
-@sw_ckSock      ; Wake any blocked socket op (recv/connect/send) on every switch
-                ; if the W5100 ISR flagged a socket event since last time — same
-                ; busy-bg-task reasoning as above.  Gated on the flag so we don't
-                ; re-poll the slow W5100 indirect bus on every switch; the woken
-                ; op re-checks its own condition (data ready / TX space / SR).
-                LDA     _kSockWakePending
-                BEQ     @sw_ckAlarm
-                STZ     _kSockWakePending
-                LDA     #WCHAN_SOCK
-                JSR     _wakeup
-                LDA     _nSelSleepers           ; + a select blocked on a socket fd
-                BEQ     @sw_ckAlarm
-                LDA     #WCHAN_SELECT
-                JSR     _wakeup
 @sw_ckAlarm     ; Deliver any alarm the heartbeat flagged (apple/fgx#152).  The
                 ; heartbeat runs at interrupt time and must not walk the
                 ; scheduler table, so it only RECORDS expiries; posting the
@@ -471,18 +453,7 @@ swtch_nosave    ENT
                 ; syscall boundary to be honoured at: everything blocked.  See
                 ; _Lbolt_Wake below.
                 JSR     _Lbolt_Wake
-                ; Wake any blocked W5100 socket op (recv/connect/send) so it
-                ; re-checks its condition.  Unconditional: the W5100 RX/TX/conn
-                ; IRQ (acked by the existing ISR) is what woke this WAI, but we
-                ; can't read chip status cheaply here, so just wake + let the op
-                ; re-poll (a benign 60 Hz re-poll if nothing's ready).  No-op
-                ; scan when no socket sleeper exists.
-                LDA     #WCHAN_SOCK
-                JSR     _wakeup
-                LDA     _nSelSleepers           ; + a block-forever select: the 60 Hz
-                BEQ     @sw_idle_ckTimer        ; re-scan safety net (idle => this is the
-                LDA     #WCHAN_SELECT           ; main task; catches any missed busy-path
-                JSR     _wakeup                 ; wake)
+                JSR     _Klog_Wake              ; /dev/klog's reader, likewise
 @sw_idle_ckTimer ; Wake any expired nanosleep timer (lone-sleeper case: a `sleep`
                 ; that is the only task idles here on the 60 Hz heartbeat until
                 ; its deadline passes, then wakes itself).
@@ -620,6 +591,30 @@ _sleepUn        ENT
                 MX      %00
                 SEI                             ; spl — close the lost-wakeup race
                 STA     _slpChan                ; A = chan
+                JSR     _Slp_Block
+                CLC                             ; never "give up": no error path
+                CLI                             ; (CLI does not touch carry)
+                RTS
+
+;=============================================================================
+; _sleepUnRel - _sleepUn for a wait with no bound, which releases a snapshot
+; fork child's parent first, as _sleep does.
+;
+; _sleepUn does not release because its waits end by themselves -- a disk read,
+; a buffer another task is about to give back -- and a release there costs the
+; parent two image copies for nothing.  A wait for a resource that only another
+; process can free is different: a snapshot child is pinned on its parent's
+; addresses until it releases (Uimg_Evictable), so its parent and siblings,
+; which share those addresses, cannot run to free it.  The network stack's
+; m_more waits for an mbuf at PZERO-1, which is exactly that.
+;
+; In:  A = chan (16-bit).  Caller MX %00.  Returns C=0 always.
+;=============================================================================
+_sleepUnRel     ENT
+                MX      %00
+                SEI                             ; spl -- close the lost-wakeup race
+                STA     _slpChan                ; A = chan
+                JSR     Img_Release             ; preserves A/X/Y
                 JSR     _Slp_Block
                 CLC                             ; never "give up": no error path
                 CLI                             ; (CLI does not touch carry)
@@ -882,6 +877,161 @@ _Lbolt_Wake     ENT
                 RTS
 
 ;=============================================================================
+; _Klog_Wake - 2.11BSD's logwakeup (sys/subr_log.c): release /dev/klog's reader,
+; and any select, when the kernel has logged.
+;
+; Upstream calls logwakeup from printf (subr_prf.c).  The ring's writer here
+; also runs at interrupt time, where the scheduler table must not be walked, so
+; the wake is performed at the two soft sites that perform lbolt's -- syscall
+; return and the idle loop -- by comparing the ring's head with the one last
+; announced.  A reader therefore waits a tick at most.
+;
+; Clobbers A/X/Y.  MX %00.  Kernel DP.
+;=============================================================================
+_Klog_Wake      ENT
+                MX      %00
+                LDA     _kernLogHead
+                CMP     _klogWakeHead
+                BEQ     @klw_none               ; the common path: nothing logged
+                STA     _klogWakeHead
+                LDA     #WCHAN_KLOG
+                JSR     _wakeup
+                LDA     #0                      ; no selector is recorded for
+                LDY     #1                      ;   the log: every one looks
+                JSR     _Sel_Wakeup
+@klw_none       RTS
+
+;=============================================================================
+; select(2)'s wake, 2.11BSD's (usr/sys/sys/sys_generic.c).  An object a select
+; found not ready holds that select's pid -- sb_sel in a socket buffer, t_rsel
+; and t_wsel in a tty, PTYR_SelR and PTYR_SelW in a pty pair -- and wakes that
+; one process when it becomes ready.  A second selector on the same object is a
+; collision: the object notes it, and its wake releases every select.
+;
+; _Sel_Wakeup - selwakeup(p, coll).
+;
+;       if (coll) {
+;               nselcoll++;
+;               wakeup((caddr_t)&selwait);
+;       }
+;       if (p) {
+;               if (p->p_wchan == (caddr_t)&selwait)
+;                       setrun(p);
+;               else if (p->p_flag & P_SELECT)
+;                       p->p_flag &= ~P_SELECT;
+;       }
+;
+; In:  A = the recorded pid, 0 for none.  Y = non-zero for a collision.
+; MX %00, the kernel's direct page, DBR the core bank.  Clobbers A/X/Y.  Masked
+; for its length and restores the caller's mask: a tty reaches it from its
+; receive interrupt.
+;=============================================================================
+_Sel_Wakeup     ENT
+                MX      %00
+                PHP
+                SEI
+                PHA
+                TYA
+                BEQ     @swk_one
+                INC     _selColl
+                LDA     _nSelSleepers
+                BEQ     @swk_one
+                LDA     #WCHAN_SELECT
+                JSR     _wakeup
+@swk_one        PLA
+                BEQ     @swk_out
+                JSR     _Sel_Waiting            ; X, Y for that pid
+                BCC     @swk_flag
+                LDA     #0
+                STA     [_schedTblPtr],Y        ; SE_WaitChan: not waiting
+                LDA     #TASK_READY
+                STA:    TCB_Status,X
+                BRA     @swk_out
+@swk_flag       TYA
+                SEC
+                SBC     #SE_WaitChan
+                CLC
+                ADC     #SE_Flags
+                TAY
+                LDA     [_schedTblPtr],Y
+                AND     #SEF_SELECT_CLR
+                STA     [_schedTblPtr],Y
+@swk_out        PLP
+                RTS
+
+; _Sel_Waiting - `p && p->p_wchan == (caddr_t)&selwait', the test an object
+; makes of its recorded selector before another select takes its place.
+; In:  A = a pid, 0 for none.  Out: C=1 when that process sleeps in select.
+;      X = its task entry, Y = its SE_WaitChan, when A was not 0.
+_Sel_Waiting    ENT
+                MX      %00
+                AND     #$00FF
+                BEQ     @swt_no
+                DEC
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL                             ; (pid-1) * SE_SIZE
+                PHA
+                CLC
+                ADC     #SE_WaitChan
+                TAY
+                PLA
+                ASL                             ; (pid-1) * TCB_SIZE
+                CLC
+                ADC     #FGX_TASK_TBL_OFF
+                TAX
+                LDA:    TCB_Status,X
+                AND     #$00FF
+                CMP     #TASK_BLOCKED
+                BNE     @swt_no
+                LDA     [_schedTblPtr],Y
+                CMP     #WCHAN_SELECT
+                BNE     @swt_no
+                SEC
+                RTS
+@swt_no         CLC
+                RTS
+
+; _Sel_Mark - `u.u_procp->p_flag |= P_SELECT', before select's scan.
+_Sel_Mark       ENT
+                MX      %00
+                JSR     @sm_y
+                LDA     [_schedTblPtr],Y
+                ORA     #SEF_SELECT
+                STA     [_schedTblPtr],Y
+                RTS
+@sm_y           LDA     _curTask
+                AND     #$00FF
+                DEC
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #SE_Flags
+                TAY
+                RTS
+
+; _Sel_Marked - clear P_SELECT and answer whether it was still set: C=0 when a
+; selwakeup cleared it during the scan.
+_Sel_Marked     ENT
+                MX      %00
+                JSR     @sm_y
+                LDA     [_schedTblPtr],Y
+                PHA
+                AND     #SEF_SELECT_CLR
+                STA     [_schedTblPtr],Y
+                PLA
+                AND     #SEF_SELECT
+                CMP     #1
+                RTS
+
+_selColl        DS      2                       ; `nselcoll'
+
+;=============================================================================
 ; _Vm_Loadav - 2.11BSD's load average, every five seconds: vmtotal()'s nrun
 ; and loadav() (sys/vm_sched.c:191, :346).  Upstream's arithmetic is
 ;
@@ -959,8 +1109,8 @@ _lvCexp         DW      235,251,254             ; 256*exp(-1/12), -1/60, -1/180:
                                                 ;   upstream's 0353, 0373, 0376
 
 ;=============================================================================
-; _Timer_WakeExpired - mark every WCHAN_TIMER-blocked task whose SE_WakeTime
-; deadline has passed (32-bit _kSystemTicks >= SE_WakeTime) READY.  A timer-
+; _Timer_WakeExpired - mark every task blocked on WCHAN_TIMER or WCHAN_SELECT
+; whose SE_WakeTime deadline has passed (32-bit _kSystemTicks >= SE_WakeTime) READY.  A timer-
 ; specialized _wakeup: same scan, plus the deadline compare.  Called from swtch
 ; (@sw_save, gated on _nTimerSleepers, so a busy bg task can't starve a sleeper)
 ; and the idle loop (@sw_idle, lone-sleeper case).  Runs under SEI (callers mask
@@ -984,8 +1134,10 @@ _Timer_WakeExpired MX   %00
                 TAY
                 LDA     [_schedTblPtr],Y
                 CMP     #WCHAN_TIMER
+                BEQ     @tw_timed
+                CMP     #WCHAN_SELECT           ; select1's tsleep(&selwait, , timo)
                 BNE     @tw_next
-                ; expired?  32-bit: now (_kSystemTicks) - SE_WakeTime, no borrow.
+@tw_timed       ; expired?  32-bit: now (_kSystemTicks) - SE_WakeTime, no borrow.
                 LDA     _twSeoff
                 CLC
                 ADC     #SE_WakeTime
@@ -1278,9 +1430,10 @@ _twSeoff        DS      2                       ; _Timer_WakeExpired seoff scrat
 _nTimerSleepers DS      2                       ; count of tasks in nanosleep (gates the
                                                 ; per-swtch timer scan; init 0 in
                                                 ; _AllocSchedTbl, ++/-- in _Sys_Nanosleep)
-_nSelSleepers   DS      2                       ; count of tasks in a block-forever
-                                                ; select (gates the per-swtch WCHAN_SELECT
-                                                ; wakes; init 0 in _AllocSchedTbl, ++/-- in
+_klogWakeHead   DS      2                       ; the ring head _Klog_Wake last announced
+_nSelSleepers   DS      2                       ; count of tasks asleep in
+                                                ; select (gates every WCHAN_SELECT
+                                                ; wake; init 0 in _AllocSchedTbl, ++/-- in
                                                 ; _Sys_Select)
 _nsDur          DS      2                       ; _Sys_Nanosleep duration (pre-_sleep only)
 

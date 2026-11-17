@@ -81,6 +81,11 @@ KTTY_LD_EXEC        EQU     KTTY_SLOT0+4*52
 KTTY_LD_TALLOC      EQU     KTTY_SLOT0+4*53
 ; Slot 54: reclaim -> C=1 a bank went back to the pool; preserves Y.
 KTTY_LD_RECLAIM     EQU     KTTY_SLOT0+4*54
+; Slots 64-65: the network drain, src/kernel/tty/net_hooks.s.
+KTTY_NET_SOFT       EQU     KTTY_SLOT0+4*64
+KTTY_NET_HOOK       EQU     KTTY_SLOT0+4*65
+; Slot 66: _KTty_Vhangup -- vhangup(2), no arguments -> C=1, A=0.
+KTTY_VHANGUP        EQU     KTTY_SLOT0+4*66
 ; Slot 55: _KTty_SigHold -- A = a pending signal -> C=1 if it stays pending (a
 ; stop while the running task still holds its parent).  D = the kernel's real
 ; page.  Clobbers A, Y.
@@ -484,6 +489,8 @@ KTTY_KC_TTSELECT    EQU     KTTY_SLOT0+4*32 ; slot 32: kc_ttselect (C) -- A=idx,
 ; not fail -- it would quietly name offset 1 as an export.  That is the same
 ; trap the TTYC_ offsets are named around, one screen down.
 TTYIO_FREAD         EQU     1
+TTYIO_PTC           EQU     $0100   ; with kc_ttioctl's tty index: the
+                                    ;   pty's controller is asking
 TTYIO_FWRITE        EQU     2
 
 ;------------------------------------------------------------------------------

@@ -15,10 +15,14 @@ DESCRIPTION
      runs the DISCOVER/OFFER/REQUEST/ACK exchange (with retransmit
      and backoff), assigns the leased address, netmask, broadcast,
      and gateway, and writes the resolver configuration to
-     /etc/resolv.conf.  With no iface it configures the primary
-     (first) interface.
+     /etc/resolv.conf.  The address is set as ifconfig(8) sets
+     one and the gateway as a default route, as route(8) adds
+     one.  With no iface it configures the first interface with
+     an Ethernet address; one with no address yet is given
+     0.0.0.0 while the exchange runs.
 
-     The lease is remembered in /etc/dhcp.lease; on the next boot
+     The lease is remembered in /etc/dhcp.lease, with the gateway,
+     whose default route the next lease deletes; on the next boot
      dhclient re-requests that same address (INIT-REBOOT) before
      falling back to a fresh DISCOVER.  There is no background renew
      daemon; re-run dhclient to renew.
@@ -43,11 +47,11 @@ DESCRIPTION
 
 FILES
      /etc/resolv.conf    resolver configuration (written)
-     /etc/dhcp.lease     remembered lease address
+     /etc/dhcp.lease     remembered lease address and gateway
      /etc/dhclient.conf  local resolver overrides (read)
 
 SEE ALSO
-     host(1), ifconfig(8), resolv.conf(5)
+     host(1), ifconfig(8), route(8), resolv.conf(5)
 
 BUGS
      Only the first nameserver and a single search domain are

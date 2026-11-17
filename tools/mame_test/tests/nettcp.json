@@ -1,0 +1,18 @@
+{
+ "name": "nettcp",
+ "description": "TCP on the kernel's network stack (net-mux S4): every AF_INET stream socket is a 2.11BSD struct socket that its FCB names.  loopprobe -t runs its cases over lo0 -- 10 KB each way byte-checked, a non-blocking connect (EINPROGRESS, writable, EISCONN), a refused connect, 6 KB written and closed at once all read before end of file, SO_LINGER 0 resetting the peer (ECONNRESET, then EPIPE and SIGPIPE killing a child), a listener shared with a child that exits, one urgent byte through MSG_OOB, and getsockname, getpeername and accept naming the same ends -- and prints TCP OK only when none failed.  A case that blocks forever shows as the frame cap.  The modules load at boot (/etc/rc).",
+ "command": "/testbin/loopprobe -t",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "TCP OK",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "TCP FAIL",
+   "PANIC",
+   "BRK",
+   "bsdnet: BROKEN"
+  ]
+ }
+}

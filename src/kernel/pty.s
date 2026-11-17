@@ -47,6 +47,59 @@ _ptyTable       DS      PTY_NPAIR*PTYR_SIZE
 ; fed `ttyinput' at arrival.
 
 ;------------------------------------------------------------------------------
+; _Ptc_Wakeup - ptcwakeup(tp, flag), for the tty bank's ptsstart and ptsread
+; (2.11BSD tty_pty.c:177-198): the select recorded on the master for that
+; direction, then everything sleeping on the pty channel.
+;
+; In:  A = the line's tty index, Y = PTY_FREAD and/or PTY_FWRITE.  A line that
+;      is no pty slave (not index 1 or 2) has no master: the channel only.
+; MX %00, the kernel's direct page, DBR the core bank.  Clobbers A/X/Y.
+;------------------------------------------------------------------------------
+_Ptc_Wakeup     ENT
+                MX      %00
+                LDX     #0
+                CMP     #1
+                BEQ     @pcw_pair
+                CMP     #2
+                BNE     @pcw_chan
+                LDX     #PTYR_SIZE
+@pcw_pair       TYA
+                PHA                             ; the flag
+                AND     #PTY_FREAD
+                BEQ     @pcw_w
+                LDA     _ptyTable+PTYR_SelR,X
+                BEQ     @pcw_w
+                PHX
+                PHA
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #PTYF_RCOLL
+                TAY
+                STZ     _ptyTable+PTYR_SelR,X
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #$FFFF-PTYF_RCOLL
+                STA     _ptyTable+PTYR_Flags,X
+                PLA
+                JSR     _Sel_Wakeup
+                PLX
+@pcw_w          PLA
+                AND     #PTY_FWRITE
+                BEQ     @pcw_chan
+                LDA     _ptyTable+PTYR_SelW,X
+                BEQ     @pcw_chan
+                PHA
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #PTYF_WCOLL
+                TAY
+                STZ     _ptyTable+PTYR_SelW,X
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #$FFFF-PTYF_WCOLL
+                STA     _ptyTable+PTYR_Flags,X
+                PLA
+                JSR     _Sel_Wakeup
+@pcw_chan       LDA     #WCHAN_PTY
+                JMP     _wakeup
+
+;------------------------------------------------------------------------------
 ; _Pty_Init - boot init: zero ALL pty state (DS regions are not zero in RAM)
 ; and bake the per-pair tty linkage.  Called from FGX_Entry after the tty
 ; table zeroing.  MX %00.

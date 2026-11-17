@@ -48,6 +48,7 @@
 #include "fsparam.h"
 #include "vnode.h"
 #include "mount.h"
+#include "specdev.h"
 #include "namei.h"
 #include "file.h"
 #include "uio.h"
@@ -1476,6 +1477,37 @@ struct file *fp;
     return (fp != (struct file *)0 && fp->f_ops == &vnops);
 }
 
+/* forceclose -- 2.11BSD sys_inode.c:718, vhangup(2)'s half that is the file
+ * table's: every open file on character device `dev' loses FREAD and FWRITE,
+ * so a descriptor some earlier session left open answers EBADF from then on
+ * (fdcheck, above).  Upstream's loop, with its `f_type != DTYPE_INODE' and
+ * `(ip->i_mode & IFMT) != IFCHR' spelled for vnodes.  Far slot 83. */
+extern struct file *file_pool;
+
+int
+forceclose(dev)
+int dev;
+{
+    register struct file *fp;
+    register struct vnode *vp;
+
+    for (fp = file_pool; fp < &file_pool[NFILE]; fp++) {
+        if (fp->f_count == 0)
+            continue;
+        if (!fp_isvn(fp))
+            continue;
+        vp = (struct vnode *)fp->f_data;
+        if (vp == (struct vnode *)0)
+            continue;
+        if (vp->v_type != VCHR)
+            continue;
+        if ((int)vp->v_rdev != dev)
+            continue;
+        fp->f_flag &= ~(FREAD|FWRITE);
+    }
+    return (0);
+}
+
 int
 ld_read(fd, buf, len)
 int   fd;
@@ -2153,28 +2185,38 @@ int           fmode;
  * `_Sys_CopyPathToBuf' before it calls -- and the core-side stub supplies its
  * bank, as slot 71's does for `_fsStatBuf'.
  *
- * `slotp' CARRIES THE DESCRIPTOR SLOT BOTH WAYS: in for a bind, out for a
- * lookup.  It too is core-bank memory, and it is one word because a descriptor
- * index is what a socket's identity reduces to on this side of the seam -- the
- * far bank has no business knowing net.mod's table layout.
- *
- * IT IS STORED AS INDEX+1 so that zero means "no socket here", which a plain
- * index cannot: descriptor 0 is a live descriptor.  That distinction is load
- * bearing, because the name outlives the socket -- close(2) does not unlink it,
- * which is why syslogd unlinks before it binds -- so a VSOCK node with nothing
- * behind it is the ordinary case after a restart and must answer ECONNREFUSED
- * rather than connecting to descriptor 0.
+ * `slotp' CARRIES THE SOCKET BOTH WAYS: in for a bind or an unbind, out for a
+ * lookup.  It too is core-bank memory, and it is one word: the socket's offset
+ * in the network modules' data bank, which is what a socket's identity reduces
+ * to on this side of the seam.  It is never 0, so a node's `v_un' of 0 means
+ * "no socket here", and that distinction is load bearing: the name outlives the
+ * socket -- close(2) does not unlink it, which is why syslogd unlinks before it
+ * binds -- so a VSOCK node with nothing behind it is the ordinary case after a
+ * restart and must answer ECONNREFUSED.
  */
-/* THE VNODE EACH BOUND SOCKET HOLDS -- Reno's per-unpcb `unp_vnode', indexed by
- * descriptor slot because that is what a socket's identity reduces to across the
- * seam.  It lives here and not in net.mod's socket record because only the bank
- * that holds vnodes can name one.
+/* THE VNODE EACH BOUND SOCKET HOLDS -- Reno's per-unpcb `unp_vnode', kept here
+ * by socket because only the bank that holds vnodes can name one.
  *
  * unp_bind KEEPS the reference this remembers, and UNP_OP_UNBIND drops it.  A
  * bind that released the vnode instead left it reclaimable, and getnewvnode
  * zeroes `v_un' on reuse, so the name stopped resolving to its socket once the
  * pool turned over -- with syslogd still alive and still bound. */
-static struct vnode *unp_vnodes[UNP_NVNODE];
+static struct unp_bound {
+    unsigned short ub_so;               /* the socket; 0 = a free entry */
+    struct vnode  *ub_vp;
+} unp_bound[UNP_NVNODE];
+
+static struct unp_bound *
+unp_find(so)
+unsigned short so;
+{
+    register int i;
+
+    for (i = 0; i < UNP_NVNODE; i++)
+        if (unp_bound[i].ub_so == so)
+            return (&unp_bound[i]);
+    return ((struct unp_bound *)0);
+}
 
 int
 unp_nameop(pid, op, path, slotp)
@@ -2186,25 +2228,26 @@ unsigned short *slotp;
     struct nameidata *ndp;
     struct vattr      vattr;
     struct vnode     *vp;
+    struct unp_bound *ub;
     int               error;
-    unsigned short    slot;
+    unsigned short    so;
 
     /* THE ROOT-STATUS GATE GUARDS THE WALKS, and UNBIND does not walk.  It is
-     * tested after the slot is taken and after the UNBIND arm has run, because
+     * tested after the socket is taken and after the UNBIND arm has run, because
      * a close that answered ENXIO would leak the vnode a bind is holding and
-     * leave the node's `v_un' naming a descriptor that is being freed.  Nothing
+     * leave the node's `v_un' naming a socket that is being freed.  Nothing
      * clears root_status once the root is mounted, so this is ordering rather
      * than a live path -- but the ordering is what makes the release
      * unconditional, which is what a close needs. */
 
-    /* THE SLOT IS TAKEN OUT OF `slotp' BEFORE ANYTHING CAN SLEEP.  It points at
-     * a core-bank global that the next task's socket call rewrites, and namei
+    /* THE SOCKET IS TAKEN OUT OF `slotp' BEFORE ANYTHING CAN SLEEP.  It points
+     * at a core-bank global that the next task's socket call rewrites, and namei
      * and VOP_CREATE both sleep, so a second bind arriving mid-walk would leave
-     * this one naming the other's descriptor.  The lookup arm has the mirror of
-     * the same problem and stores its answer LAST, after vput. */
+     * this one naming the other's socket.  The lookup arm has the mirror of the
+     * same problem and stores its answer LAST, after vput. */
     if (op != UNP_OP_LOOKUP) {
-        slot = *slotp;
-        if (slot >= UNP_NVNODE)
+        so = *slotp;
+        if (so == 0)
             return (EINVAL);
     }
 
@@ -2218,11 +2261,13 @@ unsigned short *slotp;
      * VOP_INACTIVE: a task that ran in the middle would otherwise find a
      * half-torn entry naming a vnode already on its way out. */
     if (op == UNP_OP_UNBIND) {
-        vp = unp_vnodes[slot];
-        if (vp == (struct vnode *)0)
+        ub = unp_find(so);
+        if (ub == (struct unp_bound *)0)
             return (0);           /* never bound, or unbound already */
-        unp_vnodes[slot] = (struct vnode *)0;
-        vp->v_un         = (struct specinfo *)0;
+        vp = ub->ub_vp;
+        ub->ub_so = 0;
+        ub->ub_vp = (struct vnode *)0;
+        vp->v_un  = (struct specinfo *)0;
         vrele(vp);
         return (0);
     }
@@ -2245,11 +2290,20 @@ unsigned short *slotp;
     ndp->ni_dvp    = (struct vnode *)0;
 
     if (op == UNP_OP_BIND) {
+        /* AN ENTRY IS TAKEN BEFORE THE WALK, which sleeps, so two binds cannot
+         * both find the same free one.  A bound socket is an open file, so
+         * NFILE entries cannot run out before the file table does. */
+        ub = unp_find((unsigned short)0);
+        if (ub == (struct unp_bound *)0)
+            return (ENFILE);
+        ub->ub_so = so;
         /* unp_bind: "ndp->ni_nameiop = CREATE | FOLLOW | LOCKPARENT". */
         ndp->ni_nameiop = CREATE | FOLLOW | LOCKPARENT;
         error = namei(ndp);
-        if (error)
+        if (error) {
+            ub->ub_so = 0;
             return (error);
+        }
 
         /* THE NAME ALREADY EXISTS -- EADDRINUSE, and upstream's comment marks
          * adopt-and-wakeup as a FIFO-style improvement it did not make.  The
@@ -2263,6 +2317,7 @@ unsigned short *slotp;
             else
                 vput(ndp->ni_dvp);
             vrele(vp);
+            ub->ub_so = 0;
             return (EADDRINUSE);
         }
 
@@ -2277,13 +2332,12 @@ unsigned short *slotp;
         vattr.va_mode = (unsigned short)0777;
         error = VOP_CREATE(ndp, &vattr);
         if (error == 0) {
-            /* `vp->v_socket = unp->unp_socket' upstream.  Here it is the
-             * descriptor slot, in the same union arm and with the same cast
-             * vfs_mountat uses for mountedhere -- the far bank cannot name
-             * net.mod's table. */
+            /* `vp->v_socket = unp->unp_socket' upstream: the socket, in the
+             * same union arm and with the same cast vfs_mountat uses for
+             * mountedhere. */
             vp = ndp->ni_vp;
-            vp->v_un        = (struct specinfo *)(slot + 1);
-            unp_vnodes[slot] = vp;
+            vp->v_un  = (struct specinfo *)(long)so;
+            ub->ub_vp = vp;
             /* VOP_UNLOCK AND NOT vput, WHICH IS WHAT UPSTREAM DOES: unp_bind
              * ends `unp->unp_vnode = vp; VOP_UNLOCK(vp)', keeping the
              * reference for the socket's life.  vput is VOP_UNLOCK plus vrele,
@@ -2298,6 +2352,8 @@ unsigned short *slotp;
              * stands". */
             VOP_UNLOCK(vp);
         }
+        else
+            ub->ub_so = 0;
         /* AND THE PARENT ALWAYS, which is vfs_mkdir's rule: ufs_makeinode reads
          * ni_dvp and never touches its reference or its lock. */
         vput(ndp->ni_dvp);
@@ -2334,10 +2390,10 @@ unsigned short *slotp;
     /* THE ANSWER IS STORED LAST, AFTER vput.  `slotp' is a core-bank global the
      * next task's socket call rewrites, and vput sleeps in VOP_INACTIVE, so a
      * store before it can be overwritten before this call returns -- the caller
-     * would then wire itself to whichever descriptor the other task was naming.
+     * would then wire itself to whichever socket the other task was naming.
      * Nothing sleeps between this store and the caller's read of it. */
-    slot = (unsigned short)((unsigned short)vp->v_un - 1);
+    so = (unsigned short)(long)vp->v_un;
     vput(vp);
-    *slotp = slot;
+    *slotp = so;
     return (0);
 }

@@ -11,8 +11,15 @@
  * the restored parent reaps it and reads all 2048 bytes intact (the
  * ring is KERNEL memory, so pipe data survives the parent's snapshot
  * restore -- exactly what backquote command substitution needs).
+ *
+ * Part 3 (select): a pipe is ready by its ring, as a BSD socket pair is
+ * (a pipe is one there).  Empty: not readable, and a
+ * timed select answers 0.  The write end: writable.  A byte resident:
+ * readable.  Every writer gone: readable, and the read answers EOF.
  */
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/time.h>
 
 int pipe(int *fd);
 int read(int fd, char *buf, int n);
@@ -22,6 +29,7 @@ int fork();
 int waitpid(int pid, int *status, int options);
 void _exit(int code);
 
+int sel_part();
 int g_fds[2];
 int g_st;
 char g_buf[3072];
@@ -68,6 +76,42 @@ int main(int argc, char **argv)
     }
     for (i = 0; i < 2048; i++)
         if (g_buf[i] != (char)(i ^ 0x55)) { printf("FAIL cmp2@%d\n", i); return 1; }
+    if (sel_part())
+        return 1;
     printf("PIPEGROW OK\n");
+    return 0;
+}
+
+static int
+sel1(fd, wr, sec)
+int fd, wr, sec;
+{
+    fd_set m;
+    struct timeval tv;
+
+    FD_ZERO(&m);
+    FD_SET(fd, &m);
+    tv.tv_sec = sec;
+    tv.tv_usec = 0;
+    return (select(fd + 1, wr ? (fd_set *)0 : &m, wr ? &m : (fd_set *)0,
+        (fd_set *)0, &tv));
+}
+
+int
+sel_part()
+{
+    int p[2], r;
+    char c;
+
+    if (pipe(p) != 0) { printf("FAIL pipe3\n"); return 1; }
+    if ((r = sel1(p[0], 0, 1)) != 0) { printf("FAIL sel-empty r=%d\n", r); return 1; }
+    if ((r = sel1(p[1], 1, 1)) != 1) { printf("FAIL sel-writable r=%d\n", r); return 1; }
+    write(p[1], "x", 1);
+    if ((r = sel1(p[0], 0, 1)) != 1) { printf("FAIL sel-data r=%d\n", r); return 1; }
+    read(p[0], &c, 1);
+    close(p[1]);
+    if ((r = sel1(p[0], 0, 1)) != 1) { printf("FAIL sel-eof r=%d\n", r); return 1; }
+    if ((r = read(p[0], &c, 1)) != 0) { printf("FAIL eof r=%d\n", r); return 1; }
+    close(p[0]);
     return 0;
 }

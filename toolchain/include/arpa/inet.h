@@ -4,4 +4,7 @@
 #include <sys/types.h>
 u_long inet_addr(char *cp);       /* dotted-quad -> network-order addr; -1 on error */
 char  *inet_ntoa(struct in_addr in);
+struct in_addr inet_makeaddr(long net, long host); /* 2.11BSD inet_maddr.c */
+u_long inet_network(char *cp);    /* dotted network number; -1 on error */
+u_long inet_lnaof(struct in_addr in); /* the host part, by class */
 #endif

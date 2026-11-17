@@ -95,6 +95,7 @@ ALIASES = [
     ("include/kernel.s", "FGX_DP_KERNELC_IRQ", "CFG_DP_KERNELC_IRQ"),
     ("include/kernel.s", "FGX_STK_KIRQ", "CFG_STK_KIRQ"),
     ("include/kernel.s", "FGX_STK_SWITCH", "CFG_STK_SWITCH"),
+    ("include/kernel.s", "FGX_STK_NET", "CFG_STK_NET"),
     ("include/kernel.s", "FGX_KSLOT_DP", "CFG_KSLOT_DP"),
     ("include/kernel.s", "FGX_KSLOT_COUNT", "CFG_KERNEL_KSLOTS"),
     ("include/kernel.s", "FGX_KSLOT_STK", "CFG_KERNEL_KSTK"),
@@ -146,6 +147,9 @@ PY_MIRRORS = [
     # paint disagree about where it ends.
     ("tools/ninja/genconfig.py", "SWITCH_SIZE", "include/kernel.s",
      "FGX_STK_SWITCH_SIZE"),
+    # netintr's stack: the same, one stack down.
+    ("tools/ninja/genconfig.py", "NET_STK_SIZE", "include/kernel.s",
+     "FGX_STK_NET_SIZE"),
 ]
 
 
@@ -218,7 +222,7 @@ def check_aliases(read):
 
 def check(arena, pages, dp, nproc, sig=None, pid=None, dp_kernelc=None,
           kdp=None, kstk_size=512, kirq=None, switch=None, slots=None,
-          alarm=None):
+          alarm=None, net=None):
     """Return a list of failure strings.  Pure, so the self-test can drive it.
 
     `dp_kernelc` is the single kernel-C direct page below the pid-indexed
@@ -459,6 +463,14 @@ def check(arena, pages, dp, nproc, sig=None, pid=None, dp_kernelc=None,
                     f"would be pushing on a task's stack, which is what it "
                     f"exists not to do.")
 
+    # NETINTR'S STACK fills the room directly below the scheduler's.
+    if net is not None and switch is not None:
+        if net[0] < 0xD000 or net[0] + net[1] != switch[0]:
+            bad.append(
+                f"netintr's stack ${net[0]:04X}..${net[0] + net[1] - 1:04X} does "
+                f"not end at the scheduler's stack ${switch[0]:04X} inside the "
+                f"mapped $D000 bank.")
+
     # THE KERNEL-IMAGE SLOTS.  Their direct pages live in the mapped $D000
     # bank below the scheduler's stack, and a parked image -- the page plus up
     # to a whole stack -- must fit its home stride, NPROC of which fill one
@@ -475,7 +487,8 @@ def check(arena, pages, dp, nproc, sig=None, pid=None, dp_kernelc=None,
                 f"interrupt-time stack ({kstk_size}) or odd; the paint is "
                 f"written two bytes at a time.")
         dp_top = slot_dp + n_slots * 256
-        dp_ceiling = switch[0] if switch is not None else 0xE000
+        dp_ceiling = net[0] if net is not None else (
+            switch[0] if switch is not None else 0xE000)
         if slot_dp < 0xD000 or dp_top > dp_ceiling:
             bad.append(
                 f"the slot direct pages ${slot_dp:04X}..${dp_top - 1:04X} are "
@@ -638,6 +651,15 @@ def _selftest():
                  (6, 1216, 0xDD00, 2048)):
         fails.append("slot pages running into the switch stack were not "
                      "caught")
+    NETSW = dict(switch=(0xDE00, 512), slots=SLOTS)
+    NETARGS = (0x1A00, 165, None, 12, (160, 224, 288), SHIP12, 0xBF00, 0x0900,
+               512, (0xFC80, 0xFD80))
+    if check(*NETARGS, net=(0xDA00, 1024), **NETSW):
+        fails.append("the shipping network stack was reported as broken")
+    if not check(*NETARGS, net=(0xD900, 1024), **NETSW):
+        fails.append("a network stack short of the switch stack was not caught")
+    if not check(*NETARGS, net=(0xD500, 2304), **NETSW):
+        fails.append("slot pages running into the network stack were not caught")
     # A home stride too small for the image, and too many images for a bank.
     if not check(0x1A00, 152, 0xB300, 12, (160, 224, 288), SHIP12, 0xB200,
                  0x0900, 512, (0xFC80, 0xFD80), (0xDE00, 512),
@@ -662,13 +684,14 @@ def _selftest():
         "include/kernel.s": "\n".join(
             f"{n:<20} EQU     {c}" for _, n, c in ALIASES
             if _ == "include/kernel.s")
-        + "\nFGX_KSTK_SIZE   EQU     512\nFGX_STK_SWITCH_SIZE EQU 512",
+        + "\nFGX_KSTK_SIZE   EQU     512\nFGX_STK_SWITCH_SIZE EQU 512"
+        + "\nFGX_STK_NET_SIZE EQU 1024",
         "include/fs.s": "BLK_STAGE       EQU     CFG_BLK_STAGE   ; comment",
         "include/loader.s": "BANK_USER_COUNT EQU     CFG_REST_USER_BANKS ; c",
         "src/boot/stage2.s": "                PUT     ../../include/config.s\n"
         + "\n".join(f"{n:<20} EQU {c}" for _, n, c in ALIASES
                     if _ == "src/boot/stage2.s"),
-        "tools/ninja/genconfig.py": "KSTK_SIZE = 512\nSWITCH_SIZE = 512",
+        "tools/ninja/genconfig.py": "KSTK_SIZE = 512\nSWITCH_SIZE = 512\nNET_STK_SIZE = 1024",
     }
     if check_aliases(lambda rel: REAL[rel]):
         fails.append("correctly aliased sources were reported as literals")
@@ -677,7 +700,7 @@ def _selftest():
     # the top of the per-pid stack block.  256 here does not merely misreport a
     # ceiling: it puts a direct page inside the stacks.
     DRIFTED_PY = dict(REAL)
-    DRIFTED_PY["tools/ninja/genconfig.py"] = "KSTK_SIZE = 256\nSWITCH_SIZE = 512"
+    DRIFTED_PY["tools/ninja/genconfig.py"] = "KSTK_SIZE = 256\nSWITCH_SIZE = 512\nNET_STK_SIZE = 1024"
     if not check_aliases(lambda rel: DRIFTED_PY[rel]):
         fails.append("a genconfig KSTK_SIZE that disagrees with kernel.s was "
                      "not caught -- it would place the IRQ context inside the "
@@ -685,7 +708,7 @@ def _selftest():
     # The same for the switch stack's size: genconfig places the stack by it
     # and main.s paints and swtch resets S by the kernel.s constant.
     DRIFTED_SW = dict(REAL)
-    DRIFTED_SW["tools/ninja/genconfig.py"] = "KSTK_SIZE = 512\nSWITCH_SIZE = 256"
+    DRIFTED_SW["tools/ninja/genconfig.py"] = "KSTK_SIZE = 512\nSWITCH_SIZE = 256\nNET_STK_SIZE = 1024"
     if not check_aliases(lambda rel: DRIFTED_SW[rel]):
         fails.append("a genconfig SWITCH_SIZE that disagrees with kernel.s was "
                      "not caught -- the placed stack and the painted one would "
@@ -750,10 +773,11 @@ def main():
     kirq = (equ(CONFIG_S, "CFG_DP_KERNELC_IRQ"), equ(CONFIG_S, "CFG_STK_KIRQ"))
     switch = (equ(CONFIG_S, "CFG_STK_SWITCH"),
               equ(KERNEL_S, "FGX_STK_SWITCH_SIZE"))
+    net = (equ(CONFIG_S, "CFG_STK_NET"), equ(KERNEL_S, "FGX_STK_NET_SIZE"))
     slots = (equ(CONFIG_S, "CFG_KERNEL_KSLOTS"), equ(CONFIG_S, "CFG_KERNEL_KSTK"),
              equ(CONFIG_S, "CFG_KSLOT_DP"), equ(CONFIG_S, "CFG_KHOME_STRIDE"))
     bad = check(arena, pages, dp, nproc, sig, pid, dp_kernelc, kdp,
-                kstk_size, kirq, switch, slots, alarm=alarm)
+                kstk_size, kirq, switch, slots, alarm=alarm, net=net)
     bad += check_aliases(
         lambda rel: open(os.path.join(ROOT, rel), errors="replace").read())
     if bad:
@@ -769,7 +793,8 @@ def main():
           f"pages at ${slots[2]:04X}, "
           f"IRQ kernel-C DP ${kirq[0]:04X} stack ${kirq[1]:04X}"
           f"..${kirq[1] + kstk_size - 1:04X}, switch stack ${switch[0]:04X}"
-          f"..${switch[0] + switch[1] - 1:04X}")
+          f"..${switch[0] + switch[1] - 1:04X}, network stack ${net[0]:04X}"
+          f"..${net[0] + net[1] - 1:04X}")
     return 0
 
 

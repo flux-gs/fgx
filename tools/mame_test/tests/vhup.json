@@ -1,0 +1,10 @@
+{
+  "name": "vhup",
+  "description": "vhangup(2) REVOKES THE CONTROLLING TERMINAL FROM THE FILES OPEN ON IT, 2.11BSD sys_inode.c vhangup and forceclose.  /testbin/vhup gives up its terminal, opens /dev/ttyp1 (which becomes its controlling terminal) and writes to it -- the positive control -- then calls vhangup.  The descriptor it held must answer EBADF, and a new open of the same slave must write: telnetd's open, vhangup, open.",
+  "command": "/testbin/vhup",
+  "timeout_s": 120,
+  "expect": {
+    "screen_contains": ["VHUP open", "VHUP revoked", "VHUP OK"],
+    "screen_lacks": ["VHUP FAIL", "PANIC", "BRK"]
+  }
+}

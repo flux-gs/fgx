@@ -1,6 +1,7 @@
 /* FGX libc — netdb.h.  Host + service resolution (2.11BSD-shaped). */
 #ifndef _NETDB_H
 #define _NETDB_H
+#include <sys/types.h>
 struct hostent {
     char  *h_name;       /* official name  */
     char **h_aliases;    /* alias list     */
@@ -17,7 +18,20 @@ struct servent {
     char  *s_proto;      /* "tcp"/"udp" */
 };
 
+/* /etc/networks, 2.11BSD netdb.h's struct netent. */
+struct netent {
+    char    *n_name;        /* official name of net */
+    char    **n_aliases;    /* alias list */
+    int     n_addrtype;     /* net address type */
+    u_long  n_net;          /* network # */
+};
+
 struct hostent  *gethostbyname(char *name);
+struct netent   *getnetbyname(char *name);
+struct netent   *getnetbyaddr(long net, int type);
+struct netent   *getnetent(void);
+int             setnetent(int f);
+int             endnetent(void);
 struct hostent  *gethostbyaddr(char *addr, int len, int type);
 struct servent  *getservbyname(char *name, char *proto);
 

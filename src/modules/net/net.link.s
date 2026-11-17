@@ -1,7 +1,7 @@
 *==============================================================================
 *  net.link.s - Merlin32 link file for net.mod (the networking stack module).
 *  Output: a flat binary containing the FGXM header + text (the net_op_table +
-*  the SYS_IFCONFIG / socket / transport ops lifted out of the kernel).
+*  the socket and pipe ops lifted out of the kernel).
 *  Registers a VT_NET vtable on load (mod_init); the kernel dispatches socket
 *  syscalls into it via _Net_Dispatch (src/kernel/net_dispatch.s).
 *==============================================================================

@@ -1360,6 +1360,74 @@ _VfsUnpNameRet  TAY                     ; park the errno; the drop needs A
                 PLB
                 RTL
 
+_Vfs_Forceclose ENT
+                ; far slot 83 -- forceclose(dev) -> 0.  vhangup(2)'s walk of
+                ; the file table (src/kernel/vfs/vfs_syscalls.c).  TWO ARGUMENT
+                ; BYTES, one word at 7,S once PHB and PHD have moved the frame
+                ; down three.
+                MX      %00
+                PHB
+                PHD
+                PHK
+                PLB                     ; DBR = far bank
+                LDA     #FGX_DP_KERNELC
+                TCD
+
+                LDA     7,S
+                PHA
+
+                PHK
+                PEA     _VfsForcecloseRet-1
+                PHK
+                PEA     forceclose-1
+                RTL                     ; pile call into the C
+_VfsForcecloseRet TAY
+                PLA                     ; drop the copy -- the caller cleans
+                TYA
+                PLD
+                PLB
+                RTL
+
+_Vfs_UnpFile    ENT
+                ; far slot 82 -- unp_fileop(pid, ap) -> its op's answer.  A
+                ; descriptor passed over AF_UNIX: 2.11BSD sys/sys_kern.c's
+                ; fadjust, fpfetch, fpflags, unpdisc and unpgc1, with GETF,
+                ; ufavail and the install ufalloc does (src/kernel/vfs/vfs_file.c).
+                ;
+                ; SIX ARGUMENT BYTES -- an int and an fcc pointer -- so THREE
+                ; words from 11,S once PHB and PHD have moved the frame down
+                ; three.  `ap' names the CORE bank's _unpfArgs, its bank supplied
+                ; by the KSVC arm.
+                MX      %00
+                PHB
+                PHD
+                PHK
+                PLB                     ; DBR = far bank
+                LDA     #FGX_DP_KERNELC
+                TCD
+
+                LDA     11,S
+                PHA
+                LDA     11,S
+                PHA
+                LDA     11,S
+                PHA
+
+                PHK
+                PEA     _VfsUnpFileRet-1
+                PHK
+                PEA     unp_fileop-1
+                RTL                     ; pile call into the C
+_VfsUnpFileRet  TAY                     ; park the answer; the drop needs A
+                TSC
+                CLC
+                ADC     #6              ; drop the copy -- the caller cleans
+                TCS
+                TYA
+                PLD
+                PLB
+                RTL
+
 _Vfs_Sysctl     ENT
                 ; far slot 72 -- root_sysctl(pid, uid, blk) -> 0 or errno.
                 ; sysctl(2), apple/fgx#410.
@@ -2291,8 +2359,8 @@ _Vfs_FileInit   ENT
                 ; `Kmalloc' answers on the kernel's real direct page
                 ; (`_kmallocResult', dpmap.s), which D still is until the TCD
                 ; below.  NFILE file structs and NPROC*FS_MAX_FDS descriptor
-                ; words are 5,376 bytes at thirty-two tasks, which no bank
-                ; has as a static; the vnode and namei pools are heap arenas
+                ; words (VFS_FILE_BYTES) are more than any bank has as a
+                ; static; the vnode and namei pools are heap arenas
                 ; already (vfs.mod, VFS_POOL_BYTES).  The pointer is kept in
                 ; this bank for the ofile hand-off below.
                 PLD                     ; the caller's page, for Kmalloc
@@ -2355,7 +2423,7 @@ _VfsFileInitRet TSC
                 MX      %00
                 LDA    |_kFileArenaPtr
                 CLC
-                ADC     #VFS_OFILE_OFF  ; ofile_pool = arena + NFILE*24
+                ADC     #VFS_OFILE_OFF  ; ofile_pool = arena + NFILE*FILE_SIZE
                 LDX    |_kFileArenaPtr+2 ; X.lo = the heap block's bank
                 PLD
                 PLB

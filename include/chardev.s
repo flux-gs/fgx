@@ -20,10 +20,11 @@
 
 ; apple/fgx#330 took this from 16 to 24: the eight raw disk nodes
 ; (/dev/rsd0..rsd7) join eleven already registered, and sixteen slots could not
-; hold them.  The table is a Kmalloc'd soft-global, so the cost is heap rather
+; hold them.  32 since /dev/mem and /dev/kmem took indices 23 and 24
+; (include/devnodes.s).  The table is a Kmalloc'd soft-global, so the cost is heap rather
 ; than kernel bank.  _Chardev_RegisterInternal's slot test carries the number a
 ; SECOND time as a literal; both move together.
-CHARDEV_MAX     EQU     24              ; max registered char devices
+CHARDEV_MAX     EQU     32              ; max registered char devices
 
 ; CDIDX_NDELAY -- WHERE THE IOFLAG RIDES INSIDE THE INDEX BYTE.
 ;
@@ -180,7 +181,7 @@ UIO_USERSPACE   EQU     0               ; uio.h -- the caller's own buffer
 ; long-pointer _cdTablePtr (dpmap.s); allocated by _Chardev_InitBuiltins.  Was a
 ; 384-byte static _chardev_table in memmap.s -- moved to the heap so its address
 ; no longer drifts with kernel layout.
-CDTAB_BLK_SIZE  EQU     CHARDEV_MAX*CD_REC_STRIDE   ; 576
+CDTAB_BLK_SIZE  EQU     CHARDEV_MAX*CD_REC_STRIDE   ; 768
 
 ;------------------------------------------------------------------------------
 ; CharDev_Ops vtable — what a chardev module exports.  Long-pointer

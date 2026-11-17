@@ -12,7 +12,7 @@
 ;   _Sys_ConPutCharImpl  $00:0350 target — JSRs _BootCon_PutChar, RTLs
 ;   _Sys_KernLogImpl     $00:0374 target — JSRs Kern_LogStr, RTLs
 ;   _Sys_PanicImpl       $00:0378 target — emits "PANIC" then halts
-;   _Phase1_StubHalt     shared target for the 15 unwired slots; red border
+;   _Phase1_StubHalt     shared target for the unwired and retired slots; red border
 ;                        + busy-loop on any accidental call
 ;
 ; Architecture: runtime-built table.  See docs/superpowers/plans/2026-05-
@@ -185,7 +185,7 @@ _JT_Targets
                 ; they follow the kernel.  Targets are RTL wrappers in
                 ; net_dispatch.s; the DFB $00 is dead padding (_JT_Init fills the
                 ; cell bank from PHK).
-                DA      _Net_KCall_W5WriteIp    ; slot 27 SYS_NETKC_W5WRITEIP
+                DA      _Phase1_StubHalt        ; slot 27 SYS_NETKC_W5WRITEIP, retired
                 DFB     $00
                 DA      _Net_KCall_FcbAlloc     ; slot 28 SYS_NETKC_FCBALLOC
                 DFB     $00
@@ -556,8 +556,24 @@ _Sys_KCallImpl      MX  %00
                 BRL     @kc_blkstale
 @kc_s58        ANOP
                 CPX     #KSVC_BLKIOCTL
-                BNE     @kc_s59
+                BNE     @kc_s60
                 BRL     @kc_blkioctl
+@kc_s60        ANOP
+                CPX     #KSVC_UNPFILE
+                BNE     @kc_s61
+                BRL     @kc_unpfile
+@kc_s61        ANOP
+                CPX     #KSVC_SLEEPUNR
+                BNE     @kc_s62
+                BRL     @kc_sleepunr
+@kc_s62        ANOP
+                CPX     #KSVC_SELWAKEUP
+                BNE     @kc_s63
+                BRL     @kc_selwakeup
+@kc_s63        ANOP
+                CPX     #KSVC_SELWAITING
+                BNE     @kc_s59
+                BRL     @kc_selwaiting
 @kc_s59        ANOP
                 ; Unknown service.  A module built against a NEWER kernel can
                 ; ask for one that does not exist here; say so instead of
@@ -689,6 +705,16 @@ _Sys_KCallImpl      MX  %00
                 PLB
                 SEC
                 RTL
+
+                ; --- KSVC_SLEEPUNR: A = chan.  Uninterruptible, releasing ---
+                ; The network stack's waits for a resource another process
+                ; frees (m_more's mbufs).  A snapshot fork child asleep there
+                ; must let its parent and siblings run, or none of them can
+                ; free what it waits for (sched.s _sleepUnRel).
+@kc_sleepunr    JSR     _sleepUnRel             ; A = chan; MAY SWITCH TASKS
+                PLB
+                SEC
+                RTL
                 ; ABSOLUTE, NOT THE DIRECT PAGE, and that is apple/fgx#311's
                 ; panic.  `_curTask' became a PER-PAGE IDENTITY when the kernel
                 ; direct page went per-task, and memmap.s says _kCurPid exists
@@ -807,6 +833,16 @@ _kfp993         JSL     KFAR_CON_RENDERALL
                 SEC
                 RTL
 @kc_wakeup      JSR     _wakeup                 ; A = chan
+                PLB
+                SEC
+                RTL
+@kc_selwakeup   JSR     _Sel_Wakeup             ; A = pid, Y = coll
+                PLB
+                SEC
+                RTL
+@kc_selwaiting  JSR     _Sel_Waiting            ; A = pid -> C
+                LDA     #0
+                ROL
                 PLB
                 SEC
                 RTL
@@ -933,6 +969,46 @@ _ktp105         JSL     KTTY_TOD_NOW
                 PLB
                 RTL
 
+                ; --- KSVC_UNPFILE: a descriptor passed over AF_UNIX ---
+                ;
+                ; _unpfArgs holds the op and its arguments, written by the
+                ; network modules' kc_unpfile; one far call does the op
+                ; (unp_fileop, src/kernel/vfs/vfs_file.c) and A is its answer.
+                ;
+                ; THE FD TABLE IS RE-POINTED FIRST: the socket call that led here
+                ; may have slept, and another task's syscall entry moves
+                ; _fd_table_ptr (_Fd_TableOfCur says what that cost once).
+                ; _fcbPtr IS KEPT ACROSS, because the shims the op reaches point
+                ; it at the passed file's FCB, and a close(2) that led here
+                ; through a socket's teardown still has its own in it.
+@kc_unpfile     JSR     _Fd_TableOfCur
+                PEI     _fcbPtr+1               ; bytes 1-2
+                PEI     _fcbPtr                 ; bytes 0-1
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                PHA                             ; ap: pad
+                PHK                             ;     bank
+                REP     #$30
+                MX      %00
+                PEA     _unpfArgs               ;     offset
+                LDA    |_kCurPid
+                PHA                             ; pid
+_kfp1021        JSL     KFAR_VFS_UNPFILE        ; bank byte patched by Far_Init
+                TAY                             ; the answer, across the drop
+                TSC
+                CLC
+                ADC     #6
+                TCS
+                PLA
+                STA     _fcbPtr
+                PLA
+                STA     _fcbPtr+1
+                TYA
+                PLB
+                SEC
+                RTL
+
                 ; --- KSVC_TICKS: -> A = _kSystemTicks, LOW WORD ---
                 ;
                 ; apple/fgx#182.  The counter `_HBTickTask` maintains, read the
@@ -1012,9 +1088,9 @@ _ktp105         JSL     KTTY_TOD_NOW
                 ; and read the table out of fcc's register file.
                 ; --- KSVC_UNPNAME: an AF_UNIX socket's NAME ---
                 ;
-                ; A = the sockaddr's offset in the CALLER's bank.  _unpNameOp says
-                ; bind or lookup; _unpSlot carries the descriptor slot, in for a
-                ; bind and out for a lookup.
+                ; A = the path's offset and Y its bank.  _unpNameOp says bind,
+                ; lookup or unbind; _unpSlot carries the socket, in for a bind or
+                ; an unbind and out for a lookup.
                 ;
                 ; THE PATH IS COPIED FIRST, and the carry off that copy must be
                 ; tested -- _Sys_CopyPathToBuf reports C=1 for a path over
@@ -1050,7 +1126,6 @@ _ktp105         JSL     KTTY_TOD_NOW
                 ; _Sys_PathBlkArg returns through.
                 SEP     #$30
                 MX      %11
-                LDY     _Sys_CallerBank
                 STY     _Sys_PathBank           ; the copy's source bank
                 REP     #$30
                 MX      %00

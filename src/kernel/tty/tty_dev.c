@@ -65,7 +65,7 @@ extern void kc_cdwrite();       /* kc_sys.s -- a RUN of bytes to a chardev */
 /* The pump's two doors onto the core's byte source (T3 stage 4).  Both answer
  * 0..255 for a character and -1 for none -- the carry the core routines really
  * return, folded into a value C can see. */
-extern void kc_ptywake();       /* kc_sys.s -- wake WCHAN_PTY (T4 inc 4)      */
+extern void kc_ptcwakeup();     /* kc_sys.s -- ptcwakeup(tp, flag)            */
 extern void ttyowake();         /* tty.c -- dzstart's low-water wake */
 extern void ttrstrt();          /* tty.c -- the output rail's PERFORM half */
 extern void kc_cdstop_now();    /* kc_sys.s -- d_stop, WITHOUT the rail */
@@ -562,10 +562,10 @@ kc_ttread(idx, uio, flag)
      * with the wake missing.
      *
      * AFTER the read, not before: the point is that the queue has just been
-     * drained.  Coarse on purpose, which is WCHAN_PTY's whole arrangement --
-     * one channel serves every pty waiter and each re-tests on waking. */
+     * drained.  It is upstream's `ptcwakeup(tp, FWRITE)' at the end of ptsread
+     * (tty_pty.c:137), and a line that is no pty slave has no master to wake. */
     c = (*linesw[tp->t_line].l_read)(tp, uio, flag);
-    kc_ptywake();
+    kc_ptcwakeup((int)(tp - ttys), FWRITE);
     return (c);
 }
 
@@ -621,9 +621,7 @@ tty_oproc(tp)
     /* ttyowake IS dzstart's low-water block, already ported (tty.c:738) -- the
      * TS_ASLEEP wake and the selector wake, behind the same
      * `c_cc <= TTLOWAT' test.  Calling it rather than open-coding the same
-     * five lines is not only shorter: it keeps ONE copy of the divergence
-     * ttwakeup records about FGX's selwakeup being a channel rather than a
-     * recorded proc. */
+     * five lines is shorter and keeps one copy of them. */
     ttyowake(tp);
     tp->t_state |= TS_BUSY;
     while (tp->t_outq.c_cc) {
@@ -722,7 +720,7 @@ ptsstart(tp)
 
     if (tp->t_state & TS_TTSTOP)
         return;
-    kc_ptywake();
+    kc_ptcwakeup((int)(tp - ttys), FREAD);
 }
 
 /* kc_ttselect -- the discipline's own readiness answer.  KTTY slot 32.
@@ -758,6 +756,42 @@ kc_ttselect(idx, rw)
     if (tp == (struct tty *)0)
         return (0);
     return (ttyselect(tp, rw));
+}
+
+/* kc_vhangup -- vhangup(2), 2.11BSD sys_inode.c:706.  KTTY slot 66.
+ *
+ *      if (!suser())
+ *              return;
+ *      if (u.u_ttyp == NULL)
+ *              return;
+ *      forceclose(u.u_ttyd);
+ *      if ((u.u_ttyp->t_state) & TS_ISOPEN)
+ *              gsignal(u.u_ttyp->t_pgrp, SIGHUP);
+ *
+ * suser() is asked in the core, before the call.  The controlling terminal is
+ * kept as a line index and not a device number, so forceclose is given every
+ * character device that is that line. */
+extern int kc_forceclose();
+
+int
+kc_vhangup()
+{
+    register struct tty *tp;
+    register int dev;
+    int idx;
+
+    idx = kc_curctty();
+    if (idx < 0)
+        return (0);
+    tp = tty_byidx(idx);
+    if (tp == (struct tty *)0)
+        return (0);
+    for (dev = 0; dev < 32; dev++)      /* CHARDEV_MAX, include/chardev.s */
+        if (kc_cdttyidx(dev) == idx)
+            (void) kc_forceclose(dev);
+    if (tp->t_state & TS_ISOPEN)
+        kc_gsignal(tp->t_pgrp, SIGHUP);
+    return (0);
 }
 
 /* kc_ttstopped -- is this line's output stopped?  KTTY slot 31.
@@ -1582,7 +1616,23 @@ tty_devbind()
  * against `return (0)' two lines later for the handled case.  Keeping it
  * distinct from an errno is what lets a command the discipline does not know
  * fall back to the core's answer instead of being reported as a failure.
+ *
+ * TTYIO_PTC IN THE INDEX IS THE PTY'S CONTROLLER ASKING, and it gets what
+ * `ptyioctl' gives a controller before `ttioctl' (tty_pty.c:476-515):
+ *
+ *      IF CONTROLLER STTY THEN MUST FLUSH TO PREVENT A HANG.
+ *      ttywflush(tp) will hang if there are characters in the outq.
+ *
+ *      case TIOCSETP: case TIOCSETN: case TIOCSETD:
+ *              while (getc(&tp->t_outq) >= 0)
+ *                      ;
+ *              break;
+ *
+ * The controller is the only reader of that queue, so the `ttywait' those
+ * commands reach would wait on the caller itself.
  */
+#define TTYIO_PTC 0x0100        /* include/ktty.s */
+
 int
 kc_ttioctl(idx, com, data, flag)
     int idx;
@@ -1590,11 +1640,24 @@ kc_ttioctl(idx, com, data, flag)
     char *data;
     int flag;
 {
+    int ptc;
+
+    ptc = idx & TTYIO_PTC;
+    idx &= ~TTYIO_PTC;
     if (idx < 0 || idx >= NTTY)
         return (ENOTTY);
     if (tty_bound[idx] == 0)
         return (ENOTTY);
-    return (ttioctl(&ttys[idx], com, data, flag));
+    if (ptc)
+        switch (com) {
+
+        case TIOCSETP:
+        case TIOCSETN:
+        case TIOCSETD:
+            while (getc(&ttys[idx].t_outq) >= 0)
+                ;
+            break;
+        }
     return (ttioctl(&ttys[idx], com, data, flag));
 }
 

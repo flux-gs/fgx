@@ -172,6 +172,7 @@ cfg/*.cfg
 !cfg/system.cfg
 disk/cfg/
 tools/mame_test/cfg/
+tools/mame_test/local/
 tools/mame_test/results.jsonl
 # Ad-hoc debugging manifests.  run.py discovers tests/*.json NON-recursively,
 # so anything here is deliberately outside the suite: keep one-off probes here
@@ -237,6 +238,8 @@ disk_src/etc/build
 # keeps `. /etc/netstart` (boot dhclient), the dev/test image strips it so tests
 # do not pay a boot-time DHCP they do not need.  Edit rc.in, never rc.
 disk_src/etc/rc
+# /netnix: the network stack's name list, written by tools/mknetnix.py.
+disk_src/netnix
 disk_src/etc/version
 # The zone files and /etc/localtime: tools/ninja/tz.sh zones compiles them.
 disk_src/etc/localtime
@@ -331,6 +334,7 @@ src/modules/pty/kernel_exports.s
 src/modules/cda/kernel_exports.s
 src/modules/sscon/kernel_exports.s
 src/modules/klog/kernel_exports.s
+src/modules/mem/kernel_exports.s
 src/kernel/far/kernel_exports.s
 src/kernel/tty/kernel_exports.s
 src/kernel/tty/tty_subr.s

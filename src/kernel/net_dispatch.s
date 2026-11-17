@@ -113,7 +113,7 @@ _Net_Dispatch       ENT
 ; now live in net.mod.  Each checks net.mod is registered (else ENOSYS), then
 ; routes into the module via _Net_Dispatch with the op's NETOP_* offset.  The
 ; ops read their args from _Sys_Saved*/_Sys_CallerBank, so the thunk needn't
-; preserve A/X.  (Phase 1: SYS_IFCONFIG only; socket thunks arrive in Phase 2.)
+; preserve A/X.
 ;==============================================================================
 
 ;==============================================================================
@@ -126,22 +126,13 @@ _Net_Dispatch       ENT
 ; co-located here for the net seam.  (More wrappers arrive with Phases 2-3:
 ; _sleep / _Fcb_* / Fs_* / Con_PollKey etc.)
 ;------------------------------------------------------------------------------
-; _Net_KCall_W5WriteIp - net.mod IFC_SET pushes the slot-1 IP config to the
-; W5100 (_W5_WriteIpFromRec, uthernet.s).  MX %00; reads _ifS1Off/_ifTablePtr.
-;------------------------------------------------------------------------------
-_Net_KCall_W5WriteIp ENT
-                MX      %00
-                JSR     _W5_WriteIpFromRec
-                RTL
-
-;------------------------------------------------------------------------------
 ; Wrappers for the kernel routines net.mod still calls (after Phase 3 moved the
 ; transport in-module, only these remain kernel-side).  Each `JSR <rtn> / RTL`
 ; bridges a module JSL to a JSR/RTS kernel routine.
 ;   _Net_KCall_FcbAlloc / FcbLookup-not-needed / SockFdToDesc - FCB + socket-fd
 ;     resolution (socket() / accept() / the read-write seam).
 ;   _Net_KCall_ConPollKey / _Net_KCall_Sleep - for the now-in-module
-;     _Sock_PollIntr (cooperative block: ^C poll + _sleep on WCHAN_SOCK).
+;     _Sock_PollIntr (cooperative block: ^C poll + _sleep).
 ;------------------------------------------------------------------------------
 _Net_KCall_FcbAlloc ENT
                 MX      %00
@@ -190,14 +181,9 @@ _NetThunkExec   MX      %00
                 RTS
 
 ;------------------------------------------------------------------------------
-; Syscall thunks: dispatch-table entries (#70-78, 84, 85) -> net.mod ops.
+; Syscall thunks: dispatch-table entries (#71-78, 84, 85) -> net.mod ops.
 ; The dispatch-table rows in syscall.s keep these same names, so no table edit.
 ;------------------------------------------------------------------------------
-_Sys_Ifconfig   ENT
-                MX      %00
-                LDY     #NETOP_Ifconfig
-                JSR     _NetThunkExec
-                RTS
 _Sys_Socket     ENT
                 MX      %00
                 LDY     #NETOP_Socket
@@ -256,6 +242,16 @@ _Sys_GetPeerName ENT
 _Sys_GetSockName ENT
                 MX      %00
                 LDY     #NETOP_GetSockName
+                JSR     _NetThunkExec
+                RTS
+_Sys_Sendmsg    ENT
+                MX      %00
+                LDY     #NETOP_Sendmsg
+                JSR     _NetThunkExec
+                RTS
+_Sys_Recvmsg    ENT
+                MX      %00
+                LDY     #NETOP_Recvmsg
                 JSR     _NetThunkExec
                 RTS
 

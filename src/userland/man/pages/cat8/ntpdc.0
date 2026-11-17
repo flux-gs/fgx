@@ -211,6 +211,9 @@ BUGS
      Probably a few.  Report bugs to Louis A. Mamakos
      (louie@trantor.umd.edu).
 
+     Delay, offset and dispersion travel from ntpd as 32-bit
+     milliseconds, so an offset of more than 24.8 days wraps.
+
 
 SEE ALSO
      RFC-???? _N_e_t_w_o_r_k _T_i_m_e _P_r_o_t_o_c_o_l(1), Dave Mills and ...

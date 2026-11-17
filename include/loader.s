@@ -480,17 +480,15 @@ SYS_MM_ALLOC    EQU     68                  ; FGX: large Memory-Manager allocati
 SYS_MM_FREE     EQU     69                  ; FGX: release a SYS_MM_ALLOC block.
                                             ; A.lo = handle bank, X = handle offset
                                             ; (_DisposeHandle).  Returns C=1.
-SYS_IFCONFIG    EQU     70                  ; FGX net: get/set an interface record.
-                                            ; A = ifreq offset, X = op (IFC_*),
-                                            ; caller DBR = ifreq bank.  See
-                                            ; ifconfig_sys.s / include/ifnet.s.
+; 70: retired (net.mod's interface table); answers ENOSYS.  An interface is
+; set through socket ioctls.
 SYS_SOCKET      EQU     71                  ; BSD socket(domain,type,proto): A=domain,
                                             ; X=type, Y=proto -> A=fd.  See socket.s.
 SYS_BIND        EQU     72                  ; bind(fd, sockaddr_in*, len)
 SYS_SENDTO      EQU     73                  ; sendto(fd, argblk*)  [argblk: see socket.s]
-SYS_RECVFROM    EQU     74                  ; recvfrom(fd, argblk*) (non-blocking)
+SYS_RECVFROM    EQU     74                  ; recvfrom(fd, argblk*)  (blocking; MSG_DONTWAIT)
 SYS_SETSOCKOPT  EQU     75                  ; setsockopt(fd, level, optname, val*, len)
-SYS_CONNECT     EQU     76                  ; connect(fd, sockaddr_in*, len)  [TCP]
+SYS_CONNECT     EQU     76                  ; connect(fd, sockaddr*, len)
 SYS_SEND        EQU     77                  ; send(fd, argblk*)  [buf,len,flags]
 SYS_RECV        EQU     78                  ; recv(fd, argblk*)  (blocking; MSG_DONTWAIT)
 SYS_YIELD       EQU     79                  ; yield() — cooperative reschedule (no args)
@@ -516,14 +514,12 @@ SYS_NANOSLEEP   EQU     83                  ; nanosleep(ticks) — block the cal
                                             ;   C=1 + A=0 when the deadline passes;
                                             ;   C=0 + A = EINTR if a signal woke it
                                             ;   first.  A=0 returns immediately.
-SYS_LISTEN      EQU     84                  ; listen(fd, backlog) — TCP server: OPEN the
-                                            ;   bound socket in TCP mode + LISTEN.  A=fd,
-                                            ;   X=backlog (ignored, W5100 single-socket).
+SYS_LISTEN      EQU     84                  ; listen(fd, backlog): A=fd, X=backlog.
                                             ;   C=1 + A=0 ok; C=0 + A=errno.
 SYS_ACCEPT      EQU     85                  ; accept(fd) — block until a peer connects;
-                                            ;   A=listen fd.  C=1 + A = new connection fd
-                                            ;   (the listener's hw socket; listenfd is
-                                            ;   detached); C=0 + A=errno (EINTR on ^C).
+                                            ;   A=listen fd.  C=1 + A = new connection fd,
+                                            ;   the listener still listening; C=0 + A=errno
+                                            ;   (EINTR on ^C).
 SYS_SOUND_CLAIM EQU     86                  ; sound_claim() — caller claims the DOC, so the
                                             ;   kernel runs Sound_StopDoc when the caller
                                             ;   TERMINATES (audio stops on kill, keeps
@@ -543,11 +539,10 @@ SYS_SYNC        EQU     98                  ; train-3 F4: sync() — commit ever
 SYS_SELECT      EQU     99                  ; select(nfds,rd,wr,ex,timeout) via a
                                             ; libc-marshalled argblk (A.lo=off).
                                             ; C=1+A=ready count / C=0+A=errno.
-SYS_SHUTDOWN    EQU     100                 ; shutdown(fd, how): A=fd, X=how.  TCP
-                                            ; half-close — SHUT_WR/RDWR send FIN
-                                            ; (CR_DISCON, socket stays FIN_WAIT so
-                                            ; recv still drains); SHUT_RD = no-op.
-                                            ; C=1 ok / C=0+A=EBADF/ENOTSOCK.
+SYS_SHUTDOWN    EQU     100                 ; shutdown(fd, how): A=fd, X=how, as
+                                            ; 2.11BSD's soshutdown: 0 stops receiving,
+                                            ; 1 sending (a FIN on TCP), 2 both.
+                                            ; C=1 ok / C=0+A=errno.
 SYS_SIGSETMASK  EQU     102                 ; sigsetmask(mask): A=lo16, X=hi16 of
                                             ; the 32-bit BSD signal mask (bit s-1
                                             ; blocks signal s -- the sigmask()
@@ -606,18 +601,15 @@ SYS_SIGPAUSE    EQU     107                 ; sigpause(mask): A=lo16, X=hi16.
                                             ;   Installs the mask, sleeps until
                                             ;   a signal is actionable, and
                                             ;   always returns C=0 + A=EINTR.
-SYS_GETPEERNAME EQU     108                 ; getpeername(fd, sockaddr_in*): X=fd,
-                                            ;   A=sockaddr offset (caller bank).
-                                            ;   Writes a full SIN_SIZE record --
-                                            ;   the 3-arg BSD form's namelen is
-                                            ;   libc's business, not the kernel's,
-                                            ;   which keeps this to the two
-                                            ;   registers SYS_CONNECT already uses.
-                                            ;   C=0+A=ENOTCONN unless ESTABLISHED.
-SYS_GETSOCKNAME EQU     109                 ; getsockname(fd, sockaddr_in*): same
-                                            ;   shape.  An UNBOUND socket answers
-                                            ;   0.0.0.0:0 with C=1, as BSD does --
-                                            ;   "no name yet" is not an error.
+SYS_GETPEERNAME EQU     108                 ; getpeername(fd, name*, len): X=fd,
+                                            ;   A=name offset (caller bank), Y=the
+                                            ;   buffer's length.  Copies min(len,
+                                            ;   the name's length) bytes and
+                                            ;   returns that count in A, C=1.
+                                            ;   C=0+A=ENOTCONN when unconnected.
+SYS_GETSOCKNAME EQU     109                 ; getsockname(fd, name*, len): same
+                                            ;   shape.  An UNBOUND socket is not
+                                            ;   an error, as in BSD.
 SYS_MODLOAD     EQU     110                 ; FGX-specific: stream a module into
 SYS_LSTAT       EQU     111                 ; lstat(path,buf): A=path X=stat_buf(own-bank) -> C=1 ok; C=0+A=errno.
                                             ;   stat(2) that does not FOLLOW a final symlink -- the only difference,
@@ -853,19 +845,35 @@ SYS_FCHMOD      EQU     130                 ; fchmod(fd, mode): A = fd, X =
                                             ; 4.3BSD-Reno vfs_syscalls.c.
                                             ; 2.11BSD's number is 124.
 
-SYS_NUM_MAX     EQU     SYS_FCHMOD          ; highest implemented (130)
+SYS_SENDMSG     EQU     131                 ; sendmsg(s, msg, flags): A = msg
+                                            ; offset (caller bank), X = s, Y =
+                                            ; flags.  C=1 + A = bytes sent; C=0
+                                            ; + A = errno.  2.11BSD
+                                            ; uipc_syscalls.c; its number is 28.
+SYS_RECVMSG     EQU     132                 ; recvmsg(s, msg, flags), as
+                                            ; sendmsg; msg_namelen and
+                                            ; msg_accrightslen are written back.
+                                            ; 2.11BSD's number is 27.
+
+SYS_VHANGUP     EQU     133                 ; vhangup(): revoke the caller's
+                                            ; controlling terminal from every
+                                            ; open file on it and hang up its
+                                            ; process group.  Super-user only.
+                                            ; C=1 + A = 0; C=0 + A = EPERM.
+                                            ; 2.11BSD sys_inode.c; number 76.
+
+SYS_NUM_MAX     EQU     SYS_VHANGUP         ; highest implemented (133)
 
 ; fcntl(2)'s commands (Reno sys/fcntl.h:26-40), the flags it touches -- FNDELAY
-; (Reno's O_NONBLOCK, src/kernel/vfs/file.h), FCNTLCANT (Reno sys/file.h:70
-; less the unix-domain gc marks FGX has no collector for: the access mode and
-; the flock(2) lock bits) and
+; (Reno's O_NONBLOCK, src/kernel/vfs/file.h), FCNTLCANT (Reno sys/file.h:70:
+; the access mode, the unix-domain gc marks and the flock(2) lock bits) and
 ; UF_EXCLOSE (Reno sys/user.h:83) -- and the two close-on-exec ioctls
 ; (FreeBSD's _IO('f', 1) and _IO('f', 2) low 16, as toolchain/include/
 ; sys/ioctl.h has them).
 F_SETFD         EQU     2
 F_SETFL         EQU     4
 FNDELAY         EQU     $0004
-FCNTLCANT       EQU     $0183               ; FREAD|FWRITE|FSHLOCK|FEXLOCK
+FCNTLCANT       EQU     $01B3               ; FREAD|FWRITE|FMARK|FDEFER|FSHLOCK|FEXLOCK
 UF_EXCLOSE      EQU     $01
 FIOCLEX         EQU     $6601
 FIONCLEX        EQU     $6602

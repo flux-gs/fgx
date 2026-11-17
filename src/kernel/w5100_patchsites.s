@@ -9,7 +9,7 @@
 ; (self-mod; bank from PHK/_DBRK -- reloc-correct, never a baked $05).
 ; Slot 1 -> low == baked $94/$95/$96/$97 = no-op.
 ;
-; Counts: 6 MR, 15 ARH, 15 ARL, 15 DAT (51 total).
+; Counts: 6 MR, 10 ARH, 10 ARL, 10 DAT (36 total).
 ;
 ; Offsets are RELATIVE TO _w5SiteBase, the first site in the listing, so a
 ; change to the kernel's size elsewhere leaves this file byte-identical
@@ -24,98 +24,68 @@ _w5PatchTbl     ENT
                 DFB 0           ; MR
                 DA  _w5SiteBase+$0014
                 DFB 0           ; MR
-                DA  _w5SiteBase+$0121
+                DA  _w5SiteBase+$00F1
                 DFB 1           ; ARH
-                DA  _w5SiteBase+$0127
+                DA  _w5SiteBase+$00F7
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$012D
+                DA  _w5SiteBase+$00FD
                 DFB 3           ; DAT
-                DA  _w5SiteBase+$0133
+                DA  _w5SiteBase+$0103
                 DFB 1           ; ARH
-                DA  _w5SiteBase+$0139
+                DA  _w5SiteBase+$0109
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$013F
+                DA  _w5SiteBase+$010F
                 DFB 3           ; DAT
-                DA  _w5SiteBase+$0145
+                DA  _w5SiteBase+$0115
                 DFB 1           ; ARH
-                DA  _w5SiteBase+$014B
+                DA  _w5SiteBase+$011B
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$0154
+                DA  _w5SiteBase+$0124
                 DFB 3           ; DAT
-                DA  _w5SiteBase+$0173
+                DA  _w5SiteBase+$0143
                 DFB 1           ; ARH
-                DA  _w5SiteBase+$0179
+                DA  _w5SiteBase+$0149
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$017D
+                DA  _w5SiteBase+$014D
                 DFB 3           ; DAT
-                DA  _w5SiteBase+$0199
+                DA  _w5SiteBase+$0164
                 DFB 1           ; ARH
-                DA  _w5SiteBase+$019F
+                DA  _w5SiteBase+$016A
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$01A6
+                DA  _w5SiteBase+$0171
                 DFB 3           ; DAT
+                DA  _w5SiteBase+$0178
+                DFB 1           ; ARH
+                DA  _w5SiteBase+$017E
+                DFB 2           ; ARL
+                DA  _w5SiteBase+$0182
+                DFB 3           ; DAT
+                DA  _w5SiteBase+$01A7
+                DFB 1           ; ARH
                 DA  _w5SiteBase+$01AD
-                DFB 1           ; ARH
+                DFB 2           ; ARL
                 DA  _w5SiteBase+$01B3
-                DFB 2           ; ARL
-                DA  _w5SiteBase+$01B7
                 DFB 3           ; DAT
-                DA  _w5SiteBase+$01D9
+                DA  _w5SiteBase+$01B8
                 DFB 1           ; ARH
-                DA  _w5SiteBase+$01DF
+                DA  _w5SiteBase+$01BE
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$01E5
+                DA  _w5SiteBase+$01C4
                 DFB 3           ; DAT
-                DA  _w5SiteBase+$01EA
-                DFB 1           ; ARH
-                DA  _w5SiteBase+$01F0
-                DFB 2           ; ARL
-                DA  _w5SiteBase+$01F6
-                DFB 3           ; DAT
-                DA  _w5SiteBase+$021D
+                DA  _w5SiteBase+$01EB
                 DFB 0           ; MR
+                DA  _w5SiteBase+$01F1
+                DFB 0           ; MR
+                DA  _w5SiteBase+$021B
+                DFB 1           ; ARH
                 DA  _w5SiteBase+$0223
-                DFB 0           ; MR
-                DA  _w5SiteBase+$0253
-                DFB 1           ; ARH
-                DA  _w5SiteBase+$025B
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$0263
+                DA  _w5SiteBase+$022B
                 DFB 3           ; DAT
-                DA  _w5SiteBase+$0298
+                DA  _w5SiteBase+$0245
                 DFB 1           ; ARH
-                DA  _w5SiteBase+$029E
+                DA  _w5SiteBase+$024B
                 DFB 2           ; ARL
-                DA  _w5SiteBase+$02AD
-                DFB 3           ; DAT
-                DA  _w5SiteBase+$02CE
-                DFB 1           ; ARH
-                DA  _w5SiteBase+$02D4
-                DFB 2           ; ARL
-                DA  _w5SiteBase+$02DA
-                DFB 3           ; DAT
-                DA  _w5SiteBase+$02E5
-                DFB 1           ; ARH
-                DA  _w5SiteBase+$02EB
-                DFB 2           ; ARL
-                DA  _w5SiteBase+$02FA
-                DFB 3           ; DAT
-                DA  _w5SiteBase+$0304
-                DFB 1           ; ARH
-                DA  _w5SiteBase+$030A
-                DFB 2           ; ARL
-                DA  _w5SiteBase+$0319
-                DFB 3           ; DAT
-                DA  _w5SiteBase+$0323
-                DFB 1           ; ARH
-                DA  _w5SiteBase+$0329
-                DFB 2           ; ARL
-                DA  _w5SiteBase+$0338
-                DFB 3           ; DAT
-                DA  _w5SiteBase+$034D
-                DFB 1           ; ARH
-                DA  _w5SiteBase+$0353
-                DFB 2           ; ARL
-                DA  _w5SiteBase+$035A
+                DA  _w5SiteBase+$0254
                 DFB 3           ; DAT
                 DA  $FFFF        ; sentinel (no DFB)

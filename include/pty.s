@@ -37,6 +37,9 @@ PTYR_Send       DS      2               ; `pt_send': the TIOCPKT_* status bits
                                         ; for a u_char, because everything in
                                         ; this record is one and the arms that
                                         ; OR into it are 16-bit.
+PTYR_SelR       DS      2               ; `pt_selr' and `pt_selw': the pid of
+PTYR_SelW       DS      2               ; the select waiting to read or write
+                                        ; the master, 0 for none
 PTYR_SIZE       EQU     *
                 DEND
 
@@ -52,6 +55,8 @@ PTY_FWRITE      EQU     2
 PTYF_MOPEN      EQU     $0001           ; master side open (exclusive)
 PTYF_SOPEN      EQU     $0002           ; >=1 slave fd open
 PTYF_PKT        EQU     $0004           ; TIOCPKT packet mode (master reads)
+PTYF_RCOLL      EQU     $0010           ; `PF_RCOLL' and `PF_WCOLL': a second
+PTYF_WCOLL      EQU     $0020           ; select found the slot taken
 PTYF_STOPPED    EQU     $0008           ; `PF_STOPPED' (tty_pty.c:53): output
                                         ; is stopped and the master has been
                                         ; told, so the restart owes it a

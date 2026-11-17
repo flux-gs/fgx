@@ -526,8 +526,8 @@ _Pty_PairFromMinor
 
 
 ;------------------------------------------------------------------------------
-; _Pty_Wake - broadcast WCHAN_PTY + nudge select sleepers (mirrors the
-; kbd/sock wake convention: only when someone is select-blocked).
+; _Pty_Wake - wake WCHAN_PTY, the channel every pty waiter sleeps on.  A
+; select on the master is _Pty_SelWake's.
 ;------------------------------------------------------------------------------
 _Pty_Wake       MX      %00
                 PHA
@@ -535,13 +535,108 @@ _Pty_Wake       MX      %00
                 PHY
                 LDA     #WCHAN_PTY
                 JSR     _PtyKC_Wakeup
-                LDA     _nSelSleepers
-                BEQ     @pw_nosel
-                LDA     #WCHAN_SELECT
-                JSR     _PtyKC_Wakeup
-@pw_nosel       PLY
+                PLY
                 PLX
                 PLA
+                RTS
+
+;------------------------------------------------------------------------------
+; _Pty_SelWake - ptcwakeup's selectors, both directions (2.11BSD
+; tty_pty.c:182-197):
+;
+;       if (pti->pt_selr) {
+;               selwakeup(pti->pt_selr, (long)(pti->pt_flags & PF_RCOLL));
+;               pti->pt_selr = 0;
+;               pti->pt_flags &= ~PF_RCOLL;
+;       }
+;
+; and the same for pt_selw.  In: X = the pair.  Preserves A/X/Y.
+;------------------------------------------------------------------------------
+_Pty_SelWake    MX      %00
+                PHA
+                PHX
+                PHY
+                LDA     _ptyTable+PTYR_SelR,X
+                BEQ     @pw_w
+                PHA
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #PTYF_RCOLL
+                TAY
+                STZ     _ptyTable+PTYR_SelR,X
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #$FFFF-PTYF_RCOLL
+                STA     _ptyTable+PTYR_Flags,X
+                PLA
+                LDX     #KSVC_SELWAKEUP
+                JSL     SYS_KCALL
+                LDA     3,S
+                TAX
+@pw_w           LDA     _ptyTable+PTYR_SelW,X
+                BEQ     @pw_out
+                PHA
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #PTYF_WCOLL
+                TAY
+                STZ     _ptyTable+PTYR_SelW,X
+                LDA     _ptyTable+PTYR_Flags,X
+                AND     #$FFFF-PTYF_WCOLL
+                STA     _ptyTable+PTYR_Flags,X
+                PLA
+                LDX     #KSVC_SELWAKEUP
+                JSL     SYS_KCALL
+@pw_out         PLY
+                PLX
+                PLA
+                RTS
+
+;------------------------------------------------------------------------------
+; _PtyM_SelR / _PtyM_SelW - a select found the master not ready that way and
+; leaves its mark, as ptcselect does (2.11BSD tty_pty.c:351-354, :369-372):
+;
+;       if ((p = pti->pt_selr) && p->p_wchan == (caddr_t)&selwait)
+;               pti->pt_flags |= PF_RCOLL;
+;       else
+;               pti->pt_selr = u.u_procp;
+;
+; In: X = the pair.  Preserves X.  Clobbers A/Y.
+;------------------------------------------------------------------------------
+_PtyM_SelR      MX      %00
+                PHX
+                LDA     _ptyTable+PTYR_SelR,X
+                LDX     #KSVC_SELWAITING
+                JSL     SYS_KCALL               ; A = 1: it sleeps in select
+                PLX
+                CMP     #0
+                BEQ     @ps_take
+                LDA     _ptyTable+PTYR_Flags,X
+                ORA     #PTYF_RCOLL
+                STA     _ptyTable+PTYR_Flags,X
+                RTS
+@ps_take        PHX
+                LDX     #KSVC_CURPID
+                JSL     SYS_KCALL
+                PLX
+                AND     #$00FF
+                STA     _ptyTable+PTYR_SelR,X
+                RTS
+_PtyM_SelW      MX      %00
+                PHX
+                LDA     _ptyTable+PTYR_SelW,X
+                LDX     #KSVC_SELWAITING
+                JSL     SYS_KCALL               ; A = 1: it sleeps in select
+                PLX
+                CMP     #0
+                BEQ     @pw_take
+                LDA     _ptyTable+PTYR_Flags,X
+                ORA     #PTYF_WCOLL
+                STA     _ptyTable+PTYR_Flags,X
+                RTS
+@pw_take        PHX
+                LDX     #KSVC_CURPID
+                JSL     SYS_KCALL
+                PLX
+                AND     #$00FF
+                STA     _ptyTable+PTYR_SelW,X
                 RTS
 
 ; scratch (kernel-bank; only used within single ops — no cross-sleep state)
@@ -1307,7 +1402,7 @@ _PtyM_Poll      MX      %00
                 BNE     @mp_rd                  ; data -> readable
                 LDA     _ptyTable+PTYR_Flags,X
                 AND     #PTYF_SOPEN
-                BNE     @mp_ckwr                ; no data, slave open -> not rd
+                BNE     @mp_selr                ; no data, slave open -> not rd
 @mp_rd          LDA     _ptyTmpB2
                 ORA     #POLLIN                 ; data or hangup-EOF readable
                 STA     _ptyTmpB2
@@ -1329,13 +1424,17 @@ _PtyM_Poll      MX      %00
                 JSL     SYS_KCALL               ; A = 1 writable / 0 not
                 PLX
                 CMP     #0
-                BEQ     @mp_done
+                BEQ     @mp_selw
                 LDA     _ptyTmpB2
                 ORA     #POLLOUT
                 STA     _ptyTmpB2
 @mp_done        LDA     _ptyTmpB2
                 SEC
                 RTL
+@mp_selr        JSR     _PtyM_SelR
+                BRA     @mp_ckwr
+@mp_selw        JSR     _PtyM_SelW
+                BRA     @mp_done
 
 ;==============================================================================
 ; SLAVE ops (ttypN).  Reads/sgtty-ioctls never reach these (routed in
@@ -1461,6 +1560,7 @@ _PtyS_Close     MX      %00
                 STA     _ptyTable+PTYR_Flags,X
                 JSR     _Pty_MaybeReset
                 JSR     _Pty_Wake               ; master read sees EOF after drain
+                JSR     _Pty_SelWake            ; `ptcwakeup(tp, FREAD|FWRITE)'
                 SEC
                 RTL
 
@@ -1861,6 +1961,7 @@ _PtyS_Stop      MX      %00
                 AND     #TIOCPKT_FLUSHREAD+TIOCPKT_FLUSHWRITE
                 BEQ     @ss_done                ; a plain stop wakes nobody
                 JSR     _Pty_Wake
+                JSR     _Pty_SelWake            ; `ptcwakeup(tp, flag)'
 @ss_done        SEC
                 RTL
 
@@ -1939,7 +2040,7 @@ _Pty_SetNB      MX      %00
 ; first).  `kc_ttstopped' carries that bit across.  `pt_send' has no consumer
 ; but this driver -- `ptcread' delivers it and `ptcselect' asks whether it is
 ; set -- so evaluating it at the ask rather than at the event is not observable
-; anywhere, and the WAKE still happens eagerly: `ptsstart' calls `kc_ptywake',
+; anywhere, and the WAKE still happens eagerly: `ptsstart' calls `kc_ptcwakeup',
 ; so a master parked in read(2) is woken by the restart exactly as upstream's
 ; `ptcwakeup(tp, FREAD)' wakes it, and finds the byte when it re-tests.
 ;

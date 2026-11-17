@@ -175,21 +175,20 @@ typedef long            off_t;
  *   pinned per process is whatever it opened for itself, so the floor is 3 + 32
  *   = 35.
  *
- * Both land near 40, and 64 is that plus a working set -- the same margin
- * VNODE_POOL carries, and the two are equal for a reason worth stating: two
- * independent open(2)s of one path are TWO file structs and ONE vnode, so
- * files can exceed vnodes; but dup and fork share a file struct outright, so
- * they can also fall well below.  The measured machine had 65 files against 78
- * inodes in use, which is the second effect winning.  Equal sizing is the
- * honest answer to a ratio that moves in both directions, and exhaustion is a
- * documented degraded mode -- falloc returns ENFILE -- not a wedge.
+ * Both land near 40 for FILES.  A socket is a file too, and takes no vnode:
+ * an idle TCP connection is two file structs and eight mbufs, so the 280 mbufs
+ * (bsdnet sys/mbuf.h) hold about 33 connections and 66 files.  128 lets the
+ * mbuf pool run out first, so a machine full of sockets answers ENOBUFS, as
+ * 2.11BSD's does, with room left to open files; VNODE_POOL stays sized for
+ * files alone.  Exhaustion is a documented degraded mode -- falloc returns
+ * ENFILE -- not a wedge (loopprobe -m, tcpmany).
  *
  * FS_MAX_FDS is the per-process descriptor limit and is NOT this: 32 processes
- * at 30 descriptors is 960 possible descriptors served by 64 file structs, the
- * same over-subscription 2.11BSD runs (3660 served by 160).  The table and the
+ * at 30 descriptors is 960 possible descriptors served by 128 file structs,
+ * the over-subscription 2.11BSD runs (3660 served by 160).  The table and the
  * per-process descriptor arrays are one heap arena (VFS_FILE_BYTES), so the
  * size costs no bank. */
-#define NFILE           64
+#define NFILE           128
 
 /* Mount-point name length.  Reno's MNAMELEN is 90 and statfs carries TWO of
  * them plus nine spare longs -- 216 bytes of a 250-byte struct mount, times 14

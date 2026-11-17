@@ -75,7 +75,7 @@ _w5SiteBase     STAL    U2_MR
                 REP     #$20
                 MX      %00
                 ; Patch the slot digit in @u2_okMsg ('uthernet2: W5100 @ slot X MR=$')
-                ; and in @rpMsg ('net: u2sX mac=') with the actual detected slot.
+                ; with the actual detected slot (_Net_RegPrimary patches its own).
                 ; DBR=kernel-bank; strings live in writable kernel-bank RAM.
                 ; Digit offset in @u2_okMsg: 24 ('uthernet2: W5100 @ slot ' = 24 chars).
                 LDA     |_u2Slot
@@ -97,16 +97,16 @@ _w5SiteBase     STAL    U2_MR
                 REP     #$20
                 MX      %00
                 JSR     Kern_LogEOL
-                ; --- register the primary interface (u2s1) + derive its MAC,
-                ;     then log it.  Out-of-line so _ProbeUthernet2 stays short
-                ;     (keeps the @u2_absent branches in range). ---
+                ; --- derive the card's MAC, apply /etc/hwaddr.conf, log it.
+                ;     Out-of-line so _ProbeUthernet2 stays short (keeps the
+                ;     @u2_absent branches in range). ---
                 JSR     _Net_RegPrimary
                 ; NOTE: _Net_BringUp below registers the W5100 ISR + arms IMR
                 ; (_ArmUthernet2), but does NOT open/MACRAW any socket — socket 0
                 ; stays CLOSED, so no IRQ fires at boot.  The firehose risk is
                 ; from MACRAW-promiscuous on an OPEN socket (netdump's job, on
                 ; /dev/bpf0 open), not from registering the ISR or arming IMR
-                ; over a closed socket.  Foreground UDP bus sequences mask the
+                ; over a closed socket.  Foreground bus sequences mask the
                 ; W5100 IRQ via U2_LOCK so an IRQ mid-sequence can't corrupt the
                 ; shared indirect AR.
                 JSR     _Net_BringUp            ; polled W5100 reset/mode + SHAR;
@@ -137,93 +137,63 @@ _w5SiteBase     STAL    U2_MR
                 RTS
 @u2_okMsg       ASC     'uthernet2: W5100 @ slot 1 MR=$',00
 _u2_mr          DS      2
-_ifS1Off        DS      2               ; slot-1 ifnet record byte-offset (set by
-                                        ; _Ifnet_Register; used for SHAR write +
-                                        ; the DHCP-result writeback, T6)
 _w5SockInUse    DS      1               ; W5100 hw-socket allocator bitmap: bits
                                         ; 0..3 = sockets 0..3 (1 = in use).  Shared
                                         ; by the socket core (socket()) + the
                                         ; /dev/bpf0 capture driver.  Zero from the
                                         ; loaded kernel image (inline DS), like
-                                        ; _u2_mr / _ifS1Off.
-_tcpNextPort    DS      2               ; TCP: next ephemeral local port (host order)
+                                        ; _u2_mr.
 
 ;------------------------------------------------------------------------------
-; _Net_RegPrimary - register the primary interface (u2sN, N = detected slot) in
-; the ifnet table, derive its MAC, cache the record offset in _ifS1Off, and log
-; "net: u2sN mac=aa:bb:cc:dd:ee:ff" (read from the record, so override-aware).
-; MX %00 in/out (PHP/PLP).  Called from _ProbeUthernet2 on detect.
+; _Net_RegPrimary - derive the card's Ethernet address from its slot, apply
+; /etc/hwaddr.conf, and log "net: slot N mac=aa:bb:cc:dd:ee:ff" (after the
+; override, so the line is the address the chip gets).  MX %00 in/out (PHP/PLP).
+; Called from _ProbeUthernet2 on detect.
 ;------------------------------------------------------------------------------
 _Net_RegPrimary MX      %00
                 PHP
                 REP     #$30
                 MX      %00
-                LDA     |_u2Slot                ; detected slot (was: LDA #1)
+                LDA     |_u2Slot                ; the detected slot
                 AND     #$00FF
-                JSR     _Ifnet_Register         ; -> X = record offset
-                STX     _ifS1Off
-                JSR     _Ifnet_LoadHwaddr       ; /etc/hwaddr.conf override (if any)
-                ; Patch the slot digit in @rpMsg ('net: u2sX mac=').
-                ; Digit offset: 8 ('net: u2s' = 8 chars).
-                LDA     |_u2Slot
+                JSR     _Net_DeriveMac
+                JSR     _Net_LoadHwaddr         ; /etc/hwaddr.conf override (if any)
+                LDA     |_u2Slot                ; the slot digit in @rpMsg
                 AND     #$00FF
                 CLC
-                ADC     #$30                    ; slot -> ASCII digit
+                ADC     #$30
                 SEP     #$20
                 MX      %10
-                STA     |@rpMsg+8               ; patch 'u2sX' digit in MAC log msg
+                STA     |@rpMsg+10              ; 'net: slot ' is 10 characters
                 REP     #$20
                 MX      %00
                 LDA     #@rpMsg
                 STA     _conStrPtr
                 JSR     Kern_LogStrNoEOL
-                LDA     _ifS1Off
-                AND     #$00FF
-                CLC
-                ADC     #IF_Mac                 ; Y = record MAC offset (clean, M16)
-                TAY
-                SEP     #$20
+                LDX     #0
+@rp_l           PHX                             ; Kern_LogHex8 and _nbMacColon
+                SEP     #$20                    ;   clobber X
                 MX      %10
-                ; Kern_LogHex8 / _nbMacColon clobber Y, so PHY/PLY around them
-                ; (the record is index-read, unlike the chip auto-inc MAC log).
-                LDA     [_ifTablePtr],Y         ; MAC[0]
-                PHY
-                JSR     Kern_LogHex8
-                JSR     _nbMacColon
-                PLY
-                INY
-                LDA     [_ifTablePtr],Y         ; MAC[1]
-                PHY
-                JSR     Kern_LogHex8
-                JSR     _nbMacColon
-                PLY
-                INY
-                LDA     [_ifTablePtr],Y         ; MAC[2]
-                PHY
-                JSR     Kern_LogHex8
-                JSR     _nbMacColon
-                PLY
-                INY
-                LDA     [_ifTablePtr],Y         ; MAC[3]
-                PHY
-                JSR     Kern_LogHex8
-                JSR     _nbMacColon
-                PLY
-                INY
-                LDA     [_ifTablePtr],Y         ; MAC[4]
-                PHY
-                JSR     Kern_LogHex8
-                JSR     _nbMacColon
-                PLY
-                INY
-                LDA     [_ifTablePtr],Y         ; MAC[5]
+                LDA     |_u2Mac,X
                 JSR     Kern_LogHex8
                 REP     #$20
                 MX      %00
-                JSR     Kern_LogEOL
+                PLX
+                INX
+                CPX     #6
+                BCS     @rp_done
+                PHX
+                SEP     #$20
+                MX      %10
+                JSR     _nbMacColon
+                REP     #$20
+                MX      %00
+                PLX
+                BRA     @rp_l
+@rp_done        JSR     Kern_LogEOL
                 PLP
                 RTS
-@rpMsg          ASC     'net: u2s1 mac=',00     ; digit [8] patched at runtime -> u2sN
+@rpMsg          ASC     'net: slot 1 mac=',00   ; digit [10] patched at runtime
 
 ;------------------------------------------------------------------------------
 ; _ArmUthernet2 - register the W5100 ISR as a SIM non-SCC generic source and
@@ -341,9 +311,6 @@ _Uthernet2_ISR  MX      %11
                 RTL
 @u2i_mine       STA    |_u2IrqLastIR            ; record the IRQR we saw
                 INC     _u2IrqCount             ; bump (8-bit; >0 means it fired)
-                LDA     #1                      ; flag a socket event so swtch @sw_save
-                STA     _kSockWakePending       ; wakes WCHAN_SOCK (M8: low byte; A
-                                                ; reloaded by the next instruction)
                 ; --- clear IRQR system bits (write-1-to-clear) ---
                 LDA     #$00
                 STAL    U2_ARH
@@ -377,6 +344,8 @@ _Uthernet2_ISR  MX      %11
                 BRA     @u2i_shl
 @u2i_set        ORA     _u2RxReady              ; DBR=kernel-bank (SIM handler contract)
                 STA    |_u2RxReady
+                INC    |_kTtyOutAny             ; the network modules drain at the next
+                                                ;   soft site, if they are loaded
                 ; one-shot guard: disarm the W5100 IRQ (IMR=0) the instant we flag a
                 ; RECV, so the LEVEL-triggered RECV can't re-fire before foreground
                 ; drains the RX buffer (the lazy-ISR firehose that hung Phase 0b).
@@ -409,17 +378,14 @@ _Uthernet2_ISR  MX      %11
                 RTL
 
 ;==============================================================================
-; _Net_BringUp - polled W5100 reset/mode/init + SHAR-from-record.  DHCP is no
+; _Net_BringUp - polled W5100 reset/mode/init + SHAR-from-record.
 ;
 ; Runs at boot (from _ProbeUthernet2) with the chip IMR=0 — NO interrupts, so
 ; the indirect-bus address pointer is ours exclusively (no ISR re-entrancy).
 ; All loops are bounded so boot always completes.  Sequence:
 ;   1. reset + indirect/auto-inc mode;
-;   2. _W5_RunInit: RMSR/TMSR, RTR/RCR, SHAR (our MAC), socket-0 UDP + dest;
-;   3. open socket 0 (UDP, src port 68), bounded wait for SR=UDP;
-;   4. build a DHCP DISCOVER in the TX buffer and SEND it (broadcast, no ARP);
-;   5. bounded-poll S0_RX_RSR for the OFFER; log the received size and, if any,
-;      the offered IP (yiaddr) read straight from the RX buffer — never faked.
+;   2. _W5_RunInit: RMSR/TMSR, RTR/RCR;
+;   3. SHAR (our MAC) from the ifnet record, then the ISR armed.
 ; MX %00 in/out (PHP/PLP); DBR forced to the live kernel-bank (PHK/PLB) for the
 ; abs,X/abs,Y table reads ($02 = assembly ORG only).
 ;==============================================================================
@@ -433,7 +399,6 @@ W5_RXBASE       EQU     $6000           ; socket 0 RX buffer base (RMSR=$55)
 W5_RXMASK       EQU     $07FF           ; 2 KB RX ring mask (RMSR=$55)
 W5_S0_MR        EQU     $0400           ; socket 0 mode register
 W5_S0_RXRD      EQU     $0428           ; socket 0 RX read pointer (16-bit BE)
-W5_SR_UDP       EQU     $22             ; Sn_SR value for an open UDP socket
 W5_MR_MACRAW    EQU     $44             ; Sn_MR MACRAW($04) + MAC-filter($40) — capture
 W5_SR_MACRAW    EQU     $42             ; Sn_SR value for an open MACRAW socket
 W5_CR_RECV      EQU     $40             ; Sn_CR RECV (commit RX_RD advance)
@@ -497,8 +462,8 @@ _Net_BringUp    MX      %00
                 FIN
                 ; --- fixed-register init (MX %11 in/out) ---
                 JSR     _W5_RunInit
-                ; --- SHAR (our MAC) from the ifnet record (was in _w5InitTbl) ---
-                JSR     _W5_WriteSharFromRec
+                ; --- SHAR (our MAC) from _u2Mac ---
+                JSR     _W5_WriteShar
                 REP     #$30
                 MX      %00
                 ; Register the W5100 ISR with SIM + arm IMR=$01.  Socket 0 is
@@ -511,8 +476,6 @@ _Net_BringUp    MX      %00
                 ; _Sim_InstallGeneric is NOT idempotent, so it must not live in
                 ; _Net_CaptureStart (repeated opens would bloat the SIM registry).
                 JSR     _ArmUthernet2
-                LDA     #49152              ; TCP ephemeral local-port base ($C000)
-                STA     _tcpNextPort
                 ; (The MACRAW capture self-test that used to live here under
                 ;  U2_DIAG=1 moved to bpf.mod with the capture driver in P0.4;
                 ;  exercise capture via the userland `netdump` tool instead.)
@@ -561,113 +524,36 @@ _W5_RunInit     MX      %11
                 BRA     @ri_lp
 @ri_done        RTS
 
-; W5100 fixed-register init: RX/TX mem 2KB/socket, retry 200ms x8, socket 0 =
-; UDP src port 68, dest 255.255.255.255:67.  SHAR (our MAC) is NO LONGER here —
-; it is written by _W5_WriteSharFromRec from the ifnet record (derived default
-; 00:08:DC:F6:00:<slot> + /etc/hwaddr.conf override), so a per-card/per-machine
-; MAC is possible.
-_w5InitTbl      HEX     001A55                  ; RMSR = 2KB/socket
-                HEX     001B55                  ; TMSR = 2KB/socket
+; W5100 fixed-register init: socket 0 has the chip's whole 8 KB of RX and of TX
+; memory, the others none -- socket 0 in MACRAW is the only socket anything
+; opens (the network modules' driver, or bpf's capture without them) -- and
+; retry 200ms x8.  SHAR (our
+; MAC) is written by _W5_WriteShar from _u2Mac (derived default
+; 00:08:DC:F6:00:<slot> + /etc/hwaddr.conf override, hwaddr.s), so a
+; per-card/per-machine MAC is possible.
+_w5InitTbl      HEX     001A03                  ; RMSR = 8KB to socket 0
+                HEX     001B03                  ; TMSR = 8KB to socket 0
                 HEX     001707                  ; RTR hi  (retry timeout 0x07D0)
                 HEX     0018D0                  ; RTR lo
                 HEX     001908                  ; RCR = 8 retries
-                HEX     040002                  ; S0_MR = UDP
-                HEX     040400                  ; S0_PORT hi
-                HEX     040544                  ; S0_PORT lo = 68 (DHCP client)
-                HEX     040CFF                  ; S0_DIPR = 255.255.255.255
-                HEX     040DFF
-                HEX     040EFF
-                HEX     040FFF
-                HEX     041000                  ; S0_DPORT hi
-                HEX     041143                  ; S0_DPORT lo = 67 (DHCP server)
                 HEX     FF                       ; terminator
 
 ;------------------------------------------------------------------------------
-; _W5_WriteSharFromRec - write the W5100 SHAR (source MAC) from the slot-1 ifnet
-; record (offset _ifS1Off, field IF_Mac).  MX %11 (M8/X8) in/out; DBR=kernel-bank
-; (for _ifS1Off).  Set AR -> SHAR0 once; U2_DAT auto-increments (MR=$03), so 6 writes
-; walk SHAR[0..5].  [_ifTablePtr],Y is DBR-independent (DP long-pointer).
+; _W5_WriteShar - write the W5100 SHAR (source MAC) from _u2Mac.  MX %11 (M8/X8)
+; in/out; DBR=kernel-bank (for _u2Mac).  Set AR -> SHAR0 once; U2_DAT
+; auto-increments (MR=$03), so 6 writes walk SHAR[0..5].
 ;------------------------------------------------------------------------------
-_W5_WriteSharFromRec MX %11
+_W5_WriteShar   MX      %11
                 LDA     #>W5_SHAR0      ; AR hi = $00
                 STAL    U2_ARH
                 LDA     #<W5_SHAR0      ; AR lo = $09
                 STAL    U2_ARL
-                LDA     _ifS1Off        ; record offset (8-bit; < 256)
-                CLC
-                ADC     #IF_Mac
-                TAY                     ; Y = record MAC offset
-                LDX     #6
-@ws_lp          LDA     [_ifTablePtr],Y ; MAC byte from the record
+                LDX     #0
+@ws_lp          LDA     |_u2Mac,X       ; MAC byte
                 STAL    U2_DAT          ; -> SHAR (AR auto-increments)
-                INY
-                DEX
+                INX
+                CPX     #6
                 BNE     @ws_lp
-                RTS
-
-;------------------------------------------------------------------------------
-; _W5_WriteIpFromRec - push the slot-1 ifnet record's IP config to the W5100:
-;   GAR  ($0001) <- IF_Gateway, SUBR ($0005) <- IF_Netmask, SIPR ($000F) <- IF_Ip.
-; The chip needs SIPR to answer ARP for / accept unicast traffic at its leased
-; address (DHCP worked without it: broadcast send + source 0.0.0.0).  Called
-; from the SYS_IFCONFIG IFC_SET path when the slot-1 interface's IP is assigned
-; (dhclient) — so it runs at runtime with the ISR armed and is U2_LOCK-wrapped.
-; MX %00 in/out.  DBR=kernel-bank.  Uses _ifS1Off + _ifTablePtr.
-;------------------------------------------------------------------------------
-_W5_WriteIpFromRec MX   %00
-                REP     #$30
-                MX      %00
-                U2_LOCK
-                SEP     #$30            ; M8/X8 for the single-byte bus writes
-                MX      %11
-                ; --- GAR ($0001) <- IF_Gateway (record +28) ---
-                LDA     #$00
-                STAL    U2_ARH
-                LDA     #$01
-                STAL    U2_ARL          ; AR = $0001 (GAR0)
-                LDA     _ifS1Off
-                CLC
-                ADC     #IF_Gateway
-                TAY
-                LDX     #4
-@wi_gw          LDA     [_ifTablePtr],Y
-                STAL    U2_DAT
-                INY
-                DEX
-                BNE     @wi_gw
-                ; --- SUBR ($0005) <- IF_Netmask (record +20) ---
-                LDA     #$00
-                STAL    U2_ARH
-                LDA     #$05
-                STAL    U2_ARL          ; AR = $0005 (SUBR0)
-                LDA     _ifS1Off
-                CLC
-                ADC     #IF_Netmask
-                TAY
-                LDX     #4
-@wi_nm          LDA     [_ifTablePtr],Y
-                STAL    U2_DAT
-                INY
-                DEX
-                BNE     @wi_nm
-                ; --- SIPR ($000F) <- IF_Ip (record +16) ---
-                LDA     #$00
-                STAL    U2_ARH
-                LDA     #$0F
-                STAL    U2_ARL          ; AR = $000F (SIPR0)
-                LDA     _ifS1Off
-                CLC
-                ADC     #IF_Ip
-                TAY
-                LDX     #4
-@wi_ip          LDA     [_ifTablePtr],Y
-                STAL    U2_DAT
-                INY
-                DEX
-                BNE     @wi_ip
-                REP     #$30
-                MX      %00
-                U2_UNLOCK
                 RTS
 
 ;------------------------------------------------------------------------------

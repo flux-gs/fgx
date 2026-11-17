@@ -84,17 +84,6 @@ UNOWNED_OK = set()
 # and `PLA / STA _ptyTmpB2' after.  Delete either half and this goes red.
 MODULE_CARRIED = {
     "src/modules/pty/pty.s": ("_ptyTmpB2", "_ptyTmpB3", "_ptyNbFlag"),
-    # `_sockTmpOff' is `DS 2' in src/kernel/socket.s -- a CORE-BANK static the
-    # net module writes through the socket-table seam, and about sixteen sites
-    # write it.  `net_op_sockteardown' holds the descriptor offset there across
-    # `_Unp_CloseTry' and re-reads it to clear SOCK_InUse, which was safe until
-    # UNP_OP_UNBIND made that call sleep: another task's socket syscall could
-    # land between the two reads and the teardown would clear InUse on a LIVE
-    # descriptor belonging to someone else while leaking its own.  That is
-    # apple/fgx#458's defect, fixed in `1d199238d' by parking the cell in
-    # `_Unp_NameCall', and this line is what makes it stay fixed --
-    # `git show 1d199238d~1' goes red here.
-    "src/modules/net/net.s": ("_sockTmpOff",),
 }
 
 
@@ -183,7 +172,7 @@ def check_module_carried(m, where=None, sleepy=None, saved=None):
 MODULE_SLEEP_ALLOWLIST = {
     "_NlKC_Sleep":
         "pass-through shim: three instructions, holds no scratch of its own "
-        "(net_loop.s).",
+        "(net_kcall.s).",
     "_PtyKC_Sleep":
         "pass-through shim: LDX #KSVC_SLEEP / JSL SYS_KCALL / RTS (pty.s).",
     # The two below became visible with apple/fgx#458: their arms reach
@@ -198,17 +187,14 @@ MODULE_SLEEP_ALLOWLIST = {
         "pass-through shim: LDX #KSVC_TTYLCLOSE / JSL SYS_KCALL / RTS (pty.s), "
         "holding no scratch of its own.  Sleeps because kc_ttclose reaches "
         "ttylclose -> ttywflush, which DRAINS unless FNDELAY is set.",
-    "_Unp_NameCall":
-        "REBUILDS rather than saves, and could not save if it wanted to: the "
-        "KSVC_UNPNAME arm calls _Sys_CopyPathToBuf, which builds _libcTmp2 as "
-        "its OWN [_libcTmp2],Y copy pointer (src/kernel/syscall.s), so the cell "
-        "cannot survive this call whether it sleeps or not.  unp.s restages with "
-        "_Unp_LoadArgs -- a RESTAGER in tools/dp_sleep_ranges.py -- before every "
-        "[_libcTmp2] read, and the unowned-read pass covers _libcTmp2 and "
-        "reports no path that inherits a stale one.  This is the argument "
-        "_Pipe_PollIntr makes for the _pipe* scratch.  Verified 2026-09-20.",
     "kc_sleep":
         "pass-through shim into the kernel service slot (vfs/kc_sys.s).",
+    "kc_sleepr":
+        "pass-through shim into KSVC_SLEEPUNR, kc_sleep's shape with the "
+        "releasing service (common/kc_sys.s): ENTERK, LDA, LDX, JSL, LEAVEK, "
+        "RTL, holding no scratch of its own.  Its one caller is the network "
+        "stack's sleep() (bsdnet machine/net_kern.c), the call site kc_sleep "
+        "had, for a sleep at or below PZERO.",
     "kc_sleepi":
         "pass-through shim into KSVC_SLEEP, kc_sleep's shape with the "
         "interruptible service (common/kc_sys.s): ENTERK, LDA, LDX, JSL, "
@@ -235,10 +221,6 @@ MODULE_SLEEP_ALLOWLIST = {
         "only exit is kc_panic on a bad mode.  This is the argument "
         "_Pipe_PollIntr's entry makes for the _pipe* scratch.  Verified "
         "2026-09-20.",
-    "_Loop_AcceptTry":
-        "loopback accept: the data paths that hold a caller uio go through "
-        "_Loop_SoIo, not this routine, and its own sleep holds only "
-        "_sockTablePtr-derived state.  Verified 2026-09-22.",
 }
 
 
@@ -938,43 +920,35 @@ def self_test(m):
         m.KSVC_SEAMS.clear()
         m.KSVC_SEAMS.update(_seams)
 
-    # 11. A BLOCK SAVE IS A SAVE, and a half-done one is not.  _Sock_PollIntr
+    # 11. A BLOCK SAVE IS A SAVE, and a half-done one is not.  _Pipe_PollIntr
     #     pushes a declared RANGE with an indexed loop rather than cell by cell;
     #     read only as the cell-by-cell idiom it credited nothing, and every
-    #     caller holding any _sock* cell across an accept was reported.
-    names = ["_sockTmpOff"]
-    alt = "_sockTmpOff"
-    # THE REGRESSION TARGET HAS TO BE WATCHED OR IT IS NOT A TARGET.  Deleting
-    # this MODULE_CARRIED entry leaves apple/fgx#458's actual defect invisible
-    # again while every other case stays green -- measured.
-    if "_sockTmpOff" not in MODULE_CARRIED.get("src/modules/net/net.s", ()):
-        print("self-test FAILED: MODULE_CARRIED no longer watches _sockTmpOff "
-              "in src/modules/net/net.s, so `git show 1d199238d~1' would go "
-              "green -- apple/fgx#458's defect is unguarded")
-        return 1
-    if "_sockTmpOff" not in m.block_ranges().get("_sockSrcOff", []):
-        print("self-test FAILED: _sockTmpOff is not seen inside the "
-              "_SOCK_SCRATCH_LEN block -- block_ranges no longer reads the "
+    #     caller holding any _pipe* cell across a sleep was reported.
+    names = ["_pipeUio"]
+    alt = "_pipeUio"
+    if "_pipeUio" not in m.block_ranges().get("_pipeRecOff", []):
+        print("self-test FAILED: _pipeUio is not seen inside the "
+              "_PIPE_SCRATCH_LEN block -- block_ranges no longer reads the "
               "declarations the assembler measures")
         return 1
-    if "_sockAcceptLOff" in m.block_ranges().get("_sockSrcOff", []):
-        print("self-test FAILED: _sockAcceptLOff was read as INSIDE the block; "
-              "src/kernel/socket.s asserts with ERR that it is outside, and "
+    if "_pipeChunk" in m.block_ranges().get("_pipeRecOff", []):
+        print("self-test FAILED: _pipeChunk was read as INSIDE the block; "
+              "src/kernel/pipe.s asserts with ERR that it is outside, and "
               "crediting it would hide a real exposure")
         return 1
     BLK_SAVE = ["_BlkSaver       MX      %00",
-                "                LDX     #_SOCK_SCRATCH_LEN-2",
-                "@bs_save        LDA     _sockSrcOff,X",
+                "                LDX     #_PIPE_SCRATCH_LEN-2",
+                "@bs_save        LDA     _pipeRecOff,X",
                 "                PHA",
                 "                DEX",
                 "                BPL     @bs_save",
                 "                JSR     _sleep",
                 "                LDX     #0",
                 "@bs_rest        PLA",
-                "                STA     _sockSrcOff,X",
+                "                STA     _pipeRecOff,X",
                 "                INX",
                 "                RTS"]
-    BLK_HALF = [l for l in BLK_SAVE if "STA     _sockSrcOff,X" not in l]
+    BLK_HALF = [l for l in BLK_SAVE if "STA     _pipeRecOff,X" not in l]
     with _tf.TemporaryDirectory() as td:
         f = pathlib.Path(td) / "blk.s"
         for bodyl, want, label in ((BLK_SAVE, True, "a block save"),
@@ -983,25 +957,22 @@ def self_test(m):
             f.write_text("\n".join(bodyl) + "\n")
             where = {"_BlkSaver": (f, 0, len(bodyl), bodyl)}
             sv = m.saved_cells(names, alt, where, {"_BlkSaver"})
-            got = "_sockTmpOff" in sv.get("_BlkSaver", set())
+            got = "_pipeUio" in sv.get("_BlkSaver", set())
             if got != want:
                 print(f"self-test FAILED: {label} was "
                       f"{'not ' if want else ''}credited")
                 return 1
 
     # 12. A SAVE IN A DEEPER CALLEE IS A SAVE -- and only when every sleeping
-    #     callee has it.  apple/fgx#458's fix parks _sockTmpOff in
-    #     _Unp_NameCall, two levels below the net_op_sockteardown call site, so
-    #     without this the FIXED tree reported the defect it had just fixed.
-    #     The tail-call case is separate: _Net_Xport_Accept reaches the sleeping
-    #     _Tcp_Accept by JMP, so a returning-call-only scan found it no sleeping
-    #     callee at all and it inherited nothing.
+    #     callee has it: a caller whose sleep is two levels down inherits the
+    #     park its callee does.  A tail call (JMP) to a sleeping routine counts
+    #     as a call, or the caller is found no sleeping callee at all.
     DEEP = ["_Inner          MX      %00",
-            "                LDA     _sockTmpOff",
+            "                LDA     _pipeUio",
             "                PHA",
             "                JSR     _sleep",
             "                PLA",
-            "                STA     _sockTmpOff",
+            "                STA     _pipeUio",
             "                RTS",
             "_InnerBad       MX      %00",
             "                JSR     _sleep",
@@ -1031,7 +1002,7 @@ def self_test(m):
         for rn, want in (("_Outer", True), ("_OuterTail", True),
                          ("_OuterBad", False), ("_OuterMixed", False),
                          ("_OuterOwnSleep", False)):
-            got = "_sockTmpOff" in sv.get(rn, set())
+            got = "_pipeUio" in sv.get(rn, set())
             if got != want:
                 print(f"self-test FAILED: {rn} was "
                       f"{'not ' if want else 'wrongly '}credited with a "

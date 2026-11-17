@@ -791,10 +791,9 @@ FCB_FwDirEntryOff   EQU FCB_FstPriv+17   ; saved _fwDirEntryOff per-FCB
 FCB_DirEntsLeft EQU     FCB_FstPriv+0   ; synthetic-/MNT/ one-shot counter (2 B)
 
 ; Socket-fd overlay of FCB_FstPriv (mutually exclusive with the ProDOS overlay —
-; a socket fd is never a file).  Holds the socket-descriptor BYTE OFFSET
-; (0/8/16/24) into the kernel socket table (src/kernel/socket.s), like a chardev
-; fd stores its chardev idx at FstPriv[0].
-FCB_SockIdx     EQU FCB_FstPriv+0
+; a socket fd is never a file).  FCB_SockSo is the socket the fd names, its
+; struct socket's offset in the network modules' data bank, 2.11BSD's f_data.
+FCB_SockSo      EQU FCB_FstPriv+0
 
 ; Pipe-fd overlay of FCB_FstPriv (mutually exclusive with the ProDOS/socket
 ; overlays).  Holds the pipe-descriptor index (0..NPIPE-1) into _pipeTablePtr
@@ -818,8 +817,8 @@ FCB_FL_DIRTY    EQU     $02             ; file written since open — Fs_Close
                                         ; pool-block dirt is FCB_WDirty.
 FCB_FL_DIR      EQU     $04             ; opendir-created (Fs_Readdir consumer)
                                         ; $08 is free
-FCB_FL_SOCKET   EQU     $10             ; socket fd (FCB_SockIdx = descriptor off);
-                                        ; close routes to _Sock_Teardown.
+FCB_FL_SOCKET   EQU     $10             ; socket fd (FCB_SockSo = its socket);
+                                        ; close routes to net.mod's soclose.
 FCB_FL_PIPE     EQU     $20             ; pipe fd (FCB_PipeIdx = descriptor idx);
                                         ; close routes to _Pipe_Teardown.  Read/
                                         ; write route to _Pipe_Read/_Pipe_Write.

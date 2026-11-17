@@ -315,6 +315,9 @@
    "name": "ptyhup"
   },
   {
+   "name": "vhup"
+  },
+  {
    "name": "ptyintr"
   },
   {
@@ -608,6 +611,9 @@
   },
   {
    "name": "ifcprobe"
+  },
+  {
+   "name": "kmemprobe"
   },
   {
    "name": "clkprobe"
@@ -956,6 +962,10 @@
   {
    "src": "bin/ifcprobe.bin",
    "dst": "disk_src/testbin/ifcprobe"
+  },
+  {
+   "src": "bin/kmemprobe.bin",
+   "dst": "disk_src/testbin/kmemprobe"
   },
   {
    "src": "bin/ntp.bin",
@@ -1552,6 +1562,10 @@
   {
    "src": "bin/ptyhup.bin",
    "dst": "disk_src/testbin/ptyhup"
+  },
+  {
+   "src": "bin/vhup.bin",
+   "dst": "disk_src/testbin/vhup"
   },
   {
    "src": "bin/ptyintr.bin",

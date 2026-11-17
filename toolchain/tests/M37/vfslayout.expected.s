@@ -1609,9 +1609,9 @@ _vfslayout_L55
                 TYA
                 RTL
 _vfslayout_L54
-                LDA     #24
+                LDA     #28
                 TAX
-                CMP     #24
+                CMP     #28
                 BEQ     _vfslayout_L56
                 LDA     #73
                 TAY
@@ -1949,22 +1949,35 @@ _vfslayout_L64
                 TYA
                 RTL
 _vfslayout_L65
-                LDA     #64
-                TAX
-                LDA     #3
-                TAY
-                TYA
-                CLC
-                ADC     #32
-                STA     _fcc_tmp_b
-                TXA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl+24
+                STA     _fcc_fpr0
+                PLA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_tmp_b
-                BVC     _vfslayout_L67
-                EOR     #$8000
-_vfslayout_L67
-                BPL     _vfslayout_L66
-                LDA     #75
+                SBC     _fcc_fpr1
+                TAX
+                CMP     #24
+                BEQ     _vfslayout_L66
+                LDA     #86
                 TAY
                 TSC
                 CLC
@@ -1975,6 +1988,32 @@ _vfslayout_L67
                 TYA
                 RTL
 _vfslayout_L66
+                LDA     #128
+                TAX
+                LDA     #3
+                TAY
+                TYA
+                CLC
+                ADC     #32
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _vfslayout_L68
+                EOR     #$8000
+_vfslayout_L68
+                BPL     _vfslayout_L67
+                LDA     #75
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L67
                 LDA     #32
                 STA     _fcc_tmp_b
                 ASL
@@ -1987,15 +2026,15 @@ _vfslayout_L66
                 CLC
                 ADC     _fcc_tmp_b
                 ASL
-                LDX     #64
+                LDX     #128
                 STA     _fcc_tmp_b
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vfslayout_L69
+                BVC     _vfslayout_L70
                 EOR     #$8000
-_vfslayout_L69
-                BMI     _vfslayout_L68
+_vfslayout_L70
+                BMI     _vfslayout_L69
                 LDA     #76
                 TAY
                 TSC
@@ -2006,11 +2045,11 @@ _vfslayout_L69
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L68
+_vfslayout_L69
                 LDA     #50
                 TAX
                 CMP     #50
-                BEQ     _vfslayout_L70
+                BEQ     _vfslayout_L71
                 LDA     #31
                 TAY
                 TSC
@@ -2021,7 +2060,7 @@ _vfslayout_L68
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L70
+_vfslayout_L71
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2049,7 +2088,7 @@ _vfslayout_L70
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #2
-                BEQ     _vfslayout_L71
+                BEQ     _vfslayout_L72
                 LDA     #32
                 TAY
                 TSC
@@ -2060,7 +2099,7 @@ _vfslayout_L70
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L71
+_vfslayout_L72
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2088,7 +2127,7 @@ _vfslayout_L71
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #22
-                BEQ     _vfslayout_L72
+                BEQ     _vfslayout_L73
                 LDA     #33
                 TAY
                 TSC
@@ -2099,7 +2138,7 @@ _vfslayout_L71
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L72
+_vfslayout_L73
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2127,7 +2166,7 @@ _vfslayout_L72
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #24
-                BEQ     _vfslayout_L73
+                BEQ     _vfslayout_L74
                 LDA     #34
                 TAY
                 TSC
@@ -2138,7 +2177,7 @@ _vfslayout_L72
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L73
+_vfslayout_L74
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2166,7 +2205,7 @@ _vfslayout_L73
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #28
-                BEQ     _vfslayout_L74
+                BEQ     _vfslayout_L75
                 LDA     #35
                 TAY
                 TSC
@@ -2177,7 +2216,7 @@ _vfslayout_L73
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L74
+_vfslayout_L75
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2205,7 +2244,7 @@ _vfslayout_L74
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #32
-                BEQ     _vfslayout_L75
+                BEQ     _vfslayout_L76
                 LDA     #44
                 TAY
                 TSC
@@ -2216,7 +2255,7 @@ _vfslayout_L74
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L75
+_vfslayout_L76
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2244,7 +2283,7 @@ _vfslayout_L75
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #38
-                BEQ     _vfslayout_L76
+                BEQ     _vfslayout_L77
                 LDA     #36
                 TAY
                 TSC
@@ -2255,7 +2294,7 @@ _vfslayout_L75
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L76
+_vfslayout_L77
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2283,7 +2322,7 @@ _vfslayout_L76
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #42
-                BEQ     _vfslayout_L77
+                BEQ     _vfslayout_L78
                 LDA     #45
                 TAY
                 TSC
@@ -2294,7 +2333,7 @@ _vfslayout_L76
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L77
+_vfslayout_L78
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2322,23 +2361,8 @@ _vfslayout_L77
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #46
-                BEQ     _vfslayout_L78
-                LDA     #46
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vfslayout_L78
-                LDA     #4
-                TAX
-                CMP     #4
                 BEQ     _vfslayout_L79
-                LDA     #47
+                LDA     #46
                 TAY
                 TSC
                 CLC
@@ -2353,7 +2377,7 @@ _vfslayout_L79
                 TAX
                 CMP     #4
                 BEQ     _vfslayout_L80
-                LDA     #37
+                LDA     #47
                 TAY
                 TSC
                 CLC
@@ -2368,7 +2392,7 @@ _vfslayout_L80
                 TAX
                 CMP     #4
                 BEQ     _vfslayout_L81
-                LDA     #43
+                LDA     #37
                 TAY
                 TSC
                 CLC
@@ -2379,6 +2403,21 @@ _vfslayout_L80
                 TYA
                 RTL
 _vfslayout_L81
+                LDA     #4
+                TAX
+                CMP     #4
+                BEQ     _vfslayout_L82
+                LDA     #43
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L82
                 LDA     #64
                 TAX
                 LDA     #32
@@ -2390,10 +2429,10 @@ _vfslayout_L81
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vfslayout_L83
+                BVC     _vfslayout_L84
                 EOR     #$8000
-_vfslayout_L83
-                BPL     _vfslayout_L82
+_vfslayout_L84
+                BPL     _vfslayout_L83
                 LDA     #38
                 TAY
                 TSC
@@ -2404,7 +2443,7 @@ _vfslayout_L83
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L82
+_vfslayout_L83
                 LDA     #64
                 JSR     _fcc_long_from_int
                 LDX     #164
@@ -2428,7 +2467,7 @@ _vfslayout_L82
                 STX     _fcc_long_b_hi
                 JSR     _fcc_long_gts
                 CMP     #0
-                BEQ     _vfslayout_L84
+                BEQ     _vfslayout_L85
                 LDA     #39
                 TAY
                 TSC
@@ -2439,7 +2478,7 @@ _vfslayout_L82
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L84
+_vfslayout_L85
                 LDA     #16
                 JSR     _fcc_long_from_int
                 ASL
@@ -2468,7 +2507,7 @@ _vfslayout_L84
                 STX     _fcc_long_b_hi
                 JSR     _fcc_long_gts
                 CMP     #0
-                BEQ     _vfslayout_L85
+                BEQ     _vfslayout_L86
                 LDA     #40
                 TAY
                 TSC
@@ -2479,11 +2518,11 @@ _vfslayout_L84
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L85
+_vfslayout_L86
                 LDA     #1024
                 TAX
                 CMP     #1024
-                BEQ     _vfslayout_L86
+                BEQ     _vfslayout_L87
                 LDA     #41
                 TAY
                 TSC
@@ -2494,11 +2533,11 @@ _vfslayout_L85
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L86
+_vfslayout_L87
                 LDA     #16
                 TAX
                 CMP     #16
-                BEQ     _vfslayout_L87
+                BEQ     _vfslayout_L88
                 LDA     #77
                 TAY
                 TSC
@@ -2509,7 +2548,7 @@ _vfslayout_L86
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L87
+_vfslayout_L88
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2535,7 +2574,7 @@ _vfslayout_L87
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                BEQ     _vfslayout_L88
+                BEQ     _vfslayout_L89
                 LDA     #78
                 TAY
                 TSC
@@ -2546,7 +2585,7 @@ _vfslayout_L87
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L88
+_vfslayout_L89
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2574,7 +2613,7 @@ _vfslayout_L88
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #4
-                BEQ     _vfslayout_L89
+                BEQ     _vfslayout_L90
                 LDA     #79
                 TAY
                 TSC
@@ -2585,7 +2624,7 @@ _vfslayout_L88
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L89
+_vfslayout_L90
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2613,7 +2652,7 @@ _vfslayout_L89
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #6
-                BEQ     _vfslayout_L90
+                BEQ     _vfslayout_L91
                 LDA     #80
                 TAY
                 TSC
@@ -2624,7 +2663,7 @@ _vfslayout_L89
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L90
+_vfslayout_L91
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2652,7 +2691,7 @@ _vfslayout_L90
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #10
-                BEQ     _vfslayout_L91
+                BEQ     _vfslayout_L92
                 LDA     #81
                 TAY
                 TSC
@@ -2663,7 +2702,7 @@ _vfslayout_L90
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L91
+_vfslayout_L92
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2691,7 +2730,7 @@ _vfslayout_L91
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #12
-                BEQ     _vfslayout_L92
+                BEQ     _vfslayout_L93
                 LDA     #82
                 TAY
                 TSC
@@ -2702,7 +2741,7 @@ _vfslayout_L91
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L92
+_vfslayout_L93
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2730,7 +2769,7 @@ _vfslayout_L92
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #14
-                BEQ     _vfslayout_L93
+                BEQ     _vfslayout_L94
                 LDA     #83
                 TAY
                 TSC
@@ -2741,11 +2780,11 @@ _vfslayout_L92
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L93
+_vfslayout_L94
                 LDA     #6
                 TAX
                 CMP     #6
-                BEQ     _vfslayout_L94
+                BEQ     _vfslayout_L95
                 LDA     #84
                 TAY
                 TSC
@@ -2756,7 +2795,7 @@ _vfslayout_L93
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L94
+_vfslayout_L95
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2782,7 +2821,7 @@ _vfslayout_L94
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                BEQ     _vfslayout_L95
+                BEQ     _vfslayout_L96
                 LDA     #85
                 TAY
                 TSC
@@ -2793,7 +2832,7 @@ _vfslayout_L94
                 STA     _fcc_fb
                 TYA
                 RTL
-_vfslayout_L95
+_vfslayout_L96
                 LDA     #42
                 TAY
                 TSC

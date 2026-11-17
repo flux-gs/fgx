@@ -56,6 +56,7 @@ EADDRINUSE      EQU     48              ; address already in use
 EAFNOSUPPORT    EQU     47              ; address family not supported
 EDESTADDRREQ    EQU     39              ; send() on an unconnected datagram socket
 EMSGSIZE        EQU     40              ; message too long for the buffer
+EPROTONOSUPPORT EQU     43              ; socket(): no protocol answers (socreate)
 
 EBUSY           EQU     16
 EEXIST          EQU     17

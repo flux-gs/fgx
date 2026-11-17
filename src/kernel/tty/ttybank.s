@@ -294,7 +294,7 @@
                 ; --- slot 39: kc_ttdrain, the SOFT half of the output rail
                 ; (T6 increment 4b).  The ISR marks TS_TIMEOUT; this restarts
                 ; every marked line from task context, through `ttrstrt'. ---
-                JMP     kc_ttdrain
+                JMP     _Net_TtDrain
                 DFB     0
 
                 ; --- slot 40: kc_ttgetraw, ONE RAW BYTE from a line
@@ -391,11 +391,21 @@
                 JMP     _KTty_TextTotal         ; 63
                 DFB     0
 
-                ; --- slots 64.. unassigned, stride 4 (3-byte JMP + 1 pad).
+                ; --- slots 64-65: the network drain (net_hooks.s) ---
+                JMP     _Net_SetSoft            ; 64
+                DFB     0
+                JMP     _Net_Hook               ; 65
+                DFB     0
+
+                ; --- slot 66: vhangup(2). ---
+                JMP     _KTty_Vhangup           ; 66
+                DFB     0
+
+                ; --- slots 67.. unassigned, stride 4 (3-byte JMP + 1 pad).
                 ; Growing KTTY_SLOT_COUNT is on the terms include/ktty.s states:
                 ; it moves where the bank's code starts and renumbers nothing --
                 ; slot n is KTTY_SLOT0 + 4n and KTTY_SLOT0 is fixed. ---
-                LUP     KTTY_SLOT_COUNT-64
+                LUP     KTTY_SLOT_COUNT-67
                 JMP     _Ktty_StubHalt
                 DFB     0
                 --^
@@ -462,6 +472,28 @@ _KTty_Carrier   MX      %00
                 PLY
                 RTL
 
+
+;==============================================================================
+; _KTty_Vhangup - slot 66: vhangup(2).  No arguments -> C=1, A=0.  The C is
+; kc_vhangup (tty_dev.c), reached by a pile call as _KTty_Carrier's is.
+;==============================================================================
+_KTty_Vhangup   MX      %00
+                PHB
+                PHD
+                PHK
+                PLB                             ; DBR = the LIVE tty bank
+                LDA     #FGX_DP_KERNELC
+                TCD
+                PHK
+                PEA     @kvh_ret-1
+                PHK
+                PEA     kc_vhangup-1
+                RTL                             ; pile call into the C
+@kvh_ret        PLD
+                PLB
+                LDA     #0
+                SEC
+                RTL
 
 ;==============================================================================
 ; _KTty_Gtod / _KTty_Stod / _KTty_Adj / _KTty_Sysctl - slots 44, 46, 45 and
@@ -1309,6 +1341,7 @@ _kttyScrSave    DS      _kttyScrHi-_kttyScrLo+1
                 PUT     kern_time.s
                 PUT     kern_time.data.s
                 PUT     ld_hooks.s
+                PUT     net_hooks.s
 
 ;--- The shared-text table: a tenant for this bank's room, like the clock.
                 PUT     text.s

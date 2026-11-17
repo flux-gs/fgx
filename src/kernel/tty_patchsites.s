@@ -49,6 +49,7 @@ _TtyPatchTbl
                 DA      _ktp106+3
                 DA      _ktp100+3
                 DA      _ktp102+3
+                DA      _ktp128+3
                 DA      _ktp103+3
                 DA      _ktp110+3
                 DA      _ktp121+3
@@ -79,5 +80,5 @@ _TtyPatchTbl
                 DA      _ktp117+3
                 DA      _ktp124+3
                 DA      _ktp118+3
-_TtyPatchEntries EQU 65
-_TtyPatchBytes   EQU 130
+_TtyPatchEntries EQU 66
+_TtyPatchBytes   EQU 132

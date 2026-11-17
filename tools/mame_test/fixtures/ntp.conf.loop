@@ -1,0 +1,4 @@
+# ntpd test configuration: a server the unreachable resolver cannot name, and
+# a numeric peer that needs no lookup, so ntpd has one peer to report to ntpdc.
+server	time.apple.com
+server	127.0.0.2

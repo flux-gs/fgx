@@ -1,0 +1,30 @@
+{
+ "name": "netudp",
+ "description": "UDP on the kernel's network stack (net-mux S3): with the network modules loaded, every AF_INET datagram socket is a 2.11BSD struct socket reached through net.mod's descriptor.  loopprobe -u runs its cases over lo0 -- a datagram both ways with the sender named, bind to port 0, a connected socket hearing only its peer, select and FIONREAD, a blocked select woken by a child's datagram, FIONBIO and MSG_DONTWAIT answering EAGAIN, EADDRINUSE and SO_REUSEADDR, MSG_OOB refused, EBADF on a closed descriptor -- and prints UDP OK only when none failed.  A case that blocks forever shows as the frame cap.  The harness has no network card, so lo0 is the only interface.  First syslogd is restarted with -u and loopprobe -s sends it a user.err line over lo0, which syslog.conf sends to the console: `syslogd ok' is the line's tail, which nothing but its arrival can print.  The network modules are loaded at boot (/etc/rc).  Last, /etc/resolv.conf names 127.0.0.1 and loopprobe -h asks gethostbyname for a name while a child bound to port 53 answers with a junk datagram every second for 12 s: the resolver must give up on its own deadline, three 1.5 s tries, and `DNS OK' says it returned within 7 s.",
+ "command": "sh /etc/netudp.sh",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "UDP OK",
+   "syslogd ok",
+   "DNS OK",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "UDP FAIL",
+   "DNS FAIL",
+   "loopprobe: FAIL",
+   "PANIC",
+   "BRK",
+   "bsdnet: BROKEN"
+  ]
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/netudp.sh",
+   "prodos_dir": "/FGX/etc",
+   "name": "netudp.sh",
+   "replace": true
+  }
+ ]
+}

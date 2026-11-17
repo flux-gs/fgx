@@ -173,6 +173,12 @@ emit_mac_longptr(const char *tag, int tgt_seg, const char *name_fmt, ...)
     vsnprintf(name, sizeof name, name_fmt, ap);
     va_end(ap);
     g_n_datamac++;   /* P3-5 I3: feeds the FGX2_RELOC_COUNT trailer */
+    if (g_module_bank) {
+        /* A module has no linker: the same cell a &function takes, stamped
+         * with the image's bank at init. */
+        fprintf(g_data_out, "MOD_FN_PTR %s;%s\n", tag, name);
+        return;
+    }
     fprintf(g_data_out, "FGX2_LONG_PTR %s;%s;%d\n", tag, name, tgt_seg);
 }
 
@@ -193,6 +199,10 @@ emit_mac_dataptr(const char *tag, const char *name_fmt, ...)
     vsnprintf(name, sizeof name, name_fmt, ap);
     va_end(ap);
     g_n_datamac++;   /* P3-5 I3: feeds the FGX2_RELOC_COUNT trailer */
+    if (g_module_bank) {
+        fprintf(g_data_out, "MOD_FN_PTR %s;%s\n", tag, name);
+        return;
+    }
     fprintf(g_data_out, "LIBC_DATA_PTR %s;%s\n", tag, name);
 }
 
@@ -1816,6 +1826,83 @@ emit_store_local_field(Local *lc, Field *f)
     }
 }
 
+/* A bit-field member reached through a member chain: the chain's address
+ * (far pointer in FPR kd) is the field's CONTAINING word, as the direct
+ * paths above address it by byte_offset.  The field is unsigned there too
+ * (K&R A.8.3: "whether an int field is treated as signed is
+ * implementation-dependent").  extract: A = container -> A = field value. */
+void
+emit_lv_bitfield_extract(Field *f)
+{
+    for (int i = 0; i < f->bit_offset; i++)
+        ir_emitf("                LSR\n");
+    ir_emitf("                AND     #$%04X\n", ((1 << f->bit_width) - 1) & 0xFFFF);
+}
+
+/* Store A as a word member through FPR kd at its byte offset, or, for a
+ * bit-field, into its bits of the containing word. */
+void
+emit_fpr_deref_store_wordmember(int kd, Field *f)
+{
+    if (f->is_bit_field) emit_lv_bitfield_store(kd, f, f->byte_offset);
+    else                 emit_fpr_deref_store_word(kd, f->byte_offset);
+}
+
+/* Load a member through FPR k at its byte offset: a bit-field is extracted
+ * from its containing word, anything else is emit_fpr_deref_field's. */
+void
+emit_fpr_deref_member(int k, Field *f)
+{
+    if (f->is_bit_field) {
+        emit_fpr_deref_field(k, LT_INT, f->byte_offset);
+        emit_lv_bitfield_extract(f);
+        return;
+    }
+    emit_fpr_deref_field(k, f->type, f->byte_offset);
+}
+
+/* store: A = the value -> the field at [kd] holds its low bit_width bits, the
+ * rest of the container is untouched, and A = the value stored (A.7.17). */
+void
+emit_lv_bitfield_store(int kd, Field *f, int off)
+{
+    int field_mask = ((1 << f->bit_width) - 1) & 0xFFFF;
+    int clear_mask = (~(field_mask << f->bit_offset)) & 0xFFFF;
+    ir_emitf("                AND     #$%04X\n", field_mask);
+    for (int i = 0; i < f->bit_offset; i++)
+        ir_emitf("                ASL\n");
+    ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
+    emit_fpr_deref_field(kd, LT_INT, off);            /* A = container */
+    ir_emitf("                AND     #$%04X\n", clear_mask);
+    ir_emitf("                ORA     _fcc_tmp_b\n");
+    emit_fpr_deref_store_word(kd, off);
+    emit_lv_bitfield_extract(f);                      /* A = value stored */
+}
+
+/* ++/-- on a bit-field whose containing word is at fprK+off: the field's
+ * own bits step, and wrap within them (K&R A.7.4.1: "The operand is
+ * incremented"; A.8.3 gives the field its width).  A = NEW, or OLD when
+ * return_old; kd stays live for the caller to drop. */
+void
+emit_bitfield_incdec_at_fpr(int kd, Field *f, int off, int is_inc,
+                            int return_old)
+{
+    emit_fpr_deref_field(kd, LT_INT, off);            /* A = container */
+    emit_lv_bitfield_extract(f);                      /* A = OLD */
+    g_expr_type = LT_INT;
+    if (return_old)
+        emit_push_a();
+    ir_emitf(is_inc ? "                INC\n" : "                DEC\n");
+    emit_lv_bitfield_store(kd, f, off);               /* A = NEW */
+    if (return_old) {
+        ir_emitf("                PLA\n");
+        g_s_delta -= 2;
+    }
+    g_expr_type      = LT_INT;
+    g_expr_struct_id = -1;
+    g_expr_unsigned  = 0;
+}
+
 /* P3-2.7b: 4-byte pointer store from FPR k into a local aggregate slot
  * (decl-init: struct ptr / fn-ptr fields and ptr-array elements).  off is
  * the byte offset within the local's slots; emit_field_sta supplies the
@@ -2317,6 +2404,13 @@ emit_member_incdec(Local *lc, Global *gv, Field *f, int is_inc, int is_prefix)
     }
     if (f->byte_offset > 0) {
         ir_record_raw(IR_ADD_CONST, (unsigned)(f->byte_offset), 0, NULL);
+    }
+    if (f->is_bit_field) {
+        int kd = fpr_alloc();
+        emit_fpr_from_carrier_a(kd);                  /* kd = &container */
+        emit_bitfield_incdec_at_fpr(kd, f, 0, is_inc, !is_prefix);
+        fpr_drop(kd);
+        return;
     }
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));    /* _fcc_ptr -> &member (base bank) */
     emit_incdec_at_fcc_ptr(stride, is_inc, is_prefix, ISPTR(f->type),
@@ -3237,7 +3331,7 @@ emit_call_indirect(int kc)
          * to a direct FGX2_FARCALL (JSL) entry.  A/X stay 16-bit. */
         ir_emitf("                PHK\n");                     /* return bank = this code bank */
         ir_emitf("                PEA     %s_L%d-1\n", g_tu_prefix, lab_r); /* return offset-1 */
-        if (g_module_bank || g_kernel_bank) {
+        if ((g_module_bank || g_kernel_bank) && !g_shared_data) {
             /* A SINGLE-BANK IMAGE -- an FGXM module (--module-bank) or a
              * statically linked kernel bank, far or tty (--kernel-bank).  In
              * both, DBR is the program bank: mod_init and every far- and
@@ -3301,7 +3395,7 @@ emit_call_indirect(int kc)
         ir_emitf("                RTL\n");
     }
     ir_emitf("%s_L%d\n", g_tu_prefix, lab_r);
-    if (g_module_bank || g_kernel_bank) {
+    if ((g_module_bank || g_kernel_bank) && !g_shared_data) {
         /* Our own DBR back, recovered from the program bank -- see above. */
         ir_emitf("                PHK\n");
         ir_emitf("                PLB\n");
@@ -3758,9 +3852,10 @@ emit_air_head(Local *lc)
 
 /* A pointer base's bank waits in _fcc_ptr+2 while its index is evaluated
  * (emit_load_base, emit_load_global).  A call in the index may reuse
- * _fcc_ptr -- `digs[f(x)]', 4.3BSD-Reno doprnt.c's quad digits -- so the
- * bank is staged again from the pointer itself, local or global.  A is
- * kept. */
+ * _fcc_ptr -- `digs[f(x)]', 4.3BSD-Reno doprnt.c's quad digits -- and so
+ * does a read through another pointer, `fdp[ap[1]]', so the bank is staged
+ * again from the pointer itself, local or global, whenever the index wrote it
+ * (ir_ptr_bank_clobbered_since).  A is kept. */
 void
 emit_restage_base_bank(Local *lc, Global *gv)
 {
@@ -3841,7 +3936,7 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         !ISPTR(DECREF(lc->type)) &&
         lc->type != LT_LONG_PTR && lc->type != LT_FLOAT_PTR) {
         int base_mut = ir_local_mutated_since(idx_snap, (void *)lc);
-        int called   = ir_call_since(idx_snap);
+        int called   = ir_ptr_bank_clobbered_since(idx_snap);
         g_s_delta -= 2;                                  /* matches the PLA in the lowering */
         g_expr_type     = is_byte ? LT_CHAR : LT_INT;
         g_expr_unsigned = lc->is_unsigned;   /* A-1: elem inherits decl */
@@ -3895,7 +3990,10 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
-        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
+        if (ir_ptr_bank_clobbered_since(idx_snap)) {
+            lc->raw_accessed = 1;           /* the restage reads its slot */
+            emit_restage_base_bank(lc, NULL);
+        }
         ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_long_b_lo"));
         /* Re-load with +2 offset for high word. */
@@ -3919,7 +4017,10 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
-        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
+        if (ir_ptr_bank_clobbered_since(idx_snap)) {
+            lc->raw_accessed = 1;           /* the restage reads its slot */
+            emit_restage_base_bank(lc, NULL);
+        }
         if (ISPTR(elem)) {                  /* element is itself a pointer → 4-byte load */
             int k = fpr_alloc();
             emit_fpr_load_ptr_at_fcc_ptr(k);
@@ -6029,7 +6130,7 @@ emit_one_global(Global *g)
                          * reloc resolves label+offset (telnet Setlist's
                          * `char *charp = &nttyb.sg_erase`). */
                         Global *tg = &g_globals[v & 0xFFFF];
-                        int goff = (int)(v >> 16);
+                        int goff = (int)(short)(v >> 16);
                         if (goff != 0)
                             emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
                         else
@@ -6108,7 +6209,7 @@ emit_one_global(Global *g)
                     if (prefix_needed) fprintf(dst, "                ");
                     if (provided && g->init_values_hi[idx] == 3) {
                         Global *tg = &g_globals[v & 0xFFFF];
-                        int goff = (int)(v >> 16);
+                        int goff = (int)(short)(v >> 16);
                         if (goff != 0)
                             emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
                         else
@@ -6175,8 +6276,14 @@ emit_one_global(Global *g)
                  * char* struct fields above): 0 = string-pool label,
                  * 1 = NULL, 3 = &global (curses cr_tty.c sflags[]). */
                 if (g->init_values_hi[j] == 3) {
-                    Global *tg = &g_globals[g->init_values[j]];
-                    emit_mac_dataptr("_Ga", "%s", gname(tg));
+                    /* &global(+offset): the index low, a signed byte offset
+                     * high, as for a pointer struct field. */
+                    Global *tg = &g_globals[g->init_values[j] & 0xFFFF];
+                    int goff = (int)(short)(g->init_values[j] >> 16);
+                    if (goff != 0)
+                        emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
+                    else
+                        emit_mac_dataptr("_Ga", "%s", gname(tg));
                 } else if (g->init_values_hi[j] == 1) {
                     fprintf(dst, "DA      $0000\n");   /* NULL: 4-byte zero */
                     fprintf(dst, "                DFB     $00\n");
@@ -6191,8 +6298,12 @@ emit_one_global(Global *g)
                  * mode: same-segment far pointer (assembly-resolved
                  * offset + bank reloc — works for extern targets in
                  * another TU).  Single-bank: baked address. */
-                Global *tg = &g_globals[g->init_values[j]];
-                emit_mac_dataptr("_Ga", "%s", gname(tg));
+                Global *tg = &g_globals[g->init_values[j] & 0xFFFF];
+                int goff = (int)(short)(g->init_values[j] >> 16);
+                if (goff != 0)
+                    emit_mac_dataptr("_Ga", "%s+%d", gname(tg), goff);
+                else
+                    emit_mac_dataptr("_Ga", "%s", gname(tg));
             } else if (is_char_arr) {
                 fprintf(dst, "DFB     $%02X\n",
                         g->init_values[j] & 0xFFu);

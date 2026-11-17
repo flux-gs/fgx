@@ -971,7 +971,7 @@ _Sys_BlkTmp     DS 2                    ; _Sys_PathBlkArg: the offset it returns
 ; MVN.  Ten bytes of KGlobals back with them.
 
 ; select(2) scan state.  _selArgOff.._selDeadline is a CONTIGUOUS persistent
-; block: Phase 2's yield loop save/restores it on the per-task kernel stack
+; block: the select loop save/restores it on the per-task kernel stack
 ; (_Sys_SavedA and these statics are NOT in swtch's per-task carryover, so a
 ; concurrent task's syscall/select would clobber the in-flight scan).  The
 ; output masks + loop-locals below it are rebuilt each scan (not saved).
@@ -982,11 +982,12 @@ _selPresent    DS  2                    ; present bits: b0=rd b1=wr b2=ex b3=tim
 _selRdIn       DS  4                    ; input readfds  (32-bit fd_set word)
 _selWrIn       DS  4                    ; input writefds
 _selExIn       DS  4                    ; input exceptfds
-_selDeadline   DS  4                    ; Phase 2: _kSystemTicks deadline
+_selDeadline   DS  4                    ; _kSystemTicks deadline
 _SEL_STATE_LEN EQU  *-_selArgOff
 _selRdOut      DS  4                    ; result readfds  (rebuilt each scan)
 _selWrOut      DS  4                    ; result writefds
 _selExOut      DS  4                    ; result exceptfds
+_selNcoll      DS  2                    ; select1's `ncoll'
 _selCount      DS  2                    ; ready (fd,set) membership count
 _selFd         DS  2                    ; scan cursor
 _selBit        DS  4                    ; 32-bit rotating bit (1<<fd)
@@ -1077,7 +1078,7 @@ _Syscall_Table  DA      _Sys_Stub               ; 0:  unused
                 DA      _Sys_GetfsStat          ; 67: SYS_GETFSSTAT (df volume info)
                 DA      _Sys_MmAlloc            ; 68: SYS_MM_ALLOC (large MM alloc)
                 DA      _Sys_MmFree             ; 69: SYS_MM_FREE
-                DA      _Sys_Ifconfig           ; 70: SYS_IFCONFIG (net iface table)
+                DA      _Sys_Stub               ; 70: retired (SYS_IFCONFIG); ifconfig(8) uses ioctls
                 DA      _Sys_Socket             ; 71: SYS_SOCKET
                 DA      _Sys_Bind               ; 72: SYS_BIND
                 DA      _Sys_Sendto             ; 73: SYS_SENDTO
@@ -1144,6 +1145,9 @@ _Syscall_Table  DA      _Sys_Stub               ; 0:  unused
                 DA      _Sys_Flock              ; 128: SYS_FLOCK
                 DA      _Sys_Fchown             ; 129: SYS_FCHOWN
                 DA      _Sys_Fchmod             ; 130: SYS_FCHMOD
+                DA      _Sys_Sendmsg            ; 131: SYS_SENDMSG
+                DA      _Sys_Recvmsg            ; 132: SYS_RECVMSG
+                DA      _thunk_Vhangup          ; 133: SYS_VHANGUP (tty slot 66)
 
 ;------------------------------------------------------------------------------
 ; _Sys_ScreenCtl (SYS_SCREEN_CTL = 101) - console screen claim.  A = 1 claims
@@ -1351,27 +1355,18 @@ _Sys_Stub       MX      %00
 
 ;------------------------------------------------------------------------------
 ; _Sys_Shutdown (#100) - shutdown(fd, how).  _Sys_SavedA = fd, _Sys_SavedX = how.
-; TCP half-close: SHUT_WR/SHUT_RDWR (how != 0) send a FIN via net_op_shutdown
-; (CR_DISCON), leaving the socket in FIN_WAIT so recv() still drains queued data
-; and sees the peer FIN as EOF; the fd stays open (close() frees it).  SHUT_RD
-; (how == 0) is a successful no-op (the W5100 can't stop RX).  _Sock_FdToDesc
-; validates the fd + socket-ness and stages _sockTmpHw for the net op.
+; Every how goes to net_op_shutdown: a kernel-stack socket's soshutdown, or the
+; chip's half-close.  The fd stays open (close() frees it).  _Sock_FdToDesc
+; validates the fd + socket-ness and stages the socket for the net op.
 ; Out: C=1 ok / C=0 + A=EBADF (bad fd or not a socket).
 ;------------------------------------------------------------------------------
 _Sys_Shutdown   MX      %00
-                LDA     _Sys_SavedX             ; how
-                AND     #$00FF
-                BEQ     @shd_ok                 ; SHUT_RD -> no FIN, succeed
                 LDA     _Sys_SavedA             ; fd
                 AND     #$00FF
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0 + A=EBADF
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0 + A=EBADF
                 BCC     @shd_err
-                STY     _sockTmpOff
                 LDY     #NETOP_Shutdown
                 JMP     _Net_Dispatch           ; -> net_op_shutdown -> _Net_Xport_Shutdown
-@shd_ok         LDA     #0
-                SEC
-                RTS
 @shd_err        RTS                             ; C=0, A=EBADF from _Sock_FdToDesc
 
 ;------------------------------------------------------------------------------
@@ -1380,10 +1375,9 @@ _Sys_Shutdown   MX      %00
 ; wrapper marshals the fd_sets in/out and pre-converts timeval->ticks:
 ;   +0 nfds(2)  +2 present(2; b0=rd b1=wr b2=ex b3=timeout)  +4 readfds(4)
 ;   +8 writefds(4)  +12 exceptfds(4)  +16 timeout-ticks(4)
-; Phase 2: blocking poll + _Sys_Yield loop.  timeout==NULL blocks until ready
-; or a signal (EINTR); timeout=={0,0} is a non-blocking poll; else it blocks up
-; to the deadline.  Out: A = ready (fd,set) count, C=1 / A=errno (EBADF/EINTR),
-; C=0.  The loop keeps only _selArgOff/_selCallerBk live across the yield (saved
+; timeout==NULL sleeps until an object is ready or a signal comes (EINTR);
+; timeout=={0,0} is a non-blocking poll; else it sleeps up to the deadline.  Out: A = ready (fd,set) count, C=1 / A=errno (EBADF/EINTR),
+; C=0.  The loop keeps only _selArgOff/_selCallerBk live across the sleep (saved
 ; on the per-task kernel stack — these statics are NOT in swtch's carryover);
 ; every scan re-reads the argblk fresh (stable in the caller bank), and the
 ; absolute deadline lives in the argblk (+16) which each select call owns.
@@ -1412,6 +1406,9 @@ _Sys_Select     MX      %00
                 LDY     #16
                 STA     [_libcTmp2],Y           ; deadline.lo -> +16
 @sel_loop       JSR     _Sel_ReadArgblk
+                LDA     _selColl                ; `ncoll = nselcoll;
+                STA     _selNcoll               ;  p_flag |= P_SELECT;'
+                JSR     _Sel_Mark
                 JSR     _Sel_Scan
                 BCC     @sel_err
                 LDA     _selCount
@@ -1427,15 +1424,36 @@ _Sys_Select     MX      %00
                 PHA
                 LDA     _selCallerBk
                 PHA
-                LDA     _selPresent             ; timed select -> yield (deadline poll);
-                AND     #8                      ; block-forever -> sleep on WCHAN_SELECT
-                BNE     @sel_yield
-                INC     _nSelSleepers           ; (the kbd/sock/idle wake sites re-scan us)
+                ; select1's test before it sleeps, 2.11BSD sys_generic.c:
+                ;     if ((p_flag & P_SELECT) == 0 || nselcoll != ncoll) {
+                ;             p_flag &= ~P_SELECT;
+                ;             goto retry;
+                ;     }
+                ;     p_flag &= ~P_SELECT;
+                ;     error = tsleep(&selwait, PSOCK | PCATCH, timo);
+                ; A wake that came during the scan found no sleeper, and left
+                ; one of those two marks instead.  Masked from the test to the
+                ; sleep, which masks for itself.  `timo' is the deadline in
+                ; SE_WakeTime, which _Timer_WakeExpired ends the sleep at.
+                SEI
+                JSR     _Sel_Marked
+                BCC     @sel_again
+                LDA     _selColl
+                CMP     _selNcoll
+                BNE     @sel_again
+                JSR     _Sel_ArmTimo            ; A = 1 timed, 0 not
+                PHA
+                BEQ     @sel_slp
+                INC     _nTimerSleepers
+@sel_slp        INC     _nSelSleepers
                 LDA     #WCHAN_SELECT
                 JSR     _sleep
                 DEC     _nSelSleepers
+                PLA
+                BEQ     @sel_wake
+                DEC     _nTimerSleepers
                 BRA     @sel_wake
-@sel_yield      JSR     _Sys_Yield
+@sel_again      CLI
 @sel_wake       PLA
                 STA     _selCallerBk
                 PLA
@@ -1539,6 +1557,46 @@ _Sel_Expired    MX      %00                     ; C=1 iff _kSystemTicks >= deadl
                 LDY     #18
                 LDA     _kSystemTicks+2
                 SBC     [_libcTmp2],Y           ; C=1 -> no borrow -> now >= deadline
+                RTS
+; _Sel_ArmTimo - set the caller's SE_WakeTime for a sleep on WCHAN_SELECT: the
+; deadline at argblk+16 for a timed select (A=1), else a time that never comes
+; (A=0).  _selPresent is current.  Clobbers Y, _selTmp, _libcTmp2.
+_Sel_ArmTimo    MX      %00
+                JSR     _Sel_SetPtr
+                LDA     _curTask
+                AND     #$00FF
+                DEC
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL                             ; (pid-1)*SE_SIZE
+                CLC
+                ADC     #SE_WakeTime
+                STA     _selTmp
+                LDA     _selPresent
+                AND     #8
+                BEQ     @sat_never
+                LDY     #18
+                LDA     [_libcTmp2],Y
+                PHA
+                LDY     #16
+                LDA     [_libcTmp2],Y
+                LDY     _selTmp
+                STA     [_schedTblPtr],Y
+                INY
+                INY
+                PLA
+                STA     [_schedTblPtr],Y
+                LDA     #1
+                RTS
+@sat_never      LDY     _selTmp
+                LDA     #$FFFF
+                STA     [_schedTblPtr],Y
+                INY
+                INY
+                STA     [_schedTblPtr],Y
+                LDA     #0
                 RTS
 _Sel_SigPending MX      %00                     ; C=1 iff a signal is pending (EINTR)
                 ; NO TTY-SIDE ARM, AND THERE MUST NOT BE ONE.  `ttyinput'
@@ -1680,9 +1738,9 @@ _Sel_Scan       MX      %00
 ;------------------------------------------------------------------------------
 ; _Sel_Classify - readiness of the fd in _selFd for select.  Out: A = ready
 ; bits (b0=read, b1=write, b2=except), C=1 / A=EBADF, C=0 (fd not open).
-;   console : read = _kKbdRingCount!=0, write = always, except = never
-;   socket  : NETOP_SockStatus (read/write per SN_SR/RSR/FSR; except never)
-;   pipe/chardev/file : read + write always ready (scope cut), except never
+;   socket  : soo_select, through NETOP_SockStatus
+;   pipe    : _SelOp_Pipe, from the ring
+;   chardev/file : read + write always ready, except never
 ; MX %00 in/out.
 ;------------------------------------------------------------------------------
 _Sel_Classify   MX      %00
@@ -1765,20 +1823,76 @@ _SelOp_Default  MX      %00
                 SEC
                 RTS
 
+; _SelOp_Pipe - a pipe's readiness from its ring, as 2.11BSD's soo_select
+; answers for the socket pair a pipe is there (sys_socket.c, uipc_socket2.c
+; soreadable/sowriteable).  Readable: bytes resident, or every writer gone (a
+; read answers EOF).  Writable: room in the ring -- which grows to
+; PIPE_MAX_BUFSZ before a writer waits -- or every reader gone (a write
+; answers EPIPE).  The pipe ops in net.mod wake WCHAN_SELECT when they move
+; bytes or close an end (net/pipe.s _Pipe_Wake).
+_SelOp_Pipe     REP     #$30
+                MX      %00
+                SEP     #$20
+                MX      %10
+                LDA     _selFd
+                JSR     _Fcb_LookupPtr          ; C=1 + _fcbPtr / C=0
+                REP     #$30
+                MX      %00
+                BCC     @sp_none
+                LDY     #FCB_PipeIdx
+                LDA     [_fcbPtr],Y
+                AND     #$00FF
+                ASL
+                ASL
+                ASL
+                ASL                             ; idx<<4 = record offset
+                STA     _selPipeRec
+                LDX     #0
+                ORA     #PIPE_Count
+                TAY
+                LDA     [_pipeTablePtr],Y
+                BNE     @sp_rd
+                LDA     _selPipeRec
+                ORA     #PIPE_WrClosed
+                TAY
+                LDA     [_pipeTablePtr],Y
+                AND     #$00FF
+                BEQ     @sp_wr
+@sp_rd          INX                             ; b0: readable
+@sp_wr          LDA     _selPipeRec
+                ORA     #PIPE_RdClosed
+                TAY
+                LDA     [_pipeTablePtr],Y
+                AND     #$00FF
+                BNE     @sp_w
+                LDA     _selPipeRec
+                ORA     #PIPE_BufSz
+                TAY
+                LDA     [_pipeTablePtr],Y
+                CMP     #PIPE_MAX_BUFSZ
+                BCC     @sp_w                   ; the ring can still grow
+                LDA     _selPipeRec
+                ORA     #PIPE_Count
+                TAY
+                LDA     [_pipeTablePtr],Y
+                CMP     #PIPE_MAX_BUFSZ
+                BCS     @sp_out
+@sp_w           INX                             ; b1: writable
+                INX
+@sp_out         TXA
+                SEC
+                RTS
+@sp_none        LDA     #0
+                SEC
+                RTS
+_selPipeRec     DS      2
+
 _SelOp_Socket   REP     #$30
                 MX      %00
                 LDA     _selFd
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0
                 BCC     @cl_sockbad
-                STY     _sockTmpOff
-                JSR     _Loop_StatusTry         ; loopback answers from its rings
-                LDA     _loopHandled
-                BEQ     @cl_sockhw
-                LDA     _loopBits
-                AND     #$0007
-                SEC
-                RTS
-@cl_sockhw      LDY     #NETOP_SockStatus
+                LDY     #NETOP_SockStatus       ; soo_select, in net.mod
                 JSR     _NetThunkExec           ; A = ready bits, C=1 / C=0 ENOSYS
                 BCC     @cl_sockbad
                 AND     #$0007
@@ -2327,8 +2441,54 @@ _Sys_Sysctl     MX      %00
                 BEQ     @sc_tod
                 CMP     #21                     ; KERN_BOOTTIME
                 BEQ     @sc_tod
+                CMP     #25                     ; KERN_NETDATA
+                BEQ     @sc_net
 @sc_notod       PLB
                 BRA     @sc_far
+                ; kern.netdata: the network stack's data bank as an address,
+                ; what 2.11BSD's route(8) reads `netdata' from /unix for.  A
+                ; read-only long, as sysctl_rdlong; 0 with no stack loaded.
+@sc_net         PLB                             ; DBR = this bank, for the walk
+                PHX
+                LDA     #VT_BSDNET
+                JSR     Mod_FindVtable          ; C=1: X = its bank
+                BCS     @sn_have
+                LDX     #0
+@sn_have        TXY                             ; Y = the bank
+                PLX                             ; X = the block again
+                PHB
+                SEP     #$20
+                MX      %10
+                LDA     _Sys_CallerBank
+                PHA
+                PLB                             ; DBR = the caller's bank
+                REP     #$20
+                MX      %00
+                LDA     |$0006,X                ; flags
+                BIT     #$0002                  ; SYSCTL_NEWP: read-only
+                BNE     @sn_perm
+                BIT     #$0001                  ; SYSCTL_OLDP
+                BEQ     @sn_size
+                LDA     |$0008,X                ; *oldlenp
+                CMP     #4
+                BCC     @sn_mem
+@sn_size        LDA     #4
+                STA     |$0008,X                ; sizeof (long)
+                STZ     |$000C,X                ; low word: offset 0
+                TYA
+                STA     |$000E,X                ; high word: the bank
+                PLB
+                LDA     #0
+                SEC
+                RTS
+@sn_perm        PLB
+                LDA     #EPERM
+                CLC
+                RTS
+@sn_mem         PLB
+                LDA     #ENOMEM
+                CLC
+                RTS
 @sc_vm          PLB
                 TXA
                 JMP     _Sys_VmSysctl
@@ -3590,12 +3750,10 @@ _WrOp_Socket      ; FCB_FL_SOCKET fd: write == sorw(fp, uio) == sosend(so, 0, ui
                 ; 2.11BSD sys_generic.c:529 -- no address, no flags, and the
                 ; transport is the socket's to choose, which net.mod does.
                 LDA     _Sys_WrFd
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0
                 BCC     @sw_sockErr
-                STY     _sockTmpOff
                 JSR     _Sys_UUio               ; _libcTmp2 = &u.u_ttyuio
                 JSR     _Sock_StageUio
-                STZ     _sockSendFlags
                 LDY     #NETOP_SoWrite
                 JMP     _Net_Dispatch
 @sw_sockErr     MX      %00
@@ -3612,8 +3770,6 @@ _Sock_StageUio  MX      %00
                 LDA     _libcTmp2+2
                 AND     #$00FF
                 STA     _sockUioBank
-                STZ     _sockSrcOff             ; read/write name no address
-                STZ     _soHasDst
                 RTS
 
 _WrOp_Pipe        ; FCB_FL_PIPE fd: write == pipe_rw(fp, uio) with UIO_WRITE.
@@ -3802,7 +3958,8 @@ _IoOp_Notty       LDA     #ENOTTY
                 MX      %00         ; argp returns REP\'d (assembler state, not code)
                 TXA                             ; X is the tty BYTE offset per
                 JSR     _Se_TtyOffToIdx         ;   @si_ttyX; the slot takes an
-                JSR     _Tty_Ioctl              ;   INDEX
+                ORA    |_ioPtc                  ;   INDEX, and TTYIO_PTC with it
+                JSR     _Tty_Ioctl
                 CMP     #0
                 BEQ     @si_kcOk
                 CMP     #$FFFF
@@ -3907,12 +4064,8 @@ _IoOp_Notty       LDA     #ENOTTY
                 RTS
 
 ;------------------------------------------------------------------------------
-; _IoOp_Socket - socket ioctls (FCB_FL_SOCKET fd).  Resolves the descriptor, then:
-;   FIONBIO    *arg != 0 -> set SOCK_NB (non-blocking), else clear
-;   FIONREAD   *arg <- RX bytes available (NETOP_SockStatus stashes -> _sockRxLen)
-;   SIOCATMARK *arg <- 0 (W5100 exposes no TCP urgent)
-;   SIOCGIF*   the 'i' group, net.mod's net_op_ifioctl (2.11BSD ifioctl)
-; All return C=1 + A=0, or C=0 + A=EBADF/ENOTTY.  MX %00 entry.
+; _IoOp_Socket - an ioctl on a socket fd: the socket's soo_ioctl, through
+; net.mod's net_op_ifioctl.  C=1 + A=0, or C=0 + A=errno.  MX %00 entry.
 ;------------------------------------------------------------------------------
 _IoOp_Socket        SEP     #$20
                 MX      %10
@@ -3920,116 +4073,19 @@ _IoOp_Socket        SEP     #$20
                 REP     #$30
                 MX      %00
                 AND     #$00FF
-                JSR     _Sock_FdToDesc          ; C=1 Y=desc + _sockTmpHw / C=0
-                BCS     @sis_desc
-                LDA     #EBADF
-                CLC
-                RTS
-@sis_desc       STY     _sockTmpOff
-                LDA     _Sys_IoctlCmd
-                AND     #$FF00
-                CMP     #SIOC_IF_GROUP          ; SIOCGIF*: net.mod's ifioctl
-                BNE     @sis_notif
-                LDY     #NETOP_IfIoctl
-                JMP     _NetThunkExec
-@sis_notif      LDA     _Sys_IoctlCmd
-                CMP     #FIONBIO
-                BEQ     @sis_nbio
-                CMP     #FIONREAD
-                BEQ     @sis_nread
-                CMP     #SIOCATMARK
-                BEQ     @sis_atmark
-                LDA     #ENOTTY
-                CLC
-                RTS
-@sis_nbio       LDA     _Sys_IoctlArgLo         ; *arg on/off
-                STA     _libcTmp2
-                SEP     #$20
-                MX      %10
-                LDA     _Sys_IoctlArgBank
-                STA     _libcTmp2+2
-                REP     #$20
-                MX      %00
-                LDA     [_libcTmp2]
-                BEQ     @sis_nbclr
-                LDA     _sockTmpOff             ; set SOCK_NB
-                CLC
-                ADC     #SOCK_Flags
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     [_sockTablePtr],Y
-                ORA     #SOCK_NB
-                STA     [_sockTablePtr],Y
-                REP     #$30
-                MX      %00
-                LDA     #0
-                SEC
-                RTS
-@sis_nbclr      LDA     _sockTmpOff             ; clear SOCK_NB
-                CLC
-                ADC     #SOCK_Flags
-                TAY
-                SEP     #$20
-                MX      %10
-                LDA     [_sockTablePtr],Y
-                AND     #$FF-SOCK_NB
-                STA     [_sockTablePtr],Y
-                REP     #$30
-                MX      %00
-                LDA     #0
-                SEC
-                RTS
-@sis_nread      ; LOOPBACK FIRST, exactly as _Sel_Classify does -- and this
-                ; arm is why apple/fgx#97 was a live defect rather than a
-                ; latent one.  A loopback descriptor has NO W5100 socket
-                ; behind it (SOCK_HwIdx is the sentinel SOCK_HW_LOOP), so
-                ; asking the chip for socket $FE's RX_RSR reads open bus on a
-                ; machine with no card.  #97's own write-up reasoned that
-                ; loopback fds never reach SockStatus because _Sel_Classify
-                ; pre-checks; that is true of select(2) and was never true
-                ; here.  The bytes live in the Rx ring, and _Loop_StatusTry
-                ; already walks it for the readable bit, so it now leaves the
-                ; resident count in _loopRxLen on the way past.
-                JSR     _Loop_StatusTry
-                LDA     _loopHandled
-                BEQ     @sisn_hw
-                LDA     _loopRxLen              ; ONE tail below, one source of
-                STA     _sockRxLen              ;   the count: a second copy of
-                BRA     @sisn_arg               ;   the store is a second answer
-@sisn_hw        LDY     #NETOP_SockStatus       ; populates _sockRxLen (RX_RSR)
-                JSR     _NetThunkExec
-@sisn_arg       LDA     _Sys_IoctlArgLo
-                STA     _libcTmp2
-                SEP     #$20
-                MX      %10
-                LDA     _Sys_IoctlArgBank
-                STA     _libcTmp2+2
-                REP     #$20
-                MX      %00
-                LDA     _sockRxLen
-                STA     [_libcTmp2]             ; *arg = bytes available
-                LDA     #0
-                SEC
-                RTS
-@sis_atmark     LDA     _Sys_IoctlArgLo
-                STA     _libcTmp2
-                SEP     #$20
-                MX      %10
-                LDA     _Sys_IoctlArgBank
-                STA     _libcTmp2+2
-                REP     #$20
-                MX      %00
-                LDA     #0
-                STA     [_libcTmp2]             ; *arg = 0 (no OOB mark)
-                SEC
-                RTS
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0 + EBADF
+                BCC     @sis_bad
+                LDY     #NETOP_IfIoctl          ; every one is soo_ioctl's, in
+                JMP     _NetThunkExec           ;   net.mod
+@sis_bad        RTS
 
 _Io_CdThenTty   ENT
                 MX      %00
                 JSR     _SyTty_Resolve          ; /dev/tty -> the caller's line
                 STA    |_ioCdIdx                ; the op preserves nothing, and
                                                 ;   A carries its result back
+                STZ    |_ioPtc                  ; not the controller, until
+                                                ;   @ct_noTty finds a master
                 JSR     _Chardev_Ioctl
                 BCS     @ct_ret                 ; C=1: the device answered
                 CMP     #ENOTTY
@@ -4039,42 +4095,29 @@ _Io_CdThenTty   ENT
                 BCC     @ct_noTty               ; no -- a master, or not a tty
                 TAX                             ; X = its tty byte offset, which
                 JMP     _IoOp_TtyAtX            ;   is that block's contract
-@ct_noTty       ; A PTY MASTER IS NOT A TTY LINE, AND THE WINDOW SIZE STILL
-                ; HAS TO REACH ITS SLAVE (apple/fgx#150, on the vnode road).
+@ct_noTty       ; A PTY MASTER'S IOCTL IS ITS SLAVE'S LINE'S.  In BSD both ends
+                ; share one `struct tty', and `ptyioctl' takes the commands
+                ; that are the controller's own -- TIOCPKT, TIOCUCNTL,
+                ; TIOCREMOTE -- and gives every other one to `error =
+                ; ttioctl(tp, cmd, data, flag)', where `tp' is the slave's line
+                ; (vendor/2.11BSD/usr/sys/sys/tty_pty.c:480-526).  So a login
+                ; daemon reads and sets the session's modes, special characters
+                ; and window size through the master it holds.
+                ;
                 ; `_Chardev_TtyOff' is right to refuse a master -- it has no
-                ; line of its own -- but in BSD both ends share one `struct
-                ; tty', so `ioctl(master, TIOCSWINSZ)' IS a set on the line the
-                ; child reads.  telnetd needs it for NAWS; winsz(8) measures
-                ; it.
-                ;
-                ; AND A MASTER'S TIOCFLUSH IS THE SLAVE'S FLUSH (apple/fgx
-                ; #241), for the same reason and from the same paragraph of
-                ; upstream: `ptyioctl' has NO TIOCFLUSH arm -- its master
-                ; switch is TIOCPKT, TIOCUCNTL, TIOCREMOTE and
-                ; TIOCSETP/SETN/SETD and nothing else
-                ; (vendor/2.11BSD/usr/sys/sys/tty_pty.c:483-511) -- so the
-                ; command falls through to `error = ttioctl(tp, cmd, data,
-                ; flag)' at tty_pty.c:526, where `tp' IS the slave's line.
-                ;
-                ; ONLY THESE THREE COMMANDS, for the reason the sibling arm
-                ; gives: widening a master's whole ioctl surface would give it
-                ; a second, competing view of state the slave owns.
-                LDA     _Sys_IoctlCmd
-                CMP     #TIOCGWINSZ
-                BEQ     @ct_mwin
-                CMP     #TIOCSWINSZ
-                BEQ     @ct_mwin
-                CMP     #TIOCFLUSH
-                BNE     @ct_mrefuse
-@ct_mwin        LDA    |_ioCdIdx
+                ; line of its own -- so the slave's line is named here, and
+                ; `_ioPtc' tells `kc_ttioctl' the controller is asking, which
+                ; is what `ptyioctl's `d_open == ptcopen' test decides.
+                LDA    |_ioCdIdx
                 CMP     _ptyMasterIdx0
                 BEQ     @ct_m0
                 CMP     _ptyMasterIdx1
-                BEQ     @ct_m1
-                BRA     @ct_mrefuse
+                BNE     @ct_mrefuse
+                LDX     #TTY_SIZE*2             ; master of pair 1 -> tty[2]
+                BRA     @ct_mgo
 @ct_m0          LDX     #TTY_SIZE               ; master of pair 0 -> tty[1]
-                JMP     _IoOp_TtyAtX
-@ct_m1          LDX     #TTY_SIZE*2             ; master of pair 1 -> tty[2]
+@ct_mgo         LDA     #TTYIO_PTC
+                STA    |_ioPtc
                 JMP     _IoOp_TtyAtX
 @ct_mrefuse     ; _Chardev_TtyOff clobbered A, so the refusal is rebuilt rather
                 ; than carried.  It is the same ENOTTY the device gave.
@@ -4861,12 +4904,10 @@ _RdOp_Pipe        ; FCB_FL_PIPE fd: read == pipe_rw(fp, uio) with UIO_READ.
                 JMP     _Pipe_Read              ; -> A=bytes(0=EOF)/C
 _RdOp_Socket      ; FCB_FL_SOCKET fd: read == sorw(fp, uio) == soreceive(so, 0, uio, 0).
                 LDA     _Sys_RdFd
-                JSR     _Sock_FdToDesc          ; C=1 + Y=desc + _sockTmpHw / C=0
+                JSR     _Sock_FdToDesc          ; C=1 + _sockTmpSo / C=0
                 BCC     @rd_sockErr
-                STY     _sockTmpOff
                 JSR     _Sys_UUio               ; _libcTmp2 = &u.u_ttyuio
                 JSR     _Sock_StageUio
-                STZ     _sockRecvFlags          ; the transports honour SOCK_NB
                 LDY     #NETOP_SoRead
                 JMP     _Net_Dispatch
 @rd_sockErr     MX      %00
@@ -6649,6 +6690,18 @@ _thunk_Stod     MX      %00
                 RTS
 @stod_priv      LDX     _Sys_CallerBank
 _ktp102         JSL     KTTY_TOD_STOD
+                RTS
+
+; vhangup(2), 2.11BSD sys_inode.c:706, opens `if (!suser()) return;'.  The
+; rest is kc_vhangup's, in the tty bank.
+_thunk_Vhangup  MX      %00
+                JSR     _Suser
+                BCS     @vh_priv
+                LDA     #EPERM
+                CLC
+                RTS
+@vh_priv
+_ktp128         JSL     KTTY_VHANGUP
                 RTS
 
 ; adjtime(2) is super user only too: 2.11BSD kern_time.c:123, `if

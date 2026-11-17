@@ -1,0 +1,100 @@
+#
+#	FGX /etc/rc, after 2.11BSD's (usr/etc/rc)
+#
+
+# shared libraries first: everything below but the static set needs libc.so
+/sbin/modload ld >/dev/console 2>&1
+/sbin/ldload >/dev/console 2>&1
+case $? in
+0|1)
+	;;
+*)
+	exit 1
+	;;
+esac
+
+if [ "$1" = autoboot ]
+then
+	echo Automatic reboot in progress... >/dev/console 2>&1
+	date >/dev/console 2>&1
+	echo Running disk integrity checks... >/dev/console 2>&1
+	# this will *only* work if fsck can do your root file system
+	# without a temporary file, and if the root file system is
+	# checked alone in a pass by itself -- be careful!  This can
+	# *seriously* mess you up.
+	/sbin/fsck -p >/dev/console 2>&1
+	case $? in
+	0)
+		date >/dev/console 2>&1
+		;;
+	2)
+		exit 1
+		;;
+	4)
+		/sbin/reboot -n
+		;;
+	8)
+		echo "Automatic reboot failed... help!" >/dev/console 2>&1
+		exit 1
+		;;
+	12)
+		echo "Reboot interrupted" >/dev/console 2>&1
+		exit 1
+		;;
+	*)
+		echo "Unknown error in reboot" >/dev/console 2>&1
+		exit 1
+		;;
+	esac
+else
+	date >/dev/console 2>&1
+fi
+
+# the kernel mounts the root read-only
+/sbin/mount -u -w /
+
+# the IIgs clock keeps local time; see adjkerntz(8)
+/sbin/adjkerntz -i
+if [ -f /etc/wall_cmos_clock ] && cmp -s /etc/localtime /usr/share/zoneinfo/UTC
+then
+	echo 'time zone not set (UTC); the IIgs clock is read as UTC -- see /etc/rc.local' >/dev/console 2>&1
+fi
+
+rm -rf /var/run/*
+>/etc/utmp; chmod 644 /etc/utmp
+
+cat /etc/motd >/dev/console 2>&1
+# color -bg -x 000099
+# color -fg -x C0C0C0
+# color -bd blue
+# font vga
+
+# the rest of /etc/modload.conf; rc.local loads the optional ones.
+# TEST FIXTURE (tools/mame_test/fixtures/rc.netlate): disk_src/etc/rc.in with
+# the network modules left off this line, for the probe runs that load them by
+# hand once DHCP has given the chip an address and a gateway.
+UFSPROBE=
+[ -f /lib/modules/ufsprobe ] && UFSPROBE=ufsprobe
+/sbin/modload net ramdisk pty klog fpsim $UFSPROBE >/dev/console 2>&1
+
+# the Control Panel's RAM disk, when there is one
+/sbin/mount_prodos -o write /dev/ram0 /ram5 >/dev/null 2>&1 &&
+	echo 'ram5: /dev/ram0 mounted on /ram5' >/dev/console 2>&1
+
+# set hostname and INET, turn on network
+. /etc/netstart
+
+echo 'starting system logger' >/dev/console 2>&1
+rm -f /dev/log
+/sbin/syslogd
+# wait for syslogd to replay the boot log before the console shell starts
+for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+do
+	test -f /var/run/syslog.pid && break
+	sleep 1
+done
+
+/sbin/update
+/sbin/cron
+
+[ -f /etc/rc.local ] && . /etc/rc.local

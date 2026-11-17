@@ -799,9 +799,12 @@ _kfp906         JSL     KFAR_VFS_ROOTOPEN       ; bank byte patched by Far_Init
                 CLC
                 RTS
 
-@fro_no         ; Nothing was allocated and nothing was asked of the root, so
-                ; this is the "not mine" answer.
-                LDA     #0
+@fro_no         ; No descriptor: _Fcb_Alloc's errno is the answer -- EMFILE
+                ; for the process, ENFILE for the system file table (Reno's
+                ; falloc, kern/descrip.c), ENOMEM for the heap.  Never zero,
+                ; which a caller would read as "no root" and answer ENXIO.
+                ; @al_full sets only A's low byte.
+                AND     #$00FF
                 PLP
                 CLC
                 RTS
@@ -1063,7 +1066,7 @@ Fs_SyncAll      MX      %00
 ; `_Ld_VnodeRead'.
 ;
 ; TWO CALLERS STILL COME HERE AND ARE BROKEN BY IT, each with an issue:
-; `_Ifnet_LoadHwaddr' (ifconfig_sys.s) reads /etc/hwaddr.conf and takes the
+; `_Net_LoadHwaddr' (hwaddr.s) reads /etc/hwaddr.conf and takes the
 ; EBADF for end-of-file, so the file is silently ignored -- apple/fgx#356;
 ; `Con_LoadFontFromFile' reports it to font(1), which cannot load any font on
 ; the image -- apple/fgx#357.  Both fixes move the read off this path, and
@@ -1202,19 +1205,8 @@ Fs_Close        MX      %00
                                                 ;   it; just drop this slot
                 REP     #$20
                 MX      %00
-                ; Loopback sockets are torn down kernel-side: their state is two
-                ; pipe.s rings, not a W5100 socket, and net.mod cannot reach
-                ; pipe.s.  _Loop_CloseTry leaves _loopHandled=0 for hw sockets.
-                LDY     #FCB_SockIdx
-                LDA     [_fcbPtr],Y
-                AND     #$00FF
-                TAY
-                JSR     _Loop_CloseTry
-                LDA     _loopHandled
-                BNE     @fc_sockdone
-                LDY     #NETOP_SockTeardown     ; _Sock_Teardown now in net.mod
+                LDY     #NETOP_SockTeardown     ; soclose, in net.mod
                 JSR     _Net_Dispatch           ; -> net_op_sockteardown (_fcbPtr live)
-@fc_sockdone
                 SEP     #$20
                 MX      %10
 @fc_sockShared  PLA                             ; restore fd from stack

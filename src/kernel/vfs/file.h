@@ -134,6 +134,12 @@
 #define FSHLOCK         0x0080  /* Reno: O_SHLOCK (00200) */
 #define FEXLOCK         0x0100  /* Reno: O_EXLOCK (00400) */
 
+/* The unix domain's garbage collector marks (uipc_usrreq.c unp_gc, reached
+ * through unp_fileop below): Reno's O_MARK 00020 and O_DEFER 00040
+ * (sys/fcntl.h:71-72), 2.11BSD's FMARK and FDEFER (h/file.h). */
+#define FMARK           0x0010
+#define FDEFER          0x0020
+
 /* flock(2)'s operations, Reno sys/fcntl.h:49-52.  toolchain/include/sys/file.h
  * carries the same four for userland. */
 #define LOCK_SH         0x01    /* shared file lock */
@@ -233,6 +239,7 @@ struct file {
     struct fileops *f_ops;      /* vnops for a vnode fd; 0 until I2 -- see head */
     char   *f_data;             /* the vnode, socket or pipe this names */
     off_t   f_offset;           /* the seek pointer this open(2) carries */
+    char   *f_fcb;              /* the core bank's FCB this open file is */
 };
 
 #endif /* _FGX_FILE_H_ */

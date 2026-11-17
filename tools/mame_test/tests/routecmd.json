@@ -1,0 +1,29 @@
+{
+ "name": "routecmd",
+ "description": "2.11BSD's route(8) on lo0, the only interface without a card: `route -n add' a host route through lo0's own address (metric 0: the gateway is this host), which a datagram to it then takes (ifcprobe -s: ip_output finds a route), `route -n delete' it, which takes the route away (ENETUNREACH, 51), and `route -f' after adding a net route, written as its network number 10.8, with metric 1 (RTF_GATEWAY, the only kind flushroutes deletes), which it finds through sysctl kern.netdata, nlist on /netnix and /dev/kmem, and deletes.",
+ "command": "R='route -n';P='/testbin/ifcprobe -s';$R add 10.9.9.9 127.0.0.1 0;$P 10.9.9.9;$R delete 10.9.9.9 127.0.0.1;$P 10.9.9.9;$R add net 10.8 127.0.0.1 1;$P 10.8.0.1;$R -f;$P 10.8.0.1;D=DO;echo RT ${D}NE",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "add host 10.9.9.9: gateway 127.0.0.1",
+   "IFC S 10.9.9.9 sent",
+   "delete host 10.9.9.9: gateway 127.0.0.1",
+   "IFC S 10.9.9.9 errno 51",
+   "add net 10.8: gateway 127.0.0.1",
+   "IFC S 10.8.0.1 sent",
+   "Flushing routing tables:",
+   "done",
+   "IFC S 10.8.0.1 errno 51",
+   "RT DONE",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "huh?",
+   "route:",
+   "PANIC",
+   "BRK",
+   "usage:",
+   "not in table"
+  ]
+ }
+}

@@ -247,7 +247,7 @@ int main()
      * the table, VFS_NPROC * FS_MAX_FDS for the arrays.  The relationship
      * that must hold is the over-subscription: more possible descriptors than
      * file structs, because dup and fork share a struct. */
-    if (sizeof(struct file) != 24)              return 73;
+    if (sizeof(struct file) != 28)              return 73;
     if (sizeof(struct file *) != 4)             return 74;
 
     /* EVERY FIELD OFFSET, because UFS 1.7d-I2 puts the syscall layer's
@@ -258,7 +258,9 @@ int main()
      * numbers as F_* EQUs, generated from tools/gen_vfs_equ.py, and this is
      * what stops the two copies drifting.
      *
-     * The layout is Reno's: four shorts, then four 4-byte members. */
+     * The layout is Reno's: four shorts, then four 4-byte members; then
+     * FGX's f_fcb, the FCB the open file is, which f_data names only for a
+     * socket or a pipe. */
     if (OFF(gfl, f_flag) != 0)                  return 77;
     if (OFF(gfl, f_type) != 2)                  return 78;
     if (OFF(gfl, f_count) != 4)                 return 79;
@@ -267,6 +269,7 @@ int main()
     if (OFF(gfl, f_ops) != 12)                  return 82;
     if (OFF(gfl, f_data) != 16)                 return 83;
     if (OFF(gfl, f_offset) != 20)               return 84;
+    if (OFF(gfl, f_fcb) != 24)                  return 86;
     if (NFILE < 3 + VFS_NPROC)                  return 75;
     if (VFS_NPROC * FS_MAX_FDS <= NFILE)        return 76;
 

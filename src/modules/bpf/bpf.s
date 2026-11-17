@@ -66,6 +66,7 @@
 ;------------------------------------------------------------------------------
 MOD_JT_BASE             EQU     $00032E     ; bank-0 JT gateway (was $02FE00; relocatable kernel)
 MOD_REGISTERCHARDEV     EQU     MOD_JT_BASE+$62
+                PUT     ../../../include/config.s
                 PUT     ../../../include/devnodes.s    ; DEVNODE_BPF0
 SYS_KERNLOG             EQU     MOD_JT_BASE+$46
 SYS_MODLOG              EQU     MOD_JT_BASE+$66 ; detail log; kernel prepends "<name>: "
@@ -86,8 +87,9 @@ W5_S0_CR        EQU     $0401           ; socket 0 command
 W5_S0_SR        EQU     $0403           ; socket 0 status
 W5_S0_RXRSR     EQU     $0426           ; socket 0 received-size
 W5_S0_RXRD      EQU     $0428           ; socket 0 RX read pointer (16-bit BE)
-W5_RXBASE       EQU     $6000           ; socket 0 RX buffer base (RMSR=$55)
-W5_RXMASK       EQU     $07FF           ; 2 KB RX ring mask (RMSR=$55)
+W5_RXBASE       EQU     $6000           ; socket 0 RX buffer base (RMSR=$03)
+W5_RXSIZE       EQU     $2000           ; socket 0 has all 8 KB (RMSR=$03)
+W5_RXMASK       EQU     W5_RXSIZE-1     ; its ring mask
 W5_MR_MACRAW    EQU     $44             ; Sn_MR MACRAW + MAC-filter (capture)
 W5_SR_MACRAW    EQU     $42             ; Sn_SR value for an open MACRAW socket
 W5_CR_RECV      EQU     $40             ; Sn_CR RECV (commit RX_RD advance)
@@ -103,6 +105,23 @@ BPF_CapLen      EQU     8               ; 2 bytes: drain scratch min(payload,sna
 BPF_Rxrd        EQU     10              ; 2 bytes: drain scratch Sn_RX_RD
 BPF_SnapBuf     EQU     12              ; record {caplen.w, datalen.w, frame...}
 BPF_SNAPLEN     EQU     60              ; bytes captured per frame
+BPF_TapPtr      EQU     78              ; long ptr to bsdnet's tap ring, 0 = direct
+VT_BSDNET       EQU     $000C           ; include/modules.s
+KSVC_FINDVTABLE EQU     19
+VT_VFSCORE      EQU     $0009
+ENXIO           EQU     6
+VFSCORE_Uiomove EQU     18
+SYS_KCALL       EQU     MOD_JT_BASE+$12
+; The tap ring, net/if_w5.c's w5_tapr.  bn_tap sits after bsdnetd's two tables.
+TAP_Up          EQU     0
+TAP_Active      EQU     2
+TAP_Head        EQU     4
+TAP_Tail        EQU     6
+TAP_Sat         EQU     8
+TAP_Rec         EQU     10
+TAP_RECSHIFT    EQU     6               ; each record is 64 bytes
+TAP_MASK        EQU     7               ; 8 records
+BN_TAP_OFF      EQU     20              ; bn_tap from the vtable entry, bn_banks
 
 ;------------------------------------------------------------------------------
 ; FCB field offsets / flags (MUST match include/fs.s).
@@ -348,7 +367,7 @@ mod_init        MX      %00
                 INX
                 INX
                 INX
-                CPX     #18                             ; 6 slots × 3 B
+                CPX     #21                             ; 7 slots, with d_read
                 BCC     @mi_spL
                 REP     #$30
                 MX      %00
@@ -401,6 +420,14 @@ bpf_open        MX      %00
                 CLC
                 RTL
 @bo_free        MX      %10
+                REP     #$20
+                MX      %00
+                JSR     _Bpf_TapOpen            ; the stack holds the chip?
+                BCC     @bo_direct
+                SEC
+                RTL
+@bo_direct      SEP     #$20
+                MX      %10
                 LDA     _w5SockInUse            ; DBR = kernel bank
                 LSR                             ; socket 0's bit -> C
                 BCC     @bo_s0free
@@ -428,7 +455,13 @@ bpf_open        MX      %00
 ; bpf_close - close("/dev/bpf0"): stop capture (IMR=0, socket 0 CLOSE).
 ;------------------------------------------------------------------------------
 bpf_close       MX      %00
-                JSR     _Net_CaptureStop        ; sets _bpfCapState=0
+                LDY     #BPF_TapPtr
+                LDA     [_bpfBase],Y
+                BEQ     @bc_direct
+                JSR     _Bpf_TapClose
+                SEC
+                RTL
+@bc_direct      JSR     _Net_CaptureStop        ; sets _bpfCapState=0
                 SEP     #$20
                 MX      %10
                 LDA     _w5SockInUse            ; socket 0 back to the allocator
@@ -453,26 +486,7 @@ bpf_read        MX      %00
                 SEC
                 RTL
 @br_room        MX      %00
-                ; Pending saturation report?  If BPF_Sat advanced since we last
-                ; surfaced it, return a SENTINEL record (caplen=0, datalen=satcount)
-                ; BEFORE the next frame; netdump shows it as "[saturated N]".
-                ; caplen=0 never occurs for a real frame, so it's unambiguous.
-                LDY     #BPF_Sat
-                LDA     [_bpfBase],Y
-                LDY     #BPF_SatRept
-                CMP     [_bpfBase],Y
-                BEQ     @br_drain
-                STA     [_bpfBase],Y            ; A = BPF_Sat -> mark reported (Y=BPF_SatRept)
-                LDY     #$0000                  ; record [0..1] = caplen = 0 (sentinel)
-                LDA     #$0000
-                STA     [_bpfSnapPtr],Y
-                LDY     #BPF_Sat
-                LDA     [_bpfBase],Y
-                LDY     #$0002                  ; record [2..3] = saturation count
-                STA     [_bpfSnapPtr],Y
-                LDA     #$0004                  ; record length = 4 (header only)
-                BRA     @br_have
-@br_drain       JSR     _Net_DrainFrame         ; C=1 + A=4+caplen, or C=0 (none)
+                JSR     _Bpf_NextRecord
                 BCS     @br_have
                 LDA     #EAGAIN
                 CLC
@@ -512,6 +526,137 @@ bpf_read        MX      %00
                 RTL
 
 ;------------------------------------------------------------------------------
+; _Bpf_NextRecord - the next record, for either road.  C=1 + A = its length, at
+; [_bpfSnapPtr]; C=0 if there is none.  MX %00.
+;
+; A pending saturation report comes first: a SENTINEL record (caplen=0,
+; datalen=count), which netdump shows as "[saturated N]".  caplen=0 never occurs
+; for a real frame, so it is unambiguous.
+;------------------------------------------------------------------------------
+_Bpf_NextRecord MX      %00
+                JSR     _Bpf_TapSat             ; the ring's losses are BPF_Sat
+                LDY     #BPF_Sat
+                LDA     [_bpfBase],Y
+                LDY     #BPF_SatRept
+                CMP     [_bpfBase],Y
+                BEQ     @nr_frame
+                STA     [_bpfBase],Y            ; mark reported (Y=BPF_SatRept)
+                LDY     #$0000                  ; record [0..1] = caplen = 0
+                LDA     #$0000
+                STA     [_bpfSnapPtr],Y
+                LDY     #BPF_Sat
+                LDA     [_bpfBase],Y
+                LDY     #$0002                  ; record [2..3] = saturation count
+                STA     [_bpfSnapPtr],Y
+                LDA     #$0004                  ; record length = 4 (header only)
+                SEC
+                RTS
+@nr_frame       LDY     #BPF_TapPtr
+                LDA     [_bpfBase],Y
+                BEQ     @nr_direct
+                JMP     _Bpf_TapNext            ; points _bpfSnapPtr at a record
+@nr_direct      JMP     _Net_DrainFrame         ; C=1 + A=4+caplen, or C=0
+
+;------------------------------------------------------------------------------
+; bpf_dread - cdevsw's d_read, the /dev road: one whole record per call, through
+; uiomove.  A record device with no d_read is refused at _Chardev_Bulk, so this
+; is what lets a read of /dev/bpf0 reach the driver at all.
+;
+; In:  a frame this reads directly, as _PtyM_DRead's does: 9,S uio offset, 11,S
+;      uio bank, 13,S flag.
+; Out: C=1 success, or C=0 + A = errno.
+;
+; vfs.mod's uiomove is resolved on each read and not cached: the cache would be
+; kernel statics, and a read here already pays for a whole frame's copy.
+;------------------------------------------------------------------------------
+bpf_dread       MX      %00
+                JSR     _Bpf_NextRecord
+                BCS     @dr_have
+                LDA     #EAGAIN
+                CLC
+                RTL
+@dr_have        PHA                             ; the record's length
+                LDA     11,S                    ; the uio, two bytes further up
+                STA     _libcTmp2
+                SEP     #$20
+                MX      %10
+                LDA     13,S
+                STA     _libcTmp2+2
+                REP     #$30
+                MX      %00
+                LDY     #UIO_RESID              ; uiomove discards past resid
+                LDA     [_libcTmp2],Y
+                CMP     1,S
+                BCS     @dr_fits
+                STA     1,S
+@dr_fits        LDA     #VT_VFSCORE
+                LDX     #KSVC_FINDVTABLE
+                JSL     SYS_KCALL
+                BCS     @dr_vfs
+                PLA
+                LDA     #ENXIO
+                CLC
+                RTL
+@dr_vfs         CLC
+                ADC     #VFSCORE_Uiomove
+                TAY
+                PHB
+                SEP     #$20
+                MX      %10
+                TXA
+                PHA
+                PLB                             ; DBR = vfs.mod
+                REP     #$30
+                MX      %00
+                LDA     |$0000,Y                ; uiomove's offset; `|' keeps it
+                TAY                             ;   from shortening to direct page
+                PLB
+                PHB                             ; the kernel bank and page, for
+                PHD                             ;   the way out, below the frame
+                LDA     _libcTmp2+2
+                AND     #$00FF
+                PHA                             ; uio bank
+                LDA     _libcTmp2
+                PHA                             ; uio offset
+                LDA     8,S                     ; n: 1,S before these 7 bytes
+                PHA
+                LDA     _bpfSnapPtr+2
+                AND     #$00FF
+                PHA                             ; cp bank
+                LDA     _bpfSnapPtr
+                PHA                             ; cp offset
+                LDA     #CFG_DP_KERNELC
+                TCD                             ; fcc's register file, for C
+                SEP     #$20
+                MX      %10
+                TXA
+                PHA
+                PLB                             ; DBR = vfs.mod.  NET ZERO.
+                REP     #$30
+                MX      %00
+                PHK
+                PEA     bpfret_uio-1
+                PHB
+                TYA
+                DEC     A
+                PHA
+                RTL                             ; PILECALL
+bpfret_uio      TAY                             ; the errno
+                TSC
+                CLC
+                ADC     #10
+                TCS
+                PLD
+                PLB
+                PLA                             ; the record's length
+                TYA
+                BNE     @dr_err
+                SEC
+                RTL
+@dr_err         CLC
+                RTL
+
+;------------------------------------------------------------------------------
 ; bpf_write - capture is read-only.
 ;------------------------------------------------------------------------------
 bpf_write       MX      %00
@@ -533,7 +678,22 @@ bpf_ioctl       MX      %00
 ;   branch on the RSR value BEFORE unlocking.
 ;------------------------------------------------------------------------------
 bpf_poll        MX      %00
-                U2_LOCK
+                LDY     #BPF_TapPtr
+                LDA     [_bpfBase],Y
+                BEQ     @bp_direct
+                JSR     _Bpf_TapPtrLoad
+                LDY     #TAP_Head
+                LDA     [_libcTmp2],Y
+                LDY     #TAP_Tail
+                CMP     [_libcTmp2],Y
+                BEQ     @bp_tapno
+                LDA     #POLLIN
+                SEC
+                RTL
+@bp_tapno       LDA     #$0000
+                SEC
+                RTL
+@bp_direct      U2_LOCK
                 LDA     #W5_S0_RXRSR
                 JSR     _W5_Rd16                ; A = RSR; Z set if zero
                 BEQ     @bp_noin
@@ -548,8 +708,150 @@ bpf_poll        MX      %00
                 RTL
 
 ;------------------------------------------------------------------------------
+; The tap: with the kernel network stack attached, socket 0 is the stack's, and
+; capture reads a ring its driver fills.  Each of these is MX %00, DBR = kernel,
+; and [_libcTmp2] is scratch, as in bpf_read.
+;------------------------------------------------------------------------------
+; [_libcTmp2] = the ring, from the capture block.
+_Bpf_TapPtrLoad MX      %00
+                LDY     #BPF_TapPtr
+                LDA     [_bpfBase],Y
+                STA     _libcTmp2
+                LDY     #BPF_TapPtr+2
+                LDA     [_bpfBase],Y
+                SEP     #$20
+                MX      %10
+                STA     _libcTmp2+2
+                REP     #$20
+                MX      %00
+                RTS
+
+; C=1: the stack is loaded and attached, and capture is on through its ring.
+_Bpf_TapOpen    MX      %00
+                LDA     #VT_BSDNET
+                LDX     #KSVC_FINDVTABLE
+                JSL     SYS_KCALL
+                BCC     @to_no
+                CLC
+                ADC     #BN_TAP_OFF
+                STA     _libcTmp2
+                TXA
+                SEP     #$20
+                MX      %10
+                STA     _libcTmp2+2
+                REP     #$20
+                MX      %00
+                LDA     [_libcTmp2]             ; bn_tap: the ring's offset
+                STA     _libcTmp2
+                LDY     #TAP_Up
+                LDA     [_libcTmp2],Y
+                BEQ     @to_no                  ; no driver: capture directly
+                LDY     #BPF_TapPtr
+                LDA     _libcTmp2
+                STA     [_bpfBase],Y
+                LDA     _libcTmp2+2
+                AND     #$00FF
+                LDY     #BPF_TapPtr+2
+                STA     [_bpfBase],Y
+                LDA     #$0000
+                LDY     #TAP_Head
+                STA     [_libcTmp2],Y
+                LDY     #TAP_Tail
+                STA     [_libcTmp2],Y
+                LDY     #TAP_Sat
+                STA     [_libcTmp2],Y
+                LDY     #BPF_Sat
+                STA     [_bpfBase],Y
+                LDY     #BPF_SatRept
+                STA     [_bpfBase],Y
+                LDA     #$0001
+                LDY     #TAP_Active
+                STA     [_libcTmp2],Y
+                SEP     #$20
+                MX      %10
+                LDY     #BPF_CapState
+                STA     [_bpfBase],Y
+                REP     #$20
+                MX      %00
+                SEC
+                RTS
+@to_no          CLC
+                RTS
+
+_Bpf_TapClose   MX      %00
+                JSR     _Bpf_TapPtrLoad
+                LDA     #$0000
+                LDY     #TAP_Active
+                STA     [_libcTmp2],Y
+                LDY     #BPF_TapPtr
+                STA     [_bpfBase],Y
+                LDY     #BPF_TapPtr+2
+                STA     [_bpfBase],Y
+                SEP     #$20
+                MX      %10
+                LDY     #BPF_CapState
+                STA     [_bpfBase],Y
+                REP     #$20
+                MX      %00
+                LDA     _bpfBase                ; the record is the block's again
+                CLC
+                ADC     #BPF_SnapBuf
+                STA     _bpfSnapPtr
+                RTS
+
+; BPF_Sat = the ring's count, when there is a ring.
+_Bpf_TapSat     MX      %00
+                LDY     #BPF_TapPtr
+                LDA     [_bpfBase],Y
+                BEQ     @ts_out
+                JSR     _Bpf_TapPtrLoad
+                LDY     #TAP_Sat
+                LDA     [_libcTmp2],Y
+                LDY     #BPF_Sat
+                STA     [_bpfBase],Y
+@ts_out         RTS
+
+; C=1 + A = the record's length, _bpfSnapPtr at it; C=0 if the ring is empty.
+_Bpf_TapNext    MX      %00
+                JSR     _Bpf_TapPtrLoad
+                LDY     #TAP_Tail
+                LDA     [_libcTmp2],Y
+                LDY     #TAP_Head
+                CMP     [_libcTmp2],Y
+                BNE     @tn_have
+                CLC
+                RTS
+@tn_have        PHA                             ; tail
+                INC
+                AND     #TAP_MASK
+                LDY     #TAP_Tail
+                STA     [_libcTmp2],Y
+                PLA
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL                             ; x 64, TAP_RECSHIFT
+                CLC
+                ADC     #TAP_Rec
+                ADC     _libcTmp2
+                STA     _bpfSnapPtr
+                SEP     #$20
+                MX      %10
+                LDA     _libcTmp2+2
+                STA     _bpfSnapPtr+2
+                REP     #$20
+                MX      %00
+                LDA     [_bpfSnapPtr]           ; caplen
+                CLC
+                ADC     #$0004
+                SEC
+                RTS
+
+;------------------------------------------------------------------------------
 ; bpf_ops - CharDev_Ops vtable for /dev/bpf0.  Order MUST match COPS_* offsets
-; in include/chardev.s (Open/Close/Read/Write/Ioctl/Poll).  Bank bytes are
+; in include/chardev.s (Open/Close/Read/Write/Ioctl/Poll/DRead).  Bank bytes are
 ; self-patched to our load bank by mod_init @mi_spL.
 ;------------------------------------------------------------------------------
 bpf_ops         DFB     <bpf_open,>bpf_open,^bpf_open
@@ -558,7 +860,7 @@ bpf_ops         DFB     <bpf_open,>bpf_open,^bpf_open
                 DFB     <bpf_write,>bpf_write,^bpf_write
                 DFB     <bpf_ioctl,>bpf_ioctl,^bpf_ioctl
                 DFB     <bpf_poll,>bpf_poll,^bpf_poll
-                DFB     0,0,0                                   ; d_read:  none -- per-byte
+                DFB     <bpf_dread,>bpf_dread,^bpf_dread        ; d_read
                 DFB     0,0,0                                   ; d_write: none -- per-byte
                 DFB     0,0,0                                   ; d_stop:  nothing in flight
 
@@ -735,12 +1037,13 @@ _Net_DrainFrame MX      %00
                 LDY     #BPF_Rxrd
                 STA     [_bpfBase],Y
                 AND     #W5_RXMASK      ; phys = RXRD & ring-mask (A still = RXRD)
-                CMP     #$07FF
+                CMP     #W5_RXMASK
                 BEQ     @df_pfxWrap
                 ORA     #W5_RXBASE      ; normal: 2-byte prefix at RXBASE+phys
                 JSR     _W5_Rd16        ; A = framelen (AR now at payload start)
                 BRA     @df_pfxDone
-@df_pfxWrap     LDA     #$67FF          ; straddle: byte0 @ $67FF, byte1 @ $6000
+@df_pfxWrap     LDA     #W5_RXBASE+W5_RXMASK ; straddle: byte0 at the ring's
+                                        ;   last byte, byte1 at its first
                 JSR     _W5_SetAR16
                 SEP     #$20
                 MX      %10
@@ -788,10 +1091,10 @@ _Net_DrainFrame MX      %00
                 MX      %00
                 INY
                 DEX
-                LDA     _bpfPhysTmp     ; advance ring pos; wrap at $0800
+                LDA     _bpfPhysTmp     ; advance ring pos; wrap at the ring's end
                 CLC
                 ADC     #$0001
-                CMP     #$0800
+                CMP     #W5_RXSIZE
                 BCC     @df_noWrap
                 LDA     #$0000
                 STA     _bpfPhysTmp

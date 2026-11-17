@@ -58,7 +58,8 @@
 #define KERN_MAXTEXTS   22      /* int: # of text entries */
 #define KERN_TEXT       23      /* struct: text entries */
 #define KERN_ACCTTHRESH 24      /* int: accounting daemon threshold */
-#define KERN_MAXID      25      /* number of valid kern ids */
+#define KERN_NETDATA    25      /* long: the network stack's data bank, as an address (FGX) */
+#define KERN_MAXID      26      /* number of valid kern ids */
 
 int sysctl();
 

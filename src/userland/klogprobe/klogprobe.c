@@ -88,7 +88,7 @@ main(argc, argv)
     long t0, t1;
     long rf;
     struct timeval tv;
-    static char mark[] = "pty: cannot place in the module bank";
+    static char mark[] = "pty: cannot place";
 
     printf("KPSTART\n");
     fflush((char *)0);

@@ -1,0 +1,35 @@
+{
+ "name": "netnoreply",
+ "description": "An echo to an unused LAN address: ARP goes unanswered, the ager clears the entry after 3 minutes, and no reply is counted. The control for netw5's echo. Only means anything at kernel.netprobe = 4.  The release /etc/rc loads the modules at boot and takes a lease through them; the probe's wire start waits for the gateway the lease gives.",
+ "command": "sleep 300; dmesg | tail -8",
+ "timeout_s": 500,
+ "mame_slots": [
+  "-sl1",
+  "uthernet2"
+ ],
+ "stage_files": [
+  {
+   "host": "disk_src/etc/rc.in",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "bsdnet: arp unresolved"
+  ],
+  "screen_lacks": [
+   "bsdnet: echo reply from gateway",
+   "bsdnet: BROKEN",
+   "PANIC",
+   "BRK"
+  ]
+ },
+ "requires": {
+  "config": {
+   "kernel.netprobe": "4"
+  },
+  "reason": "the unused target is compiled in only at kernel.netprobe = 4"
+ }
+}

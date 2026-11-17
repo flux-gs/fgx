@@ -8,7 +8,7 @@ NAME
      getty - set terminal modes, greet, exec login
 
 SYNOPSIS
-     getty [-T type] ttyname
+     getty ttyname
 
 DESCRIPTION
      Getty is invoked by init(8) once per terminal line listed in
@@ -26,12 +26,6 @@ DESCRIPTION
      for the next user.  Otherwise getty reads a name and execs
 
           /bin/login name
-
-     The -T option names the terminal type of the line, and getty
-     passes it straight through to login, which prefers it over
-     the type in ttys(5).  telnetd(8) supplies it from the
-     client's TERMINAL-TYPE negotiation; init(8) does not pass it,
-     so a line in ttys(5) keeps the type recorded there.
 
      replacing itself -- getty's stack is freed before login's is
      allocated.

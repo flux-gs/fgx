@@ -16,37 +16,15 @@
  * child's fd 0, 1 and 2) are all upstream's.  What follows is what FGX makes
  * different, because one of them is structural rather than a simplification.
  *
- * A LISTENER IS SINGLE-USE ON THE WIRE, AND THAT REWRITES THE MAIN LOOP.  On
- * the W5100 path accept(2) DETACHES the listener: the hardware socket moves to
- * the accepted connection and the listening descriptor is left owning nothing
- * (include/socket.s, SOCK_HW_NONE -- "accept detaches the listener's hw ->
- * the connfd").  Upstream binds once at startup and accepts forever; this
- * re-arms after every accept, and a service whose re-arm fails is carried as
- * DOWN and retried rather than silently dropped.
- *
- * THE TWO TRANSPORTS DO NOT AGREE ABOUT THIS, whatever the loopback code's own
- * comment suggests: _Loop_AcceptTry leaves its listener InUse and TCP_LISTEN --
- * "the listener is free again (one caller at a time)" -- so on loopback the
- * listener is NOT spent and re-arming it is redundant.  Redundant, but not
- * harmful, because handoff() closes the old one in the child: two live
- * TCP_LISTEN descriptors on one port would send every later connect to
- * whichever _Loop_FindListener reaches first.  Re-arming is unconditional
- * because inetd cannot tell the transports apart: one wildcard listener
- * serves both, the wire through the card and 127.0.0.1 through the rings
- * (apple/fgx#128, #363).
- *
- * THREE HARDWARE SOCKETS, TOTAL.  _W5_SockAlloc hands out 1..3 (0 is reserved
- * for /dev/bpf0 MACRAW), so at most three WIRE listeners can be armed at once,
- * and each live connection holds one for its lifetime.  A loopback listener
- * costs none since apple/fgx#132.  inetd therefore refuses to arm more
- * services than the machine can carry rather than letting socket() fail in the
- * middle of the config.
+ * A LISTENER STAYS A LISTENER, as upstream's does: it is bound once and
+ * accepts forever.  A service that cannot be bound -- its address not yet
+ * configured, say -- is carried as DOWN and retried every RETRY_SECS, rather
+ * than dropped.
  *
  * WHAT IS NOT HERE, and each is a deliberate omission rather than an oversight:
  *  - dgram/udp and `wait' services.  The single-threaded model hands the
  *    SOCKET to the child and waits for it to exit; nothing in the tree wants
- *    it yet, and the accept-detach rule above does not even apply.  Parsed,
- *    named in the log, skipped.
+ *    it yet.  Parsed, named in the log, skipped.
  *  - the built-in services (echo, discard, chargen, daytime, time).  `internal'
  *    is recognised and skipped, so a stock inetd.conf does not produce a
  *    parade of "cannot exec internal".
@@ -59,7 +37,7 @@
  *
  * IT DETACHES THROUGH daemon(3) as upstream does, unless -d is given, and its
  * reports go to syslogd(8) through syslog(3).  The lines it prints on
- * standard output -- a service armed, re-armed or
+ * standard output -- a service armed, re-armed after a failure, or
  * handed to a pid -- are -d's, like upstream's `if (debug) fprintf(stderr,
  * ...)', since a detached inetd's standard output is /dev/null.
  */
@@ -92,7 +70,6 @@
 #define NAMELEN     32
 #define PATHLEN     64
 #define LINELEN     160
-#define W5_USABLE   3           /* hardware sockets 1..3; 0 is /dev/bpf0 */
 #define RETRY_SECS  10          /* before re-arming a service that failed */
 
 struct servtab {
@@ -100,7 +77,6 @@ struct servtab {
     char se_proto[8];           /* "tcp" */
     char se_server[PATHLEN];    /* "/testbin/telnetd" */
     long se_addr;               /* bind address, network order */
-    int  se_wire;               /* 1 = not 127/8, so it costs a hw socket */
     char se_args[ARGBUF];       /* argv0 then args, each NUL-terminated */
     int  se_nargv;              /* how many strings se_args holds */
     int  se_port;               /* host order */
@@ -160,12 +136,11 @@ int max;
 
 /* ---- arm one service: socket, bind, listen.  Returns 0 on success.
  *
- * Called at startup AND after every accept, because accept detaches the
- * listener (see the header).  Failure is not fatal: the service is marked down
- * and retried, which is upstream's own RETRYTIME behaviour for a bind that
- * loses a race with a lingering socket. ---- */
+ * Called at startup, and again for a service that could not be armed.  Failure
+ * is not fatal: the service is marked down and retried, which is upstream's own
+ * RETRYTIME behaviour for a bind that loses a race with a lingering socket. ---- */
 /* ONCE PER OUTAGE, not once per attempt.  A service that cannot arm at all --
- * a wire listener on a machine with no Ethernet card is the ordinary case --
+ * one bound to an address the machine does not have yet, say --
  * is retried for as long as inetd runs, and reporting each attempt turns a
  * standing condition into a repeating error.  The flag clears on success, so a
  * service that goes down again says so again. */
@@ -202,12 +177,8 @@ struct servtab *sep;
         ((char *)&g_sin)[i] = 0;
     g_sin.sin_family = AF_INET;
     g_sin.sin_port   = htons(sep->se_port);
-    /* Whatever the config asked for.  0.0.0.0 means every local address, as
-     * upstream's does: listen() puts it on the W5100 when a card can take it,
-     * and a loopback connect still finds it there (_Loop_FindListener matches
-     * the state and the port, not the transport); with no card it becomes a
-     * loopback listener instead (apple/fgx#128).  127/8 is claimed for the
-     * rings at bind and never reaches the card. */
+    /* Whatever the config asked for; 0.0.0.0 is every local address, lo0's
+     * included, as upstream's is. */
     g_sin.sin_addr.s_addr = sep->se_addr;
 
     if (bind(sep->se_fd, &g_sin, sizeof(g_sin)) < 0) {
@@ -236,25 +207,8 @@ struct servtab *sep;
  * is expressed as file actions -- which run in the CHILD's fd table only, so
  * the parent's listener and its other services are untouched.
  *
- * THE CHILD MUST CLOSE THE LISTENER TOO, and "accept already detached it" is
- * only half true.  On the W5100 path the hardware socket really does move to
- * the accepted connection.  On LOOPBACK it does not: _Loop_AcceptTry consumes
- * SLF_PENDING and hands back the peer, but leaves the descriptor InUse, still
- * TCP_LISTEN and still bound -- its own comment says "the listener is free
- * again (one caller at a time)".
- *
- * So the listener is a live descriptor the child inherits.  Without this close
- * the parent's close on re-arm is NOT the last reference (Fs_Close tears a
- * socket down only on the last one), the old listener outlives the session, and
- * the re-arm adds a SECOND TCP_LISTEN on the same port -- _Loop_BindTry has no
- * EADDRINUSE check.  _Loop_FindListener returns the FIRST match, the stale one
- * nobody selects on, so a second client is told "Connected" and then never
- * accepted: it hangs until the first session ends.  That is the silent-hang
- * shape apple/fgx#140 exists to remove, reintroduced one layer up.
- *
- * Closing it here makes the parent's close the last reference, and it is what
- * upstream does anyway -- an inetd child gets the connection and nothing
- * else. ---- */
+ * THE CHILD CLOSES THE LISTENER, as upstream's does: an inetd child gets the
+ * connection and nothing else. ---- */
 static int
 handoff(sep, c)
 struct servtab *sep;
@@ -306,7 +260,7 @@ readconf()
     int off;
     struct servent *sv;
     struct servtab *sep;
-    int n, wire;
+    int n;
 
     fp = fopen(CONFIG, "r");
     if (fp == (FILE *)0) {
@@ -315,7 +269,6 @@ readconf()
     }
 
     n = 0;
-    wire = 0;
     while (fgets(g_line, sizeof(g_line), fp) != (char *)0) {
         p = g_line;
         f_service = nextfield(&p);
@@ -362,8 +315,6 @@ readconf()
                    CONFIG, MAXSERV, f_service);
             continue;
         }
-        /* (the hardware ceiling is charged below, once the bind address is
-         * parsed and we know whether this listener is on the wire) */
 
         sep = &g_serv[n];
 
@@ -393,9 +344,6 @@ readconf()
                 continue;
             }
         }
-        /* A 127/8 listener rides the loopback rings and costs no hardware
-         * socket; anything else is on the wire and holds one of the three. */
-        sep->se_wire = (ntohl(sep->se_addr) >> 24) != 127;
 
         copyfield(sep->se_service, f_service, NAMELEN);
         copyfield(sep->se_proto,   f_proto,   8);
@@ -430,21 +378,6 @@ readconf()
             syslog(LOG_ERR, "%s: %s/%s: unknown service, skipped\n",
                    CONFIG, sep->se_service, sep->se_proto);
             continue;
-        }
-
-        /* CHARGE THE HARDWARE CEILING, and count only what actually costs one.
-         * Refused here rather than left to fail at socket() partway through the
-         * config: _W5_SockAlloc hands out 1..3 (0 is /dev/bpf0), and each armed
-         * WIRE listener holds one for as long as inetd runs.  This used to be a
-         * counter that was compared and never incremented -- a guard that
-         * cannot fire reads as protection. */
-        if (sep->se_wire) {
-            if (wire >= W5_USABLE - 1) {
-                syslog(LOG_ERR, "%s: %s: no hardware socket left, skipped\n",
-                       CONFIG, sep->se_service);
-                continue;
-            }
-            wire++;
         }
 
         sep->se_fd     = -1;
@@ -504,11 +437,9 @@ char **argv;
             sep = &g_serv[i];
             if (sep->se_down) {
                 /* BACKED OFF, not retried every pass.  A service that cannot
-                 * arm at all -- a wire listener on a machine with no card, say
-                 * -- otherwise re-attempts on every select wake for as long as
-                 * ANOTHER service keeps the loop turning, and each failure
-                 * syslogs.  Measured: one card-less `*:telnet' line repainted
-                 * the console between every other line of output.
+                 * arm otherwise re-attempts on every select wake for as long
+                 * as ANOTHER service keeps the loop turning, and each failure
+                 * syslogs.
                  *
                  * The whole-config sleep below only covers the case where
                  * NOTHING is armed, which is exactly when it does not
@@ -555,25 +486,9 @@ char **argv;
 
             c = accept(sep->se_fd, (struct sockaddr *)0, (int *)0);
             if (c < 0) {
-                /* RE-ARM, DO NOT JUST COMPLAIN.  select said this listener was
-                 * ready; if accept disagrees, the descriptor is not usable and
-                 * leaving it in the set means waking on it again immediately.
-                 * Measured over the wire before the kernel half of this was
-                 * fixed: a spent listener reported readable forever, and this
-                 * arm spun at full speed filling the console with
-                 * "accept: Socket is not connected" while the service was deaf
-                 * to every real connection.
-                 *
-                 * The kernel no longer lies about a spent listener
-                 * (_Net_Xport_SockStatus), so this is the belt to that braces:
-                 * whatever the reason accept refused, a rebuild is the only
-                 * thing that can help and a retry on the same descriptor
-                 * cannot. */
-                syslog(LOG_ERR, "%s: accept: %m\n", sep->se_service);
-                close(sep->se_fd);
-                sep->se_fd     = -1;
-                sep->se_down   = 1;
-                sep->se_nextry = ticks() + (long)RETRY_SECS * 60;
+                if (errno != EINTR)
+                    syslog(LOG_WARNING, "accept (for %s): %m\n",
+                           sep->se_service);
                 continue;
             }
 
@@ -587,14 +502,6 @@ char **argv;
             /* The parent's copy goes away either way: the child holds the
              * connection now, and on a failed spawn nobody does. */
             close(c);
-
-            /* RE-ARM.  accept() detached the listener -- it owns no hardware
-             * socket now -- so this descriptor is spent.  Upstream keeps its
-             * listener and loops; here the loop has to rebuild it, or the
-             * service answers exactly one client and then goes quiet. */
-            close(sep->se_fd);
-            sep->se_fd = -1;
-            sep->se_down = 1;
         }
     }
 }

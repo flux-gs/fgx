@@ -265,3 +265,74 @@ _cfp997         STAL    _kRootFsTime
                 LDA     6,S                     ; t, high word
 _cfp998         STAL    _kRootFsTime+2
                 RTL
+
+;------------------------------------------------------------------------------
+; The FCB side of a descriptor passed over AF_UNIX (vfs_file.c unp_fileop).
+; The FCB is the core bank's: these hand its 24-bit pointer -- f_data, an fcc
+; pointer, offset at 4,S and bank at 6,S -- to a core shim, which reads it
+; through the kernel page's _fcbPtr, so the page is switched first as kc_sleep
+; does.  _FarSh_KernDP touches only A and DBR, so X and Y carry the arguments
+; across it.
+;
+; kc_fcbref(fcb, n) -- FCB_RefCount += n.  6 argument bytes.
+; kc_fcbsock(fcb) -> the FCB's socket offset, or 0 for a file that is not one.
+; kc_fdinstall(fcb) -> the lowest free descriptor, now naming the FCB with no
+;   count changed, or -1 for none.
+; kc_fsclose(fd) -> Fs_Close's errno: close(2)'s teardown for that descriptor.
+;------------------------------------------------------------------------------
+kc_fcbref       MX      %00
+                LDA     8,S                     ; n
+                TAY
+                LDA     6,S                     ; the FCB's bank
+                AND     #$00FF
+                TAX
+                LDA     4,S                     ; its offset
+                PHD
+                PHA
+_cfp1006        JSL     _FarSh_KernDP
+                TCD
+                PLA
+_cfp1007        JSL     _FarSh_FcbRef
+                PLD
+                RTL
+
+kc_fcbsock      MX      %00
+                LDA     6,S
+                AND     #$00FF
+                TAX
+                LDA     4,S
+                PHD
+                PHA
+_cfp1008        JSL     _FarSh_KernDP
+                TCD
+                PLA
+_cfp1009        JSL     _FarSh_FcbSock
+                PLD
+                RTL
+
+kc_fdinstall    MX      %00
+                LDA     6,S
+                AND     #$00FF
+                TAX
+                LDA     4,S
+                PHD
+                PHA
+_cfp1010        JSL     _FarSh_KernDP
+                TCD
+                PLA
+_cfp1011        JSL     _FarSh_FdInstall
+                PLD
+                RTL
+
+kc_fsclose      MX      %00
+                LDA     4,S                     ; fd
+                PHD
+                PHA
+_cfp1012        JSL     _FarSh_KernDP
+                TCD
+                PLA
+_cfp1013        JSL     _FarSh_Fs_Close         ; A = fd; shim owns the DBR
+                BCC     kcfsc_err               ; C=0: A is the errno
+                LDA     #0                      ; C=1: A is not defined
+kcfsc_err       PLD
+                RTL

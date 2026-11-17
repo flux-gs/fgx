@@ -126,6 +126,20 @@ PackBytes, or Toolbox-for-speed.  Profile:
 earlier dive:
 [`history/plans/2026-09-09-performance-dive-results.md`](history/plans/2026-09-09-performance-dive-results.md).
 
+**What 2.11BSD keeps in machine code, FGX should too.**  Upstream hand-codes the
+routines that are hot on every workload, and where FGX has C in their place the
+difference can be large: net-mux S4's `bcopy`, a C byte loop, was 30% of a TCP
+transfer, and 2.11BSD's `pdp/gen/bcopy.s` as MVN/MVP took the transfer from
+41.0 s to 28.6 s.  Review each against FGX's counterpart (C in `libc_c`, kernel
+C, or already assembly), profile the ones that are C, and port the ones that
+show.  The list, from `examples/2.11BSD/usr`: libc `pdp/gen` (`bcopy`, `bzero`,
+`bcmp`, `ffs`, `index`, `rindex`, `insque`, `remque`, the `str*` family),
+`pdp/stdio` (`fgetc`, `fputc`, `fgets`, `gets`, `puts`, `doprnt`), `pdp/net`
+(`htonl`, `htons`), `pdp/crt` (the long multiply, divide and remainder); and the
+kernel's `sys/pdp` (`mch_copy.s`'s `copyin`/`copyout`/`copyinstr`, `mch_xxx.s`'s
+`copystr`, `clrbuf`, `scanc`, `locc`).  4.3BSD-Reno's `vax/in_cksum.c` unrolls
+the checksum loop, where FGX's `in_cksum.s` does a word per pass.
+
 ### Shared libc -- landed
 
 `libc.so` and its siblings are shared libraries bound before `main` by a
@@ -212,16 +226,10 @@ archived tracker; new work is tracked in GitHub Issues.
   refused with EOPNOTSUPP; `select(2)` has an exceptional set).  Remaining:
   apple/fgx#424 (socket urgent state, `so_oobmark`/`SS_RCVATMARK`/`SIOCATMARK`),
   #425 (socket owner process group for SIGURG), #426 (loopback
-  `PRU_SENDOOB`/`PRU_RCVOOB`), with telnetd's `interrupt()`/`sendbrk()`
-  arriving in the apple/fgx#540 re-port; also #445 (a character device never reports an exceptional condition).  The W5100
+  `PRU_SENDOOB`/`PRU_RCVOOB`); also #445 (a character device never reports an exceptional condition).  The W5100
   cannot pass the flag, so loopback gets full semantics and W5100 TCP answers
   EOPNOTSUPP.  Design:
   `docs/history/plans/2026-09-13-tcp-urgent-mechanism-design.md`.
-- **Who re-arms a TCP listener.**  The W5100's listening socket becomes the
-  connection, and `inetd` rebuilds the listener today (measured working,
-  `wireacc`).  The BSD-shaped alternative is the kernel re-issuing OPEN +
-  LISTEN so `listen(2)` means what it says; design direction, belongs with the
-  P1 `ifnet` seam.
 - **Port `ifconfig(8)` and `route(8)` from 2.11BSD.**  The `SIOCGIF*` socket
   ioctls they are written against are in (`net_op_ifioctl`,
   `src/modules/net/net.s`); both tools are still FGX-native C against the
@@ -229,17 +237,27 @@ archived tracker; new work is tracked in GitHub Issues.
 - **Socket defects:** apple/fgx#156 (loopback connector has no local port),
   #157 (`bind(2)` leaves TCP and loopback unchecked), #546 (getpeername on
   AF_UNIX answers ENOTCONN).
-- **telnetd(8) from 2.11BSD** for real, replacing the reimplementation:
-  apple/fgx#540.
 - **Multi-NIC (2nd Uthernet II)** -- the ifnet table holds 4 (`IF_MAX`), but
   the W5100 driver is self-mod-bound to one detected slot (`_w5PatchTbl`), so a
   2nd card is detected but undriven.  Needs per-card indexed base addressing +
   ifnet multi-registration + slotscan-all.  Shares the P1 `ifnet` seam.
-- **Software IP/ICMP/ARP stack (Backend B)** -- a software path over MACRAW so
-  netdump sees ICMP and nothing is intercepted in hardware; keep UDP/TCP on the
-  offload.  Plans: `docs/history/plans/2026-07-19-networking-roadmap-scope.md`
-  (Track A/B; P4 as a faithful 2.11BSD `netinet` port) and
-  `docs/history/plans/2026-07-20-loopback-multinic-ifconfig-caps-scope.md`.
+- **No socket limit: 2.11BSD TCP/IP in the kernel, over the W5100's MACRAW
+  socket.**  The chip runs TCP and UDP itself in four hardware sockets, so the
+  whole machine holds four endpoints; a multiuser system needs as many as
+  memory allows.  2.11BSD's networking (sockets, mbufs, TCP, UDP, IP, ARP,
+  `lo0`, AF_UNIX) is ported into the kernel, the Uthernet II becomes one
+  `ifnet` driver on socket 0, and nothing above the driver knows the card.
+  Phases S0 (fcc prerequisites) to S5 are done on `feat/net-mux` under MAME;
+  the maintainer's run of S5 on real hardware
+  (`docs/history/2026-11-15-net-mux-s5-hardware-run.md`) and the branch's final
+  review come before the PR.  Design:
+  `docs/history/plans/2026-11-03-net-multiplex-design.md`, which replaces
+  Track B's S1-S3 (`2026-09-27-trackb-s0-fcc-design.md`) and the earlier
+  Backend B / Track A/B plans.
+- **An exec holds the machine for its whole load** (flux-gs/fgx#49).  `execve`
+  reads the image inside one system call and the kernel is not preempted, so
+  no other process and no network input runs until it returns: about 5 s for
+  the first `tcsh` after boot under MAME.  Packets are answered late, not lost.
 - **IPv6** -- needs the software stack (the W5100 is IPv4-only).
 - **AppleTalk driver** -- LocalTalk over the SCC; would own the printer port
   and set `_apTalkPort`, which `serial.mod` already honours.  Big effort
@@ -367,8 +385,7 @@ archived tracker; new work is tracked in GitHub Issues.
 - **Wave-4 bsdgames** -- worm and robots are ported; hangman, canfield,
   cribbage, mille, boggle, battlestar remain (atc needs the yacc/lex pregen and
   an async loop rework).
-- **Ports owing upstream behaviour:** apple/fgx#540 (telnetd is a
-  reimplementation; re-port it), #539 (stty, ed, man, worm and
+- **Ports owing upstream behaviour:** apple/fgx#539 (stty, ed, man, worm and
   robots cut code for features FGX has since gained), #501 (twelve BSD-named
   tools call libfgx where upstream uses a BSD mechanism).
 - **Reduce demand** -- vendored ports are rarely tuned for a 64 KB data space;

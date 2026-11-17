@@ -93,7 +93,9 @@ SYS_BLKPINZ             EQU     MOD_JT_BASE+$0E ; slot 2 (was SYS_BANKALLOC):
 ;       slot is the one place a module can ask for something the running
 ;       kernel does not have, and a refusal it can log beats a red border.
 ;       MX %00 in and out.  Your DBR is saved and restored.
-SYS_KCALL               EQU     MOD_JT_BASE+$12 ; slot 3 (was SYS_BANKFREE)
+SYS_KCALL               EQU     MOD_JT_BASE+$12 ; slot 3 (was SYS_BANKFREE); its bank byte
+                                                ; is the live kernel bank, which
+                                                ; bsdnet/machine/net_asm.s reads
 
 ; SYS_KCALL service numbers.  APPEND ONLY -- a module image baked these at
 ; build time, and NOTHING WILL CATCH A RENUMBER.  The build identity does
@@ -605,12 +607,14 @@ KSVC_CONBACKEND         EQU     53  ; A = table offset, Y = table bank: the
                                     ;   module's console renderer, five 3-byte
                                     ;   entries (src/kernel/far/console/
                                     ;   console_backend.s).  C=1.
-KSVC_UNPNAME            EQU     54  ; an AF_UNIX socket's NAME, bound or looked
-                                    ; up.  A = the sockaddr's offset in the
-                                    ; caller's bank; _unpNameOp holds UNP_OP_BIND
-                                    ; or UNP_OP_LOOKUP and _unpSlot carries the
-                                    ; descriptor slot -- in for a bind, out for a
-                                    ; lookup.  -> C=1, or C=0 + A = errno.
+KSVC_UNPNAME            EQU     54  ; an AF_UNIX socket's NAME, bound, looked up
+                                    ; or released.  A = the path's offset, Y its
+                                    ; bank; _unpNameOp holds UNP_OP_BIND,
+                                    ; UNP_OP_LOOKUP or UNP_OP_UNBIND and _unpSlot
+                                    ; carries the socket, its offset in the
+                                    ; network modules' data bank -- in for a bind
+                                    ; or an unbind, out for a lookup.  -> C=1, or
+                                    ; C=0 + A = errno.
                                     ;
                                     ; IT IS ONE SERVICE AND NOT TWO because bind
                                     ; and lookup differ only in the walk they ask
@@ -638,7 +642,23 @@ KSVC_BLKIOCTL           EQU     59  ; A = a block dev_t, _Sys_IoctlCmd staged:
                                     ;   a block device's ioctl.  CDIOCEJECT
                                     ;   ejects a CD-ROM.  -> C=1, or C=0 + A =
                                     ;   errno (ENOTTY for anything else).
-KSVC_COUNT              EQU     60
+KSVC_UNPFILE            EQU     60  ; _unpfArgs staged: a descriptor passed over
+                                    ;   AF_UNIX, the file-table op it names
+                                    ;   (src/kernel/vfs/vfs_file.c unp_fileop).
+                                    ;   -> C=1 + A = the op's answer.
+KSVC_SLEEPUNR           EQU     61  ; A = wait channel: KSVC_SLEEPUN for a wait
+                                    ;   with no bound -- a snapshot fork child
+                                    ;   releases its parent first (sched.s
+                                    ;   _sleepUnRel).  C=1.
+KSVC_SELWAKEUP          EQU     62  ; A = a recorded selector's pid or 0,
+                                    ;   Y = non-zero for a collision: BSD's
+                                    ;   selwakeup(p, coll) (sched.s
+                                    ;   _Sel_Wakeup).  C=1.
+KSVC_SELWAITING         EQU     63  ; A = a pid or 0 -> C=1 + A = 1 when that
+                                    ;   process sleeps in select, else 0: the
+                                    ;   test an object makes of its recorded
+                                    ;   selector (sched.s _Sel_Waiting).
+KSVC_COUNT              EQU     64
 SYS_BLKREAD             EQU     MOD_JT_BASE+$16
 SYS_BLKWRITE            EQU     MOD_JT_BASE+$1A
 SYS_BLKSTATUS           EQU     MOD_JT_BASE+$1E
@@ -685,7 +705,7 @@ SYS_SIM_REMOVE          EQU     MOD_JT_BASE+$6E ; slot 26: remove SCC IRQ handle
 ; --- slots 27-31: net.mod direct kernel-call wrappers.  Was baked-$02
 ; `JSL _Net_KCall_*` in net.s/net_xport.s; routed through bank-0 JT slots for
 ; the relocatable kernel.  Targets = RTL wrappers in net_dispatch.s. ---
-SYS_NETKC_W5WRITEIP     EQU     MOD_JT_BASE+$72 ; slot 27
+SYS_NETKC_W5WRITEIP     EQU     MOD_JT_BASE+$72 ; slot 27, retired
 SYS_NETKC_FCBALLOC      EQU     MOD_JT_BASE+$76 ; slot 28
 SYS_NETKC_SOCKFDTODESC  EQU     MOD_JT_BASE+$7A ; slot 29
 SYS_NETKC_CONPOLLKEY    EQU     MOD_JT_BASE+$7E ; slot 30
@@ -717,6 +737,32 @@ VT_NET                  EQU     $0008       ; networking stack (net.mod) — mod
                                             ; exports a net_op_table (3-byte FOP-
                                             ; style long-ptrs); kernel dispatches
                                             ; via _Net_Dispatch (net_dispatch.s).
+VT_BSDNET               EQU     $000C       ; bsdnetd: the network modules' shared
+                                            ;   data bank (tools/build_bsdnet.py)
+; A process's socket call on the kernel's stack: the call block's op, which
+; net.mod's net_kso.s names and src/kernel/bsdnet/machine/bn_sys.c switches on.
+; The C side spells them as its own #defines; the two must agree.
+BNOP_SOCKET             EQU     0
+BNOP_BIND               EQU     1
+BNOP_CONNECT            EQU     2
+BNOP_SENDTO             EQU     3
+BNOP_RECVFROM           EQU     4
+BNOP_SEND               EQU     5
+BNOP_RECV               EQU     6
+BNOP_SETSOCKOPT         EQU     7
+BNOP_GETSOCKNAME        EQU     8
+BNOP_GETPEERNAME        EQU     9
+BNOP_SHUTDOWN           EQU     10
+BNOP_READ               EQU     11
+BNOP_WRITE              EQU     12
+BNOP_IOCTL              EQU     13
+BNOP_SELECT             EQU     14
+BNOP_CLOSE              EQU     15
+                                    ; 16: retired (SYS_IFCONFIG's address change)
+BNOP_LISTEN             EQU     17
+BNOP_ACCEPT             EQU     18
+BNOP_SENDMSG            EQU     19
+BNOP_RECVMSG            EQU     20
 VT_PDCORE               EQU     $000B       ; prodos.mod's C entry points, for
                                             ;   prodosw.mod, the write half
                                             ;   (ProDOS FST P6) -- PDCORE_* below
@@ -1162,7 +1208,8 @@ PDCORE_COUNT            EQU     8
 ; net.mod's net_op_table MUST list its ops in this order.  (Module side mirrors
 ; these — keep in sync, like the FOP_* set in include/fst.s.)
 ;------------------------------------------------------------------------------
-NETOP_Ifconfig          EQU     0           ; SYS_IFCONFIG (#70)
+NETOP_Ifconfig          EQU     0           ; RETIRED: SYS_IFCONFIG (#70) answers ENOSYS
+                                            ;   in the core; the slot keeps the numbers
 NETOP_Socket            EQU     3           ; SYS_SOCKET (#71)
 NETOP_Bind              EQU     6           ; SYS_BIND (#72)
 NETOP_Sendto            EQU     9           ; SYS_SENDTO (#73)
@@ -1201,6 +1248,8 @@ NETOP_SysPipe           EQU     87          ; the pipe(2) syscall-table entry
 NETOP_GetPeerName       EQU     90          ; SYS_GETPEERNAME (#108)
 NETOP_GetSockName       EQU     93          ; SYS_GETSOCKNAME (#109)
 NETOP_IfIoctl           EQU     96          ; ioctl(2) SIOCGIF* on a socket
+NETOP_Sendmsg           EQU     99          ; SYS_SENDMSG (#131)
+NETOP_Recvmsg           EQU     102         ; SYS_RECVMSG (#132)
 
 ;------------------------------------------------------------------------------
 ; Module vtable registry — per-entry layout.  Mod_Load appends one entry

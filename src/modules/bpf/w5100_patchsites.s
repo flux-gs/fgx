@@ -11,72 +11,72 @@
 ;
 ; Counts: 0 MR, 7 ARH, 7 ARL, 20 DAT (34 total).
 _w5PatchTbl     ENT
-                DA  $426A
+                DA  $1533
                 DFB 1           ; ARH
-                DA  $4270
+                DA  $1539
                 DFB 2           ; ARL
-                DA  $4276
+                DA  $153F
                 DFB 3           ; DAT
-                DA  $4290
+                DA  $1559
                 DFB 1           ; ARH
-                DA  $4296
+                DA  $155F
                 DFB 2           ; ARL
-                DA  $429D
+                DA  $1566
                 DFB 3           ; DAT
-                DA  $42B4
+                DA  $157D
                 DFB 1           ; ARH
-                DA  $42BA
+                DA  $1583
                 DFB 2           ; ARL
-                DA  $42C1
+                DA  $158A
                 DFB 3           ; DAT
-                DA  $42F1
+                DA  $16A9
                 DFB 1           ; ARH
-                DA  $42F6
+                DA  $16AE
                 DFB 2           ; ARL
-                DA  $4301
+                DA  $16B9
                 DFB 3           ; DAT
-                DA  $4306
+                DA  $16BE
                 DFB 3           ; DAT
-                DA  $432C
+                DA  $16E4
                 DFB 3           ; DAT
-                DA  $433C
+                DA  $16F4
                 DFB 3           ; DAT
-                DA  $434D
+                DA  $1705
                 DFB 3           ; DAT
-                DA  $436B
+                DA  $1723
                 DFB 3           ; DAT
-                DA  $439C
+                DA  $1754
                 DFB 3           ; DAT
-                DA  $43AC
+                DA  $1764
                 DFB 3           ; DAT
-                DA  $43D4
+                DA  $178C
                 DFB 1           ; ARH
-                DA  $43DA
+                DA  $1792
                 DFB 2           ; ARL
-                DA  $43E0
+                DA  $1798
                 DFB 3           ; DAT
-                DA  $43FA
+                DA  $17B2
                 DFB 1           ; ARH
-                DA  $4400
+                DA  $17B8
                 DFB 2           ; ARL
-                DA  $4407
+                DA  $17BF
                 DFB 3           ; DAT
-                DA  $4441
+                DA  $17F9
                 DFB 3           ; DAT
-                DA  $4450
+                DA  $1808
                 DFB 3           ; DAT
-                DA  $4494
+                DA  $184C
                 DFB 3           ; DAT
-                DA  $44D0
+                DA  $1888
                 DFB 3           ; DAT
-                DA  $44D5
+                DA  $188D
                 DFB 3           ; DAT
-                DA  $44E5
+                DA  $189D
                 DFB 3           ; DAT
-                DA  $44F6
+                DA  $18AE
                 DFB 1           ; ARH
-                DA  $44FC
+                DA  $18B4
                 DFB 2           ; ARL
-                DA  $4503
+                DA  $18BB
                 DFB 3           ; DAT
                 DA  $FFFF        ; sentinel (no DFB)

@@ -14,6 +14,6 @@ gsf             DS      100
 gbf             DS      50
 gsi             DS      14
 gnc             DS      64
-gfl             DS      24
+gfl             DS      28
 gui             DS      16
                 FGX2_RELOC_COUNT 1

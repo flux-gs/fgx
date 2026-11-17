@@ -468,8 +468,9 @@ _Ttyv_DWrite    MX      %00
 ; SG_RAWCB is the same mask the read path itself uses to pick char-at-a-time, so
 ; the two cannot drift.
 ;
-; THE FIRST QUESTION IS `ttnread''s: the queue is a clist in the tty bank, so
-; the count comes from upstream's own readiness routine.
+; THE QUESTION IS `ttyselect''s: the queue is a clist in the tty bank, so the
+; answer comes from upstream's own readiness routine, which also records the
+; selecting process in t_rsel for ttwakeup to wake.
 ;
 ; THERE IS NO KEYBOARD-RING TEST, AND ADDING ONE IS THE BUG.  Bytes reach
 ; `t_rawq' AT ARRIVAL, so `ttnread' already sees every one of them and nothing
@@ -486,9 +487,10 @@ _Tty_PollReadable MX    %00
                 PHX                             ; _Se_TtyOffToIdx clobbers X;
                 TXA                             ;   _Tty_NRead does not
                 JSR     _Se_TtyOffToIdx
-_ktp078         JSL     KTTY_KC_TTNREAD         ; increment 8b: upstream's own
-                PLX                             ;   answer, not the core's old
-                CMP     #0                      ;   CanonPos<CanonLen compare
+                LDX     #TTYIO_FREAD            ; `ttyselect(tp, FREAD)': the
+_ktp078         JSL     KTTY_KC_TTSELECT        ;   discipline's answer, and its
+                PLX                             ;   record of who is selecting
+                CMP     #0
                 BEQ     @tpr_no                 ; the discipline has bytes, or
                                                 ;   nothing is readable at all
 @tpr_yes        SEC
@@ -526,10 +528,12 @@ _Ttyv_Poll      MX %00
                 AND     #$00FF
                 JSR     _Vc_FromCdIdx           ; -> A = VC index, X = tty offset
                 BCC     @tp_wr                  ; not a ttyv line: write-only
+                PHA
+                JSR     _Tty_PollReadable       ; would a read RETURN?  Asked
+                PLA                             ;   first: the line records the
+                BCC     @tp_wr                  ;   select either way
                 CMP     _kVcFocus               ; our VC has the keyboard?
                 BNE     @tp_wr                  ;   no -> a read here would block
-                JSR     _Tty_PollReadable       ; ...and would a read RETURN?
-                BCC     @tp_wr
                 LDA     #POLLIN+POLLOUT
                 SEC
                 RTL

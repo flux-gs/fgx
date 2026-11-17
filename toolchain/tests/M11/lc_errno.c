@@ -33,6 +33,9 @@ int main()
     if (strcmp(strerror(2), "No such file or directory") != 0) return 5;
     if (strcmp(strerror(22), "Invalid argument") != 0) return 6;
     if (strcmp(strerror(9999), "Unknown error: 9999") != 0) return 7;
+    /* 8: the socket errnos 2.11BSD's kernel answers have their messages
+     * (ENETUNREACH 51, h/errno.h). */
+    if (strcmp(strerror(51), "Network is unreachable") != 0) return 8;
 
     /* 6: prints the decoded message end-to-end (the BSD perror path).
      * errno is still ENOENT from the fopen above; strerror() did not touch it.

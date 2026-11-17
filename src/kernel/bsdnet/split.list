@@ -1,0 +1,50 @@
+# Which module each network translation unit's code goes in.  The data of all
+# of them is one image, bsdnetd.  <stem> <module> [gate]: a gated line builds only
+# when that key of cfg/system.cfg is nonzero, and module `-' compiles but does
+# not link until its phase gives it what it needs.
+machine/bsdnet_init	0
+netprobe	0	kernel.netprobe
+netprobe2	2	kernel.netprobe
+netprobe3	0	kernel.netprobe
+netprobe4	0	kernel.netprobe
+netprobe5	0	kernel.netprobe
+netprobe6	1	kernel.netprobe
+netprobe7	2	kernel.netprobe
+machine/net_intr	0
+machine/net_callout	0
+machine/net_kern	0
+machine/s2_stubs	0
+machine/bn_sys	3
+machine/net_asm.s	0
+machine/in_cksum.s	1
+machine/w5_asm.s	2
+net/af	2
+net/if	2
+net/if_loop	2
+net/if_w5	2
+net/raw_cb	2
+net/raw_usrreq	2
+net/route	2
+netinet/if_ether	2
+netinet/in	2
+netinet/in_pcb	1
+netinet/in_proto	2
+netinet/ip_icmp	1
+netinet/ip_input	1
+netinet/ip_output	1
+netinet/raw_ip	1
+netinet/tcp_debug	3
+netinet/tcp_input	3
+netinet/tcp_output	3
+netinet/tcp_subr	3
+netinet/tcp_timer	3
+netinet/tcp_usrreq	3
+netinet/udp_usrreq	1
+sys/uipc_domain	0
+sys/uipc_mbuf	0
+sys/uipc_proto	2
+sys/uipc_socket	0
+sys/uipc_socket2	0
+sys/uipc_syscalls	3
+sys/sys_socket	3
+sys/uipc_usrreq	2

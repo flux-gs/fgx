@@ -129,6 +129,7 @@ locals_declare(const char *name, int name_len, LocalKind kind,
     g_locals[g_n_locals].loop_accessed = 0;
     g_locals[g_n_locals].scope_hidden  = 0;           /* K&R A.11.1 block scope */
     g_locals[g_n_locals].homed_from    = -1;
+    g_locals[g_n_locals].is_register   = (kind == LK_LOCAL) ? g_decl_is_register : 0;
     /* Use-before-set: entries are REUSED across functions and this routine
      * assigns field by field rather than clearing, so these must be reset
      * here or the previous occupant's verdict is inherited. */
@@ -374,13 +375,15 @@ enum_consts_lookup(const char *name, int name_len)
 
 int
 fn_sig_intern(LocalType ret, int n_params, LocalType *params,
-              int *param_struct_ids, int is_variadic, int ret_unsigned)
+              int *param_struct_ids, int is_variadic, int ret_unsigned,
+              int sret_sid)
 {
     for (int i = 0; i < g_n_fn_sigs; i++) {
         if (g_fn_sigs[i].return_type != ret) continue;
         if (g_fn_sigs[i].n_params    != n_params) continue;
         if (g_fn_sigs[i].is_variadic != is_variadic) continue;
         if (g_fn_sigs[i].ret_unsigned != ret_unsigned) continue;   /* A-1 */
+        if (g_fn_sigs[i].sret_sid != sret_sid) continue;
         int ok = 1;
         for (int j = 0; j < n_params; j++) {
             if (g_fn_sigs[i].param_types[j] != params[j]) { ok = 0; break; }
@@ -394,6 +397,7 @@ fn_sig_intern(LocalType ret, int n_params, LocalType *params,
     s->n_params    = n_params;
     s->is_variadic = is_variadic;
     s->ret_unsigned = ret_unsigned;
+    s->sret_sid    = sret_sid;
     for (int j = 0; j < n_params; j++) {
         s->param_types[j] = params[j];
         s->param_struct_ids[j] = param_struct_ids ? param_struct_ids[j] : -1;
@@ -602,6 +606,8 @@ funcs_declare(const char *name, int name_len, int n_params,
                 g_funcs[i].is_from_sigs = 0;
                 g_funcs[i].n_fixed     = -1;
                 g_funcs[i].fn_sig_id   = -1;
+                g_funcs[i].sret        = 0;
+                g_funcs[i].is_implicit = 0;
                 return i;
             }
             /* Already DEFINED.  A prototype re-declaration after the
@@ -631,6 +637,8 @@ funcs_declare(const char *name, int name_len, int n_params,
     g_funcs[g_n_funcs].is_from_sigs = 0;
     g_funcs[g_n_funcs].n_fixed     = -1;
     g_funcs[g_n_funcs].fn_sig_id   = -1;   /* M18: patched after param parse */
+    g_funcs[g_n_funcs].sret        = 0;
+    g_funcs[g_n_funcs].is_implicit = 0;
     return g_n_funcs++;
 }
 
@@ -764,6 +772,10 @@ field_lookup_strict_named(int sid, const char *name, int name_len)
 Field *
 field_lookup_dot(int sid, const char *name, int name_len)
 {
+    /* A member of an object whose struct is still incomplete needs its size
+     * and layout, which K&R A.8.3 rules out ("but not otherwise"). */
+    if (sid >= 0 && g_structs[sid].is_forward)
+        die(g_cur.line, g_cur.col, "member of an object of incomplete struct type");
     return field_lookup_strict_named(sid, name, name_len);
 }
 
@@ -1030,6 +1042,7 @@ sigs_emit(const char *path)
         for (int p = 0; p < fn->n_params; p++)
             if (fn->param_types[p] == LT_STRUCT) has_struct = 1;
         if (has_struct) continue;               /* struct ids are TU-local */
+        if (fn->sret) continue;                 /* so is a by-value return's */
         /* ret_unsigned rides along: without it a loaded entry SUPPRESSES the
          * TU's own `extern unsigned f();` (the empty-paren decl hits the
          * keep-branch, the in-body prototype path is skipped by the

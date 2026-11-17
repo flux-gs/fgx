@@ -42,36 +42,36 @@ static char *_sys_errmsg[] = {
     "Numerical argument out of domain",        /* 33 */
     "Numerical result out of range",           /* 34 */
     (char *)0,                               /* 35 */
-    (char *)0,                               /* 36 */
-    (char *)0,                               /* 37 */
+    "Operation now in progress",             /* 36 */
+    "Operation already in progress",         /* 37 */
     "Socket operation on non-socket",          /* 38 */
     "Destination address required",            /* 39 */
     "Message too long",                        /* 40 */
     "Protocol wrong type for socket",          /* 41 */
     "Protocol not available",                  /* 42 */
-    (char *)0,                               /* 43 */
-    (char *)0,                               /* 44 */
+    "Protocol not supported",                /* 43 */
+    "Socket type not supported",             /* 44 */
     "Operation not supported",                 /* 45 */
-    (char *)0,                               /* 46 */
+    "Protocol family not supported",         /* 46 */
     "Address family not supported by protocol family", /* 47 */
     "Address already in use",                  /* 48 */
     "Cannot assign requested address",         /* 49 */
-    (char *)0,                               /* 50 */
-    (char *)0,                               /* 51 */
-    (char *)0,                               /* 52 */
-    (char *)0,                               /* 53 */
+    "Network is down",                       /* 50 */
+    "Network is unreachable",                /* 51 */
+    "Network dropped connection on reset",   /* 52 */
+    "Software caused connection abort",      /* 53 */
     "Connection reset by peer",                /* 54 */
     "No buffer space available",               /* 55 */
     "Socket is already connected",             /* 56 */
     "Socket is not connected",                 /* 57 */
-    (char *)0,                               /* 58 */
-    (char *)0,                               /* 59 */
+    "Can't send after socket shutdown",      /* 58 */
+    "Too many references: can't splice",     /* 59 */
     "Operation timed out",                     /* 60 */
     "Connection refused",                      /* 61 */
     "Too many levels of symbolic links",       /* 62 */
     "File name too long",                      /* 63 */
-    (char *)0,                               /* 64 */
-    (char *)0,                               /* 65 */
+    "Host is down",                          /* 64 */
+    "No route to host",                      /* 65 */
     "Directory not empty",                     /* 66 */
     (char *)0,                               /* 67 */
     (char *)0,                               /* 68 */

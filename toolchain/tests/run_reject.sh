@@ -146,4 +146,5 @@ if [ "$fail" -gt 0 ]; then
     printf 'failed: %s\n' "${failed[*]}"
     exit 1
 fi
+"$(dirname "$0")/shared_data_flag.sh" || exit 1
 exit 0

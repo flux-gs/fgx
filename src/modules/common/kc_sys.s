@@ -118,6 +118,21 @@ kc_sleep        MX      %00
                 RTL
 
 ;------------------------------------------------------------------------------
+; kc_sleepr(chan) - kc_sleep for a wait with no bound: KSVC_SLEEPUNR, which
+; releases a snapshot fork child's parent before blocking (sched.s _sleepUnRel).
+; For a wait only another process can end, such as the network stack's wait
+; for an mbuf, where a child pinned on its parent's addresses would keep the
+; process that frees one from running.
+;------------------------------------------------------------------------------
+kc_sleepr       MX      %00
+                ENTERK
+                LDA     6,S                     ; chan = pointer OFFSET
+                LDX     #KSVC_SLEEPUNR
+                JSL     SYS_KCALL
+                LEAVEK
+                RTL
+
+;------------------------------------------------------------------------------
 ; kc_sleepi(chan) -> 0 slept and woken, 1 a signal ended (or prevented) it.
 ;
 ; THE INTERRUPTIBLE ONE: KSVC_SLEEP, pty.mod's service, which reaches _sleep

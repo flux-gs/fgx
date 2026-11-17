@@ -22,33 +22,41 @@ extern int _sock_argblk[];
  * (the retired asm shims read absolute slots of the full frame, so they
  * tolerated it).  Every socket shim therefore declares the caller's FULL arity
  * and ignores what the kernel doesn't take. */
-int bind(int fd, char *addr, int addrlen)
+int bind(int fd, char *addr, int addrlen)       /* addrlen in Y, as connect */
 {
-    (void)addrlen;
     unsigned long lp = (unsigned long)addr;
-    int r = (int)__syscall_db(72, (unsigned)(lp >> 16), (unsigned)lp, fd, 0);
+    int r = (int)__syscall_db(72, (unsigned)(lp >> 16), (unsigned)lp, fd, addrlen);
     if (__syscall_c() == 0) { errno = r; return -1; }
     return 0;
 }
 
-int listen(int fd)                            /* SYS_LISTEN=84: 0 / -1 */
+int listen(int fd, int backlog)               /* SYS_LISTEN=84: 0 / -1 */
 {
-    int r = (int)__syscall(84, fd, 0, 0);
+    int r = (int)__syscall(84, fd, backlog, 0);
     if (__syscall_c() == 0) { errno = r; return -1; }
     return 0;
 }
 
-int accept(int fd)                            /* SYS_ACCEPT=85: connfd / -1 */
+int getpeername(int fd, char *name, int *namelen);
+
+/* accept(2) -- SYS_ACCEPT=85: the new descriptor / -1.  The kernel takes the
+ * listener alone; the peer's name, when the caller asks for one, is the new
+ * socket's getpeername, min(*addrlen, its length) bytes, as 2.11BSD's accept()
+ * copies it (uipc_syscalls.c). */
+int accept(int fd, char *addr, int *addrlen)
 {
-    int r = (int)__syscall(85, fd, 0, 0);
+    int r;
+
+    r = (int)__syscall(85, fd, 0, 0);
     if (__syscall_c() == 0) { errno = r; return -1; }
+    if (addr != 0 && addrlen != 0 && getpeername(r, addr, addrlen) < 0)
+        *addrlen = 0;
     return r;
 }
 
-/* shutdown(fd, how) -- TCP half-close (SYS_SHUTDOWN=100).  SHUT_WR/SHUT_RDWR send
- * a FIN (the W5100 socket stays in FIN_WAIT, so recv still drains queued data +
- * sees the peer FIN as EOF); SHUT_RD is a no-op (can't stop RX).  The fd stays
- * open -- close(fd) does the full teardown.  0 / -1 (EBADF/ENOTSOCK). */
+/* shutdown(fd, how) -- SYS_SHUTDOWN=100, 2.11BSD's soshutdown: 0 stops
+ * receiving, 1 sending (a FIN on TCP), 2 both.  The fd stays open; close(fd)
+ * tears the socket down.  0 / -1. */
 int shutdown(int fd, int how)
 {
     int r = (int)__syscall(100, fd, how, 0);
@@ -57,51 +65,42 @@ int shutdown(int fd, int how)
 }
 
 /* getpeername(2) / getsockname(2) -- SYS_GETPEERNAME=108, SYS_GETSOCKNAME=109.
- *
- * The kernel writes a full 16-byte sockaddr_in and takes no length, which keeps
- * its side to the two registers connect(2) already uses.  The BSD 3-arg form's
- * namelen is settled HERE: a buffer that cannot hold a whole record is EINVAL
- * rather than a short write the caller would have to think about, and *namelen
- * comes back as what was actually written.
- *
- * These were DECLARED in sys/socket.h and implemented nowhere (apple/fgx#142) --
- * a program that called either compiled clean and failed at link, which is the
- * "a declaration reads as shipped" shape.  telnetd(8) is the customer: upstream
- * is an inetd child whose first act is getpeername(0,...) to learn the peer for
- * login's -h. */
-#define _SIN_SIZE 16                       /* SIN_SIZE, include/socket.s */
-
+ * *namelen goes in Y; the kernel copies min(*namelen, the name's length) bytes,
+ * as 2.11BSD's uipc_syscalls.c does, and returns the count, which becomes the
+ * new *namelen.  A negative *namelen asks for nothing. */
 int getpeername(int fd, char *name, int *namelen)
 {
     int r;
-    unsigned long lp;
-    if (namelen == 0 || *namelen < _SIN_SIZE) { errno = EINVAL; return -1; }
-    lp = (unsigned long)name;
-    r = (int)__syscall_db(108, (unsigned)(lp >> 16), (unsigned)lp, fd, 0);
+    unsigned long lp = (unsigned long)name;
+    if (namelen == 0) { errno = EFAULT; return -1; }
+    r = (int)__syscall_db(108, (unsigned)(lp >> 16), (unsigned)lp, fd,
+        *namelen < 0 ? 0 : *namelen);
     if (__syscall_c() == 0) { errno = r; return -1; }
-    *namelen = _SIN_SIZE;
+    *namelen = r;
     return 0;
 }
 
 int getsockname(int fd, char *name, int *namelen)
 {
     int r;
-    unsigned long lp;
-    if (namelen == 0 || *namelen < _SIN_SIZE) { errno = EINVAL; return -1; }
-    lp = (unsigned long)name;
-    r = (int)__syscall_db(109, (unsigned)(lp >> 16), (unsigned)lp, fd, 0);
+    unsigned long lp = (unsigned long)name;
+    if (namelen == 0) { errno = EFAULT; return -1; }
+    r = (int)__syscall_db(109, (unsigned)(lp >> 16), (unsigned)lp, fd,
+        *namelen < 0 ? 0 : *namelen);
     if (__syscall_c() == 0) { errno = r; return -1; }
-    *namelen = _SIN_SIZE;
+    *namelen = r;
     return 0;
 }
 
 int sendto(int s, char *buf, int len, int flags, char *to, int tolen)
 {
     /* argblk words 4..5 = dst IP, 6 = port (net order) -- composed as word
-     * stores from the sockaddr_in's fields (SIN_PORT @2, SIN_ADDR @4) */
+     * stores from the sockaddr_in's fields (SIN_PORT @2, SIN_ADDR @4) -- and
+     * words 7..9 the sockaddr itself, its offset, bank and length, which the
+     * kernel stack's sendto copies whole, as an AF_UNIX name needs */
     int r;
     unsigned long lp = (unsigned long)buf;
-    (void)tolen;
+    unsigned long tp = (unsigned long)to;
     _sock_argblk[0] = (int)lp;
     _sock_argblk[1] = len;
     _sock_argblk[2] = flags;
@@ -109,39 +108,33 @@ int sendto(int s, char *buf, int len, int flags, char *to, int tolen)
     _sock_argblk[4] = ((to[4] & 0xFF) | ((to[5] & 0xFF) << 8));
     _sock_argblk[5] = ((to[6] & 0xFF) | ((to[7] & 0xFF) << 8));
     _sock_argblk[6] = ((to[2] & 0xFF) | ((to[3] & 0xFF) << 8));
+    _sock_argblk[7] = (int)tp;
+    _sock_argblk[8] = (int)(tp >> 16);
+    _sock_argblk[9] = tolen;
     r = (int)__syscall(73, (unsigned)(unsigned long)&_sock_argblk[0], s, 0);
     if (__syscall_c() == 0) { errno = r; return -1; }
     return r;
 }
 
-/* recvfrom(2).  THE KERNEL WRITES THE SOURCE ADDRESS INTO THIS BLOCK, never
- * into the caller's `from': word 4 points it at the 16 bytes from word 5 on,
- * which sit in the data bank the kernel reads the block through, and every
- * transport writes one whole 16-byte record there (a sockaddr_in, or AF_UNIX's
- * sun_noname).  What the caller gets is then 2.11BSD's recvit exactly: nothing
- * when `from' is null, else min(*fromlen, 16) bytes and that count written back
- * -- netcopyout's `if (*len > m->m_len) *len = m->m_len' (sys_net.c:221-223),
- * with `*fromlen <= 0' copying nothing and answering 0 (uipc_syscalls.c,
- * recvit).  getpeername settles its namelen here for the same reason. */
+/* recvfrom(2).  Block words 4 and 5 are `from', its offset and bank, and word
+ * 6 its length, which the kernel cuts to the source name's and writes back:
+ * 2.11BSD's recvit, min(*fromlen, the name's length) bytes, nothing when
+ * `from' is null or *fromlen is not positive (uipc_syscalls.c). */
 int recvfrom(int s, char *buf, int maxlen, int flags, char *from, int *fromlen)
 {
-    int r, n;
+    int r;
     unsigned long lp = (unsigned long)buf;
+    unsigned long fp = (unsigned long)from;
     _sock_argblk[0] = (int)lp;
     _sock_argblk[1] = maxlen;
     _sock_argblk[2] = flags;
     _sock_argblk[3] = (int)(lp >> 16);
-    _sock_argblk[4] = (int)(unsigned long)&_sock_argblk[5];
+    _sock_argblk[4] = (int)fp;
+    _sock_argblk[5] = (int)(fp >> 16);
+    _sock_argblk[6] = (from && *fromlen > 0) ? *fromlen : 0;
     r = (int)__syscall(74, (unsigned)(unsigned long)&_sock_argblk[0], s, 0);
     if (__syscall_c() == 0) { errno = r; return -1; }
-    if (from) {
-        n = *fromlen;
-        if (n < 0)
-            n = 0;
-        if (n > _SIN_SIZE)
-            n = _SIN_SIZE;
-        memcpy(from, (char *)&_sock_argblk[5], n);
-        *fromlen = n;
-    }
+    if (from)
+        *fromlen = _sock_argblk[6];
     return r;
 }

@@ -11,7 +11,10 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
+#include <net/if_dl.h>
+#include <net/route.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -29,8 +32,106 @@ fail(what, v)
 	fails++;
 }
 
+/* -l: SIOCADDRT and SIOCDELRT reach rtioctl, and SIOCGIFCONF names each
+ * interface's link address.  With a host route to 10.9.9.9 through lo0's own
+ * address a datagram to it leaves (ip_input then drops it, not being ours);
+ * without one ip_output answers ENETUNREACH. */
+static int
+rtconn()
+{
+	struct sockaddr_in to;
+	int s, r;
+
+	s = socket(AF_INET, SOCK_DGRAM, 0);
+	bzero((char *)&to, sizeof to);
+	to.sin_family = AF_INET;
+	to.sin_port = htons(7);
+	to.sin_addr.s_addr = htonl(0x0a090909L);
+	r = sendto(s, "x", 1, 0, (struct sockaddr *)&to, sizeof to) == 1 ? 0 : errno;
+	close(s);
+	return r;
+}
+
+static int
+rtreq(s, cmd)
+	int s, cmd;
+{
+	struct rtentry rt;
+	struct sockaddr_in *sin;
+
+	bzero((char *)&rt, sizeof rt);
+	sin = (struct sockaddr_in *)&rt.rt_dst;
+	sin->sin_family = AF_INET;
+	sin->sin_addr.s_addr = htonl(0x0a090909L);
+	sin = (struct sockaddr_in *)&rt.rt_gateway;
+	sin->sin_family = AF_INET;
+	sin->sin_addr.s_addr = htonl(0x7f000001L);
+	rt.rt_flags = RTF_UP | RTF_HOST;
+	return ioctl(s, cmd, (char *)&rt) < 0 ? errno : 0;
+}
+
+static int
+lmode()
+{
+	char buf[256];
+	struct ifconf ifc;
+	struct ifreq *r;
+	struct sockaddr_dl *sdl;
+	int s, n, i, e, link;
+
+	s = socket(AF_INET, SOCK_DGRAM, 0);
+	if ((e = rtconn()) != ENETUNREACH) { printf("IFC L FAIL before %d\n", e); return 1; }
+	if ((e = rtreq(s, SIOCADDRT)) != 0) { printf("IFC L FAIL addrt %d\n", e); return 1; }
+	if ((e = rtconn()) != 0) { printf("IFC L FAIL route %d\n", e); return 1; }
+	if ((e = rtreq(s, SIOCDELRT)) != 0) { printf("IFC L FAIL delrt %d\n", e); return 1; }
+	if ((e = rtconn()) != ENETUNREACH) { printf("IFC L FAIL after %d\n", e); return 1; }
+	ifc.ifc_len = sizeof buf;
+	ifc.ifc_buf = buf;
+	if (ioctl(s, SIOCGIFCONF, (char *)&ifc) < 0) { printf("IFC L FAIL conf %d\n", errno); return 1; }
+	n = ifc.ifc_len / sizeof (struct ifreq);
+	link = 0;
+	for (i = 0; i < n; i++) {
+		r = &ifc.ifc_req[i];
+		sdl = (struct sockaddr_dl *)&r->ifr_addr;
+		if (sdl->sdl_family != AF_LINK)
+			continue;
+		printf("IFC link %s type %d alen %d\n", r->ifr_name, sdl->sdl_type, sdl->sdl_alen);
+		if (strcmp(r->ifr_name, "lo0") == 0 && sdl->sdl_type == IFT_LOOP &&
+		    sdl->sdl_alen == 0 && sdl->sdl_index > 0)
+			link = 1;
+	}
+	if (!link) { printf("IFC L FAIL link %d\n", n); return 1; }
+	printf("IFC L ok\n");
+	return 0;
+}
+
+/* -s addr: does a datagram to addr leave?  ip_output answers ENETUNREACH
+ * when no route covers it. */
+static int
+smode(a)
+	char *a;
+{
+	struct sockaddr_in to;
+	int s, r;
+
+	s = socket(AF_INET, SOCK_DGRAM, 0);
+	bzero((char *)&to, sizeof to);
+	to.sin_family = AF_INET;
+	to.sin_port = htons(7);
+	to.sin_addr.s_addr = inet_addr(a);
+	r = sendto(s, "x", 1, 0, (struct sockaddr *)&to, sizeof to) == 1 ? 0 : errno;
+	close(s);
+	if (r == 0)
+		printf("IFC S %s sent\n", a);
+	else
+		printf("IFC S %s errno %d\n", a, r);
+	return 0;
+}
+
 int
-main()
+main(argc, argv)
+	int argc;
+	char **argv;
 {
 	char buf[256];
 	struct ifconf ifc;
@@ -38,6 +139,10 @@ main()
 	struct sockaddr_in *sin;
 	int s, n, i, sawlo;
 
+	if (argc > 1 && strcmp(argv[1], "-l") == 0)
+		return lmode();
+	if (argc > 2 && strcmp(argv[1], "-s") == 0)
+		return smode(argv[2]);
 	s = socket(AF_INET, SOCK_DGRAM, 0);
 	if (s < 0) { fail("socket", (long)errno); return 1; }
 
@@ -51,7 +156,7 @@ main()
 		r = &ifc.ifc_req[i];
 		sin = (struct sockaddr_in *)&r->ifr_addr;
 		printf("IFC if %s family %d\n", r->ifr_name, sin->sin_family);
-		if (strcmp(r->ifr_name, "lo0") == 0) {
+		if (strcmp(r->ifr_name, "lo0") == 0 && sin->sin_family != AF_LINK) {
 			sawlo = 1;
 			if (sin->sin_family != AF_INET ||
 			    sin->sin_addr.s_addr != htonl(0x7f000001L))
@@ -69,8 +174,8 @@ main()
 	strcpy(ifr.ifr_name, "lo0");
 	if (ioctl(s, SIOCGIFFLAGS, (char *)&ifr) < 0)
 		fail("flags", (long)errno);
-	else if (ifr.ifr_flags != (IFF_UP|IFF_LOOPBACK|IFF_RUNNING))
-		fail("flags-val", (long)ifr.ifr_flags);
+	else if (ifr.ifr_flags != (IFF_UP|IFF_LOOPBACK))	/* 2.11BSD if_loop.c: */
+		fail("flags-val", (long)ifr.ifr_flags);		/* never RUNNING */
 
 	strcpy(ifr.ifr_name, "lo0");
 	sin = (struct sockaddr_in *)&ifr.ifr_addr;

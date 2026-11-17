@@ -1,193 +1,548 @@
-/*
- * ifconfig - show / configure a network interface (FGX net-config v1).
- *
- *   ifconfig                 list all interfaces
- *   ifconfig u2s1            show one interface
- *   ifconfig u2s1 inet A.B.C.D netmask A.B.C.D broadcast A.B.C.D   (T5)
- *
- * Talks to the kernel ifnet table via SYS_IFCONFIG (the c_ifctl shim).
- *
- * The ifreq is a RAW 32-byte array, not a C struct: fcc even-aligns
- * word/long/pointer members (chars byte-pack since B-8 2026-07-06, words
- * still don't), so a struct still would not match the kernel's fully
- * packed IF_* layout (include/ifnet.s).
- * Byte offsets here mirror IF_* exactly.  Output is printf-only (the console
- * drops LF on the putchar/fputs path); the MAC is built with a local hex table
- * (fcc's %02x width is unreliable — same as netdump.c).
+/* SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * FGX-Provenance: 2.11BSD usr/sbin/ifconfig/ifconfig.c
+ *   Ported from usr/sbin/ifconfig/ifconfig.c, 2.11BSD (4.20.1).  Original work:
+ *   Copyright (c) 1983 Regents of the University of California.
+ *   All rights reserved.
  */
+/* FGX deltas, each in docs/PROVENANCE.md:
+ * - XNS is compiled out (#ifdef NS): the kernel has no NS family.
+ * - NEXTARG takes the pdp11 value: an int is 16 bits here too.
+ * - The netmask prints with %lX: libc's printf is 4.3BSD-Reno's, where %X is
+ *   an int, and 2.11BSD's %X is a long.
+ * - status() adds an `ether' line, the link-level address SIOCGIFCONF
+ *   returns (4.3BSD-Reno's AF_LINK sockaddr_dl, <net/if_dl.h>).
+ */
+
+#if	defined(DOSCCS) && !defined(lint)
+char copyright[] =
+"@(#) Copyright (c) 1983 Regents of the University of California.\n\
+ All rights reserved.\n";
+
+static char sccsid[] = "@(#)ifconfig.c	4.20.1 (2.11BSD GTE) 1/1/94";
+#endif
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+
+#include <net/if.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#ifdef NS
+#define	NSIP
+#include <netns/ns.h>
+#include <netns/ns_if.h>
+#endif
+#include <net/if_dl.h>
+
 #include <stdio.h>
-#include <string.h>
+#include <errno.h>
+#include <ctype.h>
+#include <netdb.h>
 
-#define IFR_SIZE      32
-#define IFR_NAME       0      /* 8 bytes, NUL-padded */
-#define IFR_SLOT       8      /* 1 (also the IFC_GETN index) */
-#define IFR_MAC        9      /* 6 */
-#define IFR_FLAGS     15      /* 1 */
-#define IFR_IP        16      /* 4 */
-#define IFR_NETMASK   20      /* 4 */
-#define IFR_BROADCAST 24      /* 4 */
+extern int errno;
+struct	ifreq ifr;
+struct	sockaddr_in sin = { AF_INET };
+struct	sockaddr_in broadaddr;
+struct	sockaddr_in netmask = { AF_INET };
+struct	sockaddr_in ipdst = { AF_INET };
+char	name[30];
+int	flags;
+int	metric;
+int	setaddr;
+int	setmask;
+int	setbroadaddr;
+int	setipdst;
+int	s;
+extern	int errno;
 
-#define IFC_GETN      0
-#define IFC_GET       1
-#define IFC_SET       2
+int	setifflags(), setifaddr(), setifdstaddr(), setifnetmask();
+int	setifmetric(), setifbroadaddr(), setifipdst();
 
-/* kernel IF_Flags bits (include/ifnet.s) — the real per-interface state. */
-#define IFF_LINK_UP   0x01    /* card present + SHAR written */
-#define IFF_IP_CONF   0x02    /* IP layer configured (DHCP or ifconfig) */
-#define IFF_DHCP      0x04    /* IP came from a DHCP lease */
+#if defined(pdp11) || defined(__FGX__)
+#define	NEXTARG		0x7fff
+#else
+#define	NEXTARG		0xffffff
+#endif
 
-/* BSD-style display flag bits (what ifconfig prints in flags=NN<...>). */
-#define BF_UP         0x01
-#define BF_BROADCAST  0x02
-#define BF_RUNNING    0x40
+struct	cmd {
+	char	*c_name;
+	int	c_parameter;		/* NEXTARG means next argv */
+	int	(*c_func)();
+} cmds[] = {
+	{ "up",		IFF_UP,		setifflags } ,
+	{ "down",	-IFF_UP,	setifflags },
+	{ "trailers",	-IFF_NOTRAILERS,setifflags },
+	{ "-trailers",	IFF_NOTRAILERS,	setifflags },
+	{ "arp",	-IFF_NOARP,	setifflags },
+	{ "-arp",	IFF_NOARP,	setifflags },
+	{ "debug",	IFF_DEBUG,	setifflags },
+	{ "-debug",	-IFF_DEBUG,	setifflags },
+#ifdef notdef
+#define	EN_SWABIPS	0x1000
+	{ "swabips",	EN_SWABIPS,	setifflags },
+	{ "-swabips",	-EN_SWABIPS,	setifflags },
+#endif
+	{ "netmask",	NEXTARG,	setifnetmask },
+	{ "metric",	NEXTARG,	setifmetric },
+	{ "broadcast",	NEXTARG,	setifbroadaddr },
+	{ "ipdst",	NEXTARG,	setifipdst },
+	{ 0,		0,		setifaddr },
+	{ 0,		0,		setifdstaddr },
+};
 
-int ifctl(int op, unsigned char *ifr);
+/*
+ * XNS support liberally adapted from
+ * code written at the University of Maryland
+ * principally by James O'Toole and Chris Torek.
+ */
 
-static unsigned char ifr[IFR_SIZE];
-static char hexd[17] = "0123456789abcdef";
-static char macbuf[18];
-static char nmbuf[12];
-static char flagbuf[48];
+int	in_status(), in_getaddr();
+#ifdef NS
+int	xns_status(), xns_getaddr();
+#endif
 
-static void fmt_mac(void)
+/* Known address families */
+struct afswtch {
+	char *af_name;
+	short af_af;
+	int (*af_status)();
+	int (*af_getaddr)();
+} afs[] = {
+	{ "inet",	AF_INET,	in_status,	in_getaddr },
+#ifdef NS
+	{ "ns",		AF_NS,		xns_status,	xns_getaddr },
+#endif
+	{ 0,		0,		0,		0 }
+};
+
+struct afswtch *afp;	/*the address family being set or asked about*/
+
+main(argc, argv)
+	int argc;
+	char *argv[];
 {
-    int i, j, v;
-    j = 0;
-    for (i = 0; i < 6; i++) {
-        v = ifr[IFR_MAC + i];
-        macbuf[j++] = hexd[(v >> 4) & 15];
-        macbuf[j++] = hexd[v & 15];
-        if (i < 5)
-            macbuf[j++] = ':';
-    }
-    macbuf[j] = 0;
+	int af = AF_INET;
+
+	if (argc < 2) {
+		fprintf(stderr, "usage: ifconfig interface\n%s%s%s%s%s",
+		    "\t[ af [ address [ dest_addr ] ] [ up ] [ down ]",
+			    "[ netmask mask ] ]\n",
+		    "\t[ metric n ]\n",
+		    "\t[ trailers | -trailers ]\n",
+		    "\t[ arp | -arp ]\n");
+		exit(1);
+	}
+	argc--, argv++;
+	strncpy(name, *argv, sizeof(name));
+	strncpy(ifr.ifr_name, name, sizeof(ifr.ifr_name));
+	argc--, argv++;
+	if (argc > 0) {
+		struct afswtch *myafp;
+		
+		for (myafp = afp = afs; myafp->af_name; myafp++)
+			if (strcmp(myafp->af_name, *argv) == 0) {
+				afp = myafp; argc--; argv++;
+				break;
+			}
+		af = ifr.ifr_addr.sa_family = afp->af_af;
+	}
+	s = socket(af, SOCK_DGRAM, 0);
+	if (s < 0) {
+		perror("ifconfig: socket");
+		exit(1);
+	}
+	if (ioctl(s, SIOCGIFFLAGS, (caddr_t)&ifr) < 0) {
+		Perror("ioctl (SIOCGIFFLAGS)");
+		exit(1);
+	}
+	strncpy(ifr.ifr_name, name, sizeof ifr.ifr_name);
+	flags = ifr.ifr_flags;
+	if (ioctl(s, SIOCGIFMETRIC, (caddr_t)&ifr) < 0)
+		perror("ioctl (SIOCGIFMETRIC)");
+	else
+		metric = ifr.ifr_metric;
+	if (argc == 0) {
+		status();
+		exit(0);
+	}
+	while (argc > 0) {
+		register struct cmd *p;
+
+		for (p = cmds; p->c_name; p++)
+			if (strcmp(*argv, p->c_name) == 0)
+				break;
+		if (p->c_name == 0 && setaddr)
+			p++;	/* got src, do dst */
+		if (p->c_func) {
+			if (p->c_parameter == NEXTARG) {
+				(*p->c_func)(argv[1]);
+				argc--, argv++;
+			} else
+				(*p->c_func)(*argv, p->c_parameter);
+		}
+		argc--, argv++;
+	}
+	if ((setmask || setaddr) && (af == AF_INET)) {
+		/*
+		 * If setting the address and not the mask,
+		 * clear any existing mask and the kernel will then
+		 * assign the default.  If setting both,
+		 * set the mask first, so the address will be
+		 * interpreted correctly.
+		 */
+		ifr.ifr_addr = *(struct sockaddr *)&netmask;
+		if (ioctl(s, SIOCSIFNETMASK, (caddr_t)&ifr) < 0)
+			Perror("ioctl (SIOCSIFNETMASK)");
+	}
+#ifdef NS
+	if (setipdst && af==AF_NS) {
+		struct nsip_req rq;
+		int size = sizeof(rq);
+
+		rq.rq_ns = *(struct sockaddr *) &sin;
+		rq.rq_ip = *(struct sockaddr *) &ipdst;
+
+		if (setsockopt(s, 0, SO_NSIP_ROUTE, &rq, size) < 0)
+			Perror("Encapsulation Routing");
+		setaddr = 0;
+	}
+#endif
+	if (setaddr) {
+		ifr.ifr_addr = *(struct sockaddr *) &sin;
+		if (ioctl(s, SIOCSIFADDR, (caddr_t)&ifr) < 0)
+			Perror("ioctl (SIOCSIFADDR)");
+	}
+	if (setbroadaddr) {
+		ifr.ifr_addr = *(struct sockaddr *)&broadaddr;
+		if (ioctl(s, SIOCSIFBRDADDR, (caddr_t)&ifr) < 0)
+			Perror("ioctl (SIOCSIFBRDADDR)");
+	}
+	exit(0);
 }
 
-/* netmask -> nmbuf as BSD-style "0xffffff00". */
-static void fmt_mask(void)
+/*ARGSUSED*/
+setifaddr(addr, param)
+	char *addr;
+	short param;
 {
-    int i, j, v;
-    nmbuf[0] = '0';
-    nmbuf[1] = 'x';
-    j = 2;
-    for (i = 0; i < 4; i++) {
-        v = ifr[IFR_NETMASK + i];
-        nmbuf[j++] = hexd[(v >> 4) & 15];
-        nmbuf[j++] = hexd[v & 15];
-    }
-    nmbuf[j] = 0;
+	/*
+	 * Delay the ioctl to set the interface addr until flags are all set.
+	 * The address interpretation may depend on the flags,
+	 * and the flags may change when the address is set.
+	 */
+	setaddr++;
+	(*afp->af_getaddr)(addr, &sin);
 }
 
-/* Build the BSD-style "NN<TOK,...>" flags string from the real IF_Flags byte;
- * return the numeric value.  The W5100 is a broadcast medium; UP/RUNNING track
- * IFF_LINK_UP (card present + link), so a down card no longer reads as up. */
-static int render_flags(void)
+setifnetmask(addr)
+	char *addr;
 {
-    int f, n;
-    unsigned char iff;
-    iff = ifr[IFR_FLAGS];
-    f = BF_BROADCAST;                     /* W5100 = broadcast medium */
-    if (iff & IFF_LINK_UP)
-        f = f | BF_UP | BF_RUNNING;
-    flagbuf[0] = 0;
-    n = 0;
-    if (f & BF_UP)        { if (n) strcat(flagbuf, ","); strcat(flagbuf, "UP");        n = 1; }
-    if (f & BF_BROADCAST) { if (n) strcat(flagbuf, ","); strcat(flagbuf, "BROADCAST"); n = 1; }
-    if (f & BF_RUNNING)   { if (n) strcat(flagbuf, ","); strcat(flagbuf, "RUNNING");   n = 1; }
-    return f;
+	in_getaddr(addr, &netmask);
+	setmask++;
 }
 
-/* BSD ifconfig layout: name + flags, offload options, then ether / inet. */
-static void show(void)
+setifbroadaddr(addr)
+	char *addr;
 {
-    int f;
-    f = render_flags();
-    fmt_mac();
-    printf("%s: flags=%d<%s>\n", ifr, f, flagbuf);
-    /* W5100 hardware TCP/IP offload — a static property of the chip (there is
-     * no runtime cap mask; OFFLOAD_* is defined-only).  Honest token set: the
-     * card does IPv4/ARP/TCP/UDP and their checksums; inbound ICMP echo too.
-     * The options=<> framing already means "offloaded"; keep it under 80 cols. */
-    printf("        options=<TCP4,UDP4,ICMP4,ARP,CSUM_IP,CSUM_TCP,CSUM_UDP>\n");
-    printf("        ether %s\n", macbuf);
-    if (ifr[IFR_FLAGS] & IFF_IP_CONF) {
-        fmt_mask();
-        printf("        inet %u.%u.%u.%u netmask %s broadcast %u.%u.%u.%u\n",
-               ifr[IFR_IP], ifr[IFR_IP+1], ifr[IFR_IP+2], ifr[IFR_IP+3],
-               nmbuf,
-               ifr[IFR_BROADCAST], ifr[IFR_BROADCAST+1],
-               ifr[IFR_BROADCAST+2], ifr[IFR_BROADCAST+3]);
-        if (ifr[IFR_FLAGS] & IFF_DHCP)
-            printf("        status: active (dhcp lease)\n");
-    }
+	(*afp->af_getaddr)(addr, &broadaddr);
+	setbroadaddr++;
 }
 
-/* Parse a dotted-quad "A.B.C.D" from s into ifr[off..off+3]. */
-static void parse_ip(char *s, int off)
+setifipdst(addr)
+	char *addr;
 {
-    int i, v;
-    for (i = 0; i < 4; i++) {
-        v = 0;
-        while (*s >= '0' && *s <= '9') {
-            v = v * 10 + (*s - '0');
-            s++;
-        }
-        ifr[off + i] = v;
-        if (*s == '.')
-            s++;
-    }
+	in_getaddr(addr, &ipdst);
+	setipdst++;
 }
 
-int main(int argc, char **argv)
+/*ARGSUSED*/
+setifdstaddr(addr, param)
+	char *addr;
+	int param;
 {
-    int i, k;
 
-    /* no args, or "-a": list every interface (BSD `ifconfig -a`). */
-    if (argc < 2 || (argv[1][0] == '-' && argv[1][1] == 'a' && argv[1][2] == 0)) {
-        for (i = 0; i < 4; i++) {
-            ifr[IFR_SLOT] = i;
-            if (ifctl(IFC_GETN, ifr) != 0)
-                break;
-            show();
-        }
-        return 0;
-    }
-
-    for (k = 0; k < 7 && argv[1][k]; k++)
-        ifr[IFR_NAME + k] = argv[1][k];
-    ifr[IFR_NAME + k] = 0;
-
-    if (ifctl(IFC_GET, ifr) != 0) {
-        printf("ifconfig: %s: no such interface\n", argv[1]);
-        return 1;
-    }
-
-    if (argc >= 3) {
-        /* GET above loaded the record (name/mac/current IP) so unset fields
-         * are preserved; now parse the inet/netmask/broadcast args.  Keywords
-         * have unique first letters: i/n/b. */
-        i = 2;
-        while (i < argc) {
-            if (i + 1 < argc && argv[i][0] == 'i') {
-                parse_ip(argv[i + 1], IFR_IP);
-                i += 2;
-            } else if (i + 1 < argc && argv[i][0] == 'n') {
-                parse_ip(argv[i + 1], IFR_NETMASK);
-                i += 2;
-            } else if (i + 1 < argc && argv[i][0] == 'b') {
-                parse_ip(argv[i + 1], IFR_BROADCAST);
-                i += 2;
-            } else {
-                i++;
-            }
-        }
-        if (ifctl(IFC_SET, ifr) != 0) {
-            printf("ifconfig: %s: set failed\n", argv[1]);
-            return 1;
-        }
-        ifctl(IFC_GET, ifr);    /* re-read to display the result */
-    }
-
-    show();
-    return 0;
+	(*afp->af_getaddr)(addr, &ifr.ifr_addr);
+	if (ioctl(s, SIOCSIFDSTADDR, (caddr_t)&ifr) < 0)
+		Perror("ioctl (SIOCSIFDSTADDR)");
 }
+
+setifflags(vname, value)
+	char *vname;
+	short value;
+{
+ 	if (ioctl(s, SIOCGIFFLAGS, (caddr_t)&ifr) < 0) {
+ 		Perror("ioctl (SIOCGIFFLAGS)");
+ 		exit(1);
+ 	}
+	strncpy(ifr.ifr_name, name, sizeof (ifr.ifr_name));
+ 	flags = ifr.ifr_flags;
+
+	if (value < 0) {
+		value = -value;
+		flags &= ~value;
+	} else
+		flags |= value;
+	ifr.ifr_flags = flags;
+	if (ioctl(s, SIOCSIFFLAGS, (caddr_t)&ifr) < 0)
+		Perror(vname);
+}
+
+setifmetric(val)
+	char *val;
+{
+	strncpy(ifr.ifr_name, name, sizeof (ifr.ifr_name));
+	ifr.ifr_metric = atoi(val);
+	if (ioctl(s, SIOCSIFMETRIC, (caddr_t)&ifr) < 0)
+		perror("ioctl (set metric)");
+}
+
+#define	IFFBITS \
+"\020\1UP\2BROADCAST\3DEBUG\4LOOPBACK\5POINTOPOINT\6NOTRAILERS\7RUNNING\10NOARP\
+"
+
+/*
+ * Print the status of the interface.  If an address family was
+ * specified, show it and it only; otherwise, show them all.
+ */
+status()
+{
+	register struct afswtch *p = afp;
+	short af = ifr.ifr_addr.sa_family;
+
+	printf("%s: ", name);
+	printb("flags", flags, IFFBITS);
+	if (metric)
+		printf(" metric %d", metric);
+	putchar('\n');
+	if ((p = afp) != NULL) {
+		(*p->af_status)(1);
+	} else for (p = afs; p->af_name; p++) {
+		ifr.ifr_addr.sa_family = p->af_af;
+		(*p->af_status)(0);
+	}
+	link_status();
+}
+
+/*
+ * The link-level address: the AF_LINK entry SIOCGIFCONF returns for this
+ * interface, printed when it has one.
+ */
+link_status()
+{
+	char buf[512];
+	struct ifconf ifc;
+	register struct ifreq *r;
+	register struct sockaddr_dl *sdl;
+	register u_char *a;
+	int n;
+
+	ifc.ifc_len = sizeof buf;
+	ifc.ifc_buf = buf;
+	if (ioctl(s, SIOCGIFCONF, (caddr_t)&ifc) < 0)
+		return;
+	for (n = ifc.ifc_len / sizeof (struct ifreq), r = ifc.ifc_req; n > 0;
+	    n--, r++) {
+		sdl = (struct sockaddr_dl *)&r->ifr_addr;
+		if (sdl->sdl_family != AF_LINK || sdl->sdl_alen != 6 ||
+		    strncmp(r->ifr_name, name, sizeof (r->ifr_name)) != 0)
+			continue;
+		a = (u_char *)LLADDR(sdl);
+		printf("\tether %02x:%02x:%02x:%02x:%02x:%02x\n",
+		    a[0], a[1], a[2], a[3], a[4], a[5]);
+	}
+}
+
+in_status(force)
+	int force;
+{
+	struct sockaddr_in *sin;
+	char *inet_ntoa();
+
+	strncpy(ifr.ifr_name, name, sizeof (ifr.ifr_name));
+	if (ioctl(s, SIOCGIFADDR, (caddr_t)&ifr) < 0) {
+		if (errno == EADDRNOTAVAIL || errno == EAFNOSUPPORT) {
+			if (!force)
+				return;
+			bzero((char *)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+		} else
+			perror("ioctl (SIOCGIFADDR)");
+	}
+	sin = (struct sockaddr_in *)&ifr.ifr_addr;
+	printf("\tinet %s ", inet_ntoa(sin->sin_addr));
+	strncpy(ifr.ifr_name, name, sizeof (ifr.ifr_name));
+	if (ioctl(s, SIOCGIFNETMASK, (caddr_t)&ifr) < 0) {
+		if (errno != EADDRNOTAVAIL)
+			perror("ioctl (SIOCGIFNETMASK)");
+		bzero((char *)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+	} else
+		netmask.sin_addr =
+		    ((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr;
+	if (flags & IFF_POINTOPOINT) {
+		if (ioctl(s, SIOCGIFDSTADDR, (caddr_t)&ifr) < 0) {
+			if (errno == EADDRNOTAVAIL)
+			    bzero((char *)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+			else
+			    perror("ioctl (SIOCGIFDSTADDR)");
+		}
+		strncpy(ifr.ifr_name, name, sizeof (ifr.ifr_name));
+		sin = (struct sockaddr_in *)&ifr.ifr_dstaddr;
+		printf("--> %s ", inet_ntoa(sin->sin_addr));
+	}
+	printf("netmask %lX ", ntohl(netmask.sin_addr.s_addr));
+	if (flags & IFF_BROADCAST) {
+		if (ioctl(s, SIOCGIFBRDADDR, (caddr_t)&ifr) < 0) {
+			if (errno == EADDRNOTAVAIL)
+			    bzero((char *)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+			else
+			    perror("ioctl (SIOCGIFADDR)");
+		}
+		strncpy(ifr.ifr_name, name, sizeof (ifr.ifr_name));
+		sin = (struct sockaddr_in *)&ifr.ifr_addr;
+		if (sin->sin_addr.s_addr != 0)
+			printf("broadcast %s", inet_ntoa(sin->sin_addr));
+	}
+	putchar('\n');
+}
+
+#ifdef NS
+xns_status(force)
+	int force;
+{
+	struct sockaddr_ns *sns;
+
+	close(s);
+	s = socket(AF_NS, SOCK_DGRAM, 0);
+	if (s < 0) {
+		if (errno == EPROTONOSUPPORT)
+			return;
+		perror("ifconfig: socket");
+		exit(1);
+	}
+	if (ioctl(s, SIOCGIFADDR, (caddr_t)&ifr) < 0) {
+		if (errno == EADDRNOTAVAIL || errno == EAFNOSUPPORT) {
+			if (!force)
+				return;
+			bzero((char *)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+		} else
+			perror("ioctl (SIOCGIFADDR)");
+	}
+	strncpy(ifr.ifr_name, name, sizeof ifr.ifr_name);
+	sns = (struct sockaddr_ns *)&ifr.ifr_addr;
+	printf("\tns %s ", ns_ntoa(sns->sns_addr));
+	if (flags & IFF_POINTOPOINT) { /* by W. Nesheim@Cornell */
+		if (ioctl(s, SIOCGIFDSTADDR, (caddr_t)&ifr) < 0) {
+			if (errno == EADDRNOTAVAIL)
+			    bzero((char *)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+			else
+			    Perror("ioctl (SIOCGIFDSTADDR)");
+		}
+		strncpy(ifr.ifr_name, name, sizeof (ifr.ifr_name));
+		sns = (struct sockaddr_ns *)&ifr.ifr_dstaddr;
+		printf("--> %s ", ns_ntoa(sns->sns_addr));
+	}
+	putchar('\n');
+}
+#endif
+
+Perror(cmd)
+	char *cmd;
+{
+	extern int errno;
+
+	fprintf(stderr, "ifconfig: ");
+	switch (errno) {
+
+	case ENXIO:
+		fprintf(stderr, "%s: no such interface\n", cmd);
+		break;
+
+	case EPERM:
+		fprintf(stderr, "%s: permission denied\n", cmd);
+		break;
+
+	default:
+		perror(cmd);
+	}
+	exit(1);
+}
+
+struct	in_addr inet_makeaddr();
+
+in_getaddr(s, saddr)
+	char *s;
+	struct sockaddr *saddr;
+{
+	register struct sockaddr_in *sin = (struct sockaddr_in *)saddr;
+	struct hostent *hp;
+	struct netent *np;
+	u_long val;
+
+	sin->sin_family = AF_INET;
+	val = inet_addr(s);
+	if (val != -1) {
+		sin->sin_addr.s_addr = val;
+		return;
+	}
+	hp = gethostbyname(s);
+	if (hp) {
+		sin->sin_family = hp->h_addrtype;
+		bcopy(hp->h_addr, (char *)&sin->sin_addr, hp->h_length);
+		return;
+	}
+	np = getnetbyname(s);
+	if (np) {
+		sin->sin_family = np->n_addrtype;
+		sin->sin_addr = inet_makeaddr(np->n_net, INADDR_ANY);
+		return;
+	}
+	fprintf(stderr, "%s: bad value\n", s);
+	exit(1);
+}
+
+/*
+ * Print a value a la the %b format of the kernel's printf
+ */
+printb(s, v, bits)
+	char *s;
+	register char *bits;
+	register unsigned short v;
+{
+	register int i, any = 0;
+	register char c;
+
+	if (bits && *bits == 8)
+		printf("%s=%o", s, v);
+	else
+		printf("%s=%x", s, v);
+	bits++;
+	if (bits) {
+		putchar('<');
+		while (i = *bits++) {
+			if (v & (1 << (i-1))) {
+				if (any)
+					putchar(',');
+				any = 1;
+				for (; (c = *bits) > 32; bits++)
+					putchar(c);
+			} else
+				for (; *bits > 32; bits++)
+					;
+		}
+		putchar('>');
+	}
+}
+
+#ifdef NS
+xns_getaddr(addr, saddr)
+char *addr;
+struct sockaddr *saddr;
+{
+	struct sockaddr_ns *sns = (struct sockaddr_ns *)saddr;
+	struct ns_addr ns_addr();
+	sns->sns_family = AF_NS;
+	sns->sns_addr = ns_addr(addr);
+}
+#endif

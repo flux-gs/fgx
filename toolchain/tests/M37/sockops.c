@@ -7,9 +7,12 @@
  * and the _sock_argblk staging are what's under test; live-net behavior
  * stays with the live-net gates (nc/udpecho/ping, human-run).
  *
- * FGX-only (MAME oracle).  5+5+5+5+5+5+4+4+4 = 42. */
+ * FGX-only (MAME oracle).  5+5+5+5+5+5+4+4+4+5+5 = 52. */
+#include <sys/socket.h>
+
 char sa[16];
 char buf[8];
+struct msghdr mh;
 
 int main(void)
 {
@@ -24,7 +27,9 @@ int main(void)
     if (setsockopt(99, 0, 0, buf, 4) == -1) r += 5;
     if (sendto(99, buf, 4, 0, sa, 16) == -1)   r += 4;
     if (recvfrom(99, buf, 8, 0, sa, 16) == -1) r += 4;
-    if (ifctl(0, sa) == -1)                 r += 4;
+    if (listen(99, 1) == -1)                r += 4;
+    if (sendmsg(99, &mh, 0) == -1)          r += 5;
+    if (recvmsg(99, &mh, 0) == -1)          r += 5;
     close(fd);
     return r;
 }

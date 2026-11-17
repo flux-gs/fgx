@@ -116,6 +116,10 @@ MANIFESTS = {
         # core-side KSVC arm stages the IN value and reads the OUT one; this row
         # is what lets the far bank's shim name the word at all.
         ('_unpSlot', '_unpSlot', 0, 'abs24'),
+        # A descriptor passed over AF_UNIX: unp_fileop's FCB side (far/kc_sys.s).
+        ('_FarSh_FcbRef',    '_FarSh_FcbRef',    0, 'abs24'),
+        ('_FarSh_FcbSock',   '_FarSh_FcbSock',   0, 'abs24'),
+        ('_FarSh_FdInstall', '_FarSh_FdInstall', 0, 'abs24'),
     ],
     # tty: the TTY KERNEL BANK (src/kernel/tty, bin/fgxtty.bin).  A THIRD
     # statically linked kernel image, at live kernel bank + 2.  See
@@ -132,6 +136,7 @@ MANIFESTS = {
     # row in a generated table that no build step can tell from a live one.
     'tty': [
         ('_FarSh_LogStr',   '_FarSh_LogStr',   0, 'abs24'),
+        ('_kTtyOutAny',     '_kTtyOutAny',     0, 'abs24'),
         ('_FarSh_KernDP',   '_FarSh_KernDP',   0, 'abs24'),
         ('_FarSh_Wakeup',   '_FarSh_Wakeup',   0, 'abs24'),
         # The INTERRUPTIBLE sleep, T6 increment 4b.  `_FarSh_SleepUn' below is
@@ -140,6 +145,7 @@ MANIFESTS = {
         # PZERO and therefore PCATCH.
         ('_FarSh_Sleep',    '_FarSh_Sleep',    0, 'abs24'),
         ('_FarSh_CdTtyIdx', '_FarSh_CdTtyIdx', 0, 'abs24'),
+        ('_FarSh_Forceclose', '_FarSh_Forceclose', 0, 'abs24'),
         # The pump's two doors onto the core's byte source, and the INTR flush
         # the heartbeat latched because it consumed the ^C, RETIRED AT T6
         # INCREMENT 4b -- which is what the row here always said would happen:
@@ -148,10 +154,14 @@ MANIFESTS = {
         # ttyblock/ttyunblock's RTSCTS arm.  FGX has no cdevsw array, so
         # d_ioctl is the registry's _Chardev_Ioctl reached through here.
         ('_FarSh_CdIoctl',  '_FarSh_CdIoctl',  0, 'abs24'),
-        # ttwakeup/ttyowake.  selwakeup is one CHANNEL in FGX, not a recorded
-        # proc; gsignal is _Kill_GroupFanout, which the tty bank feeds from its
-        # own t_pgrp rather than through _ttyTable.
+        # ttwakeup/ttyowake's selwakeup(p, coll), and ttyselect's test of the
+        # selector a line already holds and the pid it records.  gsignal is
+        # _Kill_GroupFanout, which the tty bank feeds from its own t_pgrp
+        # rather than through _ttyTable.
         ('_FarSh_SelWakeup','_FarSh_SelWakeup',0, 'abs24'),
+        ('_FarSh_SelWaiting','_FarSh_SelWaiting',0, 'abs24'),
+        ('_FarSh_PtcWakeup','_FarSh_PtcWakeup',0, 'abs24'),
+        ('_FarSh_CurPid',   '_FarSh_CurPid',   0, 'abs24'),
         ('_FarSh_Gsignal',  '_FarSh_Gsignal',  0, 'abs24'),
         # ttyflush and, at T6, ttyinput's ^S path.
         ('_FarSh_CdStop',   '_FarSh_CdStop',   0, 'abs24'),
@@ -245,6 +255,9 @@ MANIFESTS = {
         ('_klogVfsUiomove', '_klogVfsUiomove', 0, 'lo16'),
         ('_klogVfsBank', '_klogVfsBank', 0, 'lo16'),
     ],
+    # mem: /dev/mem and /dev/kmem (src/modules/mem).  It keeps no state and
+    # finds vfs.mod's uiomove on each call, so the build id is all it needs.
+    'mem': [],
     'bpf': [
         ('_Sys_RdMax', '_Sys_RdMax', 0, 'lo16'),
         # The W5100 socket bitmap: open claims socket 0 for MACRAW through it.
@@ -258,27 +271,30 @@ MANIFESTS = {
         # at mod_init entry (DBR=kernel bank) to bind its own U2_* sites.
         ('_u2Slot',   '_u2Slot',   0, 'lo16'),
     ],
-    # net: the networking stack module (src/modules/net). Phase 1 = SYS_IFCONFIG.
-    # The ifconfig scratch statics (_ifn*/_ifc*) STAY kernel-side in
-    # ifconfig_sys.s and are reached DBR-relative (lo16, DBR=$02 during
-    # dispatch); the syscall args come from the dispatcher's _Sys_Saved* slots;
-    # _ifS1Off is the slot-1 record offset; _W5_WriteIpFromRec is the one kernel
-    # routine the IFC_SET path JSLs (abs24).
+    # bsdnet: the kernel network stack's W5100 driver (machine/w5_asm.s), which
+    # moves DBR to the live kernel bank for these.
+    'bsdnet': [
+        # The running task's kernel-slot base, which bn_sysent makes fcc's
+        # stack floor for a socket call (machine/net_asm.s).
+        ('_kCurKStkBase', '_kCurKStkBase', 0, 'lo16'),
+        # An AF_UNIX name's op and socket, for KSVC_UNPNAME (machine/net_asm.s
+        # kc_unpname).
+        ('_unpNameOp', '_unpNameOp', 0, 'lo16'),
+        ('_unpfArgs', '_unpfArgs', 0, 'lo16'),
+        ('_unpSlot', '_unpSlot', 0, 'lo16'),
+        ('_u2Slot', '_u2Slot', 0, 'lo16'),
+        ('_u2SltBit', '_u2SltBit', 0, 'lo16'),
+        ('_u2Locked', '_u2Locked', 0, 'lo16'),
+        ('_u2Imr', '_u2Imr', 0, 'lo16'),
+        ('_u2RxReady', '_u2RxReady', 0, 'lo16'),
+        ('_w5SockInUse', '_w5SockInUse', 0, 'lo16'),
+    ],
+    # net: the networking stack module (src/modules/net): the socket syscalls,
+    # whose args come from the dispatcher's _Sys_Saved* slots.
     'net': [
         ('_Sys_SavedA', '_Sys_SavedA', 0, 'lo16'),
         ('_Sys_SavedX', '_Sys_SavedX', 0, 'lo16'),
         ('_Sys_CallerBank', '_Sys_CallerBank', 0, 'lo16'),
-        ('_ifcOp', '_ifcOp', 0, 'lo16'),
-        ('_ifnIdx', '_ifnIdx', 0, 'lo16'),
-        ('_ifnCount', '_ifnCount', 0, 'lo16'),
-        ('_ifnName', '_ifnName', 0, 'lo16'),
-        ('_ifcRecOff', '_ifcRecOff', 0, 'lo16'),
-        ('_ifcTmpW', '_ifcTmpW', 0, 'lo16'),
-        ('_ifS1Off', '_ifS1Off', 0, 'lo16'),
-        # RTL trampoline (net_dispatch.s) wrapping the JSR/RTS kernel routine
-        # _W5_WriteIpFromRec, so the module can JSL it without a stack mismatch.
-        ('_Net_KCall_W5WriteIp', '_Net_KCall_W5WriteIp', 0, 'abs24'),
-        # --- Phase 2 (socket.s move) ---
         # Syscall arg saved by the dispatcher (SavedA/X already above).
         ('_Sys_SavedY', '_Sys_SavedY', 0, 'lo16'),
         # ioctl(2)'s staged command and argument, for the SIOCGIF* op.
@@ -288,35 +304,13 @@ MANIFESTS = {
         # The _sock* scratch statics the moved handlers/helpers read+write; they
         # STAY in socket.s (kernel), reached DBR-relative (DBR=$02 during
         # dispatch).  Also read by the kept kernel transport cores.
-        ('_sockTmpProto', '_sockTmpProto', 0, 'lo16'),
-        ('_sockTmpTag', '_sockTmpTag', 0, 'lo16'),
-        ('_sockTmpHw', '_sockTmpHw', 0, 'lo16'),
-        ('_sockTmpOff', '_sockTmpOff', 0, 'lo16'),
-        ('_sockTmp2', '_sockTmp2', 0, 'lo16'),
-        ('_sockBufOff', '_sockBufOff', 0, 'lo16'),
-        ('_sockLen', '_sockLen', 0, 'lo16'),
-        ('_sockDstIp', '_sockDstIp', 0, 'lo16'),
-        ('_sockDstPort', '_sockDstPort', 0, 'lo16'),
-        ('_sockSrcOff', '_sockSrcOff', 0, 'lo16'),
-        ('_sockRecvFlags', '_sockRecvFlags', 0, 'lo16'),
-        ('_sockSendFlags', '_sockSendFlags', 0, 'lo16'),
-        ('_sockOptLevel', '_sockOptLevel', 0, 'lo16'),
-        ('_sockOptName', '_sockOptName', 0, 'lo16'),
-        ('_sockOptLen', '_sockOptLen', 0, 'lo16'),
-        ('_sockOptVal', '_sockOptVal', 0, 'lo16'),
-        ('_sockBindAddr', '_sockBindAddr', 0, 'lo16'),
-        ('_sockAcceptLOff', '_sockAcceptLOff', 0, 'lo16'),
+        # The fd's kernel-stack socket, from _Sock_FdToDesc (net_kso.s).
+        ('_sockTmpSo', '_sockTmpSo', 0, 'lo16'),
         # RTL wrappers for the kernel routines net.mod still calls (Phase 3 moved
         # the transport in-module, so only the FCB layer remains kernel-side).
-        ('_Net_KCall_FcbAlloc', '_Net_KCall_FcbAlloc', 0, 'abs24'),
-        ('_Net_KCall_SockFdToDesc', '_Net_KCall_SockFdToDesc', 0, 'abs24'),
         # --- Phase 3 (transport + ring + _Sock_PollIntr move) ---
         # Con_PollKey + _sleep, for the now-in-module _Sock_PollIntr.
-        ('_Net_KCall_ConPollKey', '_Net_KCall_ConPollKey', 0, 'abs24'),
-        ('_Net_KCall_Sleep', '_Net_KCall_Sleep', 0, 'abs24'),
         # Inline statics that stayed in uthernet.s (the transport reads them).
-        ('_w5SockInUse', '_w5SockInUse', 0, 'lo16'),
-        ('_tcpNextPort', '_tcpNextPort', 0, 'lo16'),
         # W5100 bus shadows (the U2_LOCK/UNLOCK macros STAL/LDAL these).
         ('_u2Imr', '_u2Imr', 0, 'lo16'),
         ('_u2Locked', '_u2Locked', 0, 'lo16'),
@@ -325,32 +319,14 @@ MANIFESTS = {
         # at mod_init entry (DBR=kernel bank) to bind its own U2_* sites.
         ('_u2Slot',   '_u2Slot',   0, 'lo16'),
         # Additional _sock* statics the transport cores read+write.
-        ('_sockSrcIp', '_sockSrcIp', 0, 'lo16'),
-        ('_sockSrcPort', '_sockSrcPort', 0, 'lo16'),
         ('_sockRxLen', '_sockRxLen', 0, 'lo16'),
-        ('_sockCapLen', '_sockCapLen', 0, 'lo16'),
-        ('_sockRingRun', '_sockRingRun', 0, 'lo16'),
-        ('_sockTxWr', '_sockTxWr', 0, 'lo16'),
-        ('_sockTxBase', '_sockTxBase', 0, 'lo16'),
-        ('_sockPhys', '_sockPhys', 0, 'lo16'),
+        # select(2)'s block-forever count: a pipe op wakes WCHAN_SELECT only
+        # when someone sleeps there (pipe.s _Pipe_Wake), as pty.mod does.
+        ('_nSelSleepers', '_nSelSleepers', 0, 'lo16'),
         # net_loop.s + pipe.s moved into net.mod 2026-08-11.  Their STATICS
         # stayed in the core bank (syscall.s / fs.s / net_dispatch.s write them
         # directly, and they are how arguments reach the moved bodies --
         # _Net_Dispatch clobbers A, so nothing travels in a register).
-        ('_ttyTable', '_ttyTable', 0, 'lo16'),
-        ('_nSelSleepers', '_nSelSleepers', 0, 'lo16'),
-        ('_loopHandled', '_loopHandled', 0, 'lo16'),
-        ('_loopDstPort', '_loopDstPort', 0, 'lo16'),
-        ('_loopConnOff', '_loopConnOff', 0, 'lo16'),
-        ('_loopLisOff', '_loopLisOff', 0, 'lo16'),
-        ('_loopAccOff', '_loopAccOff', 0, 'lo16'),
-        ('_loopIsRecv', '_loopIsRecv', 0, 'lo16'),
-        ('_loopMsgNb', '_loopMsgNb', 0, 'lo16'),
-        ('_loopRingA', '_loopRingA', 0, 'lo16'),
-        ('_loopRingB', '_loopRingB', 0, 'lo16'),
-        ('_loopScratch', '_loopScratch', 0, 'lo16'),
-        ('_loopBits', '_loopBits', 0, 'lo16'),
-        ('_loopRxLen', '_loopRxLen', 0, 'lo16'),
         # unp.s -- AF_UNIX SOCK_DGRAM.  Statics stay in the core bank for the
         # same reason the loopback ones do, and _unpHdr additionally MUST: it is
         # the source buffer _Pipe_WriteAt copies the record header from, so it
@@ -359,20 +335,7 @@ MANIFESTS = {
         # THE ORDER HERE IS IRRELEVANT but the order in src/kernel/unp.s is not:
         # they are one contiguous block that a blocking recv saves on the task's
         # stack, and _unpBlkEnd anchors its length.
-        ('_unpHandled', '_unpHandled', 0, 'lo16'),
-        ('_unpArgBlk', '_unpArgBlk', 0, 'lo16'),
-        ('_unpDescOff', '_unpDescOff', 0, 'lo16'),
-        ('_unpPeerOff', '_unpPeerOff', 0, 'lo16'),
-        ('_unpRingOff', '_unpRingOff', 0, 'lo16'),
-        ('_unpPayLen', '_unpPayLen', 0, 'lo16'),
-        ('_unpNeed', '_unpNeed', 0, 'lo16'),
-        ('_unpGot', '_unpGot', 0, 'lo16'),
-        ('_unpHdr', '_unpHdr', 0, 'lo16'),
-        ('_unpBlkEnd', '_unpBlkEnd', 0, 'lo16'),
-        ('_unpNameOp', '_unpNameOp', 0, 'lo16'),
-        ('_unpSlot', '_unpSlot', 0, 'lo16'),
         ('_pipeThunkFd', '_pipeThunkFd', 0, 'lo16'),
-        ('_loopThunkSock', '_loopThunkSock', 0, 'lo16'),
         ('_pipeRecOff', '_pipeRecOff', 0, 'lo16'),
         ('_pipeReqLen', '_pipeReqLen', 0, 'lo16'),
         ('_pipeDone', '_pipeDone', 0, 'lo16'),
@@ -383,11 +346,6 @@ MANIFESTS = {
         ('_pipeKUio', '_pipeKUio', 0, 'lo16'),
         ('_sockUio', '_sockUio', 0, 'lo16'),
         ('_sockUioBank', '_sockUioBank', 0, 'lo16'),
-        ('_soHasDst', '_soHasDst', 0, 'lo16'),
-        ('_soBounce', '_soBounce', 0, 'lo16'),
-        ('_unpUio', '_unpUio', 0, 'lo16'),
-        ('_unpUioBank', '_unpUioBank', 0, 'lo16'),
-        ('_unpFrom', '_unpFrom', 0, 'lo16'),
         ('_pipeUioBank', '_pipeUioBank', 0, 'lo16'),
         ('_pipeSeg', '_pipeSeg', 0, 'lo16'),
         ('_netVfsUiomove', '_netVfsUiomove', 0, 'lo16'),
@@ -407,7 +365,6 @@ MANIFESTS = {
         ('_pgNewSz', '_pgNewSz', 0, 'lo16'),
         ('_pgHead', '_pgHead', 0, 'lo16'),
         ('_pgCount', '_pgCount', 0, 'lo16'),
-        ('_w5RxHdrLen', '_w5RxHdrLen', 0, 'lo16'),
     ],
     # ramdisk: the /RAM5 driver, lifted out of the core bank 2026-08-11.  All
     # lo16: the module runs at DBR = kernel bank (Mod_Load JSLs mod_init

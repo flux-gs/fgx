@@ -31,9 +31,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img1
+                STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
-                STA     _fcc_img0
+                STA     1,S   ; fccstk d=0 b=1
                 PHA
                 SEP     #$20
                 MX      %10
@@ -46,9 +46,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PLA
                 LDA     _fcc_fpr0+2
-                STA     _fcc_img3
+                STA     _fcc_img1
                 LDA     _fcc_fpr0
-                STA     _fcc_img2
+                STA     _fcc_img0
                 LDA     #_pidx_mutidx_d
                 PHA
                 LDA     #0
@@ -100,11 +100,11 @@ main_stkok        TCS
                 TYA
                 STA:    $0000,X
                 PLA
-                LDA     _fcc_img0
+                LDA     1,S   ; fccstk d=0 b=1
                 PHA
-                LDA     _fcc_img1
+                LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_ptr+2
-                LDA     _fcc_img0
+                LDA     3,S   ; fccstk d=2 b=1
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -115,16 +115,18 @@ main_stkok        TCS
                 LDA     _fcc_fpr0
                 INC
                 INC
-                STA     _fcc_img0
+                STA     3,S   ; fccstk d=2 b=1
                 LDA     _fcc_fpr0
                 SEC
-                SBC     _fcc_img2
+                SBC     _fcc_img0
                 LSR
                 ASL
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
                 PLA
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 STA     9,S   ; fccstk d=0 b=9
                 TAY

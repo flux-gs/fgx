@@ -57,6 +57,14 @@ _CorePatchTbl
                 DA      _cfp118+3
                 DA      _cfp997+3
                 DA      _cfp998+3
+                DA      _cfp1006+3
+                DA      _cfp1007+3
+                DA      _cfp1008+3
+                DA      _cfp1009+3
+                DA      _cfp1010+3
+                DA      _cfp1011+3
+                DA      _cfp1012+3
+                DA      _cfp1013+3
                 DA      _cfp470+3
                 DA      _cfp471+3
                 DA      _cfp472+3
@@ -136,5 +144,5 @@ _CorePatchTbl
                 DA      _cfp024+3
                 DA      _cfp013+3
                 DA      _cfp014+3
-_CorePatchEntries EQU 122
-_CorePatchBytes   EQU 244
+_CorePatchEntries EQU 130
+_CorePatchBytes   EQU 260

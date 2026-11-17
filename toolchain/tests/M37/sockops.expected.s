@@ -254,7 +254,10 @@ _sockops_L5
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L6
                 LDA     #16
-                PHA
+                STA     _fcc_fpr0
+                STZ     _fcc_fpr0+2
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -291,7 +294,7 @@ _sockops_L6
                 TAY
                 TSC
                 CLC
-                ADC     #16
+                ADC     #18
                 TCS
                 TYA
                 CMP     #$FFFF
@@ -302,23 +305,11 @@ _sockops_L6
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L7
+                LDA     #1
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #sa
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
+                LDA     #99
                 PHA
-                FGX2_FARCALL ifctl
-                PLY
+                FGX2_FARCALL listen
                 PLY
                 PLY
                 CMP     #$FFFF
@@ -329,6 +320,66 @@ _sockops_L7
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L8
+                LDA     #0
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #mh
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #99
+                PHA
+                FGX2_FARCALL sendmsg
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #$FFFF
+                BNE     _sockops_L9
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                CLC
+                ADC     #5
+                STA     3,S   ; fccstk d=0 b=3
+_sockops_L9
+                LDA     #0
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #mh
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #99
+                PHA
+                FGX2_FARCALL recvmsg
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #$FFFF
+                BNE     _sockops_L10
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                CLC
+                ADC     #5
+                STA     3,S   ; fccstk d=0 b=3
+_sockops_L10
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close
@@ -345,4 +396,4 @@ _sockops_L8
                 RTL
 main_FRAMESIZE   EQU     4
 main_STKGUARD    EQU     0
-                FGX2_RELOC_COUNT 12
+                FGX2_RELOC_COUNT 14
